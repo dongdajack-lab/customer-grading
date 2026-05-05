@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天地人 · 客户分级系统</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f0f2f5; min-height: 100vh; color: #333; }
+.header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 30px 40px; }
+.header h1 { font-size: 28px; margin-bottom: 8px; }
+.header p { opacity: 0.85; font-size: 15px; }
+.main { max-width: 1400px; margin: 0 auto; padding: 30px; }
+.card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 24px; overflow: hidden; }
+.card-title { font-size: 18px; font-weight: bold; padding: 20px 24px 0; color: #1a73e8; display: flex; align-items: center; gap: 10px; }
+.card-title .dot { width: 8px; height: 8px; background: #1a73e8; border-radius: 50%; }
+.card-body { padding: 20px 24px 24px; }
+.btn { padding: 12px 28px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-right: 10px; margin-bottom: 10px; transition: all 0.2s; }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.btn-primary { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; }
+.btn-success { background: linear-gradient(135deg, #34a853, #1e7e34); color: white; }
+.btn-warning { background: linear-gradient(135deg, #f9ab00, #e37400); color: white; }
+.btn-info { background: linear-gradient(135deg, #4fc3f7, #0288d1); color: white; }
+.btn-sm { padding: 8px 16px; font-size: 13px; }
+.weight-bar { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.weight-item { flex: 1; min-width: 200px; background: #f8f9fa; border-radius: 10px; padding: 16px; border: 2px solid #e9ecef; }
+.weight-item label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #555; }
+.weight-row { display: flex; align-items: center; gap: 8px; }
+.weight-input { width: 70px; padding: 8px; border: 2px solid #dee2e6; border-radius: 6px; font-size: 16px; text-align: center; font-weight: bold; }
+.weight-percent { font-size: 18px; font-weight: bold; color: #999; }
+.weight-total { background: #e8f5e9; border-color: #66bb6a; text-align: center; }
+.weight-total .weight-percent { color: #43a047; font-size: 22px; }
+textarea { width: 100%; padding: 14px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px; font-family: "SF Mono", "Menlo", monospace; resize: vertical; }
+textarea:focus { outline: none; border-color: #1a73e8; }
+.rules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.rule-card { border: 2px solid #e9ecef; border-radius: 10px; padding: 16px; background: #fafbfc; }
+.rule-card h4 { font-size: 15px; margin-bottom: 12px; color: #1a73e8; }
+.rule-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.rule-row input { padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; width: 60px; text-align: center; }
+.rule-row span { font-size: 13px; color: #666; min-width: 30px; }
+.rule-row .arrow { color: #aaa; font-weight: bold; }
+.grade-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.grade-table th, .grade-table td { padding: 10px 14px; text-align: center; border: 1px solid #e9ecef; font-size: 14px; }
+.grade-table th { background: #1a73e8; color: white; }
+.grade-table input { width: 60px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; }
+.result-table { width: 100%; border-collapse: collapse; }
+.result-table th, .result-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+.result-table th { background: #f8f9fa; font-weight: bold; color: #555; position: sticky; top: 0; }
+.result-table tr:hover { background: #f0f7ff; }
+.tag { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; }
+.tag-S { background: #e53935; }
+.tag-A { background: #fb8c00; }
+.tag-B { background: #43a047; }
+.tag-C { background: #8e99a4; }
+.tag-P { background: #bdbdbd; color: #555; }
+.score-bar { display: inline-block; height: 8px; border-radius: 4px; margin-right: 6px; vertical-align: middle; }
+.stats-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.stat-box { padding: 16px 20px; border-radius: 10px; color: white; text-align: center; min-width: 120px; }
+.stat-box .num { font-size: 28px; font-weight: bold; }
+.stat-box .label { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+.stat-S { background: linear-gradient(135deg, #e53935, #c62828); }
+.stat-A { background: linear-gradient(135deg, #fb8c00, #e65100); }
+.stat-B { background: linear-gradient(135deg, #43a047, #2e7d32); }
+.stat-C { background: linear-gradient(135deg, #78909c, #546e7a); }
+.stat-P { background: linear-gradient(135deg, #bdbdbd, #9e9e9e); color: #555; }
+.tips { background: #fff3e0; border-left: 4px solid #f9ab00; padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 16px; font-size: 13px; color: #e65100; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>天地人 · 客户分级系统</h1>
+  <p>输入客户数据 → 查看评分规则 → 调整规则后重新分级</p>
+</div>
+
+<div class="main">
+
+  <!-- 1. 权重设置 -->
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>权重设置（合计需为100%）</div>
+    <div class="card-body">
+      <button class="btn btn-sm btn-info" onclick="setPreset('old')">老客户预设（重收入+利润）</button>
+      <button class="btn btn-sm btn-warning" onclick="setPreset('new')">新客户预设（重潜力+影响力）</button>
+      <button class="btn btn-sm" style="background:#9c27b0;color:white;" onclick="setPreset('equal')">平均权重</button>
+      <div class="weight-bar" style="margin-top:16px;">
+        <div class="weight-item">
+          <label>💰 销售收入</label>
+          <div class="weight-row">
+            <input type="number" id="w1" value="35" min="0" max="100" class="weight-input" oninput="updateWeightSum()">
+            <span class="weight-percent">%</span>
+          </div>
+        </div>
+        <div class="weight-item">
+          <label>🏆 行业影响力</label>
+          <div class="weight-row">
+            <input type="number" id="w2" value="15" min="0" max="100" class="weight-input" oninput="updateWeightSum()">
+            <span class="weight-percent">%</span>
+          </div>
+        </div>
+        <div class="weight-item">
+          <label>📈 利润率</label>
+          <div class="weight-row">
+            <input type="number" id="w3" value="25" min="0" max="100" class="weight-input" oninput="updateWeightSum()">
+            <span class="weight-percent">%</span>
+          </div>
+        </div>
+        <div class="weight-item">
+          <label>🚀 成长潜力</label>
+          <div class="weight-row">
+            <input type="number" id="w4" value="25" min="0" max="100" class="weight-input" oninput="updateWeightSum()">
+            <span class="weight-percent">%</span>
+          </div>
+        </div>
+        <div class="weight-item weight-total">
+          <label>合计</label>
+          <div class="weight-row">
+            <span class="weight-percent" id="weightSum">100%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 评分规则（可编辑） -->
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>评分规则（可修改阈值后重新分级）</div>
+    <div class="card-body">
+      <div class="tips">💡 每个维度有5档评分（20/40/60/80/100），修改阈值后点击「重新分级」即可生效。阈值含义：达到该值及以上得对应分数。</div>
+      <div class="rules-grid">
+        <!-- 维度1: 销售收入 -->
+        <div class="rule-card">
+          <h4>💰 销售收入（单位：万元）</h4>
+          <div class="rule-row"><span>20分</span><span class="arrow">≥</span><input type="number" id="r1_t1" value="0"><span>万</span></div>
+          <div class="rule-row"><span>40分</span><span class="arrow">≥</span><input type="number" id="r1_t2" value="100"><span>万</span></div>
+          <div class="rule-row"><span>60分</span><span class="arrow">≥</span><input type="number" id="r1_t3" value="500"><span>万</span></div>
+          <div class="rule-row"><span>80分</span><span class="arrow">≥</span><input type="number" id="r1_t4" value="1000"><span>万</span></div>
+          <div class="rule-row"><span>100分</span><span class="arrow">≥</span><input type="number" id="r1_t5" value="1500"><span>万</span></div>
+        </div>
+        <!-- 维度2: 行业影响力 -->
+        <div class="rule-card">
+          <h4>🏆 行业影响力（排名，越小越好）</h4>
+          <div class="rule-row"><span>20分</span><span class="arrow">≤</span><input type="number" id="r2_t1" value="999"><span>名</span></div>
+          <div class="rule-row"><span>40分</span><span class="arrow">≤</span><input type="number" id="r2_t2" value="100"><span>名</span></div>
+          <div class="rule-row"><span>60分</span><span class="arrow">≤</span><input type="number" id="r2_t3" value="50"><span>名</span></div>
+          <div class="rule-row"><span>80分</span><span class="arrow">≤</span><input type="number" id="r2_t4" value="10"><span>名</span></div>
+          <div class="rule-row"><span>100分</span><span class="arrow">≤</span><input type="number" id="r2_t5" value="3"><span>名</span></div>
+        </div>
+        <!-- 维度3: 利润率 -->
+        <div class="rule-card">
+          <h4>📈 利润率（单位：%）</h4>
+          <div class="rule-row"><span>20分</span><span class="arrow">≥</span><input type="number" id="r3_t1" value="0"><span>%</span></div>
+          <div class="rule-row"><span>40分</span><span class="arrow">≥</span><input type="number" id="r3_t2" value="10"><span>%</span></div>
+          <div class="rule-row"><span>60分</span><span class="arrow">≥</span><input type="number" id="r3_t3" value="20"><span>%</span></div>
+          <div class="rule-row"><span>80分</span><span class="arrow">≥</span><input type="number" id="r3_t4" value="30"><span>%</span></div>
+          <div class="rule-row"><span>100分</span><span class="arrow">≥</span><input type="number" id="r3_t5" value="50"><span>%</span></div>
+        </div>
+        <!-- 维度4: 成长潜力 -->
+        <div class="rule-card">
+          <h4>🚀 成长潜力 / 市场份额（单位：%）</h4>
+          <div class="rule-row"><span>20分</span><span class="arrow">≥</span><input type="number" id="r4_t1" value="0"><span>%</span></div>
+          <div class="rule-row"><span>40分</span><span class="arrow">≥</span><input type="number" id="r4_t2" value="10"><span>%</span></div>
+          <div class="rule-row"><span>60分</span><span class="arrow">≥</span><input type="number" id="r4_t3" value="20"><span>%</span></div>
+          <div class="rule-row"><span>80分</span><span class="arrow">≥</span><input type="number" id="r4_t4" value="30"><span>%</span></div>
+          <div class="rule-row"><span>100分</span><span class="arrow">≥</span><input type="number" id="r4_t5" value="50"><span>%</span></div>
+        </div>
+      </div>
+
+      <!-- 级别划分阈值 -->
+      <div style="margin-top:20px; padding-top:16px; border-top:1px solid #eee;">
+        <h4 style="margin-bottom:12px; color:#1a73e8;">🎯 级别划分阈值（加权总分）</h4>
+        <table class="grade-table">
+          <tr><th>级别</th><th>含义</th><th>分数门槛</th><th>调整</th></tr>
+          <tr><td><span class="tag tag-S">S级</span></td><td>战略客户</td><td id="gradeS_disp">≥ 90分</td><td><input type="number" id="gradeS" value="90" min="0" max="100"> 分</td></tr>
+          <tr><td><span class="tag tag-A">A级</span></td><td>重点客户</td><td id="gradeA_disp">≥ 80分</td><td><input type="number" id="gradeA" value="80" min="0" max="100"> 分</td></tr>
+          <tr><td><span class="tag tag-B">B级</span></td><td>潜力客户</td><td id="gradeB_disp">≥ 70分</td><td><input type="number" id="gradeB" value="70" min="0" max="100"> 分</td></tr>
+          <tr><td><span class="tag tag-C">C级</span></td><td>一般客户</td><td id="gradeC_disp">≥ 60分</td><td><input type="number" id="gradeC" value="60" min="0" max="100"> 分</td></tr>
+          <tr><td><span class="tag tag-P">P级</span></td><td>观察客户</td><td>&lt; 60分</td><td style="color:#999;">低于C级即为P级</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 数据输入 -->
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>客户数据输入</div>
+    <div class="card-body">
+      <div class="tips">📌 格式：客户名,销售额(万),行业排名,利润率(%),市场份额(%)，每行一个客户。支持中英文逗号。</div>
+      <textarea id="batchInput" rows="8" placeholder="示例：&#10;华为技术,1800,1,42,65&#10;腾讯科技,2000,1,55,70&#10;小米科技,1100,5,28,55"></textarea>
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="parseAndGrade()">📋 解析并分级</button>
+        <button class="btn btn-success" onclick="reGrade()">🔄 用新规则重新分级</button>
+        <button class="btn btn-info" onclick="fillSampleData()">📝 填充50条示例数据</button>
+        <button class="btn btn-warning" onclick="exportCSV()" id="exportBtn" disabled>📥 导出CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 分级结果 -->
+  <div class="card" id="resultCard" style="display:none;">
+    <div class="card-title"><span class="dot"></span>分级结果</div>
+    <div class="card-body">
+      <div class="stats-row" id="statsRow"></div>
+      <div style="max-height:600px; overflow:auto; border:1px solid #e9ecef; border-radius:8px;">
+        <table class="result-table" id="resultTable"></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var customerList = [];
+var rawData = [];
+
+function updateWeightSum() {
+  var w1 = parseInt(document.getElementById('w1').value) || 0;
+  var w2 = parseInt(document.getElementById('w2').value) || 0;
+  var w3 = parseInt(document.getElementById('w3').value) || 0;
+  var w4 = parseInt(document.getElementById('w4').value) || 0;
+  var sum = w1 + w2 + w3 + w4;
+  var el = document.getElementById('weightSum');
+  el.textContent = sum + '%';
+  el.style.color = (sum === 100) ? '#43a047' : '#e53935';
+}
+
+function setPreset(type) {
+  if (type === 'old') {
+    document.getElementById('w1').value = 40;
+    document.getElementById('w2').value = 10;
+    document.getElementById('w3').value = 35;
+    document.getElementById('w4').value = 15;
+  } else if (type === 'new') {
+    document.getElementById('w1').value = 20;
+    document.getElementById('w2').value = 30;
+    document.getElementById('w3').value = 10;
+    document.getElementById('w4').value = 40;
+  } else {
+    document.getElementById('w1').value = 25;
+    document.getElementById('w2').value = 25;
+    document.getElementById('w3').value = 25;
+    document.getElementById('w4').value = 25;
+  }
+  updateWeightSum();
+}
+
+function getThresholds(dim) {
+  return [
+    parseFloat(document.getElementById('r' + dim + '_t1').value) || 0,
+    parseFloat(document.getElementById('r' + dim + '_t2').value) || 0,
+    parseFloat(document.getElementById('r' + dim + '_t3').value) || 0,
+    parseFloat(document.getElementById('r' + dim + '_t4').value) || 0,
+    parseFloat(document.getElementById('r' + dim + '_t5').value) || 0
+  ];
+}
+
+function getGradeThresholds() {
+  return {
+    S: parseInt(document.getElementById('gradeS').value) || 90,
+    A: parseInt(document.getElementById('gradeA').value) || 80,
+    B: parseInt(document.getElementById('gradeB').value) || 70,
+    C: parseInt(document.getElementById('gradeC').value) || 60
+  };
+}
+
+function scoreDimension(value, thresholds, reverse) {
+  // thresholds: [t20, t40, t60, t80, t100]
+  // reverse: true 表示排名类（值越小分越高）
+  var t = thresholds;
+  if (reverse) {
+    if (value <= t[4]) return 100;
+    if (value <= t[3]) return 80;
+    if (value <= t[2]) return 60;
+    if (value <= t[1]) return 40;
+    return 20;
+  } else {
+    if (value >= t[4]) return 100;
+    if (value >= t[3]) return 80;
+    if (value >= t[2]) return 60;
+    if (value >= t[1]) return 40;
+    return 20;
+  }
+}
+
+function getGrade(score) {
+  var gt = getGradeThresholds();
+  if (score >= gt.S) return { grade: 'S', label: 'S（战略）' };
+  if (score >= gt.A) return { grade: 'A', label: 'A（重点）' };
+  if (score >= gt.B) return { grade: 'B', label: 'B（潜力）' };
+  if (score >= gt.C) return { grade: 'C', label: 'C（一般）' };
+  return { grade: 'P', label: 'P（观察）' };
+}
+
+function doGrade() {
+  var w1 = parseInt(document.getElementById('w1').value) || 35;
+  var w2 = parseInt(document.getElementById('w2').value) || 15;
+  var w3 = parseInt(document.getElementById('w3').value) || 25;
+  var w4 = parseInt(document.getElementById('w4').value) || 25;
+  var totalWeight = w1 + w2 + w3 + w4;
+
+  if (totalWeight !== 100) {
+    alert('⚠️ 权重合计必须为100%，当前为' + totalWeight + '%');
+    return false;
+  }
+
+  var t1 = getThresholds(1);
+  var t2 = getThresholds(2);
+  var t3 = getThresholds(3);
+  var t4 = getThresholds(4);
+
+  customerList = [];
+  rawData.forEach(function(row) {
+    var revenue = row.revenue;
+    var rank = row.rank;
+    var margin = row.margin;
+    var share = row.share;
+
+    var s1 = scoreDimension(revenue, t1, false);
+    var s2 = scoreDimension(rank, t2, true);
+    var s3 = scoreDimension(margin, t3, false);
+    var s4 = scoreDimension(share, t4, false);
+
+    var finalScore = Math.round((s1 * w1 + s2 * w2 + s3 * w3 + s4 * w4) / 100);
+    var g = getGrade(finalScore);
+
+    customerList.push({
+      name: row.name,
+      revenue: revenue,
+      rank: rank,
+      margin: margin,
+      share: share,
+      s1: s1, s2: s2, s3: s3, s4: s4,
+      score: finalScore,
+      grade: g.grade,
+      gradeLabel: g.label
+    });
+  });
+
+  renderResults(w1, w2, w3, w4);
+  return true;
+}
+
+function parseAndGrade() {
+  var raw = document.getElementById('batchInput').value.trim();
+  if (!raw) { alert('请先输入客户数据'); return; }
+
+  var lines = raw.split('\n');
+  rawData = [];
+  var skipCount = 0;
+
+  lines.forEach(function(line) {
+    var normalizedLine = line.replace(/，/g, ',');
+    var cols = normalizedLine.split(',').map(function(s) { return s.trim(); });
+    if (cols.length < 2 || !cols[0]) { skipCount++; return; }
+    rawData.push({
+      name: cols[0],
+      revenue: parseFloat(cols[1]) || 0,
+      rank: parseInt(cols[2]) || 999,
+      margin: parseFloat(cols[3]) || 0,
+      share: parseFloat(cols[4]) || 0
+    });
+  });
+
+  if (rawData.length === 0) {
+    alert('没有解析到有效数据（至少需要：客户名,销售额）');
+    return;
+  }
+
+  var ok = doGrade();
+  if (ok) {
+    document.getElementById('exportBtn').disabled = false;
+    document.getElementById('resultCard').style.display = 'block';
+    var msg = '✅ 分级完成！\n\n';
+    msg += '成功处理：' + customerList.length + ' 个客户\n';
+    if (skipCount > 0) msg += '跳过：' + skipCount + ' 行（格式不正确）\n';
+    msg += '\n可查看下方评分规则，修改后点击「重新分级」';
+    alert(msg);
+  }
+}
+
+function reGrade() {
+  if (rawData.length === 0) {
+    alert('请先输入数据并执行「解析并分级」');
+    return;
+  }
+  var ok = doGrade();
+  if (ok) {
+    alert('✅ 已按新规则重新分级！共 ' + customerList.length + ' 个客户');
+  }
+}
+
+function renderResults(w1, w2, w3, w4) {
+  var counts = { S: 0, A: 0, B: 0, C: 0, P: 0 };
+  customerList.forEach(function(c) { counts[c.grade]++; });
+
+  var statsHtml = '';
+  statsHtml += '<div class="stat-box stat-S"><div class="num">' + counts.S + '</div><div class="label">S 战略客户</div></div>';
+  statsHtml += '<div class="stat-box stat-A"><div class="num">' + counts.A + '</div><div class="label">A 重点客户</div></div>';
+  statsHtml += '<div class="stat-box stat-B"><div class="num">' + counts.B + '</div><div class="label">B 潜力客户</div></div>';
+  statsHtml += '<div class="stat-box stat-C"><div class="num">' + counts.C + '</div><div class="label">C 一般客户</div></div>';
+  statsHtml += '<div class="stat-box stat-P"><div class="num">' + counts.P + '</div><div class="label">P 观察客户</div></div>';
+  document.getElementById('statsRow').innerHTML = statsHtml;
+
+  var html = '<thead><tr>';
+  html += '<th>#</th><th>客户名称</th><th>销售额(万)</th><th>行业排名</th><th>利润率%</th><th>份额%</th>';
+  html += '<th>收入分(' + w1 + '%)</th><th>行业分(' + w2 + '%)</th><th>利润分(' + w3 + '%)</th><th>潜力分(' + w4 + '%)</th>';
+  html += '<th>加权总分</th><th>级别</th>';
+  html += '</tr></thead><tbody>';
+
+  customerList.forEach(function(c, i) {
+    var barColor = c.score >= 90 ? '#e53935' : c.score >= 80 ? '#fb8c00' : c.score >= 70 ? '#43a047' : c.score >= 60 ? '#78909c' : '#bdbdbd';
+    html += '<tr>';
+    html += '<td>' + (i + 1) + '</td>';
+    html += '<td><strong>' + c.name + '</strong></td>';
+    html += '<td>' + c.revenue + '</td>';
+    html += '<td>' + (c.rank === 999 ? '-' : c.rank) + '</td>';
+    html += '<td>' + c.margin + '</td>';
+    html += '<td>' + c.share + '</td>';
+    html += '<td>' + c.s1 + '</td>';
+    html += '<td>' + c.s2 + '</td>';
+    html += '<td>' + c.s3 + '</td>';
+    html += '<td>' + c.s4 + '</td>';
+    html += '<td><span class="score-bar" style="width:' + (c.score * 0.6) + 'px;background:' + barColor + ';"></span><strong>' + c.score + '</strong></td>';
+    html += '<td><span class="tag tag-' + c.grade + '">' + c.gradeLabel + '</span></td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody>';
+  document.getElementById('resultTable').innerHTML = html;
+}
+
+function fillSampleData() {
+  var data = [
+    '华为技术,1800,1,42,65','中兴通讯,1200,2,38,58','腾讯科技,2000,1,55,70',
+    '阿里巴巴,1600,1,48,62','字节跳动,1400,3,52,45','百度在线,900,4,35,40',
+    '小米科技,1100,5,28,55','美团,1300,3,32,50','京东集团,1000,4,25,48',
+    '拼多多,800,6,30,35','宁德时代,1500,1,45,72','比亚迪,1700,2,40,68',
+    '隆基绿能,600,8,35,42','阳光电源,400,12,38,30','三一重工,900,3,42,55',
+    '中联重科,500,7,36,48','中国中车,700,5,30,52','国药控股,800,2,48,45',
+    '迈瑞医疗,600,4,55,38','恒瑞医药,500,6,52,42','中国石油,2000,1,60,85',
+    '中国石化,1800,2,55,82','国家电网,2200,1,65,90','中国建筑,1600,3,42,78',
+    '工商银行,2500,1,70,95','建设银行,2300,2,68,93','平安保险,1400,4,58,60',
+    '招商银行,1200,5,62,55','中国移动,1900,1,52,75','中国联通,800,6,48,70',
+    '茅台酒,1000,1,78,88','五粮液,600,2,72,82','美的集团,900,3,65,72',
+    '格力电器,800,4,68,75','海尔智家,700,5,62,68','青岛啤酒,300,8,58,65',
+    '海天味业,400,6,72,58','双汇发展,500,5,48,62','顺丰控股,700,2,42,58',
+    '中通快递,400,4,38,52','圆通速递,300,7,35,48','中国国航,600,3,32,42',
+    '南方航空,500,4,28,38','东方航空,400,5,30,44','宝钢股份,800,2,45,65',
+    '鞍钢股份,300,8,38,55','中国铝业,400,6,42,60','江西铜业,350,7,48,58',
+    '万华化学,600,3,52,48','荣盛石化,450,5,42,52'
+  ];
+  document.getElementById('batchInput').value = data.join('\n');
+  alert('✅ 已填充50条示例数据！');
+}
+
+function exportCSV() {
+  if (customerList.length === 0) { alert('没有数据可导出'); return; }
+  var csv = '\uFEFF客户名称,销售额(万),行业排名,利润率%,份额%,收入分,行业分,利润分,潜力分,加权总分,级别\n';
+  customerList.forEach(function(c) {
+    csv += [c.name, c.revenue, c.rank, c.margin, c.share, c.s1, c.s2, c.s3, c.s4, c.score, c.grade].join(',') + '\n';
+  });
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = '客户分级结果_' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+  alert('✅ CSV已导出！');
+}
+
+updateWeightSum();
+</script>
+</body>
+</html>
