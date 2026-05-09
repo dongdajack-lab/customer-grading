@@ -522,8 +522,9 @@ function levelInfo(score) {
 // DATA SUBMISSION → Google Sheets (non-blocking)
 // ================================================================
 function submitData() {
-  if (!SCRIPT_URL || SCRIPT_URL.includes('AKfyc')) {
-    // 未配置或还是占位符，跳过
+  if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE' || !SCRIPT_URL.endsWith('/exec')) {
+    // 未配置或URL格式不对，跳过
+    console.warn('SCRIPT_URL 未正确配置，跳过数据提交');
     return Promise.resolve();
   }
   const payload = {
