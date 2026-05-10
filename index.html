@@ -76,11 +76,25 @@ textarea:focus { outline: none; border-color: #1a73e8; }
 <body>
 
     <div class="header">
-      <h1>天地人 · 客户分级系统 <span style="font-size:16px;opacity:0.7;margin-left:12px;">—— 大董老师</span></h1>
+      <h1>大董老师 · 天地人客户分级系统</h1>
       <p>自定义评分维度 → 设置权重和规则 → 输入客户数据 → 自动分级</p>
     </div>
 
 <div class="main">
+
+  <!-- 0. 基本信息 -->
+  <div class="card">
+    <div class="card-body" style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
+      <div>
+        <label style="font-size:13px;color:#666;">公司名称（选填）</label><br>
+        <input type="text" id="companyName" placeholder="请输入贵公司名称" style="padding:8px 12px;border:1.5px solid #dee2e6;border-radius:6px;font-size:14px;width:220px;">
+      </div>
+      <div>
+        <label style="font-size:13px;color:#666;">填报人（选填）</label><br>
+        <input type="text" id="fillerName" placeholder="请输入填报人姓名" style="padding:8px 12px;border:1.5px solid #dee2e6;border-radius:6px;font-size:14px;width:180px;">
+      </div>
+    </div>
+  </div>
 
   <!-- 1. 维度管理 -->
   <div class="card">
@@ -127,16 +141,6 @@ textarea:focus { outline: none; border-color: #1a73e8; }
   <div class="card">
     <div class="card-title"><span class="dot"></span>③ 客户数据输入</div>
     <div class="card-body">
-      <div style="display:flex;gap:20px;margin-bottom:16px;flex-wrap:wrap;">
-        <div>
-          <label style="font-size:13px;color:#666;">公司名称（选填）</label><br>
-          <input type="text" id="companyName" placeholder="请输入贵公司名称" style="padding:8px 12px;border:1.5px solid #dee2e6;border-radius:6px;font-size:14px;width:220px;">
-        </div>
-        <div>
-          <label style="font-size:13px;color:#666;">填报人（选填）</label><br>
-          <input type="text" id="fillerName" placeholder="请输入填报人姓名" style="padding:8px 12px;border:1.5px solid #dee2e6;border-radius:6px;font-size:14px;width:180px;">
-        </div>
-      </div>
       <div class="tips" id="inputFormatTips">📌 数据格式说明加载中...</div>
       <textarea id="batchInput" rows="8" placeholder="请先添加评分维度，系统会自动生成格式说明..."></textarea>
       <div style="margin-top:16px;">
