@@ -526,17 +526,44 @@ function submitData() {
     console.warn('SHEETDB_URL 未正确配置，跳过数据提交');
     return Promise.resolve();
   }
-  const payload = {
-    "data": [{
-      "提交时间": new Date().toLocaleString('zh-CN'),
-      "公司名称": document.getElementById('inp-company').value || '（未填写）',
-      "填写人": document.getElementById('inp-name').value || '（未填写）',
-      "综合健康度": Math.round((calcSection('sky')+calcSection('land')+calcSection('people'))/3) + '分',
-      "天_战略聚焦": calcSection('sky') + '分',
-      "地_过程管控": calcSection('land') + '分',
-      "人_铁军激励": calcSection('people') + '分'
-    }]
+  const total = Math.round((calcSection('sky')+calcSection('land')+calcSection('people'))/3);
+  const data = {
+    "提交时间": new Date().toLocaleString('zh-CN'),
+    "公司名称": document.getElementById('inp-company').value || '（未填写）',
+    "填写人": document.getElementById('inp-name').value || '（未填写）',
+    "综合健康度": total + '分',
+    "天_战略聚焦": calcSection('sky') + '分',
+    "地_过程管控": calcSection('land') + '分',
+    "人_铁军激励": calcSection('people') + '分'
   };
+  
+  // 添加所有题目分数
+  ['sky','land','people'].forEach(sec => {
+    QS[sec].forEach(q => {
+      const score = answers[q.id] || 0;
+      const scoreLabels = ['', '完全没有', '有想法没落地', '部分执行', '基本完善'];
+      data[q.id] = score + '分-' + scoreLabels[score];
+    });
+  });
+  
+  // 添加所有追问答案
+  ['sky','land','people'].forEach(sec => {
+    QS[sec].forEach(q => {
+      const fuIdx = followups[q.id];
+      if (fuIdx !== undefined && q.followup) {
+        const isOther = !!(q.followup.allowOther && fuIdx === q.followup.opts.length - 1);
+        if (isOther && followupCustom[q.id]) {
+          data[q.id + '_追问'] = '其他：' + followupCustom[q.id];
+        } else if (q.followup.opts[fuIdx]) {
+          data[q.id + '_追问'] = q.followup.opts[fuIdx];
+        }
+      } else {
+        data[q.id + '_追问'] = '';
+      }
+    });
+  });
+  
+  const payload = {"data": [data]};
   return fetch(SHEETDB_URL, {
     method: 'POST',
     body: JSON.stringify(payload),
