@@ -181,9 +181,9 @@
 
 <script>
 // ================================================================
-// 配置：Google Apps Script 部署后的网址（以 /exec 结尾）
+// 配置：SheetDB API 网址（用于接收诊断数据）
 // ★ 部署完成后，把网址粘贴到下面引号里 ★
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYOw_VkqLHBf28HAez0C5_KkLsS1jg7TAGglhzC4j_HcZqYVxajkaNarUaPs5rfPIS/exec';
+const SHEETDB_URL = 'https://sheetdb.io/api/v1/90v836nhzopr5';
 
 // ================================================================
 // DATA: Questions + Follow-ups
@@ -519,40 +519,25 @@ function levelInfo(score) {
 }
 
 // ================================================================
-// DATA SUBMISSION → Google Sheets (non-blocking)
+// DATA SUBMISSION → SheetDB (non-blocking)
 // ================================================================
 function submitData() {
-  if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE' || !SCRIPT_URL.endsWith('/exec')) {
-    // 未配置或URL格式不对，跳过
-    console.warn('SCRIPT_URL 未正确配置，跳过数据提交');
+  if (!SHEETDB_URL || SHEETDB_URL === 'YOUR_SHEETDB_URL_HERE') {
+    console.warn('SHEETDB_URL 未正确配置，跳过数据提交');
     return Promise.resolve();
   }
   const payload = {
-    timestamp: new Date().toLocaleString('zh-CN'),
-    company: document.getElementById('inp-company').value || '',
-    name: document.getElementById('inp-name').value || '',
-    totalScore: Math.round((calcSection('sky')+calcSection('land')+calcSection('people'))/3),
-    skyScore: calcSection('sky'),
-    landScore: calcSection('land'),
-    peopleScore: calcSection('people'),
-    answers: {...answers},
-    followups: {}
+    "data": [{
+      "提交时间": new Date().toLocaleString('zh-CN'),
+      "公司名称": document.getElementById('inp-company').value || '（未填写）',
+      "填写人": document.getElementById('inp-name').value || '（未填写）',
+      "综合健康度": Math.round((calcSection('sky')+calcSection('land')+calcSection('people'))/3) + '分',
+      "天_战略聚焦": calcSection('sky') + '分',
+      "地_过程管控": calcSection('land') + '分',
+      "人_铁军激励": calcSection('people') + '分'
+    }]
   };
-  // 收集追问文本
-  ['sky','land','people'].forEach(sec=>{
-    QS[sec].forEach(q=>{
-      const fuIdx = followups[q.id];
-      if (fuIdx !== undefined && q.followup) {
-        const isOther = !!(q.followup.allowOther && fuIdx === q.followup.opts.length - 1);
-        if (isOther && followupCustom[q.id]) {
-          payload.followups[q.id] = '其他：' + followupCustom[q.id];
-        } else if (q.followup.opts[fuIdx]) {
-          payload.followups[q.id] = q.followup.opts[fuIdx];
-        }
-      }
-    });
-  });
-  return fetch(SCRIPT_URL, {
+  return fetch(SHEETDB_URL, {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {'Content-Type': 'application/json'}
