@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>识人练习 - 四种动物性格测试</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#C0392B,#E74C3C); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:28px; }
+  header p { font-size:15px; opacity:0.85; margin-top:6px; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#C0392B; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#C0392B; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #C0392B; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#C0392B; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:center; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; }
+  .option:hover { border-color:#C0392B; background:#FFF5F5; }
+  .option.selected { border-color:#C0392B; background:#FFF5F5; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .icon { font-size:28px; flex-shrink:0; }
+  .option .text { flex:1; }
+  .option .radio { width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .option.selected .radio { border-color:#C0392B; background:#C0392B; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#C0392B; margin-right:4px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#C0392B; color:white; }
+  .btn-primary:hover { background:#A93226; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; text-align:center; }
+  .result-page.show { display:block; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#27AE60,#2ECC71); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .label { font-size:14px; margin-top:4px; opacity:0.85; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#C0392B; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#C0392B; margin-left:2px; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#C0392B; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>识人练习</h1>
+  <p>四种动物性格识别测试 · 共10题</p>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="label">正确 / 10 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    scenario: "朋友一见面就滔滔不绝地讲他的创业经历，讲到激动处还站起来比划，不断问你：你觉得我这个想法怎么样？是不是很厉害？",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"peacock",
+    explain:"关键词：创业经历讲不停、是不是很厉害、等你认可。孔雀型喜欢成为焦点，需要被关注和认可。热情、话多、表情丰富是典型特征。"
+  },
+  {
+    scenario: "同事说话很快，一坐下就说：我没时间绕弯子，直接说重点，你们这个方案到底能帮我解决什么问题？说话时一直看着表。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"关键词：没时间绕弯子、直接说重点、一直看表。老虎型时间观念极强，注重效率，讨厌浪费时间，说话快且直接。"
+  },
+  {
+    scenario: "家人反复问：这个会不会有问题啊？我再考虑考虑……你们有没有成功案例？我怕做不好……说话语气比较软，一直在微笑。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"koala",
+    explain:"关键词：会不会有问题、再考虑考虑、怕做不好、语气软、一直在微笑。考拉型温和、注重安全感，决策较慢，需要反复确认和案例。"
+  },
+  {
+    scenario: "合作伙伴拿了个笔记本边听边记，然后问：这个数据对比行业平均水平怎么样？你们的计算方法能详细解释一下吗？有论文或者白皮书可以参考吗？",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"owl",
+    explain:"关键词：笔记本边听边记、数据对比、计算方法、论文白皮书。猫头鹰型重视逻辑和证据，表情不多，决策慢但一旦认可就很难改变。"
+  },
+  {
+    scenario: "你刚开始介绍方案，对方就打断：好了好了，别废话，直接告诉我多少钱，能给我什么优惠？我今天就要定！语气很强势。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"关键词：好了好了、别废话、直接告诉我、我今天就要定、语气强势。老虎型雷厉风行，讨厌废话，注重效率。"
+  },
+  {
+    scenario: "聚餐时有人很热情：哇你这件衣服好好看！你们公司是不是很有名啊？我跟你讲哦，我上次……话很多，表情丰富，喜欢跟大家聊天。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"peacock",
+    explain:"关键词：衣服好好看、我跟你讲哦、话很多、表情丰富。孔雀型热情、爱表现、喜欢被认可，话多且表情丰富。"
+  },
+  {
+    scenario: "团队成员说：我不太懂这些，你帮我看看应该怎么选？你们之前服务过像我这样的案例吗？我比较倾向于稳妥一点的方案……语气比较谦虚。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"koala",
+    explain:"关键词：我不太懂、帮我看看、比较倾向于稳妥、语气谦虚。考拉型依赖性强，需要别人帮她做决策，喜欢稳妥方案。"
+  },
+  {
+    scenario: "对方问：这个阶段付款，如果后面效果不好，能退款吗？你们做了多久了？有多少客户用过？我不想当小白鼠……说话语气比较软。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"koala",
+    explain:"关键词：能退款吗、不想当小白鼠、语气软。考拉型害怕风险，需要安全感，决策较慢。"
+  },
+  {
+    scenario: "对方表情不多，问了很多专业问题：你们的数据来源是什么？有没有第三方检测报告？这个结论是基于什么样本量得出的？说话很理性。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"owl",
+    explain:"关键词：数据来源、第三方检测报告、样本量、表情不多。猫头鹰型谨慎、分析型、注重数据和证据。"
+  },
+  {
+    scenario: "对方一进门就跟你握手，力道很大，坐下后直接说：我时间很紧，你只有5分钟，说说你们能帮我解决什么问题？一直在看表。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"关键词：时间很紧、只有5分钟、一直看表、直接说问题。老虎型时间观念极强，注重效率，讨厌浪费时间。"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answered = false;
+let results = [];
+
+function renderQuestion() {
+  selected = null;
+  answered = false;
+  var q = questions[current];
+
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+
+  var card = document.getElementById("questionCard");
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【场景描述】</span>' + q.scenario + '</div>';
+  html += '<div class="options">';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '  <div class="icon">' + o.icon + '</div>';
+    html += '  <div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+    html += '  <div class="radio"></div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswer"></div>';
+  html += '<div class="explanation" id="explanation">';
+  html += '  <h4>解析</h4>';
+  html += '  <p>' + q.explain + '</p>';
+  html += '</div>';
+  card.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.toggle("selected", i === idx);
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].value === q.answer;
+  answered = true;
+
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    if (q.options[i].value === q.answer) opts[i].classList.add("correct");
+    if (i === selected && !isCorrect) opts[i].classList.add("wrong");
+    opts[i].onclick = null;
+  }
+
+  results[current] = isCorrect;
+
+  // 先显示正确答案
+  var labels = ['A', 'B', 'C', 'D'];
+  var correctIdx = q.options.findIndex(function(o) { return o.value === q.answer; });
+  var correctLabel = labels[correctIdx];
+  var correctText = q.options[correctIdx].text;
+  var correctIcon = q.options[correctIdx].icon;
+  document.getElementById('correctAnswer').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabel + ' — ' + correctIcon + ' ' + correctText + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+
+  document.getElementById("explanation").classList.add("show");
+
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    var self = this;
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  var percent = Math.round(score / results.length * 100);
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = percent;
+
+  var detailHTML = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    var icon = results[i] ? "✅" : "❌";
+    var text = results[i] ? "正确" : "错误";
+    detailHTML += '<div class="result-item"><span class="status">' + icon + '</span><span>第 ' + (i+1) + ' 题：' + text + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detailHTML;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

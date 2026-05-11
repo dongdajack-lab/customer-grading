@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>锁单练习 - 接转推 + 成交技巧</title>
+<style>
+  * { margin:0; padding:0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f5f6fa; min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #27AE60, #2ECC71); color: white; padding: 24px 32px; text-align: center; }
+  header h1 { font-size: 28px; }
+  header p { font-size: 15px; opacity: 0.85; margin-top: 6px; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
+
+  .tab-row { display: flex; gap: 0; margin-bottom: 24px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .tab { flex: 1; padding: 14px 0; text-align: center; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #888; border-bottom: 3px solid transparent; }
+  .tab.active { color: #27AE60; border-bottom-color: #27AE60; background: #E8F8F5; }
+  .tab:hover { background: #f0f0f0; }
+
+  .hint-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .hint-tag { padding: 5px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; }
+  .tag-L { background: #EBF5FB; color: #2980B9; }
+  .tag-S { background: #FDEDEC; color: #E67E22; }
+  .tag-C { background: #F4ECF7; color: #8E44AD; }
+  .tag-P { background: #E8F8F5; color: #27AE60; }
+  .tag-A { background: #FADBD8; color: #C0392B; }
+
+  .progress-bar { height: 6px; background: #ddd; border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #27AE60; border-radius: 3px; transition: width 0.4s; }
+  .progress-text { text-align: right; font-size: 13px; color: #888; margin-bottom: 16px; }
+
+  .card { background: white; border-radius: 16px; padding: 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display: inline-block; background: #27AE60; color: white; border-radius: 20px; padding: 4px 14px; font-size: 13px; margin-bottom: 14px; }
+  .scenario { background: #f8f9fa; border-left: 4px solid #27AE60; padding: 14px 18px; border-radius: 0 12px 12px 0; margin: 14px 0; font-size: 15px; line-height: 1.8; color: #333; }
+  .scenario .label { font-weight: 600; color: #27AE60; }
+
+  .step-label { font-size: 14px; font-weight: 600; color: #555; margin: 16px 0 10px; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-size: 14px; line-height: 1.6; }
+  .option:hover { border-color: #27AE60; background: #F0FFF4; }
+  .option.selected { border-color: #27AE60; background: #E8F8F5; }
+  .option.correct { border-color: #27AE60; background: #E8F8F5; }
+  .option.wrong { border-color: #E74C3C; background: #FDEDEC; }
+  .option .radio { min-width: 22px; height: 22px; border-radius: 50%; border: 2px solid #ccc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-top: 1px; }
+  .option.selected .radio { border-color: #27AE60; background: #27AE60; }
+  .option.selected .radio::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
+  .option .text { flex: 1; }
+
+  .explanation { margin-top: 18px; padding: 14px 18px; background: #E8F8F5; border-radius: 12px; display: none; }
+  .explanation.show { display: block; }
+  .explanation h4 { color: #27AE60; font-size: 14px; margin-bottom: 6px; }
+  .explanation p { font-size: 13px; color: #333; line-height: 1.7; }
+  .correct-answer { margin-top: 18px; padding: 14px 18px; background: #FFF3CD; border: 2px solid #F0AD4E; border-radius: 12px; display: none; font-size: 13px; line-height: 1.6; }
+  .correct-answer.show { display: block; }
+  .correct-answer .label { font-weight: 700; color: #E67E22; margin-bottom: 6px; }
+  .opt-label { font-weight: 700; color: #27AE60; margin-right: 6px; }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 24px; }
+  .btn { flex: 1; padding: 13px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-primary { background: #27AE60; color: white; }
+  .btn-primary:hover { background: #219653; }
+  .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+  .btn-secondary { background: #f0f0f0; color: #333; }
+  .btn-secondary:hover { background: #e0e0e0; }
+
+  .result-page { display: none; }
+  .result-page.show { display: block; text-align: center; }
+  .mode-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+  .badge-LSCPA { background: #F4ECF7; color: #8E44AD; }
+  .badge-close { background: #E8F8F5; color: #27AE60; }
+
+  .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #27AE60, #2ECC71); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .score-circle .num { font-size: 44px; font-weight: 700; line-height: 1; }
+  .score-circle .label { font-size: 13px; margin-top: 4px; opacity: 0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#E67E22; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#E67E22; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background: white; border-radius: 16px; padding: 20px 24px; margin-top: 16px; text-align: left; }
+  .result-detail h3 { font-size: 16px; margin-bottom: 10px; color: #333; }
+  .result-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .result-item:last-child { border-bottom: none; }
+  .result-item .status { font-size: 16px; }
+  .restart-btn { margin-top: 20px; padding: 12px 40px; background: #27AE60; color: white; border: none; border-radius: 10px; font-size: 15px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔒 锁单练习</h1>
+  <p>LSCPA抗拒处理 + 成交技巧训练</p>
+</header>
+
+<div class="container">
+  <div class="tab-row">
+    <div class="tab active" id="tabLSCPA" onclick="switchMode('LSCPA')">LSCPA 抗拒处理</div>
+    <div class="tab" id="tabClose" onclick="switchMode('close')">成交技巧</div>
+  </div>
+
+  <!-- LSCPA模式 -->
+  <div id="modeLSCPA">
+    <div class="progress-text" id="progressTextL">第 1 题 / 共 6 题</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFillL"></div></div>
+    <div class="card" id="questionCardL"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrevL" onclick="prevQL()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNextL" onclick="nextQL()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <!-- 成交技巧模式 -->
+  <div id="modeClose" style="display:none;">
+    <div class="progress-text" id="progressTextC">第 1 题 / 共 5 题</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFillC"></div></div>
+    <div class="card" id="questionCardC"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrevC" onclick="prevQC()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNextC" onclick="nextQC()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <!-- 结果页 -->
+  <div class="result-page" id="resultPage">
+    <div class="mode-badge" id="resultBadge">LSCPA 抗拒处理</div>
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="label" id="scoreLabel">正确 / 0 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">🔄 再来一次</button>
+  </div>
+</div>
+
+<script>
+// ========== 题目数据 ==========
+const lscpaQuestions = [
+  {
+    scenario: `<span class="label">【客户抗拒】</span>客户：你们这个课程太贵了，我看一下再说。`,
+    step: 'L - 倾听（Listen）',
+    question: `面对"太贵了"这个抗拒，第一步<strong>L-倾听</strong>，你应该先说什么？`,
+    options: [
+      { text: '别瞎说，我们一点都不贵！', correct: false },
+      { text: '好的我理解，您说贵能具体说说吗？是觉得价格超出预算，还是觉得不值这个价？', correct: true },
+      { text: '隔壁更贵，我们已经很便宜了！', correct: false },
+      { text: '那您觉得多少钱合适？', correct: false }
+    ],
+    explain: `<strong>✅ 正确做法（L-倾听）</strong><br><br>` +
+      `让客户说完，不打断、不反驳，并引导客户说出真实顾虑。<br>` +
+      `"能具体说说吗？"是关键话术，能挖出客户真正的抗拒原因（是预算问题？还是觉得不值？）。`
+  },
+  {
+    scenario: `<span class="label">【接上题，客户回答】</span>客户：也不是说贵，主要是我之前买过类似的课，没什么用，觉得花这个钱不值。`,
+    step: 'S - 分担（Share）',
+    question: `客户说之前买过类似的课没用，第二步<strong>S-分担</strong>，你应该怎么回应？`,
+    options: [
+      { text: '那是因为您之前买的不好，我们不一样！', correct: false },
+      { text: '我特别理解您的想法！很多客户一开始也有同样的顾虑，之前有过不好的经历确实会谨慎。', correct: true },
+      { text: '那您之前买的什么课？我帮您分析一下哪里不好。', correct: false },
+      { text: '不相信就算了，反正不愁卖。', correct: false }
+    ],
+    explain: `<strong>✅ 正确做法（S-分担）</strong><br><br>` +
+      `分担 = 表达理解，建立共情，让客户感到被理解，而不是被推销。<br>` +
+      `注意：不要否定客户的过去（"之前的不好"），而是认可客户的谨慎。`
+  },
+  {
+    scenario: `<span class="label">【接上题】</span>你：我特别理解您的想法！很多客户一开始也有同样的顾虑。<br>客户：（态度软化）嗯…主要还是怕没效果，白花钱。`,
+    step: 'C - 澄清（Clarify）',
+    question: `客户说"怕没效果，白花钱"，第三步<strong>C-澄清</strong>，你应该问什么？`,
+    options: [
+      { text: '您之前那个课具体哪里没效果？', correct: false },
+      { text: '您主要是担心哪方面呢？是担心内容不实用，还是担心没时间学，还是担心学完了用不上？', correct: true },
+      { text: '不会白花钱的，我们很有用！', correct: false },
+      { text: '那您要不要先试试？', correct: false }
+    ],
+    explain: `<strong>✅ 正确做法（C-澄清）</strong><br><br>` +
+      `澄清 = 了解真实原因，挖掘深层顾虑。客户说"怕没效果"比较笼统，要进一步澄清具体担心什么。<br><br>` +
+      `正确话术给客户多个选项（内容/时间/应用），让客户选，这样能精准找到抗拒点。`
+  },
+  {
+    scenario: `<span class="label">【接上题，客户回答】</span>客户：主要是担心学完了用不上，我是开餐馆的，怕那些销售技巧不适合我。`,
+    step: 'P - 提出（Present）',
+    question: `客户担心"学完用不上，不适合餐饮业"，第四步<strong>P-提出</strong>，你应该怎么回应？`,
+    options: [
+      { text: '我们课程适合所有行业，您放心！', correct: false },
+      { text: '我们的课程有专门针对餐饮业的案例，比如XX餐厅用了我们的方法，3个月营业额提升了40%。您的情况，我帮您分析一下怎么应用…', correct: true },
+      { text: '那您别买了，不适合就算了。', correct: false },
+      { text: '所有行业都一样，销售是通用的。', correct: false }
+    ],
+    explain: `<strong>✅ 正确做法（P-提出）</strong><br><br>` +
+      `提出 = 给出解决方案，针对客户的具体顾虑逐一击破。<br><br>` +
+      `关键：用客户所在行业的案例来证明"能用、有用"，而不是空口说"适合所有行业"。`
+  },
+  {
+    scenario: `<span class="label">【接上题】</span>你详细解释了课程怎么应用在餐饮业，并举了案例。客户看起来很认真在听，偶尔点头。`,
+    step: 'A - 确认（Ask）',
+    question: `客户听完了你的解释，第五步<strong>A-确认</strong>，你应该怎么收尾？`,
+    options: [
+      { text: '好了我讲完了，您自己决定吧。', correct: false },
+      { text: '我们课程很适合您的，要不要报名？', correct: false },
+      { text: '这样解释的话，您觉得清楚了吗？还有哪里需要我再说明的？', correct: true },
+      { text: '那我帮您报名了？', correct: false }
+    ],
+    explain: `<strong>✅ 正确做法（A-确认）</strong><br><br>` +
+      `确认 = 确认顾虑已化解，推进下一步。不要直接跳到"要不要报名"，先确认客户还有没有疑问。<br><br>` +
+      `等客户说"清楚了，没问题了"，再进入成交环节，成功率会高很多。`
+  },
+  {
+    scenario: `<span class="label">【综合题】</span>客户：我回去跟老婆商量一下，明天给你答复。`,
+    step: 'LSCPA 综合',
+    question: `客户说要"跟老婆商量"，这是常见的拖延抗拒。正确的LSCPA处理顺序，下列哪一项<strong>最合适</strong>？`,
+    options: [
+      { text: 'L：好的，您主要想跟她商量哪方面呢？ → S：理解，很多人都需要家人支持 → C：是担心她不支持，还是您自己也有顾虑？ → P：先报名，用效果说服她 → A：这样行吗？', correct: true },
+      { text: 'L：别商量了，直接买！ → S：这个课真的很值 → C：您老婆不懂的 → P：今天有优惠 → A：快决定吧', correct: false },
+      { text: 'L：好的 → S：我理解 → P：直接给方案 → A：行吗？', correct: false },
+      { text: '直接说：那您跟她商量吧，商量好了告诉我。', correct: false }
+    ],
+    explain: `<strong>✅ 正确做法（LSCPA 综合）</strong><br><br>` +
+      `客户说"跟XX商量"通常是委婉拒绝，深层原因可能是：①自己也有顾虑 ②确实需要做决定的人不止他。<br><br>` +
+      `先L（倾听）→ 弄清是需要真的商量，还是借口 → 再针对性处理。`
+  }
+];
+
+const closeQuestions = [
+  {
+    scenario: '<span class="label">【场景】</span>你已经介绍完课程价值，客户频频点头，看起来很认可。这时候应该用哪种<strong>成交技巧</strong>最合适？',
+    question: '客户频频点头、表示认可，这是明确的<strong>成交信号</strong>，你应该怎么做？',
+    options: [
+      { text: '选择成交法：您是今晚报名锁定299元直播价，还是等明天恢复原价999元再报名？', correct: true },
+      { text: '小狗成交法：您先试试看，不满意退款。', correct: false },
+      { text: '等客户主动说好我报名。', correct: false },
+      { text: '继续介绍更多课程细节。', correct: false }
+    ],
+    explain: '<strong>✅ 选择成交法</strong><br><br>当客户频频点头、表示认可时，是成交的最佳时机！不要继续讲，直接用<strong>选择成交法</strong>推进。<br><br>选择成交法的关键：给出两个都导向成交的选项，让客户做「选择」，而不是做「要不要」的决定。'
+  },
+  {
+    scenario: '<span class="label">【场景】</span>接上题。客户说：嗯…299元是还好，但我之前买课都没坚持下来，怕这次也一样。',
+    question: '客户有意愿但担心坚持不下来，这时候用哪种成交技巧<strong>最合适</strong>？',
+    options: [
+      { text: '直接说：那您别买了。', correct: false },
+      { text: '小狗成交法：您先报名体验7天，感受一下课程内容。如果7天内觉得没用，我立刻退款，一分钱不收。', correct: true },
+      { text: '选择成交法：您是要基础版还是高级版？', correct: false },
+      { text: '说：别人都能坚持，您也可以。', correct: false }
+    ],
+    explain: '<strong>✅ 小狗成交法</strong>（零风险承诺）<br><br>客户有意愿但担心「坚持不下来」（这是常见的心理门槛），用<strong>小狗成交法</strong>降低心理门槛。<br><br>核心逻辑：让客户「先试再决定」，零风险承诺能大幅降低决策压力。'
+  },
+  {
+    scenario: '<span class="label">【场景】</span>你用小狗成交法，客户报名了。上完第一晚课后，客户发消息：课程还不错，有点意思。',
+    question: '客户上完第一晚课后主动反馈还不错，这正是<strong>小点成交法</strong>的第二步（建立信任），接下来你应该怎么做？',
+    options: [
+      { text: '说：那您再考虑考虑吧。', correct: false },
+      { text: '说：太好了！我觉得您会很有收获。后面还有4个模块，要不要继续深入学习？→ 升级销售', correct: true },
+      { text: '什么都不说，等客户主动。', correct: false },
+      { text: '说：那您帮我推荐朋友吧。', correct: false }
+    ],
+    explain: '<strong>✅ 小点成交法</strong>（先成交小项目，再逐步升级）<br><br>流程：① 先卖低价品（299元直播课）→ ② 用服务证明价值 → ③ 升级销售（深入学习方案）<br><br>关键：在小点成交后，趁客户满意度高时，自然推进大单。'
+  },
+  {
+    scenario: '<span class="label">【综合题】</span>以下哪一组话术，<strong>最符合「接-转-推」三字诀</strong>来处理客户抗拒？',
+    question: '「接-转-推」是处理客户抗拒的万能公式，下列哪一组话术<strong>顺序正确</strong>？',
+    options: [
+      { text: '接：您说贵能具体说说吗？（倾听）→ 转：很多客户一开始也这么想，后来发现…（转换视角）→ 推：算下来每天不到10块钱，帮您提升30%业绩（推进成交）', correct: true },
+      { text: '接：我们一点都不贵！→ 转：隔壁更贵→ 推：快买吧', correct: false },
+      { text: '接：好的我记下了→ 转：直接介绍产品→ 推：您买吗？', correct: false },
+      { text: '接：理解→ 接：我理解→ 推：买吧', correct: false }
+    ],
+    explain: '<strong>✅ 接-转-推三字诀</strong><br><br>接 = 接纳抗拒，不反驳（您说贵能具体说说吗？）<br>转 = 把抗拒转化为另一个角度（很多客户一开始也这么想…）<br>推 = 给出解决方案，推进成交（算下来每天不到10块钱…）'
+  },
+  {
+    scenario: '<span class="label">【场景】</span>客户问：你们有没有试听课？我想先了解一下。',
+    question: '客户主动要求试听，这是<strong>高意向信号</strong>，你应该怎么回应？',
+    options: [
+      { text: '没有试听，要么全款要么算了。', correct: false },
+      { text: '有的！您可以先报名，我们今天有体验环节，感受一下教学风格。而且今天报名7天内不满意全额退款。（小狗成交法）', correct: true },
+      { text: '试听没有，但我可以给您发个大纲。', correct: false },
+      { text: '您要先试听？那您自己上网找免费资源吧。', correct: false }
+    ],
+    explain: '<strong>✅ 小狗成交法 + 接-转-推</strong><br><br>客户主动要求「试听」= 高意向信号！不要只发大纲（太被动），要把「试听」转化为「零风险报名」。<br><br>话术逻辑：有体验（满足试听需求）+ 零风险（7天退款）+ 主动推进成交。'
+  }
+];
+
+// ========== 状态变量 ==========
+let mode = 'LSCPA';
+let currentL = 0, selectedL = null, answeredL = false, resultsL = [];
+let currentC = 0, selectedC = null, answeredC = false, resultsC = [];
+
+// ========== 模式切换 ==========
+function switchMode(m) {
+  mode = m;
+  document.getElementById('tabLSCPA').classList.toggle('active', m === 'LSCPA');
+  document.getElementById('tabClose').classList.toggle('active', m === 'close');
+  document.getElementById('modeLSCPA').style.display = m === 'LSCPA' ? 'block' : 'none';
+  document.getElementById('modeClose').style.display = m === 'close' ? 'block' : 'none';
+  document.getElementById('resultPage').classList.remove('show');
+  if (m === 'LSCPA') renderQuestionL();
+  else renderQuestionC();
+}
+
+// ========== LSCPA模式 ==========
+function renderQuestionL() {
+  selectedL = null; answeredL = false;
+  const q = lscpaQuestions[currentL];
+  document.getElementById('progressTextL').textContent = `第 ${currentL+1} 题 / 共 ${lscpaQuestions.length} 题`;
+  document.getElementById('progressFillL').style.width = `${(currentL / lscpaQuestions.length)*100}%`;
+  document.getElementById('btnNextL').textContent = '确认答案';
+  document.getElementById('btnNextL').disabled = true;
+  document.getElementById('btnNextL').onclick = nextQL;
+  document.getElementById('btnPrevL').disabled = currentL === 0;
+
+  document.getElementById('questionCardL').innerHTML = `
+    <div class="question-badge">第 ${currentL+1} 题 · ${q.step}</div>
+    <div class="scenario">${q.scenario}</div>
+    <div style="font-weight:600; margin:14px 0 10px; color:#333;">${q.question}</div>
+    <div class="options">
+      ${q.options.map((o,i) => {
+        var labels = ['A','B','C','D'];
+        return `<div class="option" id="optL${i}" onclick="selectOptionL(${i})">
+          <div class="radio"></div>
+          <div class="text"><span class="opt-label">[${labels[i]}]</span> ${o.text}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="correct-answer" id="correctAnswerL"></div>
+    <div class="explanation" id="explanationL">
+      <h4>📝 解析</h4>
+      <p>${q.explain}</p>
+    </div>
+  `;
+}
+
+function selectOptionL(idx) {
+  if (answeredL) return;
+  selectedL = idx;
+  document.querySelectorAll('#questionCardL .option').forEach((el,i) => el.classList.toggle('selected', i===idx));
+  document.getElementById('btnNextL').disabled = false;
+}
+
+function nextQL() {
+  if (selectedL === null) return;
+  const q = lscpaQuestions[currentL];
+  const isCorrect = q.options[selectedL].correct;
+  answeredL = true;
+  document.querySelectorAll('#questionCardL .option').forEach((el,i) => {
+    if (q.options[i].correct) el.classList.add('correct');
+    if (i === selectedL && !isCorrect) el.classList.add('wrong');
+    el.onclick = null;
+  });
+  resultsL[currentL] = isCorrect;
+
+  // 先显示正确答案
+  var labelsL = ['A', 'B', 'C', 'D'];
+  var correctIdxL = lscpaQuestions[currentL].options.findIndex(function(o) { return o.correct === true; });
+  var correctLabelL = labelsL[correctIdxL];
+  var correctTextL = lscpaQuestions[currentL].options[correctIdxL].text;
+  document.getElementById('correctAnswerL').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabelL + ' — ' + correctTextL + '</div>';
+  document.getElementById('correctAnswerL').classList.add('show');
+
+  document.getElementById('explanationL').classList.add('show');
+  document.getElementById('btnNextL').textContent = currentL < lscpaQuestions.length-1 ? '下一题 →' : '查看结果';
+  if (currentL < lscpaQuestions.length-1) {
+    document.getElementById('btnNextL').onclick = () => { currentL++; renderQuestionL(); };
+  } else {
+    document.getElementById('btnNextL').onclick = () => showResult('LSCPA');
+  }
+  document.getElementById('btnNextL').disabled = false;
+}
+
+function prevQL() { if (currentL > 0) { currentL--; renderQuestionL(); } }
+
+// ========== 成交技巧模式 ==========
+function renderQuestionC() {
+  selectedC = null; answeredC = false;
+  const q = closeQuestions[currentC];
+  document.getElementById('progressTextC').textContent = `第 ${currentC+1} 题 / 共 ${closeQuestions.length} 题`;
+  document.getElementById('progressFillC').style.width = `${(currentC / closeQuestions.length)*100}%`;
+  document.getElementById('btnNextC').textContent = '确认答案';
+  document.getElementById('btnNextC').disabled = true;
+  document.getElementById('btnNextC').onclick = nextQC;
+  document.getElementById('btnPrevC').disabled = currentC === 0;
+
+  document.getElementById('questionCardC').innerHTML = `
+    <div class="question-badge">第 ${currentC+1} 题 · 成交技巧</div>
+    <div class="scenario">${q.scenario}</div>
+    <div style="font-weight:600; margin:14px 0 10px; color:#333;">${q.question}</div>
+    <div class="options">
+      ${q.options.map((o,i) => {
+        var labels = ['A','B','C','D'];
+        return `<div class="option" id="optC${i}" onclick="selectOptionC(${i})">
+          <div class="radio"></div>
+          <div class="text"><span class="opt-label">[${labels[i]}]</span> ${o.text}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="correct-answer" id="correctAnswerC"></div>
+    <div class="explanation" id="explanationC">
+      <h4>📝 解析</h4>
+      <p>${q.explain}</p>
+    </div>
+  `;
+}
+
+function selectOptionC(idx) {
+  if (answeredC) return;
+  selectedC = idx;
+  document.querySelectorAll('#questionCardC .option').forEach((el,i) => el.classList.toggle('selected', i===idx));
+  document.getElementById('btnNextC').disabled = false;
+}
+
+function nextQC() {
+  if (selectedC === null) return;
+  const q = closeQuestions[currentC];
+  const isCorrect = q.options[selectedC].correct;
+  answeredC = true;
+  document.querySelectorAll('#questionCardC .option').forEach((el,i) => {
+    if (q.options[i].correct) el.classList.add('correct');
+    if (i === selectedC && !isCorrect) el.classList.add('wrong');
+    el.onclick = null;
+  });
+  resultsC[currentC] = isCorrect;
+
+  // 先显示正确答案
+  var labelsC = ['A', 'B', 'C', 'D'];
+  var correctIdxC = closeQuestions[currentC].options.findIndex(function(o) { return o.correct === true; });
+  var correctLabelC = labelsC[correctIdxC];
+  var correctTextC = closeQuestions[currentC].options[correctIdxC].text;
+  document.getElementById('correctAnswerC').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabelC + ' — ' + correctTextC + '</div>';
+  document.getElementById('correctAnswerC').classList.add('show');
+
+  document.getElementById('explanationC').classList.add('show');
+  document.getElementById('btnNextC').textContent = currentC < closeQuestions.length-1 ? '下一题 →' : '查看结果';
+  if (currentC < closeQuestions.length-1) {
+    document.getElementById('btnNextC').onclick = () => { currentC++; renderQuestionC(); };
+  } else {
+    document.getElementById('btnNextC').onclick = () => showResult('close');
+  }
+  document.getElementById('btnNextC').disabled = false;
+}
+
+function prevQC() { if (currentC > 0) { currentC--; renderQuestionC(); } }
+
+// ========== 结果显示 ==========
+function showResult(m) {
+  document.getElementById('modeLSCPA').style.display = 'none';
+  document.getElementById('modeClose').style.display = 'none';
+  const rp = document.getElementById('resultPage');
+  rp.classList.add('show');
+
+  const badge = document.getElementById('resultBadge');
+  const scoreNum = document.getElementById('scoreNum');
+  const scoreLabel = document.getElementById('scoreLabel');
+
+  if (m === 'LSCPA') {
+    badge.textContent = 'LSCPA 抗拒处理';
+    badge.className = 'mode-badge badge-LSCPA';
+    const score = resultsL.filter(Boolean).length;
+    const percent = Math.round(score / lscpaQuestions.length * 100);
+    scoreNum.textContent = score;
+    scoreLabel.textContent = `正确 / ${lscpaQuestions.length} 题`;
+    document.getElementById('percentNum').textContent = percent;
+    let detailHTML = '<h3>📊 答题详情</h3>';
+    resultsL.forEach((r,i) => {
+      detailHTML += `<div class="result-item"><span class="status">${r?'✅':'❌'}</span><span>第${i+1}题：${r?'正确':'错误'} — ${lscpaQuestions[i].step}</span></div>`;
+    });
+    document.getElementById('resultDetail').innerHTML = detailHTML;
+  } else {
+    badge.textContent = '成交技巧';
+    badge.className = 'mode-badge badge-close';
+    const score = resultsC.filter(Boolean).length;
+    const percent = Math.round(score / closeQuestions.length * 100);
+    scoreNum.textContent = score;
+    scoreLabel.textContent = `正确 / ${closeQuestions.length} 题`;
+    document.getElementById('percentNum').textContent = percent;
+    let detailHTML = '<h3>📊 答题详情</h3>';
+    resultsC.forEach((r,i) => {
+      detailHTML += `<div class="result-item"><span class="status">${r?'✅':'❌'}</span><span>第${i+1}题：${r?'正确':'错误'} — 成交技巧</span></div>`;
+    });
+    document.getElementById('resultDetail').innerHTML = detailHTML;
+  }
+}
+
+function restart() {
+  currentL = 0; selectedL = null; answeredL = false; resultsL = [];
+  currentC = 0; selectedC = null; answeredC = false; resultsC = [];
+  document.getElementById('resultPage').classList.remove('show');
+  if (mode === 'LSCPA') { document.getElementById('modeLSCPA').style.display = 'block'; renderQuestionL(); }
+  else { document.getElementById('modeClose').style.display = 'block'; renderQuestionC(); }
+}
+
+renderQuestionL();
+</script>
+</body>
+</html>
