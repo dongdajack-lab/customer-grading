@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 识人练习 - 永锐线束定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#1a5fa8,#2980B9); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header .subtitle { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,0.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#1a5fa8; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#1a5fa8; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #1a5fa8; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#1a5fa8; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:center; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; }
+  .option:hover { border-color:#1a5fa8; background:#EBF5FB; }
+  .option.selected { border-color:#1a5fa8; background:#EBF5FB; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .icon { font-size:28px; flex-shrink:0; }
+  .option .text { flex:1; }
+  .option .radio { width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .option.selected .radio { border-color:#1a5fa8; background:#1a5fa8; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#1a5fa8; margin-right:4px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#1a5fa8; color:white; }
+  .btn-primary:hover { background:#154e8d; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; text-align:center; }
+  .result-page.show { display:block; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#1a5fa8,#2980B9); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .label { font-size:14px; margin-top:4px; opacity:0.85; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#1a5fa8; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#1a5fa8; margin-left:2px; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#1a5fa8; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-bar { background:#EBF5FB; border-radius:12px; padding:12px 18px; margin-bottom:20px; font-size:13px; color:#1a5fa8; line-height:1.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>识人练习</h1>
+  <p class="subtitle">四种动物性格识别测试 · 共10题</p>
+  <span class="company-tag">📦 广东永锐线束定制版</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-bar">💡 场景均来自线束/电线电缆 ToB 销售实战，对象为工程机械、汽车、家电厂的采购、技术、老板等角色</div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="label">正确 / 10 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    scenario: "你拜访某工程机械厂采购经理，对方一坐下就说：你只有10分钟，直接说你们线束比现在供应商强在哪，价格能给到什么条件，今天能决定最好。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"关键词：只有10分钟、直接说、今天能决定最好。老虎型：时间观念极强，讨厌废话，说话快且直接，想掌控谈判节奏。应对策略：开门见山，准备好一句话优势对比，不要做长篇介绍。"
+  },
+  {
+    scenario: "你拜访某家电集团的电气工程师，他拿着笔记本，问你：你们线束的端子压接力测试报告有吗？用的是什么铜材？通过了哪几个认证？能提供PPAP文件吗？",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"owl",
+    explain:"关键词：压接力测试报告、铜材材质、认证、PPAP文件，一口气问出一串技术问题。猫头鹰型：分析型、注重数据和证据，表情不多，决策慢但认可后很稳定。应对策略：准备充分的技术资料，用数据说话，不要催他，给他时间研究。"
+  },
+  {
+    scenario: "你打电话给某汽车零部件厂的采购主管，对方说：你们上次送样我还没来得及看，这个事情我要汇报给采购总监，他说可以我才能往下推进，你先等我消息吧……语气很温和。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"koala",
+    explain:"关键词：还没来得及看、要汇报给领导、等我消息、语气温和。考拉型：依赖性强，回避独立决策，不愿担责，行动慢。应对策略：帮他准备一份可以直接给领导汇报的对比材料，降低他的行动门槛。"
+  },
+  {
+    scenario: "你在行业展会上碰到某商用车厂的采购总监，他主动过来跟你握手，说：哎永锐的！我在朋友圈看到你们了，你们那个新能源线束做得还不错嘛！你们在圈子里名气越来越大了！说话很热情，一直在笑。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"peacock",
+    explain:"关键词：主动打招呼、在朋友圈看到、名气越来越大、热情、一直在笑。孔雀型：社交型、热情、喜欢夸人也喜欢被认可，注重关系和感觉。应对策略：先聊关系，多认可他的眼光，再聊业务。"
+  },
+  {
+    scenario: "你拜访某轨道交通总包商的项目采购，他说：你们的价格我查过了，比行业均价高8%，虽然你们客户资质不错，但我们有严格的成本管控，这块你要给我一个合理的解释。语气平静但很坚定。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"关键词：查过了、比行业均价高8%、严格成本管控、要给我一个解释、语气坚定。老虎型：做了功课，直接挑战，掌控节奏，不绕弯子。应对策略：不要道歉，直接用TCO（总拥有成本）逻辑反将一军，用数据对比不良率和维修成本。"
+  },
+  {
+    scenario: "客户是一个小型汽配厂的老板，他说：我知道你们挺有名的，三一重工都是你们客户，这个我信。就是我这个单不大，你们会不会服务我们这种小厂？你们给不给力啊？语气有点担忧。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"koala",
+    explain:"关键词：知道你们挺有名的（找安全感）、会不会服务我们小厂（怕被忽视）、给不给力（需要保证）、语气担忧。考拉型：喜欢找有背书的大品牌，但同时害怕自己不够重要，需要被安抚和保证。应对策略：明确告诉他专属服务机制，给他安全感。"
+  },
+  {
+    scenario: "你给某新能源汽车厂的采购发了一份报价单，对方回复消息：你们这个价格，比上次高了5%，这是为什么？铜价涨了多少？人工涨了多少？每项成本能不能列个明细给我？",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"owl",
+    explain:"关键词：价格高了5%（精确计算）、为什么（要逻辑）、铜价人工各涨多少（要拆分）、要成本明细。猫头鹰型：注重数据和逻辑，不接受模糊答案，要求透明和可验证。应对策略：提供详细的成本构成说明，数据要经得起推敲，不能含糊。"
+  },
+  {
+    scenario: "你在客户公司等候室等待，采购总监的助理出来说：王总今天临时有个重要会议，让我转告你，他下周一上午有时间，可以来正式汇报一下你们的方案。语气很礼貌。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐅", text:"老虎型（大Boss）", value:"tiger" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"虽然你只见到了助理，但从信号判断：临时取消（时间管控强）、要求正式汇报方案（注重效率和实质）。这是典型的老虎型大Boss的行为模式。应对策略：下周一的汇报要极度精炼，核心价值1-2页PPT讲清楚，不要做冗长展示。"
+  },
+  {
+    scenario: "你在微信上跟进一个潜在客户，对方回复：你们的资料我发给我们张工看了，他说技术上没问题。不过我们老板说还要再问几家，我也没办法，你理解一下，等我消息。语气客气但被动。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"koala",
+    explain:"关键词：我也没办法、等我消息、语气客气但被动。考拉型：不是决策人，习惯于推给领导，回避自己表态，怕承担责任。应对策略：绕过这个人，想办法直接接触真正的决策人（老板），同时帮他准备可以向老板汇报的材料。"
+  },
+  {
+    scenario: "你第一次电话联系一个工程机械厂的采购经理，对方直接说：说吧，你们公司叫什么，主要做什么产品，服务过哪些客户，价格区间大概多少，一分钟内说完。",
+    options: [
+      { icon:"🐅", text:"老虎型", value:"tiger" },
+      { icon:"🦚", text:"孔雀型", value:"peacock" },
+      { icon:"🐨", text:"考拉型", value:"koala" },
+      { icon:"🦉", text:"猫头鹰型", value:"owl" }
+    ],
+    answer:"tiger",
+    explain:"关键词：一分钟内说完、主动列出要点（公司、产品、客户、价格）、语气强势直接。老虎型：掌控节奏，讨厌废话，只关心核心信息，高效决策。应对策略：真的用1分钟说完，不要超时，展现你同样高效，这是获得老虎型尊重的第一步。"
+  }
+];
+
+let current = 0, selected = null, answered = false, results = [];
+
+function renderQuestion() {
+  selected = null; answered = false;
+  var q = questions[current];
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+
+  var card = document.getElementById("questionCard");
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【场景描述】</span>' + q.scenario + '</div>';
+  html += '<div style="font-weight:600;margin:16px 0 8px;color:#333;">这位客户最可能是哪种性格类型？</div>';
+  html += '<div class="options">';
+  var labels = ['A','B','C','D'];
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '<div class="icon">' + o.icon + '</div>';
+    html += '<div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+    html += '<div class="radio"></div></div>';
+  }
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswer"></div>';
+  html += '<div class="explanation" id="explanation"><h4>解析 + 应对策略</h4><p>' + q.explain + '</p></div>';
+  card.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  document.querySelectorAll(".option").forEach((el,i) => el.classList.toggle("selected", i===idx));
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].value === q.answer;
+  answered = true;
+  document.querySelectorAll(".option").forEach((el,i) => {
+    if (q.options[i].value === q.answer) el.classList.add("correct");
+    if (i === selected && !isCorrect) el.classList.add("wrong");
+    el.onclick = null;
+  });
+  results[current] = isCorrect;
+  var labels = ['A','B','C','D'];
+  var correctIdx = q.options.findIndex(o => o.value === q.answer);
+  document.getElementById('correctAnswer').innerHTML =
+    '<div class="label">✅ 正确答案：' + labels[correctIdx] + ' — ' + q.options[correctIdx].icon + ' ' + q.options[correctIdx].text + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+  document.getElementById("explanation").classList.add("show");
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() { if (current > 0) { current--; renderQuestion(); } }
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = results.filter(Boolean).length;
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = Math.round(score / results.length * 100);
+  var d = "<h3>答题详情</h3>";
+  results.forEach((r,i) => { d += '<div class="result-item"><span>' + (r?'✅':'❌') + '</span><span>第 ' + (i+1) + ' 题：' + (r?'正确':'错误') + '</span></div>'; });
+  document.getElementById("resultDetail").innerHTML = d;
+}
+
+function restart() {
+  current = 0; selected = null; answered = false; results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
