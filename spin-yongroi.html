@@ -5,71 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>大董老师 · 挖痛练习 - 永锐线束定制版</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
-  header { background:linear-gradient(135deg,#1a5fa8,#2980B9); color:white; padding:24px 32px; text-align:center; }
-  header h1 { font-size:26px; }
-  header .subtitle { font-size:14px; opacity:0.85; margin-top:6px; }
-  header .company-tag { display:inline-block; background:rgba(255,255,255,0.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
-  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
-  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
-  .progress-fill { height:100%; background:#1a5fa8; border-radius:3px; transition:width 0.4s; }
-  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
-  .spin-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
-  .spin-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
-  .tag-S { background:#EBF5FB; color:#2980B9; }
-  .tag-P { background:#FDEDEC; color:#E67E22; }
-  .tag-I { background:#FADBD8; color:#C0392B; }
-  .tag-N { background:#E8F8F5; color:#27AE60; }
-  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
-  .question-badge { display:inline-block; background:#1a5fa8; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
-  .scenario { background:#f8f9fa; border-left:4px solid #1a5fa8; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
-  .scenario .label { font-weight:600; color:#1a5fa8; }
-  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
-  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
-  .option:hover { border-color:#1a5fa8; background:#EBF5FB; }
-  .option.selected { border-color:#1a5fa8; background:#EBF5FB; }
-  .option.correct { border-color:#27AE60; background:#E8F8F5; }
-  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
-  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
-  .option.selected .radio { border-color:#1a5fa8; background:#1a5fa8; }
-  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
-  .option .text { flex:1; }
-  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
-  .explanation.show { display:block; }
-  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
-  .explanation p { font-size:14px; color:#333; line-height:1.7; }
-  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
-  .correct-answer.show { display:block; }
-  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
-  .opt-label { font-weight:700; color:#1a5fa8; margin-right:6px; }
-  .btn-row { display:flex; gap:12px; margin-top:24px; }
-  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-  .btn-primary { background:#1a5fa8; color:white; }
-  .btn-primary:hover { background:#154e8d; }
-  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
-  .btn-secondary { background:#f0f0f0; color:#333; }
-  .btn-secondary:hover { background:#e0e0e0; }
-  .result-page { display:none; }
-  .result-page.show { display:block; text-align:center; }
-  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#1a5fa8,#2980B9); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
-  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
-  .score-circle .label { font-size:14px; margin-top:4px; opacity:0.85; }
-  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
-  .percent-circle .num { font-size:36px; font-weight:700; color:#1a5fa8; line-height:1; }
-  .percent-circle .unit { font-size:20px; font-weight:700; color:#1a5fa8; }
-  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
-  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
-  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
-  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
-  .result-item:last-child { border-bottom:none; }
-  .restart-btn { margin-top:24px; padding:14px 48px; background:#1a5fa8; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;min-height:100vh}
+  header{background:linear-gradient(135deg,#1a5fa8,#2980B9);color:white;padding:24px 32px;text-align:center}
+  header h1{font-size:26px}
+  header .subtitle{font-size:14px;opacity:.85;margin-top:6px}
+  header .company-tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px}
+  .container{max-width:800px;margin:0 auto;padding:32px 20px}
+  .progress-bar{height:6px;background:#ddd;border-radius:3px;margin-bottom:24px;overflow:hidden}
+  .progress-fill{height:100%;background:#1a5fa8;border-radius:3px;transition:width .4s}
+  .progress-text{text-align:right;font-size:13px;color:#888;margin-bottom:4px}
+  .spin-hint{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .spin-tag{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .tag-S{background:#EBF5FB;color:#2980B9}
+  .tag-P{background:#FDEDEC;color:#E67E22}
+  .tag-I{background:#FADBD8;color:#C0392B}
+  .tag-N{background:#E8F8F5;color:#27AE60}
+  .card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+  .question-badge{display:inline-block;background:#1a5fa8;color:white;border-radius:20px;padding:4px 14px;font-size:13px;margin-bottom:16px}
+  .scenario{background:#f8f9fa;border-left:4px solid #1a5fa8;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;line-height:1.8;color:#333}
+  .scenario .label{font-weight:600;color:#1a5fa8}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1.6}
+  .option:hover{border-color:#1a5fa8;background:#EBF5FB}
+  .option.selected{border-color:#1a5fa8;background:#EBF5FB}
+  .option.correct{border-color:#27AE60;background:#E8F8F5}
+  .option.wrong{border-color:#E74C3C;background:#FDEDEC}
+  .option .radio{min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+  .option.selected .radio{border-color:#1a5fa8;background:#1a5fa8}
+  .option.selected .radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%;display:block}
+  .option .text{flex:1}
+  .explanation{margin-top:20px;padding:16px 20px;background:#E8F8F5;border-radius:12px;display:none}
+  .explanation.show{display:block}
+  .explanation h4{color:#27AE60;font-size:15px;margin-bottom:8px}
+  .explanation p{font-size:14px;color:#333;line-height:1.7}
+  .correct-answer{margin-top:20px;padding:14px 18px;background:#FFF3CD;border:2px solid #F0AD4E;border-radius:12px;display:none;font-size:14px;line-height:1.6}
+  .correct-answer.show{display:block}
+  .correct-answer .clabel{font-weight:700;color:#E67E22;margin-bottom:6px}
+  .opt-label{font-weight:700;color:#1a5fa8;margin-right:6px}
+  .btn-row{display:flex;gap:12px;margin-top:24px}
+  .btn{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+  .btn-primary{background:#1a5fa8;color:white}
+  .btn-primary:hover{background:#154e8d}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed}
+  .btn-secondary{background:#f0f0f0;color:#333}
+  .btn-secondary:hover{background:#e0e0e0}
+  .result-page{display:none}
+  .result-page.show{display:block;text-align:center}
+  .score-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#1a5fa8,#2980B9);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .num{font-size:48px;font-weight:700;line-height:1}
+  .score-circle .slabel{font-size:14px;margin-top:4px;opacity:.85}
+  .percent-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .percent-circle .num{font-size:36px;font-weight:700;color:#1a5fa8;line-height:1}
+  .percent-circle .unit{font-size:20px;font-weight:700;color:#1a5fa8}
+  .percent-circle .sub-label{font-size:13px;color:#999;margin-top:2px}
+  .result-detail{background:white;border-radius:16px;padding:24px;margin-top:20px;text-align:left}
+  .result-detail h3{font-size:17px;margin-bottom:12px;color:#333}
+  .result-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+  .result-item:last-child{border-bottom:none}
+  .restart-btn{margin-top:24px;padding:14px 48px;background:#1a5fa8;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>挖痛练习</h1>
+  <h1>大董老师 · 挖痛练习</h1>
   <p class="subtitle">SPIN四层提问法训练 · 共8题</p>
   <span class="company-tag">📦 广东永锐线束定制版</span>
 </header>
@@ -86,15 +86,15 @@
     </div>
     <div class="card" id="questionCard"></div>
     <div class="btn-row">
-      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
-      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
     </div>
   </div>
 
   <div class="result-page" id="resultPage">
     <div class="score-circle">
       <span class="num" id="scoreNum">0</span>
-      <span class="label">正确 / 8 题</span>
+      <span class="slabel">正确 / 8 题</span>
     </div>
     <div class="percent-circle">
       <span class="num" id="percentNum">0</span>
@@ -102,188 +102,221 @@
       <span class="sub-label">百分制</span>
     </div>
     <div class="result-detail" id="resultDetail"></div>
-    <button class="restart-btn" onclick="restart()">再来一次</button>
+    <button class="restart-btn" id="restartBtn">再来一次</button>
   </div>
 </div>
 
 <script>
-const questions = [
-  {
-    scenario: "你初次拜访某工程机械厂的采购经理，他说：我们现在线束供应商有两家，整体还凑合，就是偶尔有点小问题。",
-    question: "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的现状？",
-    options: [
-      { text:"您目前两家供应商各占大概多少份额？主要是做什么车型的线束？每年采购量大概多少？", type:"S", correct:true },
-      { text:"那偶尔出的小问题是什么问题？", type:"P", correct:false },
-      { text:"这些小问题对你们生产有影响吗？", type:"I", correct:false },
-      { text:"如果这些问题解决了，对你们帮助大吗？", type:"N", correct:false }
-    ],
-    explain:"<strong>✅ S - 现状问题</strong><br><br>第一步先摸清楚现状：供应商格局、车型结构、采购规模，才能找到切入点。<br>在不了解现状的情况下直接问痛点，很容易问偏，也容易让客户觉得你不专业。"
-  },
-  {
-    scenario: "采购经理说：我们90%的线束都在现在这两家采购，主要做挖掘机和装载机。年采购量大概在1500万左右，对，就是偶尔有批次不良，有时候装配线那边会投诉我们。",
-    question: "采购经理说出了痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
-    options: [
-      { text:"批次不良大概多久出一次？每次不良给你们造成多少损失？", type:"I", correct:false },
-      { text:"如果有一家供应商能把不良率控制在更低水平，您愿意了解一下吗？", type:"N", correct:false },
-      { text:"批次不良主要是哪类问题？端子接触不良、绝缘层问题还是线径不对？除了装配线投诉，还有没有其他麻烦？", type:"P", correct:true },
-      { text:"您现在两家供应商谁的不良率更高？", type:"S", correct:false }
-    ],
-    explain:"<strong>✅ P - 难点问题</strong><br><br>把痛点问具体：不良是哪类问题（端子/绝缘/线径），还有没有其他麻烦。<br>问得越具体，你后面提方案的针对性就越强，也越能体现你的专业度。"
-  },
-  {
-    scenario: "采购经理说：主要是端子接触不良，还有就是颜色标识有时候对不上，装配工人容易搞错，返工率挺高的。另外每次验货也很费时间，要抽检很多。",
-    question: "采购经理说出了多个痛点，接下来哪句话是 <strong>I - 影响问题</strong>，能放大问题的严重性？",
-    options: [
-      { text:"如果我们能解决这些问题，对您帮助大吗？", type:"N", correct:false },
-      { text:"您的验货标准是什么？", type:"S", correct:false },
-      { text:"端子接触不良和颜色标识问题，大概每个月给你们造成多少返工工时？有没有因此影响过整机的交付节点？万一出厂后出现质量问题，客户索赔的风险有多大？", type:"I", correct:true },
-      { text:"有没有因为这个被装配线投诉过领导？", type:"P", correct:false }
-    ],
-    explain:"<strong>✅ I - 影响问题</strong><br><br>三个维度放大影响：<br>① 内部成本（返工工时）<br>② 交付风险（影响节点）<br>③ 外部风险（客户索赔）<br><br>让采购经理意识到这不只是"偶尔小问题"，而是有真实成本和风险的系统性隐患。"
-  },
-  {
-    scenario: "采购经理沉吟片刻：你这样一算……每个月返工工时大概得损失5-6万，上个月还因为颜色错装延误了一台挖机出厂，客户那边催了好几次，我被总经理说了一顿。",
-    question: "采购经理已经感受到问题严重，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决的价值？",
-    options: [
-      { text:"每个月损失5-6万，那一年就是60-70万，这个数字是否已经让您觉得必须解决了？", type:"I", correct:false },
-      { text:"如果有一家线束供应商，能把端子不良率控制在0.1%以内，颜色标识100%符合你们标准，出货前提供全检报告，让你们的验货时间缩短50%——这对你们的装配线和你本人的工作压力，会有什么改变？", type:"N", correct:true },
-      { text:"您现在两家供应商哪家问题更多？", type:"S", correct:false },
-      { text:"端子不良率他们目前大概多少？", type:"P", correct:false }
-    ],
-    explain:"<strong>✅ N - 需求回报问题</strong><br><br>N型问题要让客户自己说出"这个方案值得"。<br>关键技巧：把解决方案的具体价值点出来（0.1%不良率/全检报告/验货时间-50%），再问"这对你意味着什么"，让他自己算这笔账。"
-  },
-  {
-    scenario: "你是永锐销售，拜访一家新能源汽车厂的高压线束采购负责人，他说：我们正在做新车型的线束选型，还在初步了解阶段。",
-    question: "第一步（S-现状问题），你应该先问哪句话？",
-    options: [
-      { text:"如果找到合适的供应商，您的线束采购能提升多少效率？", type:"N", correct:false },
-      { text:"您这个车型是纯电平台还是混动？高压线束的电压等级大概是多少伏？预计月需求量是多少？目前在对比几家供应商？", type:"S", correct:true },
-      { text:"您现在遇到最大的选型困难是什么？", type:"P", correct:false },
-      { text:"如果选型周期太长会不会影响你们的量产节点？", type:"I", correct:false }
-    ],
-    explain:"<strong>✅ S - 现状问题</strong><br><br>新能源高压线束有高度专业的参数要求（电压等级、车型平台、需求量），第一步必须先摸清这些基本参数，才能知道永锐有没有匹配的产品能力，以及竞争格局如何。"
-  },
-  {
-    scenario: "采购负责人说：纯电平台，400V/800V双平台都要做。月需求量初期大概2000套，量产后会更大。目前在对比三家，你们是其中之一，就是觉得高压连接器这块不太好选。",
-    question: "接下来应该问 <strong>P - 难点问题</strong>，下列哪句话最合适？",
-    options: [
-      { text:"高压连接器选型难这个问题，会影响你们的量产节点吗？", type:"I", correct:false },
-      { text:"高压连接器具体难在哪？是IP防护等级难达标，还是高温性能波动，还是供应商技术资质不好验证？", type:"P", correct:true },
-      { text:"如果解决了选型问题，你们能更快推进量产吗？", type:"N", correct:false },
-      { text:"你们800V平台的量产计划是什么时候？", type:"S", correct:false }
-    ],
-    explain:"<strong>✅ P - 难点问题</strong><br><br>把高压连接器"不好选"的问题具体化：<br>• IP防护等级难达标（密封性）<br>• 高温性能波动（热管理场景）<br>• 供应商资质不好验证（审厂成本）<br><br>找到具体痛点，永锐才能精准展示高压连接器的技术优势。"
-  },
-  {
-    scenario: "采购负责人说：主要是IP防护等级，我们要求IP67，现在对比的供应商里有两家IP67数据比较模糊，不知道是真的还是刷的认证。另外就是量产后批次稳定性，样品好但批量出问题的供应商我们吃过亏。",
-    question: "接下来应该问 <strong>I - 影响问题</strong>，下列哪句话最合适？",
-    options: [
-      { text:"如果找到IP67真实达标且批次稳定的供应商，对您推进量产帮助大吗？", type:"N", correct:false },
-      { text:"IP67认证造假这个问题，您有没有遇到过实际案例？批次稳定性出问题过的那家，当时大概给你们造成什么损失？如果新车型量产后出现同样问题，会影响你们的整车交付和市场口碑吗？", type:"I", correct:true },
-      { text:"您之前吃过亏的是哪家供应商？", type:"P", correct:false },
-      { text:"你们IP67测试是内部测试还是外部第三方测试？", type:"S", correct:false }
-    ],
-    explain:"<strong>✅ I - 影响问题</strong><br><br>把两个风险的影响链条打通：<br>• IP67造假 → 实车出问题 → 整车召回 / 安全事故<br>• 批次稳定性差 → 停产 → 交付延误 → 市场口碑受损<br><br>这两个风险在新能源行业的代价极大，要让他充分感受到不解决这个问题的后果。"
-  },
-  {
-    scenario: "采购负责人说：对，之前那家供应商批量出问题那次，停产2天，追责下来还影响了我们季度KPI。IP67造假也遇到过，还好是内部测试发现了，不然上了整车就麻烦大了。",
-    question: "采购负责人已经充分感受到风险，接下来应该问 <strong>N - 需求回报问题</strong>，下列哪句话最合适？",
-    options: [
-      { text:"那您希望我们怎么证明我们没有这些问题？", type:"P", correct:false },
-      { text:"您之前停产那次，大概损失了多少钱？", type:"I", correct:false },
-      { text:"如果有一家线束供应商能提供可溯源的IP67第三方检测报告、量产前全系列PPAP认证、以及首批量产后3个月的驻厂质检支持——这对您来说意味着什么？能解决您现在选型最担心的问题吗？", type:"N", correct:true },
-      { text:"我们现在能安排您参观工厂吗？", type:"S", correct:false }
-    ],
-    explain:"<strong>✅ N - 需求回报问题</strong><br><br>把永锐的核心差异化能力直接对应客户的两大核心顾虑：<br>• 可溯源IP67第三方报告 → 解决认证造假担忧<br>• 量产前全系列PPAP → 解决批次稳定性担忧<br>• 首批驻厂质检支持 → 给他额外安全感<br><br>然后问他"这能解决您的问题吗"——让他自己说出"是"，成交水到渠成。"
-  }
-];
+(function(){
+  var questions = [
+    {
+      scenario: "你初次拜访某工程机械厂的采购经理，他说：我们现在线束供应商有两家，整体还凑合，就是偶尔有点小问题。",
+      question: "下面哪句话是 S - 现状问题，能最好地了解他的现状？",
+      options: [
+        {text:"您目前两家供应商各占大概多少份额？主要是做什么车型的线束？每年采购量大概多少？", correct:true},
+        {text:"那偶尔出的小问题是什么问题？", correct:false},
+        {text:"这些小问题对你们生产有影响吗？", correct:false},
+        {text:"如果这些问题解决了，对你们帮助大吗？", correct:false}
+      ],
+      explain:"S - 现状问题：第一步先摸清楚现状——供应商格局、车型结构、采购规模，才能找到切入点。在不了解现状的情况下直接问痛点，很容易问偏，也容易让客户觉得你不专业。"
+    },
+    {
+      scenario: "采购经理说：我们90%的线束都在现在这两家采购，主要做挖掘机和装载机。年采购量大概在1500万左右，对，就是偶尔有批次不良，有时候装配线那边会投诉我们。",
+      question: "采购经理说出了痛点，接下来哪句话是 P - 难点问题，能进一步挖深痛点？",
+      options: [
+        {text:"批次不良大概多久出一次？每次不良给你们造成多少损失？", correct:false},
+        {text:"如果有一家供应商能把不良率控制在更低水平，您愿意了解一下吗？", correct:false},
+        {text:"批次不良主要是哪类问题？端子接触不良、绝缘层问题还是线径不对？除了装配线投诉，还有没有其他麻烦？", correct:true},
+        {text:"您现在两家供应商谁的不良率更高？", correct:false}
+      ],
+      explain:"P - 难点问题：把痛点问具体——不良是哪类问题（端子/绝缘/线径），还有没有其他麻烦。问得越具体，你后面提方案的针对性就越强，也越能体现你的专业度。"
+    },
+    {
+      scenario: "采购经理说：主要是端子接触不良，还有就是颜色标识有时候对不上，装配工人容易搞错，返工率挺高的。另外每次验货也很费时间，要抽检很多。",
+      question: "采购经理说出了多个痛点，接下来哪句话是 I - 影响问题，能放大问题的严重性？",
+      options: [
+        {text:"如果我们能解决这些问题，对您帮助大吗？", correct:false},
+        {text:"您的验货标准是什么？", correct:false},
+        {text:"端子接触不良和颜色标识问题，大概每个月给你们造成多少返工工时？有没有因此影响过整机的交付节点？万一出厂后出现质量问题，客户索赔的风险有多大？", correct:true},
+        {text:"有没有因为这个被装配线投诉过领导？", correct:false}
+      ],
+      explain:"I - 影响问题：三个维度放大影响——① 内部成本（返工工时）② 交付风险（影响节点）③ 外部风险（客户索赔）。让采购经理意识到这不只是"偶尔小问题"，而是有真实成本和风险的系统性隐患。"
+    },
+    {
+      scenario: "采购经理沉吟片刻：你这样一算……每个月返工工时大概得损失5-6万，上个月还因为颜色错装延误了一台挖机出厂，客户那边催了好几次，我被总经理说了一顿。",
+      question: "采购经理已经感受到问题严重，接下来哪句话是 N - 需求回报问题，能引导他说出解决的价值？",
+      options: [
+        {text:"每个月损失5-6万，那一年就是60-70万，这个数字是否已经让您觉得必须解决了？", correct:false},
+        {text:"如果有一家线束供应商，能把端子不良率控制在0.1%以内，颜色标识100%符合你们标准，出货前提供全检报告，让你们的验货时间缩短50%——这对你们的装配线和你本人的工作压力，会有什么改变？", correct:true},
+        {text:"您现在两家供应商哪家问题更多？", correct:false},
+        {text:"端子不良率他们目前大概多少？", correct:false}
+      ],
+      explain:"N - 需求回报问题：N型问题要让客户自己说出"这个方案值得"。关键技巧：把解决方案的具体价值点出来（0.1%不良率/全检报告/验货时间-50%），再问"这对你意味着什么"，让他自己算这笔账。"
+    },
+    {
+      scenario: "你是永锐销售，拜访一家新能源汽车厂的高压线束采购负责人，他说：我们正在做新车型的线束选型，还在初步了解阶段。",
+      question: "第一步（S-现状问题），你应该先问哪句话？",
+      options: [
+        {text:"如果找到合适的供应商，您的线束采购能提升多少效率？", correct:false},
+        {text:"您这个车型是纯电平台还是混动？高压线束的电压等级大概是多少伏？预计月需求量是多少？目前在对比几家供应商？", correct:true},
+        {text:"您现在遇到最大的选型困难是什么？", correct:false},
+        {text:"如果选型周期太长会不会影响你们的量产节点？", correct:false}
+      ],
+      explain:"S - 现状问题：新能源高压线束有高度专业的参数要求（电压等级、车型平台、需求量），第一步必须先摸清这些基本参数，才能知道永锐有没有匹配的产品能力，以及竞争格局如何。"
+    },
+    {
+      scenario: "采购负责人说：纯电平台，400V/800V双平台都要做。月需求量初期大概2000套，量产后会更大。目前在对比三家，你们是其中之一，就是觉得高压连接器这块不太好选。",
+      question: "接下来应该问 P - 难点问题，下列哪句话最合适？",
+      options: [
+        {text:"高压连接器选型难这个问题，会影响你们的量产节点吗？", correct:false},
+        {text:"高压连接器具体难在哪？是IP防护等级难达标，还是高温性能波动，还是供应商技术资质不好验证？", correct:true},
+        {text:"如果解决了选型问题，你们能更快推进量产吗？", correct:false},
+        {text:"你们800V平台的量产计划是什么时候？", correct:false}
+      ],
+      explain:"P - 难点问题：把高压连接器"不好选"的问题具体化——IP防护等级难达标（密封性）、高温性能波动（热管理场景）、供应商资质不好验证（审厂成本）。找到具体痛点，永锐才能精准展示高压连接器的技术优势。"
+    },
+    {
+      scenario: "采购负责人说：主要是IP防护等级，我们要求IP67，现在对比的供应商里有两家IP67数据比较模糊，不知道是真的还是刷的认证。另外就是量产后批次稳定性，样品好但批量出问题的供应商我们吃过亏。",
+      question: "接下来应该问 I - 影响问题，下列哪句话最合适？",
+      options: [
+        {text:"如果找到IP67真实达标且批次稳定的供应商，对您推进量产帮助大吗？", correct:false},
+        {text:"IP67认证造假这个问题，您有没有遇到过实际案例？批次稳定性出问题过的那家，当时大概给你们造成什么损失？如果新车型量产后出现同样问题，会影响你们的整车交付和市场口碑吗？", correct:true},
+        {text:"您之前吃过亏的是哪家供应商？", correct:false},
+        {text:"你们IP67测试是内部测试还是外部第三方测试？", correct:false}
+      ],
+      explain:"I - 影响问题：把两个风险的影响链条打通——IP67造假→实车出问题→整车召回/安全事故；批次稳定性差→停产→交付延误→市场口碑受损。这两个风险在新能源行业的代价极大，要让他充分感受到不解决这个问题的后果。"
+    },
+    {
+      scenario: "采购负责人说：对，之前那家供应商批量出问题那次，停产2天，追责下来还影响了我们季度KPI。IP67造假也遇到过，还好是内部测试发现了，不然上了整车就麻烦大了。",
+      question: "采购负责人已经充分感受到风险，接下来应该问 N - 需求回报问题，下列哪句话最合适？",
+      options: [
+        {text:"那您希望我们怎么证明我们没有这些问题？", correct:false},
+        {text:"您之前停产那次，大概损失了多少钱？", correct:false},
+        {text:"如果有一家线束供应商能提供可溯源的IP67第三方检测报告、量产前全系列PPAP认证、以及首批量产后3个月的驻厂质检支持——这对您来说意味着什么？能解决您现在选型最担心的问题吗？", correct:true},
+        {text:"我们现在能安排您参观工厂吗？", correct:false}
+      ],
+      explain:"N - 需求回报问题：把永锐的核心差异化能力直接对应客户的两大核心顾虑——可溯源IP67第三方报告→解决认证造假担忧；量产前全系列PPAP→解决批次稳定性担忧；首批驻厂质检支持→给他额外安全感。然后问他"这能解决您的问题吗"——让他自己说出"是"，成交水到渠成。"
+    }
+  ];
 
-let current = 0, selected = null, answered = false, results = [];
+  var current = 0;
+  var selected = null;
+  var answered = false;
+  var results = [];
 
-function renderQuestion() {
-  selected = null; answered = false;
-  var q = questions[current];
-  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
-  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
-  document.getElementById("btnNext").textContent = "确认答案";
-  document.getElementById("btnNext").disabled = true;
-  document.getElementById("btnNext").onclick = nextQ;
-  document.getElementById("btnPrev").disabled = (current === 0);
+  function $(id){ return document.getElementById(id); }
 
-  var card = document.getElementById("questionCard");
-  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
-  html += '<div class="scenario"><span class="label">【场景】</span>' + q.scenario + '</div>';
-  html += '<div style="font-weight:600;margin:16px 0 8px;color:#333;">' + q.question + '</div>';
-  html += '<div class="options">';
-  var labels = ['A','B','C','D'];
-  for (var i = 0; i < q.options.length; i++) {
-    var o = q.options[i];
-    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
-    html += '<div class="radio"></div>';
-    html += '<div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+  function renderQuestion(){
+    selected = null;
+    answered = false;
+    var q = questions[current];
+    $('progressText').textContent = '第 ' + (current+1) + ' 题 / 共 ' + questions.length + ' 题';
+    $('progressFill').style.width = (current / questions.length * 100) + '%';
+    $('btnNext').textContent = '确认答案';
+    $('btnNext').disabled = true;
+    $('btnPrev').disabled = (current === 0);
+
+    var card = $('questionCard');
+    var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+    html += '<div class="scenario"><span class="label">【场景】</span>' + q.scenario + '</div>';
+    html += '<div style="font-weight:600;margin:16px 0 8px;color:#333;">' + q.question + '</div>';
+    html += '<div class="options">';
+    var labels = ['A','B','C','D'];
+    for(var i = 0; i < q.options.length; i++){
+      html += '<div class="option" data-idx="' + i + '">';
+      html += '<div class="radio"></div>';
+      html += '<div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + q.options[i].text + '</div>';
+      html += '</div>';
+    }
     html += '</div>';
+    html += '<div class="correct-answer" id="correctAnswer"></div>';
+    html += '<div class="explanation" id="explanation"><h4>解析</h4><p>' + q.explain + '</p></div>';
+    card.innerHTML = html;
+
+    // bind click events
+    var optEls = card.querySelectorAll('.option');
+    for(var j = 0; j < optEls.length; j++){
+      (function(idx){
+        optEls[idx].addEventListener('click', function(){
+          if(answered) return;
+          selected = idx;
+          for(var k = 0; k < optEls.length; k++){
+            optEls[k].classList.toggle('selected', k === idx);
+          }
+          $('btnNext').disabled = false;
+        });
+      })(j);
+    }
   }
-  html += '</div>';
-  html += '<div class="correct-answer" id="correctAnswer"></div>';
-  html += '<div class="explanation" id="explanation"><h4>解析</h4><p>' + q.explain + '</p></div>';
-  card.innerHTML = html;
-}
 
-function selectOption(idx) {
-  if (answered) return;
-  selected = idx;
-  document.querySelectorAll(".option").forEach((el,i) => el.classList.toggle("selected", i===idx));
-  document.getElementById("btnNext").disabled = false;
-}
+  $('btnNext').addEventListener('click', function(){
+    if(selected === null) return;
+    if(!answered){
+      // confirm answer
+      var q = questions[current];
+      answered = true;
+      var optEls = $('questionCard').querySelectorAll('.option');
+      for(var i = 0; i < q.options.length; i++){
+        if(q.options[i].correct) optEls[i].classList.add('correct');
+        if(i === selected && !q.options[selected].correct) optEls[i].classList.add('wrong');
+      }
+      results[current] = q.options[selected].correct;
+      var labels = ['A','B','C','D'];
+      var correctIdx = -1;
+      for(var j = 0; j < q.options.length; j++){
+        if(q.options[j].correct){ correctIdx = j; break; }
+      }
+      $('correctAnswer').innerHTML = '<div class="clabel">✅ 正确答案：' + labels[correctIdx] + ' — ' + q.options[correctIdx].text + '</div>';
+      $('correctAnswer').classList.add('show');
+      $('explanation').classList.add('show');
 
-function nextQ() {
-  if (selected === null) return;
-  var q = questions[current];
-  var isCorrect = q.options[selected].correct;
-  answered = true;
-  document.querySelectorAll(".option").forEach((el,i) => {
-    if (q.options[i].correct) el.classList.add("correct");
-    if (i === selected && !isCorrect) el.classList.add("wrong");
-    el.onclick = null;
+      if(current < questions.length - 1){
+        $('btnNext').textContent = '下一题 →';
+      } else {
+        $('btnNext').textContent = '查看结果';
+      }
+      $('btnNext').disabled = false;
+    } else {
+      // navigate
+      if(current < questions.length - 1){
+        current++;
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
   });
-  results[current] = isCorrect;
-  var labels = ['A','B','C','D'];
-  var correctIdx = q.options.findIndex(o => o.correct === true);
-  document.getElementById('correctAnswer').innerHTML =
-    '<div class="label">✅ 正确答案：' + labels[correctIdx] + ' — ' + q.options[correctIdx].text + '</div>';
-  document.getElementById('correctAnswer').classList.add('show');
-  document.getElementById("explanation").classList.add("show");
-  if (current < questions.length - 1) {
-    document.getElementById("btnNext").textContent = "下一题 →";
-    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
-  } else {
-    document.getElementById("btnNext").textContent = "查看结果";
-    document.getElementById("btnNext").onclick = showResult;
+
+  $('btnPrev').addEventListener('click', function(){
+    if(current > 0){ current--; renderQuestion(); }
+  });
+
+  $('restartBtn').addEventListener('click', function(){
+    current = 0; selected = null; answered = false; results = [];
+    $('quizPage').style.display = 'block';
+    $('resultPage').classList.remove('show');
+    renderQuestion();
+  });
+
+  function showResult(){
+    $('quizPage').style.display = 'none';
+    $('resultPage').classList.add('show');
+    var score = 0;
+    for(var i = 0; i < results.length; i++){
+      if(results[i]) score++;
+    }
+    $('scoreNum').textContent = score;
+    $('percentNum').textContent = Math.round(score / results.length * 100);
+    var d = '<h3>答题详情</h3>';
+    for(var j = 0; j < results.length; j++){
+      d += '<div class="result-item"><span>' + (results[j]?'✅':'❌') + '</span><span>第 ' + (j+1) + ' 题：' + (results[j]?'正确':'错误') + '</span></div>';
+    }
+    $('resultDetail').innerHTML = d;
   }
-  document.getElementById("btnNext").disabled = false;
-}
 
-function prevQ() { if (current > 0) { current--; renderQuestion(); } }
-
-function showResult() {
-  document.getElementById("quizPage").style.display = "none";
-  document.getElementById("resultPage").classList.add("show");
-  var score = results.filter(Boolean).length;
-  document.getElementById("scoreNum").textContent = score;
-  document.getElementById("percentNum").textContent = Math.round(score / results.length * 100);
-  var d = "<h3>答题详情</h3>";
-  results.forEach((r,i) => { d += '<div class="result-item"><span>' + (r?'✅':'❌') + '</span><span>第 ' + (i+1) + ' 题：' + (r?'正确':'错误') + '</span></div>'; });
-  document.getElementById("resultDetail").innerHTML = d;
-}
-
-function restart() {
-  current = 0; selected = null; answered = false; results = [];
-  document.getElementById("quizPage").style.display = "block";
-  document.getElementById("resultPage").classList.remove("show");
+  // init
   renderQuestion();
-}
-
-renderQuestion();
+})();
 </script>
 </body>
 </html>
