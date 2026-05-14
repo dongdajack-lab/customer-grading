@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>招聘管理系统 · 岗位JD + 面试评分卡</title>
+  <title>招聘管理系统 · 销售岗位专属版</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,6 +18,8 @@
       --danger-light: #fdeaea;
       --purple: #8e44ad;
       --purple-light: #f4ecf7;
+      --teal: #16a085;
+      --teal-light: #e8f6f3;
       --grey-dark: #2c3e50;
       --grey-mid: #7f8c8d;
       --grey-light: #ecf0f1;
@@ -106,22 +108,11 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-    .tab-btn:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-    .tab-btn.active {
-      background: var(--primary);
-      color: white;
-      box-shadow: var(--shadow);
-    }
+    .tab-btn:hover { background: var(--primary-light); color: var(--primary); }
+    .tab-btn.active { background: var(--primary); color: white; box-shadow: var(--shadow); }
 
     /* ── Container ── */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 32px 24px;
-    }
+    .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
 
     /* ── Section Card ── */
     .section-card {
@@ -139,144 +130,173 @@
       gap: 12px;
     }
     .section-icon {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 20px;
     }
     .section-icon.blue { background: var(--primary-light); }
     .section-icon.orange { background: var(--accent-light); }
     .section-icon.green { background: var(--success-light); }
     .section-icon.purple { background: var(--purple-light); }
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--grey-dark);
-    }
-    .section-subtitle {
-      font-size: 13px;
-      color: var(--grey-mid);
-    }
-    .section-body {
-      padding: 24px;
+    .section-icon.teal { background: var(--teal-light); }
+    .section-title { font-size: 18px; font-weight: 600; color: var(--grey-dark); }
+    .section-subtitle { font-size: 13px; color: var(--grey-mid); }
+    .section-body { padding: 24px; }
+
+    /* ── Grid Layout ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 640px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
     }
 
     /* ── Form Elements ── */
-    .form-group {
-      margin-bottom: 20px;
-    }
+    .form-group { margin-bottom: 20px; }
     .form-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--grey-dark);
-      margin-bottom: 8px;
+      display: block; font-size: 14px; font-weight: 500;
+      color: var(--grey-dark); margin-bottom: 8px;
     }
-    .form-label .required {
-      color: var(--danger);
-      margin-left: 4px;
-    }
+    .form-label .required { color: var(--danger); margin-left: 4px; }
     .form-input, .form-select, .form-textarea {
-      width: 100%;
-      padding: 12px 16px;
+      width: 100%; padding: 12px 16px;
       border: 1.5px solid var(--grey-light);
-      border-radius: 8px;
-      font-size: 15px;
+      border-radius: 8px; font-size: 15px;
       font-family: inherit;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus {
-      outline: none;
-      border-color: var(--primary);
+      outline: none; border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
     }
-    .form-textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-    .form-hint {
-      font-size: 12px;
-      color: var(--grey-mid);
-      margin-top: 6px;
-    }
+    .form-textarea { min-height: 80px; resize: vertical; }
+    .form-hint { font-size: 12px; color: var(--grey-mid); margin-top: 6px; }
 
-    /* ── JD Elements ── */
-    .jd-element {
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 12px;
-      border-left: 4px solid var(--primary);
+    /* ── Chip Tag ── */
+    .chip-group {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 12px; background: var(--bg);
+      border-radius: 8px; min-height: 56px;
+      border: 1.5px solid transparent;
+      transition: border-color 0.3s;
     }
-    .jd-element.orange { border-left-color: var(--accent); }
-    .jd-element.green { border-left-color: var(--success); }
-    .jd-element-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .jd-element-title {
-      font-weight: 600;
-      color: var(--grey-dark);
-      font-size: 15px;
-    }
-    .jd-element-badge {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-weight: 500;
-    }
-    .jd-element-badge.blue { background: var(--primary-light); color: var(--primary); }
-    .jd-element-badge.orange { background: var(--accent-light); color: var(--accent); }
-    .jd-element-badge.green { background: var(--success-light); color: var(--success); }
-    .jd-list {
-      list-style: none;
-      padding-left: 0;
-    }
-    .jd-list li {
-      position: relative;
-      padding-left: 20px;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: var(--grey-dark);
-    }
-    .jd-list li::before {
-      content: '•';
-      position: absolute;
-      left: 6px;
-      color: var(--primary);
-      font-weight: bold;
-    }
-    .jd-list.orange li::before { color: var(--accent); }
-    .jd-list.green li::before { color: var(--success); }
-
-    /* ── Add Button ── */
-    .btn-add {
-      width: 100%;
-      padding: 12px;
-      border: 2px dashed var(--grey-light);
-      border-radius: 8px;
-      background: transparent;
-      color: var(--grey-mid);
-      font-size: 14px;
+    .chip-group:focus-within { border-color: var(--primary); }
+    .chip {
+      display: inline-flex; align-items: center;
+      padding: 8px 16px;
+      background: var(--white);
+      border: 1.5px solid var(--grey-light);
+      border-radius: 20px;
+      font-size: 13px; color: var(--grey-dark);
       cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      transition: all 0.2s;
+      user-select: none;
     }
-    .btn-add:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: var(--primary-light);
+    .chip:hover { border-color: var(--primary); color: var(--primary); }
+    .chip.selected {
+      background: var(--primary); border-color: var(--primary);
+      color: white;
+    }
+    .chip.selected.orange { background: var(--accent); border-color: var(--accent); }
+    .chip.selected.green { background: var(--success); border-color: var(--success); }
+    .chip.selected.teal { background: var(--teal); border-color: var(--teal); }
+    .chip.selected.purple { background: var(--purple); border-color: var(--purple); }
+    .chip.selected.danger { background: var(--danger); border-color: var(--danger); }
+
+    /* 选中数量提示 */
+    .chip-tip {
+      font-size: 12px; color: var(--grey-mid);
+      margin-top: 8px; padding-left: 4px;
+    }
+    .chip-tip span { color: var(--primary); font-weight: 600; }
+
+    /* ── Skill Category Block ── */
+    .skill-block {
+      background: var(--bg); border-radius: 8px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .skill-block-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 12px;
+    }
+    .skill-block-title {
+      font-weight: 600; color: var(--grey-dark);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .skill-block-badge {
+      font-size: 11px; padding: 2px 10px;
+      border-radius: 10px; font-weight: 500;
+    }
+    .skill-sub-label {
+      font-size: 13px; color: var(--grey-mid); margin-top: 4px;
     }
 
-    /* ── Score Card ── */
+    /* ── Level Selector ── */
+    .level-selector {
+      display: flex; gap: 8px; margin-top: 12px;
+    }
+    .level-btn {
+      flex: 1; padding: 10px;
+      border: 1.5px solid var(--grey-light);
+      border-radius: 8px; background: white;
+      font-size: 12px; color: var(--grey-mid);
+      cursor: pointer; transition: all 0.2s;
+      text-align: center;
+    }
+    .level-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .level-btn.selected { background: var(--primary); border-color: var(--primary); color: white; }
+    .level-btn.selected.orange { background: var(--accent); border-color: var(--accent); }
+    .level-btn.selected.danger { background: var(--danger); border-color: var(--danger); }
+
+    /* ── Chip Option with Level ── */
+    .chip-with-level {
+      background: white;
+      border: 1.5px solid var(--grey-light);
+      border-radius: 10px; padding: 12px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s;
+    }
+    .chip-with-level:hover { border-color: var(--primary); }
+    .chip-with-level.selected { border-color: var(--primary); background: var(--primary-light); }
+    .chip-with-level-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 8px;
+    }
+    .chip-with-level-title {
+      font-size: 14px; font-weight: 500;
+      color: var(--grey-dark);
+    }
+    .chip-with-level-check {
+      width: 20px; height: 20px;
+      border: 2px solid var(--grey-light);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 12px; color: white;
+      transition: all 0.2s;
+    }
+    .chip-with-level.selected .chip-with-level-check {
+      background: var(--primary); border-color: var(--primary);
+    }
+    .chip-with-level.selected .chip-with-level-check::after {
+      content: '✓';
+    }
+    .level-row {
+      display: flex; gap: 8px;
+    }
+    .level-chip {
+      flex: 1; padding: 6px 8px;
+      border: 1.5px solid var(--grey-light);
+      border-radius: 6px; background: white;
+      font-size: 11px; color: var(--grey-mid);
+      cursor: pointer; transition: all 0.2s;
+      text-align: center;
+    }
+    .level-chip:hover { border-color: var(--primary); color: var(--primary); }
+    .level-chip.selected { background: var(--primary); border-color: var(--primary); color: white; }
+    .level-chip.selected.orange { background: var(--accent); border-color: var(--accent); }
+    .level-chip.selected.danger { background: var(--danger); border-color: var(--danger); }
+
+    /* ── Interview Score ── */
     .score-card {
       background: var(--bg);
       border-radius: 8px;
@@ -284,119 +304,61 @@
       margin-bottom: 12px;
     }
     .score-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 12px;
+    }
+    .score-title { font-weight: 600; color: var(--grey-dark); }
+    .score-badge {
+      font-size: 11px; padding: 2px 10px;
+      border-radius: 10px; font-weight: 500;
+    }
+    .score-desc {
+      font-size: 12px; color: var(--grey-mid);
       margin-bottom: 12px;
     }
-    .score-title {
-      font-weight: 600;
-      color: var(--grey-dark);
+    .score-options {
+      display: flex; flex-wrap: wrap; gap: 6px;
     }
-    .score-badge {
-      font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-weight: 500;
-    }
-    .score-slider {
-      width: 100%;
-      height: 8px;
-      -webkit-appearance: none;
-      appearance: none;
-      background: linear-gradient(to right, var(--danger), var(--accent), var(--success));
-      border-radius: 4px;
-      outline: none;
-      cursor: pointer;
-    }
-    .score-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
+    .score-option {
+      padding: 6px 14px;
+      border: 1.5px solid var(--grey-light);
+      border-radius: 16px;
+      font-size: 13px; color: var(--grey-dark);
+      cursor: pointer; transition: all 0.2s;
       background: white;
-      border: 3px solid var(--primary);
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: var(--shadow);
     }
-    .score-display {
-      text-align: center;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
-      margin: 12px 0;
-    }
-    .score-scale {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--grey-mid);
+    .score-option:hover { border-color: var(--primary); color: var(--primary); }
+    .score-option.selected {
+      background: var(--primary); border-color: var(--primary);
+      color: white;
     }
     .score-comment {
-      margin-top: 12px;
+      margin-top: 10px;
     }
     .score-comment textarea {
-      width: 100%;
-      padding: 10px;
+      width: 100%; padding: 8px;
       border: 1px solid var(--grey-light);
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 60px;
+      border-radius: 6px; font-size: 12px;
+      font-family: inherit; resize: vertical;
+      min-height: 48px;
     }
 
-    /* ── Candidate Info ── */
-    .candidate-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    /* ── Action Buttons ── */
-    .btn-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
+    /* ── Button Group ── */
+    .btn-group { display: flex; gap: 12px; margin-top: 24px; }
     .btn {
-      flex: 1;
-      padding: 14px 24px;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      flex: 1; padding: 14px 24px;
+      border: none; border-radius: 8px;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+      display: flex; align-items: center;
+      justify-content: center; gap: 8px;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      box-shadow: var(--shadow);
-    }
-    .btn-secondary {
-      background: var(--grey-light);
-      color: var(--grey-dark);
-    }
-    .btn-secondary:hover {
-      background: #d5d8dc;
-    }
-    .btn-success {
-      background: var(--success);
-      color: white;
-    }
-    .btn-success:hover {
-      background: #1e8449;
-      box-shadow: var(--shadow);
-    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow); }
+    .btn-secondary { background: var(--grey-light); color: var(--grey-dark); }
+    .btn-secondary:hover { background: #d5d8dc; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #1e8449; box-shadow: var(--shadow); }
 
     /* ── Result Panel ── */
     .result-panel {
@@ -404,163 +366,96 @@
       background: var(--white);
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
-      margin-top: 24px;
-      overflow: hidden;
+      margin-top: 24px; overflow: hidden;
     }
     .result-panel.show { display: block; }
     .result-header {
-      padding: 24px;
-      text-align: center;
-      color: white;
+      padding: 32px 24px; text-align: center; color: white;
     }
     .result-header.excellent { background: linear-gradient(135deg, var(--success), #1e8449); }
     .result-header.good { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
     .result-header.pass { background: linear-gradient(135deg, var(--accent), #d35400); }
     .result-header.fail { background: linear-gradient(135deg, var(--danger), #922b21); }
-    .result-score {
-      font-size: 56px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .result-label {
-      font-size: 18px;
-      opacity: 0.9;
-    }
-    .result-body {
-      padding: 24px;
-    }
+    .result-score { font-size: 56px; font-weight: 700; margin-bottom: 4px; }
+    .result-label { font-size: 18px; opacity: 0.9; }
+    .result-body { padding: 24px; }
     .result-summary {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px; margin-bottom: 20px;
     }
+    @media (max-width: 640px) { .result-summary { grid-template-columns: 1fr; } }
     .result-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px;
-      background: var(--bg);
-      border-radius: 8px;
+      display: flex; justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg); border-radius: 8px;
     }
-    .result-item-label {
-      color: var(--grey-mid);
-      font-size: 13px;
-    }
-    .result-item-value {
-      font-weight: 600;
-      color: var(--grey-dark);
-    }
+    .result-item-label { color: var(--grey-mid); font-size: 13px; }
+    .result-item-value { font-weight: 600; }
     .result-item-value.high { color: var(--success); }
     .result-item-value.medium { color: var(--accent); }
     .result-item-value.low { color: var(--danger); }
-
-    /* ── Recommendation ── */
     .recommendation {
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: 16px;
+      padding: 20px; border-radius: 8px; margin-top: 16px;
     }
-    .recommendation.hire {
-      background: var(--success-light);
-      border: 1px solid var(--success);
-    }
-    .recommendation.maybe {
-      background: var(--accent-light);
-      border: 1px solid var(--accent);
-    }
-    .recommendation.reject {
-      background: var(--danger-light);
-      border: 1px solid var(--danger);
-    }
+    .recommendation.hire { background: var(--success-light); border: 1px solid var(--success); }
+    .recommendation.maybe { background: var(--accent-light); border: 1px solid var(--accent); }
+    .recommendation.reject { background: var(--danger-light); border: 1px solid var(--danger); }
     .recommendation-title {
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-weight: 600; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
     }
     .recommendation.hire .recommendation-title { color: var(--success); }
     .recommendation.maybe .recommendation-title { color: var(--accent); }
     .recommendation.reject .recommendation-title { color: var(--danger); }
-    .recommendation-text {
-      font-size: 14px;
-      color: var(--grey-dark);
-      line-height: 1.7;
-    }
+    .recommendation-text { font-size: 14px; color: var(--grey-dark); line-height: 1.7; }
 
     /* ── JD Preview ── */
     .jd-preview {
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 24px;
-      margin-top: 20px;
+      background: var(--bg); border-radius: 8px;
+      padding: 24px; margin-top: 20px;
     }
     .jd-preview-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--grey-dark);
-      margin-bottom: 8px;
-      text-align: center;
+      font-size: 20px; font-weight: 700;
+      color: var(--grey-dark); margin-bottom: 8px; text-align: center;
     }
     .jd-preview-meta {
-      text-align: center;
-      font-size: 13px;
-      color: var(--grey-mid);
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--grey-light);
+      text-align: center; font-size: 13px;
+      color: var(--grey-mid); margin-bottom: 20px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--grey-light);
     }
-    .jd-section {
-      margin-bottom: 20px;
-    }
+    .jd-section { margin-bottom: 20px; }
     .jd-section-title {
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-weight: 600; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .jd-tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .jd-tag {
+      display: inline-flex; align-items: center;
+      padding: 4px 12px;
+      background: white; border-radius: 12px;
+      font-size: 13px; color: var(--grey-dark);
+      margin-bottom: 4px;
+    }
+    .jd-tag::before {
+      content: '✓ '; color: var(--success);
     }
 
     /* ── Footer ── */
-    footer {
-      text-align: center;
-      padding: 32px 24px;
-      color: var(--grey-mid);
-      font-size: 13px;
-    }
+    footer { text-align: center; padding: 32px 24px; color: var(--grey-mid); font-size: 13px; }
 
     /* ── Toast ── */
     .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
+      position: fixed; bottom: 24px; right: 24px;
       padding: 16px 24px;
-      background: var(--grey-dark);
-      color: white;
-      border-radius: 8px;
-      font-size: 14px;
+      background: var(--grey-dark); color: white;
+      border-radius: 8px; font-size: 14px;
       box-shadow: var(--shadow-lg);
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 1000;
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.3s; z-index: 1000;
     }
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateY(0); opacity: 1; }
     .toast.success { background: var(--success); }
     .toast.error { background: var(--danger); }
-
-    /* ── Responsive ── */
-    @media (max-width: 640px) {
-      header h1 { font-size: 22px; }
-      .tab-btn { padding: 10px 20px; font-size: 14px; }
-      .section-body { padding: 16px; }
-      .result-summary { grid-template-columns: 1fr; }
-      .btn-group { flex-direction: column; }
-    }
 
     /* ── Hidden ── */
     .hidden { display: none !important; }
@@ -570,7 +465,7 @@
   <header>
     <div class="header-badge">天地人销售管理体系</div>
     <h1>招聘管理系统</h1>
-    <p>标准化岗位JD生成 + 面试评分卡 · 让招聘有据可依</p>
+    <p>销售岗位专属 · 选项式填写 · 3分钟生成专业JD</p>
   </header>
 
   <!-- Tab Navigation -->
@@ -583,141 +478,291 @@
   <main class="container">
     <!-- JD 生成 Tab -->
     <section id="tab-jd" class="tab-content">
+
       <!-- 基础信息 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon blue">🏢</div>
           <div>
             <div class="section-title">岗位基本信息</div>
-            <div class="section-subtitle">填写岗位的核心信息</div>
+            <div class="section-subtitle">基本信息（少量填写即可）</div>
           </div>
         </div>
         <div class="section-body">
-          <div class="form-group">
-            <label class="form-label">公司名称 <span class="required">*</span></label>
-            <input type="text" class="form-input" id="companyName" placeholder="例如：深圳市XX科技有限公司" value="深圳市博商管理科学研究院">
-          </div>
-          <div class="candidate-grid">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">公司名称 <span class="required">*</span></label>
+              <input type="text" class="form-input" id="companyName" placeholder="深圳市XX科技有限公司" value="深圳市博商管理科学研究院">
+            </div>
             <div class="form-group">
               <label class="form-label">岗位名称 <span class="required">*</span></label>
-              <input type="text" class="form-input" id="positionName" placeholder="例如：高级销售经理">
-            </div>
-            <div class="form-group">
-              <label class="form-label">所属部门 <span class="required">*</span></label>
-              <input type="text" class="form-input" id="department" placeholder="例如：销售部">
+              <input type="text" class="form-input" id="positionName" placeholder="高级销售经理">
             </div>
           </div>
-          <div class="candidate-grid">
+          <div class="grid-2">
             <div class="form-group">
-              <label class="form-label">汇报对象</label>
-              <input type="text" class="form-input" id="reportTo" placeholder="例如：销售总监">
+              <label class="form-label">所属部门</label>
+              <input type="text" class="form-input" id="department" placeholder="销售部">
+            </div>
+            <div class="form-group">
+              <label class="form-label">工作地点</label>
+              <input type="text" class="form-input" id="location" placeholder="深圳南山区" value="深圳">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">薪资范围</label>
+              <input type="text" class="form-input" id="salaryRange" placeholder="15K-25K+提成">
             </div>
             <div class="form-group">
               <label class="form-label">招聘人数</label>
               <input type="number" class="form-input" id="headcount" value="1" min="1">
             </div>
           </div>
-          <div class="candidate-grid">
-            <div class="form-group">
-              <label class="form-label">工作地点</label>
-              <input type="text" class="form-input" id="location" placeholder="例如：深圳南山区" value="深圳">
-            </div>
-            <div class="form-group">
-              <label class="form-label">薪资范围</label>
-              <input type="text" class="form-input" id="salaryRange" placeholder="例如：15K-25K+提成">
-            </div>
-          </div>
         </div>
       </div>
 
-      <!-- 必备技能 -->
+      <!-- 必选一：硬实力 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon orange">💼</div>
           <div>
-            <div class="section-title">必备技能（硬实力）</div>
-            <div class="section-subtitle">岗位必须掌握的硬性技能要求</div>
+            <div class="section-title">硬实力要求（销售岗专用）</div>
+            <div class="section-subtitle">勾选候选人必须具备的硬性条件，可多选</div>
           </div>
         </div>
         <div class="section-body">
-          <div id="hardSkills">
-            <div class="jd-element">
-              <div class="jd-element-header">
-                <span class="jd-element-title">技能要求 1</span>
-                <span class="jd-element-badge orange">硬技能</span>
+          
+          <!-- 行业经验 -->
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">🏭 行业经验</div>
+                <div class="skill-sub-label">候选人最好有哪个行业的销售经验</div>
               </div>
-              <textarea class="form-textarea" placeholder="例如：3年以上B2B工业品销售经验，有大客户开发能力"></textarea>
+            </div>
+            <div class="chip-group" id="industryExp">
+              <div class="chip" data-value="工业品/设备/制造业" onclick="toggleChip(this)">工业品/设备/制造业</div>
+              <div class="chip" data-value="软件/IT/互联网" onclick="toggleChip(this)">软件/IT/互联网</div>
+              <div class="chip" data-value="消费品/零售" onclick="toggleChip(this)">消费品/零售</div>
+              <div class="chip" data-value="医疗健康/器械" onclick="toggleChip(this)">医疗健康/器械</div>
+              <div class="chip" data-value="金融/保险" onclick="toggleChip(this)">金融/保险</div>
+              <div class="chip" data-value="教育培训" onclick="toggleChip(this)">教育培训</div>
+              <div class="chip" data-value="工程/建筑/地产" onclick="toggleChip(this)">工程/建筑/地产</div>
+              <div class="chip" data-value="不限行业" onclick="toggleChip(this)">不限行业</div>
+            </div>
+            <div class="chip-tip">已选：<span id="industryCount">0</span> 项（建议选1-2项）</div>
+          </div>
+
+          <!-- 客户类型 -->
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">👔 客户类型</div>
+                <div class="skill-sub-label">候选人主要打哪类客户</div>
+              </div>
+            </div>
+            <div class="chip-group" id="customerType">
+              <div class="chip" data-value="企业客户/B2B" onclick="toggleChip(this)">企业客户/B2B</div>
+              <div class="chip" data-value="政府/事业单位" onclick="toggleChip(this)">政府/事业单位</div>
+              <div class="chip" data-value="经销商/代理商" onclick="toggleChip(this)">经销商/代理商</div>
+              <div class="chip" data-value="个人客户/B2C" onclick="toggleChip(this)">个人客户/B2C</div>
+              <div class="chip" data-value="不限类型" onclick="toggleChip(this)">不限类型</div>
+            </div>
+            <div class="chip-tip">已选：<span id="customerCount">0</span> 项（建议选1项）</div>
+          </div>
+
+          <!-- 销售模式 -->
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">📞 销售模式</div>
+                <div class="skill-sub-label">候选人用什么方式做销售</div>
+              </div>
+            </div>
+            <div class="chip-group" id="salesMode">
+              <div class="chip" data-value="大客户直销/面对面销售" onclick="toggleChip(this)">大客户直销/面对面销售</div>
+              <div class="chip" data-value="电话销售/电销团队" onclick="toggleChip(this)">电话销售/电销团队</div>
+              <div class="chip" data-value="渠道销售/招商" onclick="toggleChip(this)">渠道销售/招商</div>
+              <div class="chip" data-value="电商/线上销售" onclick="toggleChip(this)">电商/线上销售</div>
+              <div class="chip" data-value="项目型销售/招投标" onclick="toggleChip(this)">项目型销售/招投标</div>
+              <div class="chip" data-value="门店/顾问式销售" onclick="toggleChip(this)">门店/顾问式销售</div>
+            </div>
+            <div class="chip-tip">已选：<span id="modeCount">0</span> 项（建议选1-2项）</div>
+          </div>
+
+          <!-- 销售经验年限 -->
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">⏱️ 经验年限</div>
+                <div class="skill-sub-label">需要几年以上销售经验</div>
+              </div>
+            </div>
+            <div class="level-selector">
+              <button class="level-btn selected" onclick="selectLevel(this, 'experience', '1年+')">1年+</button>
+              <button class="level-btn" onclick="selectLevel(this, 'experience', '2年+')">2年+</button>
+              <button class="level-btn" onclick="selectLevel(this, 'experience', '3年+')">3年+</button>
+              <button class="level-btn" onclick="selectLevel(this, 'experience', '5年+')">5年+</button>
+              <button class="level-btn" onclick="selectLevel(this, 'experience', '不限')">不限</button>
             </div>
           </div>
-          <button class="btn-add" onclick="addSkill('hardSkills')">+ 添加硬技能要求</button>
+
+          <!-- 业绩要求 -->
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">💰 业绩要求</div>
+                <div class="skill-sub-label">需要达到什么业绩标准（可多选）</div>
+              </div>
+            </div>
+            <div class="chip-group" id="performance">
+              <div class="chip" data-value="年销售额 ≥ 100万" onclick="toggleChip(this)">年销售额 ≥ 100万</div>
+              <div class="chip" data-value="年销售额 ≥ 300万" onclick="toggleChip(this)">年销售额 ≥ 300万</div>
+              <div class="chip" data-value="年销售额 ≥ 500万" onclick="toggleChip(this)">年销售额 ≥ 500万</div>
+              <div class="chip" data-value="年销售额 ≥ 1000万" onclick="toggleChip(this)">年销售额 ≥ 1000万</div>
+              <div class="chip" data-value="客户数量 ≥ 30家" onclick="toggleChip(this)">客户数量 ≥ 30家</div>
+              <div class="chip" data-value="客户复购率 ≥ 40%" onclick="toggleChip(this)">客户复购率 ≥ 40%</div>
+              <div class="chip" data-value="无业绩要求" onclick="toggleChip(this)">无业绩要求</div>
+            </div>
+            <div class="chip-tip">已选：<span id="performanceCount">0</span> 项（建议选1-2项）</div>
+          </div>
+
+          <!-- 友商背景 -->
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">🏴 友商背景</div>
+                <div class="skill-sub-label">是否需要来自特定竞争对手</div>
+              </div>
+            </div>
+            <div class="chip-group" id="competitor">
+              <div class="chip" data-value="有同行业TOP10友商经验" onclick="toggleChip(this)">有同行业TOP10友商经验</div>
+              <div class="chip" data-value="有同类产品销售经验" onclick="toggleChip(this)">有同类产品销售经验</div>
+              <div class="chip" data-value="无友商背景要求" onclick="toggleChip(this)">无友商背景要求</div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- 软性特质 -->
+      <!-- 必选二：软实力 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon green">🎯</div>
           <div>
-            <div class="section-title">软性特质（软实力）</div>
-            <div class="section-subtitle">价值观、性格、抗压能力等软性要求</div>
+            <div class="section-title">软实力要求（通用）</div>
+            <div class="section-subtitle">勾选候选人需要具备的软性能力，5项覆盖所有核心素质</div>
           </div>
         </div>
         <div class="section-body">
-          <div id="softSkills">
-            <div class="jd-element green">
-              <div class="jd-element-header">
-                <span class="jd-element-title">软性要求 1</span>
-                <span class="jd-element-badge green">软技能</span>
+          
+          <div class="skill-block">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">软实力五项（核心素质）</div>
+                <div class="skill-sub-label">选3-5项即可，覆盖90%的销售岗位需求</div>
               </div>
-              <textarea class="form-textarea" placeholder="例如：自驱力强，不需要督促就能主动完成工作目标"></textarea>
+              <span class="skill-block-badge" style="background: var(--success-light); color: var(--success);">建议选3-5项</span>
+            </div>
+            
+            <div class="chip-with-level" onclick="toggleSoftSkill(this, '沟通表达', 0)">
+              <div class="chip-with-level-header">
+                <span class="chip-with-level-title">1️⃣ 沟通表达能力</span>
+                <div class="chip-with-level-check"></div>
+              </div>
+              <div class="level-row">
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 0, '必须优秀')">必须优秀</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 0, '良好即可')">良好即可</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 0, '可培养')">可培养</button>
+              </div>
+            </div>
+
+            <div class="chip-with-level" onclick="toggleSoftSkill(this, '抗压能力', 1)">
+              <div class="chip-with-level-header">
+                <span class="chip-with-level-title">2️⃣ 抗压能力</span>
+                <div class="chip-with-level-check"></div>
+              </div>
+              <div class="level-row">
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 1, '必须优秀')">必须优秀</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 1, '良好即可')">良好即可</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 1, '可培养')">可培养</button>
+              </div>
+            </div>
+
+            <div class="chip-with-level" onclick="toggleSoftSkill(this, '自驱力/目标感', 2)">
+              <div class="chip-with-level-header">
+                <span class="chip-with-level-title">3️⃣ 自驱力/目标感</span>
+                <div class="chip-with-level-check"></div>
+              </div>
+              <div class="level-row">
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 2, '必须优秀')">必须优秀</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 2, '良好即可')">良好即可</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 2, '可培养')">可培养</button>
+              </div>
+            </div>
+
+            <div class="chip-with-level" onclick="toggleSoftSkill(this, '学习能力', 3)">
+              <div class="chip-with-level-header">
+                <span class="chip-with-level-title">4️⃣ 学习能力</span>
+                <div class="chip-with-level-check"></div>
+              </div>
+              <div class="level-row">
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 3, '必须优秀')">必须优秀</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 3, '良好即可')">良好即可</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 3, '可培养')">可培养</button>
+              </div>
+            </div>
+
+            <div class="chip-with-level" onclick="toggleSoftSkill(this, '客户关系/服务意识', 4)">
+              <div class="chip-with-level-header">
+                <span class="chip-with-level-title">5️⃣ 客户关系/服务意识</span>
+                <div class="chip-with-level-check"></div>
+              </div>
+              <div class="level-row">
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 4, '必须优秀')">必须优秀</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 4, '良好即可')">良好即可</button>
+                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 4, '可培养')">可培养</button>
+              </div>
+            </div>
+
+            <div class="chip-tip" style="margin-top: 16px;">
+              已选软实力：<span id="softCount">0</span> 项
+              · <span style="color: var(--success);">绿色=必须优秀</span>
+              · <span style="color: var(--accent);">橙色=良好即可</span>
+              · <span style="color: var(--grey-mid);">灰色=可培养</span>
             </div>
           </div>
-          <button class="btn-add" onclick="addSkill('softSkills')">+ 添加软性要求</button>
+
         </div>
       </div>
 
-      <!-- 业绩证明 -->
+      <!-- 其他补充 -->
       <div class="section-card">
         <div class="section-header">
-          <div class="section-icon purple">📈</div>
+          <div class="section-icon teal">📝</div>
           <div>
-            <div class="section-title">业绩证明（可量化）</div>
-            <div class="section-subtitle">必须有数据支撑的业绩要求</div>
+            <div class="section-title">其他补充（选填）</div>
+            <div class="section-subtitle">如有特殊要求可补充，如无可跳过</div>
           </div>
         </div>
         <div class="section-body">
-          <div id="achievements">
-            <div class="jd-element" style="border-left-color: var(--purple);">
-              <div class="jd-element-header">
-                <span class="jd-element-title">业绩要求 1</span>
-                <span class="jd-element-badge" style="background: var(--purple-light); color: var(--purple);">可量化</span>
-              </div>
-              <textarea class="form-textarea" placeholder="例如：年销售额 ≥ 500万，客户复购率 ≥ 40%"></textarea>
-            </div>
+          <div class="chip-group" id="otherRequirements">
+            <div class="chip" data-value="有带团队经验" onclick="toggleChip(this)">有带团队经验</div>
+            <div class="chip" data-value="有客户资源优先" onclick="toggleChip(this)">有客户资源优先</div>
+            <div class="chip" data-value="本科及以上学历" onclick="toggleChip(this)">本科及以上学历</div>
+            <div class="chip" data-value="35岁以下" onclick="toggleChip(this)">35岁以下</div>
+            <div class="chip" data-value="能适应出差" onclick="toggleChip(this)">能适应出差</div>
+            <div class="chip" data-value="有驾照优先" onclick="toggleChip(this)">有驾照优先</div>
+            <div class="chip" data-value="退伍军人优先" onclick="toggleChip(this)">退伍军人优先</div>
           </div>
-          <button class="btn-add" onclick="addSkill('achievements')">+ 添加业绩要求</button>
-        </div>
-      </div>
+          <div class="chip-tip">已选：<span id="otherCount">0</span> 项</div>
 
-      <!-- 工作职责 -->
-      <div class="section-card">
-        <div class="section-header">
-          <div class="section-icon blue">📋</div>
-          <div>
-            <div class="section-title">岗位职责</div>
-            <div class="section-subtitle">描述该岗位的主要工作内容</div>
+          <div class="form-group" style="margin-top: 20px;">
+            <label class="form-label">岗位职责（简述主要工作，选填）</label>
+            <textarea class="form-textarea" id="responsibilities" placeholder="如无需填写，系统将根据硬实力选项自动生成"></textarea>
+            <div class="form-hint">系统会根据前面勾选的硬实力自动推断主要工作内容，此处可补充特殊职责</div>
           </div>
-        </div>
-        <div class="section-body">
-          <div id="responsibilities">
-            <div class="jd-element">
-              <div class="jd-element-header">
-                <span class="jd-element-title">职责 1</span>
-              </div>
-              <textarea class="form-textarea" placeholder="例如：负责区域大客户的开发与维护，完成年度销售目标"></textarea>
-            </div>
-          </div>
-          <button class="btn-add" onclick="addSkill('responsibilities')">+ 添加职责</button>
         </div>
       </div>
 
@@ -727,7 +772,7 @@
           <div class="section-icon green">👁️</div>
           <div>
             <div class="section-title">JD 预览</div>
-            <div class="section-subtitle">实时预览生成的岗位说明书</div>
+            <div class="section-subtitle">系统根据选项自动生成</div>
           </div>
         </div>
         <div class="section-body">
@@ -737,7 +782,7 @@
 
       <!-- 操作按钮 -->
       <div class="btn-group">
-        <button class="btn btn-secondary" onclick="previewJD()">👁️ 预览JD</button>
+        <button class="btn btn-secondary" onclick="previewJD()">👁️ 生成预览</button>
         <button class="btn btn-primary" onclick="saveJD()">💾 保存JD</button>
         <button class="btn btn-success" onclick="copyJD()">📋 复制JD</button>
       </div>
@@ -745,6 +790,7 @@
 
     <!-- 面试评分 Tab -->
     <section id="tab-interview" class="tab-content hidden">
+      
       <!-- 候选人信息 -->
       <div class="section-card">
         <div class="section-header">
@@ -755,7 +801,7 @@
           </div>
         </div>
         <div class="section-body">
-          <div class="candidate-grid">
+          <div class="grid-2">
             <div class="form-group">
               <label class="form-label">候选人姓名 <span class="required">*</span></label>
               <input type="text" class="form-input" id="candidateName" placeholder="请输入姓名">
@@ -765,10 +811,10 @@
               <input type="text" class="form-input" id="applyPosition" placeholder="例如：高级销售经理">
             </div>
           </div>
-          <div class="candidate-grid">
+          <div class="grid-2">
             <div class="form-group">
               <label class="form-label">面试官</label>
-              <input type="text" class="form-input" id="interviewer" placeholder="请输入面试官姓名">
+              <input type="text" class="form-input" id="interviewer" placeholder="面试官姓名">
             </div>
             <div class="form-group">
               <label class="form-label">面试日期</label>
@@ -786,134 +832,139 @@
         </div>
       </div>
 
-      <!-- 评分维度 -->
+      <!-- 面试评分（选项式） -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon purple">📊</div>
           <div>
-            <div class="section-title">面试评分</div>
-            <div class="section-subtitle">滑动选择分数，并填写评价备注</div>
+            <div class="section-title">面试评分（选项式）</div>
+            <div class="section-subtitle">直接勾选表现等级，不用自己打分</div>
           </div>
         </div>
         <div class="section-body">
-          <!-- 经验匹配度 -->
-          <div class="score-card">
-            <div class="score-header">
-              <span class="score-title">1. 经验匹配度</span>
-              <span class="score-badge" style="background: var(--primary-light); color: var(--primary);">硬实力</span>
-            </div>
-            <input type="range" class="score-slider" id="score1" min="1" max="10" value="7" oninput="updateScore(1)">
-            <div class="score-display" id="scoreDisplay1">7 <span style="font-size:16px;font-weight:400;">/ 10</span></div>
-            <div class="score-scale">
-              <span>1分 不匹配</span>
-              <span>5分 一般</span>
-              <span>10分 非常匹配</span>
-            </div>
-            <div class="score-comment">
-              <textarea id="comment1" placeholder="备注：候选人在此维度的具体表现..."></textarea>
-            </div>
-          </div>
-
+          
           <!-- 沟通表达能力 -->
           <div class="score-card">
             <div class="score-header">
-              <span class="score-title">2. 沟通表达能力</span>
-              <span class="score-badge" style="background: var(--accent-light); color: var(--accent);">软实力</span>
+              <span class="score-title">1. 沟通表达能力</span>
+              <span class="score-badge" style="background: var(--primary-light); color: var(--primary);">表达能力</span>
             </div>
-            <input type="range" class="score-slider" id="score2" min="1" max="10" value="7" oninput="updateScore(2)">
-            <div class="score-display" id="scoreDisplay2">7 <span style="font-size:16px;font-weight:400;">/ 10</span></div>
-            <div class="score-scale">
-              <span>1分 表达混乱</span>
-              <span>5分 能正常交流</span>
-              <span>10分 表达清晰有感染力</span>
+            <div class="score-desc">候选人能否清晰表达观点，能否说服客户</div>
+            <div class="score-options" id="score1_opts">
+              <div class="score-option" data-score="2" onclick="selectScore(1, this)">❌ 表达混乱，词不达意</div>
+              <div class="score-option" data-score="5" onclick="selectScore(1, this)">⚠️ 能正常交流</div>
+              <div class="score-option" data-score="8" onclick="selectScore(1, this)">✅ 表达清晰有说服力</div>
+              <div class="score-option" data-score="10" onclick="selectScore(1, this)">⭐ 表达优秀，有感染力</div>
             </div>
             <div class="score-comment">
-              <textarea id="comment2" placeholder="备注：候选人在此维度的具体表现..."></textarea>
+              <textarea id="comment1" placeholder="备注：面试中观察到的具体表现..."></textarea>
             </div>
           </div>
 
-          <!-- 学习能力 -->
+          <!-- 抗压能力 -->
           <div class="score-card">
             <div class="score-header">
-              <span class="score-title">3. 学习能力</span>
-              <span class="score-badge" style="background: var(--success-light); color: var(--success);">潜力</span>
+              <span class="score-title">2. 抗压能力</span>
+              <span class="score-badge" style="background: var(--accent-light); color: var(--accent);">心理素质</span>
             </div>
-            <input type="range" class="score-slider" id="score3" min="1" max="10" value="7" oninput="updateScore(3)">
-            <div class="score-display" id="scoreDisplay3">7 <span style="font-size:16px;font-weight:400;">/ 10</span></div>
-            <div class="score-scale">
-              <span>1分 难以学习新事物</span>
-              <span>5分 学习速度一般</span>
-              <span>10分 快速学习举一反三</span>
+            <div class="score-desc">面对拒绝、业绩压力时的表现</div>
+            <div class="score-options" id="score2_opts">
+              <div class="score-option" data-score="2" onclick="selectScore(2, this)">❌ 容易崩溃，遇到挫折就放弃</div>
+              <div class="score-option" data-score="5" onclick="selectScore(2, this)">⚠️ 能应对一般压力</div>
+              <div class="score-option" data-score="8" onclick="selectScore(2, this)">✅ 抗压能力强，能坚持</div>
+              <div class="score-option" data-score="10" onclick="selectScore(2, this)">⭐ 越挫越勇，压力下表现更好</div>
             </div>
             <div class="score-comment">
-              <textarea id="comment3" placeholder="备注：候选人在此维度的具体表现..."></textarea>
+              <textarea id="comment2" placeholder="备注：面试中观察到的具体表现..."></textarea>
             </div>
           </div>
 
-          <!-- 动机与稳定性 -->
+          <!-- 自驱力 -->
           <div class="score-card">
             <div class="score-header">
-              <span class="score-title">4. 动机与稳定性</span>
-              <span class="score-badge" style="background: var(--purple-light); color: var(--purple);">稳定性</span>
+              <span class="score-title">3. 自驱力/目标感</span>
+              <span class="score-badge" style="background: var(--success-light); color: var(--success);">内在动力</span>
             </div>
-            <input type="range" class="score-slider" id="score4" min="1" max="10" value="7" oninput="updateScore(4)">
-            <div class="score-display" id="scoreDisplay4">7 <span style="font-size:16px;font-weight:400;">/ 10</span></div>
-            <div class="score-scale">
-              <span>1分 动机不纯</span>
-              <span>5分 动机一般</span>
-              <span>10分 动机明确稳定</span>
+            <div class="score-desc">是否主动工作，不需要人盯着</div>
+            <div class="score-options" id="score3_opts">
+              <div class="score-option" data-score="2" onclick="selectScore(3, this)">❌ 需要人盯着干活</div>
+              <div class="score-option" data-score="5" onclick="selectScore(3, this)">⚠️ 分内事会做，不主动</div>
+              <div class="score-option" data-score="8" onclick="selectScore(3, this)">✅ 有自驱力，会主动找事</div>
+              <div class="score-option" data-score="10" onclick="selectScore(3, this)">⭐ 自驱力极强，有野心</div>
             </div>
             <div class="score-comment">
-              <textarea id="comment4" placeholder="备注：候选人在此维度的具体表现..."></textarea>
+              <textarea id="comment3" placeholder="备注：面试中观察到的具体表现..."></textarea>
             </div>
           </div>
 
-          <!-- 文化适配度 -->
+          <!-- 专业经验 -->
           <div class="score-card">
             <div class="score-header">
-              <span class="score-title">5. 文化适配度</span>
-              <span class="score-badge" style="background: var(--grey-light); color: var(--grey-mid);">价值观</span>
+              <span class="score-title">4. 专业经验匹配度</span>
+              <span class="score-badge" style="background: var(--purple-light); color: var(--purple);">硬实力</span>
             </div>
-            <input type="range" class="score-slider" id="score5" min="1" max="10" value="7" oninput="updateScore(5)">
-            <div class="score-display" id="scoreDisplay5">7 <span style="font-size:16px;font-weight:400;">/ 10</span></div>
-            <div class="score-scale">
-              <span>1分 价值观差异大</span>
-              <span>5分 基本适配</span>
-              <span>10分 高度契合</span>
+            <div class="score-desc">候选人的经验与岗位要求的匹配程度</div>
+            <div class="score-options" id="score4_opts">
+              <div class="score-option" data-score="2" onclick="selectScore(4, this)">❌ 经验不匹配，需从头培养</div>
+              <div class="score-option" data-score="5" onclick="selectScore(4, this)">⚠️ 经验一般，需适应期</div>
+              <div class="score-option" data-score="8" onclick="selectScore(4, this)">✅ 经验匹配，上手快</div>
+              <div class="score-option" data-score="10" onclick="selectScore(4, this)">⭐ 经验优秀，可直接上手</div>
             </div>
             <div class="score-comment">
-              <textarea id="comment5" placeholder="备注：候选人在此维度的具体表现..."></textarea>
+              <textarea id="comment4" placeholder="备注：面试中了解到的经验详情..."></textarea>
+            </div>
+          </div>
+
+          <!-- 稳定性/动机 -->
+          <div class="score-card">
+            <div class="score-header">
+              <span class="score-title">5. 动机与稳定性</span>
+              <span class="score-badge" style="background: var(--teal-light); color: var(--teal);">稳定性</span>
+            </div>
+            <div class="score-desc">求职动机是否明确，能做多久</div>
+            <div class="score-options" id="score5_opts">
+              <div class="score-option" data-score="2" onclick="selectScore(5, this)">❌ 动机不纯，可能骑驴找马</div>
+              <div class="score-option" data-score="5" onclick="selectScore(5, this)">⚠️ 动机一般，稳定性不确定</div>
+              <div class="score-option" data-score="8" onclick="selectScore(5, this)">✅ 动机明确，稳定性较好</div>
+              <div class="score-option" data-score="10" onclick="selectScore(5, this)">⭐ 动机强烈，稳定性高</div>
+            </div>
+            <div class="score-comment">
+              <textarea id="comment5" placeholder="备注：候选人离职原因/求职动机..."></textarea>
             </div>
           </div>
 
           <!-- 综合评价 -->
           <div class="form-group" style="margin-top: 24px;">
             <label class="form-label">综合评价 / 面试总结</label>
-            <textarea class="form-textarea" id="overallComment" placeholder="请记录候选人的整体表现、优势、劣势及是否推荐录用..." style="min-height: 120px;"></textarea>
+            <textarea class="form-textarea" id="overallComment" placeholder="记录候选人的整体表现、核心优势、主要顾虑..." style="min-height: 100px;"></textarea>
           </div>
 
-          <!-- 关键问题记录 -->
-          <div class="form-group">
-            <label class="form-label">关键问题记录（STAR法则）</label>
-            <div style="background: var(--bg); border-radius: 8px; padding: 16px; margin-top: 8px;">
-              <div class="form-group" style="margin-bottom: 12px;">
-                <label class="form-label" style="font-size: 13px;">情境(Situation)：当时是什么情况？</label>
-                <textarea class="form-textarea" id="star_s" placeholder="候选人描述的背景情况..." style="min-height: 60px;"></textarea>
-              </div>
-              <div class="form-group" style="margin-bottom: 12px;">
-                <label class="form-label" style="font-size: 13px;">任务(Task)：你的任务是什么？</label>
-                <textarea class="form-textarea" id="star_t" placeholder="候选人承担的任务..." style="min-height: 60px;"></textarea>
-              </div>
-              <div class="form-group" style="margin-bottom: 12px;">
-                <label class="form-label" style="font-size: 13px;">行动(Action)：你采取了什么行动？</label>
-                <textarea class="form-textarea" id="star_a" placeholder="候选人采取的具体行动..." style="min-height: 60px;"></textarea>
-              </div>
-              <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" style="font-size: 13px;">结果(Result)：结果如何？学到什么？</label>
-                <textarea class="form-textarea" id="star_r" placeholder="最终结果及候选人的反思..." style="min-height: 60px;"></textarea>
+          <!-- STAR记录 -->
+          <div class="skill-block" style="margin-top: 16px;">
+            <div class="skill-block-header">
+              <div>
+                <div class="skill-block-title">📝 STAR面试记录</div>
+                <div class="skill-sub-label">用STAR法则记录一个关键销售案例</div>
               </div>
             </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label" style="font-size: 13px;">情境(S)：当时是什么情况？客户/项目背景？</label>
+              <textarea class="form-textarea" id="star_s" placeholder="例如：当时负责一个大客户，订单金额50万，客户已经拒绝过一次..." style="min-height: 60px;"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label" style="font-size: 13px;">任务(T)：你当时的任务/目标是什么？</label>
+              <textarea class="form-textarea" id="star_t" placeholder="例如：需要在一个月内拿下这个订单，否则会丢失这个客户..." style="min-height: 60px;"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label" style="font-size: 13px;">行动(A)：你具体做了什么？</label>
+              <textarea class="form-textarea" id="star_a" placeholder="例如：我做了三件事：1.约客户喝茶了解真实顾虑；2.调整方案解决了价格问题；3.找到了拍板人..." style="min-height: 60px;"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 13px;">结果(R)：最终结果如何？你学到什么？</label>
+              <textarea class="form-textarea" id="star_r" placeholder="例如：最终拿下了订单，客户复购率达到60%。学到了：客户拒绝不一定是价格问题，要先挖痛..." style="min-height: 60px;"></textarea>
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -938,6 +989,7 @@
           </div>
         </div>
       </div>
+
     </section>
 
     <!-- 历史记录 Tab -->
@@ -971,7 +1023,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // Tab 切换
+    // ─── Tab 切换 ───
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -981,144 +1033,217 @@
       });
     });
 
-    // 添加技能/要求
-    let skillCounters = { hardSkills: 1, softSkills: 1, achievements: 1, responsibilities: 1 };
-    function addSkill(containerId) {
-      const container = document.getElementById(containerId);
-      const counter = ++skillCounters[containerId];
+    // ─── 状态管理 ───
+    const state = {
+      hardSkills: {
+        industryExp: [],
+        customerType: [],
+        salesMode: [],
+        performance: [],
+        competitor: [],
+        experience: '1年+',
+        other: []
+      },
+      softSkills: [
+        { name: null, level: null },
+        { name: null, level: null },
+        { name: null, level: null },
+        { name: null, level: null },
+        { name: null, level: null }
+      ],
+      scores: [0, 0, 0, 0, 0],
+      scoreSelected: [null, null, null, null, null]
+    };
+
+    // ─── 切换Chip选中 ───
+    function toggleChip(el) {
+      const value = el.dataset.value;
+      const group = el.parentElement.id;
       
-      const typeMap = {
-        hardSkills: { badge: 'orange', text: '硬技能' },
-        softSkills: { badge: 'green', text: '软技能' },
-        achievements: { badge: 'purple', text: '可量化' },
-        responsibilities: { badge: 'blue', text: '职责' }
-      };
-      const type = typeMap[containerId];
-      const borderColor = type.badge === 'orange' ? 'var(--accent)' : 
-                         type.badge === 'green' ? 'var(--success)' : 
-                         type.badge === 'purple' ? 'var(--purple)' : 'var(--primary)';
+      // 单选逻辑（某些组只能选一个）
+      if (['industryExp', 'customerType', 'competitor'].includes(group)) {
+        // 单选模式
+        el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        state.hardSkills[group] = [value];
+      } else {
+        // 多选模式
+        el.classList.toggle('selected');
+        if (el.classList.contains('selected')) {
+          state.hardSkills[group].push(value);
+        } else {
+          state.hardSkills[group] = state.hardSkills[group].filter(v => v !== value);
+        }
+      }
       
-      const html = `
-        <div class="jd-element" style="border-left-color: ${borderColor};">
-          <div class="jd-element-header">
-            <span class="jd-element-title">${type.text} ${counter}</span>
-            <span class="jd-element-badge ${type.badge}">${type.text}</span>
-          </div>
-          <textarea class="form-textarea" placeholder="请输入内容"></textarea>
-        </div>
-      `;
-      container.insertAdjacentHTML('beforeend', html);
+      updateChipCount(group);
     }
 
-    // 更新分数显示
-    function updateScore(num) {
-      const score = document.getElementById('score' + num).value;
-      const display = document.getElementById('scoreDisplay' + num);
-      display.innerHTML = score + ' <span style="font-size:16px;font-weight:400;">/ 10</span>';
-      
-      // 更新颜色
-      if (score >= 8) display.style.color = 'var(--success)';
-      else if (score >= 5) display.style.color = 'var(--primary)';
-      else display.style.color = 'var(--danger)';
+    function updateChipCount(group) {
+      const countEl = document.getElementById(group + 'Count');
+      if (countEl) {
+        countEl.textContent = state.hardSkills[group].length;
+      }
     }
 
-    // 预览JD
+    // ─── 等级选择 ───
+    function selectLevel(el, key, value) {
+      el.parentElement.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      state.hardSkills[key] = value;
+    }
+
+    // ─── 软实力选择 ───
+    function toggleSoftSkill(el, name, index) {
+      if (state.softSkills[index].name === name) {
+        // 取消选中
+        el.classList.remove('selected');
+        el.querySelectorAll('.level-chip').forEach(c => c.classList.remove('selected', 'orange', 'danger'));
+        state.softSkills[index] = { name: null, level: null };
+      } else {
+        // 选中
+        el.classList.add('selected');
+        state.softSkills[index] = { name: name, level: '良好即可' };
+        el.querySelectorAll('.level-chip').forEach(c => c.classList.remove('selected'));
+        el.querySelector('.level-chip:nth-child(2)').classList.add('selected', 'orange');
+      }
+      updateSoftCount();
+    }
+
+    function selectSoftLevel(el, index, level) {
+      const parent = el.parentElement.parentElement;
+      el.parentElement.querySelectorAll('.level-chip').forEach(c => {
+        c.classList.remove('selected', 'orange', 'danger');
+      });
+      el.classList.add('selected');
+      
+      // 设置颜色
+      if (level === '必须优秀') {
+        el.classList.add('danger');
+      } else if (level === '良好即可') {
+        el.classList.add('orange');
+      }
+      
+      state.softSkills[index].level = level;
+    }
+
+    function updateSoftCount() {
+      const count = state.softSkills.filter(s => s.name !== null).length;
+      document.getElementById('softCount').textContent = count;
+    }
+
+    // ─── 面试评分 ───
+    function selectScore(num, el) {
+      const container = document.getElementById('score' + num + '_opts');
+      container.querySelectorAll('.score-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state.scoreSelected[num - 1] = el;
+      state.scores[num - 1] = parseInt(el.dataset.score);
+    }
+
+    // ─── 生成JD预览 ───
     function previewJD() {
       const company = document.getElementById('companyName').value || '公司名称';
       const position = document.getElementById('positionName').value || '岗位名称';
-      const dept = document.getElementById('department').value || '-';
-      const report = document.getElementById('reportTo').value || '-';
-      const count = document.getElementById('headcount').value || '1';
       const location = document.getElementById('location').value || '-';
       const salary = document.getElementById('salaryRange').value || '面议';
+      const headcount = document.getElementById('headcount').value || '1';
+      const dept = document.getElementById('department').value || '-';
 
-      // 收集各项内容
-      const hardSkills = getTextareaValues('hardSkills');
-      const softSkills = getTextareaValues('softSkills');
-      const achievements = getTextareaValues('achievements');
-      const responsibilities = getTextareaValues('responsibilities');
+      // 自动生成职责
+      let responsibilities = document.getElementById('responsibilities').value.trim();
+      if (!responsibilities) {
+        responsibilities = generateResponsibilities();
+      }
+
+      // 硬实力
+      const industry = state.hardSkills.industryExp.join('、') || '不限';
+      const customer = state.hardSkills.customerType.join('、') || '不限';
+      const mode = state.hardSkills.salesMode.join('、') || '不限';
+      const perf = state.hardSkills.performance.join('；') || '无业绩要求';
+      const comp = state.hardSkills.competitor.join('、') || '无要求';
+      const exp = state.hardSkills.experience;
+      const other = state.hardSkills.other.join('、') || '无';
+
+      // 软实力
+      const softs = state.softSkills.filter(s => s.name !== null);
+      const softText = softs.map(s => {
+        const levelTag = s.level === '必须优秀' ? '⭐' : s.level === '良好即可' ? '✓' : '○';
+        return `${levelTag} ${s.name}（${s.level}）`;
+      }).join('<br>');
 
       const preview = `
         <div class="jd-preview-title">${position}</div>
         <div class="jd-preview-meta">
-          ${company} · ${dept} · 招聘${count}人 · ${location} · 薪资：${salary}
+          ${company} · ${dept} · 招聘${headcount}人 · ${location} · 薪资：${salary}
         </div>
         
-        ${responsibilities.length > 0 && responsibilities.some(v => v.trim()) ? `
         <div class="jd-section">
-          <div class="jd-section-title">📋 岗位职责</div>
-          <ul class="jd-list">
-            ${responsibilities.filter(v => v.trim()).map(v => `<li>${v}</li>`).join('')}
-          </ul>
+          <div class="jd-section-title" style="color: var(--grey-dark);">📋 岗位职责</div>
+          <div style="font-size: 14px; line-height: 1.8; color: var(--grey-dark);">
+            ${responsibilities.split('\n').map(r => r.trim() ? `<div style="margin-bottom: 8px;">• ${r}</div>` : '').join('')}
+          </div>
         </div>
-        ` : ''}
         
-        ${hardSkills.length > 0 && hardSkills.some(v => v.trim()) ? `
         <div class="jd-section">
-          <div class="jd-section-title" style="color: var(--accent);">💼 必备技能</div>
-          <ul class="jd-list orange">
-            ${hardSkills.filter(v => v.trim()).map(v => `<li>${v}</li>`).join('')}
-          </ul>
+          <div class="jd-section-title" style="color: var(--accent);">💼 硬性要求</div>
+          <div style="font-size: 14px; line-height: 2; color: var(--grey-dark);">
+            <div style="margin-bottom: 8px;">🏭 <strong>行业经验：</strong>${industry}</div>
+            <div style="margin-bottom: 8px;">👔 <strong>客户类型：</strong>${customer}</div>
+            <div style="margin-bottom: 8px;">📞 <strong>销售模式：</strong>${mode}</div>
+            <div style="margin-bottom: 8px;">⏱️ <strong>经验年限：</strong>${exp}</div>
+            <div style="margin-bottom: 8px;">💰 <strong>业绩要求：</strong>${perf}</div>
+            <div style="margin-bottom: 8px;">🏴 <strong>友商背景：</strong>${comp}</div>
+            ${other !== '无' ? `<div style="margin-bottom: 8px;">📌 <strong>其他要求：</strong>${other}</div>` : ''}
+          </div>
         </div>
-        ` : ''}
         
-        ${softSkills.length > 0 && softSkills.some(v => v.trim()) ? `
         <div class="jd-section">
-          <div class="jd-section-title" style="color: var(--success);">🎯 软性特质</div>
-          <ul class="jd-list green">
-            ${softSkills.filter(v => v.trim()).map(v => `<li>${v}</li>`).join('')}
-          </ul>
-        </div>
-        ` : ''}
-        
-        ${achievements.length > 0 && achievements.some(v => v.trim()) ? `
-        <div class="jd-section">
-          <div class="jd-section-title" style="color: var(--purple);">📈 业绩证明</div>
-          <ul class="jd-list" style="padding-left: 0;">
-            ${achievements.filter(v => v.trim()).map(v => `<li style="padding-left: 20px; list-style: none; margin-bottom: 8px; position: relative; padding-left: 16px;"><span style="color: var(--purple); margin-right: 4px;">◆</span>${v}</li>`).join('')}
-          </ul>
-        </div>
-        ` : ''}
-        
-        <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--grey-light); margin-top: 20px;">
-          <span style="font-size: 12px; color: var(--grey-mid);">
-            📧 简历投递邮箱 | 🏢 ${report ? '汇报对象：' + report : ''}
-          </span>
+          <div class="jd-section-title" style="color: var(--success);">🎯 软实力要求</div>
+          <div style="font-size: 14px; line-height: 2; color: var(--grey-dark);">
+            ${softText || '无特殊软实力要求'}
+          </div>
         </div>
       `;
 
       document.getElementById('jdPreviewContent').innerHTML = preview;
       document.getElementById('jdPreview').classList.remove('hidden');
-      showToast('JD预览已生成', 'success');
+      showToast('JD预览已生成 ✓', 'success');
     }
 
-    // 获取textarea值
-    function getTextareaValues(containerId) {
-      const container = document.getElementById(containerId);
-      return Array.from(container.querySelectorAll('textarea')).map(t => t.value);
+    function generateResponsibilities() {
+      const industry = state.hardSkills.industryExp[0] || '相关行业';
+      const customer = state.hardSkills.customerType[0] || '企业客户';
+      const mode = state.hardSkills.salesMode[0] || '大客户销售';
+
+      return `负责${industry}${customer}的开发与维护
+完成公司下达的年度销售目标
+${mode}，独立开发新客户
+维护老客户关系，提升复购率
+收集市场信息，竞品动态分析
+配合团队完成其他销售相关工作`;
     }
 
-    // 保存JD
+    // ─── 保存JD ───
     function saveJD() {
       const position = document.getElementById('positionName').value;
       if (!position) {
         showToast('请先填写岗位名称', 'error');
         return;
       }
+      previewJD();
 
       const jdData = {
         type: 'jd',
         position: position,
         company: document.getElementById('companyName').value,
         department: document.getElementById('department').value,
-        reportTo: document.getElementById('reportTo').value,
-        headcount: document.getElementById('headcount').value,
         location: document.getElementById('location').value,
         salaryRange: document.getElementById('salaryRange').value,
-        hardSkills: getTextareaValues('hardSkills').filter(v => v.trim()),
-        softSkills: getTextareaValues('softSkills').filter(v => v.trim()),
-        achievements: getTextareaValues('achievements').filter(v => v.trim()),
-        responsibilities: getTextareaValues('responsibilities').filter(v => v.trim()),
+        headcount: document.getElementById('headcount').value,
+        hardSkills: { ...state.hardSkills },
+        softSkills: state.softSkills.filter(s => s.name !== null),
+        responsibilities: document.getElementById('responsibilities').value,
         savedAt: new Date().toISOString()
       };
 
@@ -1126,10 +1251,9 @@
       showToast('JD保存成功', 'success');
     }
 
-    // 复制JD
+    // ─── 复制JD ───
     function copyJD() {
       previewJD();
-      
       const content = document.getElementById('jdPreviewContent').innerText;
       navigator.clipboard.writeText(content).then(() => {
         showToast('JD已复制到剪贴板', 'success');
@@ -1138,93 +1262,74 @@
       });
     }
 
-    // 提交面试评分
+    // ─── 面试评分提交 ───
     function submitInterview() {
       const candidateName = document.getElementById('candidateName').value;
       
-      const scores = [];
-      for (let i = 1; i <= 5; i++) {
-        scores.push({
-          dimension: ['经验匹配度', '沟通表达能力', '学习能力', '动机与稳定性', '文化适配度'][i-1],
-          score: parseInt(document.getElementById('score' + i).value),
-          comment: document.getElementById('comment' + i).value
-        });
+      const dimensions = ['沟通表达能力', '抗压能力', '自驱力/目标感', '专业经验匹配度', '动机与稳定性'];
+      const unrated = state.scores.filter(s => s === 0).length;
+      
+      if (unrated > 0) {
+        showToast(`还有${unrated}项未评分，请完成所有评分`, 'error');
+        return;
       }
 
-      const totalScore = scores.reduce((sum, s) => sum + s.score, 0);
+      const totalScore = state.scores.reduce((sum, s) => sum + s, 0);
       const avgScore = totalScore / 5;
 
-      // 计算结果
+      // 结果样式
       const resultHeader = document.getElementById('resultHeader');
-      const resultScore = document.getElementById('resultScore');
-      const resultLabel = document.getElementById('resultLabel');
-      const resultSummary = document.getElementById('resultSummary');
       const recommendation = document.getElementById('recommendation');
-      const recommendTitle = document.getElementById('recommendTitle');
-      const recommendText = document.getElementById('recommendText');
-
-      resultScore.textContent = avgScore.toFixed(1);
-
-      // 设置样式
+      
       resultHeader.className = 'result-header';
       recommendation.className = 'recommendation';
       
-      if (avgScore >= 8) {
-        resultHeader.classList.add('excellent');
-        resultLabel.textContent = '⭐ 优秀';
-        recommendation.classList.add('hire');
-        recommendTitle.innerHTML = '✅ 推荐录用';
-        recommendText.textContent = '候选人在各维度表现优秀，建议优先录用。该候选人具备较强的岗位匹配度，可直接进入下一轮面试或发放offer。';
-      } else if (avgScore >= 6) {
-        resultHeader.classList.add('good');
-        resultLabel.textContent = '👍 良好';
-        recommendation.classList.add('maybe');
-        recommendTitle.innerHTML = '⚠️ 备选考虑';
-        recommendText.textContent = '候选人整体表现良好，但部分维度有待提升。建议与其他候选人比较后决定，或安排复试进一步考察。';
-      } else if (avgScore >= 4) {
-        resultHeader.classList.add('pass');
-        resultLabel.textContent = '🤔 一般';
-        recommendation.classList.add('maybe');
-        recommendTitle.innerHTML = '⚠️ 谨慎录用';
-        recommendText.textContent = '候选人表现一般，与岗位要求存在一定差距。建议暂缓考虑，或安排到非核心岗位试用。';
+      let resultClass, resultLabel, recClass, recTitle, recText;
+      
+      if (avgScore >= 9) {
+        resultClass = 'excellent'; resultLabel = '⭐ 优秀';
+        recClass = 'hire'; recTitle = '✅ 推荐录用';
+        recText = '候选人在各维度表现优秀，是难得的人才。建议优先录用，可直接发放offer。';
+      } else if (avgScore >= 7) {
+        resultClass = 'good'; resultLabel = '👍 良好';
+        recClass = 'maybe'; recTitle = '⚠️ 备选考虑';
+        recText = '候选人整体表现良好，可以录用。建议与团队成员面谈确认文化适配度。';
+      } else if (avgScore >= 5) {
+        resultClass = 'pass'; resultLabel = '🤔 一般';
+        recClass = 'maybe'; recTitle = '⚠️ 谨慎录用';
+        recText = '候选人表现一般，存在一定差距。建议作为备选，或安排到次要岗位试用。';
       } else {
-        resultHeader.classList.add('fail');
-        resultLabel.textContent = '❌ 不建议';
-        recommendation.classList.add('reject');
-        recommendTitle.innerHTML = '🚫 不推荐';
-        recommendText.textContent = '候选人在多个维度表现不佳，不建议录用。建议继续寻找更匹配的候选人。';
+        resultClass = 'fail'; resultLabel = '❌ 不建议';
+        recClass = 'reject'; recTitle = '🚫 不推荐';
+        recText = '候选人在多个维度表现不佳，不建议录用。建议继续寻找更匹配的候选人。';
       }
 
-      // 显示各维度得分
-      resultSummary.innerHTML = scores.map(s => {
-        let level = s.score >= 8 ? 'high' : s.score >= 5 ? 'medium' : 'low';
+      resultHeader.classList.add(resultClass);
+      document.getElementById('resultScore').textContent = avgScore.toFixed(1);
+      document.getElementById('resultLabel').textContent = resultLabel;
+      
+      recommendation.classList.add(recClass);
+      document.getElementById('recommendTitle').innerHTML = recTitle;
+      document.getElementById('recommendText').textContent = recText;
+
+      // 各维度得分
+      document.getElementById('resultSummary').innerHTML = dimensions.map((d, i) => {
+        const score = state.scores[i];
+        const level = score >= 8 ? 'high' : score >= 5 ? 'medium' : 'low';
+        const desc = score >= 8 ? '优秀' : score >= 5 ? '一般' : '不足';
         return `
           <div class="result-item">
-            <span class="result-item-label">${s.dimension}</span>
-            <span class="result-item-value ${level}">${s.score}分</span>
+            <span class="result-item-label">${d}</span>
+            <span class="result-item-value ${level}">${score}分 · ${desc}</span>
           </div>
         `;
       }).join('');
-
-      // 显示STAR
-      const starInfo = `
-        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--grey-light);">
-          <div style="font-weight: 600; margin-bottom: 8px;">📝 STAR面试记录</div>
-          <div style="font-size: 13px; color: var(--grey-dark); line-height: 1.8;">
-            <div><strong>情境(S)：</strong>${document.getElementById('star_s').value || '未记录'}</div>
-            <div><strong>任务(T)：</strong>${document.getElementById('star_t').value || '未记录'}</div>
-            <div><strong>行动(A)：</strong>${document.getElementById('star_a').value || '未记录'}</div>
-            <div><strong>结果(R)：</strong>${document.getElementById('star_r').value || '未记录'}</div>
-          </div>
-        </div>
-      `;
-      resultSummary.insertAdjacentHTML('afterend', starInfo);
 
       document.getElementById('resultPanel').classList.add('show');
       window.scrollTo({ top: document.getElementById('resultPanel').offsetTop - 100, behavior: 'smooth' });
     }
 
-    // 保存面试记录
+    // ─── 保存面试记录 ───
     function saveInterview() {
       const candidateName = document.getElementById('candidateName').value;
       if (!candidateName) {
@@ -1239,11 +1344,9 @@
         interviewer: document.getElementById('interviewer').value,
         interviewDate: document.getElementById('interviewDate').value,
         interviewType: document.getElementById('interviewType').value,
-        scores: Array.from({length: 5}, (_, i) => ({
-          dimension: ['经验匹配度', '沟通表达能力', '学习能力', '动机与稳定性', '文化适配度'][i],
-          score: parseInt(document.getElementById('score' + (i+1)).value),
-          comment: document.getElementById('comment' + (i+1)).value
-        })),
+        scores: state.scores,
+        dimensions: ['沟通表达能力', '抗压能力', '自驱力/目标感', '专业经验匹配度', '动机与稳定性'],
+        comments: Array.from({length: 5}, (_, i) => document.getElementById('comment' + (i+1)).value),
         overallComment: document.getElementById('overallComment').value,
         star: {
           s: document.getElementById('star_s').value,
@@ -1259,11 +1362,13 @@
       loadHistory();
     }
 
-    // 重置评分
+    // ─── 重置评分 ───
     function resetInterview() {
+      state.scores = [0, 0, 0, 0, 0];
+      state.scoreSelected = [null, null, null, null, null];
+      
       for (let i = 1; i <= 5; i++) {
-        document.getElementById('score' + i).value = 7;
-        updateScore(i);
+        document.getElementById('score' + i + '_opts').querySelectorAll('.score-option').forEach(o => o.classList.remove('selected'));
         document.getElementById('comment' + i).value = '';
       }
       document.getElementById('overallComment').value = '';
@@ -1275,7 +1380,7 @@
       showToast('评分已重置', 'success');
     }
 
-    // LocalStorage 操作
+    // ─── LocalStorage ───
     function saveToStorage(data) {
       let records = JSON.parse(localStorage.getItem('recruitment_records') || '[]');
       records.unshift(data);
@@ -1298,11 +1403,11 @@
 
       container.innerHTML = records.map((r, index) => {
         if (r.type === 'interview') {
-          const avgScore = r.scores.reduce((sum, s) => sum + s.score, 0) / 5;
+          const avgScore = r.scores.reduce((sum, s) => sum + s, 0) / 5;
           const scoreClass = avgScore >= 8 ? 'excellent' : avgScore >= 6 ? 'good' : avgScore >= 4 ? 'pass' : 'fail';
           const scoreText = avgScore >= 8 ? '优秀' : avgScore >= 6 ? '良好' : avgScore >= 4 ? '一般' : '不建议';
           return `
-            <div style="padding: 16px; background: var(--bg); border-radius: 8px; margin-bottom: 12px; cursor: pointer;" onclick="viewRecord(${index})">
+            <div style="padding: 16px; background: var(--bg); border-radius: 8px; margin-bottom: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                   <strong>${r.candidateName || '未命名'}</strong>
@@ -1328,7 +1433,7 @@
                 <span class="score-badge" style="background: var(--primary-light); color: var(--primary);">JD</span>
               </div>
               <div style="font-size: 12px; color: var(--grey-mid); margin-top: 8px;">
-                ${r.department || ''} · 招聘${r.headcount || 1}人 · ${new Date(r.savedAt).toLocaleDateString()}
+                ${r.department || ''} · ${new Date(r.savedAt).toLocaleDateString()}
               </div>
             </div>
           `;
@@ -1337,7 +1442,7 @@
       }).join('');
     }
 
-    // Toast提示
+    // ─── Toast ───
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
       toast.textContent = message;
@@ -1346,25 +1451,10 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // 初始化
+    // ─── 初始化 ───
     document.addEventListener('DOMContentLoaded', () => {
-      // 设置默认日期
       document.getElementById('interviewDate').valueAsDate = new Date();
-      // 初始化分数显示
-      for (let i = 1; i <= 5; i++) {
-        updateScore(i);
-      }
-      // 加载历史记录
       loadHistory();
-    });
-
-    // 实时预览JD
-    document.querySelectorAll('#tab-jd input, #tab-jd textarea').forEach(el => {
-      el.addEventListener('input', () => {
-        if (!document.getElementById('jdPreview').classList.contains('hidden')) {
-          previewJD();
-        }
-      });
     });
   </script>
 </body>
