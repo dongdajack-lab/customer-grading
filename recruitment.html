@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>招聘管理系统 · 销售岗位专属版</title>
+  <title>招聘管理系统 · 完整版</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -29,9 +29,7 @@
       --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
       --radius: 12px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
@@ -39,8 +37,6 @@
       line-height: 1.6;
       min-height: 100vh;
     }
-
-    /* ── Header ── */
     header {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
@@ -52,10 +48,8 @@
     header::before {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 400px;
-      height: 400px;
+      top: -50%; right: -10%;
+      width: 400px; height: 400px;
       background: rgba(255,255,255,0.04);
       border-radius: 50%;
     }
@@ -69,65 +63,37 @@
       letter-spacing: 2px;
       margin-bottom: 16px;
     }
-    header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
-    }
-    header p {
-      font-size: 14px;
-      opacity: 0.85;
-      max-width: 560px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
+    header h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; position: relative; z-index: 1; }
+    header p { font-size: 14px; opacity: 0.85; max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
 
-    /* ── Tab Navigation ── */
     .tab-nav {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
+      display: flex; justify-content: center; gap: 8px;
       padding: 24px;
       background: var(--white);
       border-bottom: 1px solid var(--grey-light);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
     }
     .tab-btn {
-      padding: 12px 32px;
-      border: none;
-      background: var(--grey-light);
-      color: var(--grey-mid);
-      font-size: 15px;
-      font-weight: 500;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
+      padding: 12px 32px; border: none;
+      background: var(--grey-light); color: var(--grey-mid);
+      font-size: 15px; font-weight: 500;
+      border-radius: 8px; cursor: pointer; transition: all 0.3s;
     }
     .tab-btn:hover { background: var(--primary-light); color: var(--primary); }
     .tab-btn.active { background: var(--primary); color: white; box-shadow: var(--shadow); }
 
-    /* ── Container ── */
-    .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
 
-    /* ── Section Card ── */
     .section-card {
       background: var(--white);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      margin-bottom: 24px;
-      overflow: hidden;
+      margin-bottom: 24px; overflow: hidden;
     }
     .section-header {
       padding: 20px 24px;
       border-bottom: 1px solid var(--grey-light);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
     }
     .section-icon {
       width: 40px; height: 40px;
@@ -140,18 +106,18 @@
     .section-icon.green { background: var(--success-light); }
     .section-icon.purple { background: var(--purple-light); }
     .section-icon.teal { background: var(--teal-light); }
+    .section-icon.red { background: var(--danger-light); }
     .section-title { font-size: 18px; font-weight: 600; color: var(--grey-dark); }
     .section-subtitle { font-size: 13px; color: var(--grey-mid); }
     .section-body { padding: 24px; }
 
-    /* ── Grid Layout ── */
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    @media (max-width: 640px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
     }
 
-    /* ── Form Elements ── */
     .form-group { margin-bottom: 20px; }
     .form-label {
       display: block; font-size: 14px; font-weight: 500;
@@ -161,8 +127,7 @@
     .form-input, .form-select, .form-textarea {
       width: 100%; padding: 12px 16px;
       border: 1.5px solid var(--grey-light);
-      border-radius: 8px; font-size: 15px;
-      font-family: inherit;
+      border-radius: 8px; font-size: 15px; font-family: inherit;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -172,11 +137,11 @@
     .form-textarea { min-height: 80px; resize: vertical; }
     .form-hint { font-size: 12px; color: var(--grey-mid); margin-top: 6px; }
 
-    /* ── Chip Tag ── */
+    /* 选项式Chip */
     .chip-group {
       display: flex; flex-wrap: wrap; gap: 8px;
       padding: 12px; background: var(--bg);
-      border-radius: 8px; min-height: 56px;
+      border-radius: 8px; min-height: 52px;
       border: 1.5px solid transparent;
       transition: border-color 0.3s;
     }
@@ -188,152 +153,108 @@
       border: 1.5px solid var(--grey-light);
       border-radius: 20px;
       font-size: 13px; color: var(--grey-dark);
-      cursor: pointer;
-      transition: all 0.2s;
-      user-select: none;
+      cursor: pointer; transition: all 0.2s; user-select: none;
     }
     .chip:hover { border-color: var(--primary); color: var(--primary); }
-    .chip.selected {
-      background: var(--primary); border-color: var(--primary);
-      color: white;
-    }
+    .chip.selected { background: var(--primary); border-color: var(--primary); color: white; }
     .chip.selected.orange { background: var(--accent); border-color: var(--accent); }
     .chip.selected.green { background: var(--success); border-color: var(--success); }
     .chip.selected.teal { background: var(--teal); border-color: var(--teal); }
     .chip.selected.purple { background: var(--purple); border-color: var(--purple); }
     .chip.selected.danger { background: var(--danger); border-color: var(--danger); }
+    .chip.selected.grey { background: var(--grey-mid); border-color: var(--grey-mid); }
 
-    /* 选中数量提示 */
-    .chip-tip {
-      font-size: 12px; color: var(--grey-mid);
-      margin-top: 8px; padding-left: 4px;
-    }
-    .chip-tip span { color: var(--primary); font-weight: 600; }
-
-    /* ── Skill Category Block ── */
-    .skill-block {
+    /* 单选列表 */
+    .radio-list {
       background: var(--bg); border-radius: 8px;
-      padding: 16px; margin-bottom: 16px;
+      padding: 8px;
     }
-    .skill-block-header {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 12px;
+    .radio-item {
+      display: flex; align-items: center;
+      padding: 10px 16px;
+      border-radius: 6px; cursor: pointer;
+      transition: background 0.2s;
     }
-    .skill-block-title {
-      font-weight: 600; color: var(--grey-dark);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .skill-block-badge {
-      font-size: 11px; padding: 2px 10px;
-      border-radius: 10px; font-weight: 500;
-    }
-    .skill-sub-label {
-      font-size: 13px; color: var(--grey-mid); margin-top: 4px;
-    }
-
-    /* ── Level Selector ── */
-    .level-selector {
-      display: flex; gap: 8px; margin-top: 12px;
-    }
-    .level-btn {
-      flex: 1; padding: 10px;
-      border: 1.5px solid var(--grey-light);
-      border-radius: 8px; background: white;
-      font-size: 12px; color: var(--grey-mid);
-      cursor: pointer; transition: all 0.2s;
-      text-align: center;
-    }
-    .level-btn:hover { border-color: var(--primary); color: var(--primary); }
-    .level-btn.selected { background: var(--primary); border-color: var(--primary); color: white; }
-    .level-btn.selected.orange { background: var(--accent); border-color: var(--accent); }
-    .level-btn.selected.danger { background: var(--danger); border-color: var(--danger); }
-
-    /* ── Chip Option with Level ── */
-    .chip-with-level {
-      background: white;
-      border: 1.5px solid var(--grey-light);
-      border-radius: 10px; padding: 12px;
-      margin-bottom: 8px;
-      transition: border-color 0.2s;
-    }
-    .chip-with-level:hover { border-color: var(--primary); }
-    .chip-with-level.selected { border-color: var(--primary); background: var(--primary-light); }
-    .chip-with-level-header {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 8px;
-    }
-    .chip-with-level-title {
-      font-size: 14px; font-weight: 500;
-      color: var(--grey-dark);
-    }
-    .chip-with-level-check {
-      width: 20px; height: 20px;
+    .radio-item:hover { background: rgba(44,90,160,0.05); }
+    .radio-item.selected { background: var(--primary-light); }
+    .radio-dot {
+      width: 18px; height: 18px;
       border: 2px solid var(--grey-light);
-      border-radius: 50%; display: flex;
-      align-items: center; justify-content: center;
-      font-size: 12px; color: white;
+      border-radius: 50%; margin-right: 12px;
+      display: flex; align-items: center; justify-content: center;
       transition: all 0.2s;
     }
-    .chip-with-level.selected .chip-with-level-check {
-      background: var(--primary); border-color: var(--primary);
+    .radio-item.selected .radio-dot {
+      border-color: var(--primary);
+      background: var(--primary);
     }
-    .chip-with-level.selected .chip-with-level-check::after {
-      content: '✓';
+    .radio-item.selected .radio-dot::after {
+      content: ''; width: 6px; height: 6px;
+      background: white; border-radius: 50%;
     }
-    .level-row {
-      display: flex; gap: 8px;
-    }
-    .level-chip {
-      flex: 1; padding: 6px 8px;
-      border: 1.5px solid var(--grey-light);
-      border-radius: 6px; background: white;
-      font-size: 11px; color: var(--grey-mid);
-      cursor: pointer; transition: all 0.2s;
-      text-align: center;
-    }
-    .level-chip:hover { border-color: var(--primary); color: var(--primary); }
-    .level-chip.selected { background: var(--primary); border-color: var(--primary); color: white; }
-    .level-chip.selected.orange { background: var(--accent); border-color: var(--accent); }
-    .level-chip.selected.danger { background: var(--danger); border-color: var(--danger); }
+    .radio-label { font-size: 14px; color: var(--grey-dark); }
+    .radio-desc { font-size: 12px; color: var(--grey-mid); margin-left: auto; }
 
-    /* ── Interview Score ── */
-    .score-card {
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 12px;
+    /* 维度块 */
+    .dimension-block {
+      background: var(--bg); border-radius: 10px;
+      padding: 16px; margin-bottom: 16px;
     }
-    .score-header {
+    .dimension-header {
       display: flex; justify-content: space-between;
       align-items: center; margin-bottom: 12px;
     }
-    .score-title { font-weight: 600; color: var(--grey-dark); }
-    .score-badge {
+    .dimension-title {
+      font-weight: 600; color: var(--grey-dark);
+      font-size: 15px;
+    }
+    .dimension-tag {
       font-size: 11px; padding: 2px 10px;
       border-radius: 10px; font-weight: 500;
     }
-    .score-desc {
-      font-size: 12px; color: var(--grey-mid);
-      margin-bottom: 12px;
+    .dimension-tag.blue { background: var(--primary-light); color: var(--primary); }
+    .dimension-tag.orange { background: var(--accent-light); color: var(--accent); }
+    .dimension-tag.green { background: var(--success-light); color: var(--success); }
+    .dimension-tag.purple { background: var(--purple-light); color: var(--purple); }
+    .dimension-tag.red { background: var(--danger-light); color: var(--danger); }
+    .dimension-tip {
+      font-size: 12px; color: var(--grey-mid); margin-bottom: 12px;
     }
-    .score-options {
-      display: flex; flex-wrap: wrap; gap: 6px;
+
+    /* 评分选项 */
+    .score-row {
+      display: flex; gap: 8px; margin-bottom: 8px;
+      align-items: flex-start;
     }
-    .score-option {
-      padding: 6px 14px;
-      border: 1.5px solid var(--grey-light);
-      border-radius: 16px;
-      font-size: 13px; color: var(--grey-dark);
-      cursor: pointer; transition: all 0.2s;
-      background: white;
+    .score-radio {
+      width: 20px; height: 20px;
+      border: 2px solid var(--grey-light);
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+      transition: all 0.2s;
     }
-    .score-option:hover { border-color: var(--primary); color: var(--primary); }
-    .score-option.selected {
-      background: var(--primary); border-color: var(--primary);
-      color: white;
+    .score-radio.selected { border-color: var(--primary); background: var(--primary); }
+    .score-radio.selected::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; }
+    .score-content { flex: 1; }
+    .score-label {
+      font-size: 14px; color: var(--grey-dark);
+      margin-bottom: 4px;
     }
+    .score-desc { font-size: 12px; color: var(--grey-mid); }
+    .score-points {
+      font-size: 12px; font-weight: 600;
+      color: var(--primary); margin-left: auto;
+      padding: 2px 8px;
+      background: var(--primary-light);
+      border-radius: 10px; flex-shrink: 0;
+    }
+    .score-points.high { background: var(--success-light); color: var(--success); }
+    .score-points.mid { background: var(--accent-light); color: var(--accent); }
+    .score-points.low { background: var(--danger-light); color: var(--danger); }
+
     .score-comment {
-      margin-top: 10px;
+      margin-top: 8px; padding-left: 28px;
     }
     .score-comment textarea {
       width: 100%; padding: 8px;
@@ -343,15 +264,24 @@
       min-height: 48px;
     }
 
-    /* ── Button Group ── */
+    /* 总分计算 */
+    .score-total {
+      display: flex; justify-content: space-between;
+      align-items: center;
+      padding: 16px; background: var(--primary);
+      border-radius: 8px; color: white;
+      margin-top: 16px;
+    }
+    .score-total-label { font-size: 14px; }
+    .score-total-value { font-size: 28px; font-weight: 700; }
+
+    /* 按钮 */
     .btn-group { display: flex; gap: 12px; margin-top: 24px; }
     .btn {
-      flex: 1; padding: 14px 24px;
-      border: none; border-radius: 8px;
-      font-size: 15px; font-weight: 600;
+      flex: 1; padding: 14px 24px; border: none;
+      border-radius: 8px; font-size: 15px; font-weight: 600;
       cursor: pointer; transition: all 0.3s;
-      display: flex; align-items: center;
-      justify-content: center; gap: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow); }
@@ -359,97 +289,79 @@
     .btn-secondary:hover { background: #d5d8dc; }
     .btn-success { background: var(--success); color: white; }
     .btn-success:hover { background: #1e8449; box-shadow: var(--shadow); }
+    .btn-orange { background: var(--accent); color: white; }
+    .btn-orange:hover { background: #d35400; box-shadow: var(--shadow); }
 
-    /* ── Result Panel ── */
-    .result-panel {
-      display: none;
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
-      margin-top: 24px; overflow: hidden;
-    }
+    /* 结果面板 */
+    .result-panel { display: none; margin-top: 24px; }
     .result-panel.show { display: block; }
     .result-header {
       padding: 32px 24px; text-align: center; color: white;
+      border-radius: var(--radius) var(--radius) 0 0;
     }
     .result-header.excellent { background: linear-gradient(135deg, var(--success), #1e8449); }
     .result-header.good { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
     .result-header.pass { background: linear-gradient(135deg, var(--accent), #d35400); }
     .result-header.fail { background: linear-gradient(135deg, var(--danger), #922b21); }
-    .result-score { font-size: 56px; font-weight: 700; margin-bottom: 4px; }
+    .result-score { font-size: 56px; font-weight: 700; }
     .result-label { font-size: 18px; opacity: 0.9; }
-    .result-body { padding: 24px; }
-    .result-summary {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 10px; margin-bottom: 20px;
-    }
-    @media (max-width: 640px) { .result-summary { grid-template-columns: 1fr; } }
-    .result-item {
+    .result-body { padding: 24px; background: var(--white); border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow-lg); }
+    .result-detail { margin-bottom: 20px; }
+    .result-dim {
       display: flex; justify-content: space-between;
-      padding: 10px 12px;
-      background: var(--bg); border-radius: 8px;
+      padding: 10px 0; border-bottom: 1px solid var(--grey-light);
     }
-    .result-item-label { color: var(--grey-mid); font-size: 13px; }
-    .result-item-value { font-weight: 600; }
-    .result-item-value.high { color: var(--success); }
-    .result-item-value.medium { color: var(--accent); }
-    .result-item-value.low { color: var(--danger); }
+    .result-dim-label { color: var(--grey-mid); font-size: 14px; }
+    .result-dim-value { font-weight: 600; }
+    .result-dim-value.high { color: var(--success); }
+    .result-dim-value.mid { color: var(--accent); }
+    .result-dim-value.low { color: var(--danger); }
     .recommendation {
       padding: 20px; border-radius: 8px; margin-top: 16px;
     }
     .recommendation.hire { background: var(--success-light); border: 1px solid var(--success); }
     .recommendation.maybe { background: var(--accent-light); border: 1px solid var(--accent); }
     .recommendation.reject { background: var(--danger-light); border: 1px solid var(--danger); }
-    .recommendation-title {
-      font-weight: 600; margin-bottom: 8px;
-      display: flex; align-items: center; gap: 8px;
-    }
+    .recommendation-title { font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
     .recommendation.hire .recommendation-title { color: var(--success); }
     .recommendation.maybe .recommendation-title { color: var(--accent); }
     .recommendation.reject .recommendation-title { color: var(--danger); }
     .recommendation-text { font-size: 14px; color: var(--grey-dark); line-height: 1.7; }
 
-    /* ── JD Preview ── */
+    /* JD预览 */
     .jd-preview {
-      background: var(--bg); border-radius: 8px;
-      padding: 24px; margin-top: 20px;
+      background: var(--bg); border-radius: var(--radius);
+      padding: 32px; margin-top: 20px;
+      max-height: 600px; overflow-y: auto;
     }
     .jd-preview-title {
-      font-size: 20px; font-weight: 700;
-      color: var(--grey-dark); margin-bottom: 8px; text-align: center;
+      font-size: 22px; font-weight: 700;
+      color: var(--grey-dark); margin-bottom: 12px; text-align: center;
     }
     .jd-preview-meta {
-      text-align: center; font-size: 13px;
-      color: var(--grey-mid); margin-bottom: 20px;
-      padding-bottom: 16px; border-bottom: 1px solid var(--grey-light);
+      text-align: center; font-size: 14px;
+      color: var(--grey-mid); margin-bottom: 24px;
+      padding-bottom: 20px; border-bottom: 2px solid var(--grey-light);
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
     }
-    .jd-section { margin-bottom: 20px; }
+    .jd-meta-item { display: flex; align-items: center; gap: 6px; }
+    .jd-section { margin-bottom: 24px; }
     .jd-section-title {
-      font-weight: 600; margin-bottom: 10px;
+      font-size: 16px; font-weight: 600; margin-bottom: 12px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--grey-light);
       display: flex; align-items: center; gap: 8px;
     }
-    .jd-tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
-    .jd-tag {
-      display: inline-flex; align-items: center;
-      padding: 4px 12px;
-      background: white; border-radius: 12px;
-      font-size: 13px; color: var(--grey-dark);
-      margin-bottom: 4px;
-    }
-    .jd-tag::before {
-      content: '✓ '; color: var(--success);
-    }
+    .jd-content { font-size: 14px; line-height: 1.8; color: var(--grey-dark); }
+    .jd-item { margin-bottom: 8px; padding-left: 16px; position: relative; }
+    .jd-item::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
+    .jd-tag { display: inline-block; background: var(--primary-light); color: var(--primary); padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 2px; }
 
-    /* ── Footer ── */
     footer { text-align: center; padding: 32px 24px; color: var(--grey-mid); font-size: 13px; }
 
-    /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; right: 24px;
-      padding: 16px 24px;
-      background: var(--grey-dark); color: white;
-      border-radius: 8px; font-size: 14px;
-      box-shadow: var(--shadow-lg);
+      padding: 16px 24px; background: var(--grey-dark); color: white;
+      border-radius: 8px; font-size: 14px; box-shadow: var(--shadow-lg);
       transform: translateY(100px); opacity: 0;
       transition: all 0.3s; z-index: 1000;
     }
@@ -457,91 +369,216 @@
     .toast.success { background: var(--success); }
     .toast.error { background: var(--danger); }
 
-    /* ── Hidden ── */
     .hidden { display: none !important; }
+
+    /* 候选人信息卡 */
+    .candidate-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white; border-radius: var(--radius);
+      padding: 24px; margin-bottom: 24px;
+    }
+    .candidate-card .grid-2 { gap: 16px; }
+    .candidate-card .form-label { color: rgba(255,255,255,0.8); font-size: 13px; }
+    .candidate-card .form-input, .candidate-card .form-select {
+      background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;
+    }
+    .candidate-card .form-input::placeholder { color: rgba(255,255,255,0.6); }
+    .candidate-card .form-input:focus { border-color: white; }
   </style>
 </head>
 <body>
   <header>
     <div class="header-badge">天地人销售管理体系</div>
     <h1>招聘管理系统</h1>
-    <p>销售岗位专属 · 选项式填写 · 3分钟生成专业JD</p>
+    <p>JD生成器 + 面试评分表 · 完整版 · 100分制</p>
   </header>
 
-  <!-- Tab Navigation -->
   <nav class="tab-nav">
-    <button class="tab-btn active" data-tab="jd">📋 岗位JD生成</button>
-    <button class="tab-btn" data-tab="interview">📊 面试评分卡</button>
+    <button class="tab-btn active" data-tab="jd">📋 JD生成器</button>
+    <button class="tab-btn" data-tab="interview">📊 面试评分表</button>
     <button class="tab-btn" data-tab="history">📁 记录历史</button>
   </nav>
 
   <main class="container">
-    <!-- JD 生成 Tab -->
+    <!-- JD生成器 -->
     <section id="tab-jd" class="tab-content">
 
-      <!-- 基础信息 -->
+      <!-- 基本信息 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon blue">🏢</div>
           <div>
-            <div class="section-title">岗位基本信息</div>
-            <div class="section-subtitle">基本信息（少量填写即可）</div>
+            <div class="section-title">基本信息</div>
+            <div class="section-subtitle">岗位基础信息</div>
           </div>
         </div>
         <div class="section-body">
           <div class="grid-2">
             <div class="form-group">
               <label class="form-label">公司名称 <span class="required">*</span></label>
-              <input type="text" class="form-input" id="companyName" placeholder="深圳市XX科技有限公司" value="深圳市博商管理科学研究院">
+              <input type="text" class="form-input" id="companyName" placeholder="如：深圳市XX科技有限公司" value="深圳市博商管理科学研究院">
             </div>
             <div class="form-group">
               <label class="form-label">岗位名称 <span class="required">*</span></label>
-              <input type="text" class="form-input" id="positionName" placeholder="高级销售经理">
+              <input type="text" class="form-input" id="positionName" placeholder="如：高级销售经理">
             </div>
           </div>
-          <div class="grid-2">
+          <div class="grid-4">
             <div class="form-group">
               <label class="form-label">所属部门</label>
-              <input type="text" class="form-input" id="department" placeholder="销售部">
+              <input type="text" class="form-input" id="department" placeholder="如：销售部">
+            </div>
+            <div class="form-group">
+              <label class="form-label">汇报对象</label>
+              <input type="text" class="form-input" id="reportTo" placeholder="如：销售总监">
             </div>
             <div class="form-group">
               <label class="form-label">工作地点</label>
-              <input type="text" class="form-input" id="location" placeholder="深圳南山区" value="深圳">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">薪资范围</label>
-              <input type="text" class="form-input" id="salaryRange" placeholder="15K-25K+提成">
+              <input type="text" class="form-input" id="location" placeholder="如：深圳南山区" value="深圳">
             </div>
             <div class="form-group">
               <label class="form-label">招聘人数</label>
               <input type="number" class="form-input" id="headcount" value="1" min="1">
             </div>
           </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">薪资范围</label>
+              <input type="text" class="form-input" id="salaryRange" placeholder="如：15K-25K+提成">
+            </div>
+            <div class="form-group">
+              <label class="form-label">福利标签（选填）</label>
+              <div class="chip-group" id="benefits">
+                <div class="chip" data-value="五险一金" onclick="toggleChip(this)">五险一金</div>
+                <div class="chip" data-value="六险一金" onclick="toggleChip(this)">六险一金</div>
+                <div class="chip" data-value="周末双休" onclick="toggleChip(this)">周末双休</div>
+                <div class="chip" data-value="弹性工作" onclick="toggleChip(this)">弹性工作</div>
+                <div class="chip" data-value="年终奖金" onclick="toggleChip(this)">年终奖金</div>
+                <div class="chip" data-value="带薪年假" onclick="toggleChip(this)">带薪年假</div>
+                <div class="chip" data-value="年度旅游" onclick="toggleChip(this)">年度旅游</div>
+                <div class="chip" data-value="定期体检" onclick="toggleChip(this)">定期体检</div>
+                <div class="chip" data-value="股权激励" onclick="toggleChip(this)">股权激励</div>
+                <div class="chip" data-value="培训机会" onclick="toggleChip(this)">培训机会</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- 必选一：硬实力 -->
+      <!-- 岗位概述 -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon teal">📝</div>
+          <div>
+            <div class="section-title">岗位概述（一句话介绍）</div>
+            <div class="section-subtitle">用一句话描述这个岗位的核心价值</div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="radio-list" id="jobSummary">
+            <div class="radio-item" data-value="开拓新客户，推动业绩增长" onclick="selectRadio(this, 'jobSummary')">
+              <div class="radio-dot"></div>
+              <span class="radio-label">开拓新客户，推动业绩增长</span>
+              <span class="radio-desc">适合：销售代表/客户经理</span>
+            </div>
+            <div class="radio-item" data-value="管理大客户，提升复购与增购" onclick="selectRadio(this, 'jobSummary')">
+              <div class="radio-dot"></div>
+              <span class="radio-label">管理大客户，提升复购与增购</span>
+              <span class="radio-desc">适合：大客户经理/客户总监</span>
+            </div>
+            <div class="radio-item" data-value="搭建渠道网络，赋能经销商" onclick="selectRadio(this, 'jobSummary')">
+              <div class="radio-dot"></div>
+              <span class="radio-label">搭建渠道网络，赋能经销商</span>
+              <span class="radio-desc">适合：渠道经理/招商经理</span>
+            </div>
+            <div class="radio-item" data-value="主导项目销售，赢取大单" onclick="selectRadio(this, 'jobSummary')">
+              <div class="radio-dot"></div>
+              <span class="radio-label">主导项目销售，赢取大单</span>
+              <span class="radio-desc">适合：项目经理/解决方案销售</span>
+            </div>
+            <div class="radio-item" data-value="带领销售团队，完成业绩目标" onclick="selectRadio(this, 'jobSummary')">
+              <div class="radio-dot"></div>
+              <span class="radio-label">带领销售团队，完成业绩目标</span>
+              <span class="radio-desc">适合：销售经理/销售总监</span>
+            </div>
+            <div class="radio-item" data-value="通过电话/网络开拓客户，完成销售指标" onclick="selectRadio(this, 'jobSummary')">
+              <div class="radio-dot"></div>
+              <span class="radio-label">通过电话/网络开拓客户，完成销售指标</span>
+              <span class="radio-desc">适合：电销专员/网销专员</span>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top: 16px;">
+            <label class="form-label">或自定义（选填）</label>
+            <input type="text" class="form-input" id="customSummary" placeholder="如需要可自定义岗位概述">
+          </div>
+        </div>
+      </div>
+
+      <!-- 任职资格-硬性要求 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon orange">💼</div>
           <div>
-            <div class="section-title">硬实力要求（销售岗专用）</div>
-            <div class="section-subtitle">勾选候选人必须具备的硬性条件，可多选</div>
+            <div class="section-title">任职资格 - 硬性要求</div>
+            <div class="section-subtitle">必须满足的条件，候选人入职前会核实</div>
           </div>
         </div>
         <div class="section-body">
           
-          <!-- 行业经验 -->
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">🏭 行业经验</div>
-                <div class="skill-sub-label">候选人最好有哪个行业的销售经验</div>
-              </div>
+          <!-- 学历 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">📚 学历要求</span>
+              <span class="dimension-tag orange">必选</span>
             </div>
-            <div class="chip-group" id="industryExp">
+            <div class="chip-group">
+              <div class="chip" data-value="初中及以下" onclick="toggleChip(this)">初中及以下</div>
+              <div class="chip" data-value="高中/中专" onclick="toggleChip(this)">高中/中专</div>
+              <div class="chip" data-value="大专" onclick="toggleChip(this)">大专</div>
+              <div class="chip selected" data-value="本科" onclick="toggleChip(this)">本科</div>
+              <div class="chip" data-value="硕士" onclick="toggleChip(this)">硕士</div>
+              <div class="chip" data-value="MBA" onclick="toggleChip(this)">MBA</div>
+              <div class="chip" data-value="学历不限" onclick="toggleChip(this)">学历不限</div>
+            </div>
+          </div>
+
+          <!-- 年龄 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">🎂 年龄要求</span>
+              <span class="dimension-tag blue">选填</span>
+            </div>
+            <div class="chip-group">
+              <div class="chip" data-value="25岁以下" onclick="toggleChip(this)">25岁以下</div>
+              <div class="chip" data-value="28岁以下" onclick="toggleChip(this)">28岁以下</div>
+              <div class="chip" data-value="30岁以下" onclick="toggleChip(this)">30岁以下</div>
+              <div class="chip" data-value="35岁以下" onclick="toggleChip(this)">35岁以下</div>
+              <div class="chip" data-value="40岁以下" onclick="toggleChip(this)">40岁以下</div>
+              <div class="chip" data-value="45岁以下" onclick="toggleChip(this)">45岁以下</div>
+              <div class="chip selected" data-value="年龄不限" onclick="toggleChip(this)">年龄不限</div>
+            </div>
+          </div>
+
+          <!-- 性别 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">⚧ 性别要求</span>
+              <span class="dimension-tag blue">选填</span>
+            </div>
+            <div class="chip-group">
+              <div class="chip selected" data-value="性别不限" onclick="toggleChip(this)">性别不限</div>
+              <div class="chip" data-value="男性优先" onclick="toggleChip(this)">男性优先</div>
+              <div class="chip" data-value="女性优先" onclick="toggleChip(this)">女性优先</div>
+            </div>
+          </div>
+
+          <!-- 行业经验 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">🏭 行业经验要求</span>
+              <span class="dimension-tag orange">必选</span>
+            </div>
+            <div class="chip-group">
               <div class="chip" data-value="工业品/设备/制造业" onclick="toggleChip(this)">工业品/设备/制造业</div>
               <div class="chip" data-value="软件/IT/互联网" onclick="toggleChip(this)">软件/IT/互联网</div>
               <div class="chip" data-value="消费品/零售" onclick="toggleChip(this)">消费品/零售</div>
@@ -549,234 +586,239 @@
               <div class="chip" data-value="金融/保险" onclick="toggleChip(this)">金融/保险</div>
               <div class="chip" data-value="教育培训" onclick="toggleChip(this)">教育培训</div>
               <div class="chip" data-value="工程/建筑/地产" onclick="toggleChip(this)">工程/建筑/地产</div>
+              <div class="chip" data-value="政府/央企/国企" onclick="toggleChip(this)">政府/央企/国企</div>
               <div class="chip" data-value="不限行业" onclick="toggleChip(this)">不限行业</div>
             </div>
-            <div class="chip-tip">已选：<span id="industryCount">0</span> 项（建议选1-2项）</div>
           </div>
 
           <!-- 客户类型 -->
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">👔 客户类型</div>
-                <div class="skill-sub-label">候选人主要打哪类客户</div>
-              </div>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">👔 客户类型</span>
+              <span class="dimension-tag orange">必选</span>
             </div>
-            <div class="chip-group" id="customerType">
+            <div class="chip-group">
               <div class="chip" data-value="企业客户/B2B" onclick="toggleChip(this)">企业客户/B2B</div>
               <div class="chip" data-value="政府/事业单位" onclick="toggleChip(this)">政府/事业单位</div>
               <div class="chip" data-value="经销商/代理商" onclick="toggleChip(this)">经销商/代理商</div>
               <div class="chip" data-value="个人客户/B2C" onclick="toggleChip(this)">个人客户/B2C</div>
               <div class="chip" data-value="不限类型" onclick="toggleChip(this)">不限类型</div>
             </div>
-            <div class="chip-tip">已选：<span id="customerCount">0</span> 项（建议选1项）</div>
           </div>
 
           <!-- 销售模式 -->
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">📞 销售模式</div>
-                <div class="skill-sub-label">候选人用什么方式做销售</div>
-              </div>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">📞 销售模式</span>
+              <span class="dimension-tag orange">必选</span>
             </div>
-            <div class="chip-group" id="salesMode">
+            <div class="chip-group">
               <div class="chip" data-value="大客户直销/面对面销售" onclick="toggleChip(this)">大客户直销/面对面销售</div>
               <div class="chip" data-value="电话销售/电销团队" onclick="toggleChip(this)">电话销售/电销团队</div>
               <div class="chip" data-value="渠道销售/招商" onclick="toggleChip(this)">渠道销售/招商</div>
               <div class="chip" data-value="电商/线上销售" onclick="toggleChip(this)">电商/线上销售</div>
               <div class="chip" data-value="项目型销售/招投标" onclick="toggleChip(this)">项目型销售/招投标</div>
               <div class="chip" data-value="门店/顾问式销售" onclick="toggleChip(this)">门店/顾问式销售</div>
+              <div class="chip" data-value="直销+渠道混合" onclick="toggleChip(this)">直销+渠道混合</div>
             </div>
-            <div class="chip-tip">已选：<span id="modeCount">0</span> 项（建议选1-2项）</div>
           </div>
 
-          <!-- 销售经验年限 -->
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">⏱️ 经验年限</div>
-                <div class="skill-sub-label">需要几年以上销售经验</div>
-              </div>
+          <!-- 经验年限 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">⏱️ 销售经验年限</span>
+              <span class="dimension-tag orange">必选</span>
             </div>
-            <div class="level-selector">
-              <button class="level-btn selected" onclick="selectLevel(this, 'experience', '1年+')">1年+</button>
-              <button class="level-btn" onclick="selectLevel(this, 'experience', '2年+')">2年+</button>
-              <button class="level-btn" onclick="selectLevel(this, 'experience', '3年+')">3年+</button>
-              <button class="level-btn" onclick="selectLevel(this, 'experience', '5年+')">5年+</button>
-              <button class="level-btn" onclick="selectLevel(this, 'experience', '不限')">不限</button>
+            <div class="chip-group">
+              <div class="chip" data-value="1年+" onclick="toggleChip(this)">1年+</div>
+              <div class="chip" data-value="2年+" onclick="toggleChip(this)">2年+</div>
+              <div class="chip" data-value="3年+" onclick="toggleChip(this)">3年+</div>
+              <div class="chip" data-value="5年+" onclick="toggleChip(this)">5年+</div>
+              <div class="chip" data-value="8年+" onclick="toggleChip(this)">8年+</div>
+              <div class="chip" data-value="经验不限" onclick="toggleChip(this)">经验不限</div>
             </div>
           </div>
 
           <!-- 业绩要求 -->
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">💰 业绩要求</div>
-                <div class="skill-sub-label">需要达到什么业绩标准（可多选）</div>
-              </div>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">💰 业绩要求（可多选）</span>
+              <span class="dimension-tag green">建议选</span>
             </div>
-            <div class="chip-group" id="performance">
-              <div class="chip" data-value="年销售额 ≥ 100万" onclick="toggleChip(this)">年销售额 ≥ 100万</div>
-              <div class="chip" data-value="年销售额 ≥ 300万" onclick="toggleChip(this)">年销售额 ≥ 300万</div>
-              <div class="chip" data-value="年销售额 ≥ 500万" onclick="toggleChip(this)">年销售额 ≥ 500万</div>
-              <div class="chip" data-value="年销售额 ≥ 1000万" onclick="toggleChip(this)">年销售额 ≥ 1000万</div>
-              <div class="chip" data-value="客户数量 ≥ 30家" onclick="toggleChip(this)">客户数量 ≥ 30家</div>
-              <div class="chip" data-value="客户复购率 ≥ 40%" onclick="toggleChip(this)">客户复购率 ≥ 40%</div>
+            <div class="chip-group">
+              <div class="chip" data-value="年销售额≥100万" onclick="toggleChip(this)">年销售额≥100万</div>
+              <div class="chip" data-value="年销售额≥300万" onclick="toggleChip(this)">年销售额≥300万</div>
+              <div class="chip" data-value="年销售额≥500万" onclick="toggleChip(this)">年销售额≥500万</div>
+              <div class="chip" data-value="年销售额≥1000万" onclick="toggleChip(this)">年销售额≥1000万</div>
+              <div class="chip" data-value="年销售额≥2000万" onclick="toggleChip(this)">年销售额≥2000万</div>
+              <div class="chip" data-value="开发客户≥30家/年" onclick="toggleChip(this)">开发客户≥30家/年</div>
+              <div class="chip" data-value="客户复购率≥40%" onclick="toggleChip(this)">客户复购率≥40%</div>
               <div class="chip" data-value="无业绩要求" onclick="toggleChip(this)">无业绩要求</div>
             </div>
-            <div class="chip-tip">已选：<span id="performanceCount">0</span> 项（建议选1-2项）</div>
           </div>
 
           <!-- 友商背景 -->
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">🏴 友商背景</div>
-                <div class="skill-sub-label">是否需要来自特定竞争对手</div>
-              </div>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">🏴 竞品/友商背景要求</span>
+              <span class="dimension-tag blue">选填</span>
             </div>
-            <div class="chip-group" id="competitor">
-              <div class="chip" data-value="有同行业TOP10友商经验" onclick="toggleChip(this)">有同行业TOP10友商经验</div>
+            <div class="chip-group">
+              <div class="chip" data-value="有同行业TOP10企业销售经验" onclick="toggleChip(this)">有同行业TOP10企业销售经验</div>
               <div class="chip" data-value="有同类产品销售经验" onclick="toggleChip(this)">有同类产品销售经验</div>
-              <div class="chip" data-value="无友商背景要求" onclick="toggleChip(this)">无友商背景要求</div>
+              <div class="chip" data-value="有客户资源（自带资源优先）" onclick="toggleChip(this)">有客户资源（自带资源优先）</div>
+              <div class="chip" data-value="无竞品背景要求" onclick="toggleChip(this)">无竞品背景要求</div>
+            </div>
+          </div>
+
+          <!-- 专业背景 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">🎓 专业背景要求</span>
+              <span class="dimension-tag blue">选填</span>
+            </div>
+            <div class="chip-group">
+              <div class="chip" data-value="市场营销/工商管理" onclick="toggleChip(this)">市场营销/工商管理</div>
+              <div class="chip" data-value="计算机/软件工程" onclick="toggleChip(this)">计算机/软件工程</div>
+              <div class="chip" data-value="机械/自动化/工程" onclick="toggleChip(this)">机械/自动化/工程</div>
+              <div class="chip" data-value="医学/药学/生物" onclick="toggleChip(this)">医学/药学/生物</div>
+              <div class="chip" data-value="金融/经济" onclick="toggleChip(this)">金融/经济</div>
+              <div class="chip" data-value="专业不限" onclick="toggleChip(this)">专业不限</div>
+            </div>
+          </div>
+
+          <!-- 其他证书/技能 -->
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">📜 证书/技能要求（选填）</span>
+              <span class="dimension-tag blue">选填</span>
+            </div>
+            <div class="chip-group">
+              <div class="chip" data-value="C1驾驶证" onclick="toggleChip(this)">C1驾驶证</div>
+              <div class="chip" data-value="英语CET-4及以上" onclick="toggleChip(this)">英语CET-4及以上</div>
+              <div class="chip" data-value="PMP/项目管理证书" onclick="toggleChip(this)">PMP/项目管理证书</div>
+              <div class="chip" data-value="会计从业资格证" onclick="toggleChip(this)">会计从业资格证</div>
+              <div class="chip" data-value="无证书要求" onclick="toggleChip(this)">无证书要求</div>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- 必选二：软实力 -->
+      <!-- 任职资格-软实力 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon green">🎯</div>
           <div>
-            <div class="section-title">软实力要求（通用）</div>
-            <div class="section-subtitle">勾选候选人需要具备的软性能力，5项覆盖所有核心素质</div>
+            <div class="section-title">任职资格 - 软实力要求</div>
+            <div class="section-subtitle">面试时重点考察的能力素质，选3-5项即可</div>
           </div>
         </div>
         <div class="section-body">
-          
-          <div class="skill-block">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">软实力五项（核心素质）</div>
-                <div class="skill-sub-label">选3-5项即可，覆盖90%的销售岗位需求</div>
-              </div>
-              <span class="skill-block-badge" style="background: var(--success-light); color: var(--success);">建议选3-5项</span>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">核心软实力（5项覆盖90%需求）</span>
+              <span class="dimension-tag green">建议选3-5项</span>
             </div>
             
-            <div class="chip-with-level" onclick="toggleSoftSkill(this, '沟通表达', 0)">
-              <div class="chip-with-level-header">
-                <span class="chip-with-level-title">1️⃣ 沟通表达能力</span>
-                <div class="chip-with-level-check"></div>
+            <div class="radio-item" data-skill="沟通表达能力" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">1. 沟通表达能力</span>
+                <span class="radio-desc">清晰表达观点，有效倾听客户需求，能说服和影响他人</span>
               </div>
-              <div class="level-row">
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 0, '必须优秀')">必须优秀</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 0, '良好即可')">良好即可</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 0, '可培养')">可培养</button>
+            </div>
+            <div class="radio-item" data-skill="抗压能力/韧性" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">2. 抗压能力/韧性</span>
+                <span class="radio-desc">面对拒绝和压力能坚持，越挫越勇，能从失败中快速恢复</span>
+              </div>
+            </div>
+            <div class="radio-item" data-skill="自驱力/目标感" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">3. 自驱力/目标感</span>
+                <span class="radio-desc">不需要人盯着，能自我激励，主动寻找机会达成目标</span>
+              </div>
+            </div>
+            <div class="radio-item" data-skill="学习能力" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">4. 学习能力</span>
+                <span class="radio-desc">能快速掌握产品知识、行业知识和销售技巧，善于总结复盘</span>
+              </div>
+            </div>
+            <div class="radio-item" data-skill="客户关系/服务意识" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">5. 客户关系/服务意识</span>
+                <span class="radio-desc">重视客户体验，能建立和维护长期客户关系，提升客户满意度</span>
+              </div>
+            </div>
+            <div class="radio-item" data-skill="谈判能力" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">6. 谈判能力</span>
+                <span class="radio-desc">能处理价格异议和复杂局面，争取双赢，能在博弈中占据主动</span>
+              </div>
+            </div>
+            <div class="radio-item" data-skill="执行力和计划性" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">7. 执行力和计划性</span>
+                <span class="radio-desc">做事有条理，能制定并执行销售计划，善于利用时间</span>
+              </div>
+            </div>
+            <div class="radio-item" data-skill="团队协作" onclick="toggleSoftSkill(this)">
+              <div class="radio-dot"></div>
+              <div style="flex: 1;">
+                <span class="radio-label">8. 团队协作</span>
+                <span class="radio-desc">能与团队成员配合，能配合市场、售前、售后等部门协同作战</span>
               </div>
             </div>
 
-            <div class="chip-with-level" onclick="toggleSoftSkill(this, '抗压能力', 1)">
-              <div class="chip-with-level-header">
-                <span class="chip-with-level-title">2️⃣ 抗压能力</span>
-                <div class="chip-with-level-check"></div>
-              </div>
-              <div class="level-row">
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 1, '必须优秀')">必须优秀</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 1, '良好即可')">良好即可</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 1, '可培养')">可培养</button>
-              </div>
-            </div>
-
-            <div class="chip-with-level" onclick="toggleSoftSkill(this, '自驱力/目标感', 2)">
-              <div class="chip-with-level-header">
-                <span class="chip-with-level-title">3️⃣ 自驱力/目标感</span>
-                <div class="chip-with-level-check"></div>
-              </div>
-              <div class="level-row">
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 2, '必须优秀')">必须优秀</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 2, '良好即可')">良好即可</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 2, '可培养')">可培养</button>
-              </div>
-            </div>
-
-            <div class="chip-with-level" onclick="toggleSoftSkill(this, '学习能力', 3)">
-              <div class="chip-with-level-header">
-                <span class="chip-with-level-title">4️⃣ 学习能力</span>
-                <div class="chip-with-level-check"></div>
-              </div>
-              <div class="level-row">
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 3, '必须优秀')">必须优秀</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 3, '良好即可')">良好即可</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 3, '可培养')">可培养</button>
-              </div>
-            </div>
-
-            <div class="chip-with-level" onclick="toggleSoftSkill(this, '客户关系/服务意识', 4)">
-              <div class="chip-with-level-header">
-                <span class="chip-with-level-title">5️⃣ 客户关系/服务意识</span>
-                <div class="chip-with-level-check"></div>
-              </div>
-              <div class="level-row">
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 4, '必须优秀')">必须优秀</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 4, '良好即可')">良好即可</button>
-                <button class="level-chip" onclick="event.stopPropagation(); selectSoftLevel(this, 4, '可培养')">可培养</button>
-              </div>
-            </div>
-
-            <div class="chip-tip" style="margin-top: 16px;">
-              已选软实力：<span id="softCount">0</span> 项
-              · <span style="color: var(--success);">绿色=必须优秀</span>
-              · <span style="color: var(--accent);">橙色=良好即可</span>
-              · <span style="color: var(--grey-mid);">灰色=可培养</span>
+            <div class="form-hint" style="margin-top: 12px;">
+              已选 <span id="softCount" style="color: var(--success); font-weight: 600;">0</span> 项软实力
             </div>
           </div>
-
         </div>
       </div>
 
-      <!-- 其他补充 -->
+      <!-- 加分项 -->
       <div class="section-card">
         <div class="section-header">
-          <div class="section-icon teal">📝</div>
+          <div class="section-icon purple">⭐</div>
           <div>
-            <div class="section-title">其他补充（选填）</div>
-            <div class="section-subtitle">如有特殊要求可补充，如无可跳过</div>
+            <div class="section-title">加分项（优先条件）</div>
+            <div class="section-subtitle">有则加分，没有也没关系</div>
           </div>
         </div>
         <div class="section-body">
-          <div class="chip-group" id="otherRequirements">
-            <div class="chip" data-value="有带团队经验" onclick="toggleChip(this)">有带团队经验</div>
-            <div class="chip" data-value="有客户资源优先" onclick="toggleChip(this)">有客户资源优先</div>
-            <div class="chip" data-value="本科及以上学历" onclick="toggleChip(this)">本科及以上学历</div>
-            <div class="chip" data-value="35岁以下" onclick="toggleChip(this)">35岁以下</div>
-            <div class="chip" data-value="能适应出差" onclick="toggleChip(this)">能适应出差</div>
-            <div class="chip" data-value="有驾照优先" onclick="toggleChip(this)">有驾照优先</div>
-            <div class="chip" data-value="退伍军人优先" onclick="toggleChip(this)">退伍军人优先</div>
-          </div>
-          <div class="chip-tip">已选：<span id="otherCount">0</span> 项</div>
-
-          <div class="form-group" style="margin-top: 20px;">
-            <label class="form-label">岗位职责（简述主要工作，选填）</label>
-            <textarea class="form-textarea" id="responsibilities" placeholder="如无需填写，系统将根据硬实力选项自动生成"></textarea>
-            <div class="form-hint">系统会根据前面勾选的硬实力自动推断主要工作内容，此处可补充特殊职责</div>
+          <div class="chip-group">
+            <div class="chip" data-value="有带团队经验（1人以上）" onclick="toggleChip(this)">有带团队经验</div>
+            <div class="chip" data-value="有成功案例可分享" onclick="toggleChip(this)">有成功案例可分享</div>
+            <div class="chip" data-value="有客户资源可转化" onclick="toggleChip(this)">有客户资源可转化</div>
+            <div class="chip" data-value="有行业人脉积累" onclick="toggleChip(this)">有行业人脉积累</div>
+            <div class="chip" data-value="主动积极，能说会道" onclick="toggleChip(this)">主动积极，能说会道</div>
+            <div class="chip" data-value="稳定性高，3年内无频繁跳槽" onclick="toggleChip(this)">稳定性高</div>
+            <div class="chip" data-value="无加分项" onclick="toggleChip(this)">无加分项</div>
           </div>
         </div>
       </div>
 
-      <!-- JD预览 -->
-      <div class="section-card hidden" id="jdPreview">
+      <!-- 岗位职责 -->
+      <div class="section-card">
         <div class="section-header">
-          <div class="section-icon green">👁️</div>
+          <div class="section-icon red">📋</div>
           <div>
-            <div class="section-title">JD 预览</div>
-            <div class="section-subtitle">系统根据选项自动生成</div>
+            <div class="section-title">岗位职责</div>
+            <div class="section-subtitle">自动根据前面选项生成，或手动修改</div>
           </div>
         </div>
         <div class="section-body">
-          <div class="jd-preview" id="jdPreviewContent"></div>
+          <textarea class="form-textarea" id="responsibilities" placeholder="根据前面的选择自动生成，也可手动修改" style="min-height: 160px;"></textarea>
+          <div class="form-hint">系统会根据行业、客户类型、销售模式等选择自动推断主要职责</div>
         </div>
       </div>
 
@@ -786,203 +828,552 @@
         <button class="btn btn-primary" onclick="saveJD()">💾 保存JD</button>
         <button class="btn btn-success" onclick="copyJD()">📋 复制JD</button>
       </div>
+
+      <!-- JD预览 -->
+      <div class="section-card hidden" id="jdPreview">
+        <div class="section-header">
+          <div class="section-icon green">👁️</div>
+          <div>
+            <div class="section-title">JD预览</div>
+            <div class="section-subtitle">可复制直接使用</div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="jd-preview" id="jdPreviewContent"></div>
+        </div>
+      </div>
+
     </section>
 
-    <!-- 面试评分 Tab -->
+    <!-- 面试评分表 -->
     <section id="tab-interview" class="tab-content hidden">
       
       <!-- 候选人信息 -->
+      <div class="candidate-card">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">候选人姓名 <span class="required">*</span></label>
+            <input type="text" class="form-input" id="candidateName" placeholder="请输入候选人姓名">
+          </div>
+          <div class="form-group">
+            <label class="form-label">应聘岗位</label>
+            <input type="text" class="form-input" id="applyPosition" placeholder="如：高级销售经理">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">面试官</label>
+            <input type="text" class="form-input" id="interviewer" placeholder="面试官姓名">
+          </div>
+          <div class="form-group">
+            <label class="form-label">面试日期</label>
+            <input type="date" class="form-input" id="interviewDate">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">面试类型</label>
+          <div style="display: flex; gap: 12px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="interviewType" value="初试" checked style="width: 16px; height: 16px;"> 初试
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="interviewType" value="复试" style="width: 16px; height: 16px;"> 复试
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="interviewType" value="终面" style="width: 16px; height: 16px;"> 终面
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评分规则说明 -->
+      <div class="section-card">
+        <div class="section-header" style="background: var(--primary-light);">
+          <div class="section-icon blue">📏</div>
+          <div>
+            <div class="section-title">评分规则</div>
+            <div class="section-subtitle">总分100分，每项只能选一个等级</div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="grid-4" style="gap: 8px;">
+            <div style="padding: 12px; background: var(--danger-light); border-radius: 8px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--danger);">0-2分</div>
+              <div style="font-size: 12px; color: var(--danger);">不合格</div>
+            </div>
+            <div style="padding: 12px; background: var(--accent-light); border-radius: 8px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--accent);">3-4分</div>
+              <div style="font-size: 12px; color: var(--accent);">一般</div>
+            </div>
+            <div style="padding: 12px; background: var(--success-light); border-radius: 8px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--success);">5-6分</div>
+              <div style="font-size: 12px; color: var(--success);">良好</div>
+            </div>
+            <div style="padding: 12px; background: var(--primary-light); border-radius: 8px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--primary);">7-8分</div>
+              <div style="font-size: 12px; color: var(--primary);">优秀</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; padding: 12px; background: var(--bg); border-radius: 8px; font-size: 13px; color: var(--grey-mid);">
+            <strong style="color: var(--grey-dark);">录用标准：</strong>
+            总分≥70分可录用 | 总分≥80分优先录用 | 总分<60分不建议录用
+          </div>
+        </div>
+      </div>
+
+      <!-- 第一部分：基础信息核实 -->
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon blue">👤</div>
           <div>
-            <div class="section-title">候选人信息</div>
-            <div class="section-subtitle">记录候选人基本信息</div>
-          </div>
-        </div>
-        <div class="section-body">
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">候选人姓名 <span class="required">*</span></label>
-              <input type="text" class="form-input" id="candidateName" placeholder="请输入姓名">
-            </div>
-            <div class="form-group">
-              <label class="form-label">应聘岗位</label>
-              <input type="text" class="form-input" id="applyPosition" placeholder="例如：高级销售经理">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">面试官</label>
-              <input type="text" class="form-input" id="interviewer" placeholder="面试官姓名">
-            </div>
-            <div class="form-group">
-              <label class="form-label">面试日期</label>
-              <input type="date" class="form-input" id="interviewDate">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">面试类型</label>
-            <select class="form-select" id="interviewType">
-              <option value="初试">初试</option>
-              <option value="复试">复试</option>
-              <option value="终面">终面</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- 面试评分（选项式） -->
-      <div class="section-card">
-        <div class="section-header">
-          <div class="section-icon purple">📊</div>
-          <div>
-            <div class="section-title">面试评分（选项式）</div>
-            <div class="section-subtitle">直接勾选表现等级，不用自己打分</div>
+            <div class="section-title">第一部分：基础信息核实（10分）</div>
+            <div class="section-subtitle">核实简历上的基本信息是否属实</div>
           </div>
         </div>
         <div class="section-body">
           
-          <!-- 沟通表达能力 -->
-          <div class="score-card">
-            <div class="score-header">
-              <span class="score-title">1. 沟通表达能力</span>
-              <span class="score-badge" style="background: var(--primary-light); color: var(--primary);">表达能力</span>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">1.1 学历真实性（3分）</span>
             </div>
-            <div class="score-desc">候选人能否清晰表达观点，能否说服客户</div>
-            <div class="score-options" id="score1_opts">
-              <div class="score-option" data-score="2" onclick="selectScore(1, this)">❌ 表达混乱，词不达意</div>
-              <div class="score-option" data-score="5" onclick="selectScore(1, this)">⚠️ 能正常交流</div>
-              <div class="score-option" data-score="8" onclick="selectScore(1, this)">✅ 表达清晰有说服力</div>
-              <div class="score-option" data-score="10" onclick="selectScore(1, this)">⭐ 表达优秀，有感染力</div>
+            <div class="score-row" onclick="selectScore(1, 0, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">真实且高于要求</div><div class="score-desc">学历真实，且高于岗位要求</div></div>
+              <span class="score-points high">8分</span>
             </div>
-            <div class="score-comment">
-              <textarea id="comment1" placeholder="备注：面试中观察到的具体表现..."></textarea>
+            <div class="score-row" onclick="selectScore(1, 0, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">真实且符合要求</div><div class="score-desc">学历真实，符合岗位学历要求</div></div>
+              <span class="score-points">6分</span>
             </div>
-          </div>
-
-          <!-- 抗压能力 -->
-          <div class="score-card">
-            <div class="score-header">
-              <span class="score-title">2. 抗压能力</span>
-              <span class="score-badge" style="background: var(--accent-light); color: var(--accent);">心理素质</span>
+            <div class="score-row" onclick="selectScore(1, 0, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">真实但略低于要求</div><div class="score-desc">学历真实，但略低于岗位要求</div></div>
+              <span class="score-points mid">3分</span>
             </div>
-            <div class="score-desc">面对拒绝、业绩压力时的表现</div>
-            <div class="score-options" id="score2_opts">
-              <div class="score-option" data-score="2" onclick="selectScore(2, this)">❌ 容易崩溃，遇到挫折就放弃</div>
-              <div class="score-option" data-score="5" onclick="selectScore(2, this)">⚠️ 能应对一般压力</div>
-              <div class="score-option" data-score="8" onclick="selectScore(2, this)">✅ 抗压能力强，能坚持</div>
-              <div class="score-option" data-score="10" onclick="selectScore(2, this)">⭐ 越挫越勇，压力下表现更好</div>
-            </div>
-            <div class="score-comment">
-              <textarea id="comment2" placeholder="备注：面试中观察到的具体表现..."></textarea>
+            <div class="score-row" onclick="selectScore(1, 0, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">学历存疑或造假</div><div class="score-desc">无法提供证明，或明显与简历不符</div></div>
+              <span class="score-points low">0分</span>
             </div>
           </div>
 
-          <!-- 自驱力 -->
-          <div class="score-card">
-            <div class="score-header">
-              <span class="score-title">3. 自驱力/目标感</span>
-              <span class="score-badge" style="background: var(--success-light); color: var(--success);">内在动力</span>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">1.2 工作经验真实性（4分）</span>
             </div>
-            <div class="score-desc">是否主动工作，不需要人盯着</div>
-            <div class="score-options" id="score3_opts">
-              <div class="score-option" data-score="2" onclick="selectScore(3, this)">❌ 需要人盯着干活</div>
-              <div class="score-option" data-score="5" onclick="selectScore(3, this)">⚠️ 分内事会做，不主动</div>
-              <div class="score-option" data-score="8" onclick="selectScore(3, this)">✅ 有自驱力，会主动找事</div>
-              <div class="score-option" data-score="10" onclick="selectScore(3, this)">⭐ 自驱力极强，有野心</div>
+            <div class="score-row" onclick="selectScore(1, 1, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">完全真实，有详细佐证</div><div class="score-desc">能详细描述每段工作内容和成果，有数据支撑</div></div>
+              <span class="score-points high">8分</span>
             </div>
-            <div class="score-comment">
-              <textarea id="comment3" placeholder="备注：面试中观察到的具体表现..."></textarea>
+            <div class="score-row" onclick="selectScore(1, 1, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">基本真实</div><div class="score-desc">工作经验基本属实，能说清主要工作</div></div>
+              <span class="score-points">6分</span>
             </div>
-          </div>
-
-          <!-- 专业经验 -->
-          <div class="score-card">
-            <div class="score-header">
-              <span class="score-title">4. 专业经验匹配度</span>
-              <span class="score-badge" style="background: var(--purple-light); color: var(--purple);">硬实力</span>
+            <div class="score-row" onclick="selectScore(1, 1, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">部分存疑</div><div class="score-desc">部分工作经历说不清楚，或时间对不上</div></div>
+              <span class="score-points mid">3分</span>
             </div>
-            <div class="score-desc">候选人的经验与岗位要求的匹配程度</div>
-            <div class="score-options" id="score4_opts">
-              <div class="score-option" data-score="2" onclick="selectScore(4, this)">❌ 经验不匹配，需从头培养</div>
-              <div class="score-option" data-score="5" onclick="selectScore(4, this)">⚠️ 经验一般，需适应期</div>
-              <div class="score-option" data-score="8" onclick="selectScore(4, this)">✅ 经验匹配，上手快</div>
-              <div class="score-option" data-score="10" onclick="selectScore(4, this)">⭐ 经验优秀，可直接上手</div>
-            </div>
-            <div class="score-comment">
-              <textarea id="comment4" placeholder="备注：面试中了解到的经验详情..."></textarea>
+            <div class="score-row" onclick="selectScore(1, 1, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">疑似虚假</div><div class="score-desc">工作经历造假，或明显夸大</div></div>
+              <span class="score-points low">0分</span>
             </div>
           </div>
 
-          <!-- 稳定性/动机 -->
-          <div class="score-card">
-            <div class="score-header">
-              <span class="score-title">5. 动机与稳定性</span>
-              <span class="score-badge" style="background: var(--teal-light); color: var(--teal);">稳定性</span>
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">1.3 稳定性/求职动机（3分）</span>
             </div>
-            <div class="score-desc">求职动机是否明确，能做多久</div>
-            <div class="score-options" id="score5_opts">
-              <div class="score-option" data-score="2" onclick="selectScore(5, this)">❌ 动机不纯，可能骑驴找马</div>
-              <div class="score-option" data-score="5" onclick="selectScore(5, this)">⚠️ 动机一般，稳定性不确定</div>
-              <div class="score-option" data-score="8" onclick="selectScore(5, this)">✅ 动机明确，稳定性较好</div>
-              <div class="score-option" data-score="10" onclick="selectScore(5, this)">⭐ 动机强烈，稳定性高</div>
+            <div class="score-row" onclick="selectScore(1, 2, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">非常稳定，动机明确</div><div class="score-desc">离职原因合理，求职目标清晰，稳定性好</div></div>
+              <span class="score-points high">8分</span>
             </div>
-            <div class="score-comment">
-              <textarea id="comment5" placeholder="备注：候选人离职原因/求职动机..."></textarea>
+            <div class="score-row" onclick="selectScore(1, 2, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">稳定性一般</div><div class="score-desc">有1-2次跳槽，但原因可解释</div></div>
+              <span class="score-points">6分</span>
             </div>
-          </div>
-
-          <!-- 综合评价 -->
-          <div class="form-group" style="margin-top: 24px;">
-            <label class="form-label">综合评价 / 面试总结</label>
-            <textarea class="form-textarea" id="overallComment" placeholder="记录候选人的整体表现、核心优势、主要顾虑..." style="min-height: 100px;"></textarea>
-          </div>
-
-          <!-- STAR记录 -->
-          <div class="skill-block" style="margin-top: 16px;">
-            <div class="skill-block-header">
-              <div>
-                <div class="skill-block-title">📝 STAR面试记录</div>
-                <div class="skill-sub-label">用STAR法则记录一个关键销售案例</div>
-              </div>
+            <div class="score-row" onclick="selectScore(1, 2, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">稳定性较差</div><div class="score-desc">跳槽较频繁（3次以上/5年），或动机不纯</div></div>
+              <span class="score-points mid">3分</span>
             </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label class="form-label" style="font-size: 13px;">情境(S)：当时是什么情况？客户/项目背景？</label>
-              <textarea class="form-textarea" id="star_s" placeholder="例如：当时负责一个大客户，订单金额50万，客户已经拒绝过一次..." style="min-height: 60px;"></textarea>
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label class="form-label" style="font-size: 13px;">任务(T)：你当时的任务/目标是什么？</label>
-              <textarea class="form-textarea" id="star_t" placeholder="例如：需要在一个月内拿下这个订单，否则会丢失这个客户..." style="min-height: 60px;"></textarea>
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label class="form-label" style="font-size: 13px;">行动(A)：你具体做了什么？</label>
-              <textarea class="form-textarea" id="star_a" placeholder="例如：我做了三件事：1.约客户喝茶了解真实顾虑；2.调整方案解决了价格问题；3.找到了拍板人..." style="min-height: 60px;"></textarea>
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label" style="font-size: 13px;">结果(R)：最终结果如何？你学到什么？</label>
-              <textarea class="form-textarea" id="star_r" placeholder="例如：最终拿下了订单，客户复购率达到60%。学到了：客户拒绝不一定是价格问题，要先挖痛..." style="min-height: 60px;"></textarea>
+            <div class="score-row" onclick="selectScore(1, 2, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">极不稳定</div><div class="score-desc">骑驴找马，或试用期离职倾向明显</div></div>
+              <span class="score-points low">0分</span>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- 提交按钮 -->
-      <div class="btn-group">
-        <button class="btn btn-secondary" onclick="resetInterview()">🔄 重置评分</button>
-        <button class="btn btn-primary" onclick="submitInterview()">📊 提交评分</button>
-        <button class="btn btn-success" onclick="saveInterview()">💾 保存记录</button>
+      <!-- 第二部分：硬实力评估 -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon orange">💼</div>
+          <div>
+            <div class="section-title">第二部分：硬实力评估（50分）</div>
+            <div class="section-subtitle">专业能力、行业经验、业绩证明</div>
+          </div>
+        </div>
+        <div class="section-body">
+          
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">2.1 行业经验匹配度（10分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 0, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">完全匹配</div><div class="score-desc">有同行业直接经验，了解行业规则和客户需求</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 0, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">相关行业经验</div><div class="score-desc">有相关行业经验，可快速迁移能力</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 0, 4, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">跨行业经验</div><div class="score-desc">无本行业经验，但有销售能力底子</div></div>
+              <span class="score-points mid">4分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 0, 2, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">行业经验不足</div><div class="score-desc">行业经验很少，需要较长时间适应</div></div>
+              <span class="score-points low">2分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 0, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">无相关经验</div><div class="score-desc">完全无行业背景，白纸一张</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">2.2 销售技能/方法论（10分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 1, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">系统化销售能力</div><div class="score-desc">有完整销售方法论，能系统化运作销售流程</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 1, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">有实战经验</div><div class="score-desc">有实战销售经验，但方法论不系统</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 1, 4, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">基础销售能力</div><div class="score-desc">会基本销售动作，但深度不够</div></div>
+              <span class="score-points mid">4分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 1, 2, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">销售经验不足</div><div class="score-desc">销售技能欠缺，需要大量培训</div></div>
+              <span class="score-points low">2分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 1, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">无销售经验</div><div class="score-desc">从未做过销售，纯新人</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">2.3 过往业绩/成果证明（15分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 2, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">业绩优秀且有证明</div><div class="score-desc">有数据证明的优秀业绩，超额完成任务</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 2, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">业绩达标</div><div class="score-desc">能完成任务，达到公司平均水平</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 2, 4, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">业绩一般</div><div class="score-desc">业绩不太稳定，时而达标时而不达标</div></div>
+              <span class="score-points mid">4分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 2, 2, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">业绩较差</div><div class="score-desc">经常完不成任务，或业绩下滑明显</div></div>
+              <span class="score-points low">2分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 2, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">无业绩证明</div><div class="score-desc">说不出具体业绩，或无法核实</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">2.4 客户资源/渠道积累（10分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 3, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">资源丰富可转化</div><div class="score-desc">自带大量客户资源，可快速转化</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 3, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">有一定积累</div><div class="score-desc">有客户积累，但数量和质量一般</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 3, 4, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">资源较少</div><div class="score-desc">客户资源有限，主要靠公司分配</div></div>
+              <span class="score-points mid">4分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 3, 2, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">无资源积累</div><div class="score-desc">无客户资源，需要从零开发</div></div>
+              <span class="score-points low">2分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 3, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">资源情况不明</div><div class="score-desc">说不清自己的客户资源情况</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">2.5 产品知识/学习能力（5分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 4, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">快速掌握</div><div class="score-desc">能快速学习产品知识，融会贯通</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 4, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">学习速度正常</div><div class="score-desc">通过培训能掌握产品知识</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 4, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">学习较慢</div><div class="score-desc">需要较长时间消化吸收</div></div>
+              <span class="score-points mid">3分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(2, 4, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">学习困难</div><div class="score-desc">对产品知识理解困难，难以掌握</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <!-- 结果展示 -->
+      <!-- 第三部分：软实力评估 -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon green">🎯</div>
+          <div>
+            <div class="section-title">第三部分：软实力评估（30分）</div>
+            <div class="section-subtitle">综合能力素质考察</div>
+          </div>
+        </div>
+        <div class="section-body">
+          
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">3.1 沟通表达能力（8分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 0, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">表达优秀</div><div class="score-desc">表达清晰有感染力，逻辑清晰，能有效说服</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 0, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">表达良好</div><div class="score-desc">表达基本清晰，能正常交流</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 0, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">表达一般</div><div class="score-desc">表达不太流畅，需要改进</div></div>
+              <span class="score-points mid">3分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 0, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">表达困难</div><div class="score-desc">表达混乱，词不达意</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">3.2 抗压能力/韧性（7分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 1, 7, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">抗压极强</div><div class="score-desc">越挫越勇，压力下表现更好</div></div>
+              <span class="score-points high">7分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 1, 5, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">抗压良好</div><div class="score-desc">能应对正常销售压力</div></div>
+              <span class="score-points">5分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 1, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">抗压一般</div><div class="score-desc">在压力下表现明显下降</div></div>
+              <span class="score-points mid">3分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 1, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">抗压差</div><div class="score-desc">容易崩溃，遇到挫折就放弃</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">3.3 自驱力/目标感（8分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 2, 8, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">自驱力极强</div><div class="score-desc">主动性强，有野心，不需要人管</div></div>
+              <span class="score-points high">8分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 2, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">有自驱力</div><div class="score-desc">分内事会主动完成</div></div>
+              <span class="score-points">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 2, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">需要督促</div><div class="score-desc">需要人盯着才会干活</div></div>
+              <span class="score-points mid">3分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 2, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">消极被动</div><div class="score-desc">推一步走一步，没有主动性</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">3.4 逻辑思维/应变能力（7分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 3, 7, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">思维敏捷</div><div class="score-desc">反应快，能灵活应对各种问题</div></div>
+              <span class="score-points high">7分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 3, 5, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">思维正常</div><div class="score-desc">能正常思考和处理问题</div></div>
+              <span class="score-points">5分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 3, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">思维较慢</div><div class="score-desc">反应较慢，需要时间思考</div></div>
+              <span class="score-points mid">3分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(3, 3, 0, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">思维混乱</div><div class="score-desc">思路不清，问非所答</div></div>
+              <span class="score-points low">0分</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 第四部分：综合评估 -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon purple">⭐</div>
+          <div>
+            <div class="section-title">第四部分：综合评估（10分）</div>
+            <div class="section-subtitle">整体印象、加分项等</div>
+          </div>
+        </div>
+        <div class="section-body">
+          
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">4.1 第一印象/整体气质（4分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(4, 0, 4, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">第一印象好</div><div class="score-desc">穿着得体、气质佳、有亲和力</div></div>
+              <span class="score-points high">4分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(4, 0, 3, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">第一印象一般</div><div class="score-desc">穿着正常，无明显问题</div></div>
+              <span class="score-points mid">3分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(4, 0, 1, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">第一印象差</div><div class="score-desc">穿着邋遢或不得体，明显不合群</div></div>
+              <span class="score-points low">1分</span>
+            </div>
+          </div>
+
+          <div class="dimension-block">
+            <div class="dimension-header">
+              <span class="dimension-title">4.2 与岗位/团队匹配度（6分）</span>
+            </div>
+            <div class="score-row" onclick="selectScore(4, 1, 6, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">高度匹配</div><div class="score-desc">价值观一致，与团队风格契合</div></div>
+              <span class="score-points high">6分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(4, 1, 4, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">基本匹配</div><div class="score-desc">无明显冲突，适配度一般</div></div>
+              <span class="score-points">4分</span>
+            </div>
+            <div class="score-row" onclick="selectScore(4, 1, 2, this)">
+              <div class="score-radio"></div>
+              <div class="score-content"><div class="score-label">不太匹配</div><div class="score-desc">价值观或风格有明显差异</div></div>
+              <span class="score-points low">2分</span>
+            </div>
+          </div>
+
+          <!-- 综合评语 -->
+          <div class="form-group" style="margin-top: 16px;">
+            <label class="form-label">综合评语 / 面试记录</label>
+            <textarea class="form-textarea" id="overallComment" placeholder="记录候选人的整体表现、优势、劣势、是否建议录用等..." style="min-height: 120px;"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 总分计算 -->
+      <div class="score-total">
+        <div>
+          <div class="score-total-label">面试总分（100分）</div>
+          <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">基础信息10 + 硬实力50 + 软实力30 + 综合评估10</div>
+        </div>
+        <div class="score-total-value" id="totalScore">0</div>
+      </div>
+
+      <!-- 结果面板 -->
       <div class="result-panel" id="resultPanel">
         <div class="result-header" id="resultHeader">
           <div class="result-score" id="resultScore">0</div>
-          <div class="result-label" id="resultLabel">评估中...</div>
+          <div class="result-label" id="resultLabel">评分中...</div>
         </div>
         <div class="result-body">
-          <div class="result-summary" id="resultSummary"></div>
+          <div class="result-detail" id="resultDetail"></div>
           <div class="recommendation" id="recommendation">
             <div class="recommendation-title" id="recommendTitle"></div>
             <div class="recommendation-text" id="recommendText"></div>
@@ -990,24 +1381,30 @@
         </div>
       </div>
 
+      <!-- 操作按钮 -->
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="resetInterview()">🔄 重置</button>
+        <button class="btn btn-orange" onclick="calculateScore()">📊 计算总分</button>
+        <button class="btn btn-success" onclick="saveInterview()">💾 保存记录</button>
+      </div>
+
     </section>
 
-    <!-- 历史记录 Tab -->
+    <!-- 历史记录 -->
     <section id="tab-history" class="tab-content hidden">
       <div class="section-card">
         <div class="section-header">
           <div class="section-icon blue">📁</div>
           <div>
             <div class="section-title">面试记录</div>
-            <div class="section-subtitle">查看历史面试评分记录</div>
+            <div class="section-subtitle">查看历史记录</div>
           </div>
         </div>
         <div class="section-body">
           <div id="historyList">
-            <div style="text-align: center; padding: 48px 24px; color: var(--grey-mid);">
+            <div style="text-align: center; padding: 48px; color: var(--grey-mid);">
               <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
-              <p>暂无面试记录</p>
-              <p style="font-size: 13px; margin-top: 8px;">完成面试评分后，记录将自动保存到这里</p>
+              <p>暂无记录</p>
             </div>
           </div>
         </div>
@@ -1019,11 +1416,10 @@
     <p>© 2026 天地人销售管理体系 · 大董老师 · 博商懂生意学完就落地</p>
   </footer>
 
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
   <script>
-    // ─── Tab 切换 ───
+    // Tab切换
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1033,294 +1429,126 @@
       });
     });
 
-    // ─── 状态管理 ───
+    // 状态
     const state = {
-      hardSkills: {
-        industryExp: [],
-        customerType: [],
-        salesMode: [],
-        performance: [],
-        competitor: [],
-        experience: '1年+',
-        other: []
-      },
-      softSkills: [
-        { name: null, level: null },
-        { name: null, level: null },
-        { name: null, level: null },
-        { name: null, level: null },
-        { name: null, level: null }
-      ],
-      scores: [0, 0, 0, 0, 0],
-      scoreSelected: [null, null, null, null, null]
+      selectedChips: {},
+      selectedRadio: {},
+      selectedSoftSkills: [],
+      scores: [
+        [0, 0, 0], // 第一部分
+        [0, 0, 0, 0, 0], // 第二部分
+        [0, 0, 0, 0], // 第三部分
+        [0, 0] // 第四部分
+      ]
     };
 
-    // ─── 切换Chip选中 ───
+    // Chip选择
     function toggleChip(el) {
       const value = el.dataset.value;
-      const group = el.parentElement.id;
+      const parent = el.parentElement;
+      const groupId = parent.id || 'default';
       
-      // 单选逻辑（某些组只能选一个）
-      if (['industryExp', 'customerType', 'competitor'].includes(group)) {
-        // 单选模式
-        el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        state.hardSkills[group] = [value];
-      } else {
-        // 多选模式
-        el.classList.toggle('selected');
-        if (el.classList.contains('selected')) {
-          state.hardSkills[group].push(value);
-        } else {
-          state.hardSkills[group] = state.hardSkills[group].filter(v => v !== value);
+      // 单选逻辑
+      parent.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      state.selectedChips[groupId] = [value];
+    }
+
+    // Radio选择
+    function selectRadio(el, groupId) {
+      const container = document.getElementById(groupId);
+      container.querySelectorAll('.radio-item').forEach(item => item.classList.remove('selected'));
+      el.classList.add('selected');
+      state.selectedRadio[groupId] = el.dataset.value;
+    }
+
+    // 软实力选择
+    function toggleSoftSkill(el) {
+      el.classList.toggle('selected');
+      const skill = el.dataset.skill;
+      if (el.classList.contains('selected')) {
+        if (!state.selectedSoftSkills.includes(skill)) {
+          state.selectedSoftSkills.push(skill);
         }
-      }
-      
-      updateChipCount(group);
-    }
-
-    function updateChipCount(group) {
-      const countEl = document.getElementById(group + 'Count');
-      if (countEl) {
-        countEl.textContent = state.hardSkills[group].length;
-      }
-    }
-
-    // ─── 等级选择 ───
-    function selectLevel(el, key, value) {
-      el.parentElement.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
-      el.classList.add('selected');
-      state.hardSkills[key] = value;
-    }
-
-    // ─── 软实力选择 ───
-    function toggleSoftSkill(el, name, index) {
-      if (state.softSkills[index].name === name) {
-        // 取消选中
-        el.classList.remove('selected');
-        el.querySelectorAll('.level-chip').forEach(c => c.classList.remove('selected', 'orange', 'danger'));
-        state.softSkills[index] = { name: null, level: null };
       } else {
-        // 选中
-        el.classList.add('selected');
-        state.softSkills[index] = { name: name, level: '良好即可' };
-        el.querySelectorAll('.level-chip').forEach(c => c.classList.remove('selected'));
-        el.querySelector('.level-chip:nth-child(2)').classList.add('selected', 'orange');
+        state.selectedSoftSkills = state.selectedSoftSkills.filter(s => s !== skill);
       }
-      updateSoftCount();
+      document.getElementById('softCount').textContent = state.selectedSoftSkills.length;
     }
 
-    function selectSoftLevel(el, index, level) {
-      const parent = el.parentElement.parentElement;
-      el.parentElement.querySelectorAll('.level-chip').forEach(c => {
-        c.classList.remove('selected', 'orange', 'danger');
+    // 面试评分
+    function selectScore(section, index, points, el) {
+      // 清除同组其他选中
+      el.parentElement.querySelectorAll('.score-row').forEach(row => {
+        row.querySelector('.score-radio').classList.remove('selected');
       });
-      el.classList.add('selected');
+      el.querySelector('.score-radio').classList.add('selected');
+      state.scores[section][index] = points;
       
-      // 设置颜色
-      if (level === '必须优秀') {
-        el.classList.add('danger');
-      } else if (level === '良好即可') {
-        el.classList.add('orange');
-      }
+      // 更新总分
+      updateTotalScore();
+    }
+
+    function updateTotalScore() {
+      const total = state.scores.flat().reduce((sum, s) => sum + s, 0);
+      document.getElementById('totalScore').textContent = total;
+      return total;
+    }
+
+    // 计算总分并显示结果
+    function calculateScore() {
+      const total = updateTotalScore();
       
-      state.softSkills[index].level = level;
-    }
-
-    function updateSoftCount() {
-      const count = state.softSkills.filter(s => s.name !== null).length;
-      document.getElementById('softCount').textContent = count;
-    }
-
-    // ─── 面试评分 ───
-    function selectScore(num, el) {
-      const container = document.getElementById('score' + num + '_opts');
-      container.querySelectorAll('.score-option').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
-      state.scoreSelected[num - 1] = el;
-      state.scores[num - 1] = parseInt(el.dataset.score);
-    }
-
-    // ─── 生成JD预览 ───
-    function previewJD() {
-      const company = document.getElementById('companyName').value || '公司名称';
-      const position = document.getElementById('positionName').value || '岗位名称';
-      const location = document.getElementById('location').value || '-';
-      const salary = document.getElementById('salaryRange').value || '面议';
-      const headcount = document.getElementById('headcount').value || '1';
-      const dept = document.getElementById('department').value || '-';
-
-      // 自动生成职责
-      let responsibilities = document.getElementById('responsibilities').value.trim();
-      if (!responsibilities) {
-        responsibilities = generateResponsibilities();
-      }
-
-      // 硬实力
-      const industry = state.hardSkills.industryExp.join('、') || '不限';
-      const customer = state.hardSkills.customerType.join('、') || '不限';
-      const mode = state.hardSkills.salesMode.join('、') || '不限';
-      const perf = state.hardSkills.performance.join('；') || '无业绩要求';
-      const comp = state.hardSkills.competitor.join('、') || '无要求';
-      const exp = state.hardSkills.experience;
-      const other = state.hardSkills.other.join('、') || '无';
-
-      // 软实力
-      const softs = state.softSkills.filter(s => s.name !== null);
-      const softText = softs.map(s => {
-        const levelTag = s.level === '必须优秀' ? '⭐' : s.level === '良好即可' ? '✓' : '○';
-        return `${levelTag} ${s.name}（${s.level}）`;
-      }).join('<br>');
-
-      const preview = `
-        <div class="jd-preview-title">${position}</div>
-        <div class="jd-preview-meta">
-          ${company} · ${dept} · 招聘${headcount}人 · ${location} · 薪资：${salary}
-        </div>
-        
-        <div class="jd-section">
-          <div class="jd-section-title" style="color: var(--grey-dark);">📋 岗位职责</div>
-          <div style="font-size: 14px; line-height: 1.8; color: var(--grey-dark);">
-            ${responsibilities.split('\n').map(r => r.trim() ? `<div style="margin-bottom: 8px;">• ${r}</div>` : '').join('')}
-          </div>
-        </div>
-        
-        <div class="jd-section">
-          <div class="jd-section-title" style="color: var(--accent);">💼 硬性要求</div>
-          <div style="font-size: 14px; line-height: 2; color: var(--grey-dark);">
-            <div style="margin-bottom: 8px;">🏭 <strong>行业经验：</strong>${industry}</div>
-            <div style="margin-bottom: 8px;">👔 <strong>客户类型：</strong>${customer}</div>
-            <div style="margin-bottom: 8px;">📞 <strong>销售模式：</strong>${mode}</div>
-            <div style="margin-bottom: 8px;">⏱️ <strong>经验年限：</strong>${exp}</div>
-            <div style="margin-bottom: 8px;">💰 <strong>业绩要求：</strong>${perf}</div>
-            <div style="margin-bottom: 8px;">🏴 <strong>友商背景：</strong>${comp}</div>
-            ${other !== '无' ? `<div style="margin-bottom: 8px;">📌 <strong>其他要求：</strong>${other}</div>` : ''}
-          </div>
-        </div>
-        
-        <div class="jd-section">
-          <div class="jd-section-title" style="color: var(--success);">🎯 软实力要求</div>
-          <div style="font-size: 14px; line-height: 2; color: var(--grey-dark);">
-            ${softText || '无特殊软实力要求'}
-          </div>
-        </div>
-      `;
-
-      document.getElementById('jdPreviewContent').innerHTML = preview;
-      document.getElementById('jdPreview').classList.remove('hidden');
-      showToast('JD预览已生成 ✓', 'success');
-    }
-
-    function generateResponsibilities() {
-      const industry = state.hardSkills.industryExp[0] || '相关行业';
-      const customer = state.hardSkills.customerType[0] || '企业客户';
-      const mode = state.hardSkills.salesMode[0] || '大客户销售';
-
-      return `负责${industry}${customer}的开发与维护
-完成公司下达的年度销售目标
-${mode}，独立开发新客户
-维护老客户关系，提升复购率
-收集市场信息，竞品动态分析
-配合团队完成其他销售相关工作`;
-    }
-
-    // ─── 保存JD ───
-    function saveJD() {
-      const position = document.getElementById('positionName').value;
-      if (!position) {
-        showToast('请先填写岗位名称', 'error');
-        return;
-      }
-      previewJD();
-
-      const jdData = {
-        type: 'jd',
-        position: position,
-        company: document.getElementById('companyName').value,
-        department: document.getElementById('department').value,
-        location: document.getElementById('location').value,
-        salaryRange: document.getElementById('salaryRange').value,
-        headcount: document.getElementById('headcount').value,
-        hardSkills: { ...state.hardSkills },
-        softSkills: state.softSkills.filter(s => s.name !== null),
-        responsibilities: document.getElementById('responsibilities').value,
-        savedAt: new Date().toISOString()
-      };
-
-      saveToStorage(jdData);
-      showToast('JD保存成功', 'success');
-    }
-
-    // ─── 复制JD ───
-    function copyJD() {
-      previewJD();
-      const content = document.getElementById('jdPreviewContent').innerText;
-      navigator.clipboard.writeText(content).then(() => {
-        showToast('JD已复制到剪贴板', 'success');
-      }).catch(() => {
-        showToast('复制失败，请手动复制', 'error');
-      });
-    }
-
-    // ─── 面试评分提交 ───
-    function submitInterview() {
-      const candidateName = document.getElementById('candidateName').value;
-      
-      const dimensions = ['沟通表达能力', '抗压能力', '自驱力/目标感', '专业经验匹配度', '动机与稳定性'];
-      const unrated = state.scores.filter(s => s === 0).length;
-      
-      if (unrated > 0) {
-        showToast(`还有${unrated}项未评分，请完成所有评分`, 'error');
-        return;
-      }
-
-      const totalScore = state.scores.reduce((sum, s) => sum + s, 0);
-      const avgScore = totalScore / 5;
-
-      // 结果样式
       const resultHeader = document.getElementById('resultHeader');
+      const resultScore = document.getElementById('resultScore');
+      const resultLabel = document.getElementById('resultLabel');
+      const resultDetail = document.getElementById('resultDetail');
       const recommendation = document.getElementById('recommendation');
-      
+      const recommendTitle = document.getElementById('recommendTitle');
+      const recommendText = document.getElementById('recommendText');
+
+      resultScore.textContent = total;
       resultHeader.className = 'result-header';
-      recommendation.className = 'recommendation';
-      
-      let resultClass, resultLabel, recClass, recTitle, recText;
-      
-      if (avgScore >= 9) {
-        resultClass = 'excellent'; resultLabel = '⭐ 优秀';
-        recClass = 'hire'; recTitle = '✅ 推荐录用';
-        recText = '候选人在各维度表现优秀，是难得的人才。建议优先录用，可直接发放offer。';
-      } else if (avgScore >= 7) {
-        resultClass = 'good'; resultLabel = '👍 良好';
-        recClass = 'maybe'; recTitle = '⚠️ 备选考虑';
-        recText = '候选人整体表现良好，可以录用。建议与团队成员面谈确认文化适配度。';
-      } else if (avgScore >= 5) {
-        resultClass = 'pass'; resultLabel = '🤔 一般';
-        recClass = 'maybe'; recTitle = '⚠️ 谨慎录用';
-        recText = '候选人表现一般，存在一定差距。建议作为备选，或安排到次要岗位试用。';
+
+      const parts = [
+        { name: '基础信息核实', score: state.scores[0].reduce((a,b)=>a+b,0), max: 10 },
+        { name: '硬实力评估', score: state.scores[1].reduce((a,b)=>a+b,0), max: 50 },
+        { name: '软实力评估', score: state.scores[2].reduce((a,b)=>a+b,0), max: 30 },
+        { name: '综合评估', score: state.scores[3].reduce((a,b)=>a+b,0), max: 10 }
+      ];
+
+      if (total >= 80) {
+        resultHeader.classList.add('excellent');
+        resultLabel.textContent = '⭐ 优秀';
+        recommendation.className = 'recommendation hire';
+        recommendTitle.innerHTML = '✅ 强烈推荐录用';
+        recommendText.textContent = '候选人在各维度表现优秀，是难得的人才。建议优先录用，可直接发放offer。';
+      } else if (total >= 70) {
+        resultHeader.classList.add('good');
+        resultLabel.textContent = '👍 良好';
+        recommendation.className = 'recommendation hire';
+        recommendTitle.innerHTML = '✅ 推荐录用';
+        recommendText.textContent = '候选人整体表现良好，符合岗位要求。建议录用。';
+      } else if (total >= 60) {
+        resultHeader.classList.add('pass');
+        resultLabel.textContent = '🤔 一般';
+        recommendation.className = 'recommendation maybe';
+        recommendTitle.innerHTML = '⚠️ 备选考虑';
+        recommendText.textContent = '候选人表现一般，可作为备选或安排到次要岗位试用。';
       } else {
-        resultClass = 'fail'; resultLabel = '❌ 不建议';
-        recClass = 'reject'; recTitle = '🚫 不推荐';
-        recText = '候选人在多个维度表现不佳，不建议录用。建议继续寻找更匹配的候选人。';
+        resultHeader.classList.add('fail');
+        resultLabel.textContent = '❌ 较差';
+        recommendation.className = 'recommendation reject';
+        recommendTitle.innerHTML = '🚫 不建议录用';
+        recommendText.textContent = '候选人在多个维度表现不佳，不建议录用。建议继续寻找更匹配的候选人。';
       }
 
-      resultHeader.classList.add(resultClass);
-      document.getElementById('resultScore').textContent = avgScore.toFixed(1);
-      document.getElementById('resultLabel').textContent = resultLabel;
-      
-      recommendation.classList.add(recClass);
-      document.getElementById('recommendTitle').innerHTML = recTitle;
-      document.getElementById('recommendText').textContent = recText;
-
-      // 各维度得分
-      document.getElementById('resultSummary').innerHTML = dimensions.map((d, i) => {
-        const score = state.scores[i];
-        const level = score >= 8 ? 'high' : score >= 5 ? 'medium' : 'low';
-        const desc = score >= 8 ? '优秀' : score >= 5 ? '一般' : '不足';
+      resultDetail.innerHTML = parts.map(p => {
+        const level = p.score >= p.max * 0.8 ? 'high' : p.score >= p.max * 0.6 ? '' : 'low';
         return `
-          <div class="result-item">
-            <span class="result-item-label">${d}</span>
-            <span class="result-item-value ${level}">${score}分 · ${desc}</span>
+          <div class="result-dim">
+            <span class="result-dim-label">${p.name}</span>
+            <span class="result-dim-value ${level}">${p.score}/${p.max}分</span>
           </div>
         `;
       }).join('');
@@ -1329,7 +1557,150 @@ ${mode}，独立开发新客户
       window.scrollTo({ top: document.getElementById('resultPanel').offsetTop - 100, behavior: 'smooth' });
     }
 
-    // ─── 保存面试记录 ───
+    // 生成JD预览
+    function previewJD() {
+      const company = document.getElementById('companyName').value || '公司名称';
+      const position = document.getElementById('positionName').value || '岗位名称';
+      const dept = document.getElementById('department').value || '-';
+      const report = document.getElementById('reportTo').value || '-';
+      const location = document.getElementById('location').value || '-';
+      const headcount = document.getElementById('headcount').value || '1';
+      const salary = document.getElementById('salaryRange').value || '面议';
+      const summary = state.selectedRadio['jobSummary'] || '';
+      const customSummary = document.getElementById('customSummary').value;
+      
+      // 收集所有选项
+      const getChips = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return [];
+        return Array.from(el.querySelectorAll('.chip.selected')).map(c => c.dataset.value);
+      };
+
+      const education = getChips('education') || ['本科'];
+      const age = getChips('age') || ['年龄不限'];
+      const gender = getChips('gender') || ['性别不限'];
+      const industry = getChips('industry') || ['不限行业'];
+      const customer = getChips('customer') || ['企业客户/B2B'];
+      const mode = getChips('mode') || ['大客户直销'];
+      const experience = getChips('experience') || ['1年+'];
+      const performance = getChips('performance');
+      const competitor = getChips('competitor') || ['无竞品背景要求'];
+      const major = getChips('major') || ['专业不限'];
+      const certificate = getChips('certificate') || ['无证书要求'];
+      const benefits = getChips('benefits');
+      const bonus = getChips('bonus');
+      const responsibilities = document.getElementById('responsibilities').value || generateResponsibilities(industry[0], customer[0], mode[0]);
+
+      const softSkills = state.selectedSoftSkills.join('、') || '综合素质';
+
+      let html = `
+        <div class="jd-preview-title">${position}</div>
+        <div class="jd-preview-meta">
+          <span class="jd-meta-item">🏢 ${company}</span>
+          <span class="jd-meta-item">📍 ${location}</span>
+          <span class="jd-meta-item">👥 招聘${headcount}人</span>
+          <span class="jd-meta-item">💰 ${salary}</span>
+        </div>
+        
+        <div class="jd-section">
+          <div class="jd-section-title">📝 岗位概述</div>
+          <div class="jd-content">${customSummary || summary || '负责公司产品销售工作，完成销售业绩目标。'}</div>
+        </div>
+        
+        <div class="jd-section">
+          <div class="jd-section-title">📋 岗位职责</div>
+          <div class="jd-content">
+            ${responsibilities.split('\n').filter(r => r.trim()).map(r => `<div class="jd-item">${r}</div>`).join('')}
+          </div>
+        </div>
+        
+        <div class="jd-section">
+          <div class="jd-section-title">💼 任职资格</div>
+          <div class="jd-content">
+            <p style="margin-bottom: 8px;"><strong>硬性要求：</strong></p>
+            ${education.length ? `<div class="jd-item"><strong>学历：</strong>${education.join('/')}</div>` : ''}
+            ${age.length ? `<div class="jd-item"><strong>年龄：</strong>${age.join('/')}</div>` : ''}
+            ${gender.length ? `<div class="jd-item"><strong>性别：</strong>${gender.join('/')}</div>` : ''}
+            ${industry.length ? `<div class="jd-item"><strong>行业经验：</strong>${industry.join('/')}</div>` : ''}
+            ${customer.length ? `<div class="jd-item"><strong>客户类型：</strong>${customer.join('/')}</div>` : ''}
+            ${mode.length ? `<div class="jd-item"><strong>销售模式：</strong>${mode.join('/')}</div>` : ''}
+            ${experience.length ? `<div class="jd-item"><strong>经验年限：</strong>${experience.join('/')}</div>` : ''}
+            ${performance.length ? `<div class="jd-item"><strong>业绩要求：</strong>${performance.join('；')}</div>` : ''}
+            ${competitor.length ? `<div class="jd-item"><strong>竞品背景：</strong>${competitor.join('/')}</div>` : ''}
+            ${major.length ? `<div class="jd-item"><strong>专业背景：</strong>${major.join('/')}</div>` : ''}
+            ${certificate.length ? `<div class="jd-item"><strong>证书要求：</strong>${certificate.join('/')}</div>` : ''}
+            
+            <p style="margin: 16px 0 8px;"><strong>软实力要求：</strong></p>
+            <div class="jd-item">${softSkills}</div>
+          </div>
+        </div>
+        
+        ${bonus && bonus.length && !bonus.includes('无加分项') ? `
+        <div class="jd-section">
+          <div class="jd-section-title">⭐ 加分项</div>
+          <div class="jd-content">
+            ${bonus.map(b => `<span class="jd-tag">${b}</span>`).join(' ')}
+          </div>
+        </div>
+        ` : ''}
+        
+        ${benefits && benefits.length ? `
+        <div class="jd-section">
+          <div class="jd-section-title">🎁 福利待遇</div>
+          <div class="jd-content">
+            ${benefits.map(b => `<span class="jd-tag" style="background: var(--success-light); color: var(--success);">${b}</span>`).join(' ')}
+          </div>
+        </div>
+        ` : ''}
+        
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--grey-light); margin-top: 20px; color: var(--grey-mid); font-size: 13px;">
+          ${company} · ${dept !== '-' ? '汇报对象：' + dept : ''} · ${report !== '-' ? '上级：' + report : ''}
+        </div>
+      `;
+
+      document.getElementById('jdPreviewContent').innerHTML = html;
+      document.getElementById('jdPreview').classList.remove('hidden');
+      showToast('JD预览已生成', 'success');
+    }
+
+    function generateResponsibilities(industry, customer, mode) {
+      return `负责${industry || '相关行业'}${customer || '客户'}的开发与维护
+独立${mode || '进行销售'}，完成个人销售指标
+建立并维护良好的客户关系，提升客户满意度
+收集市场信息，分析竞品动态
+配合公司市场策略，执行销售计划
+完成领导交代的其他销售相关工作`;
+    }
+
+    // 保存JD
+    function saveJD() {
+      const position = document.getElementById('positionName').value;
+      if (!position) {
+        showToast('请填写岗位名称', 'error');
+        return;
+      }
+      previewJD();
+      
+      const data = {
+        type: 'jd',
+        position: position,
+        company: document.getElementById('companyName').value,
+        savedAt: new Date().toISOString()
+      };
+      saveToStorage(data);
+      showToast('JD保存成功', 'success');
+    }
+
+    // 复制JD
+    function copyJD() {
+      previewJD();
+      const content = document.getElementById('jdPreviewContent').innerText;
+      navigator.clipboard.writeText(content).then(() => {
+        showToast('JD已复制到剪贴板', 'success');
+      });
+    }
+
+    // 保存面试记录
     function saveInterview() {
       const candidateName = document.getElementById('candidateName').value;
       if (!candidateName) {
@@ -1337,121 +1708,85 @@ ${mode}，独立开发新客户
         return;
       }
 
-      const interviewData = {
+      const data = {
         type: 'interview',
         candidateName: candidateName,
         applyPosition: document.getElementById('applyPosition').value,
         interviewer: document.getElementById('interviewer').value,
         interviewDate: document.getElementById('interviewDate').value,
-        interviewType: document.getElementById('interviewType').value,
+        interviewType: document.querySelector('input[name="interviewType"]:checked')?.value || '初试',
+        totalScore: state.scores.flat().reduce((a,b)=>a+b,0),
         scores: state.scores,
-        dimensions: ['沟通表达能力', '抗压能力', '自驱力/目标感', '专业经验匹配度', '动机与稳定性'],
-        comments: Array.from({length: 5}, (_, i) => document.getElementById('comment' + (i+1)).value),
-        overallComment: document.getElementById('overallComment').value,
-        star: {
-          s: document.getElementById('star_s').value,
-          t: document.getElementById('star_t').value,
-          a: document.getElementById('star_a').value,
-          r: document.getElementById('star_r').value
-        },
+        comment: document.getElementById('overallComment').value,
         savedAt: new Date().toISOString()
       };
 
-      saveToStorage(interviewData);
+      saveToStorage(data);
       showToast('面试记录保存成功', 'success');
       loadHistory();
     }
 
-    // ─── 重置评分 ───
+    // 重置
     function resetInterview() {
-      state.scores = [0, 0, 0, 0, 0];
-      state.scoreSelected = [null, null, null, null, null];
-      
-      for (let i = 1; i <= 5; i++) {
-        document.getElementById('score' + i + '_opts').querySelectorAll('.score-option').forEach(o => o.classList.remove('selected'));
-        document.getElementById('comment' + i).value = '';
-      }
+      state.scores = [[0,0,0], [0,0,0,0,0], [0,0,0,0], [0,0]];
+      document.querySelectorAll('.score-radio').forEach(r => r.classList.remove('selected'));
+      document.getElementById('totalScore').textContent = '0';
       document.getElementById('overallComment').value = '';
-      document.getElementById('star_s').value = '';
-      document.getElementById('star_t').value = '';
-      document.getElementById('star_a').value = '';
-      document.getElementById('star_r').value = '';
       document.getElementById('resultPanel').classList.remove('show');
-      showToast('评分已重置', 'success');
+      showToast('已重置', 'success');
     }
 
-    // ─── LocalStorage ───
+    // Storage
     function saveToStorage(data) {
-      let records = JSON.parse(localStorage.getItem('recruitment_records') || '[]');
+      let records = JSON.parse(localStorage.getItem('recruitment_records_v2') || '[]');
       records.unshift(data);
-      localStorage.setItem('recruitment_records', JSON.stringify(records));
+      localStorage.setItem('recruitment_records_v2', JSON.stringify(records));
     }
 
     function loadHistory() {
-      const records = JSON.parse(localStorage.getItem('recruitment_records') || '[]');
+      const records = JSON.parse(localStorage.getItem('recruitment_records_v2') || '[]');
       const container = document.getElementById('historyList');
 
-      if (records.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; padding: 48px 24px; color: var(--grey-mid);">
-            <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
-            <p>暂无记录</p>
-          </div>
-        `;
+      if (!records.length) {
+        container.innerHTML = '<div style="text-align: center; padding: 48px; color: var(--grey-mid);"><div style="font-size: 48px; margin-bottom: 16px;">📋</div><p>暂无记录</p></div>';
         return;
       }
 
-      container.innerHTML = records.map((r, index) => {
+      container.innerHTML = records.map(r => {
         if (r.type === 'interview') {
-          const avgScore = r.scores.reduce((sum, s) => sum + s, 0) / 5;
-          const scoreClass = avgScore >= 8 ? 'excellent' : avgScore >= 6 ? 'good' : avgScore >= 4 ? 'pass' : 'fail';
-          const scoreText = avgScore >= 8 ? '优秀' : avgScore >= 6 ? '良好' : avgScore >= 4 ? '一般' : '不建议';
+          const score = r.totalScore || 0;
+          const level = score >= 80 ? 'excellent' : score >= 70 ? 'good' : score >= 60 ? 'pass' : 'fail';
+          const text = score >= 80 ? '优秀' : score >= 70 ? '良好' : score >= 60 ? '一般' : '较差';
           return `
             <div style="padding: 16px; background: var(--bg); border-radius: 8px; margin-bottom: 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <strong>${r.candidateName || '未命名'}</strong>
-                  <span style="margin-left: 12px; font-size: 13px; color: var(--grey-mid);">${r.applyPosition || ''}</span>
-                </div>
-                <span class="score-badge" style="background: ${scoreClass === 'excellent' ? 'var(--success-light)' : scoreClass === 'good' ? 'var(--primary-light)' : scoreClass === 'pass' ? 'var(--accent-light)' : 'var(--danger-light)'}; color: ${scoreClass === 'excellent' ? 'var(--success)' : scoreClass === 'good' ? 'var(--primary)' : scoreClass === 'pass' ? 'var(--accent)' : 'var(--danger)'};">
-                  ${avgScore.toFixed(1)}分 · ${scoreText}
-                </span>
+              <div style="display: flex; justify-content: space-between;">
+                <div><strong>${r.candidateName}</strong> · ${r.applyPosition || ''}</div>
+                <span style="background: var(--${level === 'excellent' ? 'success' : level === 'good' ? 'primary' : level === 'pass' ? 'accent' : 'danger'}-light); color: var(--${level === 'excellent' ? 'success' : level === 'good' ? 'primary' : level === 'pass' ? 'accent' : 'danger'}); padding: 2px 10px; border-radius: 10px; font-size: 13px;">${score}分 · ${text}</span>
               </div>
-              <div style="font-size: 12px; color: var(--grey-mid); margin-top: 8px;">
-                面试官：${r.interviewer || '-'} · ${r.interviewDate || '-'} · ${r.interviewType || '-'}
-              </div>
+              <div style="font-size: 12px; color: var(--grey-mid); margin-top: 8px;">${r.interviewer || ''} · ${r.interviewDate || ''} · ${r.interviewType || ''}</div>
             </div>
           `;
-        } else if (r.type === 'jd') {
+        } else {
           return `
             <div style="padding: 16px; background: var(--bg); border-radius: 8px; margin-bottom: 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <strong>📋 ${r.position || '未命名岗位'}</strong>
-                  <span style="margin-left: 12px; font-size: 13px; color: var(--grey-mid);">${r.company || ''}</span>
-                </div>
-                <span class="score-badge" style="background: var(--primary-light); color: var(--primary);">JD</span>
-              </div>
-              <div style="font-size: 12px; color: var(--grey-mid); margin-top: 8px;">
-                ${r.department || ''} · ${new Date(r.savedAt).toLocaleDateString()}
-              </div>
+              <strong>📋 ${r.position}</strong> · ${r.company || ''}
+              <div style="font-size: 12px; color: var(--grey-mid); margin-top: 4px;">${new Date(r.savedAt).toLocaleDateString()}</div>
             </div>
           `;
         }
-        return '';
       }).join('');
     }
 
-    // ─── Toast ───
-    function showToast(message, type = 'success') {
+    // Toast
+    function showToast(msg, type = 'success') {
       const toast = document.getElementById('toast');
-      toast.textContent = message;
+      toast.textContent = msg;
       toast.className = 'toast ' + type;
       setTimeout(() => toast.classList.add('show'), 10);
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ─── 初始化 ───
+    // Init
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('interviewDate').valueAsDate = new Date();
       loadHistory();
