@@ -221,6 +221,17 @@
       font-size: 12px; color: var(--grey-mid); margin-bottom: 12px;
     }
 
+    /* 自定义开放填空 */
+    .custom-open-input {
+      border: 1px dashed var(--grey-mid) !important;
+      background: rgba(255,255,255,0.8) !important;
+    }
+    .custom-open-input:focus {
+      border-color: var(--accent) !important;
+      border-style: solid !important;
+      box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1) !important;
+    }
+
     /* 评分选项 */
     .score-row {
       display: flex; gap: 8px; margin-bottom: 8px;
@@ -540,6 +551,9 @@
               <div class="chip" data-value="MBA" onclick="toggleChip(this)">MBA</div>
               <div class="chip" data-value="学历不限" onclick="toggleChip(this)">学历不限</div>
             </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_education" placeholder="💬 其他学历要求（选填）：如：211/985院校毕业优先" style="font-size: 13px; padding: 8px 12px;">
+            </div>
           </div>
 
           <!-- 年龄 -->
@@ -557,6 +571,9 @@
               <div class="chip" data-value="45岁以下" onclick="toggleChip(this)">45岁以下</div>
               <div class="chip selected" data-value="年龄不限" onclick="toggleChip(this)">年龄不限</div>
             </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_age" placeholder="💬 其他年龄要求（选填）：如：28-35岁之间优先" style="font-size: 13px; padding: 8px 12px;">
+            </div>
           </div>
 
           <!-- 性别 -->
@@ -569,6 +586,9 @@
               <div class="chip selected" data-value="性别不限" onclick="toggleChip(this)">性别不限</div>
               <div class="chip" data-value="男性优先" onclick="toggleChip(this)">男性优先</div>
               <div class="chip" data-value="女性优先" onclick="toggleChip(this)">女性优先</div>
+            </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_gender" placeholder="💬 其他要求（选填）" style="font-size: 13px; padding: 8px 12px;">
             </div>
           </div>
 
@@ -589,6 +609,9 @@
               <div class="chip" data-value="政府/央企/国企" onclick="toggleChip(this)">政府/央企/国企</div>
               <div class="chip" data-value="不限行业" onclick="toggleChip(this)">不限行业</div>
             </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_industry" placeholder="💬 其他行业要求（选填）：如：有新能源/半导体行业经验优先" style="font-size: 13px; padding: 8px 12px;">
+            </div>
           </div>
 
           <!-- 客户类型 -->
@@ -603,6 +626,9 @@
               <div class="chip" data-value="经销商/代理商" onclick="toggleChip(this)">经销商/代理商</div>
               <div class="chip" data-value="个人客户/B2C" onclick="toggleChip(this)">个人客户/B2C</div>
               <div class="chip" data-value="不限类型" onclick="toggleChip(this)">不限类型</div>
+            </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_customer" placeholder="💬 其他客户类型（选填）：如：有大型企业客户资源优先" style="font-size: 13px; padding: 8px 12px;">
             </div>
           </div>
 
@@ -621,6 +647,9 @@
               <div class="chip" data-value="门店/顾问式销售" onclick="toggleChip(this)">门店/顾问式销售</div>
               <div class="chip" data-value="直销+渠道混合" onclick="toggleChip(this)">直销+渠道混合</div>
             </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_mode" placeholder="💬 其他销售模式（选填）：如：需要经常出差拜访客户" style="font-size: 13px; padding: 8px 12px;">
+            </div>
           </div>
 
           <!-- 经验年限 -->
@@ -636,6 +665,9 @@
               <div class="chip" data-value="5年+" onclick="toggleChip(this)">5年+</div>
               <div class="chip" data-value="8年+" onclick="toggleChip(this)">8年+</div>
               <div class="chip" data-value="经验不限" onclick="toggleChip(this)">经验不限</div>
+            </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_experience" placeholder="💬 其他经验要求（选填）：如：有独立开发客户经验" style="font-size: 13px; padding: 8px 12px;">
             </div>
           </div>
 
@@ -655,6 +687,9 @@
               <div class="chip" data-value="客户复购率≥40%" onclick="toggleChip(this)">客户复购率≥40%</div>
               <div class="chip" data-value="无业绩要求" onclick="toggleChip(this)">无业绩要求</div>
             </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_performance" placeholder="💬 其他业绩要求（选填）：如：有大客户成单经验优先" style="font-size: 13px; padding: 8px 12px;">
+            </div>
           </div>
 
           <!-- 友商背景 -->
@@ -668,6 +703,9 @@
               <div class="chip" data-value="有同类产品销售经验" onclick="toggleChip(this)">有同类产品销售经验</div>
               <div class="chip" data-value="有客户资源（自带资源优先）" onclick="toggleChip(this)">有客户资源（自带资源优先）</div>
               <div class="chip" data-value="无竞品背景要求" onclick="toggleChip(this)">无竞品背景要求</div>
+            </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_competitor" placeholder="💬 其他背景要求（选填）：如：有华为/阿里等大厂经验优先" style="font-size: 13px; padding: 8px 12px;">
             </div>
           </div>
 
@@ -685,6 +723,9 @@
               <div class="chip" data-value="金融/经济" onclick="toggleChip(this)">金融/经济</div>
               <div class="chip" data-value="专业不限" onclick="toggleChip(this)">专业不限</div>
             </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_major" placeholder="💬 其他专业要求（选填）：如：工科背景优先" style="font-size: 13px; padding: 8px 12px;">
+            </div>
           </div>
 
           <!-- 其他证书/技能 -->
@@ -699,6 +740,9 @@
               <div class="chip" data-value="PMP/项目管理证书" onclick="toggleChip(this)">PMP/项目管理证书</div>
               <div class="chip" data-value="会计从业资格证" onclick="toggleChip(this)">会计从业资格证</div>
               <div class="chip" data-value="无证书要求" onclick="toggleChip(this)">无证书要求</div>
+            </div>
+            <div style="margin-top: 10px;">
+              <input type="text" class="form-input custom-open-input" id="custom_certificate" placeholder="💬 其他证书/技能要求（选填）：如：熟练使用CRM系统" style="font-size: 13px; padding: 8px 12px;">
             </div>
           </div>
 
@@ -804,6 +848,9 @@
             <div class="chip" data-value="稳定性高，3年内无频繁跳槽" onclick="toggleChip(this)">稳定性高</div>
             <div class="chip" data-value="无加分项" onclick="toggleChip(this)">无加分项</div>
           </div>
+          <div style="margin-top: 10px;">
+            <input type="text" class="form-input custom-open-input" id="custom_bonus" placeholder="💬 其他加分项（选填）：如：有演讲/主持经验优先" style="font-size: 13px; padding: 8px 12px;">
+          </div>
         </div>
       </div>
 
@@ -819,6 +866,9 @@
         <div class="section-body">
           <textarea class="form-textarea" id="responsibilities" placeholder="根据前面的选择自动生成，也可手动修改" style="min-height: 160px;"></textarea>
           <div class="form-hint">系统会根据行业、客户类型、销售模式等选择自动推断主要职责</div>
+          <div style="margin-top: 12px;">
+            <input type="text" class="form-input custom-open-input" id="custom_responsibility" placeholder="💬 其他岗位职责（选填）：如：负责华南区大客户开拓" style="font-size: 13px; padding: 8px 12px;">
+          </div>
         </div>
       </div>
 
@@ -1593,6 +1643,21 @@
 
       const softSkills = state.selectedSoftSkills.join('、') || '综合素质';
 
+      // 收集自定义字段
+      const customEducation = document.getElementById('custom_education')?.value || '';
+      const customAge = document.getElementById('custom_age')?.value || '';
+      const customGender = document.getElementById('custom_gender')?.value || '';
+      const customIndustry = document.getElementById('custom_industry')?.value || '';
+      const customCustomer = document.getElementById('custom_customer')?.value || '';
+      const customMode = document.getElementById('custom_mode')?.value || '';
+      const customExperience = document.getElementById('custom_experience')?.value || '';
+      const customPerformance = document.getElementById('custom_performance')?.value || '';
+      const customCompetitor = document.getElementById('custom_competitor')?.value || '';
+      const customMajor = document.getElementById('custom_major')?.value || '';
+      const customCertificate = document.getElementById('custom_certificate')?.value || '';
+      const customBonus = document.getElementById('custom_bonus')?.value || '';
+      const customResponsibility = document.getElementById('custom_responsibility')?.value || '';
+
       let html = `
         <div class="jd-preview-title">${position}</div>
         <div class="jd-preview-meta">
@@ -1611,6 +1676,7 @@
           <div class="jd-section-title">📋 岗位职责</div>
           <div class="jd-content">
             ${responsibilities.split('\n').filter(r => r.trim()).map(r => `<div class="jd-item">${r}</div>`).join('')}
+            ${customResponsibility ? `<div class="jd-item">${customResponsibility}</div>` : ''}
           </div>
         </div>
         
@@ -1618,28 +1684,29 @@
           <div class="jd-section-title">💼 任职资格</div>
           <div class="jd-content">
             <p style="margin-bottom: 8px;"><strong>硬性要求：</strong></p>
-            ${education.length ? `<div class="jd-item"><strong>学历：</strong>${education.join('/')}</div>` : ''}
-            ${age.length ? `<div class="jd-item"><strong>年龄：</strong>${age.join('/')}</div>` : ''}
-            ${gender.length ? `<div class="jd-item"><strong>性别：</strong>${gender.join('/')}</div>` : ''}
-            ${industry.length ? `<div class="jd-item"><strong>行业经验：</strong>${industry.join('/')}</div>` : ''}
-            ${customer.length ? `<div class="jd-item"><strong>客户类型：</strong>${customer.join('/')}</div>` : ''}
-            ${mode.length ? `<div class="jd-item"><strong>销售模式：</strong>${mode.join('/')}</div>` : ''}
-            ${experience.length ? `<div class="jd-item"><strong>经验年限：</strong>${experience.join('/')}</div>` : ''}
-            ${performance.length ? `<div class="jd-item"><strong>业绩要求：</strong>${performance.join('；')}</div>` : ''}
-            ${competitor.length ? `<div class="jd-item"><strong>竞品背景：</strong>${competitor.join('/')}</div>` : ''}
-            ${major.length ? `<div class="jd-item"><strong>专业背景：</strong>${major.join('/')}</div>` : ''}
-            ${certificate.length ? `<div class="jd-item"><strong>证书要求：</strong>${certificate.join('/')}</div>` : ''}
+            ${education.length ? `<div class="jd-item"><strong>学历：</strong>${education.join('/')}${customEducation ? '，' + customEducation : ''}</div>` : ''}
+            ${age.length ? `<div class="jd-item"><strong>年龄：</strong>${age.join('/')}${customAge ? '，' + customAge : ''}</div>` : ''}
+            ${gender.length ? `<div class="jd-item"><strong>性别：</strong>${gender.join('/')}${customGender ? '，' + customGender : ''}</div>` : ''}
+            ${industry.length ? `<div class="jd-item"><strong>行业经验：</strong>${industry.join('/')}${customIndustry ? '，' + customIndustry : ''}</div>` : ''}
+            ${customer.length ? `<div class="jd-item"><strong>客户类型：</strong>${customer.join('/')}${customCustomer ? '，' + customCustomer : ''}</div>` : ''}
+            ${mode.length ? `<div class="jd-item"><strong>销售模式：</strong>${mode.join('/')}${customMode ? '，' + customMode : ''}</div>` : ''}
+            ${experience.length ? `<div class="jd-item"><strong>经验年限：</strong>${experience.join('/')}${customExperience ? '，' + customExperience : ''}</div>` : ''}
+            ${performance.length ? `<div class="jd-item"><strong>业绩要求：</strong>${performance.join('；')}${customPerformance ? '，' + customPerformance : ''}</div>` : ''}
+            ${competitor.length ? `<div class="jd-item"><strong>竞品背景：</strong>${competitor.join('/')}${customCompetitor ? '，' + customCompetitor : ''}</div>` : ''}
+            ${major.length ? `<div class="jd-item"><strong>专业背景：</strong>${major.join('/')}${customMajor ? '，' + customMajor : ''}</div>` : ''}
+            ${certificate.length ? `<div class="jd-item"><strong>证书要求：</strong>${certificate.join('/')}${customCertificate ? '，' + customCertificate : ''}</div>` : ''}
             
             <p style="margin: 16px 0 8px;"><strong>软实力要求：</strong></p>
             <div class="jd-item">${softSkills}</div>
           </div>
         </div>
         
-        ${bonus && bonus.length && !bonus.includes('无加分项') ? `
+        ${(bonus && bonus.length && !bonus.includes('无加分项')) || customBonus ? `
         <div class="jd-section">
           <div class="jd-section-title">⭐ 加分项</div>
           <div class="jd-content">
-            ${bonus.map(b => `<span class="jd-tag">${b}</span>`).join(' ')}
+            ${bonus && bonus.length && !bonus.includes('无加分项') ? bonus.map(b => `<span class="jd-tag">${b}</span>`).join(' ') : ''}
+            ${customBonus ? `<span class="jd-tag">${customBonus}</span>` : ''}
           </div>
         </div>
         ` : ''}
