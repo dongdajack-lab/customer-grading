@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>大董销售体系·销冠核心能力模型 | 一生一世做销冠</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -969,6 +970,16 @@ body {
   <h2 class="section-title">1314 模型三层拆解</h2>
   <p class="section-desc">态度是根基，技能是武器，知识是弹药，三者缺一不可，共同构建优秀销售的完整能力图谱。</p>
 
+  <!-- ASK模型说明 -->
+  <div style="background: linear-gradient(135deg, var(--red-light), #F0F5FF); border-radius: 16px; padding: 24px 28px; margin-bottom: 40px; border-left: 4px solid var(--red);">
+    <div style="font-size: 14px; font-weight: 700; color: var(--red); margin-bottom: 8px;">—— 1套ASK模型</div>
+    <div style="font-size: 15px; color: var(--black); line-height: 1.8;">
+      <strong style="color:var(--red);">A</strong> = Attitude（态度）· <strong style="color:#4F46E5;">S</strong> = Skill（技能）· <strong style="color:#8B6914;">K</strong> = Knowledge（知识）<br>
+      1314模型的底层逻辑，是一套可量化、可训练、可复制的销售能力ASK框架。<br>
+      <span style="color: var(--gray); font-size: 13px;">三层递进：先修心态（A），再练动作（S），最后补认知（K）—— 缺哪层补哪层，层层通关。</span>
+    </div>
+  </div>
+
   <div class="cards-grid">
 
     <!-- 3心 -->
@@ -1262,17 +1273,19 @@ body {
   <div class="declaration-wrap" id="declarationWrap">
     <h3>🏆 我的1314销冠宣言</h3>
     <p>生成专属宣言海报，分享你的销冠决心</p>
-    <div class="declaration-card">
+    <div class="declaration-card" id="declarationCard">
       <div class="declaration-title" id="declarationTitle">— 1314 销冠宣言 —</div>
-      <div class="declaration-text" id="declarationText">
-        我是<span id="userNameDisplay">___</span>，我的1314能力报告：<br>
-        <strong>态度层（三心）：<span id="aScore">0</span>/50</strong>，
-        <strong>技能层（流程）：<span id="sScore">0</span>/50</strong>，
-        <strong>知识层（四知）：<span id="kScore">0</span>/50</strong><br><br>
-        我选择重点提升 <strong id="focusDim">___</strong>，
-        目标在3周内突破 <strong id="focusGoal">___</strong>。<br><br>
-        <strong>1314，一生一世做销冠！💪</strong>
-      </div>
+      <textarea class="declaration-text" id="declarationText" rows="8" style="width:100%;border:none;background:transparent;color:rgba(255,255,255,0.9);font-size:14px;line-height:1.8;font-family:inherit;resize:none;outline:none;" placeholder="宣言文字（可手动修改）">
+我是<span id="userNameDisplay2">___</span>，我的1314能力报告：
+态度层（三心）：<span id="aScore2">0</span>/50
+技能层（流程）：<span id="sScore2">0</span>/50
+知识层（四知）：<span id="kScore2">0</span>/50
+
+我选择重点提升 <span id="focusDim2">___</span>，
+目标在<span id="goalPeriod">3</span>周内 <span id="focusGoal2">重点补足短板</span>。
+
+1314，一生一世做销冠！💪
+      </textarea>
     </div>
     <div style="margin-bottom:20px;">
       <p style="font-size:14px;opacity:0.8;margin-bottom:12px;">👇 点击选择你要重点提升的维度：</p>
@@ -1283,7 +1296,7 @@ body {
       </div>
     </div>
     <div class="declaration-actions">
-      <button class="btn-primary" onclick="generatePoster()">📱 生成分享海报</button>
+      <button class="btn-primary" id="generateBtn" onclick="generatePoster()">📱 生成分享海报</button>
       <button class="btn-secondary" onclick="resetQuiz()" style="border-color:rgba(255,255,255,0.3);color:white;">🔄 重新测评</button>
     </div>
   </div>
@@ -1586,17 +1599,51 @@ function showResult() {
     <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
   `;
 
-  // 宣言填充
+  // 宣言填充（textarea版本）
   const dims = [{name:'三心（态度）', score:aData.total}, {name:'流程6技（技能）', score:sData.total}, {name:'四知（知识）', score:kData.total}];
   const weakest = dims.reduce((a, b) => a.score < b.score ? a : b);
+  const strongest = dims.reduce((a, b) => a.score > b.score ? a : b);
+  const allPerfect = dims.every(d => d.score >= 40); // 全40分以上=满分
+
+  // 标记全局满分状态
+  window.isAllPerfect = allPerfect;
 
   document.getElementById('userNameDisplay').textContent = userName || '___';
   document.getElementById('aScore').textContent = aData.total;
   document.getElementById('sScore').textContent = sData.total;
   document.getElementById('kScore').textContent = kData.total;
 
-  // 默认选中最低分维度
-  selectedFocus = weakest.name;
+  // 同步到textarea版本
+  const declText = document.getElementById('declarationText');
+  if (declText) {
+    const focus = allPerfect ? strongest.name : weakest.name;
+    const goalType = allPerfect ? '巩固强项' : '重点补足短板';
+    declText.value = `我是${userName || '___'}，我的1314能力报告：
+态度层（三心）：${aData.total}/50
+技能层（流程）：${sData.total}/50
+知识层（四知）：${kData.total}/50
+
+我选择重点提升 ${focus}，
+目标在3周内 ${goalType}。
+
+1314，一生一世做销冠！💪`;
+    // 同步到span
+    const el = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
+    el('userNameDisplay2', userName || '___');
+    el('aScore2', aData.total);
+    el('sScore2', sData.total);
+    el('kScore2', kData.total);
+    el('focusDim', focus);
+    el('focusDim2', focus);
+    el('focusGoal', goalType);
+    el('focusGoal2', goalType);
+  }
+
+  // 自动生成提升计划
+  autoGeneratePlan(weakest, strongest, allPerfect, dims);
+
+  // 默认选中最低分维度（满分时默认选中最高分）
+  selectedFocus = allPerfect ? strongest.name : weakest.name;
   updateFocusDisplay();
 
   // 更新选择按钮状态
@@ -1621,7 +1668,7 @@ function updateFocusDisplay() {
   const goalEl = document.getElementById('focusGoal');
   if (focusEl) focusEl.textContent = selectedFocus;
 
-  // 根据选择维度确定目标
+  // 根据选择维度确定目标 - 修复逻辑
   const dims = [
     {name:'三心（态度）', score:parseInt(document.getElementById('aScore')?.textContent || 0)},
     {name:'流程6技（技能）', score:parseInt(document.getElementById('sScore')?.textContent || 0)},
@@ -1633,35 +1680,206 @@ function updateFocusDisplay() {
   }
 }
 
+function updateFocusDisplay() {
+  const focusEl = document.getElementById('focusDim');
+  const goalEl = document.getElementById('focusGoal');
+  if (focusEl) focusEl.textContent = selectedFocus;
+
+  // 根据选择维度确定目标 - 修复逻辑
+  const dims = [
+    {name:'三心（态度）', score:parseInt(document.getElementById('aScore')?.textContent || 0)},
+    {name:'流程6技（技能）', score:parseInt(document.getElementById('sScore')?.textContent || 0)},
+    {name:'四知（知识）', score:parseInt(document.getElementById('kScore')?.textContent || 0)}
+  ];
+  const selectedDim = dims.find(d => d.name === selectedFocus);
+  if (goalEl && selectedDim) {
+    goalEl.textContent = selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
+  }
+  // 同步textarea中的文字
+  const declText = document.getElementById('declarationText');
+  if (declText) {
+    const goalType = selectedDim && selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
+    const goalPeriodEl = document.getElementById('goalPeriod');
+    declText.value = `我是${userName || '___'}，我的1314能力报告：
+态度层（三心）：${dims[0].score}/50
+技能层（流程）：${dims[1].score}/50
+知识层（四知）：${dims[2].score}/50
+
+我选择重点提升 ${selectedFocus}，
+目标在3周内 ${goalType}。
+
+1314，一生一世做销冠！💪`;
+    const el = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
+    el('focusDim2', selectedFocus);
+    el('focusGoal2', goalType);
+  }
+}
+
+function autoGeneratePlan(weakest, strongest, allPerfect, dims) {
+  const plan1 = document.getElementById('plan1');
+  const plan2 = document.getElementById('plan2');
+  const plan3 = document.getElementById('plan3');
+  const plan4 = document.getElementById('plan4');
+  if (!plan1) return;
+
+  if (allPerfect) {
+    // 满分专属提升计划
+    plan1.value = '继续保持三项均衡发展！你是准销冠级别的选手';
+    plan2.value = '保持领先，尝试带教同事，把经验复制出去';
+    plan3.value = '每天复盘一单成功案例，总结自己的签单方法论';
+    plan4.value = '向销冠前辈学习 → 读《销售圣经》→ 每周1次客户深耕';
+  } else {
+    // 普通模式：根据最短板生成
+    const dimKey = weakest.name.includes('三心') ? 'A' : weakest.name.includes('流程') ? 'S' : 'K';
+    const subScores = getSubScores(dimKey);
+    const lowestSub = Object.keys(subScores).length > 0
+      ? Object.keys(subScores).reduce((a, b) => subScores[a].total < subScores[b].total ? a : b)
+      : '基础环节';
+
+    const improvementMap = {
+      '抗压心': '每次丢单后24小时内完成复盘，训练抗压韧性',
+      '企图心': '设定明确的周收入目标，每天追踪进展',
+      '学习心': '每周向销冠请教1次，记录学习笔记',
+      '全局': '画出完整的客户跟进流程图，定位自己的薄弱环节',
+      '获客力': '每周新增10个高质量客户线索，不依赖公司分配',
+      '建信力': '每次拜访前做好充分准备，研究客户背景',
+      '提问力': '训练"问三答一"法则，多听少说',
+      '呈现力': '练习3分钟电梯演讲，用场景化语言介绍产品',
+      '锁单力': '掌握至少3种非价格谈判筹码',
+      '经营力': '建立老客户定期维护计划，争取转介绍',
+      '知己': '3分钟内脱稿讲清产品核心价值和差异化',
+      '知彼': '绘制竞品对比图，客观承认对手优势',
+      '知客': '画出重点客户的决策链图',
+      '知势': '每周阅读1篇行业报告，整理3条客户关心的话题'
+    };
+
+    const improvement = improvementMap[lowestSub] || improvementMap[weakest.name] || '找出得分最低的具体环节，针对性练习';
+    plan1.value = improvement;
+    plan2.value = `3周内将${lowestSub}维度提升至少5分`;
+    plan3.value = weakest.score < 30 ? '每天练习10分钟' : '每周重点突破1个环节';
+    plan4.value = '看课程/读手册 → 找师父指导 → 反复练习实践';
+  }
+}
+
 function generatePoster() {
-  const aScore = document.getElementById('aScore').textContent;
-  const sScore = document.getElementById('sScore').textContent;
-  const kScore = document.getElementById('kScore').textContent;
-  const focus = selectedFocus || document.getElementById('focusDim').textContent;
+  const allPerfect = window.isAllPerfect;
+  const aScore = parseInt(document.getElementById('aScore').textContent);
+  const sScore = parseInt(document.getElementById('sScore').textContent);
+  const kScore = parseInt(document.getElementById('kScore').textContent);
   const name = userName || '___';
+  const focus = selectedFocus;
+  const goalType = focus && dims && dims.find(d=>d.name===focus)?.score >= 40 ? '巩固强项' : '重点补足短板';
+  const dims = [
+    {name:'三心（态度）', score:aScore},
+    {name:'流程6技（技能）', score:sScore},
+    {name:'四知（知识）', score:kScore}
+  ];
 
-  const text = `🏆 我的1314销冠宣言 🏆
+  // 获取宣言文字（用户可能已修改）
+  const declText = document.getElementById('declarationText').value;
 
-我是${name}
+  // 如果已有海报，移除
+  const existing = document.getElementById('posterModal');
+  if (existing) existing.remove();
 
-态度层（三心）：${aScore}/50
-技能层（流程）：${sScore}/50
-知识层（四知）：${kScore}/50
+  // 创建海报容器
+  const posterHTML = allPerfect ? `
+    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#1A1A2E 0%,#2D1B3D 50%,#3D2352 100%);border-radius:20px;padding:32px 28px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(200,16,46,0.3) 0%,transparent 70%);pointer-events:none;"></div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:3px;color:#FF8A9A;text-transform:uppercase;margin-bottom:8px;">🏆 GOLDEN SALES 🏆</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px;">恭喜！已达满分成就</div>
+      <div style="font-size:32px;font-weight:900;color:white;margin:12px 0;">${name}</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:20px;">我的1314能力报告</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 8px;">
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;">💪 态度</div>
+          <div style="font-size:22px;font-weight:900;color:#FF8A9A;">${aScore}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);">/50</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 8px;">
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;">🗺️ 技能</div>
+          <div style="font-size:22px;font-weight:900;color:#A5B4FC;">${sScore}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);">/50</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 8px;">
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;">🧠 知识</div>
+          <div style="font-size:22px;font-weight:900;color:#FCD34D;">${kScore}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);">/50</div>
+        </div>
+      </div>
+      <div style="background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.5);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;color:#FCD34D;font-weight:600;">
+        🎉 我已具备销冠潜质，请大家拭目以待！<br>
+        <span style="color:rgba(255,255,255,0.8);font-size:12px;font-weight:400;">1314 · 优秀销售能力模型</span>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;">—— 大董老师 · 1314销售能力测评</div>
+    </div>
+  ` : `
+    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#C8102E 0%,#9B0B22 50%,#6B0F18 100%);border-radius:20px;padding:32px 28px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,0.4) 0%,transparent 70%);pointer-events:none;"></div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:8px;">大董销售体系 · 1314能力模型</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:4px;">我的1314销冠宣言</div>
+      <div style="font-size:28px;font-weight:900;color:white;margin:12px 0;">${name}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 8px;">
+          <div style="font-size:22px;font-weight:900;color:white;">${aScore}<span style="font-size:12px;color:rgba(255,255,255,0.6);">/50</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:4px;">三心态度</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 8px;">
+          <div style="font-size:22px;font-weight:900;color:white;">${sScore}<span style="font-size:12px;color:rgba(255,255,255,0.6);">/50</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:4px;">流程技能</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 8px;">
+          <div style="font-size:22px;font-weight:900;color:white;">${kScore}<span style="font-size:12px;color:rgba(255,255,255,0.6);">/50</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:4px;">四知知识</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;font-size:12px;line-height:1.9;white-space:pre-wrap;color:rgba(255,255,255,0.9);">${declText}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px;">—— 大董老师 · 1314销售能力测评</div>
+    </div>
+  `;
 
-重点提升方向：${focus}
+  // 创建弹窗
+  const modal = document.createElement('div');
+  modal.id = 'posterModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML = `
+    <div style="margin-bottom:16px;text-align:center;">
+      <div style="color:white;font-size:16px;font-weight:700;margin-bottom:4px;">📱 分享海报预览</div>
+      <div style="color:rgba(255,255,255,0.6);font-size:12px;">点击下方按钮下载图片保存</div>
+    </div>
+    ${posterHTML}
+    <div style="margin-top:20px;display:flex;gap:12px;">
+      <button onclick="downloadPoster()" style="background:#10B981;color:white;border:none;padding:12px 28px;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+        ⬇️ 下载图片
+      </button>
+      <button onclick="document.getElementById('posterModal').remove()" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);padding:12px 28px;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+        ✕ 关闭
+      </button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
 
-1314，一生一世做销冠！💪
+function downloadPoster() {
+  const posterInner = document.getElementById('posterInner');
+  if (!posterInner) return;
 
-—— 大董销售体系 · 1314能力模型`;
-
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.querySelector('.declaration-actions .btn-primary');
-      const orig = btn.textContent;
-      btn.textContent = '✅ 宣言已复制！';
-      btn.style.background = '#10B981';
-      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+  if (typeof html2canvas !== 'undefined') {
+    html2canvas(posterInner, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true,
+      logging: false
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = `1314销冠宣言_${userName || '用户'}_${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(err => {
+      alert('下载失败，请重试：' + err.message);
     });
+  } else {
+    alert('图片下载功能加载中，请稍后再试');
   }
 }
 
