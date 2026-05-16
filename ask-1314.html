@@ -98,6 +98,7 @@ body {
   position: absolute;
   inset: 0;
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
 }
 .hero-badge {
   display: inline-block;
@@ -980,8 +981,8 @@ body {
   <!-- ASK模型说明 -->
   <div style="background: linear-gradient(135deg, var(--red-light), #F0F5FF); border-radius: 16px; padding: 24px 28px; margin-bottom: 40px; border-left: 4px solid var(--red);">
     <div style="font-size: 18px; font-weight: 700; color: var(--red); margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px;">
-      <span>——</span>
       <span style="font-size: 36px; font-weight: 900; color: var(--red); line-height: 1;">1</span>
+      <span>——</span>
       <span>套ASK模型</span>
     </div>
     <div style="font-size: 15px; color: var(--black); line-height: 1.8;">
@@ -1328,7 +1329,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-5';
+  var v = 'v=20250516-6';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
