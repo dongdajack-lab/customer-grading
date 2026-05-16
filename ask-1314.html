@@ -2,11 +2,10 @@
 <html lang="zh-CN">
 <head>
 <script>
-// URL强制缓存清除：无版本参数时自动跳转
 (function(){
-  if (!location.search.includes('v=10')) {
+  if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=9');
+    location.replace(location.pathname + location.search + sep + 'v=10');
   }
 })();
 </script>
