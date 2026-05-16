@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1314销售能力模型 | 一生一世做销冠</title>
+<title>大董销售体系·销冠核心能力模型 | 一生一世做销冠</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -255,56 +255,6 @@ body {
 .tiandiren-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
 .tiandiren-card p { font-size: 13px; color: var(--gray); }
 
-.tiandiren-relation {
-  background: var(--light);
-  border-radius: 20px;
-  padding: 40px;
-  border: 1px solid #E5E5EE;
-}
-.tiandiren-relation h3 {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 32px;
-  color: var(--black);
-}
-.relation-flow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  flex-wrap: wrap;
-}
-.rel-item {
-  background: var(--white);
-  border: 2px solid var(--red);
-  border-radius: 12px;
-  padding: 16px 20px;
-  text-align: center;
-  min-width: 160px;
-}
-.rel-item.top { border-color: #667eea; }
-.rel-item.top .rel-label { color: #667eea; }
-.rel-item.center { border-color: var(--red); background: var(--red); color: white; }
-.rel-item.center .rel-label { color: rgba(255,255,255,0.8); }
-.rel-item.center .rel-name { color: white; }
-.rel-item.bottom { border-color: var(--gold); }
-.rel-item.bottom .rel-label { color: var(--gold); }
-.rel-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 4px; }
-.rel-name { font-size: 15px; font-weight: 800; color: var(--black); }
-.rel-arrow {
-  font-size: 24px;
-  color: #CCC;
-  padding: 0 8px;
-}
-.rel-1314 {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 14px;
-  color: var(--gray);
-}
-.rel-1314 strong { color: var(--red); }
-
 /* ===== 1314卡片 ===== */
 .cards-grid {
   display: grid;
@@ -529,6 +479,38 @@ body {
 .quiz-meta-item .num { font-size: 24px; font-weight: 900; color: var(--gold); }
 .quiz-meta-item .label { font-size: 12px; opacity: 0.7; margin-top: 2px; }
 
+/* 姓名输入 */
+.name-input-wrap {
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px auto 0;
+  max-width: 400px;
+}
+.name-input-wrap label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+.name-input-wrap input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 16px;
+  font-family: inherit;
+  text-align: center;
+}
+.name-input-wrap input::placeholder { color: rgba(255,255,255,0.5); }
+.name-input-wrap input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.2);
+}
+
 .quiz-start {
   text-align: center;
   padding: 48px;
@@ -745,22 +727,31 @@ body {
 .segment-advice { background: var(--gold-light); border-radius: 12px; padding: 14px; font-size: 13px; color: #5D4037; line-height: 1.7; }
 .segment-advice strong { color: #8B6914; }
 
-/* 四知子维度雷达 */
-.k-detail-cards {
+/* 子维度分析 */
+.sub-detail-section {
+  margin-bottom: 24px;
+}
+.sub-detail-section h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--light);
+}
+.sub-detail-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-top: 16px;
 }
-.k-detail-item {
+.sub-detail-item {
   background: var(--light);
   border-radius: 10px;
   padding: 12px;
   text-align: center;
 }
-.k-detail-item .label { font-size: 11px; color: var(--gray); margin-bottom: 4px; }
-.k-detail-item .score { font-size: 20px; font-weight: 800; color: #4F46E5; }
-.k-detail-item .max { font-size: 12px; color: var(--gray); }
+.sub-detail-item .label { font-size: 11px; color: var(--gray); margin-bottom: 4px; }
+.sub-detail-item .score { font-size: 20px; font-weight: 800; }
+.sub-detail-item .max { font-size: 12px; color: var(--gray); }
 
 /* 提升计划 */
 .improve-section {
@@ -835,6 +826,35 @@ body {
 .declaration-actions .btn-primary { background: var(--gold); color: var(--black); }
 .declaration-actions .btn-primary:hover { background: #B8942F; }
 
+/* 选择项样式 */
+.focus-selector {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.focus-option {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.focus-option:hover {
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.2);
+}
+.focus-option.selected {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--black);
+}
+
 /* ===== 页脚 ===== */
 .footer {
   background: var(--black);
@@ -861,9 +881,7 @@ body {
   .result-summary { grid-template-columns: 1fr; }
   .result-body { grid-template-columns: 1fr; }
   .improve-grid { grid-template-columns: repeat(2, 1fr); }
-  .k-detail-cards { grid-template-columns: repeat(2, 1fr); }
-  .relation-flow { flex-direction: column; gap: 12px; }
-  .rel-arrow { transform: rotate(90deg); }
+  .sub-detail-cards { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* 隐藏按钮 disabled 样式 */
@@ -889,7 +907,7 @@ body {
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-badge">大董销售体系 · 核心能力模型</div>
+  <div class="hero-badge">大董销售体系 · 销冠核心能力模型</div>
   <h1 class="hero-title">
     <span class="num">1314</span>
     <span class="sub">优秀销售能力模型</span>
@@ -942,35 +960,6 @@ body {
       </div>
     </div>
   </div>
-
-  <div class="tiandiren-relation">
-    <h3>1314 在天地人体系中的对应关系</h3>
-    <div class="relation-flow">
-      <div class="rel-item top">
-        <div class="rel-label">天</div>
-        <div class="rel-name">战略聚焦</div>
-      </div>
-      <div class="rel-arrow">→</div>
-      <div class="rel-item top">
-        <div class="rel-label">定方向</div>
-        <div class="rel-name">目标 + 定位</div>
-      </div>
-      <div class="rel-arrow">→</div>
-      <div class="rel-item top">
-        <div class="rel-label">落地保障</div>
-        <div class="rel-name">1314模型</div>
-      </div>
-      <div class="rel-arrow">→</div>
-      <div class="rel-item top">
-        <div class="rel-label">人</div>
-        <div class="rel-name">铁军打造</div>
-      </div>
-    </div>
-    <div class="rel-1314">
-      <strong>1314</strong> 是天地人体系中"人"字模块的核心落地工具：
-      三心对应<strong>态度层</strong>、一流流程对应<strong>技能层</strong>、四知对应<strong>知识层</strong>
-    </div>
-  </div>
 </section>
 
 <!-- ===== 模型详解 ===== -->
@@ -985,7 +974,7 @@ body {
     <!-- 3心 -->
     <div class="model-card">
       <div class="model-card-header">
-        <div class="model-card-num" style="background: linear-gradient(135deg, var(--red), var(--red-dark));">1</div>
+        <div class="model-card-num" style="background: linear-gradient(135deg, var(--red), var(--red-dark));">3</div>
         <div>
           <h3>三心修炼强心态</h3>
           <span>A（Attitude）态度层 · 能力根基</span>
@@ -1188,6 +1177,10 @@ body {
       <div class="quiz-meta-item"><div class="num">~5</div><div class="label">分钟完成</div></div>
       <div class="quiz-meta-item"><div class="num">1</div><div class="label">份专属报告</div></div>
     </div>
+    <div class="name-input-wrap">
+      <label>👤 请输入你的姓名（用于生成专属宣言海报）</label>
+      <input type="text" id="userNameInput" placeholder="例如：张三" maxlength="20">
+    </div>
     <div style="margin-top:28px;">
       <button class="btn-primary" onclick="startQuiz()" style="font-size:18px;padding:16px 48px;">
         🚀 开始测评
@@ -1217,8 +1210,20 @@ body {
       <div class="radar-wrap">
         <canvas id="radarChart" width="360" height="300"></canvas>
       </div>
-      <div class="k-detail-cards" id="kDetailCards">
-        <!-- 四知子维度 -->
+      <!-- 三心子维度 -->
+      <div class="sub-detail-section" id="aDetailSection">
+        <h4 style="color:var(--red);">💪 三心（态度）子维度</h4>
+        <div class="sub-detail-cards" id="aDetailCards"></div>
+      </div>
+      <!-- 流程子维度 -->
+      <div class="sub-detail-section" id="sDetailSection">
+        <h4 style="color:#4F46E5;">🗺️ 流程6技（技能）子维度</h4>
+        <div class="sub-detail-cards" id="sDetailCards"></div>
+      </div>
+      <!-- 四知子维度 -->
+      <div class="sub-detail-section" id="kDetailSection">
+        <h4 style="color:#8B6914;">🧠 四知（知识）子维度</h4>
+        <div class="sub-detail-cards" id="kDetailCards"></div>
       </div>
     </div>
 
@@ -1260,13 +1265,21 @@ body {
     <div class="declaration-card">
       <div class="declaration-title" id="declarationTitle">— 1314 销冠宣言 —</div>
       <div class="declaration-text" id="declarationText">
-        我是<span id="userName">___</span>，我的1314能力报告：<br>
+        我是<span id="userNameDisplay">___</span>，我的1314能力报告：<br>
         <strong>态度层（三心）：<span id="aScore">0</span>/50</strong>，
         <strong>技能层（流程）：<span id="sScore">0</span>/50</strong>，
         <strong>知识层（四知）：<span id="kScore">0</span>/50</strong><br><br>
         我选择重点提升 <strong id="focusDim">___</strong>，
         目标在3周内突破 <strong id="focusGoal">___</strong>。<br><br>
         <strong>1314，一生一世做销冠！💪</strong>
+      </div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <p style="font-size:14px;opacity:0.8;margin-bottom:12px;">👇 点击选择你要重点提升的维度：</p>
+      <div class="focus-selector" id="focusSelector">
+        <div class="focus-option" data-dim="三心（态度）" onclick="selectFocus(this)">💪 三心（态度）</div>
+        <div class="focus-option" data-dim="流程6技（技能）" onclick="selectFocus(this)">🗺️ 流程6技（技能）</div>
+        <div class="focus-option" data-dim="四知（知识）" onclick="selectFocus(this)">🧠 四知（知识）</div>
       </div>
     </div>
     <div class="declaration-actions">
@@ -1326,6 +1339,8 @@ const questions = [
 let currentQ = 0;
 let answers = new Array(questions.length).fill(null);
 let radarChart = null;
+let userName = '';
+let selectedFocus = '';
 
 // 颜色映射
 const dimColor = { A: '#C8102E', S: '#4F46E5', K: '#C9A84C' };
@@ -1333,6 +1348,17 @@ const dimLabel = { A: '三心（态度）', S: '流程6技（技能）', K: '四
 const dimIcon = { A: '💪', S: '🗺️', K: '🧠' };
 
 function startQuiz() {
+  // 获取用户姓名
+  const nameInput = document.getElementById('userNameInput');
+  userName = nameInput.value.trim();
+  if (!userName) {
+    nameInput.style.borderColor = '#FF6B6B';
+    nameInput.placeholder = '请填写姓名后再开始';
+    nameInput.focus();
+    return;
+  }
+  nameInput.style.borderColor = '';
+
   document.getElementById('quizIntro').style.display = 'none';
   document.getElementById('quizContainer').style.display = 'block';
   currentQ = 0;
@@ -1507,13 +1533,35 @@ function showResult() {
     }
   });
 
-  // 四知子维度
+  // 三心和流程子维度
+  const aSubs = getSubScores('A');
+  const sSubs = getSubScores('S');
   const kSubs = getSubScores('K');
+
+  // 三心子维度
+  document.getElementById('aDetailCards').innerHTML = Object.keys(aSubs).map(k => `
+    <div class="sub-detail-item">
+      <div class="label">${k}</div>
+      <div class="score" style="color:var(--red);">${aSubs[k].total}</div>
+      <div class="max">/${aSubs[k].count * 5}分</div>
+    </div>
+  `).join('');
+
+  // 流程子维度
+  document.getElementById('sDetailCards').innerHTML = Object.keys(sSubs).map(k => `
+    <div class="sub-detail-item">
+      <div class="label">${k}</div>
+      <div class="score" style="color:#4F46E5;">${sSubs[k].total}</div>
+      <div class="max">/${sSubs[k].count * 5}分</div>
+    </div>
+  `).join('');
+
+  // 四知子维度
   const subNames = { '知己':'产品', '知彼':'竞品', '知客':'客户', '知势':'行业' };
   document.getElementById('kDetailCards').innerHTML = Object.keys(kSubs).map(k => `
-    <div class="k-detail-item">
+    <div class="sub-detail-item">
       <div class="label">${k}（${subNames[k]||k}）</div>
-      <div class="score">${kSubs[k].total}</div>
+      <div class="score" style="color:#8B6914;">${kSubs[k].total}</div>
       <div class="max">/${kSubs[k].count * 5}分</div>
     </div>
   `).join('');
@@ -1541,24 +1589,60 @@ function showResult() {
   // 宣言填充
   const dims = [{name:'三心（态度）', score:aData.total}, {name:'流程6技（技能）', score:sData.total}, {name:'四知（知识）', score:kData.total}];
   const weakest = dims.reduce((a, b) => a.score < b.score ? a : b);
+
+  document.getElementById('userNameDisplay').textContent = userName || '___';
   document.getElementById('aScore').textContent = aData.total;
   document.getElementById('sScore').textContent = sData.total;
   document.getElementById('kScore').textContent = kData.total;
-  document.getElementById('focusDim').textContent = weakest.name;
-  document.getElementById('focusGoal').textContent = weakest.score >= 40 ? '巩固强项' : '重点补足短板';
+
+  // 默认选中最低分维度
+  selectedFocus = weakest.name;
+  updateFocusDisplay();
+
+  // 更新选择按钮状态
+  document.querySelectorAll('.focus-option').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.dim === selectedFocus);
+  });
 
   // 滚动到结果
   document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
 }
 
+function selectFocus(el) {
+  selectedFocus = el.dataset.dim;
+  document.querySelectorAll('.focus-option').forEach(btn => {
+    btn.classList.toggle('selected', btn === el);
+  });
+  updateFocusDisplay();
+}
+
+function updateFocusDisplay() {
+  const focusEl = document.getElementById('focusDim');
+  const goalEl = document.getElementById('focusGoal');
+  if (focusEl) focusEl.textContent = selectedFocus;
+
+  // 根据选择维度确定目标
+  const dims = [
+    {name:'三心（态度）', score:parseInt(document.getElementById('aScore')?.textContent || 0)},
+    {name:'流程6技（技能）', score:parseInt(document.getElementById('sScore')?.textContent || 0)},
+    {name:'四知（知识）', score:parseInt(document.getElementById('kScore')?.textContent || 0)}
+  ];
+  const selectedDim = dims.find(d => d.name === selectedFocus);
+  if (goalEl && selectedDim) {
+    goalEl.textContent = selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
+  }
+}
+
 function generatePoster() {
-  // 生成文本宣言用于复制
   const aScore = document.getElementById('aScore').textContent;
   const sScore = document.getElementById('sScore').textContent;
   const kScore = document.getElementById('kScore').textContent;
-  const focus = document.getElementById('focusDim').textContent;
+  const focus = selectedFocus || document.getElementById('focusDim').textContent;
+  const name = userName || '___';
 
   const text = `🏆 我的1314销冠宣言 🏆
+
+我是${name}
 
 态度层（三心）：${aScore}/50
 技能层（流程）：${sScore}/50
