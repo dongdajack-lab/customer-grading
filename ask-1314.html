@@ -2106,8 +2106,17 @@ function resetQuiz() {
   document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
 }
 function shareWechat() {
-  // 微信分享：提示用户使用微信内置分享功能
-  showShareTip('微信', '请点击右上角 · 选择"分享到朋友圈"或"发送给朋友"');
+  // 判断是否在微信环境
+  var isWechat = /MicroMessenger/i.test(navigator.userAgent);
+  if (isWechat) {
+    showShareTip('微信', '请点击右上角 · 选择"分享到朋友圈"或"发送给朋友"');
+  } else {
+    // 非微信环境：直接复制链接 + 提示可生成海报
+    copyLink();
+    setTimeout(function() {
+      showShareTip('分享', '链接已复制到剪贴板！<br><br>你也可以点击"保存为图片"生成精美海报，直接发给朋友或朋友圈。');
+    }, 200);
+  }
 }
 
 function shareWeibo() {
@@ -2172,8 +2181,46 @@ function updatePKInfo() {
 
 // 页面加载时，默认隐藏提升计划和重新测评（等分享后解锁）
 
+function initShareLock() {
+  const improve = document.querySelector('.improve-section');
+  if (improve) improve.style.display = 'none';
+  const resetBtn = document.querySelector('[onclick="resetQuiz()"]');
+  if (resetBtn && resetBtn.parentElement) resetBtn.parentElement.style.display = 'none';
+}
 
-  
+function showInvitePK() {
+  const overlay = document.getElementById('invitePKOverlay');
+  if (overlay) {
+    updatePKInfo();
+    overlay.classList.add('show');
+  }
+}
+
+function hideInvitePK() {
+  const overlay = document.getElementById('invitePKOverlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+function generateShareCard() {
+  const card = document.getElementById('segmentCard');
+  const name = userName || '我';
+  if (!card) { alert('未找到海报元素'); return; }
+  if (typeof html2canvas === 'undefined') {
+    alert('图片生成库加载中，请稍后再试');
+    return;
+  }
+  html2canvas(card, { backgroundColor: null, scale: 2, useCORS: true })
+    .then(function(canvas) {
+      const link = document.createElement('a');
+      link.download = name + '_1314销冠能力PK图.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(function(err) {
+      console.error('生成PK图失败:', err);
+      alert('图片生成失败，请手动截图保存');
+    });
+}
+
 // 页面加载时隐藏提升计划，等分享后解锁
 initShareLock();
 </script>
