@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  if (!location.search.includes('v=11')) {
+  if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
     location.replace(location.pathname + location.search + sep + 'v=13');
   }
