@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>大董销售体系·销冠核心能力模型 | 一生一世做销冠</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js?v=3"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap&v=3" rel="stylesheet">
 <style>
 :root {
   --red: #C8102E;
@@ -972,7 +975,11 @@ body {
 
   <!-- ASK模型说明 -->
   <div style="background: linear-gradient(135deg, var(--red-light), #F0F5FF); border-radius: 16px; padding: 24px 28px; margin-bottom: 40px; border-left: 4px solid var(--red);">
-    <div style="font-size: 18px; font-weight: 700; color: var(--red); margin-bottom: 8px;">—— <span style="font-size: 26px; vertical-align: middle; margin-right: 2px;">1</span>套ASK模型</div>
+    <div style="font-size: 18px; font-weight: 700; color: var(--red); margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px;">
+      <span>——</span>
+      <span style="font-size: 36px; font-weight: 900; color: var(--red); line-height: 1;">1</span>
+      <span>套ASK模型</span>
+    </div>
     <div style="font-size: 15px; color: var(--black); line-height: 1.8;">
       <strong style="color:var(--red);">A</strong> = Attitude（态度）· <strong style="color:#4F46E5;">S</strong> = Skill（技能）· <strong style="color:#8B6914;">K</strong> = Knowledge（知识）<br>
       1314模型的底层逻辑，是一套可量化、可训练、可复制的销售能力ASK框架。<br>
@@ -1315,6 +1322,19 @@ body {
 </footer>
 
 <script>
+// 缓存清除：强制使用最新版本
+(function(){
+  var v = 'v=20250516-4';
+  var current = localStorage.getItem('ask1314_version');
+  if (current !== v) {
+    localStorage.setItem('ask1314_version', v);
+    if (current) {
+      // 版本有更新，强制刷新一次以清除缓存
+      location.reload(true);
+      return;
+    }
+  }
+})();
 // ===== 题目数据（40%情境题）=====
 const questions = [
   // === A·三心 - 态度 ===
@@ -1720,69 +1740,81 @@ function toggleEditDeclaration() {
 }
 
 function autoGeneratePlan(weakest, strongest, allPerfect, dims) {
-  const plan1 = document.getElementById('plan1');
-  const plan2 = document.getElementById('plan2');
-  const plan3 = document.getElementById('plan3');
-  const plan4 = document.getElementById('plan4');
-  if (!plan1) return;
+  try {
+    const plan1 = document.getElementById('plan1');
+    const plan2 = document.getElementById('plan2');
+    const plan3 = document.getElementById('plan3');
+    const plan4 = document.getElementById('plan4');
+    if (!plan1 || !plan2 || !plan3 || !plan4) {
+      console.error('[1314] 提升计划输入框未找到');
+      return;
+    }
 
-  if (allPerfect) {
-    // 满分专属提升计划
-    plan1.value = '继续保持三项均衡发展！你是准销冠级别的选手';
-    plan2.value = '保持领先，尝试带教同事，把经验复制出去';
-    plan3.value = '每天复盘一单成功案例，总结自己的签单方法论';
-    plan4.value = '向销冠前辈学习 → 读《销售圣经》→ 每周1次客户深耕';
-  } else {
-    // 普通模式：根据最短板生成
-    const dimKey = weakest.name.includes('三心') ? 'A' : weakest.name.includes('流程') ? 'S' : 'K';
-    const subScores = getSubScores(dimKey);
-    const lowestSub = Object.keys(subScores).length > 0
-      ? Object.keys(subScores).reduce((a, b) => subScores[a].total < subScores[b].total ? a : b)
-      : '基础环节';
+    if (allPerfect) {
+      // 满分专属提升计划
+      plan1.value = '继续保持三项均衡发展！你是准销冠级别的选手';
+      plan2.value = '保持领先，尝试带教同事，把经验复制出去';
+      plan3.value = '每天复盘一单成功案例，总结自己的签单方法论';
+      plan4.value = '向销冠前辈学习 → 读《销售圣经》→ 每周1次客户深耕';
+    } else {
+      // 普通模式：根据最短板生成
+      const dimKey = weakest.name.includes('三心') ? 'A' : weakest.name.includes('流程') ? 'S' : 'K';
+      const subScores = getSubScores(dimKey);
+      const subKeys = Object.keys(subScores);
+      const lowestSub = subKeys.length > 0
+        ? subKeys.reduce((a, b) => subScores[a].total < subScores[b].total ? a : b)
+        : '基础环节';
 
-    const improvementMap = {
-      '抗压心': '每次丢单后24小时内完成复盘，训练抗压韧性',
-      '企图心': '设定明确的周收入目标，每天追踪进展',
-      '学习心': '每周向销冠请教1次，记录学习笔记',
-      '全局': '画出完整的客户跟进流程图，定位自己的薄弱环节',
-      '获客力': '每周新增10个高质量客户线索，不依赖公司分配',
-      '建信力': '每次拜访前做好充分准备，研究客户背景',
-      '提问力': '训练"问三答一"法则，多听少说',
-      '呈现力': '练习3分钟电梯演讲，用场景化语言介绍产品',
-      '锁单力': '掌握至少3种非价格谈判筹码',
-      '经营力': '建立老客户定期维护计划，争取转介绍',
-      '知己': '3分钟内脱稿讲清产品核心价值和差异化',
-      '知彼': '绘制竞品对比图，客观承认对手优势',
-      '知客': '画出重点客户的决策链图',
-      '知势': '每周阅读1篇行业报告，整理3条客户关心的话题'
-    };
+      const improvementMap = {
+        '抗压心': '每次丢单后24小时内完成复盘，训练抗压韧性',
+        '企图心': '设定明确的周收入目标，每天追踪进展',
+        '学习心': '每周向销冠请教1次，记录学习笔记',
+        '全局': '画出完整的客户跟进流程图，定位自己的薄弱环节',
+        '获客力': '每周新增10个高质量客户线索，不依赖公司分配',
+        '建信力': '每次拜访前做好充分准备，研究客户背景',
+        '提问力': '训练"问三答一"法则，多听少说',
+        '呈现力': '练习3分钟电梯演讲，用场景化语言介绍产品',
+        '锁单力': '掌握至少3种非价格谈判筹码',
+        '经营力': '建立老客户定期维护计划，争取转介绍',
+        '知己': '3分钟内脱稿讲清产品核心价值和差异化',
+        '知彼': '绘制竞品对比图，客观承认对手优势',
+        '内部': '熟记内部资源申请流程，建立跨部门协作清单',
+        '知客': '画出重点客户的决策链图',
+        '知势': '每周阅读1篇行业报告，整理3条客户关心的话题'
+      };
 
-    const improvement = improvementMap[lowestSub] || improvementMap[weakest.name] || '找出得分最低的具体环节，针对性练习';
-    plan1.value = improvement;
-    plan2.value = `3周内将${lowestSub}维度提升至少5分`;
-    plan3.value = weakest.score < 30 ? '每天练习10分钟' : '每周重点突破1个环节';
-    plan4.value = '看课程/读手册 → 找师父指导 → 反复练习实践';
+      const improvement = improvementMap[lowestSub] || improvementMap[weakest.name] || `重点突破「${lowestSub}」，针对性强化训练`;
+      plan1.value = improvement;
+      plan2.value = `3周内将「${lowestSub}」维度提升至少5分`;
+      plan3.value = (weakest.score || 0) < 30 ? '每天练习10分钟，形成肌肉记忆' : '每周重点突破1个环节，逐步提升';
+      plan4.value = '大董课程/销售手册 → 找师父1对1指导 → 实战反复演练';
+    }
+    console.log('[1314] 提升计划已自动生成');
+  } catch (err) {
+    console.error('[1314] 自动生成提升计划出错:', err);
   }
 }
 
 function generatePoster() {
   const allPerfect = window.isAllPerfect;
-  const aScore = parseInt(document.getElementById('aScore').textContent);
-  const sScore = parseInt(document.getElementById('sScore').textContent);
-  const kScore = parseInt(document.getElementById('kScore').textContent);
+  const aScore = parseInt(document.getElementById('aScore').textContent) || 0;
+  const sScore = parseInt(document.getElementById('sScore').textContent) || 0;
+  const kScore = parseInt(document.getElementById('kScore').textContent) || 0;
   const name = userName || '___';
   const focus = selectedFocus;
-  const goalType = focus && dims && dims.find(d=>d.name===focus)?.score >= 40 ? '巩固强项' : '重点补足短板';
   const dims = [
     {name:'三心（态度）', score:aScore},
     {name:'流程6技（技能）', score:sScore},
     {name:'四知（知识）', score:kScore}
   ];
+  const goalType = focus && dims && dims.find(d=>d.name===focus)?.score >= 40 ? '巩固强项' : '重点补足短板';
 
   // 获取宣言文字（优先用编辑区内容，否则用显示区文本）
   const declEdit = document.getElementById('declarationEdit');
   const declDisplay = document.getElementById('declarationDisplay');
-  const declText = declEdit && declEdit.style.display !== 'none' ? declEdit.value : (declDisplay ? declDisplay.innerText : '');
+  let declText = declEdit && declEdit.style.display !== 'none' ? declEdit.value : (declDisplay ? declDisplay.innerText : '');
+  // 转义HTML特殊字符，防止海报中出现HTML标签
+  declText = declText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   // 如果已有海报，移除
   const existing = document.getElementById('posterModal');
