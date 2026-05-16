@@ -1290,7 +1290,8 @@ body {
       <div class="declaration-title" id="declarationTitle">— 1314 销冠宣言 —</div>
       <!-- 显示模式 -->
       <div class="declaration-text" id="declarationDisplay" style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.9);">
-        我是<span id="userNameDisplay">___</span>，我的1314能力报告：<br>
+        我是<span id="userNameDisplay">___</span>，<br>
+        我的1314销冠能力测评为<span id="levelBadge" style="color:var(--gold);font-weight:700;">金牌销售</span>。<br><br>
         态度层（三心）：<span id="aScore">0</span>/50<br>
         技能层（流程）：<span id="sScore">0</span>/50<br>
         知识层（四知）：<span id="kScore">0</span>/50<br><br>
@@ -1301,20 +1302,7 @@ body {
       <!-- 编辑模式（默认隐藏） -->
       <textarea class="declaration-text" id="declarationEdit" rows="8" style="display:none;width:100%;border:2px dashed rgba(255,255,255,0.3);border-radius:8px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);font-size:14px;line-height:1.8;font-family:inherit;resize:vertical;outline:none;padding:12px;" placeholder="宣言文字（可手动修改）"></textarea>
     </div>
-    <div style="margin-bottom:16px;text-align:center;">
-      <button id="editBtn" onclick="toggleEditDeclaration()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:white;padding:6px 16px;border-radius:16px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.2s;">
-        ✏️ 编辑宣言文字
-      </button>
-    </div>
-    <div style="margin-bottom:20px;">
-      <p style="font-size:14px;opacity:0.8;margin-bottom:12px;">👇 点击选择你要重点提升的维度：</p>
-      <div class="focus-selector" id="focusSelector">
-        <div class="focus-option" data-dim="三心（态度）" onclick="selectFocus(this)">💪 三心（态度）</div>
-        <div class="focus-option" data-dim="流程6技（技能）" onclick="selectFocus(this)">🗺️ 流程6技（技能）</div>
-        <div class="focus-option" data-dim="四知（知识）" onclick="selectFocus(this)">🧠 四知（知识）</div>
-      </div>
-    </div>
-    <div class="declaration-actions">
+    <div class="declaration-actions" style="margin-top:20px;">
       <button class="btn-primary" id="generateBtn" onclick="generatePoster()">📱 生成分享海报</button>
       <button class="btn-secondary" onclick="resetQuiz()" style="border-color:rgba(255,255,255,0.3);color:white;">🔄 重新测评</button>
     </div>
@@ -1330,7 +1318,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-8';
+  var v = 'v=20250516-9';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1660,9 +1648,9 @@ function showResult() {
 
   // 段位
   let segment = {};
-  if (totalScore >= 110) {
+  if (totalScore >= 120) {
     segment = { icon: '🏆', name: '金牌销售', level: '准销冠 · 精益求精', desc: '你的能力已经处于较高水平，核心优势明显。需要继续保持强项，同时向"教练型销售"转型——培养新人、带团队，把能力复制给更多人。', advice: '重点：学习带教技巧、提炼自己的销售方法论、开始关注管理和战略层面。' };
-  } else if (totalScore >= 80) {
+  } else if (totalScore >= 90) {
     segment = { icon: '🥈', name: '银牌销售', level: '中坚力量 · 强项突出', desc: '你已经具备了销售的基本功，有明确的强项。最关键的是找到你的"致命短板"并重点突破——往往是1-2个环节的薄弱拉低了整体结果。', advice: '重点：找到得分最低的维度，针对性练习。记住：木桶的短板决定水位。' };
   } else {
     segment = { icon: '🥉', name: '铜牌销售', level: '潜力新星 · 根基先行', desc: '你处于销售能力的起步或重建阶段。不用焦虑，先把基础打扎实。从态度和基础技能入手，稳扎稳打，3个月后你会看到明显进步。', advice: '重点：先修三心，再练流程，最后补四知。"心态不稳，动作变形"。' };
@@ -1693,6 +1681,7 @@ function showResult() {
   // 更新显示区
   const setTxt = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
   setTxt('userNameDisplay', userName || '___');
+  setTxt('levelBadge', segment.name);
   setTxt('aScore', aData.total);
   setTxt('sScore', sData.total);
   setTxt('kScore', kData.total);
@@ -1702,7 +1691,7 @@ function showResult() {
   // 同步编辑区textarea
   const declEdit = document.getElementById('declarationEdit');
   if (declEdit) {
-    declEdit.value = `我是${userName || '___'}，我的1314能力报告：\n态度层（三心）：${aData.total}/50\n技能层（流程）：${sData.total}/50\n知识层（四知）：${kData.total}/50\n\n我选择重点提升 ${focus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
+    declEdit.value = `我是${userName || '___'}，我的1314销冠能力测评为${segment.name}：\n态度层（三心）：${aData.total}/50\n技能层（流程）：${sData.total}/50\n知识层（四知）：${kData.total}/50\n\n我选择重点提升 ${focus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
   }
 
   // 自动生成提升计划
@@ -1747,7 +1736,10 @@ function updateFocusDisplay() {
   // 同步编辑区
   const declEdit = document.getElementById('declarationEdit');
   if (declEdit) {
-    declEdit.value = `我是${userName || '___'}，我的1314能力报告：\n态度层（三心）：${dims[0].score}/50\n技能层（流程）：${dims[1].score}/50\n知识层（四知）：${dims[2].score}/50\n\n我选择重点提升 ${selectedFocus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
+    // 获取当前段位
+    const total = dims.reduce((s,d) => s + d.score, 0);
+    const level = total >= 120 ? '金牌销售' : total >= 90 ? '银牌销售' : '铜牌销售';
+    declEdit.value = `我是${userName || '___'}，我的1314销冠能力测评为${level}：\n态度层（三心）：${dims[0].score}/50\n技能层（流程）：${dims[1].score}/50\n知识层（四知）：${dims[2].score}/50\n\n我选择重点提升 ${selectedFocus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
   }
 }
 
@@ -1770,7 +1762,11 @@ function toggleEditDeclaration() {
     // 保存：把textarea内容同步回div显示
     const lines = edit.value.split('\n');
     display.innerHTML = lines.map((line, i) => {
-      if (i === 0) return '我是' + (line.match(/我是(.+?)，/)?.[1] || userName || '___') + '，我的1314能力报告：<br>';
+      if (i === 0) {
+        const nameMatch = line.match(/我是(.+?)，/);
+        const levelMatch = line.match(/测评为(.+?)：/);
+        return '我是' + (nameMatch?.[1] || userName || '___') + '，<br>我的1314销冠能力测评为<span style="color:var(--gold);font-weight:700;">' + (levelMatch?.[1] || '金牌销售') + '</span>。<br>';
+      }
       if (line.includes('态度层')) return '态度层（三心）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
       if (line.includes('技能层')) return '技能层（流程）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
       if (line.includes('知识层')) return '知识层（四知）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
@@ -1873,59 +1869,62 @@ function generatePoster() {
   const existing = document.getElementById('posterModal');
   if (existing) existing.remove();
 
+  // 将"1314一生一世做销冠"中的数字变红
+  const redNum = (txt) => txt.replace(/1314，一生一世做销冠！/g, '<span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">3</span><span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">4</span>，一生一世做销冠！');
+
   // 创建海报容器
   const posterHTML = allPerfect ? `
-    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#1A1A2E 0%,#2D1B3D 50%,#3D2352 100%);border-radius:20px;padding:32px 28px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
+    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#1A1A2E 0%,#2D1B3D 50%,#3D2352 100%);border-radius:20px;padding:36px 32px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(200,16,46,0.3) 0%,transparent 70%);pointer-events:none;"></div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:3px;color:#FF8A9A;text-transform:uppercase;margin-bottom:8px;">🏆 GOLDEN SALES 🏆</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px;">恭喜！已达满分成就</div>
-      <div style="font-size:32px;font-weight:900;color:white;margin:12px 0;">${name}</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:20px;">我的1314能力报告</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;">
-        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 8px;">
-          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;">💪 态度</div>
-          <div style="font-size:22px;font-weight:900;color:#FF8A9A;">${aScore}</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.4);">/50</div>
+      <div style="font-size:14px;font-weight:700;letter-spacing:3px;color:#FF8A9A;text-transform:uppercase;margin-bottom:10px;">🏆 GOLDEN SALES 🏆</div>
+      <div style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:6px;">恭喜！已达满分成就</div>
+      <div style="font-size:36px;font-weight:900;color:white;margin:14px 0;">${name}</div>
+      <div style="font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:22px;">我的1314能力报告</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 10px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">💪 态度</div>
+          <div style="font-size:26px;font-weight:900;color:#FF8A9A;">${aScore}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);">/50</div>
         </div>
-        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 8px;">
-          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;">🗺️ 技能</div>
-          <div style="font-size:22px;font-weight:900;color:#A5B4FC;">${sScore}</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.4);">/50</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 10px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">🗺️ 技能</div>
+          <div style="font-size:26px;font-weight:900;color:#A5B4FC;">${sScore}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);">/50</div>
         </div>
-        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 8px;">
-          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;">🧠 知识</div>
-          <div style="font-size:22px;font-weight:900;color:#FCD34D;">${kScore}</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.4);">/50</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 10px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">🧠 知识</div>
+          <div style="font-size:26px;font-weight:900;color:#FCD34D;">${kScore}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);">/50</div>
         </div>
       </div>
-      <div style="background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.5);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;color:#FCD34D;font-weight:600;">
+      <div style="background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.5);border-radius:14px;padding:16px;margin-bottom:22px;font-size:15px;color:#FCD34D;font-weight:600;">
         🎉 我已具备销冠潜质，请大家拭目以待！<br>
-        <span style="color:rgba(255,255,255,0.8);font-size:12px;font-weight:400;">1314 · 销冠能力模型</span>
+        <span style="color:rgba(255,255,255,0.8);font-size:14px;font-weight:400;"><span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">3</span><span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">4</span> · 销冠能力模型</span>
       </div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;">—— 大董老师 · 1314销售能力测评</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:14px;">—— 大董老师 · 1314销售能力测评</div>
     </div>
   ` : `
-    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#C8102E 0%,#9B0B22 50%,#6B0F18 100%);border-radius:20px;padding:32px 28px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
+    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#C8102E 0%,#9B0B22 50%,#6B0F18 100%);border-radius:20px;padding:36px 32px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
       <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,0.4) 0%,transparent 70%);pointer-events:none;"></div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:8px;">大董销售体系 · 1314能力模型</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:4px;">我的1314销冠宣言</div>
-      <div style="font-size:28px;font-weight:900;color:white;margin:12px 0;">${name}</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;">
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 8px;">
-          <div style="font-size:22px;font-weight:900;color:white;">${aScore}<span style="font-size:12px;color:rgba(255,255,255,0.6);">/50</span></div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:4px;">三心态度</div>
+      <div style="font-size:14px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:10px;">大董销售体系 · 1314能力模型</div>
+      <div style="font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:6px;">我的1314销冠宣言</div>
+      <div style="font-size:32px;font-weight:900;color:white;margin:14px 0;">${name}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 10px;">
+          <div style="font-size:26px;font-weight:900;color:white;">${aScore}<span style="font-size:14px;color:rgba(255,255,255,0.6);">/50</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">三心态度</div>
         </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 8px;">
-          <div style="font-size:22px;font-weight:900;color:white;">${sScore}<span style="font-size:12px;color:rgba(255,255,255,0.6);">/50</span></div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:4px;">流程技能</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 10px;">
+          <div style="font-size:26px;font-weight:900;color:white;">${sScore}<span style="font-size:14px;color:rgba(255,255,255,0.6);">/50</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">流程技能</div>
         </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 8px;">
-          <div style="font-size:22px;font-weight:900;color:white;">${kScore}<span style="font-size:12px;color:rgba(255,255,255,0.6);">/50</span></div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:4px;">四知知识</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 10px;">
+          <div style="font-size:26px;font-weight:900;color:white;">${kScore}<span style="font-size:14px;color:rgba(255,255,255,0.6);">/50</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">四知知识</div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;font-size:12px;line-height:1.9;white-space:pre-wrap;color:rgba(255,255,255,0.9);">${declText}</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px;">—— 大董老师 · 1314销售能力测评</div>
+      <div style="background:rgba(255,255,255,0.12);border-radius:14px;padding:16px;margin-bottom:18px;text-align:left;font-size:14px;line-height:2;white-space:pre-wrap;color:rgba(255,255,255,0.9);">${redNum(declText)}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:10px;">—— 大董老师 · 1314销售能力测评</div>
     </div>
   `;
 
