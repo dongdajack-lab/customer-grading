@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=11')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=11');
+    location.replace(location.pathname + location.search + sep + 'v=12');
   }
 })();
 </script>
@@ -722,46 +722,120 @@ body {
 .result-radar-wrap h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; text-align: center; }
 .radar-wrap { position: relative; max-width: 360px; margin: 0 auto; }
 .segment-card {
-  background: linear-gradient(135deg, var(--black) 0%, #2D1B3D 50%, var(--red-dark) 100%);
+  background: linear-gradient(160deg, #1a1a2e 0%, #2D1B3D 40%, #9B0B22 100%);
   border-radius: 20px;
-  padding: 40px 32px;
-  box-shadow: var(--shadow-lg);
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(200,16,46,0.25), 0 0 0 3px rgba(201,168,76,0.3), 0 0 0 6px rgba(26,26,46,0.8);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   color: white;
   text-align: center;
   position: relative;
   overflow: hidden;
-  max-width: 560px;
+  max-width: 540px;
   margin: 0 auto;
 }
 .segment-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(200,16,46,0.3) 0%, transparent 60%);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 50%, rgba(201,168,76,0.1) 100%);
   pointer-events: none;
+  z-index: 1;
 }
-.segment-badge {
-  text-align: center;
-  margin-bottom: 20px;
+.segment-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 56px;
+  background: rgba(0,0,0,0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+.segment-poster-inner {
   position: relative;
+  z-index: 3;
+  padding: 36px 32px 72px;
+}
+.segment-watermark {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 180px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.03);
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
+  user-select: none;
+}
+.segment-badge-wrap {
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 3;
+}
+.segment-badge-icon {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
 }
 .segment-poster-name {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 900;
-  color: white;
-  margin-bottom: 4px;
+  color: #FFD700;
+  margin-bottom: 6px;
   position: relative;
+  z-index: 3;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
 }
-.segment-icon { font-size: 48px; margin-bottom: 8px; }
-.segment-name { font-size: 28px; font-weight: 900; color: white; }
-.segment-level { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; }
-.segment-desc { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 16px; position: relative; }
-.segment-advice { background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.4); border-radius: 12px; padding: 14px; font-size: 13px; color: #FCD34D; line-height: 1.7; position: relative; }
-.segment-advice strong { color: var(--gold); }
-.segment-advice strong { color: #8B6914; }
+.segment-name { font-size: 32px; font-weight: 900; color: white; position: relative; z-index: 3; }
+.segment-level { font-size: 15px; color: rgba(255,255,255,0.7); margin-top: 6px; position: relative; z-index: 3; }
+.segment-divider {
+  width: 60%;
+  height: 1px;
+  margin: 20px auto;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent);
+  position: relative;
+  z-index: 3;
+}
+.segment-desc { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.8; margin-bottom: 18px; position: relative; z-index: 3; }
+.segment-advice {
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #FCD34D;
+  line-height: 1.7;
+  position: relative;
+  z-index: 3;
+  text-align: left;
+}
+.segment-advice strong { color: #FFD700; }
+.segment-brand {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 4;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+.segment-brand .brand-logo { font-weight: 900; color: #C8102E; }
+.segment-brand .brand-url { color: rgba(255,255,255,0.5); font-size: 11px; }
+.segment-card.gold { box-shadow: 0 20px 60px rgba(255,215,0,0.15), 0 0 0 3px rgba(255,215,0,0.4), 0 0 0 6px rgba(26,26,46,0.8); }
+.segment-card.silver { background: linear-gradient(160deg, #1a1a2e 0%, #1a2a3d 40%, #36454F 100%); }
+.segment-card.silver .segment-poster-name { color: #E8E8E8; text-shadow: 0 0 20px rgba(192,192,192,0.3); }
+.segment-card.bronze { background: linear-gradient(160deg, #1a1a2e 0%, #2D1B3D 40%, #5C3317 100%); }
+.segment-card.bronze .segment-poster-name { color: #CD7F32; text-shadow: 0 0 20px rgba(205,127,50,0.3); }
 
 /* 子维度分析 */
 .sub-detail-section {
@@ -862,7 +936,110 @@ body {
 /* 隐藏按钮 disabled 样式 */
 .btn-nav { cursor: pointer; }
 .btn-nav:disabled { cursor: not-allowed; }
-</style>
+
+/* ===== 分享弹层 ===== */
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.share-overlay.show { opacity: 1; pointer-events: auto; }
+.share-modal {
+  background: #FFF;
+  border-radius: 20px;
+  width: 340px;
+  max-width: 90vw;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  transform: translateY(20px);
+  transition: transform 0.3s;
+}
+.share-overlay.show .share-modal { transform: translateY(0); }
+.share-modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--black);
+  margin-bottom: 8px;
+}
+.share-modal-desc {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.share-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.share-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 2px solid #EEE;
+  border-radius: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: var(--gray);
+  min-width: 72px;
+}
+.share-btn:hover { border-color: var(--red); color: var(--red); }
+.share-btn-icon { font-size: 28px; }
+.share-btn-ok {
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.share-btn-ok:hover { background: var(--red-dark); }
+
+/* ===== 海报下方分享按钮 ===== */
+.poster-share-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.poster-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #DDD;
+  background: white;
+  font-size: 13px;
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.poster-share-btn:hover { border-color: var(--red); color: var(--red); }
+.poster-share-btn .s-icon { font-size: 16px; }
+@media (max-width: 768px) {
+  .share-btns { gap: 8px; }
+  .share-btn { padding: 10px 12px; min-width: 60px; }
+}
+
+  </style>
 </head>
 <body>
 
@@ -898,6 +1075,7 @@ body {
   <div class="hero-actions">
     <a href="#quiz" class="btn-primary" onclick="return startQuizFromHero();">🎯 开始30题自测</a>
     <a href="#model" class="btn-secondary">📖 了解模型详情</a>
+    <a href="#quiz" class="btn-secondary" style="border-color:var(--gold);color:var(--gold);" onclick="alert('完成测评后，即可邀请好友PK！');return startQuizFromHero();">⚔️ 邀请PK</a>
   </div>
 </section>
 
@@ -1225,6 +1403,12 @@ body {
     <div style="text-align:center;margin-top:16px;">
       <button class="btn-primary" onclick="downloadPoster()" style="font-size:15px;padding:12px 28px;">📥 保存为图片</button>
     </div>
+    <div class="poster-share-row">
+      <button class="poster-share-btn" onclick="shareWechat()"><span class="s-icon">💬</span> 微信分享</button>
+      <button class="poster-share-btn" onclick="shareWeibo()"><span class="s-icon">🔴</span> 微博分享</button>
+      <button class="poster-share-btn" onclick="copyLink()"><span class="s-icon">🔗</span> 复制链接</button>
+      <button class="poster-share-btn" onclick="showInvitePK()" style="background:var(--red);color:white;border-color:var(--red);"><span class="s-icon">⚔️</span> 邀请PK</button>
+    </div>
   </div>
 
   <div class="improve-section">
@@ -1259,6 +1443,68 @@ body {
   </div>
 </section>
 
+
+<!-- 邀请好友PK弹层 -->
+<div class="share-overlay" id="invitePKOverlay">
+  <div class="share-modal" style="max-width:380px;">
+    <div style="position:absolute;top:16px;right:16px;cursor:pointer;font-size:20px;" onclick="hideInvitePK()">✕</div>
+    <div class="share-modal-title">⚔️ 邀请好友PK销冠段位</div>
+    <div class="share-modal-desc">把你的能力报告发给朋友，看看谁的销冠段位更高！</div>
+    
+    <div style="background:linear-gradient(135deg,#1a1a2e,#9B0B22);border-radius:16px;padding:24px 20px;color:white;text-align:center;margin-bottom:20px;">
+      <div style="font-size:13px;opacity:0.7;margin-bottom:8px;">你的当前段位</div>
+      <div id="pkMySegment" style="font-size:28px;font-weight:900;margin-bottom:4px;">🏆 金牌销售</div>
+      <div id="pkMyScore" style="font-size:16px;opacity:0.8;">总分 125 / 150</div>
+    </div>
+    
+    <div style="font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:16px;text-align:left;">
+      <strong style="color:var(--black);">PK规则：</strong><br>
+      ① 把海报或链接发给朋友<br>
+      ② 朋友扫码/打开链接完成测评<br>
+      ③ 双方段位PK，输的人请赢的人喝奶茶 ☕
+    </div>
+    
+    <div class="share-btns" style="margin-bottom:16px;">
+      <button class="share-btn" onclick="generateShareCard()">
+        <span class="share-btn-icon">🖼️</span>
+        <span>生成PK海报</span>
+      </button>
+      <button class="share-btn" onclick="shareWechat()">
+        <span class="share-btn-icon">💬</span>
+        <span>发微信</span>
+      </button>
+      <button class="share-btn" onclick="copyLink()">
+        <span class="share-btn-icon">🔗</span>
+        <span>复制链接</span>
+      </button>
+    </div>
+    <div style="font-size:12px;color:#AAA;">💡 提示：保存海报后，发给朋友微信/朋友圈即可</div>
+  </div>
+</div>
+
+<!-- 分享解锁弹层 -->
+<div class="share-overlay" id="shareOverlay">
+  <div class="share-modal">
+    <div class="share-modal-title">🎁 解锁专属提升方案</div>
+    <div class="share-modal-desc">分享你的能力海报到朋友圈或销售群，<br>帮助更多同行提升，也让自己更有动力！</div>
+    <div class="share-btns">
+      <button class="share-btn" onclick="shareWechat()">
+        <span class="share-btn-icon">💬</span>
+        <span>微信</span>
+      </button>
+      <button class="share-btn" onclick="shareWeibo()">
+        <span class="share-btn-icon">🔴</span>
+        <span>微博</span>
+      </button>
+      <button class="share-btn" onclick="copyLink()">
+        <span class="share-btn-icon">🔗</span>
+        <span>复制链接</span>
+      </button>
+    </div>
+    <button class="share-btn-ok" onclick="unlockContent()">✅ 我已分享，查看方案</button>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <p><strong>大董销售体系</strong> · 天地人销售管理体系</p>
@@ -1268,7 +1514,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-11';
+  var v = 'v=20250516-12';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1597,23 +1843,43 @@ function showResult() {
 
   // 段位
   let segment = {};
+  let segClass = '';
+  let medalIcon = '';
   if (totalScore >= 120) {
     segment = { icon: '🏆', name: '金牌销售', level: '准销冠 · 精益求精', desc: '你的能力已经处于较高水平，核心优势明显。需要继续保持强项，同时向"教练型销售"转型——培养新人、带团队，把能力复制给更多人。', advice: '重点：学习带教技巧、提炼自己的销售方法论、开始关注管理和战略层面。' };
+    segClass = 'gold';
+    medalIcon = '🏆';
   } else if (totalScore >= 90) {
     segment = { icon: '🥈', name: '银牌销售', level: '中坚力量 · 强项突出', desc: '你已经具备了销售的基本功，有明确的强项。最关键的是找到你的"致命短板"并重点突破——往往是1-2个环节的薄弱拉低了整体结果。', advice: '重点：找到得分最低的维度，针对性练习。记住：木桶的短板决定水位。' };
+    segClass = 'silver';
+    medalIcon = '🥈';
   } else {
     segment = { icon: '🥉', name: '铜牌销售', level: '潜力新星 · 根基先行', desc: '你处于销售能力的起步或重建阶段。不用焦虑，先把基础打扎实。从态度和基础技能入手，稳扎稳打，3个月后你会看到明显进步。', advice: '重点：先修三心，再练流程，最后补四知。"心态不稳，动作变形"。' };
+    segClass = 'bronze';
+    medalIcon = '🥉';
   }
 
-  document.getElementById('segmentCard').innerHTML = `
-    <div class="segment-poster-name">${userName || '___'}</div>
-    <div class="segment-badge">
-      <div class="segment-icon">${segment.icon}</div>
+  // 更新海报样式
+  const card = document.getElementById('segmentCard');
+  card.className = 'segment-card ' + segClass;
+  card.innerHTML = `
+    <div class="segment-watermark">1314</div>
+    <div class="segment-poster-inner">
+      <div class="segment-badge-wrap">
+        <div class="segment-badge-icon">${medalIcon}</div>
+        <div class="segment-poster-name">${userName || '___'}</div>
+      </div>
       <div class="segment-name">${segment.name}</div>
       <div class="segment-level">${segment.level}</div>
+      <div class="segment-divider"></div>
+      <p class="segment-desc">${segment.desc}</p>
+      <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
     </div>
-    <p class="segment-desc">${segment.desc}</p>
-    <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
+    <div class="segment-brand">
+      <span class="brand-logo">大董销售体系</span>
+      <span class="brand-divider">·</span>
+      <span class="brand-url">dongdajack-lab.github.io/customer-grading/ask-1314.html</span>
+    </div>
   `;
 
   // 自动生成提升计划
@@ -1715,6 +1981,77 @@ function resetQuiz() {
   document.getElementById('quizContainer').style.display = 'none';
   document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
 }
+function shareWechat() {
+  // 微信分享：提示用户使用微信内置分享功能
+  showShareTip('微信', '请点击右上角 · 选择"分享到朋友圈"或"发送给朋友"');
+}
+
+function shareWeibo() {
+  const url = encodeURIComponent(location.href);
+  const title = encodeURIComponent('我的1314销冠能力测评结果：' + (userName || '') + '，快来测测你的销售段位！');
+  window.open('https://service.weibo.com/share/share.php?url=' + url + '&title=' + title, '_blank');
+}
+
+function copyLink() {
+  const text = location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('✅ 链接已复制，快去分享吧！');
+    });
+  } else {
+    const input = document.createElement('input');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    alert('✅ 链接已复制，快去分享吧！');
+  }
+}
+
+function showShareTip(platform, msg) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = '<div style="background:#FFF;border-radius:16px;padding:28px 24px;text-align:center;max-width:300px;"><div style="font-size:16px;font-weight:700;margin-bottom:12px;">' + platform + '分享指引</div><div style="font-size:13px;color:#4A4A5A;line-height:1.8;margin-bottom:20px;">' + msg + '</div><button onclick="this.parentElement.parentElement.remove()" style="background:#C8102E;color:#FFF;border:none;padding:10px 32px;border-radius:20px;font-size:14px;cursor:pointer;">我知道了</button></div>';
+  document.body.appendChild(overlay);
+}
+
+function unlockContent() {
+  const overlay = document.getElementById('shareOverlay');
+  if (overlay) overlay.classList.remove('show');
+  // 显示提升计划区域
+  const improve = document.querySelector('.improve-section');
+  if (improve) improve.style.display = 'block';
+  // 显示重新测评按钮
+  const resetBtn = document.querySelector('[onclick="resetQuiz()"]');
+  if (resetBtn && resetBtn.parentElement) resetBtn.parentElement.style.display = 'block';
+  // 更新PK段位信息
+  updatePKInfo();
+}
+
+function updatePKInfo() {
+  const aData = getScore('A');
+  const sData = getScore('S');
+  const kData = getScore('K');
+  const total = aData.total + sData.total + kData.total;
+  const segEl = document.getElementById('pkMySegment');
+  const scoreEl = document.getElementById('pkMyScore');
+  if (segEl && scoreEl) {
+    let segName = '🥉 潜力新星';
+    let segIcon = '🥉';
+    if (total >= 120) { segName = '🏆 金牌销售'; segIcon = '🏆'; }
+    else if (total >= 90) { segName = '🥈 银牌销售'; segIcon = '🥈'; }
+    segEl.textContent = segIcon + ' ' + segName.replace(/[🥇🥈🥉🏆]/g, '').trim();
+    scoreEl.textContent = '总分 ' + total + ' / 150';
+  }
+}
+
+// 页面加载时，默认隐藏提升计划和重新测评（等分享后解锁）
+
+
+  
+// 页面加载时隐藏提升计划，等分享后解锁
+initShareLock();
 </script>
 </body>
 </html>
