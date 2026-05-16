@@ -4,7 +4,7 @@
 <script>
 // URL强制缓存清除：无版本参数时自动跳转
 (function(){
-  if (!location.search.includes('v=9')) {
+  if (!location.search.includes('v=10')) {
     var sep = location.search ? '&' : '?';
     location.replace(location.pathname + location.search + sep + 'v=9');
   }
@@ -723,23 +723,43 @@ body {
 .result-radar-wrap h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; text-align: center; }
 .radar-wrap { position: relative; max-width: 360px; margin: 0 auto; }
 .segment-card {
-  background: var(--white);
+  background: linear-gradient(135deg, var(--black) 0%, #2D1B3D 50%, var(--red-dark) 100%);
   border-radius: 20px;
-  padding: 28px;
-  box-shadow: var(--shadow);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.segment-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(200,16,46,0.3) 0%, transparent 60%);
+  pointer-events: none;
 }
 .segment-badge {
   text-align: center;
   margin-bottom: 20px;
+  position: relative;
+}
+.segment-poster-name {
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 4px;
+  position: relative;
 }
 .segment-icon { font-size: 48px; margin-bottom: 8px; }
-.segment-name { font-size: 22px; font-weight: 900; }
-.segment-level { font-size: 13px; color: var(--gray); margin-top: 4px; }
-.segment-desc { font-size: 14px; color: var(--gray); line-height: 1.7; margin-bottom: 16px; }
-.segment-advice { background: var(--gold-light); border-radius: 12px; padding: 14px; font-size: 13px; color: #5D4037; line-height: 1.7; }
+.segment-name { font-size: 28px; font-weight: 900; color: white; }
+.segment-level { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+.segment-desc { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 16px; position: relative; }
+.segment-advice { background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.4); border-radius: 12px; padding: 14px; font-size: 13px; color: #FCD34D; line-height: 1.7; position: relative; }
+.segment-advice strong { color: var(--gold); }
 .segment-advice strong { color: #8B6914; }
 
 /* 子维度分析 */
@@ -808,67 +828,6 @@ body {
 .improve-input:focus { outline: none; border-color: var(--red); }
 .improve-placeholder { color: #AAA; font-size: 12px; }
 
-/* 宣言 */
-.declaration-wrap {
-  background: linear-gradient(135deg, var(--black), var(--red-dark));
-  border-radius: 24px;
-  padding: 48px;
-  text-align: center;
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-.declaration-wrap::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(200,16,46,0.3) 0%, transparent 60%);
-}
-.declaration-wrap h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; position: relative; }
-.declaration-wrap p { opacity: 0.7; margin-bottom: 24px; font-size: 14px; position: relative; }
-.declaration-card {
-  background: rgba(255,255,255,0.1);
-  border: 2px solid rgba(200,16,46,0.5);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 24px;
-  position: relative;
-}
-.declaration-title { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 12px; }
-.declaration-text { font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.9); }
-.declaration-text strong { color: var(--gold); }
-.declaration-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
-.declaration-actions .btn-primary { background: var(--gold); color: var(--black); }
-.declaration-actions .btn-primary:hover { background: #B8942F; }
-
-/* 选择项样式 */
-.focus-selector {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-.focus-option {
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: 2px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.1);
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.focus-option:hover {
-  border-color: var(--gold);
-  background: rgba(255,255,255,0.2);
-}
-.focus-option.selected {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: var(--black);
-}
 
 /* ===== 页脚 ===== */
 .footer {
@@ -915,7 +874,6 @@ body {
       <li><a href="#model">能力模型</a></li>
       <li><a href="#quiz">开始测评</a></li>
       <li><a href="#result">测评结果</a></li>
-      <li><a href="#declaration" class="nav-cta">生成宣言</a></li>
     </ul>
   </div>
 </nav>
@@ -1292,29 +1250,8 @@ body {
     </div>
   </div>
 
-  <div class="declaration-wrap" id="declarationWrap">
-    <h3>🏆 我的1314销冠宣言</h3>
-    <p>生成专属宣言海报，分享你的销冠决心</p>
-    <div class="declaration-card" id="declarationCard">
-      <div class="declaration-title" id="declarationTitle">— 1314 销冠宣言 —</div>
-      <!-- 显示模式 -->
-      <div class="declaration-text" id="declarationDisplay" style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.9);">
-        我是<span id="userNameDisplay">___</span>，<br>
-        我的1314销冠能力测评为<span id="levelBadge" style="color:var(--gold);font-weight:700;">金牌销售</span>。<br><br>
-        态度层（三心）：<span id="aScore">0</span>/50<br>
-        技能层（流程）：<span id="sScore">0</span>/50<br>
-        知识层（四知）：<span id="kScore">0</span>/50<br><br>
-        我选择重点提升 <span id="focusDim">___</span>，<br>
-        目标在<span id="goalPeriod">3</span>周内 <span id="focusGoal">重点补足短板</span>。<br><br>
-        <strong style="color:var(--gold);">1314，一生一世做销冠！💪</strong>
-      </div>
-      <!-- 编辑模式（默认隐藏） -->
-      <textarea class="declaration-text" id="declarationEdit" rows="8" style="display:none;width:100%;border:2px dashed rgba(255,255,255,0.3);border-radius:8px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);font-size:14px;line-height:1.8;font-family:inherit;resize:vertical;outline:none;padding:12px;" placeholder="宣言文字（可手动修改）"></textarea>
-    </div>
-    <div class="declaration-actions" style="margin-top:20px;">
-      <button class="btn-primary" id="generateBtn" onclick="generatePoster()">📱 生成分享海报</button>
-      <button class="btn-secondary" onclick="resetQuiz()" style="border-color:rgba(255,255,255,0.3);color:white;">🔄 重新测评</button>
-    </div>
+  <div style="text-align:center;margin-top:24px;">
+    <button class="btn-primary" onclick="resetQuiz()" style="font-size:16px;padding:14px 36px;">🔄 重新测评</button>
   </div>
 </section>
 
@@ -1327,7 +1264,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-9';
+  var v = 'v=20250516-10';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1382,7 +1319,6 @@ let currentQ = 0;
 let answers = new Array(questions.length).fill(null);
 let radarChart = null;
 let userName = '';
-let selectedFocus = '';
 
 // 颜色映射
 const dimColor = { A: '#C8102E', S: '#4F46E5', K: '#C9A84C' };
@@ -1666,6 +1602,7 @@ function showResult() {
   }
 
   document.getElementById('segmentCard').innerHTML = `
+    <div class="segment-poster-name">${userName || '___'}</div>
     <div class="segment-badge">
       <div class="segment-icon">${segment.icon}</div>
       <div class="segment-name">${segment.name}</div>
@@ -1675,127 +1612,17 @@ function showResult() {
     <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
   `;
 
-  // 宣言填充
+  // 自动生成提升计划
   const dims = [{name:'三心（态度）', score:aData.total}, {name:'流程6技（技能）', score:sData.total}, {name:'四知（知识）', score:kData.total}];
   const weakest = dims.reduce((a, b) => a.score < b.score ? a : b);
   const strongest = dims.reduce((a, b) => a.score > b.score ? a : b);
-  const allPerfect = dims.every(d => d.score >= 40); // 全40分以上=满分
-
-  // 标记全局满分状态
-  window.isAllPerfect = allPerfect;
-
-  const focus = allPerfect ? strongest.name : weakest.name;
-  const goalType = allPerfect ? '巩固强项' : '重点补足短板';
-
-  // 更新显示区
-  const setTxt = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
-  setTxt('userNameDisplay', userName || '___');
-  setTxt('levelBadge', segment.name);
-  setTxt('aScore', aData.total);
-  setTxt('sScore', sData.total);
-  setTxt('kScore', kData.total);
-  setTxt('focusDim', focus);
-  setTxt('focusGoal', goalType);
-
-  // 同步编辑区textarea
-  const declEdit = document.getElementById('declarationEdit');
-  if (declEdit) {
-    declEdit.value = `我是${userName || '___'}，我的1314销冠能力测评为${segment.name}：\n态度层（三心）：${aData.total}/50\n技能层（流程）：${sData.total}/50\n知识层（四知）：${kData.total}/50\n\n我选择重点提升 ${focus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
-  }
-
-  // 自动生成提升计划
+  const allPerfect = dims.every(d => d.score >= 40);
   autoGeneratePlan(weakest, strongest, allPerfect, dims);
-
-  // 默认选中维度
-  selectedFocus = focus;
-  updateFocusDisplay();
-
-  // 更新选择按钮状态
-  document.querySelectorAll('.focus-option').forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.dim === selectedFocus);
-  });
 
   // 滚动到结果
   document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
 }
 
-function selectFocus(el) {
-  selectedFocus = el.dataset.dim;
-  document.querySelectorAll('.focus-option').forEach(btn => {
-    btn.classList.toggle('selected', btn === el);
-  });
-  updateFocusDisplay();
-}
-
-function updateFocusDisplay() {
-  const focusEl = document.getElementById('focusDim');
-  const goalEl = document.getElementById('focusGoal');
-  if (focusEl) focusEl.textContent = selectedFocus;
-
-  // 根据选择维度确定目标
-  const dims = [
-    {name:'三心（态度）', score:parseInt(document.getElementById('aScore')?.textContent || 0)},
-    {name:'流程6技（技能）', score:parseInt(document.getElementById('sScore')?.textContent || 0)},
-    {name:'四知（知识）', score:parseInt(document.getElementById('kScore')?.textContent || 0)}
-  ];
-  const selectedDim = dims.find(d => d.name === selectedFocus);
-  const goalType = selectedDim && selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
-  if (goalEl) goalEl.textContent = goalType;
-
-  // 同步编辑区
-  const declEdit = document.getElementById('declarationEdit');
-  if (declEdit) {
-    // 获取当前段位
-    const total = dims.reduce((s,d) => s + d.score, 0);
-    const level = total >= 120 ? '金牌销售' : total >= 90 ? '银牌销售' : '铜牌销售';
-    declEdit.value = `我是${userName || '___'}，我的1314销冠能力测评为${level}：\n态度层（三心）：${dims[0].score}/50\n技能层（流程）：${dims[1].score}/50\n知识层（四知）：${dims[2].score}/50\n\n我选择重点提升 ${selectedFocus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
-  }
-}
-
-let isEditingDeclaration = false;
-function toggleEditDeclaration() {
-  const display = document.getElementById('declarationDisplay');
-  const edit = document.getElementById('declarationEdit');
-  const btn = document.getElementById('editBtn');
-  if (!display || !edit || !btn) return;
-
-  isEditingDeclaration = !isEditingDeclaration;
-  if (isEditingDeclaration) {
-    // 进入编辑模式：显示textarea，隐藏div
-    display.style.display = 'none';
-    edit.style.display = 'block';
-    btn.textContent = '✅ 保存修改';
-    btn.style.background = 'rgba(16,185,129,0.3)';
-    btn.style.borderColor = 'rgba(16,185,129,0.6)';
-  } else {
-    // 保存：把textarea内容同步回div显示
-    const lines = edit.value.split('\n');
-    display.innerHTML = lines.map((line, i) => {
-      if (i === 0) {
-        const nameMatch = line.match(/我是(.+?)，/);
-        const levelMatch = line.match(/测评为(.+?)：/);
-        return '我是' + (nameMatch?.[1] || userName || '___') + '，<br>我的1314销冠能力测评为<span style="color:var(--gold);font-weight:700;">' + (levelMatch?.[1] || '金牌销售') + '</span>。<br>';
-      }
-      if (line.includes('态度层')) return '态度层（三心）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
-      if (line.includes('技能层')) return '技能层（流程）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
-      if (line.includes('知识层')) return '知识层（四知）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
-      if (line.includes('我选择')) {
-        const focusMatch = line.match(/重点提升\s*(.+?)，/);
-        const goalMatch = line.match(/周内\s*(.+?)。/);
-        return '我选择重点提升 ' + (focusMatch?.[1] || selectedFocus || '___') + '，<br>目标在3周内 ' + (goalMatch?.[1] || '重点补足短板') + '。<br>';
-      }
-      if (line.includes('一生一世')) return '<strong style="color:var(--gold);">' + line + '</strong>';
-      if (line.trim() === '') return '<br>';
-      return line + '<br>';
-    }).join('');
-
-    display.style.display = 'block';
-    edit.style.display = 'none';
-    btn.textContent = '✏️ 编辑宣言文字';
-    btn.style.background = 'rgba(255,255,255,0.1)';
-    btn.style.borderColor = 'rgba(255,255,255,0.3)';
-  }
-}
 
 function autoGeneratePlan(weakest, strongest, allPerfect, dims) {
   try {
@@ -1853,134 +1680,6 @@ function autoGeneratePlan(weakest, strongest, allPerfect, dims) {
   }
 }
 
-function generatePoster() {
-  const allPerfect = window.isAllPerfect;
-  const aScore = parseInt(document.getElementById('aScore').textContent) || 0;
-  const sScore = parseInt(document.getElementById('sScore').textContent) || 0;
-  const kScore = parseInt(document.getElementById('kScore').textContent) || 0;
-  const name = userName || '___';
-  const focus = selectedFocus;
-  const dims = [
-    {name:'三心（态度）', score:aScore},
-    {name:'流程6技（技能）', score:sScore},
-    {name:'四知（知识）', score:kScore}
-  ];
-  const goalType = focus && dims && dims.find(d=>d.name===focus)?.score >= 40 ? '巩固强项' : '重点补足短板';
-
-  // 获取宣言文字（优先用编辑区内容，否则用显示区文本）
-  const declEdit = document.getElementById('declarationEdit');
-  const declDisplay = document.getElementById('declarationDisplay');
-  let declText = declEdit && declEdit.style.display !== 'none' ? declEdit.value : (declDisplay ? declDisplay.innerText : '');
-  // 转义HTML特殊字符，防止海报中出现HTML标签
-  declText = declText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  // 如果已有海报，移除
-  const existing = document.getElementById('posterModal');
-  if (existing) existing.remove();
-
-  // 将"1314一生一世做销冠"中的数字变红
-  const redNum = (txt) => txt.replace(/1314，一生一世做销冠！/g, '<span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">3</span><span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">4</span>，一生一世做销冠！');
-
-  // 创建海报容器
-  const posterHTML = allPerfect ? `
-    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#1A1A2E 0%,#2D1B3D 50%,#3D2352 100%);border-radius:20px;padding:36px 32px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(200,16,46,0.3) 0%,transparent 70%);pointer-events:none;"></div>
-      <div style="font-size:14px;font-weight:700;letter-spacing:3px;color:#FF8A9A;text-transform:uppercase;margin-bottom:10px;">🏆 GOLDEN SALES 🏆</div>
-      <div style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:6px;">恭喜！已达满分成就</div>
-      <div style="font-size:36px;font-weight:900;color:white;margin:14px 0;">${name}</div>
-      <div style="font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:22px;">我的1314能力报告</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;">
-        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 10px;">
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">💪 态度</div>
-          <div style="font-size:26px;font-weight:900;color:#FF8A9A;">${aScore}</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.4);">/50</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 10px;">
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">🗺️ 技能</div>
-          <div style="font-size:26px;font-weight:900;color:#A5B4FC;">${sScore}</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.4);">/50</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:16px 10px;">
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">🧠 知识</div>
-          <div style="font-size:26px;font-weight:900;color:#FCD34D;">${kScore}</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.4);">/50</div>
-        </div>
-      </div>
-      <div style="background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.5);border-radius:14px;padding:16px;margin-bottom:22px;font-size:15px;color:#FCD34D;font-weight:600;">
-        🎉 我已具备销冠潜质，请大家拭目以待！<br>
-        <span style="color:rgba(255,255,255,0.8);font-size:14px;font-weight:400;"><span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">3</span><span style="color:#FF8A9A;">1</span><span style="color:#FF8A9A;">4</span> · 销冠能力模型</span>
-      </div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:14px;">—— 大董老师 · 1314销售能力测评</div>
-    </div>
-  ` : `
-    <div id="posterInner" style="width:390px;background:linear-gradient(135deg,#C8102E 0%,#9B0B22 50%,#6B0F18 100%);border-radius:20px;padding:36px 32px;color:white;font-family:'Noto Sans SC',sans-serif;text-align:center;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,0.4) 0%,transparent 70%);pointer-events:none;"></div>
-      <div style="font-size:14px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:10px;">大董销售体系 · 1314能力模型</div>
-      <div style="font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:6px;">我的1314销冠宣言</div>
-      <div style="font-size:32px;font-weight:900;color:white;margin:14px 0;">${name}</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;">
-        <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 10px;">
-          <div style="font-size:26px;font-weight:900;color:white;">${aScore}<span style="font-size:14px;color:rgba(255,255,255,0.6);">/50</span></div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">三心态度</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 10px;">
-          <div style="font-size:26px;font-weight:900;color:white;">${sScore}<span style="font-size:14px;color:rgba(255,255,255,0.6);">/50</span></div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">流程技能</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 10px;">
-          <div style="font-size:26px;font-weight:900;color:white;">${kScore}<span style="font-size:14px;color:rgba(255,255,255,0.6);">/50</span></div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;">四知知识</div>
-        </div>
-      </div>
-      <div style="background:rgba(255,255,255,0.12);border-radius:14px;padding:16px;margin-bottom:18px;text-align:left;font-size:14px;line-height:2;white-space:pre-wrap;color:rgba(255,255,255,0.9);">${redNum(declText)}</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:10px;">—— 大董老师 · 1314销售能力测评</div>
-    </div>
-  `;
-
-  // 创建弹窗
-  const modal = document.createElement('div');
-  modal.id = 'posterModal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
-  modal.innerHTML = `
-    <div style="margin-bottom:16px;text-align:center;">
-      <div style="color:white;font-size:16px;font-weight:700;margin-bottom:4px;">📱 分享海报预览</div>
-      <div style="color:rgba(255,255,255,0.6);font-size:12px;">点击下方按钮下载图片保存</div>
-    </div>
-    ${posterHTML}
-    <div style="margin-top:20px;display:flex;gap:12px;">
-      <button onclick="downloadPoster()" style="background:#10B981;color:white;border:none;padding:12px 28px;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
-        ⬇️ 下载图片
-      </button>
-      <button onclick="document.getElementById('posterModal').remove()" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);padding:12px 28px;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
-        ✕ 关闭
-      </button>
-    </div>
-  `;
-  document.body.appendChild(modal);
-}
-
-function downloadPoster() {
-  const posterInner = document.getElementById('posterInner');
-  if (!posterInner) return;
-
-  if (typeof html2canvas !== 'undefined') {
-    html2canvas(posterInner, {
-      backgroundColor: null,
-      scale: 2,
-      useCORS: true,
-      logging: false
-    }).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `1314销冠宣言_${userName || '用户'}_${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    }).catch(err => {
-      alert('下载失败，请重试：' + err.message);
-    });
-  } else {
-    alert('图片下载功能加载中，请稍后再试');
-  }
-}
 
 function resetQuiz() {
   document.getElementById('result').classList.remove('show');
