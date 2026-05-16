@@ -917,12 +917,16 @@ body {
     <span class="sub">优秀销售能力模型</span>
   </h1>
   <div class="hero-poem">
-    <strong>一个模型打天下</strong>，三心修炼强心态，<br>
-    一流流程拿结果，四肢贯通做专家。<br><br>
+    <strong>1个模型打天下</strong>，3心修炼强心态，<br>
+    1流流程拿结果，4知贯通做专家。<br><br>
     <strong>1314，一生一世做销冠！</strong>
   </div>
+  <div class="name-input-wrap" style="max-width:360px;margin:0 auto 20px;">
+    <label>👤 请输入你的姓名（用于生成专属宣言海报）</label>
+    <input type="text" id="heroUserName" placeholder="例如：张三" maxlength="20">
+  </div>
   <div class="hero-actions">
-    <a href="#quiz" class="btn-primary">🎯 开始30题自测</a>
+    <a href="#quiz" class="btn-primary" onclick="return startQuizFromHero();">🎯 开始30题自测</a>
     <a href="#model" class="btn-secondary">📖 了解模型详情</a>
   </div>
 </section>
@@ -1324,7 +1328,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-4';
+  var v = 'v=20250516-5';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1386,17 +1390,46 @@ const dimColor = { A: '#C8102E', S: '#4F46E5', K: '#C9A84C' };
 const dimLabel = { A: '三心（态度）', S: '流程6技（技能）', K: '四知（知识）' };
 const dimIcon = { A: '💪', S: '🗺️', K: '🧠' };
 
-function startQuiz() {
-  // 获取用户姓名
-  const nameInput = document.getElementById('userNameInput');
-  userName = nameInput.value.trim();
+function startQuizFromHero() {
+  const heroName = document.getElementById('heroUserName');
+  userName = heroName ? heroName.value.trim() : '';
   if (!userName) {
-    nameInput.style.borderColor = '#FF6B6B';
-    nameInput.placeholder = '请填写姓名后再开始';
-    nameInput.focus();
+    if (heroName) {
+      heroName.style.borderColor = '#FF6B6B';
+      heroName.placeholder = '请填写姓名后再开始';
+      heroName.focus();
+    }
+    return false;
+  }
+  if (heroName) heroName.style.borderColor = '';
+
+  // 同步到quizIntro的输入框（如果存在）
+  const quizName = document.getElementById('userNameInput');
+  if (quizName) quizName.value = userName;
+
+  document.getElementById('quizIntro').style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'block';
+  currentQ = 0;
+  answers = new Array(questions.length).fill(null);
+  renderQuestion();
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+  return false;
+}
+
+function startQuiz() {
+  // 获取用户姓名（优先quizIntro里的，否则用hero区的）
+  const nameInput = document.getElementById('userNameInput');
+  const heroName = document.getElementById('heroUserName');
+  userName = (nameInput && nameInput.value.trim()) || (heroName && heroName.value.trim()) || '';
+  if (!userName) {
+    if (nameInput) {
+      nameInput.style.borderColor = '#FF6B6B';
+      nameInput.placeholder = '请填写姓名后再开始';
+      nameInput.focus();
+    }
     return;
   }
-  nameInput.style.borderColor = '';
+  if (nameInput) nameInput.style.borderColor = '';
 
   document.getElementById('quizIntro').style.display = 'none';
   document.getElementById('quizContainer').style.display = 'block';
@@ -1451,6 +1484,15 @@ function renderQuestion() {
 function selectOption(idx) {
   answers[currentQ] = idx;
   renderQuestion();
+  // 短暂延迟让用户看到选中效果，然后自动跳转
+  setTimeout(() => {
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 250);
 }
 
 function nextQ() {
