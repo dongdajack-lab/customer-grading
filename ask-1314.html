@@ -972,7 +972,7 @@ body {
 
   <!-- ASK模型说明 -->
   <div style="background: linear-gradient(135deg, var(--red-light), #F0F5FF); border-radius: 16px; padding: 24px 28px; margin-bottom: 40px; border-left: 4px solid var(--red);">
-    <div style="font-size: 14px; font-weight: 700; color: var(--red); margin-bottom: 8px;">—— 1套ASK模型</div>
+    <div style="font-size: 18px; font-weight: 700; color: var(--red); margin-bottom: 8px;">—— <span style="font-size: 26px; vertical-align: middle; margin-right: 2px;">1</span>套ASK模型</div>
     <div style="font-size: 15px; color: var(--black); line-height: 1.8;">
       <strong style="color:var(--red);">A</strong> = Attitude（态度）· <strong style="color:#4F46E5;">S</strong> = Skill（技能）· <strong style="color:#8B6914;">K</strong> = Knowledge（知识）<br>
       1314模型的底层逻辑，是一套可量化、可训练、可复制的销售能力ASK框架。<br>
@@ -1275,17 +1275,23 @@ body {
     <p>生成专属宣言海报，分享你的销冠决心</p>
     <div class="declaration-card" id="declarationCard">
       <div class="declaration-title" id="declarationTitle">— 1314 销冠宣言 —</div>
-      <textarea class="declaration-text" id="declarationText" rows="8" style="width:100%;border:none;background:transparent;color:rgba(255,255,255,0.9);font-size:14px;line-height:1.8;font-family:inherit;resize:none;outline:none;" placeholder="宣言文字（可手动修改）">
-我是<span id="userNameDisplay2">___</span>，我的1314能力报告：
-态度层（三心）：<span id="aScore2">0</span>/50
-技能层（流程）：<span id="sScore2">0</span>/50
-知识层（四知）：<span id="kScore2">0</span>/50
-
-我选择重点提升 <span id="focusDim2">___</span>，
-目标在<span id="goalPeriod">3</span>周内 <span id="focusGoal2">重点补足短板</span>。
-
-1314，一生一世做销冠！💪
-      </textarea>
+      <!-- 显示模式 -->
+      <div class="declaration-text" id="declarationDisplay" style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.9);">
+        我是<span id="userNameDisplay">___</span>，我的1314能力报告：<br>
+        态度层（三心）：<span id="aScore">0</span>/50<br>
+        技能层（流程）：<span id="sScore">0</span>/50<br>
+        知识层（四知）：<span id="kScore">0</span>/50<br><br>
+        我选择重点提升 <span id="focusDim">___</span>，<br>
+        目标在<span id="goalPeriod">3</span>周内 <span id="focusGoal">重点补足短板</span>。<br><br>
+        <strong style="color:var(--gold);">1314，一生一世做销冠！💪</strong>
+      </div>
+      <!-- 编辑模式（默认隐藏） -->
+      <textarea class="declaration-text" id="declarationEdit" rows="8" style="display:none;width:100%;border:2px dashed rgba(255,255,255,0.3);border-radius:8px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);font-size:14px;line-height:1.8;font-family:inherit;resize:vertical;outline:none;padding:12px;" placeholder="宣言文字（可手动修改）"></textarea>
+    </div>
+    <div style="margin-bottom:16px;text-align:center;">
+      <button id="editBtn" onclick="toggleEditDeclaration()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:white;padding:6px 16px;border-radius:16px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.2s;">
+        ✏️ 编辑宣言文字
+      </button>
     </div>
     <div style="margin-bottom:20px;">
       <p style="font-size:14px;opacity:0.8;margin-bottom:12px;">👇 点击选择你要重点提升的维度：</p>
@@ -1599,7 +1605,7 @@ function showResult() {
     <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
   `;
 
-  // 宣言填充（textarea版本）
+  // 宣言填充
   const dims = [{name:'三心（态度）', score:aData.total}, {name:'流程6技（技能）', score:sData.total}, {name:'四知（知识）', score:kData.total}];
   const weakest = dims.reduce((a, b) => a.score < b.score ? a : b);
   const strongest = dims.reduce((a, b) => a.score > b.score ? a : b);
@@ -1608,42 +1614,29 @@ function showResult() {
   // 标记全局满分状态
   window.isAllPerfect = allPerfect;
 
-  document.getElementById('userNameDisplay').textContent = userName || '___';
-  document.getElementById('aScore').textContent = aData.total;
-  document.getElementById('sScore').textContent = sData.total;
-  document.getElementById('kScore').textContent = kData.total;
+  const focus = allPerfect ? strongest.name : weakest.name;
+  const goalType = allPerfect ? '巩固强项' : '重点补足短板';
 
-  // 同步到textarea版本
-  const declText = document.getElementById('declarationText');
-  if (declText) {
-    const focus = allPerfect ? strongest.name : weakest.name;
-    const goalType = allPerfect ? '巩固强项' : '重点补足短板';
-    declText.value = `我是${userName || '___'}，我的1314能力报告：
-态度层（三心）：${aData.total}/50
-技能层（流程）：${sData.total}/50
-知识层（四知）：${kData.total}/50
+  // 更新显示区
+  const setTxt = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
+  setTxt('userNameDisplay', userName || '___');
+  setTxt('aScore', aData.total);
+  setTxt('sScore', sData.total);
+  setTxt('kScore', kData.total);
+  setTxt('focusDim', focus);
+  setTxt('focusGoal', goalType);
 
-我选择重点提升 ${focus}，
-目标在3周内 ${goalType}。
-
-1314，一生一世做销冠！💪`;
-    // 同步到span
-    const el = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
-    el('userNameDisplay2', userName || '___');
-    el('aScore2', aData.total);
-    el('sScore2', sData.total);
-    el('kScore2', kData.total);
-    el('focusDim', focus);
-    el('focusDim2', focus);
-    el('focusGoal', goalType);
-    el('focusGoal2', goalType);
+  // 同步编辑区textarea
+  const declEdit = document.getElementById('declarationEdit');
+  if (declEdit) {
+    declEdit.value = `我是${userName || '___'}，我的1314能力报告：\n态度层（三心）：${aData.total}/50\n技能层（流程）：${sData.total}/50\n知识层（四知）：${kData.total}/50\n\n我选择重点提升 ${focus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
   }
 
   // 自动生成提升计划
   autoGeneratePlan(weakest, strongest, allPerfect, dims);
 
-  // 默认选中最低分维度（满分时默认选中最高分）
-  selectedFocus = allPerfect ? strongest.name : weakest.name;
+  // 默认选中维度
+  selectedFocus = focus;
   updateFocusDisplay();
 
   // 更新选择按钮状态
@@ -1668,50 +1661,61 @@ function updateFocusDisplay() {
   const goalEl = document.getElementById('focusGoal');
   if (focusEl) focusEl.textContent = selectedFocus;
 
-  // 根据选择维度确定目标 - 修复逻辑
+  // 根据选择维度确定目标
   const dims = [
     {name:'三心（态度）', score:parseInt(document.getElementById('aScore')?.textContent || 0)},
     {name:'流程6技（技能）', score:parseInt(document.getElementById('sScore')?.textContent || 0)},
     {name:'四知（知识）', score:parseInt(document.getElementById('kScore')?.textContent || 0)}
   ];
   const selectedDim = dims.find(d => d.name === selectedFocus);
-  if (goalEl && selectedDim) {
-    goalEl.textContent = selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
+  const goalType = selectedDim && selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
+  if (goalEl) goalEl.textContent = goalType;
+
+  // 同步编辑区
+  const declEdit = document.getElementById('declarationEdit');
+  if (declEdit) {
+    declEdit.value = `我是${userName || '___'}，我的1314能力报告：\n态度层（三心）：${dims[0].score}/50\n技能层（流程）：${dims[1].score}/50\n知识层（四知）：${dims[2].score}/50\n\n我选择重点提升 ${selectedFocus}，\n目标在3周内 ${goalType}。\n\n1314，一生一世做销冠！💪`;
   }
 }
 
-function updateFocusDisplay() {
-  const focusEl = document.getElementById('focusDim');
-  const goalEl = document.getElementById('focusGoal');
-  if (focusEl) focusEl.textContent = selectedFocus;
+let isEditingDeclaration = false;
+function toggleEditDeclaration() {
+  const display = document.getElementById('declarationDisplay');
+  const edit = document.getElementById('declarationEdit');
+  const btn = document.getElementById('editBtn');
+  if (!display || !edit || !btn) return;
 
-  // 根据选择维度确定目标 - 修复逻辑
-  const dims = [
-    {name:'三心（态度）', score:parseInt(document.getElementById('aScore')?.textContent || 0)},
-    {name:'流程6技（技能）', score:parseInt(document.getElementById('sScore')?.textContent || 0)},
-    {name:'四知（知识）', score:parseInt(document.getElementById('kScore')?.textContent || 0)}
-  ];
-  const selectedDim = dims.find(d => d.name === selectedFocus);
-  if (goalEl && selectedDim) {
-    goalEl.textContent = selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
-  }
-  // 同步textarea中的文字
-  const declText = document.getElementById('declarationText');
-  if (declText) {
-    const goalType = selectedDim && selectedDim.score >= 40 ? '巩固强项' : '重点补足短板';
-    const goalPeriodEl = document.getElementById('goalPeriod');
-    declText.value = `我是${userName || '___'}，我的1314能力报告：
-态度层（三心）：${dims[0].score}/50
-技能层（流程）：${dims[1].score}/50
-知识层（四知）：${dims[2].score}/50
+  isEditingDeclaration = !isEditingDeclaration;
+  if (isEditingDeclaration) {
+    // 进入编辑模式：显示textarea，隐藏div
+    display.style.display = 'none';
+    edit.style.display = 'block';
+    btn.textContent = '✅ 保存修改';
+    btn.style.background = 'rgba(16,185,129,0.3)';
+    btn.style.borderColor = 'rgba(16,185,129,0.6)';
+  } else {
+    // 保存：把textarea内容同步回div显示
+    const lines = edit.value.split('\n');
+    display.innerHTML = lines.map((line, i) => {
+      if (i === 0) return '我是' + (line.match(/我是(.+?)，/)?.[1] || userName || '___') + '，我的1314能力报告：<br>';
+      if (line.includes('态度层')) return '态度层（三心）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
+      if (line.includes('技能层')) return '技能层（流程）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
+      if (line.includes('知识层')) return '知识层（四知）：' + (line.match(/(\d+)/)?.[1] || '0') + '/50<br>';
+      if (line.includes('我选择')) {
+        const focusMatch = line.match(/重点提升\s*(.+?)，/);
+        const goalMatch = line.match(/周内\s*(.+?)。/);
+        return '我选择重点提升 ' + (focusMatch?.[1] || selectedFocus || '___') + '，<br>目标在3周内 ' + (goalMatch?.[1] || '重点补足短板') + '。<br>';
+      }
+      if (line.includes('一生一世')) return '<strong style="color:var(--gold);">' + line + '</strong>';
+      if (line.trim() === '') return '<br>';
+      return line + '<br>';
+    }).join('');
 
-我选择重点提升 ${selectedFocus}，
-目标在3周内 ${goalType}。
-
-1314，一生一世做销冠！💪`;
-    const el = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
-    el('focusDim2', selectedFocus);
-    el('focusGoal2', goalType);
+    display.style.display = 'block';
+    edit.style.display = 'none';
+    btn.textContent = '✏️ 编辑宣言文字';
+    btn.style.background = 'rgba(255,255,255,0.1)';
+    btn.style.borderColor = 'rgba(255,255,255,0.3)';
   }
 }
 
@@ -1775,8 +1779,10 @@ function generatePoster() {
     {name:'四知（知识）', score:kScore}
   ];
 
-  // 获取宣言文字（用户可能已修改）
-  const declText = document.getElementById('declarationText').value;
+  // 获取宣言文字（优先用编辑区内容，否则用显示区文本）
+  const declEdit = document.getElementById('declarationEdit');
+  const declDisplay = document.getElementById('declarationDisplay');
+  const declText = declEdit && declEdit.style.display !== 'none' ? declEdit.value : (declDisplay ? declDisplay.innerText : '');
 
   // 如果已有海报，移除
   const existing = document.getElementById('posterModal');
