@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=11')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=12');
+    location.replace(location.pathname + location.search + sep + 'v=13');
   }
 })();
 </script>
@@ -1039,6 +1039,86 @@ body {
   .share-btn { padding: 10px 12px; min-width: 60px; }
 }
 
+/* ===== 满分钻石级海报 ===== */
+.segment-card.diamond {
+  background: linear-gradient(160deg, #0a0a1a 0%, #1a0a2e 20%, #2d0a3e 40%, #4a0a5e 60%, #1a0a2e 80%, #0a0a1a 100%);
+  box-shadow: 0 0 60px rgba(255,215,0,0.3), 0 0 120px rgba(255,165,0,0.15), 0 0 0 3px rgba(255,215,0,0.6), 0 0 0 8px rgba(138,43,226,0.4), 0 20px 60px rgba(0,0,0,0.5);
+  animation: diamondGlow 3s ease-in-out infinite alternate;
+}
+.segment-card.diamond::before {
+  background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.1) 30%, rgba(255,215,0,0.15) 60%, rgba(255,255,255,0.1) 100%);
+}
+.segment-card.diamond .segment-poster-name { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,165,0,0.4); }
+.segment-card.diamond .segment-badge-icon { filter: drop-shadow(0 0 20px rgba(255,215,0,0.9)); }
+
+.diamond-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.diamond-star {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: #FFD700;
+  border-radius: 50%;
+  animation: starTwinkle 2s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(255,215,0,0.8);
+}
+.diamond-score-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 8px 0;
+  position: relative;
+  z-index: 3;
+}
+.diamond-score-item {
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.35);
+  border-radius: 10px;
+  padding: 6px 14px;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+}
+.diamond-score-item .d-label { font-size: 10px; color: rgba(255,215,0,0.7); text-transform: uppercase; letter-spacing: 1px; }
+.diamond-score-item .d-val { font-size: 20px; font-weight: 900; color: #FFD700; }
+.diamond-badge-line {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin: 4px 0 8px;
+  position: relative;
+  z-index: 3;
+  letter-spacing: 2px;
+}
+.diamond-badge-line strong { color: #FFD700; font-weight: 700; }
+.diamond-share-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a0a2e;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 8px 24px;
+  border-radius: 20px;
+  margin-top: 8px;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+  letter-spacing: 1px;
+}
+
+@keyframes diamondGlow {
+  0% { box-shadow: 0 0 40px rgba(255,215,0,0.25), 0 0 80px rgba(255,165,0,0.1), 0 0 0 3px rgba(255,215,0,0.5), 0 20px 60px rgba(0,0,0,0.5); }
+  100% { box-shadow: 0 0 80px rgba(255,215,0,0.45), 0 0 160px rgba(255,165,0,0.25), 0 0 0 4px rgba(255,215,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
   </style>
 </head>
 <body>
@@ -1514,7 +1594,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-12';
+  var v = 'v=20250516-13';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1845,11 +1925,20 @@ function showResult() {
   let segment = {};
   let segClass = '';
   let medalIcon = '';
-  if (totalScore >= 120) {
+  const isFullScore = totalScore === 150;
+  const isGold = totalScore >= 120 && !isFullScore;
+  const isSilver = totalScore >= 90 && totalScore < 120;
+  const isBronze = totalScore < 90;
+
+  if (isFullScore) {
+    segment = { icon: '💎', name: '钻石销冠', level: '满分实力 · 横扫江湖', desc: '你在三心、流程、四知三大维度均拿到满分！你已是准销冠级别的实力派。接下来的目标，是把能力复制给更多人，带出冠军团队。', advice: '重点：提炼自己的签单方法论 → 带教新人 → 冲击销冠管理层！' };
+    segClass = 'diamond';
+    medalIcon = '💎';
+  } else if (isGold) {
     segment = { icon: '🏆', name: '金牌销售', level: '准销冠 · 精益求精', desc: '你的能力已经处于较高水平，核心优势明显。需要继续保持强项，同时向"教练型销售"转型——培养新人、带团队，把能力复制给更多人。', advice: '重点：学习带教技巧、提炼自己的销售方法论、开始关注管理和战略层面。' };
     segClass = 'gold';
     medalIcon = '🏆';
-  } else if (totalScore >= 90) {
+  } else if (isSilver) {
     segment = { icon: '🥈', name: '银牌销售', level: '中坚力量 · 强项突出', desc: '你已经具备了销售的基本功，有明确的强项。最关键的是找到你的"致命短板"并重点突破——往往是1-2个环节的薄弱拉低了整体结果。', advice: '重点：找到得分最低的维度，针对性练习。记住：木桶的短板决定水位。' };
     segClass = 'silver';
     medalIcon = '🥈';
@@ -1862,31 +1951,66 @@ function showResult() {
   // 更新海报样式
   const card = document.getElementById('segmentCard');
   card.className = 'segment-card ' + segClass;
-  card.innerHTML = `
-    <div class="segment-watermark">1314</div>
-    <div class="segment-poster-inner">
-      <div class="segment-badge-wrap">
-        <div class="segment-badge-icon">${medalIcon}</div>
-        <div class="segment-poster-name">${userName || '___'}</div>
+
+  if (isFullScore) {
+    // 满分钻石级海报
+    const starsHTML = Array.from({length: 20}, (_, i) =>
+      `<div class="diamond-star" style="left:${5+Math.random()*90}%;top:${5+Math.random()*85}%;animation-delay:${(i*0.15)%2}s;"></div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="segment-watermark" style="font-size:240px;opacity:0.04;">1314</div>
+      <div class="diamond-stars">${starsHTML}</div>
+      <div class="segment-poster-inner">
+        <div class="segment-badge-wrap">
+          <div class="segment-badge-icon" style="font-size:80px;">💎</div>
+          <div class="segment-poster-name" style="font-size:42px;">${userName || '___'}</div>
+        </div>
+        <div class="segment-name" style="font-size:36px;">${segment.name}</div>
+        <div class="segment-level" style="font-size:16px;">${segment.level}</div>
+        <div class="segment-divider"></div>
+        <div class="diamond-score-row">
+          <div class="diamond-score-item"><div class="d-label">三心</div><div class="d-val">${aData.total}</div></div>
+          <div class="diamond-score-item"><div class="d-label">流程</div><div class="d-val">${sData.total}</div></div>
+          <div class="diamond-score-item"><div class="d-label">四知</div><div class="d-val">${kData.total}</div></div>
+          <div class="diamond-score-item"><div class="d-label">总分</div><div class="d-val" style="color:#FF6B6B;">150</div></div>
+        </div>
+        <p class="segment-desc">${segment.desc}</p>
+        <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
+        <div class="diamond-share-tag">🔥 请大家拭目以待 🔥</div>
       </div>
-      <div class="segment-name">${segment.name}</div>
-      <div class="segment-level">${segment.level}</div>
-      <div class="segment-divider"></div>
-      <p class="segment-desc">${segment.desc}</p>
-      <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
-    </div>
-    <div class="segment-brand">
-      <span class="brand-logo">大董销售体系</span>
-      <span class="brand-divider">·</span>
-      <span class="brand-url">dongdajack-lab.github.io/customer-grading/ask-1314.html</span>
-    </div>
-  `;
+      <div class="segment-brand">
+        <span class="brand-logo" style="color:#FFD700;">大董老师</span>
+        <span class="brand-divider">·</span>
+        <span class="brand-url">大董销售体系</span>
+      </div>
+    `;
+  } else {
+    card.innerHTML = `
+      <div class="segment-watermark">1314</div>
+      <div class="segment-poster-inner">
+        <div class="segment-badge-wrap">
+          <div class="segment-badge-icon">${medalIcon}</div>
+          <div class="segment-poster-name">${userName || '___'}</div>
+        </div>
+        <div class="segment-name">${segment.name}</div>
+        <div class="segment-level">${segment.level}</div>
+        <div class="segment-divider"></div>
+        <p class="segment-desc">${segment.desc}</p>
+        <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
+      </div>
+      <div class="segment-brand">
+        <span class="brand-logo">大董销售体系</span>
+        <span class="brand-divider">·</span>
+        <span class="brand-url">dongdajack-lab.github.io/customer-grading/ask-1314.html</span>
+      </div>
+    `;
+  }
 
   // 自动生成提升计划
   const dims = [{name:'三心（态度）', score:aData.total}, {name:'流程6技（技能）', score:sData.total}, {name:'四知（知识）', score:kData.total}];
   const weakest = dims.reduce((a, b) => a.score < b.score ? a : b);
   const strongest = dims.reduce((a, b) => a.score > b.score ? a : b);
-  const allPerfect = dims.every(d => d.score >= 40);
+  const allPerfect = isFullScore || dims.every(d => d.score >= 40);
   autoGeneratePlan(weakest, strongest, allPerfect, dims);
 
   // 滚动到结果
