@@ -88,7 +88,7 @@ body {
 /* ===== HERO ===== */
 .hero {
   background: linear-gradient(135deg, var(--black) 0%, #2D1B3D 50%, var(--red-dark) 100%);
-  padding: 140px 24px 100px;
+  padding: 120px 24px 60px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -134,11 +134,11 @@ body {
 }
 .hero-poem {
   max-width: 700px;
-  margin: 32px auto 0;
+  margin: 24px auto 0;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(200,16,46,0.3);
   border-radius: 16px;
-  padding: 24px 32px;
+  padding: 20px 28px;
   font-size: 15px;
   color: rgba(255,255,255,0.8);
   line-height: 2;
@@ -146,7 +146,7 @@ body {
 }
 .hero-poem strong { color: var(--gold); font-weight: 700; }
 .hero-actions {
-  margin-top: 36px;
+  margin-top: 24px;
   display: flex;
   gap: 16px;
   justify-content: center;
@@ -488,8 +488,8 @@ body {
 .name-input-wrap {
   background: rgba(255,255,255,0.1);
   border-radius: 16px;
-  padding: 24px;
-  margin: 24px auto 0;
+  padding: 20px;
+  margin: 16px auto 0;
   max-width: 400px;
 }
 .name-input-wrap label {
@@ -497,6 +497,7 @@ body {
   font-size: 14px;
   margin-bottom: 8px;
   opacity: 0.9;
+  color: white;
 }
 .name-input-wrap input {
   width: 100%;
@@ -899,7 +900,7 @@ body {
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-logo">大董<span>·</span>1314</div>
+    <div class="nav-logo">大董老师<span>·</span>1314销冠能力模型</div>
     <ul class="nav-links">
       <li><a href="#tiandiren">天地人关联</a></li>
       <li><a href="#model">能力模型</a></li>
@@ -915,7 +916,7 @@ body {
   <div class="hero-badge">大董销售体系 · 销冠核心能力模型</div>
   <h1 class="hero-title">
     <span class="num">1314</span>
-    <span class="sub">优秀销售能力模型</span>
+    <span class="sub">销冠能力模型</span>
   </h1>
   <div class="hero-poem">
     <strong>1个模型打天下</strong>，3心修炼强心态，<br>
@@ -1329,7 +1330,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-6';
+  var v = 'v=20250516-7';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1484,7 +1485,16 @@ function renderQuestion() {
 
 function selectOption(idx) {
   answers[currentQ] = idx;
-  renderQuestion();
+  // 只更新选中样式，不重新render整个容器，避免屏幕晃动
+  const btns = document.querySelectorAll('.options-list .option-btn');
+  btns.forEach((btn, i) => {
+    if (i === idx) btn.classList.add('selected');
+    else btn.classList.remove('selected');
+  });
+  // 启用下题按钮
+  const nextBtn = document.querySelector('.btn-next');
+  if (nextBtn) nextBtn.disabled = false;
+
   // 短暂延迟让用户看到选中效果，然后自动跳转
   setTimeout(() => {
     if (currentQ < questions.length - 1) {
@@ -1890,7 +1900,7 @@ function generatePoster() {
       </div>
       <div style="background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.5);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;color:#FCD34D;font-weight:600;">
         🎉 我已具备销冠潜质，请大家拭目以待！<br>
-        <span style="color:rgba(255,255,255,0.8);font-size:12px;font-weight:400;">1314 · 优秀销售能力模型</span>
+        <span style="color:rgba(255,255,255,0.8);font-size:12px;font-weight:400;">1314 · 销冠能力模型</span>
       </div>
       <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;">—— 大董老师 · 1314销售能力测评</div>
     </div>
