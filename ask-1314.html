@@ -709,7 +709,7 @@ body {
 
 .result-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   margin-bottom: 40px;
 }
@@ -724,7 +724,7 @@ body {
 .segment-card {
   background: linear-gradient(135deg, var(--black) 0%, #2D1B3D 50%, var(--red-dark) 100%);
   border-radius: 20px;
-  padding: 36px 32px;
+  padding: 40px 32px;
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
@@ -733,6 +733,8 @@ body {
   text-align: center;
   position: relative;
   overflow: hidden;
+  max-width: 560px;
+  margin: 0 auto;
 }
 .segment-card::before {
   content: '';
@@ -1220,6 +1222,9 @@ body {
     <div class="segment-card" id="segmentCard">
       <!-- 段位卡片 -->
     </div>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="btn-primary" onclick="downloadPoster()" style="font-size:15px;padding:12px 28px;">📥 保存为图片</button>
+    </div>
   </div>
 
   <div class="improve-section">
@@ -1263,7 +1268,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250516-10';
+  var v = 'v=20250516-11';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -1679,6 +1684,29 @@ function autoGeneratePlan(weakest, strongest, allPerfect, dims) {
   }
 }
 
+
+function downloadPoster() {
+  const card = document.getElementById('segmentCard');
+  if (!card) return;
+  // 临时隐藏按钮避免截图到
+  const btn = card.nextElementSibling;
+  if (btn) btn.style.display = 'none';
+  html2canvas(card, {
+    backgroundColor: null,
+    scale: 2,
+    useCORS: true
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = (userName || '我的') + '_1314能力海报.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    if (btn) btn.style.display = '';
+  }).catch(err => {
+    console.error('海报生成失败:', err);
+    alert('海报生成失败，请重试');
+    if (btn) btn.style.display = '';
+  });
+}
 
 function resetQuiz() {
   document.getElementById('result').classList.remove('show');
