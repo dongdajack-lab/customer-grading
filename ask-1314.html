@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=19');
+    location.replace(location.pathname + location.search + sep + 'v=20');
   }
 })();
 </script>
@@ -898,10 +898,7 @@ body {
   #heroUserName { padding: 10px 14px; font-size: 14px; }
   .hero-actions { margin-top: 12px !important; }
   .hero-actions .btn { padding: 12px 28px; font-size: 15px; }
-  #visitorStats { gap: 16px; margin-top: 16px; }
-  #visitorStats div div:first-child { font-size: 24px !important; }
-  #visitorStats div div:last-child { font-size: 11px !important; }
-  
+
   /* Section 紧凑 */
   .section { padding: 24px 16px; }
   .section-title { font-size: 22px; }
@@ -1193,10 +1190,6 @@ body {
     <span style="color:var(--red);">1</span>流流程拿结果，<span style="color:var(--red);">4</span>知贯通做专家。<br><br>
     <strong>1314，一生一世做销冠！</strong>
   </div>
-  <!-- 访客统计：显示你是第几位访客 -->
-  <div id="visitDisplay" style="margin:18px auto 0;font-size:15px;color:rgba(255,255,255,0.85);text-align:center;line-height:1.8;">
-    🎯 你是第 <span id="visitNum" style="font-size:26px;font-weight:900;color:#FFD700;margin:0 4px;">---</span> 位访客
-  </div>
   <div class="name-input-wrap" style="max-width:360px;margin:16px auto 20px;">
     <label>👤 请输入你的姓名（用于生成专属宣言海报）</label>
     <input type="text" id="heroUserName" placeholder="例如：张三" maxlength="20">
@@ -1205,11 +1198,6 @@ body {
     <a href="#quiz" class="btn-primary" onclick="return startQuizFromHero();">🎯 开始30题自测</a>
     <a href="#model" class="btn-secondary">📖 了解模型详情</a>
     <a href="#quiz" class="btn-secondary" style="border-color:var(--gold);color:var(--gold);" onclick="alert('完成测评后，即可邀请好友PK！');return startQuizFromHero();">⚔️ 邀请PK</a>
-  </div>
-  <div id="visitorStats" style="margin-top:14px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,0.55);">
-    <span>📊 30道精选题目</span>
-    <span>🧭 3大核心维度</span>
-    <span>🏆 销冠段位认证</span>
   </div>
 </section>
 
@@ -1589,7 +1577,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250517-17';
+  var v = 'v=20250517-20';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
@@ -2236,61 +2224,6 @@ function generateShareCard() {
       alert('图片生成失败，请手动截图保存');
     });
 }
-
-
-// ===== 访客统计（实时显示"你是第X位访客"）=====
-(function(){
-  var STORAGE_KEY = 'ask1314_visitors';
-  var displayEl = document.getElementById('visitNum');
-
-  // 本地计数（保底显示）
-  var localCount = parseInt(localStorage.getItem('ask1314_visitors') || '0');
-
-  // 先显示本地值
-  if(displayEl) displayEl.textContent = localCount || '---';
-
-  // Worker URL（部署后填入）
-  var WORKER_URL = 'https://ask-1314-counter.dongdajack.workers.dev';
-
-  // 通用：更新显示+本地存储
-  function updateDisplay(count) {
-    if (displayEl) displayEl.textContent = count;
-    localStorage.setItem('ask1314_visitors', count);
-  }
-
-  // 如果 Worker URL 已配置，使用真实全网计数
-  if (WORKER_URL) {
-    // 先读取当前计数
-    fetch(WORKER_URL, { mode: 'cors' })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (d && d.count !== undefined) {
-          updateDisplay(d.count);
-        }
-      })
-      .catch(function () { console.log('[1314] Worker 读取失败，使用本地计数'); });
-
-    // 本次会话首次访问 → 计数+1
-    if (!sessionStorage.getItem('ask1314_visited')) {
-      sessionStorage.setItem('ask1314_visited', '1');
-      fetch(WORKER_URL, { method: 'POST', mode: 'cors' })
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          if (d && d.count !== undefined) {
-            updateDisplay(d.count);
-          }
-        })
-        .catch(function () { /* 静默失败，下次刷新会修正 */ });
-    }
-  } else {
-    // 无 Worker：使用本地计数
-    if (!sessionStorage.getItem('ask1314_visited')) {
-      sessionStorage.setItem('ask1314_visited', '1');
-      localCount = localCount + 1;
-      updateDisplay(localCount);
-    }
-  }
-})();
 
 // ===== 海报二维码 =====
 function generateQRCode(callback) {
