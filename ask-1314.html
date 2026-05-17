@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=20');
+    location.replace(location.pathname + location.search + sep + 'v=21');
   }
 })();
 </script>
@@ -1210,15 +1210,14 @@ body {
 
   <!-- ASK模型说明 -->
   <div style="background: linear-gradient(135deg, var(--red-light), #F0F5FF); border-radius: 16px; padding: 24px 28px; margin-bottom: 40px; border-left: 4px solid var(--red);">
-    <div style="font-size: 18px; font-weight: 700; color: var(--red); margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px;">
-      <span style="font-size: 36px; font-weight: 900; color: var(--red); line-height: 1;">1</span>
-      <span>——</span>
+    <div style="font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px;">
+      <span style="font-size: 36px; font-weight: 900; color: var(--red); line-height: 1;">一</span>
       <span>套ASK模型</span>
     </div>
     <div style="font-size: 15px; color: var(--black); line-height: 1.8;">
       <strong style="color:var(--red);">A</strong> = Attitude（态度）· <strong style="color:#4F46E5;">S</strong> = Skill（技能）· <strong style="color:#8B6914;">K</strong> = Knowledge（知识）<br>
       1314模型的底层逻辑，是一套可量化、可训练、可复制的销售能力ASK框架。<br>
-      <span style="color: var(--gray); font-size: 13px;">三层递进：先修心态（A），再练动作（S），最后补认知（K）—— 缺哪层补哪层，层层通关。</span>
+      <span style="color: var(--gray); font-size: 13px;">三层体系：态度是根基（A），技能是武器（S），认知是弹药（K）。三者相互支撑、缺一不可，缺哪层补哪层，系统通关。</span>
     </div>
   </div>
 
@@ -1227,9 +1226,8 @@ body {
     <!-- 3心 -->
     <div class="model-card">
       <div class="model-card-header">
-        <div class="model-card-num" style="background: linear-gradient(135deg, var(--red), var(--red-dark));">3</div>
         <div>
-          <h3>三心修炼强心态</h3>
+          <h3><span style="color:var(--red);font-size:32px;font-weight:900;margin-right:4px;">三</span>心修炼强心态</h3>
           <span>A（Attitude）态度层 · 能力根基</span>
         </div>
       </div>
@@ -1266,9 +1264,8 @@ body {
     <!-- 1流程 -->
     <div class="model-card">
       <div class="model-card-header">
-        <div class="model-card-num" style="background: linear-gradient(135deg, #4F46E5, #7C3AED);">1</div>
         <div>
-          <h3>一流流程拿结果</h3>
+          <h3><span style="color:#4F46E5;font-size:32px;font-weight:900;margin-right:4px;">一</span>流流程拿结果</h3>
           <span>S（Skill）技能层 · 落地动作</span>
         </div>
       </div>
@@ -1328,9 +1325,8 @@ body {
     <!-- 4知 -->
     <div class="model-card" style="grid-column: span 2;">
       <div class="model-card-header">
-        <div class="model-card-num" style="background: linear-gradient(135deg, var(--gold), #D4A843);">4</div>
         <div>
-          <h3>四知贯通做专家</h3>
+          <h3><span style="color:var(--gold);font-size:32px;font-weight:900;margin-right:4px;">四</span>知贯通做专家</h3>
           <span>K（Knowledge）知识层 · 弹药储备</span>
         </div>
       </div>
@@ -1344,14 +1340,8 @@ body {
                 <p>自家产品与内部资源</p>
               </div>
             </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">3分钟脱稿讲清产品价值、三个典型场景、与竞品本质差异</div>
-            </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">掌握跨部门资源申请路径（专家售前/高层拜访/技术测试）</div>
-            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">了解自家产品的核心价值、优势边界和适用场景，做到心中有数。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">清楚内部资源地图，知道什么时候该调用哪些资源，做到手中有粮。</p>
             <div class="zhi-deliverable">📄 成果物：产品一页纸 + 内部资源地图</div>
           </div>
           <div class="zhi-item">
@@ -1362,14 +1352,8 @@ body {
                 <p>竞争对手全景</p>
               </div>
             </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">绘制竞品能力对比图，客观承认竞品最强3个优势</div>
-            </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">收集至少3个竞品丢单案例，分析失误点及我方应对策略</div>
-            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">了解主要竞品的优劣势、市场策略和定价体系，做到知己知彼。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">能在客户面前客观评价竞品，找到差异化竞争优势，占据主动。</p>
             <div class="zhi-deliverable">📄 成果物：竞品作战地图 + 丢单案例库</div>
           </div>
           <div class="zhi-item">
@@ -1380,14 +1364,8 @@ body {
                 <p>客户业务与决策链</p>
               </div>
             </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">画出重点客户的决策链（发起者/影响者/决策者/使用者/守门人）</div>
-            </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">流畅说出核心客户所在行业今年的三大业务挑战</div>
-            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">理解客户所在行业的业务逻辑和核心痛点，做到有的放矢。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">理清客户内部决策链，找到关键发起人和影响者，精准推进。</p>
             <div class="zhi-deliverable">📄 成果物：客户画像 + 决策链图</div>
           </div>
           <div class="zhi-item">
@@ -1398,14 +1376,8 @@ body {
                 <p>行业趋势与前瞻洞察</p>
               </div>
             </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">每月整理一份行业动态分享，向客户传递有价值的洞察</div>
-            </div>
-            <div class="zhi-action">
-              <div class="zhi-action-label">训练动作</div>
-              <div class="zhi-action-text">每周固定阅读行业权威报告，整理信息笔记和素材库</div>
-            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">掌握行业动态和发展趋势，先人一步洞察机会和风向。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">把趋势转化为谈资，让客户觉得你懂行、值得信任和托付。</p>
             <div class="zhi-deliverable">📄 成果物：行业洞察月报</div>
           </div>
         </div>
@@ -1577,7 +1549,7 @@ body {
 <script>
 // 缓存清除：强制使用最新版本
 (function(){
-  var v = 'v=20250517-20';
+  var v = 'v=20250517-21';
   var current = localStorage.getItem('ask1314_version');
   if (current !== v) {
     localStorage.setItem('ask1314_version', v);
