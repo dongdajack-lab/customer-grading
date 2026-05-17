@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=17');
+    location.replace(location.pathname + location.search + sep + 'v=18');
   }
 })();
 </script>
@@ -1193,7 +1193,11 @@ body {
     <span style="color:var(--red);">1</span>流流程拿结果，<span style="color:var(--red);">4</span>知贯通做专家。<br><br>
     <strong>1314，一生一世做销冠！</strong>
   </div>
-  <div class="name-input-wrap" style="max-width:360px;margin:0 auto 20px;">
+  <!-- 访客统计：显示你是第几位访客 -->
+  <div id="visitDisplay" style="margin:18px auto 0;font-size:15px;color:rgba(255,255,255,0.85);text-align:center;line-height:1.8;">
+    🎯 你是第 <span id="visitNum" style="font-size:26px;font-weight:900;color:#FFD700;margin:0 4px;">---</span> 位访客
+  </div>
+  <div class="name-input-wrap" style="max-width:360px;margin:16px auto 20px;">
     <label>👤 请输入你的姓名（用于生成专属宣言海报）</label>
     <input type="text" id="heroUserName" placeholder="例如：张三" maxlength="20">
   </div>
@@ -1202,19 +1206,10 @@ body {
     <a href="#model" class="btn-secondary">📖 了解模型详情</a>
     <a href="#quiz" class="btn-secondary" style="border-color:var(--gold);color:var(--gold);" onclick="alert('完成测评后，即可邀请好友PK！');return startQuizFromHero();">⚔️ 邀请PK</a>
   </div>
-  <div id="visitorStats" style="margin-top:20px;display:flex;justify-content:center;gap:24px;flex-wrap:wrap;">
-    <div style="text-align:center;">
-      <div id="visitCount" style="font-size:32px;font-weight:900;color:var(--gold);line-height:1;">---</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px;">人已参与测评</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:32px;font-weight:900;color:var(--red);line-height:1;">30</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px;">道精选题目</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:32px;font-weight:900;color:#4F46E5;line-height:1;">3</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px;">大核心维度</div>
-    </div>
+  <div id="visitorStats" style="margin-top:14px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,0.55);">
+    <span>📊 30道精选题目</span>
+    <span>🧭 3大核心维度</span>
+    <span>🏆 销冠段位认证</span>
   </div>
 </section>
 
@@ -2243,32 +2238,48 @@ function generateShareCard() {
 }
 
 
-// ===== 访客统计 =====
+// ===== 访客统计（实时显示"你是第X位访客"）=====
 (function(){
   var STORAGE_KEY = 'ask1314_visitors';
-  var API_URL = 'https://api.countapi.xyz/hit/dongdajack-ask-1314/visits';
-  var displayEl = document.getElementById('visitCount');
-  
-  // 先显示本地估计值
+  var displayEl = document.getElementById('visitNum');
+
+  // 本地计数（保底显示）
   var localCount = parseInt(localStorage.getItem(STORAGE_KEY) || '0');
-  if(displayEl) displayEl.textContent = localCount >= 100 ? (localCount + '+' ) : (localCount || '---');
-  
-  // 尝试调用countapi（免费访客统计API）
+
+  // 先显示本地值
+  if(displayEl) displayEl.textContent = localCount || '---';
+
+  // 尝试调用 countapi，3秒超时
   if(navigator.onLine){
-    fetch(API_URL).then(function(r){ return r.json(); }).then(function(d){
-      if(d && d.value !== undefined){
-        var count = d.value;
-        localStorage.setItem(STORAGE_KEY, count);
-        if(displayEl) displayEl.textContent = count >= 100 ? (count + '+') : count;
-      }
-    }).catch(function(){});
-  }
-  
-  // 记录本次访问
-  if(!sessionStorage.getItem('ask1314_visited')){
-    sessionStorage.setItem('ask1314_visited','1');
-    localCount = localCount + 1;
-    localStorage.setItem(STORAGE_KEY, localCount);
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, 3000);
+    fetch('https://api.countapi.xyz/hit/dongdajack-ask-1314/visits', { signal: controller.signal })
+      .then(function(r){ clearTimeout(timer); return r.json(); })
+      .then(function(d){
+        if(d && d.value !== undefined){
+          var count = d.value;
+          localStorage.setItem(STORAGE_KEY, count);
+          if(displayEl) displayEl.textContent = count;
+        }
+      })
+      .catch(function(){
+        console.log('[1314] 访客统计API暂不可用，使用本地计数');
+        // 本地也+1（本次会话首次访问）
+        if(!sessionStorage.getItem('ask1314_visited')){
+          sessionStorage.setItem('ask1314_visited', '1');
+          localCount = localCount + 1;
+          localStorage.setItem(STORAGE_KEY, localCount);
+          if(displayEl) displayEl.textContent = localCount;
+        }
+      });
+  } else {
+    // 离线：本地+1
+    if(!sessionStorage.getItem('ask1314_visited')){
+      sessionStorage.setItem('ask1314_visited', '1');
+      localCount = localCount + 1;
+      localStorage.setItem(STORAGE_KEY, localCount);
+      if(displayEl) displayEl.textContent = localCount;
+    }
   }
 })();
 
