@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=13');
+    location.replace(location.pathname + location.search + sep + 'v=14');
   }
 })();
 </script>
@@ -227,46 +227,6 @@ body {
   max-width: 600px;
   margin-bottom: 48px;
 }
-
-/* ===== 天地人关联图 ===== */
-.tiandiren-section {
-  background: var(--white);
-}
-.tiandiren-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 48px;
-}
-.tiandiren-card {
-  background: var(--light);
-  border-radius: 20px;
-  padding: 32px 24px;
-  text-align: center;
-  border: 2px solid transparent;
-  transition: all 0.3s;
-  position: relative;
-}
-.tiandiren-card:hover {
-  border-color: var(--red);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-.tiandiren-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin: 0 auto 16px;
-}
-.tiandiren-card:nth-child(1) .tiandiren-icon { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-.tiandiren-card:nth-child(2) .tiandiren-icon { background: linear-gradient(135deg, var(--red), var(--red-dark)); color: white; }
-.tiandiren-card:nth-child(3) .tiandiren-icon { background: linear-gradient(135deg, var(--gold), #D4A843); color: white; }
-.tiandiren-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-.tiandiren-card p { font-size: 13px; color: var(--gray); }
 
 /* ===== 1314卡片 ===== */
 .cards-grid {
@@ -923,14 +883,100 @@ body {
 
 /* ===== 响应式 ===== */
 @media (max-width: 768px) {
+  /* 导航 */
   .nav-links { display: none; }
-  .tiandiren-grid { grid-template-columns: 1fr; }
-  .cards-grid { grid-template-columns: 1fr; }
-  .zhi-grid { grid-template-columns: 1fr; }
-  .result-summary { grid-template-columns: 1fr; }
+  .nav-inner { padding: 0 12px; height: 50px; }
+  .nav-logo { font-size: 14px; }
+  
+  /* Hero 紧凑 */
+  .hero { padding: 70px 16px 32px; }
+  .hero-title .num { font-size: 48px; }
+  .hero-title .sub { font-size: 18px; }
+  .hero-poem { font-size: 14px; margin-bottom: 12px; }
+  .name-input-wrap { margin-bottom: 12px !important; }
+  .name-input-wrap label { font-size: 12px; }
+  #heroUserName { padding: 10px 14px; font-size: 14px; }
+  .hero-actions { margin-top: 12px !important; }
+  .hero-actions .btn { padding: 12px 28px; font-size: 15px; }
+  #visitorStats { gap: 16px; margin-top: 12px; }
+  #visitorStats .num { font-size: 22px !important; }
+  
+  /* Section 紧凑 */
+  .section { padding: 40px 16px; }
+  .section-title { font-size: 24px; }
+  .section-desc { font-size: 13px; margin-bottom: 20px; }
+  
+  /* 卡片网格 */
+  .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+  .model-card-header { padding: 16px 18px; }
+  .model-card-header h3 { font-size: 16px; }
+  .model-card-num { width: 36px; height: 36px; font-size: 18px; }
+  .model-card-body { padding: 16px 18px; }
+  .heart-item { padding: 12px 0; gap: 10px; }
+  .heart-item h4 { font-size: 14px; }
+  .heart-item p { font-size: 12px; }
+  .heart-icon { width: 38px; height: 38px; font-size: 18px; }
+  
+  /* 流程步骤 */
+  .skill-step { padding: 12px; }
+  .step-num { width: 32px; height: 32px; font-size: 14px; }
+  .step-content h4 { font-size: 14px; }
+  .step-content p { font-size: 12px; }
+  
+  /* 四知 */
+  .zhi-grid { grid-template-columns: 1fr; gap: 16px; }
+  .zhi-card { padding: 18px; }
+  .zhi-icon { width: 44px; height: 44px; font-size: 22px; }
+  .zhi-card h4 { font-size: 15px; }
+  .zhi-card p { font-size: 12px; }
+  .train-item { padding: 10px; }
+  .train-item .t-label { font-size: 11px; }
+  .train-item .t-val { font-size: 12px; }
+  
+  /* 测评区 */
+  .quiz-section { padding: 24px 16px; }
+  .quiz-meta { gap: 12px; }
+  .quiz-meta-item .num { font-size: 20px; }
+  .quiz-container { padding: 16px; }
+  .q-num { font-size: 12px; }
+  .q-text { font-size: 15px; }
+  .option-item { padding: 12px 14px; font-size: 14px; }
+  .quiz-nav { flex-direction: column; gap: 10px; }
+  .quiz-nav .btn { width: 100%; }
+  
+  /* 结果区 */
+  .result-section { padding: 24px 16px; }
+  .result-summary { grid-template-columns: 1fr; gap: 12px; }
+  .summary-item .s-val { font-size: 28px; }
   .result-body { grid-template-columns: 1fr; }
-  .improve-grid { grid-template-columns: repeat(2, 1fr); }
-  .sub-detail-cards { grid-template-columns: repeat(2, 1fr); }
+  .radar-wrap { min-height: 260px; }
+  .segment-card { padding: 24px 16px; }
+  .segment-poster-name { font-size: 24px !important; }
+  .segment-name { font-size: 22px !important; }
+  .segment-level { font-size: 13px !important; }
+  .segment-desc { font-size: 12px; }
+  .segment-advice { font-size: 12px; padding: 12px; }
+  .poster-actions { flex-direction: column; gap: 8px; }
+  .poster-share-btn { width: 100%; justify-content: center; }
+  
+  /* 提升计划 */
+  .improve-grid { grid-template-columns: 1fr; gap: 12px; }
+  .improve-card { padding: 18px; }
+  .improve-icon { width: 40px; height: 40px; font-size: 20px; }
+  .improve-card h4 { font-size: 15px; }
+  .improve-card li { font-size: 12px; }
+  
+  /* PK弹层 */
+  .share-modal { padding: 24px 18px; }
+  
+  /* 钻石海报 */
+  .diamond-score-row { flex-wrap: wrap; gap: 8px; }
+  .diamond-score-item { padding: 6px 10px; }
+  .diamond-score-item .d-val { font-size: 16px; }
+  
+  /* 按钮加大方便手指点击 */
+  .btn { min-height: 44px; }
+  .option-item { min-height: 48px; }
 }
 
 /* 隐藏按钮 disabled 样式 */
@@ -1034,11 +1080,6 @@ body {
 }
 .poster-share-btn:hover { border-color: var(--red); color: var(--red); }
 .poster-share-btn .s-icon { font-size: 16px; }
-@media (max-width: 768px) {
-  .share-btns { gap: 8px; }
-  .share-btn { padding: 10px 12px; min-width: 60px; }
-}
-
 /* ===== 满分钻石级海报 ===== */
 .segment-card.diamond {
   background: linear-gradient(160deg, #0a0a1a 0%, #1a0a2e 20%, #2d0a3e 40%, #4a0a5e 60%, #1a0a2e 80%, #0a0a1a 100%);
@@ -1128,7 +1169,6 @@ body {
   <div class="nav-inner">
     <div class="nav-logo">大董老师<span>·</span>1314销冠能力模型</div>
     <ul class="nav-links">
-      <li><a href="#tiandiren">天地人关联</a></li>
       <li><a href="#model">能力模型</a></li>
       <li><a href="#quiz">开始测评</a></li>
       <li><a href="#result">测评结果</a></li>
@@ -1156,45 +1196,6 @@ body {
     <a href="#quiz" class="btn-primary" onclick="return startQuizFromHero();">🎯 开始30题自测</a>
     <a href="#model" class="btn-secondary">📖 了解模型详情</a>
     <a href="#quiz" class="btn-secondary" style="border-color:var(--gold);color:var(--gold);" onclick="alert('完成测评后，即可邀请好友PK！');return startQuizFromHero();">⚔️ 邀请PK</a>
-  </div>
-</section>
-
-<!-- ===== 天地人关联 ===== -->
-<section class="section tiandiren-section" id="tiandiren">
-  <div class="section-tag">体系关联</div>
-  <h2 class="section-title">1314模型在天地人体系中的位置</h2>
-  <p class="section-desc">1314不是孤立的框架，而是大董天地人销售管理体系在个人能力层面的落地工具。</p>
-
-  <div class="tiandiren-grid">
-    <div class="tiandiren-card">
-      <div class="tiandiren-icon">☁️</div>
-      <h3>天 · 战略聚焦</h3>
-      <p>目标客户是谁，做什么定位，打什么仗</p>
-      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #EEE;">
-        <div style="font-size:11px;color:var(--gray);margin-bottom:4px;">关联模块</div>
-        <div style="font-size:13px;font-weight:700;">1314是落地执行的保障</div>
-      </div>
-    </div>
-    <div class="tiandiren-card">
-      <div class="tiandiren-icon">🗺️</div>
-      <h3>地 · 过程管控</h3>
-      <p>销售流程管控、阶段推进、节点把控</p>
-      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #EEE;">
-        <div style="font-size:11px;color:var(--gray);margin-bottom:4px;">关联模块</div>
-        <div style="font-size:13px;font-weight:700;color:var(--red);">1314 → 「一流流程」</div>
-      </div>
-    </div>
-    <div class="tiandiren-card">
-      <div class="tiandiren-icon">⚔️</div>
-      <h3>人 · 铁军打造</h3>
-      <p>态度、技能、知识 — 销售铁军三要素</p>
-      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #EEE;">
-        <div style="font-size:11px;color:var(--gray);margin-bottom:4px;">关联模块</div>
-        <div style="font-size:13px;font-weight:700;">
-          态度→三心 &nbsp;|&nbsp; 技能→流程 &nbsp;|&nbsp; 知识→四知
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1978,7 +1979,15 @@ function showResult() {
         <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
         <div class="diamond-share-tag">🔥 请大家拭目以待 🔥</div>
       </div>
-      <div class="segment-brand">
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0;">
+      <img id="posterQR" src="" alt="扫码测评" style="width:72px;height:72px;border-radius:8px;background:white;padding:4px;" />
+      <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.6);line-height:1.6;">
+        扫码参加<br>1314销冠能力测评<br>
+        <span style="color:#FFD700;">大董销售体系</span>
+      </div>
+    </div>
+    <div class="segment-brand">
+
         <span class="brand-logo" style="color:#FFD700;">大董老师</span>
         <span class="brand-divider">·</span>
         <span class="brand-url">大董销售体系</span>
@@ -1998,7 +2007,15 @@ function showResult() {
         <p class="segment-desc">${segment.desc}</p>
         <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
       </div>
-      <div class="segment-brand">
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0;">
+      <img id="posterQR" src="" alt="扫码测评" style="width:72px;height:72px;border-radius:8px;background:white;padding:4px;" />
+      <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.6);line-height:1.6;">
+        扫码参加<br>1314销冠能力测评<br>
+        <span style="color:#FFD700;">大董销售体系</span>
+      </div>
+    </div>
+    <div class="segment-brand">
+
         <span class="brand-logo">大董销售体系</span>
         <span class="brand-divider">·</span>
         <span class="brand-url">dongdajack-lab.github.io/customer-grading/ask-1314.html</span>
@@ -2221,8 +2238,45 @@ function generateShareCard() {
     });
 }
 
-// 页面加载时隐藏提升计划，等分享后解锁
-initShareLock();
+
+// ===== 访客统计 =====
+(function(){
+  var STORAGE_KEY = 'ask1314_visitors';
+  var API_URL = 'https://api.countapi.xyz/hit/dongdajack-ask-1314/visits';
+  var displayEl = document.getElementById('visitCount');
+  
+  // 先显示本地估计值
+  var localCount = parseInt(localStorage.getItem(STORAGE_KEY) || '0');
+  if(displayEl) displayEl.textContent = localCount >= 100 ? (localCount + '+' ) : (localCount || '---');
+  
+  // 尝试调用countapi（免费访客统计API）
+  if(navigator.onLine){
+    fetch(API_URL).then(function(r){ return r.json(); }).then(function(d){
+      if(d && d.value !== undefined){
+        var count = d.value;
+        localStorage.setItem(STORAGE_KEY, count);
+        if(displayEl) displayEl.textContent = count >= 100 ? (count + '+') : count;
+      }
+    }).catch(function(){});
+  }
+  
+  // 记录本次访问
+  if(!sessionStorage.getItem('ask1314_visited')){
+    sessionStorage.setItem('ask1314_visited','1');
+    localCount = localCount + 1;
+    localStorage.setItem(STORAGE_KEY, localCount);
+  }
+})();
+
+// ===== 海报二维码 =====
+function generateQRCode(callback) {
+  var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent(location.origin + location.pathname);
+  if(callback) callback(qrUrl);
+  return qrUrl;
+}
+
+  // 页面加载时隐藏提升计划，等分享后解锁
+  initShareLock();
 </script>
 </body>
 </html>
