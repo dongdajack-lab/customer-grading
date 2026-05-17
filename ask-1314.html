@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=14');
+    location.replace(location.pathname + location.search + sep + 'v=15');
   }
 })();
 </script>
@@ -682,7 +682,7 @@ body {
 .result-radar-wrap h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; text-align: center; }
 .radar-wrap { position: relative; max-width: 360px; margin: 0 auto; }
 .segment-card {
-  background: linear-gradient(160deg, #1a1a2e 0%, #2D1B3D 40%, #9B0B22 100%);
+  background: linear-gradient(160deg, #C8102E 0%, #9B0B22 40%, #7A0000 100%);
   border-radius: 20px;
   padding: 0;
   box-shadow: 0 20px 60px rgba(200,16,46,0.25), 0 0 0 3px rgba(201,168,76,0.3), 0 0 0 6px rgba(26,26,46,0.8);
@@ -787,14 +787,14 @@ body {
   gap: 12px;
   z-index: 4;
   font-size: 12px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.85);
 }
-.segment-brand .brand-logo { font-weight: 900; color: #C8102E; }
-.segment-brand .brand-url { color: rgba(255,255,255,0.5); font-size: 11px; }
+.segment-brand .brand-logo { font-weight: 900; color: #FFD700; }
+.segment-brand .brand-url { color: rgba(255,255,255,0.7); font-size: 11px; }
 .segment-card.gold { box-shadow: 0 20px 60px rgba(255,215,0,0.15), 0 0 0 3px rgba(255,215,0,0.4), 0 0 0 6px rgba(26,26,46,0.8); }
-.segment-card.silver { background: linear-gradient(160deg, #1a1a2e 0%, #1a2a3d 40%, #36454F 100%); }
+.segment-card.silver { background: linear-gradient(160deg, #C8102E 0%, #B0102E 40%, #8B0000 100%); }
 .segment-card.silver .segment-poster-name { color: #E8E8E8; text-shadow: 0 0 20px rgba(192,192,192,0.3); }
-.segment-card.bronze { background: linear-gradient(160deg, #1a1a2e 0%, #2D1B3D 40%, #5C3317 100%); }
+.segment-card.bronze { background: linear-gradient(160deg, #C8102E 0%, #A0102E 40%, #7A0000 100%); }
 .segment-card.bronze .segment-poster-name { color: #CD7F32; text-shadow: 0 0 20px rgba(205,127,50,0.3); }
 
 /* 子维度分析 */
@@ -1082,7 +1082,7 @@ body {
 .poster-share-btn .s-icon { font-size: 16px; }
 /* ===== 满分钻石级海报 ===== */
 .segment-card.diamond {
-  background: linear-gradient(160deg, #0a0a1a 0%, #1a0a2e 20%, #2d0a3e 40%, #4a0a5e 60%, #1a0a2e 80%, #0a0a1a 100%);
+  background: linear-gradient(160deg, #C8102E 0%, #A0102E 20%, #C8102E 40%, #D03040 60%, #A0102E 80%, #7A0000 100%);
   box-shadow: 0 0 60px rgba(255,215,0,0.3), 0 0 120px rgba(255,165,0,0.15), 0 0 0 3px rgba(255,215,0,0.6), 0 0 0 8px rgba(138,43,226,0.4), 0 20px 60px rgba(0,0,0,0.5);
   animation: diamondGlow 3s ease-in-out infinite alternate;
 }
@@ -1979,15 +1979,15 @@ function showResult() {
         <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
         <div class="diamond-share-tag">🔥 请大家拭目以待 🔥</div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0;">
-      <img id="posterQR" src="" alt="扫码测评" style="width:72px;height:72px;border-radius:8px;background:white;padding:4px;" />
-      <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.6);line-height:1.6;">
-        扫码参加<br>1314销冠能力测评<br>
-        <span style="color:#FFD700;">大董销售体系</span>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 20px;position:relative;z-index:2;">
+        <img id="posterQR" src="" alt="扫码测评" style="width:64px;height:64px;border-radius:8px;background:white;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
+        <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.8);line-height:1.7;">
+          <strong>扫码参加</strong><br>1314销冠能力测评<br>
+          <span style="color:#FFD700;font-weight:700;">大董销售体系</span>
+        </div>
       </div>
     </div>
-    <div class="segment-brand">
-
+    <div class="segment-brand" style="position:relative;">
         <span class="brand-logo" style="color:#FFD700;">大董老师</span>
         <span class="brand-divider">·</span>
         <span class="brand-url">大董销售体系</span>
@@ -2007,18 +2007,18 @@ function showResult() {
         <p class="segment-desc">${segment.desc}</p>
         <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0;">
-      <img id="posterQR" src="" alt="扫码测评" style="width:72px;height:72px;border-radius:8px;background:white;padding:4px;" />
-      <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.6);line-height:1.6;">
-        扫码参加<br>1314销冠能力测评<br>
-        <span style="color:#FFD700;">大董销售体系</span>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 20px;position:relative;z-index:2;">
+        <img id="posterQR" src="" alt="扫码测评" style="width:64px;height:64px;border-radius:8px;background:white;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
+        <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.8);line-height:1.7;">
+          <strong>扫码参加</strong><br>1314销冠能力测评<br>
+          <span style="color:#FFD700;font-weight:700;">大董销售体系</span>
+        </div>
       </div>
     </div>
-    <div class="segment-brand">
-
-        <span class="brand-logo">大董销售体系</span>
+    <div class="segment-brand" style="position:relative;">
+        <span class="brand-logo" style="color:#FFD700;">大董老师</span>
         <span class="brand-divider">·</span>
-        <span class="brand-url">dongdajack-lab.github.io/customer-grading/ask-1314.html</span>
+        <span class="brand-url">大董销售体系</span>
       </div>
     `;
   }
@@ -2032,6 +2032,13 @@ function showResult() {
 
   // 滚动到结果
   document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
+  // 设置海报二维码（延时确保DOM已渲染）
+  setTimeout(function(){
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent(location.href.split('?')[0]);
+    var qrImg = document.getElementById('posterQR');
+    if(qrImg) qrImg.src = qrUrl;
+  }, 200);
 }
 
 
