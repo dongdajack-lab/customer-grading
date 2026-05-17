@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=15');
+    location.replace(location.pathname + location.search + sep + 'v=16');
   }
 })();
 </script>
@@ -902,26 +902,30 @@ body {
   #visitorStats .num { font-size: 22px !important; }
   
   /* Section 紧凑 */
-  .section { padding: 40px 16px; }
-  .section-title { font-size: 24px; }
-  .section-desc { font-size: 13px; margin-bottom: 20px; }
-  
+  .section { padding: 24px 16px; }
+  .section-title { font-size: 22px; }
+  .section-desc { font-size: 13px; margin-bottom: 16px; }
+
   /* 卡片网格 */
-  .cards-grid { grid-template-columns: 1fr; gap: 16px; }
-  .model-card-header { padding: 16px 18px; }
-  .model-card-header h3 { font-size: 16px; }
+  .cards-grid { grid-template-columns: 1fr; gap: 12px; display: grid !important; }
+  .model-card { display: block !important; visibility: visible !important; opacity: 1 !important; }
+  .model-card-header { padding: 14px 16px; }
+  .model-card-header h3 { font-size: 15px; }
   .model-card-num { width: 36px; height: 36px; font-size: 18px; }
-  .model-card-body { padding: 16px 18px; }
-  .heart-item { padding: 12px 0; gap: 10px; }
+  .model-card-body { padding: 14px 16px; }
+  .heart-item { padding: 10px 0; gap: 10px; }
   .heart-item h4 { font-size: 14px; }
   .heart-item p { font-size: 12px; }
-  .heart-icon { width: 38px; height: 38px; font-size: 18px; }
+  .heart-icon { width: 36px; height: 36px; font-size: 16px; }
   
   /* 流程步骤 */
-  .skill-step { padding: 12px; }
+  .skill-step { padding: 10px 12px; }
+  .skill-step:last-child { margin-bottom: 0; }
+  .skill-flow { gap: 8px; }
   .step-num { width: 32px; height: 32px; font-size: 14px; }
   .step-content h4 { font-size: 14px; }
   .step-content p { font-size: 12px; }
+  .model-card-body > p:last-child { margin-bottom: 0 !important; margin-top: 8px !important; }
   
   /* 四知 */
   .zhi-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -1419,26 +1423,6 @@ body {
   <h2 class="section-title">1314 销售能力自测</h2>
   <p class="section-desc">30题测评，40%情境题，测出你在三心、流程、四知三个维度的真实水平。</p>
 
-  <div class="quiz-intro" id="quizIntro">
-    <h2>🎯 你的1314能力报告</h2>
-    <p>根据实际情况用1-5分自评，找到你的销冠成长路径</p>
-    <div class="quiz-meta">
-      <div class="quiz-meta-item"><div class="num">30</div><div class="label">道题目</div></div>
-      <div class="quiz-meta-item"><div class="num">3</div><div class="label">大维度</div></div>
-      <div class="quiz-meta-item"><div class="num">~5</div><div class="label">分钟完成</div></div>
-      <div class="quiz-meta-item"><div class="num">1</div><div class="label">份专属报告</div></div>
-    </div>
-    <div class="name-input-wrap">
-      <label>👤 请输入你的姓名（用于生成专属宣言海报）</label>
-      <input type="text" id="userNameInput" placeholder="例如：张三" maxlength="20">
-    </div>
-    <div style="margin-top:28px;">
-      <button class="btn-primary" onclick="startQuiz()" style="font-size:18px;padding:16px 48px;">
-        🚀 开始测评
-      </button>
-    </div>
-  </div>
-
   <div id="quizContainer" style="display:none;">
     <!-- 题目动态插入 -->
   </div>
@@ -1669,11 +1653,8 @@ function startQuizFromHero() {
   }
   if (heroName) heroName.style.borderColor = '';
 
-  // 同步到quizIntro的输入框（如果存在）
-  const quizName = document.getElementById('userNameInput');
-  if (quizName) quizName.value = userName;
-
-  document.getElementById('quizIntro').style.display = 'none';
+  var quizIntro = document.getElementById('quizIntro');
+  if (quizIntro) quizIntro.style.display = 'none';
   document.getElementById('quizContainer').style.display = 'block';
   currentQ = 0;
   answers = new Array(questions.length).fill(null);
@@ -1683,21 +1664,21 @@ function startQuizFromHero() {
 }
 
 function startQuiz() {
-  // 获取用户姓名（优先quizIntro里的，否则用hero区的）
-  const nameInput = document.getElementById('userNameInput');
+  // 获取用户姓名（hero区的）
   const heroName = document.getElementById('heroUserName');
-  userName = (nameInput && nameInput.value.trim()) || (heroName && heroName.value.trim()) || '';
+  userName = (heroName && heroName.value.trim()) || '';
   if (!userName) {
-    if (nameInput) {
-      nameInput.style.borderColor = '#FF6B6B';
-      nameInput.placeholder = '请填写姓名后再开始';
-      nameInput.focus();
+    if (heroName) {
+      heroName.style.borderColor = '#FF6B6B';
+      heroName.placeholder = '请填写姓名后再开始';
+      heroName.focus();
     }
     return;
   }
-  if (nameInput) nameInput.style.borderColor = '';
+  if (heroName) heroName.style.borderColor = '';
 
-  document.getElementById('quizIntro').style.display = 'none';
+  var quizIntro = document.getElementById('quizIntro');
+  if (quizIntro) quizIntro.style.display = 'none';
   document.getElementById('quizContainer').style.display = 'block';
   currentQ = 0;
   answers = new Array(questions.length).fill(null);
@@ -2125,7 +2106,8 @@ function downloadPoster() {
 function resetQuiz() {
   document.getElementById('result').classList.remove('show');
   document.getElementById('quiz').style.display = 'block';
-  document.getElementById('quizIntro').style.display = 'block';
+  var quizIntro = document.getElementById('quizIntro');
+  if (quizIntro) quizIntro.style.display = 'block';
   document.getElementById('quizContainer').style.display = 'none';
   document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
 }
