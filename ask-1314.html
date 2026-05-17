@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=18');
+    location.replace(location.pathname + location.search + sep + 'v=19');
   }
 })();
 </script>
@@ -2244,41 +2244,50 @@ function generateShareCard() {
   var displayEl = document.getElementById('visitNum');
 
   // 本地计数（保底显示）
-  var localCount = parseInt(localStorage.getItem(STORAGE_KEY) || '0');
+  var localCount = parseInt(localStorage.getItem('ask1314_visitors') || '0');
 
   // 先显示本地值
   if(displayEl) displayEl.textContent = localCount || '---';
 
-  // 尝试调用 countapi，3秒超时
-  if(navigator.onLine){
-    var controller = new AbortController();
-    var timer = setTimeout(function(){ controller.abort(); }, 3000);
-    fetch('https://api.countapi.xyz/hit/dongdajack-ask-1314/visits', { signal: controller.signal })
-      .then(function(r){ clearTimeout(timer); return r.json(); })
-      .then(function(d){
-        if(d && d.value !== undefined){
-          var count = d.value;
-          localStorage.setItem(STORAGE_KEY, count);
-          if(displayEl) displayEl.textContent = count;
+  // Worker URL（部署后填入）
+  var WORKER_URL = 'https://ask-1314-counter.dongdajack.workers.dev';
+
+  // 通用：更新显示+本地存储
+  function updateDisplay(count) {
+    if (displayEl) displayEl.textContent = count;
+    localStorage.setItem('ask1314_visitors', count);
+  }
+
+  // 如果 Worker URL 已配置，使用真实全网计数
+  if (WORKER_URL) {
+    // 先读取当前计数
+    fetch(WORKER_URL, { mode: 'cors' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.count !== undefined) {
+          updateDisplay(d.count);
         }
       })
-      .catch(function(){
-        console.log('[1314] 访客统计API暂不可用，使用本地计数');
-        // 本地也+1（本次会话首次访问）
-        if(!sessionStorage.getItem('ask1314_visited')){
-          sessionStorage.setItem('ask1314_visited', '1');
-          localCount = localCount + 1;
-          localStorage.setItem(STORAGE_KEY, localCount);
-          if(displayEl) displayEl.textContent = localCount;
-        }
-      });
+      .catch(function () { console.log('[1314] Worker 读取失败，使用本地计数'); });
+
+    // 本次会话首次访问 → 计数+1
+    if (!sessionStorage.getItem('ask1314_visited')) {
+      sessionStorage.setItem('ask1314_visited', '1');
+      fetch(WORKER_URL, { method: 'POST', mode: 'cors' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.count !== undefined) {
+            updateDisplay(d.count);
+          }
+        })
+        .catch(function () { /* 静默失败，下次刷新会修正 */ });
+    }
   } else {
-    // 离线：本地+1
-    if(!sessionStorage.getItem('ask1314_visited')){
+    // 无 Worker：使用本地计数
+    if (!sessionStorage.getItem('ask1314_visited')) {
       sessionStorage.setItem('ask1314_visited', '1');
       localCount = localCount + 1;
-      localStorage.setItem(STORAGE_KEY, localCount);
-      if(displayEl) displayEl.textContent = localCount;
+      updateDisplay(localCount);
     }
   }
 })();
