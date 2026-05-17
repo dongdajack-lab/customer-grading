@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<script>
+(function(){
+  if (!location.search.includes('v=')) {
+    var sep = location.search ? '&' : '?';
+    location.replace(location.pathname + location.search + sep + 'v=1');
+  }
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>大董老师·销冠核心能力模型 | 永锐线束定制版</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js?v=3"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap&v=3" rel="stylesheet">
+<style>
+:root {
+  --red: #C8102E;
+  --red-dark: #9B0B22;
+  --red-light: #F5E6E8;
+  --gold: #C9A84C;
+  --gold-light: #FDF6E3;
+  --black: #1A1A2E;
+  --gray: #4A4A5A;
+  --light: #F8F8FC;
+  --white: #FFFFFF;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans SC', -apple-system, sans-serif;
+  background: var(--light);
+  color: var(--black);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== NAV ===== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(26,26,46,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(200,16,46,0.2);
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 60px;
+}
+.nav-logo {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: 2px;
+}
+.nav-logo span { color: var(--red); }
+.nav-links {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+.nav-links a:hover {
+  color: var(--white);
+  background: rgba(200,16,46,0.4);
+}
+.nav-cta {
+  background: var(--red) !important;
+  color: var(--white) !important;
+  font-weight: 700;
+}
+.nav-cta:hover { background: var(--red-dark) !important; }
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--black) 0%, #2D1B3D 50%, var(--red-dark) 100%);
+  padding: 120px 24px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(200,16,46,0.25);
+  border: 1px solid rgba(200,16,46,0.5);
+  color: #FF8A9A;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: 20px;
+  margin-bottom: 28px;
+  animation: fadeInDown 0.6s ease;
+}
+.hero-title {
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+  animation: fadeInUp 0.8s ease;
+}
+.hero-title .num { color: var(--red); }
+.hero-title .sub {
+  display: block;
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 4px;
+  margin-top: 8px;
+}
+.hero-poem {
+  max-width: 700px;
+  margin: 24px auto 0;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(200,16,46,0.3);
+  border-radius: 16px;
+  padding: 20px 28px;
+  font-size: 18px;
+  color: rgba(255,255,255,0.8);
+  line-height: 2;
+  animation: fadeInUp 1s ease;
+}
+.hero-poem strong { color: var(--gold); font-weight: 700; }
+.hero-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 1.2s ease;
+}
+.btn-primary {
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  padding: 14px 36px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,16,46,0.4); }
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 12px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+/* ===== SECTIONS ===== */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+}
+.section-tag::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--red);
+}
+.section-title {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 900;
+  color: var(--black);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.section-desc {
+  font-size: 16px;
+  color: var(--gray);
+  max-width: 600px;
+  margin-bottom: 48px;
+}
+
+/* ===== 1314卡片 ===== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+.model-card {
+  background: var(--white);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+.model-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--red);
+}
+.model-card-header {
+  padding: 28px 28px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #F0F0F5;
+}
+.model-card-num {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: white;
+  flex-shrink: 0;
+}
+.model-card-header h3 {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.model-card-header > div > span {
+  font-size: 12px;
+  color: var(--gray);
+  display: block;
+}
+.model-card-body { padding: 24px 28px; }
+
+.heart-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #F5F5F8;
+}
+.heart-item:last-child { border-bottom: none; }
+.heart-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.hi-1 { background: #FFF0F0; }
+.hi-2 { background: #FFF5E0; }
+.hi-3 { background: #F0F5FF; }
+.heart-item h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.heart-item p {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+.heart-tag {
+  display: inline-block;
+  background: var(--red-light);
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+/* 流程6技 */
+.skill-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.skill-step {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--light);
+  border-radius: 12px;
+  border-left: 4px solid var(--red);
+  transition: all 0.2s;
+}
+.skill-step:hover { background: var(--red-light); border-left-color: var(--red-dark); }
+.skill-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.skill-step h4 {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 60px;
+}
+.skill-step-desc {
+  font-size: 13px;
+  color: var(--gray);
+  flex: 1;
+}
+.skill-step-power {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  background: var(--red-light);
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* 四知 */
+.zhi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.zhi-item {
+  background: var(--light);
+  border-radius: 16px;
+  padding: 20px;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+.zhi-item:hover { border-color: var(--gold); }
+.zhi-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.zhi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.zi-1 { background: #FFF0F0; }
+.zi-2 { background: #F0F5FF; }
+.zi-3 { background: #FFF5E0; }
+.zi-4 { background: #F0FFF5; }
+.zhi-item h4 { font-size: 15px; font-weight: 700; }
+.zhi-item p { font-size: 12px; color: var(--gray); margin-top: 2px; }
+.zhi-action {
+  background: white;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--gold);
+}
+.zhi-action-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.zhi-action-text { font-size: 13px; font-weight: 600; color: var(--black); }
+.zhi-deliverable {
+  background: linear-gradient(135deg, var(--gold-light), #FFF9E6);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #8B6914;
+  font-weight: 600;
+}
+
+/* ===== 测评区域 ===== */
+.quiz-section {
+  background: var(--white);
+}
+.quiz-intro {
+  background: linear-gradient(135deg, var(--black), var(--red-dark));
+  border-radius: 24px;
+  padding: 48px;
+  color: white;
+  text-align: center;
+  margin-bottom: 48px;
+}
+.quiz-intro h2 { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+.quiz-intro p { opacity: 0.8; font-size: 15px; }
+.quiz-meta {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.quiz-meta-item {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 12px 20px;
+  text-align: center;
+}
+.quiz-meta-item .num { font-size: 24px; font-weight: 900; color: var(--gold); }
+.quiz-meta-item .label { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+/* 姓名输入 */
+.name-input-wrap {
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px auto 0;
+  max-width: 400px;
+}
+.name-input-wrap label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+  color: white;
+}
+.name-input-wrap input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 16px;
+  font-family: inherit;
+  text-align: center;
+}
+.name-input-wrap input::placeholder { color: rgba(255,255,255,0.5); }
+.name-input-wrap input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.2);
+}
+
+.quiz-start {
+  text-align: center;
+  padding: 48px;
+}
+.quiz-start h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.quiz-start p { color: var(--gray); margin-bottom: 24px; }
+
+/* 题目 */
+.question-block {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  display: none;
+}
+.question-block.active { display: block; animation: fadeInUp 0.4s ease; }
+.question-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.question-dim-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.dim-a { background: #FFF0F0; color: var(--red); }
+.dim-s { background: #F0F5FF; color: #4F46E5; }
+.dim-k { background: var(--gold-light); color: #8B6914; }
+.question-text { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.question-type-tag {
+  display: inline-block;
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-left: 8px;
+}
+.scenario-box {
+  background: linear-gradient(135deg, #FFF8E1, #FFFDE7);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #5D4037;
+  line-height: 1.7;
+}
+.scenario-box strong { color: var(--red-dark); }
+.options-list { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--light);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+  font-size: 14px;
+  color: var(--black);
+  font-family: inherit;
+}
+.option-btn:hover { border-color: var(--red); background: var(--red-light); }
+.option-btn.selected { border-color: var(--red); background: var(--red-light); }
+.option-btn .opt-letter {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid #DDD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.option-btn.selected .opt-letter { background: var(--red); color: white; border-color: var(--red); }
+.option-text { flex: 1; line-height: 1.5; }
+
+.quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+.progress-bar-wrap {
+  flex: 1;
+  margin: 0 20px;
+}
+.progress-bar-bg {
+  background: #EEE;
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--gold));
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.progress-text { font-size: 12px; color: var(--gray); text-align: center; margin-top: 6px; }
+.btn-nav {
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-prev { background: #EEE; color: var(--gray); }
+.btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-next { background: var(--red); color: white; }
+.btn-next:hover { background: var(--red-dark); }
+.btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ===== 结果页 ===== */
+.result-section {
+  display: none;
+  padding: 80px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.result-section.show { display: block; animation: fadeInUp 0.6s ease; }
+.result-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.result-header h2 { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+.result-header p { color: var(--gray); }
+
+.result-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.result-dim-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.result-dim-card .dim-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.result-dim-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.result-dim-card .score { font-size: 36px; font-weight: 900; color: var(--black); }
+.result-dim-card .total { font-size: 14px; color: var(--gray); font-weight: 400; }
+.result-dim-card .max { font-size: 14px; color: var(--gray); }
+.result-dim-card .tag {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.result-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.result-radar-wrap {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+.result-radar-wrap h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+.radar-wrap { position: relative; max-width: 360px; margin: 0 auto; }
+.segment-card {
+  background: linear-gradient(160deg, #C8102E 0%, #9B0B22 40%, #7A0000 100%);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(200,16,46,0.25), 0 0 0 3px rgba(201,168,76,0.3), 0 0 0 6px rgba(26,26,46,0.8);
+  display: flex;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  max-width: 540px;
+  margin: 0 auto;
+}
+.segment-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 50%, rgba(201,168,76,0.1) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.segment-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 56px;
+  background: rgba(0,0,0,0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+.segment-poster-inner {
+  position: relative;
+  z-index: 3;
+  padding: 36px 32px 72px;
+}
+.segment-watermark {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 180px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.03);
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
+  user-select: none;
+}
+.segment-badge-wrap {
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 3;
+}
+.segment-badge-icon {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+.segment-poster-name {
+  font-size: 36px;
+  font-weight: 900;
+  color: #FFD700;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 3;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.segment-name { font-size: 32px; font-weight: 900; color: white; position: relative; z-index: 3; }
+.segment-level { font-size: 15px; color: rgba(255,255,255,0.7); margin-top: 6px; position: relative; z-index: 3; }
+.segment-divider {
+  width: 60%;
+  height: 1px;
+  margin: 20px auto;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent);
+  position: relative;
+  z-index: 3;
+}
+.segment-desc { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.8; margin-bottom: 18px; position: relative; z-index: 3; }
+.segment-advice {
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #FCD34D;
+  line-height: 1.7;
+  position: relative;
+  z-index: 3;
+  text-align: left;
+}
+.segment-advice strong { color: #FFD700; }
+.segment-brand {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 4;
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+}
+.segment-brand .brand-logo { font-weight: 900; color: #FFD700; }
+.segment-brand .brand-url { color: rgba(255,255,255,0.7); font-size: 11px; }
+.segment-card.gold { box-shadow: 0 20px 60px rgba(255,215,0,0.15), 0 0 0 3px rgba(255,215,0,0.4), 0 0 0 6px rgba(26,26,46,0.8); }
+.segment-card.silver { background: linear-gradient(160deg, #C8102E 0%, #B0102E 40%, #8B0000 100%); }
+.segment-card.silver .segment-poster-name { color: #E8E8E8; text-shadow: 0 0 20px rgba(192,192,192,0.3); }
+.segment-card.bronze { background: linear-gradient(160deg, #C8102E 0%, #A0102E 40%, #7A0000 100%); }
+.segment-card.bronze .segment-poster-name { color: #CD7F32; text-shadow: 0 0 20px rgba(205,127,50,0.3); }
+
+/* 子维度分析 */
+.sub-detail-section {
+  margin-bottom: 24px;
+}
+.sub-detail-section h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--light);
+}
+.sub-detail-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.sub-detail-item {
+  background: var(--light);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.sub-detail-item .label { font-size: 11px; color: var(--gray); margin-bottom: 4px; }
+.sub-detail-item .score { font-size: 20px; font-weight: 800; }
+.sub-detail-item .max { font-size: 12px; color: var(--gray); }
+
+/* 提升计划 */
+.improve-section {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.improve-section h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+.improve-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.improve-item {
+  background: var(--light);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.improve-item:hover { border-color: var(--red); }
+.improve-item .num { font-size: 28px; font-weight: 900; color: var(--red); }
+.improve-item .label { font-size: 11px; color: var(--gray); margin-top: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.improve-item .value { font-size: 12px; color: var(--black); margin-top: 8px; font-weight: 600; min-height: 36px; }
+.improve-input {
+  width: 100%;
+  border: 2px solid #EEE;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: none;
+  margin-top: 6px;
+  transition: border-color 0.2s;
+}
+.improve-input:focus { outline: none; border-color: var(--red); }
+.improve-placeholder { color: #AAA; font-size: 12px; }
+
+
+/* ===== 页脚 ===== */
+.footer {
+  background: var(--black);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 40px 24px;
+  font-size: 13px;
+}
+.footer strong { color: var(--red); }
+
+/* ===== 动画 ===== */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp 0.6s ease both; }
+.fade-in:nth-child(2) { animation-delay: 0.1s; }
+.fade-in:nth-child(3) { animation-delay: 0.2s; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  /* 导航 */
+  .nav-links { display: none; }
+  .nav-inner { padding: 0 12px; height: 50px; }
+  .nav-logo { font-size: 14px; }
+  
+  /* Hero 紧凑 */
+  .hero { padding: 70px 16px 32px; }
+  .hero-title .num { font-size: 48px; }
+  .hero-title .sub { font-size: 18px; }
+  .hero-poem { font-size: 16px; margin-bottom: 12px; }
+  .name-input-wrap { margin-bottom: 12px !important; }
+  .name-input-wrap label { font-size: 12px; }
+  #heroUserName { padding: 10px 14px; font-size: 14px; }
+  .hero-actions { margin-top: 12px !important; }
+  .hero-actions .btn { padding: 12px 28px; font-size: 15px; }
+
+  /* Section 紧凑 */
+  .section { padding: 24px 16px; }
+  .section-title { font-size: 22px; }
+  .section-desc { font-size: 13px; margin-bottom: 16px; }
+
+  /* 卡片网格 */
+  .cards-grid { grid-template-columns: 1fr; gap: 12px; display: grid !important; }
+  .model-card { display: block !important; visibility: visible !important; opacity: 1 !important; grid-column: auto !important; margin-bottom: 0 !important; }
+  .model-card-header { padding: 14px 16px; }
+  .model-card-header h3 { font-size: 15px; }
+  .model-card-num { width: 36px; height: 36px; font-size: 18px; }
+  .model-card-body { padding: 14px 16px; }
+  .model-card-body > p:last-child { margin-bottom: 0 !important; }
+  .heart-item { padding: 10px 0; gap: 10px; }
+  .heart-item h4 { font-size: 14px; }
+  .heart-item p { font-size: 12px; }
+  .heart-icon { width: 36px; height: 36px; font-size: 16px; }
+  
+  /* 流程步骤 */
+  .skill-step { padding: 10px 12px; }
+  .skill-step:last-child { margin-bottom: 0 !important; }
+  .skill-flow { gap: 8px; margin-bottom: 0 !important; }
+  .step-num { width: 32px; height: 32px; font-size: 14px; }
+  .step-content h4 { font-size: 14px; }
+  .step-content p { font-size: 12px; }
+  
+  /* 四知 */
+  .zhi-grid { grid-template-columns: 1fr; gap: 16px; }
+  .zhi-card { padding: 18px; }
+  .zhi-icon { width: 44px; height: 44px; font-size: 22px; }
+  .zhi-card h4 { font-size: 15px; }
+  .zhi-card p { font-size: 12px; }
+  .train-item { padding: 10px; }
+  .train-item .t-label { font-size: 11px; }
+  .train-item .t-val { font-size: 12px; }
+  
+  /* 测评区 */
+  .quiz-section { padding: 24px 16px; }
+  .quiz-meta { gap: 12px; }
+  .quiz-meta-item .num { font-size: 20px; }
+  .quiz-container { padding: 16px; }
+  .q-num { font-size: 12px; }
+  .q-text { font-size: 15px; }
+  .option-item { padding: 12px 14px; font-size: 14px; }
+  .quiz-nav { flex-direction: column; gap: 10px; }
+  .quiz-nav .btn { width: 100%; }
+  
+  /* 结果区 */
+  .result-section { padding: 24px 16px; }
+  .result-summary { grid-template-columns: 1fr; gap: 12px; }
+  .summary-item .s-val { font-size: 28px; }
+  .result-body { grid-template-columns: 1fr; }
+  .radar-wrap { min-height: 260px; }
+  .segment-card { padding: 24px 16px; }
+  .segment-poster-name { font-size: 24px !important; }
+  .segment-name { font-size: 22px !important; }
+  .segment-level { font-size: 13px !important; }
+  .segment-desc { font-size: 12px; }
+  .segment-advice { font-size: 12px; padding: 12px; }
+  .poster-actions { flex-direction: column; gap: 8px; }
+  .poster-share-btn { width: 100%; justify-content: center; }
+  
+  /* 提升计划 */
+  .improve-grid { grid-template-columns: 1fr; gap: 12px; }
+  .improve-card { padding: 18px; }
+  .improve-icon { width: 40px; height: 40px; font-size: 20px; }
+  .improve-card h4 { font-size: 15px; }
+  .improve-card li { font-size: 12px; }
+  
+  /* PK弹层 */
+  .share-modal { padding: 24px 18px; }
+  
+  /* 钻石海报 */
+  .diamond-score-row { flex-wrap: wrap; gap: 8px; }
+  .diamond-score-item { padding: 6px 10px; }
+  .diamond-score-item .d-val { font-size: 16px; }
+  
+  /* 按钮加大方便手指点击 */
+  .btn { min-height: 44px; }
+  .option-item { min-height: 48px; }
+}
+
+/* 隐藏按钮 disabled 样式 */
+.btn-nav { cursor: pointer; }
+.btn-nav:disabled { cursor: not-allowed; }
+
+/* ===== 分享弹层 ===== */
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.share-overlay.show { opacity: 1; pointer-events: auto; }
+.share-modal {
+  background: #FFF;
+  border-radius: 20px;
+  width: 340px;
+  max-width: 90vw;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  transform: translateY(20px);
+  transition: transform 0.3s;
+}
+.share-overlay.show .share-modal { transform: translateY(0); }
+.share-modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--black);
+  margin-bottom: 8px;
+}
+.share-modal-desc {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.share-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.share-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 2px solid #EEE;
+  border-radius: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: var(--gray);
+  min-width: 72px;
+}
+.share-btn:hover { border-color: var(--red); color: var(--red); }
+.share-btn-icon { font-size: 28px; }
+.share-btn-ok {
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.share-btn-ok:hover { background: var(--red-dark); }
+
+/* ===== 海报下方分享按钮 ===== */
+.poster-share-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.poster-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #DDD;
+  background: white;
+  font-size: 13px;
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.poster-share-btn:hover { border-color: var(--red); color: var(--red); }
+.poster-share-btn .s-icon { font-size: 16px; }
+/* ===== 满分钻石级海报 ===== */
+.segment-card.diamond {
+  background: linear-gradient(160deg, #C8102E 0%, #A0102E 20%, #C8102E 40%, #D03040 60%, #A0102E 80%, #7A0000 100%);
+  box-shadow: 0 0 60px rgba(255,215,0,0.3), 0 0 120px rgba(255,165,0,0.15), 0 0 0 3px rgba(255,215,0,0.6), 0 0 0 8px rgba(138,43,226,0.4), 0 20px 60px rgba(0,0,0,0.5);
+  animation: diamondGlow 3s ease-in-out infinite alternate;
+}
+.segment-card.diamond::before {
+  background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.1) 30%, rgba(255,215,0,0.15) 60%, rgba(255,255,255,0.1) 100%);
+}
+.segment-card.diamond .segment-poster-name { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,165,0,0.4); }
+.segment-card.diamond .segment-badge-icon { filter: drop-shadow(0 0 20px rgba(255,215,0,0.9)); }
+
+.diamond-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.diamond-star {
+  position: absolute;
+  width: 4px; height: 4px;
+  background: #FFD700;
+  border-radius: 50%;
+  animation: starTwinkle 2s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(255,215,0,0.8);
+}
+.diamond-score-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 8px 0;
+  position: relative;
+  z-index: 3;
+}
+.diamond-score-item {
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.35);
+  border-radius: 10px;
+  padding: 6px 14px;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+}
+.diamond-score-item .d-label { font-size: 10px; color: rgba(255,215,0,0.7); text-transform: uppercase; letter-spacing: 1px; }
+.diamond-score-item .d-val { font-size: 20px; font-weight: 900; color: #FFD700; }
+.diamond-badge-line {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin: 4px 0 8px;
+  position: relative;
+  z-index: 3;
+  letter-spacing: 2px;
+}
+.diamond-badge-line strong { color: #FFD700; font-weight: 700; }
+.diamond-share-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a0a2e;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 8px 24px;
+  border-radius: 20px;
+  margin-top: 8px;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+  letter-spacing: 1px;
+}
+
+@keyframes diamondGlow {
+  0% { box-shadow: 0 0 40px rgba(255,215,0,0.25), 0 0 80px rgba(255,165,0,0.1), 0 0 0 3px rgba(255,215,0,0.5), 0 20px 60px rgba(0,0,0,0.5); }
+  100% { box-shadow: 0 0 80px rgba(255,215,0,0.45), 0 0 160px rgba(255,165,0,0.25), 0 0 0 4px rgba(255,215,0,0.8), 0 20px 60px rgba(0,0,0,0.5); }
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">大董老师<span>·</span>1314销冠能力模型</div>
+    <ul class="nav-links">
+      <li><a href="#model">能力模型</a></li>
+      <li><a href="#quiz">开始测评</a></li>
+      <li><a href="#result">测评结果</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge">📦 广东永锐线束定制版</div>
+  <h1 class="hero-title">
+    <span class="num">1314</span>
+    <span class="sub">销冠能力模型</span>
+  </h1>
+  <div class="hero-poem">
+    <span style="color:var(--red);font-weight:700;">1</span><span style="color:var(--white);font-weight:700;">个模型打天下</span>，<span style="color:var(--red);font-weight:700;">3</span><span style="color:var(--white);font-weight:700;">心修炼强心态</span>，<br>
+    <span style="color:var(--red);font-weight:700;">1</span><span style="color:var(--white);font-weight:700;">流流程拿结果</span>，<span style="color:var(--red);font-weight:700;">4</span><span style="color:var(--white);font-weight:700;">知贯通做专家</span>。<br><br>
+    <strong>1314，一生一世做销冠！</strong>
+  </div>
+  <div class="name-input-wrap" style="max-width:360px;margin:16px auto 20px;">
+    <label>👤 请输入你的姓名（用于生成专属宣言海报）</label>
+    <input type="text" id="heroUserName" placeholder="例如：张三" maxlength="20">
+  </div>
+  <div class="hero-actions">
+    <a href="#quiz" class="btn-primary" onclick="return startQuizFromHero();">🎯 开始30题自测</a>
+    <a href="#model" class="btn-secondary">📖 了解模型详情</a>
+    <a href="#quiz" class="btn-secondary" style="border-color:var(--gold);color:var(--gold);" onclick="alert('完成测评后，即可邀请好友PK！');return startQuizFromHero();">⚔️ 邀请PK</a>
+  </div>
+</section>
+
+<!-- ===== 模型详解 ===== -->
+<section class="section" id="model">
+
+  <div class="section-tag">能力模型详解</div>
+  <h2 class="section-title">1314 模型三层拆解</h2>
+  <p class="section-desc">态度是根基，技能是武器，知识是弹药，三者缺一不可，共同构建优秀销售的完整能力图谱。</p>
+
+  <!-- ASK模型说明 -->
+  <div style="background: linear-gradient(135deg, var(--red-light), #F0F5FF); border-radius: 16px; padding: 24px 28px; margin-bottom: 40px; border-left: 4px solid var(--red);">
+    <div style="font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px;">
+      <span style="font-size: 32px; font-weight: 900; color: var(--red); line-height: 1;">一</span>
+      <span>套ASK模型</span>
+    </div>
+    <div style="font-size: 15px; color: var(--black); line-height: 1.8;">
+      <strong style="color:var(--red);">A</strong> = Attitude（态度）· <strong style="color:#4F46E5;">S</strong> = Skill（技能）· <strong style="color:#8B6914;">K</strong> = Knowledge（知识）<br>
+      1314模型的底层逻辑，是一套可量化、可训练、可复制的销售能力ASK框架。<br>
+      <span style="color: var(--gray); font-size: 13px;">三层体系：态度是根基（A），技能是武器（S），认知是弹药（K）。三者相互支撑、缺一不可，缺哪层补哪层，系统通关。</span>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- 3心 -->
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <h3><span style="color:var(--red);font-size:32px;font-weight:900;margin-right:4px;">三</span>心修炼强心态</h3>
+          <span>A（Attitude）态度层 · 能力根基</span>
+        </div>
+      </div>
+      <div class="model-card-body">
+        <p style="font-size:13px;color:var(--gray);margin-bottom:16px;">三个<strong style="color:var(--black);">可训练、可培养的心态能力</strong>，是销售职业的底层操作系统。</p>
+
+        <div class="heart-item">
+          <div class="heart-icon hi-1">💪</div>
+          <div>
+            <span class="heart-tag">Attitude 01</span>
+            <h4>抗压心（韧性）</h4>
+            <p>被拒绝后快速恢复，越挫越勇。面对客户冷脸、丢单挫折，依然能稳定发挥。</p>
+          </div>
+        </div>
+        <div class="heart-item">
+          <div class="heart-icon hi-2">🎯</div>
+          <div>
+            <span class="heart-tag">Attitude 02</span>
+            <h4>企图心（目标感）</h4>
+            <p>赚到钱、拿到结果、成为销冠的内在驱动力。主动拓客、自律执行、不找借口。</p>
+          </div>
+        </div>
+        <div class="heart-item">
+          <div class="heart-icon hi-3">🚀</div>
+          <div>
+            <span class="heart-tag">Attitude 03</span>
+            <h4>学习心（成长型）</h4>
+            <p>每次失败和拒绝都是养分，主动复盘迭代。主动学新知识、向上请教、自驱前行。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1流程 -->
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <h3><span style="color:#4F46E5;font-size:32px;font-weight:900;margin-right:4px;">一</span>流流程拿结果</h3>
+          <span>S（Skill）技能层 · 落地动作</span>
+        </div>
+      </div>
+      <div class="model-card-body">
+        <p style="font-size:13px;color:var(--gray);margin-bottom:16px;">六阶段销售流程，每阶段一个<strong style="color:var(--black);">核心技能词</strong>，形成可拆解的能力地图。</p>
+
+        <div class="skill-flow">
+          <div class="skill-step">
+            <div class="skill-step-num">1</div>
+            <div>
+              <h4 class="skill-step-desc">线索获取</h4>
+            </div>
+            <div class="skill-step-power">获客力</div>
+          </div>
+          <div class="skill-step">
+            <div class="skill-step-num">2</div>
+            <div>
+              <h4 class="skill-step-desc">准备破冰</h4>
+            </div>
+            <div class="skill-step-power">建信力</div>
+          </div>
+          <div class="skill-step">
+            <div class="skill-step-num">3</div>
+            <div>
+              <h4 class="skill-step-desc">深度挖需</h4>
+            </div>
+            <div class="skill-step-power">提问力</div>
+          </div>
+          <div class="skill-step">
+            <div class="skill-step-num">4</div>
+            <div>
+              <h4 class="skill-step-desc">价值塑造</h4>
+            </div>
+            <div class="skill-step-power">呈现力</div>
+          </div>
+          <div class="skill-step">
+            <div class="skill-step-num">5</div>
+            <div>
+              <h4 class="skill-step-desc">谈判成交</h4>
+            </div>
+            <div class="skill-step-power">锁单力</div>
+          </div>
+          <div class="skill-step">
+            <div class="skill-step-num">6</div>
+            <div>
+              <h4 class="skill-step-desc">客情深耕</h4>
+            </div>
+            <div class="skill-step-power">经营力</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--gray);margin-top:12px;background:var(--light);padding:8px 12px;border-radius:8px;">
+          💡 记住6个词 → 复盘自己在哪步最薄弱 → 流程不再是黑箱
+        </p>
+      </div>
+    </div>
+
+    <!-- 4知 -->
+    <div class="model-card" style="grid-column: span 2;">
+      <div class="model-card-header">
+        <div>
+          <h3><span style="color:var(--gold);font-size:32px;font-weight:900;margin-right:4px;">四</span>知贯通做专家</h3>
+          <span>K（Knowledge）知识层 · 弹药储备</span>
+        </div>
+      </div>
+      <div class="model-card-body">
+        <div class="zhi-grid">
+          <div class="zhi-item">
+            <div class="zhi-item-header">
+              <div class="zhi-icon zi-1">🧠</div>
+              <div>
+                <h4>知己</h4>
+                <p>自家产品与内部资源</p>
+              </div>
+            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">了解自家产品的核心价值、优势边界和适用场景，做到心中有数。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">清楚内部资源地图，知道什么时候该调用哪些资源，做到手中有粮。</p>
+            <div class="zhi-deliverable">📄 成果物：产品一页纸 + 内部资源地图</div>
+          </div>
+          <div class="zhi-item">
+            <div class="zhi-item-header">
+              <div class="zhi-icon zi-2">🎯</div>
+              <div>
+                <h4>知彼</h4>
+                <p>竞争对手全景</p>
+              </div>
+            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">了解主要竞品的优劣势、市场策略和定价体系，做到知己知彼。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">能在客户面前客观评价竞品，找到差异化竞争优势，占据主动。</p>
+            <div class="zhi-deliverable">📄 成果物：竞品作战地图 + 丢单案例库</div>
+          </div>
+          <div class="zhi-item">
+            <div class="zhi-item-header">
+              <div class="zhi-icon zi-3">👥</div>
+              <div>
+                <h4>知客</h4>
+                <p>客户业务与决策链</p>
+              </div>
+            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">理解客户所在行业的业务逻辑和核心痛点，做到有的放矢。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">理清客户内部决策链，找到关键发起人和影响者，精准推进。</p>
+            <div class="zhi-deliverable">📄 成果物：客户画像 + 决策链图</div>
+          </div>
+          <div class="zhi-item">
+            <div class="zhi-item-header">
+              <div class="zhi-icon zi-4">📊</div>
+              <div>
+                <h4>知势</h4>
+                <p>行业趋势与前瞻洞察</p>
+              </div>
+            </div>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">掌握行业动态和发展趋势，先人一步洞察机会和风向。</p>
+            <p style="font-size:14px;color:var(--black);line-height:1.7;margin:8px 0;">把趋势转化为谈资，让客户觉得你懂行、值得信任和托付。</p>
+            <div class="zhi-deliverable">📄 成果物：行业洞察月报</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== 测评区域 ===== -->
+<section class="quiz-section section" id="quiz">
+
+  <div id="quizContainer" style="display:none;">
+    <!-- 题目动态插入 -->
+  </div>
+</section>
+
+<!-- ===== 结果页 ===== -->
+<section class="result-section" id="result">
+  <div class="result-header">
+    <h2>📊 你的1314能力报告</h2>
+    <p>基于30题自测的真实评估</p>
+  </div>
+
+  <div class="result-summary" id="resultSummary">
+    <!-- 动态填充 -->
+  </div>
+
+  <div class="result-body">
+    <div class="result-radar-wrap">
+      <h3>雷达图分析</h3>
+      <div class="radar-wrap">
+        <canvas id="radarChart" width="360" height="300"></canvas>
+      </div>
+      <!-- 三心子维度 -->
+      <div class="sub-detail-section" id="aDetailSection">
+        <h4 style="color:var(--red);">💪 三心（态度）子维度</h4>
+        <div class="sub-detail-cards" id="aDetailCards"></div>
+      </div>
+      <!-- 流程子维度 -->
+      <div class="sub-detail-section" id="sDetailSection">
+        <h4 style="color:#4F46E5;">🗺️ 流程6技（技能）子维度</h4>
+        <div class="sub-detail-cards" id="sDetailCards"></div>
+      </div>
+      <!-- 四知子维度 -->
+      <div class="sub-detail-section" id="kDetailSection">
+        <h4 style="color:#8B6914;">🧠 四知（知识）子维度</h4>
+        <div class="sub-detail-cards" id="kDetailCards"></div>
+      </div>
+    </div>
+
+    <div class="segment-card" id="segmentCard">
+      <!-- 段位卡片 -->
+    </div>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="btn-primary" onclick="downloadPoster()" style="font-size:15px;padding:12px 28px;">📥 保存为图片</button>
+    </div>
+    <div class="poster-share-row">
+      <button class="poster-share-btn" onclick="shareWechat()"><span class="s-icon">💬</span> 微信分享</button>
+      <button class="poster-share-btn" onclick="shareWeibo()"><span class="s-icon">🔴</span> 微博分享</button>
+      <button class="poster-share-btn" onclick="copyLink()"><span class="s-icon">🔗</span> 复制链接</button>
+      <button class="poster-share-btn" onclick="showInvitePK()" style="background:var(--red);color:white;border-color:var(--red);"><span class="s-icon">⚔️</span> 邀请PK</button>
+    </div>
+  </div>
+
+  <div class="improve-section">
+    <h3>📝 1314 提升计划</h3>
+    <p style="font-size:14px;color:var(--gray);margin-bottom:20px;">基于你的测评结果，生成专属提升计划（可手动修改）</p>
+    <div class="improve-grid">
+      <div class="improve-item">
+        <div class="num" style="color:var(--red);font-size:20px;">1</div>
+        <div class="label">核心短板</div>
+        <textarea class="improve-input" id="plan1" rows="2" placeholder="你当前最需要补足的一处"></textarea>
+      </div>
+      <div class="improve-item">
+        <div class="num" style="color:#4F46E5;font-size:20px;">3</div>
+        <div class="label">周目标</div>
+        <textarea class="improve-input" id="plan2" rows="2" placeholder="3周内要达成的具体进步"></textarea>
+      </div>
+      <div class="improve-item">
+        <div class="num" style="color:var(--gold);font-size:20px;">1</div>
+        <div class="label">关键动作</div>
+        <textarea class="improve-input" id="plan3" rows="2" placeholder="每天/每周要做的核心一件事"></textarea>
+      </div>
+      <div class="improve-item">
+        <div class="num" style="color:#10B981;font-size:20px;">4</div>
+        <div class="label">学习资源</div>
+        <textarea class="improve-input" id="plan4" rows="2" placeholder="师父/手册/课程/实践，各选一个"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:24px;">
+    <button class="btn-primary" onclick="resetQuiz()" style="font-size:16px;padding:14px 36px;">🔄 重新测评</button>
+  </div>
+</section>
+
+
+<!-- 邀请好友PK弹层 -->
+<div class="share-overlay" id="invitePKOverlay">
+  <div class="share-modal" style="max-width:380px;">
+    <div style="position:absolute;top:16px;right:16px;cursor:pointer;font-size:20px;" onclick="hideInvitePK()">✕</div>
+    <div class="share-modal-title">⚔️ 邀请好友PK销冠段位</div>
+    <div class="share-modal-desc">把你的能力报告发给朋友，看看谁的销冠段位更高！</div>
+    
+    <div style="background:linear-gradient(135deg,#1a1a2e,#9B0B22);border-radius:16px;padding:24px 20px;color:white;text-align:center;margin-bottom:20px;">
+      <div style="font-size:13px;opacity:0.7;margin-bottom:8px;">你的当前段位</div>
+      <div id="pkMySegment" style="font-size:28px;font-weight:900;margin-bottom:4px;">🏆 金牌销售</div>
+      <div id="pkMyScore" style="font-size:16px;opacity:0.8;">总分 125 / 150</div>
+    </div>
+    
+    <div style="font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:16px;text-align:left;">
+      <strong style="color:var(--black);">PK规则：</strong><br>
+      ① 把海报或链接发给朋友<br>
+      ② 朋友扫码/打开链接完成测评<br>
+      ③ 双方段位PK，输的人请赢的人喝奶茶 ☕
+    </div>
+    
+    <div class="share-btns" style="margin-bottom:16px;">
+      <button class="share-btn" onclick="generateShareCard()">
+        <span class="share-btn-icon">🖼️</span>
+        <span>生成PK海报</span>
+      </button>
+      <button class="share-btn" onclick="shareWechat()">
+        <span class="share-btn-icon">💬</span>
+        <span>发微信</span>
+      </button>
+      <button class="share-btn" onclick="copyLink()">
+        <span class="share-btn-icon">🔗</span>
+        <span>复制链接</span>
+      </button>
+    </div>
+    <div style="font-size:12px;color:#AAA;">💡 提示：保存海报后，发给朋友微信/朋友圈即可</div>
+  </div>
+</div>
+
+<!-- 分享解锁弹层 -->
+<div class="share-overlay" id="shareOverlay">
+  <div class="share-modal">
+    <div class="share-modal-title">🎁 解锁专属提升方案</div>
+    <div class="share-modal-desc">分享你的能力海报到朋友圈或销售群，<br>帮助更多同行提升，也让自己更有动力！</div>
+    <div class="share-btns">
+      <button class="share-btn" onclick="shareWechat()">
+        <span class="share-btn-icon">💬</span>
+        <span>微信</span>
+      </button>
+      <button class="share-btn" onclick="shareWeibo()">
+        <span class="share-btn-icon">🔴</span>
+        <span>微博</span>
+      </button>
+      <button class="share-btn" onclick="copyLink()">
+        <span class="share-btn-icon">🔗</span>
+        <span>复制链接</span>
+      </button>
+    </div>
+    <button class="share-btn-ok" onclick="unlockContent()">✅ 我已分享，查看方案</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p><strong>大董老师</strong> · 天地人销售管理体系</p>
+  <p style="margin-top:8px;">1314，一生一世做销冠</p>
+</footer>
+
+<script>
+// 缓存清除：强制使用最新版本
+(function(){
+  var v = 'v=20250517-21';
+  var current = localStorage.getItem('ask1314_version');
+  if (current !== v) {
+    localStorage.setItem('ask1314_version', v);
+    if (current) {
+      // 版本有更新，强制刷新一次以清除缓存
+      location.reload(true);
+      return;
+    }
+  }
+})();
+// ===== 题目数据（40%情境题）=====
+const questions = [
+  // === A·三心 - 态度 ===
+  // 抗压心
+  { dim:'A', sub:'抗压心', type:'normal', text:'经历一次重大丢单后，我的第一反应是：', options:['冷静复盘，分析原因','先沮丧几天再调整','抱怨运气或客户','无所谓，继续下一个'], scores:[5,3,2,1] },
+  { dim:'A', sub:'抗压心', type:'scenario', scenario:'你跟进了3个月的一家工程机械厂线束大单，在即将签约前被竞争对手以低价截单。客户还特意打电话告诉你「其实你们线束品质更好，但价格差太多」。', text:'此刻你真正的第一反应是：', options:['把这个失败案例完整复盘，找出自己的断点','算了，这个客户不值得浪费这么多时间','发一条朋友圈感慨世道不公，然后继续','暗自记下这个竞争对手的名字，下次想办法扳回来'], scores:[5,2,1,3] },
+  { dim:'A', sub:'抗压心', type:'normal', text:'面对连续数月业绩不佳的情况，我依然能保持稳定的拜访量，不自我放弃。', options:['完全符合我','大多数时候如此','偶尔会动摇','经常找借口减少拜访'], scores:[5,4,2,1] },
+  { dim:'A', sub:'企图心', type:'normal', text:'我有一个清晰的收入目标（年薪/季度收入），并且拆分到了每月、每周、每天的行动量。', options:['有详细计划并每日追踪','有大概目标但不细致','有目标但没拆解到日','没有明确目标，走一步看一步'], scores:[5,3,2,1] },
+  { dim:'A', sub:'企图心', type:'scenario', scenario:'你本月的线束销售业绩目标是80万，目前只完成了35万，还剩10天。有一个犹豫了2周的新能源车厂采购，你有把握签下来，但需要今晚请他吃饭喝茶，可能要花3000元，而你心里清楚他「还没有完全下定决心」。', text:'你会怎么做？', options:['果断出手请客，全力冲刺目标，这是必要的投入','再发一条消息催一下，看他今晚有没有空，不强求','算了，这客户太犹豫了，把精力放到其他客户身上','发个朋友圈，等客户主动来找我'], scores:[5,3,2,1] },
+  { dim:'A', sub:'企图心', type:'normal', text:'在团队月度PK中，我的个人目标是：', options:['争夺销冠，拿最高奖金','争取进入前三','完成公司底线目标就行','没有具体目标，顺其自然'], scores:[5,4,2,1] },
+  { dim:'A', sub:'学习心', type:'normal', text:'最近一次失败的销售经历（丢单/被拒），我有没有做过系统性复盘？', options:['写了复盘文档，找到了明确改进点','想了想原因，但没有记录','等情绪平复就翻篇了','不愿意回想，刻意回避'], scores:[5,3,2,1] },
+  { dim:'A', sub:'学习心', type:'scenario', scenario:'你丢了一单高压线束给竞品，事后得知对手用了你没预料到的策略——他们主动提供了IP67第三方检测报告，打消了客户对认证造假的顾虑。你心里闪过三个念头：① 「对手太狡猾了」 ② 「我确实对高压线束行业不够了解」 ③ 「下回我也准备第三方报告」 。', text:'你最主要的念头是哪个？', options:['②，深刻认识到自己知识的不足','①，竞争对手的问题','③，下次照搬','①+③，环境和对手都有问题'], scores:[5,3,2,1] },
+  { dim:'A', sub:'学习心', type:'normal', text:'过去3个月，我主动向同事/上级请教过至少3次销售技巧或客户问题。', options:['完全符合','大概有2-3次','偶尔一次','从来没有'], scores:[5,4,2,1] },
+  { dim:'A', sub:'学习心', type:'normal', text:'对于客户所在行业的新政策、新技术，我通常的态度是：', options:['主动搜索学习，储备行业知识','偶尔了解一下','感觉和我关系不大','完全不关注'], scores:[5,3,2,1] },
+
+  // === S·流程 - 技能 ===
+  { dim:'S', sub:'全局', type:'normal', text:'在我脑海中，有一幅清晰的"作战地图"：从线索→初访→需求→方案→谈判→签约→转介绍的完整流程，每个关键节点我都清楚。', options:['完全清晰，随时能画出来','大致清楚，但有些环节模糊','只了解自己当前阶段的操作','没什么概念，走一步看一步'], scores:[5,3,2,1] },
+  { dim:'S', sub:'获客力', type:'scenario', scenario:'你刚加入永锐，负责开拓华东区的新能源车厂线束业务。你的直属经理问：「这个月的第一周你打算怎么找客户？」 你回想一下，通常你会：', text:'你实际的做法最接近：', options:['先梳理新能源车厂名单、查车型平台信息、找行业关联，定出priority客户名单再行动','先打听现有客户是怎么来的，模仿尝试','用公司给的资源库一个个打电话','先熟悉线束产品再说，客户不急'], scores:[5,4,2,1] },
+  { dim:'S', sub:'建信力', type:'normal', text:'每一次初次拜访前，我都会通过多种渠道调研客户背景，并写下本次沟通的"最佳目标"和"最低可接受目标"。', options:['每次都这样做','大多数时候有准备','偶尔准备一下','基本不做准备直接去'], scores:[5,4,2,1] },
+  { dim:'S', sub:'提问力', type:'normal', text:'在与客户的对话中，我用于倾听和记笔记的时间，通常：', options:['超过我讲话的时间','和我讲话时间差不多','以我讲为主','大多数时候是我在说'], scores:[5,3,2,1] },
+  { dim:'S', sub:'提问力', type:'scenario', scenario:'客户说：「你们的线束报价比另一家贵30%，你们有什么优势？」 大多数销售会直接进入产品介绍模式。', text:'你真正会怎么回应？', options:['不直接回答，先问：「您为什么关注价格这一块？是有什么具体的预算压力，还是之前的线束供应商出过什么问题？」','直接说我们线束品质更好、端子更可靠、用料更足','给对方一个折扣报价','把产品资料发过去让客户自己看'], scores:[5,3,2,1] },
+  { dim:'S', sub:'呈现力', type:'normal', text:'当我介绍产品时，我通常从什么开始？', options:['"它能帮你解决什么问题"','"我们有以下功能"','"我们公司成立于..."','"我们的价格是..."'], scores:[5,3,2,1] },
+  { dim:'S', sub:'呈现力', type:'scenario', scenario:'客户是一家工程机械厂，对你说：「我们的核心问题是线束批次不良率高，装配线返工多，每次验货都很费时间。」 他问你们的线束能帮什么忙。', text:'你的最佳回应是：', options:['先讲一个类似工程机械厂的成功案例（如三一重工），再关联到不良率问题的具体解决方案','发一套完整的线束产品规格书','直接报价','说我们的线束能帮所有企业降低不良率'], scores:[5,2,1,1] },
+  { dim:'S', sub:'锁单力', type:'normal', text:'客户提出价格异议时，我总能找到除降价之外的谈判筹码（如服务延期、培训支持、付款周期等）。', options:['完全符合','大多数时候可以','偶尔能想到','基本只会申请折扣'], scores:[5,4,2,1] },
+  { dim:'S', sub:'锁单力', type:'scenario', scenario:'客户在谈判桌上说：「这个线束价格我接受不了，你们再降10%我就签，不然我选别家了。」 你很清楚你的价格底线是降5%。', text:'你的实际反应是：', options:['用其他条件交换（如延长质保期、提供驻厂质检支持、灵活付款），守住价格底线','立刻去找老板申请降价10%','告诉客户一分都不能降','直接放弃这单'], scores:[5,1,2,1] },
+  { dim:'S', sub:'经营力', type:'normal', text:'项目交付后，我仍会定期向老客户分享行业洞察或有价值的信息，上一年度成交的客户中，至少有一定比例通过老客户转介绍获得新单。', options:['有稳定的转介绍机制，转介绍占比超过20%','偶尔有转介绍，但不系统','偶尔有老客户主动介绍，但自己很少主动经营','几乎没有转介绍'], scores:[5,3,2,1] },
+
+  // === K·四知 - 知识 ===
+  { dim:'K', sub:'知己', type:'normal', text:'给我3分钟，我能脱稿、生动地讲清楚永锐线束的核心业务价值、三个典型应用场景（工程机械/新能源车/轨道交通）和与竞品的本质差异。', options:['完全可以做到','基本可以，但不够脱稿','需要看着资料才能讲','还不太清楚'], scores:[5,3,2,1] },
+  { dim:'K', sub:'知己', type:'scenario', scenario:'客户问了一个你公司非主流规格线束的问题（比如某种特殊耐高温线缆），你之前没深入了解过。', text:'你的反应是：', options:['先记录下问题，承诺24小时内给专业答复，同时快速找产品文档自学','直接说这个产品不是我负责，稍后让相关同事联系','凭印象大致说说','说我们没有这个产品'], scores:[5,3,2,1] },
+  { dim:'K', sub:'内部', type:'normal', text:'我清楚地知道，当项目需要专家售前、高层拜访、技术测试等内部资源时，标准申请流程和关键决策人是谁。', options:['完全清楚，能快速调动','大致知道，需要查一下','不太清楚，找谁都不知道','从来没试过调动内部资源'], scores:[5,3,1,1] },
+  { dim:'K', sub:'内部', type:'scenario', scenario:'你的大客户（一家新能源车厂）突然提出需要技术专家当面演示高压线束方案，但售前团队说你这个客户「不在名单上」，暂时安排不了。你知道这个演示对签单至关重要。', text:'你会怎么做？', options:['找到能拍板的高层，说明业务价值和客户重要性，争取特批','接受售前的安排，让客户等','直接告诉客户「我们技术资源不够」放弃争取','绕过流程，自己硬上'], scores:[5,2,1,1] },
+  { dim:'K', sub:'知彼', type:'normal', text:'我能画出核心线束竞争对手的「能力图谱」：不仅清楚其产品软肋（如端子不良率、批次稳定性），也客观承认他们最强的三个优势。', options:['已经做过竞品分析图','大概了解，但没有整理','只知道一些表面的信息','对竞争对手基本不了解'], scores:[5,3,2,1] },
+  { dim:'K', sub:'知彼', type:'scenario', scenario:'你的老客户（一家轨道交通总包商）突然告诉你：「XX竞品来找过我了，线束报价比你们低不少，你觉得呢？」 你知道对手确实在某些规格上有价格优势。', text:'你的回应最可能是：', options:['客观承认对手价格优势，但重点说明我们能提供的核心差异化价值（批次稳定性/全检报告/驻厂支持）','直接贬低对手，说他们线束质量差','沉默，不知道怎么回应','说那你选他们吧'], scores:[5,2,1,1] },
+  { dim:'K', sub:'知客', type:'normal', text:'对于我负责的重点客户，我能画出他们详细的决策链（采购/技术/生产/品质/高层决策者），以及每个角色的关注点（如采购关注价格、技术关注IP67认证、品质关注不良率）。', options:['完整画过，详细到每个角色的关注点和态度','大致知道关键决策人是谁','只知道对接人','不太清楚'], scores:[5,3,2,1] },
+  { dim:'K', sub:'知客', type:'scenario', scenario:'你约见了一个新客户（一家汽车厂），对接人是采购经理。见面后你发现，采购经理上面还有一个电气工程师总监，再上面才是厂长——而且电气总监对线束方案有否决权，但你目前没有接触到电气总监。', text:'你的下一步最合理的是：', options:['通过采购经理引荐电气总监，了解技术评估标准，同时找到能让电气总监认可的角度','继续维护采购经理，让他帮忙向上推','直接联系厂长','算了，这客户决策链太复杂'], scores:[5,3,2,1] },
+  { dim:'K', sub:'知势', type:'normal', text:'近三个月，我至少给客户分享过一个他们尚不了解的线束行业前沿趋势（如800V高压平台、新能源国标变化、铜价走势等），并让他们觉得有启发。', options:['有过分享，客户反馈很好','有分享过，但客户反应一般','还没有主动分享过','从没想过要这样做'], scores:[5,3,2,1] },
+  { dim:'K', sub:'知势', type:'normal', text:'我每周至少会固定阅读一份线束/汽车/新能源行业权威报告或头部媒体，并整理信息笔记。', options:['每周都做，有笔记和素材库','偶尔看看，没有整理','很少看行业信息','完全不看，只关注自己的产品'], scores:[5,3,2,1] },
+];
+
+let currentQ = 0;
+let answers = new Array(questions.length).fill(null);
+let radarChart = null;
+let userName = '';
+
+// 颜色映射
+const dimColor = { A: '#C8102E', S: '#4F46E5', K: '#C9A84C' };
+const dimLabel = { A: '三心（态度）', S: '流程6技（技能）', K: '四知（知识）' };
+const dimIcon = { A: '💪', S: '🗺️', K: '🧠' };
+
+function startQuizFromHero() {
+  const heroName = document.getElementById('heroUserName');
+  userName = heroName ? heroName.value.trim() : '';
+  if (!userName) {
+    if (heroName) {
+      heroName.style.borderColor = '#FF6B6B';
+      heroName.placeholder = '请填写姓名后再开始';
+      heroName.focus();
+    }
+    return false;
+  }
+  if (heroName) heroName.style.borderColor = '';
+
+  var quizIntro = document.getElementById('quizIntro');
+  if (quizIntro) quizIntro.style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'block';
+  currentQ = 0;
+  answers = new Array(questions.length).fill(null);
+  renderQuestion();
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+  return false;
+}
+
+function startQuiz() {
+  // 获取用户姓名（hero区的）
+  const heroName = document.getElementById('heroUserName');
+  userName = (heroName && heroName.value.trim()) || '';
+  if (!userName) {
+    if (heroName) {
+      heroName.style.borderColor = '#FF6B6B';
+      heroName.placeholder = '请填写姓名后再开始';
+      heroName.focus();
+    }
+    return;
+  }
+  if (heroName) heroName.style.borderColor = '';
+
+  var quizIntro = document.getElementById('quizIntro');
+  if (quizIntro) quizIntro.style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'block';
+  currentQ = 0;
+  answers = new Array(questions.length).fill(null);
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const container = document.getElementById('quizContainer');
+  const q = questions[currentQ];
+  const answered = answers[currentQ] !== null;
+  const total = questions.length;
+  const progress = ((currentQ) / total * 100).toFixed(0);
+
+  const dimTagClass = {A:'dim-a', S:'dim-s', K:'dim-k'}[q.dim];
+  const scenarioHTML = q.type === 'scenario' ? `<div class="scenario-box">${q.scenario.replace(/\n/g, '<br>')}<br><strong>${q.text}</strong></div>` : `<div class="question-text">${q.text}</div>`;
+
+  const optionsHTML = q.options.map((opt, i) => {
+    const letter = String.fromCharCode(65 + i);
+    return `<button class="option-btn${answers[currentQ] === i ? ' selected' : ''}" onclick="selectOption(${i})">
+      <span class="opt-letter">${letter}</span>
+      <span class="option-text">${opt}</span>
+    </button>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="question-block active">
+      <div class="question-header">
+        <span class="question-dim-badge ${dimTagClass}">${dimIcon[q.dim]} ${dimLabel[q.dim]}</span>
+        ${q.type === 'scenario' ? '<span class="question-type-tag">📋 情境题</span>' : ''}
+        <span style="margin-left:auto;font-size:13px;color:var(--gray);">${currentQ+1} / ${total}</span>
+      </div>
+      ${scenarioHTML}
+      <div class="options-list">${optionsHTML}</div>
+      <div class="quiz-nav">
+        <button class="btn-nav btn-prev" onclick="prevQ()" ${currentQ===0?'disabled':''}>← 上题</button>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:${progress}%"></div>
+          </div>
+          <div class="progress-text">${progress}% 完成</div>
+        </div>
+        <button class="btn-nav btn-next" onclick="nextQ()" ${!answered?'disabled':''}>
+          ${currentQ === total-1 ? '查看结果 →' : '下题 →'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(idx) {
+  answers[currentQ] = idx;
+  // 只更新选中样式，不重新render整个容器，避免屏幕晃动
+  const btns = document.querySelectorAll('.options-list .option-btn');
+  btns.forEach((btn, i) => {
+    if (i === idx) btn.classList.add('selected');
+    else btn.classList.remove('selected');
+  });
+  // 启用下题按钮
+  const nextBtn = document.querySelector('.btn-next');
+  if (nextBtn) nextBtn.disabled = false;
+
+  // 短暂延迟让用户看到选中效果，然后自动跳转
+  setTimeout(() => {
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 250);
+}
+
+function nextQ() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQ() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+function getScore(dim) {
+  const qIndices = questions.map((q, i) => q.dim === dim ? i : -1).filter(i => i >= 0);
+  const scores = qIndices.map(i => {
+    const q = questions[i];
+    const ans = answers[i];
+    if (ans === null || ans === undefined) return 1;
+    return q.scores ? q.scores[ans] : (ans + 1);
+  });
+  return { total: scores.reduce((a, b) => a + b, 0), count: qIndices.length };
+}
+
+function getSubScores(dim) {
+  const subs = {};
+  questions.forEach((q, i) => {
+    if (q.dim === dim) {
+      if (!subs[q.sub]) subs[q.sub] = [];
+      const ans = answers[i];
+      const score = (ans === null || ans === undefined) ? 1 : (q.scores ? q.scores[ans] : (ans + 1));
+      subs[q.sub].push(score);
+    }
+  });
+  const result = {};
+  Object.keys(subs).forEach(k => {
+    result[k] = { total: subs[k].reduce((a, b) => a + b, 0), count: subs[k].length };
+  });
+  return result;
+}
+
+function showResult() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').classList.add('show');
+
+  const aData = getScore('A');
+  const sData = getScore('S');
+  const kData = getScore('K');
+  const totalScore = aData.total + sData.total + kData.total;
+
+  // 结果汇总卡片
+  const getTag = (score, max) => {
+    const pct = score / max;
+    if (pct >= 0.8) return { text: '优秀', color: '#10B981', bg: '#D1FAE5' };
+    if (pct >= 0.6) return { text: '良好', color: '#4F46E5', bg: '#E0E7FF' };
+    if (pct >= 0.4) return { text: '一般', color: '#D97706', bg: '#FEF3C7' };
+    return { text: '待提升', color: '#C8102E', bg: '#FFE4E6' };
+  };
+
+  const aTag = getTag(aData.total, 50);
+  const sTag = getTag(sData.total, 50);
+  const kTag = getTag(kData.total, 50);
+
+  document.getElementById('resultSummary').innerHTML = `
+    <div class="result-dim-card">
+      <div class="dim-icon" style="background:#FFE4E6;">💪</div>
+      <h4>三心（态度）</h4>
+      <div class="score">${aData.total}<span class="total">/50</span></div>
+      <span class="tag" style="color:${aTag.color};background:${aTag.bg};">${aTag.text}</span>
+    </div>
+    <div class="result-dim-card">
+      <div class="dim-icon" style="background:#E0E7FF;">🗺️</div>
+      <h4>流程6技（技能）</h4>
+      <div class="score">${sData.total}<span class="total">/50</span></div>
+      <span class="tag" style="color:${sTag.color};background:${sTag.bg};">${sTag.text}</span>
+    </div>
+    <div class="result-dim-card">
+      <div class="dim-icon" style="background:var(--gold-light);">🧠</div>
+      <h4>四知（知识）</h4>
+      <div class="score">${kData.total}<span class="total">/50</span></div>
+      <span class="tag" style="color:${kTag.color};background:${kTag.bg};">${kTag.text}</span>
+    </div>
+  `;
+
+  // 雷达图
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  if (radarChart) radarChart.destroy();
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['三心（态度）', '流程6技（技能）', '四知（知识）'],
+      datasets: [{
+        data: [aData.total, sData.total, kData.total],
+        backgroundColor: 'rgba(200,16,46,0.15)',
+        borderColor: '#C8102E',
+        borderWidth: 2,
+        pointBackgroundColor: '#C8102E',
+        pointRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          min: 0, max: 50,
+          ticks: { stepSize: 10, font: { size: 10 } },
+          pointLabels: { font: { size: 13, weight: 'bold' } },
+          gridColor: 'rgba(0,0,0,0.08)',
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // 三心和流程子维度
+  const aSubs = getSubScores('A');
+  const sSubs = getSubScores('S');
+  const kSubs = getSubScores('K');
+
+  // 三心子维度
+  document.getElementById('aDetailCards').innerHTML = Object.keys(aSubs).map(k => `
+    <div class="sub-detail-item">
+      <div class="label">${k}</div>
+      <div class="score" style="color:var(--red);">${aSubs[k].total}</div>
+      <div class="max">/${aSubs[k].count * 5}分</div>
+    </div>
+  `).join('');
+
+  // 流程子维度
+  document.getElementById('sDetailCards').innerHTML = Object.keys(sSubs).map(k => `
+    <div class="sub-detail-item">
+      <div class="label">${k}</div>
+      <div class="score" style="color:#4F46E5;">${sSubs[k].total}</div>
+      <div class="max">/${sSubs[k].count * 5}分</div>
+    </div>
+  `).join('');
+
+  // 四知子维度
+  const subNames = { '知己':'产品', '知彼':'竞品', '知客':'客户', '知势':'行业' };
+  document.getElementById('kDetailCards').innerHTML = Object.keys(kSubs).map(k => `
+    <div class="sub-detail-item">
+      <div class="label">${k}（${subNames[k]||k}）</div>
+      <div class="score" style="color:#8B6914;">${kSubs[k].total}</div>
+      <div class="max">/${kSubs[k].count * 5}分</div>
+    </div>
+  `).join('');
+
+  // 段位
+  let segment = {};
+  let segClass = '';
+  let medalIcon = '';
+  const isFullScore = totalScore === 150;
+  const isGold = totalScore >= 120 && !isFullScore;
+  const isSilver = totalScore >= 90 && totalScore < 120;
+  const isBronze = totalScore < 90;
+
+  if (isFullScore) {
+    segment = { icon: '💎', name: '钻石销冠', level: '满分实力 · 横扫江湖', desc: '你在三心、流程、四知三大维度均拿到满分！你已是准销冠级别的实力派。接下来的目标，是把能力复制给更多人，带出冠军团队。', advice: '重点：提炼自己的签单方法论 → 带教新人 → 冲击销冠管理层！' };
+    segClass = 'diamond';
+    medalIcon = '💎';
+  } else if (isGold) {
+    segment = { icon: '🏆', name: '金牌销售', level: '准销冠 · 精益求精', desc: '你的能力已经处于较高水平，核心优势明显。需要继续保持强项，同时向"教练型销售"转型——培养新人、带团队，把能力复制给更多人。', advice: '重点：学习带教技巧、提炼自己的销售方法论、开始关注管理和战略层面。' };
+    segClass = 'gold';
+    medalIcon = '🏆';
+  } else if (isSilver) {
+    segment = { icon: '🥈', name: '银牌销售', level: '中坚力量 · 强项突出', desc: '你已经具备了销售的基本功，有明确的强项。最关键的是找到你的"致命短板"并重点突破——往往是1-2个环节的薄弱拉低了整体结果。', advice: '重点：找到得分最低的维度，针对性练习。记住：木桶的短板决定水位。' };
+    segClass = 'silver';
+    medalIcon = '🥈';
+  } else {
+    segment = { icon: '🥉', name: '铜牌销售', level: '潜力新星 · 根基先行', desc: '你处于销售能力的起步或重建阶段。不用焦虑，先把基础打扎实。从态度和基础技能入手，稳扎稳打，3个月后你会看到明显进步。', advice: '重点：先修三心，再练流程，最后补四知。"心态不稳，动作变形"。' };
+    segClass = 'bronze';
+    medalIcon = '🥉';
+  }
+
+  // 更新海报样式
+  const card = document.getElementById('segmentCard');
+  card.className = 'segment-card ' + segClass;
+
+  if (isFullScore) {
+    // 满分钻石级海报
+    const starsHTML = Array.from({length: 20}, (_, i) =>
+      `<div class="diamond-star" style="left:${5+Math.random()*90}%;top:${5+Math.random()*85}%;animation-delay:${(i*0.15)%2}s;"></div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="segment-watermark" style="font-size:240px;opacity:0.04;">1314</div>
+      <div class="diamond-stars">${starsHTML}</div>
+      <div class="segment-poster-inner">
+        <div class="segment-badge-wrap">
+          <div class="segment-badge-icon" style="font-size:80px;">💎</div>
+          <div class="segment-poster-name" style="font-size:42px;">${userName || '___'}</div>
+        </div>
+        <div class="segment-name" style="font-size:36px;">${segment.name}</div>
+        <div class="segment-level" style="font-size:16px;">${segment.level}</div>
+        <div class="segment-divider"></div>
+        <div class="diamond-score-row">
+          <div class="diamond-score-item"><div class="d-label">三心</div><div class="d-val">${aData.total}</div></div>
+          <div class="diamond-score-item"><div class="d-label">流程</div><div class="d-val">${sData.total}</div></div>
+          <div class="diamond-score-item"><div class="d-label">四知</div><div class="d-val">${kData.total}</div></div>
+          <div class="diamond-score-item"><div class="d-label">总分</div><div class="d-val" style="color:#FF6B6B;">150</div></div>
+        </div>
+        <p class="segment-desc">${segment.desc}</p>
+        <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
+        <div class="diamond-share-tag">🔥 请大家拭目以待 🔥</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 20px;position:relative;z-index:2;">
+        <img id="posterQR" src="" alt="扫码测评" style="width:64px;height:64px;border-radius:8px;background:white;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
+        <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.8);line-height:1.7;">
+          <strong>扫码参加</strong><br>1314销冠能力测评<br>
+          <span style="color:#FFD700;font-weight:700;">大董老师</span>
+        </div>
+      </div>
+    </div>
+    <div class="segment-brand" style="position:relative;">
+        <span class="brand-logo" style="color:#FFD700;">大董老师</span>
+        <span class="brand-divider">·</span>
+        <span class="brand-url">大董老师</span>
+      </div>
+    `;
+  } else {
+    card.innerHTML = `
+      <div class="segment-watermark">1314</div>
+      <div class="segment-poster-inner">
+        <div class="segment-badge-wrap">
+          <div class="segment-badge-icon">${medalIcon}</div>
+          <div class="segment-poster-name">${userName || '___'}</div>
+        </div>
+        <div class="segment-name">${segment.name}</div>
+        <div class="segment-level">${segment.level}</div>
+        <div class="segment-divider"></div>
+        <p class="segment-desc">${segment.desc}</p>
+        <div class="segment-advice"><strong>💡 行动建议：</strong>${segment.advice}</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 20px;position:relative;z-index:2;">
+        <img id="posterQR" src="" alt="扫码测评" style="width:64px;height:64px;border-radius:8px;background:white;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
+        <div style="text-align:left;font-size:11px;color:rgba(255,255,255,0.8);line-height:1.7;">
+          <strong>扫码参加</strong><br>1314销冠能力测评<br>
+          <span style="color:#FFD700;font-weight:700;">大董老师</span>
+        </div>
+      </div>
+    </div>
+    <div class="segment-brand" style="position:relative;">
+        <span class="brand-logo" style="color:#FFD700;">大董老师</span>
+        <span class="brand-divider">·</span>
+        <span class="brand-url">大董老师</span>
+      </div>
+    `;
+  }
+
+  // 自动生成提升计划
+  const dims = [{name:'三心（态度）', score:aData.total}, {name:'流程6技（技能）', score:sData.total}, {name:'四知（知识）', score:kData.total}];
+  const weakest = dims.reduce((a, b) => a.score < b.score ? a : b);
+  const strongest = dims.reduce((a, b) => a.score > b.score ? a : b);
+  const allPerfect = isFullScore || dims.every(d => d.score >= 40);
+  autoGeneratePlan(weakest, strongest, allPerfect, dims);
+
+  // 滚动到结果
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
+  // 设置海报二维码（延时确保DOM已渲染）
+  setTimeout(function(){
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent(location.href.split('?')[0]);
+    var qrImg = document.getElementById('posterQR');
+    if(qrImg) qrImg.src = qrUrl;
+  }, 200);
+}
+
+
+function autoGeneratePlan(weakest, strongest, allPerfect, dims) {
+  try {
+    const plan1 = document.getElementById('plan1');
+    const plan2 = document.getElementById('plan2');
+    const plan3 = document.getElementById('plan3');
+    const plan4 = document.getElementById('plan4');
+    if (!plan1 || !plan2 || !plan3 || !plan4) {
+      console.error('[1314] 提升计划输入框未找到');
+      return;
+    }
+
+    if (allPerfect) {
+      // 满分专属提升计划
+      plan1.value = '继续保持三项均衡发展！你是准销冠级别的选手';
+      plan2.value = '保持领先，尝试带教同事，把经验复制出去';
+      plan3.value = '每天复盘一单成功案例，总结自己的签单方法论';
+      plan4.value = '向销冠前辈学习 → 读《销售圣经》→ 每周1次客户深耕';
+    } else {
+      // 普通模式：根据最短板生成
+      const dimKey = weakest.name.includes('三心') ? 'A' : weakest.name.includes('流程') ? 'S' : 'K';
+      const subScores = getSubScores(dimKey);
+      const subKeys = Object.keys(subScores);
+      const lowestSub = subKeys.length > 0
+        ? subKeys.reduce((a, b) => subScores[a].total < subScores[b].total ? a : b)
+        : '基础环节';
+
+      const improvementMap = {
+        '抗压心': '每次丢单后24小时内完成复盘，训练抗压韧性',
+        '企图心': '设定明确的周收入目标，每天追踪进展',
+        '学习心': '每周向销冠请教1次，记录学习笔记',
+        '全局': '画出完整的客户跟进流程图，定位自己的薄弱环节',
+        '获客力': '每周新增10个高质量客户线索（新能源车厂/工程机械/轨道交通），不依赖公司分配',
+        '建信力': '每次拜访前做好充分准备，研究客户背景',
+        '提问力': '训练"问三答一"法则，多听少说',
+        '呈现力': '练习3分钟电梯演讲，用场景化语言介绍永锐线束解决方案',
+        '锁单力': '掌握至少3种非价格谈判筹码',
+        '经营力': '建立老客户定期维护计划，争取转介绍',
+        '知己': '3分钟内脱稿讲清永锐线束核心价值和差异化',
+        '知彼': '绘制线束竞品对比图，客观承认对手优势',
+        '内部': '熟记内部资源申请流程，建立跨部门协作清单',
+        '知客': '画出重点客户的决策链图',
+        '知势': '每周阅读1篇线束/新能源/汽车行业报告，整理3条客户关心的话题'
+      };
+
+      const improvement = improvementMap[lowestSub] || improvementMap[weakest.name] || `重点突破「${lowestSub}」，针对性强化训练`;
+      plan1.value = improvement;
+      plan2.value = `3周内将「${lowestSub}」维度提升至少5分`;
+      plan3.value = (weakest.score || 0) < 30 ? '每天练习10分钟，形成肌肉记忆' : '每周重点突破1个环节，逐步提升';
+      plan4.value = '大董课程/销售手册 → 找师父1对1指导 → 实战反复演练';
+    }
+    console.log('[1314] 提升计划已自动生成');
+  } catch (err) {
+    console.error('[1314] 自动生成提升计划出错:', err);
+  }
+}
+
+
+function downloadPoster() {
+  const card = document.getElementById('segmentCard');
+  if (!card) return;
+  // 临时隐藏按钮避免截图到
+  const btn = card.nextElementSibling;
+  if (btn) btn.style.display = 'none';
+  html2canvas(card, {
+    backgroundColor: null,
+    scale: 2,
+    useCORS: true
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = (userName || '我的') + '_1314能力海报.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    if (btn) btn.style.display = '';
+  }).catch(err => {
+    console.error('海报生成失败:', err);
+    alert('海报生成失败，请重试');
+    if (btn) btn.style.display = '';
+  });
+}
+
+function resetQuiz() {
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('quiz').style.display = 'block';
+  var quizIntro = document.getElementById('quizIntro');
+  if (quizIntro) quizIntro.style.display = 'block';
+  document.getElementById('quizContainer').style.display = 'none';
+  document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+}
+function shareWechat() {
+  // 判断是否在微信环境
+  var isWechat = /MicroMessenger/i.test(navigator.userAgent);
+  if (isWechat) {
+    showShareTip('微信', '请点击右上角 · 选择"分享到朋友圈"或"发送给朋友"');
+  } else {
+    // 非微信环境：直接复制链接 + 提示可生成海报
+    copyLink();
+    setTimeout(function() {
+      showShareTip('分享', '链接已复制到剪贴板！<br><br>你也可以点击"保存为图片"生成精美海报，直接发给朋友或朋友圈。');
+    }, 200);
+  }
+}
+
+function shareWeibo() {
+  const url = encodeURIComponent(location.href);
+  const title = encodeURIComponent('我的1314销冠能力测评结果：' + (userName || '') + '，快来测测你的销售段位！');
+  window.open('https://service.weibo.com/share/share.php?url=' + url + '&title=' + title, '_blank');
+}
+
+function copyLink() {
+  const text = location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('✅ 链接已复制，快去分享吧！');
+    });
+  } else {
+    const input = document.createElement('input');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    alert('✅ 链接已复制，快去分享吧！');
+  }
+}
+
+function showShareTip(platform, msg) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = '<div style="background:#FFF;border-radius:16px;padding:28px 24px;text-align:center;max-width:300px;"><div style="font-size:16px;font-weight:700;margin-bottom:12px;">' + platform + '分享指引</div><div style="font-size:13px;color:#4A4A5A;line-height:1.8;margin-bottom:20px;">' + msg + '</div><button onclick="this.parentElement.parentElement.remove()" style="background:#C8102E;color:#FFF;border:none;padding:10px 32px;border-radius:20px;font-size:14px;cursor:pointer;">我知道了</button></div>';
+  document.body.appendChild(overlay);
+}
+
+function unlockContent() {
+  const overlay = document.getElementById('shareOverlay');
+  if (overlay) overlay.classList.remove('show');
+  // 显示提升计划区域
+  const improve = document.querySelector('.improve-section');
+  if (improve) improve.style.display = 'block';
+  // 显示重新测评按钮
+  const resetBtn = document.querySelector('[onclick="resetQuiz()"]');
+  if (resetBtn && resetBtn.parentElement) resetBtn.parentElement.style.display = 'block';
+  // 更新PK段位信息
+  updatePKInfo();
+}
+
+function updatePKInfo() {
+  const aData = getScore('A');
+  const sData = getScore('S');
+  const kData = getScore('K');
+  const total = aData.total + sData.total + kData.total;
+  const segEl = document.getElementById('pkMySegment');
+  const scoreEl = document.getElementById('pkMyScore');
+  if (segEl && scoreEl) {
+    let segName = '🥉 潜力新星';
+    let segIcon = '🥉';
+    if (total >= 120) { segName = '🏆 金牌销售'; segIcon = '🏆'; }
+    else if (total >= 90) { segName = '🥈 银牌销售'; segIcon = '🥈'; }
+    segEl.textContent = segIcon + ' ' + segName.replace(/[🥇🥈🥉🏆]/g, '').trim();
+    scoreEl.textContent = '总分 ' + total + ' / 150';
+  }
+}
+
+// 页面加载时，默认隐藏提升计划和重新测评（等分享后解锁）
+
+function initShareLock() {
+  const improve = document.querySelector('.improve-section');
+  if (improve) improve.style.display = 'none';
+  const resetBtn = document.querySelector('[onclick="resetQuiz()"]');
+  if (resetBtn && resetBtn.parentElement) resetBtn.parentElement.style.display = 'none';
+}
+
+function showInvitePK() {
+  const overlay = document.getElementById('invitePKOverlay');
+  if (overlay) {
+    updatePKInfo();
+    overlay.classList.add('show');
+  }
+}
+
+function hideInvitePK() {
+  const overlay = document.getElementById('invitePKOverlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+function generateShareCard() {
+  const card = document.getElementById('segmentCard');
+  const name = userName || '我';
+  if (!card) { alert('未找到海报元素'); return; }
+  if (typeof html2canvas === 'undefined') {
+    alert('图片生成库加载中，请稍后再试');
+    return;
+  }
+  html2canvas(card, { backgroundColor: null, scale: 2, useCORS: true })
+    .then(function(canvas) {
+      const link = document.createElement('a');
+      link.download = name + '_1314销冠能力PK图.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(function(err) {
+      console.error('生成PK图失败:', err);
+      alert('图片生成失败，请手动截图保存');
+    });
+}
+
+// ===== 海报二维码 =====
+function generateQRCode(callback) {
+  var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent(location.origin + location.pathname);
+  if(callback) callback(qrUrl);
+  return qrUrl;
+}
+
+  // 页面加载时隐藏提升计划，等分享后解锁
+  initShareLock();
+</script>
+</body>
+</html>
