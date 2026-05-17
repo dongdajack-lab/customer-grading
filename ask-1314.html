@@ -5,7 +5,7 @@
 (function(){
   if (!location.search.includes('v=')) {
     var sep = location.search ? '&' : '?';
-    location.replace(location.pathname + location.search + sep + 'v=21');
+    location.replace(location.pathname + location.search + sep + 'v=22');
   }
 })();
 </script>
@@ -113,7 +113,7 @@ body {
   background: rgba(200,16,46,0.25);
   border: 1px solid rgba(200,16,46,0.5);
   color: #FF8A9A;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -147,7 +147,7 @@ body {
   border: 1px solid rgba(200,16,46,0.3);
   border-radius: 16px;
   padding: 20px 28px;
-  font-size: 15px;
+  font-size: 18px;
   color: rgba(255,255,255,0.8);
   line-height: 2;
   animation: fadeInUp 1s ease;
@@ -271,7 +271,7 @@ body {
   font-weight: 800;
   line-height: 1.3;
 }
-.model-card-header span {
+.model-card-header > div > span {
   font-size: 12px;
   color: var(--gray);
   display: block;
@@ -892,7 +892,7 @@ body {
   .hero { padding: 70px 16px 32px; }
   .hero-title .num { font-size: 48px; }
   .hero-title .sub { font-size: 18px; }
-  .hero-poem { font-size: 14px; margin-bottom: 12px; }
+  .hero-poem { font-size: 16px; margin-bottom: 12px; }
   .name-input-wrap { margin-bottom: 12px !important; }
   .name-input-wrap label { font-size: 12px; }
   #heroUserName { padding: 10px 14px; font-size: 14px; }
@@ -1180,14 +1180,14 @@ body {
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-badge">大董销售体系 · 销冠核心能力模型</div>
+  <div class="hero-badge">大董老师</div>
   <h1 class="hero-title">
     <span class="num">1314</span>
     <span class="sub">销冠能力模型</span>
   </h1>
   <div class="hero-poem">
-    <strong><span style="color:var(--red);">1</span>个模型打天下</strong>，<span style="color:var(--red);">3</span>心修炼强心态，<br>
-    <span style="color:var(--red);">1</span>流流程拿结果，<span style="color:var(--red);">4</span>知贯通做专家。<br><br>
+    <span style="color:var(--red);font-weight:700;">1</span><span style="color:var(--white);font-weight:700;">个模型打天下</span>，<span style="color:var(--red);font-weight:700;">3</span><span style="color:var(--white);font-weight:700;">心修炼强心态</span>，<br>
+    <span style="color:var(--red);font-weight:700;">1</span><span style="color:var(--white);font-weight:700;">流流程拿结果</span>，<span style="color:var(--red);font-weight:700;">4</span><span style="color:var(--white);font-weight:700;">知贯通做专家</span>。<br><br>
     <strong>1314，一生一世做销冠！</strong>
   </div>
   <div class="name-input-wrap" style="max-width:360px;margin:16px auto 20px;">
