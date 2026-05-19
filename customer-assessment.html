@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新客户三维评估表 · 天地人销售体系</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#2c5aa0;--primary-light:#e8f0fc;--primary-dark:#1a3d6e;--accent:#e67e22;--accent-light:#fef3e8;--success:#27ae60;--success-light:#e8f8ee;--danger:#c0392b;--danger-light:#fdeaea;--purple:#8e44ad;--purple-light:#f4ecf7;--grey-dark:#2c3e50;--grey-mid:#7f8c8d;--grey-light:#ecf0f1;--bg:#f5f7fa;--white:#fff;--shadow:0 2px 12px rgba(0,0,0,0.08);--shadow-lg:0 8px 32px rgba(0,0,0,0.12);--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--grey-dark);line-height:1.6;min-height:100vh}
+header{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;padding:48px 24px 40px;text-align:center;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:rgba(255,255,255,0.04);border-radius:50%}
+.header-badge{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 16px;font-size:12px;letter-spacing:2px;margin-bottom:16px}
+header h1{font-size:26px;font-weight:700;margin-bottom:10px;position:relative;z-index:1}
+header p{font-size:13px;opacity:0.85;max-width:640px;margin:0 auto;position:relative;z-index:1;line-height:1.7}
+.container{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+.progress-bar{display:flex;margin-bottom:28px;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.progress-step{flex:1;text-align:center;padding:14px 4px;font-size:11px;font-weight:500;color:var(--grey-mid);position:relative;cursor:pointer;transition:all .3s;border-bottom:3px solid transparent;user-select:none}
+.progress-step.active{color:var(--primary);border-bottom-color:var(--primary);background:var(--primary-light)}
+.progress-step.done{color:var(--success);border-bottom-color:var(--success)}
+.progress-step .step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--grey-light);color:var(--grey-mid);font-size:11px;font-weight:700;margin:0 auto 4px}
+.progress-step.active .step-num{background:var(--primary);color:#fff}
+.progress-step.done .step-num{background:var(--success);color:#fff}
+.step-section{display:none}
+.step-section.active{display:block}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;margin-bottom:20px}
+.card-title{font-size:17px;font-weight:700;color:var(--primary);margin-bottom:4px}
+.card-subtitle{font-size:12px;color:var(--grey-mid);margin-bottom:24px}
+.dim-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--grey-light)}
+.dim-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.dim-icon.blue{background:var(--primary-light)}
+.dim-icon.orange{background:var(--accent-light)}
+.dim-icon.purple{background:var(--purple-light)}
+.dim-title{font-size:16px;font-weight:700}
+.dim-desc{font-size:12px;color:var(--grey-mid)}
+.question{margin-bottom:20px}
+.question:last-child{margin-bottom:0}
+.q-label{font-size:14px;font-weight:500;margin-bottom:8px;display:flex;align-items:flex-start;gap:8px}
+.q-num{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.q-text{flex:1}
+.options{display:flex;flex-direction:column;gap:7px;padding-left:30px}
+.opt{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;border:1.5px solid var(--grey-light);cursor:pointer;transition:all .2s;font-size:13px;line-height:1.5}
+.opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.opt.selected{border-color:var(--primary);background:var(--primary-light)}
+.opt input{display:none}
+.opt .radio{width:17px;height:17px;border-radius:50%;border:2px solid var(--grey-mid);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.opt.selected .radio{border-color:var(--primary)}
+.opt.selected .radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--primary)}
+.opt-score{margin-left:auto;font-size:11px;color:var(--grey-mid);white-space:nowrap}
+.form-row{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.form-group{flex:1;min-width:180px}
+.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:5px;color:var(--grey-dark)}
+.form-group input,.form-group select{width:100%;padding:9px 12px;border-radius:8px;border:1.5px solid var(--grey-light);font-size:13px;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.btn-row{display:flex;justify-content:space-between;margin-top:28px;gap:12px}
+.btn{padding:11px 28px;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .3s;font-family:inherit}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.btn-outline{background:#fff;color:var(--grey-dark);border:1.5px solid var(--grey-light)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{opacity:.9}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+@media(max-width:680px){.score-grid{grid-template-columns:1fr}}
+.score-card{text-align:center;padding:20px 12px;border-radius:var(--radius);border:2px solid var(--grey-light)}
+.score-card.high{border-color:var(--success);background:var(--success-light)}
+.score-card.mid{border-color:var(--accent);background:var(--accent-light)}
+.score-card.low{border-color:var(--danger);background:var(--danger-light)}
+.score-label{font-size:12px;color:var(--grey-mid);margin-bottom:6px}
+.score-value{font-size:38px;font-weight:700;line-height:1.1}
+.score-max{font-size:13px;color:var(--grey-mid)}
+.score-name{font-size:14px;font-weight:700;margin-top:6px}
+.grade-banner{padding:30px;border-radius:var(--radius);margin-bottom:28px;text-align:center;position:relative;overflow:hidden;color:#fff}
+.grade-banner::before{content:'';position:absolute;top:-40%;right:-5%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.1)}
+.grade-banner.a-grade{background:linear-gradient(135deg,#27ae60,#2ecc71)}
+.grade-banner.b-grade{background:linear-gradient(135deg,#e67e22,#f39c12)}
+.grade-banner.c-grade{background:linear-gradient(135deg,#2980b9,#3498db)}
+.grade-banner.d-grade{background:linear-gradient(135deg,#c0392b,#e74c3c)}
+.grade-letter{font-size:64px;font-weight:900;line-height:1;opacity:.2;position:absolute;right:24px;top:50%;transform:translateY(-50%)}
+.grade-banner h2{font-size:20px;font-weight:700;margin-bottom:6px;position:relative;z-index:1}
+.grade-banner p{font-size:13px;opacity:.9;position:relative;z-index:1}
+.advice-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:680px){.advice-grid{grid-template-columns:1fr}}
+.advice-card{padding:18px;border-radius:var(--radius);border-left:4px solid}
+.advice-card h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.advice-card p{font-size:12px;color:var(--grey-mid);line-height:1.7}
+.advice-card.green{border-left-color:var(--success);background:var(--success-light)}
+.advice-card.orange{border-left-color:var(--accent);background:var(--accent-light)}
+.advice-card.red{border-left-color:var(--danger);background:var(--danger-light)}
+.advice-card.blue{border-left-color:var(--primary);background:var(--primary-light)}
+.footer{text-align:center;padding:28px 20px;color:var(--grey-mid);font-size:11px;border-top:1px solid var(--grey-light);margin-top:40px}
+@media print{header,.btn-row,.progress-bar,.footer{display:none!important}.card{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-badge">天地人销售体系 · 工具</div>
+  <h1>新客户三维评估表</h1>
+  <p>一次性交易业务（如污水处理设备）的新客户签约前评估工具<br>从「回款安全」「利润空间」「成交概率」三个维度综合判断客户价值</p>
+</header>
+<div class="container">
+<div class="progress-bar">
+  <div class="progress-step active" onclick="goStep(0)"><div class="step-num">1</div>客户信息</div>
+  <div class="progress-step" onclick="goStep(1)"><div class="step-num">2</div>回款安全</div>
+  <div class="progress-step" onclick="goStep(2)"><div class="step-num">3</div>利润空间</div>
+  <div class="progress-step" onclick="goStep(3)"><div class="step-num">4</div>成交概率</div>
+  <div class="progress-step" onclick="goStep(4)"><div class="step-num">5</div>评估结果</div>
+</div>
+
+<!-- STEP 1 -->
+<div class="step-section active" id="section-0">
+  <div class="card">
+    <div class="card-title">客户基本信息</div>
+    <div class="card-subtitle">填写客户基础信息，便于后续追踪和管理</div>
+    <div class="form-row">
+      <div class="form-group"><label>客户公司名称 *</label><input type="text" id="c-name" placeholder="请输入客户公司全称"></div>
+      <div class="form-group"><label>所属行业</label>
+        <select id="c-industry"><option value="">请选择</option><option>制造业（成熟工厂）</option><option>化工/制药</option><option>食品/饮料</option><option>房地产/建筑</option><option>市政工程/政府项目</option><option>新建工厂（未投产）</option><option>其他</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>预计合同金额（万元）</label><input type="number" id="c-amount" placeholder="请输入金额"></div>
+      <div class="form-group"><label>销售负责人</label><input type="text" id="c-owner" placeholder="请输入销售姓名"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>客户类型</label>
+        <select id="c-type"><option value="">请选择</option><option>新客户（首次接触）</option><option>转介绍客户</option><option>老客户扩产复购</option></select>
+      </div>
+      <div class="form-group"><label>评估日期</label><input type="date" id="c-date"></div>
+    </div>
+  </div>
+  <div class="btn-row"><div></div><button class="btn btn-primary" onclick="nextStep(0)">下一步：回款安全 →</button></div>
+</div>
+
+<!-- STEP 2: 回款安全 -->
+<div class="step-section" id="section-1">
+  <div class="card">
+    <div class="dim-header">
+      <div class="dim-icon blue">&#x1F4B0;</div>
+      <div><div class="dim-title">维度一：回款安全性</div><div class="dim-desc">评估客户付款能力与意愿，判断应收账款风险（满分 25 分）</div></div>
+    </div>
+    <div class="question" data-dim="payment">
+      <div class="q-label"><span class="q-num">1</span><span class="q-text">客户的资金来源是什么？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>自有资金充足，公司盈利稳定<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,4)"><span class="radio"></span>已获批银行贷款，资金有保障<span class="opt-score">+4</span></div>
+        <div class="opt" onclick="selectOpt(this,2)"><span class="radio"></span>依赖项目销售回款或外部融资<span class="opt-score">+2</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>资金情况不明或明显紧张<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="payment">
+      <div class="q-label"><span class="q-num">2</span><span class="q-text">客户现场工程进度如何？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>土建已完成，具备安装调试条件<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>土建进行中，预计设备到货时可完成<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>土建未开始，工期不确定<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>不清楚现场条件<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="payment">
+      <div class="q-label"><span class="q-num">3</span><span class="q-text">你见到了客户方的哪一级决策人？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>老板或财务总监（能直接批付款）<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>部门经理（需上报，但有影响力）<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>仅接触采购员或工程师<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>还未见到关键决策人<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="payment">
+      <div class="q-label"><span class="q-num">4</span><span class="q-text">该客户是否有付款历史可参考？（转介绍或公开信息）</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>有良好付款记录（转介绍来源确认）<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>有付款记录，但偶尔延期<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>有不良付款记录或无法确认<span class="opt-score">+0</span></div>
+        <div class="opt" onclick="selectOpt(this,2)"><span class="radio"></span>新客户，无历史记录<span class="opt-score">+2</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="payment">
+      <div class="q-label"><span class="q-num">5</span><span class="q-text">客户是否接受出厂验收条款？（设备到货前完成工厂验收，提前触发验收款）</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>完全接受，甚至有提前验收意愿<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>可以接受，需要一些沟通<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>尚未沟通此条款<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>拒绝，坚持现场安装后才验收<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(1)">← 上一步</button><button class="btn btn-primary" onclick="nextStep(1)">下一步：利润空间 →</button></div>
+</div>
+
+<!-- STEP 3: 利润空间 -->
+<div class="step-section" id="section-2">
+  <div class="card">
+    <div class="dim-header">
+      <div class="dim-icon orange">&#x1F4C8;</div>
+      <div><div class="dim-title">维度二：利润空间</div><div class="dim-desc">评估客户是否认可差异化价值，是否能接受标准价或溢价（满分 20 分）</div></div>
+    </div>
+    <div class="question" data-dim="profit">
+      <div class="q-label"><span class="q-num">1</span><span class="q-text">客户对价格的敏感度如何？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>更关注质量和服务，价格是次要因素<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>价格是因素之一，但愿意为好东西付溢价<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>价格敏感，多家比价，压价明显<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>只认最低价，不接受任何溢价<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="profit">
+      <div class="q-label"><span class="q-num">2</span><span class="q-text">客户是否认可你们质量和服务上的差异化？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>明确认可，有对比同行后的选择偏好<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>初步认可，需要进一步展示证明<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>听说过，但更关心价格<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>不关心差异化，只比价格<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="profit">
+      <div class="q-label"><span class="q-num">3</span><span class="q-text">预计本次成交价格区间是？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>溢价成交（高于标准价）<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,4)"><span class="radio"></span>按标准价成交，无折扣<span class="opt-score">+4</span></div>
+        <div class="opt" onclick="selectOpt(this,2)"><span class="radio"></span>需要一定折扣才能成交<span class="opt-score">+2</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>大幅降价才能考虑<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="profit">
+      <div class="q-label"><span class="q-num">4</span><span class="q-text">客户是否愿意为增值服务付费？（出厂验收、定期巡检、快速响应等）</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>愿意，认为这些服务能降低他们的风险<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>可以讨论，愿意付费的意愿一般<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>不需要额外服务，只要求最低价完成采购<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>明确拒绝一切额外付费<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(2)">← 上一步</button><button class="btn btn-primary" onclick="nextStep(2)">下一步：成交概率 →</button></div>
+</div>
+
+<!-- STEP 4: 成交概率 -->
+<div class="step-section" id="section-3">
+  <div class="card">
+    <div class="dim-header">
+      <div class="dim-icon purple">&#x1F3AF;</div>
+      <div><div class="dim-title">维度三：成交概率</div><div class="dim-desc">评估项目成熟度与销售对项目的掌控程度（满分 20 分）</div></div>
+    </div>
+    <div class="question" data-dim="probability">
+      <div class="q-label"><span class="q-num">1</span><span class="q-text">客户的需求明确吗？（设备规格、型号、数量）</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>需求非常明确，有完整技术参数<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>需求基本明确，部分细节待定<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>需求模糊，还在方案比较阶段<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>客户自己也不确定需要什么<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="probability">
+      <div class="q-label"><span class="q-num">2</span><span class="q-text">客户预算是否已批或有明确来源？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>预算已批，随时可以启动<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>预算在走审批流程，进展顺利<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>还在申请中，时间不确定<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>无预算，走一步看一步<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="probability">
+      <div class="q-label"><span class="q-num">3</span><span class="q-text">竞争对手情况如何？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>客户主动找你，竞争对手尚未进入<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>有1-2家竞品，但你们有明确差异化优势<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>多家竞品卷入，价格战激烈<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>客户已明确选择其他供应商<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+    <div class="question" data-dim="probability">
+      <div class="q-label"><span class="q-num">4</span><span class="q-text">项目计划启动时间？</span></div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,5)"><span class="radio"></span>近期（1个月内）启动，紧急程度高<span class="opt-score">+5</span></div>
+        <div class="opt" onclick="selectOpt(this,3)"><span class="radio"></span>3个月内启动<span class="opt-score">+3</span></div>
+        <div class="opt" onclick="selectOpt(this,1)"><span class="radio"></span>6个月内，无明确时间节点<span class="opt-score">+1</span></div>
+        <div class="opt" onclick="selectOpt(this,0)"><span class="radio"></span>时间未知，看情况再说<span class="opt-score">+0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(3)">← 上一步</button><button class="btn btn-accent" onclick="showResult()">查看评估结果</button></div>
+</div>
+
+<!-- STEP 5: 结果 -->
+<div class="step-section" id="section-4">
+  <div class="card">
+    <div class="card-title">评估结果</div>
+    <div class="card-subtitle" id="result-meta">客户：— | 金额：— | 负责人：—</div>
+    <div class="score-grid">
+      <div class="score-card" id="card-payment">
+        <div class="score-label">&#x1F4B0; 回款安全</div>
+        <div class="score-value" id="score-payment">0</div>
+        <div class="score-max">/ 25分</div>
+        <div class="score-name" id="label-payment">—</div>
+      </div>
+      <div class="score-card" id="card-profit">
+        <div class="score-label">&#x1F4C8; 利润空间</div>
+        <div class="score-value" id="score-profit">0</div>
+        <div class="score-max">/ 20分</div>
+        <div class="score-name" id="label-profit">—</div>
+      </div>
+      <div class="score-card" id="card-probability">
+        <div class="score-label">&#x1F3AF; 成交概率</div>
+        <div class="score-value" id="score-probability">0</div>
+        <div class="score-max">/ 20分</div>
+        <div class="score-name" id="label-probability">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grade-banner" id="grade-banner">
+    <div class="grade-letter" id="grade-letter">A</div>
+    <h2 id="grade-title">A级客户</h2>
+    <p id="grade-desc">重点攻坚，资源倾斜</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">行动建议</div>
+    <div class="advice-grid">
+      <div class="advice-card green">
+        <h4>&#x2705; 签约策略</h4>
+        <p id="advice-sign">—</p>
+      </div>
+      <div class="advice-card orange">
+        <h4>&#x26A0; 条款建议</h4>
+        <p id="advice-clause">—</p>
+      </div>
+      <div class="advice-card blue">
+        <h4>&#x1F4CB; 销售下一步</h4>
+        <p id="advice-next">—</p>
+      </div>
+      <div class="advice-card red">
+        <h4>&#x1F6AB; 红线提示</h4>
+        <p id="advice-red">—</p>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="prevStep(4)">← 上一步</button>
+    <button class="btn btn-primary" onclick="window.print()">打印此报告</button>
+  </div>
+</div>
+
+<div class="footer">天地人销售管理体系 · 新客户三维评估表 · 工具支持：大董销售体系</div>
+</div>
+
+<script>
+var currentStep = 0;
+
+function goStep(n) {
+  document.querySelectorAll('.step-section').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.progress-step').forEach(function(p,i){
+    p.classList.remove('active','done');
+    if(i < n) p.classList.add('done');
+    else if(i === n) p.classList.add('active');
+  });
+  document.getElementById('section-'+n).classList.add('active');
+  currentStep = n;
+}
+
+function nextStep(n) {
+  if(n===0){
+    var name = document.getElementById('c-name').value.trim();
+    if(!name){alert('请填写客户公司名称');return;}
+  }
+  if(n < 4) goStep(n+1);
+}
+
+function prevStep(n){if(n>0) goStep(n-1);}
+
+function selectOpt(el,score){
+  var q = el.closest('.question');
+  q.querySelectorAll('.opt').forEach(function(o){o.classList.remove('selected')});
+  el.classList.add('selected');
+}
+
+function getScore(dim){
+  var qs = document.querySelectorAll('.question[data-dim="'+dim+'"]');
+  var total=0,count=0;
+  qs.forEach(function(q){
+    var sel = q.querySelector('.opt.selected');
+    if(sel){total+=parseInt(sel.dataset.score||0);count++;}
+  });
+  if(count===0) return 0;
+  return total;
+}
+
+function getLevel(score,max){
+  var pct=score/max;
+  if(pct>=0.75) return {cls:'high',label:'优秀'};
+  if(pct>=0.5) return {cls:'mid',label:'一般'};
+  return {cls:'low',label:'较差'};
+}
+
+function showResult(){
+  var sp = getScore('payment');
+  var sf = getScore('profit');
+  var spr = getScore('probability');
+  var name = document.getElementById('c-name').value||'—';
+  var amount = document.getElementById('c-amount').value;
+  var owner = document.getElementById('c-owner').value;
+  var meta = '客户：'+name+(amount?' | 预计金额：'+amount+'万元':'')+(owner?' | 负责人：'+owner:'');
+  document.getElementById('result-meta').textContent = meta;
+
+  var dims = [{id:'payment',max:25},{id:'profit',max:20},{id:'probability',max:20}];
+  dims.forEach(function(d){
+    var sc = d.id==='payment'?sp:d.id==='profit'?sf:spr;
+    var lv = getLevel(sc,d.max);
+    document.getElementById('card-'+d.id).className='score-card '+lv.cls;
+    document.getElementById('score-'+d.id).textContent = sc;
+    document.getElementById('label-'+d.id).textContent = lv.label;
+  });
+
+  var total = sp+sf+spr;
+  var maxTotal=65;
+  var pct=total/maxTotal;
+
+  var grade,cls,title,desc;
+  if(pct>=0.75){
+    grade='A'; cls='a-grade'; title='A级客户 · 重点攻坚';
+    desc='回款好、利润高、成交概率大 — 资源倾斜，优先签约。';
+  } else if(pct>=0.55){
+    grade='B'; cls='b-grade'; title='B级客户 · 可接但需控风险';
+    desc='综合表现中等，需针对性调整条款或提升价值传递。';
+  } else if(pct>=0.38){
+    grade='C'; cls='c-grade'; title='C级客户 · 谨慎签约';
+    desc='有明显短板（回款差或利润低），建议提高预付或放弃。';
+  } else {
+    grade='D'; cls='d-grade'; title='D级客户 · 建议放弃';
+    desc='回款风险高且利润空间低，投入资源不划算，果断放弃。';
+  }
+
+  document.getElementById('grade-banner').className='grade-banner '+cls;
+  document.getElementById('grade-letter').textContent=grade;
+  document.getElementById('grade-title').textContent=title;
+  document.getElementById('grade-desc').textContent=desc;
+
+  var payLevel = sp/25;
+  var profLevel = sf/20;
+  var probLevel = spr/20;
+
+  // 签约策略
+  if(grade==='A'){
+    document.getElementById('advice-sign').textContent='全力签约，公司资源倾斜支持，优先保证交货和服务质量。';
+  } else if(grade==='B'){
+    if(payLevel<0.5) document.getElementById('advice-sign').textContent='可以接，但必须要求预付比例不低于40%，且加入出厂验收条款。';
+    else if(profLevel<0.5) document.getElementById('advice-sign').textContent='可以接，尝试通过增值服务包提升溢价空间（出厂验收+定期巡检打包）。';
+    else document.getElementById('advice-sign').textContent='综合可接，标准条款签约，适当争取溢价。';
+  } else if(grade==='C'){
+    document.getElementById('advice-sign').textContent='需经理审批。要求预付50%+，或要求缩短账期，否则建议放弃该客户。';
+  } else {
+    document.getElementById('advice-sign').textContent='建议放弃该客户。销售时间应投入在A、B级客户身上，不值得在此浪费资源。';
+  }
+
+  // 条款建议
+  if(sp<15){
+    document.getElementById('advice-clause').textContent='必须加入出厂验收条款（提前触发验收款）+ 提高预付比例至40%+，否则不签。';
+  } else if(sf<10){
+    document.getElementById('advice-clause').textContent='建议打包"增值服务包"（出厂验收+1年巡检+快速响应SLA），用服务换溢价。';
+  } else {
+    document.getElementById('advice-clause').textContent='条款可按公司标准模板执行，重点确保回款节点清晰即可。';
+  }
+
+  // 销售下一步
+  if(grade==='A'){
+    document.getElementById('advice-next').textContent='本周内安排高层会面，深度了解需求，争取快速推进签约。';
+  } else if(grade==='B'){
+    document.getElementById('advice-next').textContent='持续跟进，明确客户的差异化价值认知，争取下一次见面能敲定核心需求。';
+  } else if(grade==='C'){
+    document.getElementById('advice-next').textContent='上报经理，明确公司的底线条款（预付/账期），底线以内才可签，超出需特批。';
+  } else {
+    document.getElementById('advice-next').textContent='停止投入时间，将精力转移到A、B级客户身上，每季度复盘一次客户池。';
+  }
+
+  // 红线
+  if(sp<10){
+    document.getElementById('advice-red').textContent='红线：拒绝接受现场安装后才验收条款，必须前置验收节点，否则项目风险不可控。';
+  } else if(sf<8){
+    document.getElementById('advice-red').textContent='红线：不允许低于标准价10%以上的折扣，需经理审批才可接受更深度降价。';
+  } else {
+    document.getElementById('advice-red').textContent='暂无强制红线，但持续关注回款进度，每月至少一次主动催款。';
+  }
+
+  goStep(4);
+}
+</script>
+</body>
+</html>
