@@ -661,6 +661,12 @@
     <div class="header">
         <h1>📋 客户拜访管理</h1>
         <div class="header-sub">永锐线束版 · 天地人销售体系</div>
+        <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; opacity: 0.8;">当前学员：</span>
+            <select id="student-selector" onchange="switchStudent(this.value)" style="font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: white; max-width: 120px;">
+            </select>
+            <button onclick="showAddStudentModal()" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; border: none; background: rgba(255,255,255,0.2); color: white; cursor: pointer;">➕</button>
+        </div>
     </div>
     
     <!-- 主内容 -->
@@ -761,15 +767,42 @@
     
     <script>
         // ==================== 数据存储 ====================
-        const STORAGE_KEY = 'yongroi-visits-v1';
+        const STUDENT_LIST_KEY = 'yongroi-students';
+        const CURRENT_STUDENT_KEY = 'yongroi-current-student';
         
+        let currentStudentId = null;
+        
+        function getStudentList() {
+            const list = localStorage.getItem(STUDENT_LIST_KEY);
+            return list ? JSON.parse(list) : [];
+        }
+        
+        function saveStudentList(list) {
+            localStorage.setItem(STUDENT_LIST_KEY, JSON.stringify(list));
+        }
+        
+        function getStudentStorageKey(studentId) {
+            return 'yongroi-visits-' + studentId;
+        }
+        
+        function getCurrentStudentData() {
+            if (!currentStudentId) return { visits: [] };
+            const data = localStorage.getItem(getStudentStorageKey(currentStudentId));
+            return data ? JSON.parse(data) : { visits: [] };
+        }
+        
+        function saveCurrentStudentData(data) {
+            if (!currentStudentId) return;
+            localStorage.setItem(getStudentStorageKey(currentStudentId), JSON.stringify(data));
+        }
+        
+        // 兼容旧API
         function getData() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : { customers: [], visits: [] };
+            return getCurrentStudentData();
         }
         
         function saveData(data) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            saveCurrentStudentData(data);
         }
         
         // 生成唯一ID
@@ -997,6 +1030,7 @@
             const visit = {
                 id: genId(),
                 customerId: genId(),
+                studentId: currentStudentId,
                 customerName: name,
                 customerType: type,
                 contact: contact,
@@ -1123,7 +1157,7 @@
                     </div>
                     <div style="font-size: 13px; color: var(--gray-500);">
                         ${visit.during && visit.during.actions && Object.keys(visit.during.actions).length > 0 ? 
-                            `已完成 ${Object.values(visit.during.actions).filter(v => v).length}/6 项关键动作` : 
+                            `已完成 ${Object.values(visit.during.actions).filter(v => v).length}/5 项关键动作` : 
                             '点击开始执行'}
                     </div>
                 </div>
@@ -1217,6 +1251,7 @@
             const newVisit = {
                 ...JSON.parse(JSON.stringify(oldVisit)),
                 id: genId(),
+                studentId: currentStudentId,
                 createdAt: new Date().toISOString(),
                 stage: 'preparing',
                 prep: { checklist: {}, notes: '' },
@@ -2066,8 +2101,69 @@
         
         // ==================== 初始化 ====================
         document.addEventListener('DOMContentLoaded', function() {
-            renderCustomerList();
+            initStudentSystem();
         });
+        
+        function initStudentSystem() {
+            const studentList = getStudentList();
+            const currentStudent = localStorage.getItem(CURRENT_STUDENT_KEY);
+            
+            if (studentList.length === 0 || !currentStudent || !studentList.find(s => s.id === currentStudent)) {
+                // 没有学员或当前学员无效，弹出添加学员模态框
+                showAddStudentModal(true);
+            } else {
+                currentStudentId = currentStudent;
+                renderStudentSelector();
+                renderCustomerList();
+            }
+        }
+        
+        function renderStudentSelector() {
+            const list = getStudentList();
+            const selector = document.getElementById('student-selector');
+            selector.innerHTML = list.map(s => 
+                `<option value="${s.id}" ${s.id === currentStudentId ? 'selected' : ''}>${s.name}</option>`
+            ).join('');
+        }
+        
+        function switchStudent(studentId) {
+            currentStudentId = studentId;
+            localStorage.setItem(CURRENT_STUDENT_KEY, studentId);
+            renderCustomerList();
+            showToast('已切换到：' + getStudentList().find(s => s.id === studentId)?.name);
+        }
+        
+        function showAddStudentModal(isRequired = false) {
+            const name = prompt('请输入您的姓名或工号（用于区分不同学员的数据）：');
+            if (name && name.trim()) {
+                const studentList = getStudentList();
+                const existing = studentList.find(s => s.name === name.trim());
+                
+                if (existing) {
+                    currentStudentId = existing.id;
+                    localStorage.setItem(CURRENT_STUDENT_KEY, existing.id);
+                } else {
+                    const newStudent = {
+                        id: genId(),
+                        name: name.trim(),
+                        createdAt: new Date().toISOString()
+                    };
+                    studentList.push(newStudent);
+                    saveStudentList(studentList);
+                    currentStudentId = newStudent.id;
+                    localStorage.setItem(CURRENT_STUDENT_KEY, newStudent.id);
+                }
+                
+                renderStudentSelector();
+                renderCustomerList();
+                
+                if (!isRequired) {
+                    showToast('学员已添加/切换成功！');
+                }
+            } else if (isRequired) {
+                showAddStudentModal(true);
+            }
+        }
     </script>
 </body>
 </html>
