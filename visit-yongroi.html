@@ -902,8 +902,8 @@
             {
                 id: 'listen',
                 title: '多听多问（30/70法则）',
-                hint: '70%时间倾听，30%时间提问',
-                items: ['使用SPIN挖痛提问', '现状问题 → 影响问题 → 需求利益问题', '避免连续追问超过3个问题']
+                hint: '30%时间说(以提问为主)，70%时间倾听',
+                items: ['使用SPIN挖痛提问', '现状问题 → 难点问题 → 暗示问题 → 需求效益满足问题']
             },
             {
                 id: 'commit',
@@ -1354,6 +1354,26 @@
                     </div>
                 `).join('')}
                 
+                <!-- 拜访目标自定义添加 -->
+                <div style="margin-top: 20px; background: #EFF6FF; border-radius: 12px; padding: 16px;">
+                    <label class="form-label" style="color: var(--primary);">🎯 拜访目标（自定义添加）</label>
+                    <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 12px;">
+                        写下本次拜访要达成的具体目标（如：了解预算、推进打样等）
+                    </div>
+                    <div id="custom-goals-list">
+                        ${(visit.customGoals || []).map((goal, i) => `
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <input type="text" class="form-input" value="${goal}" 
+                                    onchange="updateCustomGoal(${i}, this.value)" style="flex: 1;" placeholder="输入拜访目标...">
+                                <button onclick="removeCustomGoal(${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn btn-outline" onclick="addCustomGoal()" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                        ➕ 添加拜访目标
+                    </button>
+                </div>
+                
                 <div style="margin-top: 20px;">
                     <label class="form-label">准备备注（可选）</label>
                     <textarea class="form-input form-textarea" 
@@ -1411,6 +1431,43 @@
             visit.prep.globalNote = value;
             saveData(data);
             currentVisit = visit;
+        }
+        
+        // 自定义拜访目标操作
+        function addCustomGoal() {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.customGoals) visit.customGoals = [];
+                visit.customGoals.push('');
+                saveData(data);
+                currentVisit = visit;
+                renderBeforePage();
+            }
+        }
+        
+        function updateCustomGoal(index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.customGoals) {
+                visit.customGoals[index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeCustomGoal(index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.customGoals) {
+                visit.customGoals.splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderBeforePage();
+            }
         }
         
         // 保存并继续
