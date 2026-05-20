@@ -1289,7 +1289,15 @@
         
         // ==================== 拜访前页面渲染 ====================
         function renderBeforePage() {
-            if (!currentVisit) return;
+            if (!currentVisit) {
+                document.getElementById('before-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📝</div>
+                        <div class="text">请先选择一个拜访记录<br>从「客户列表」进入拜访详情</div>
+                    </div>
+                `;
+                return;
+            }
             
             const visit = currentVisit;
             const prep = visit.prep || { checklist: {}, notes: '' };
@@ -1416,7 +1424,15 @@
         
         // ==================== 拜访中页面渲染 ====================
         function renderDuringPage() {
-            if (!currentVisit) return;
+            if (!currentVisit) {
+                document.getElementById('during-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🤝</div>
+                        <div class="text">请先选择一个拜访记录<br>从「客户列表」进入拜访详情</div>
+                    </div>
+                `;
+                return;
+            }
             
             const visit = currentVisit;
             const during = visit.during || { actions: {}, notes: '', commitment: '', nextVisit: '', summarySent: false };
@@ -1580,7 +1596,15 @@
         
         // ==================== 拜访后复盘页面渲染 ====================
         function renderAfterPage() {
-            if (!currentVisit) return;
+            if (!currentVisit) {
+                document.getElementById('after-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📊</div>
+                        <div class="text">请先选择一个拜访记录<br>从「客户列表」进入拜访详情</div>
+                    </div>
+                `;
+                return;
+            }
             
             const visit = currentVisit;
             const after = visit.after || {
