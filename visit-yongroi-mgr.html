@@ -900,6 +900,48 @@
             return allVisits;
         }
         
+        // 从拜访记录推导客户列表（学员版没有独立的customers数组）
+        function getAllCustomers() {
+            const allVisits = getAllVisits();
+            const customerMap = {};
+            
+            allVisits.forEach(v => {
+                if (!customerMap[v.customerId]) {
+                    customerMap[v.customerId] = {
+                        id: v.customerId,
+                        name: v.customerName || '未知客户',
+                        type: v.customerType || 'other',
+                        grade: v.customerGrade || 'C',
+                        salesName: v.salesName || '未知',
+                        salesId: v.salesId,
+                        createdAt: v.createdAt,
+                        visitCount: 0,
+                        lastVisitDate: v.visitDate || v.createdAt
+                    };
+                }
+                customerMap[v.customerId].visitCount++;
+                // 用最新的拜访数据更新客户信息
+                if (v.customerGrade) customerMap[v.customerId].grade = v.customerGrade;
+                if (v.customerName) customerMap[v.customerId].name = v.customerName;
+                // 更新最后拜访日期
+                const vDate = new Date(v.visitDate || v.createdAt);
+                const lastDate = new Date(customerMap[v.customerId].lastVisitDate);
+                if (vDate > lastDate) {
+                    customerMap[v.customerId].lastVisitDate = v.visitDate || v.createdAt;
+                }
+            });
+            
+            return Object.values(customerMap);
+        }
+        
+        // 类型中文映射
+        const TYPE_MAP = {
+            'engineering': '工程机械厂',
+            'nev': '新能源车厂',
+            'railway': '轨道交通',
+            'other': '其他'
+        };
+        
         function getMgrData() {
             const data = localStorage.getItem(MGR_DATA_KEY);
             return data ? JSON.parse(data) : {
@@ -952,16 +994,8 @@
             const thisMonth = now.getMonth();
             const thisYear = now.getFullYear();
             
-            // 收集所有客户
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    const customers = JSON.parse(data).customers || [];
-                    allCustomers = allCustomers.concat(customers.map(c => ({...c, salesName: s.name})));
-                }
-            });
+            // 从拜访记录推导客户列表
+            const allCustomers = getAllCustomers();
             
             // 统计分级
             const gradeA = allCustomers.filter(c => c.grade === 'A').length;
@@ -1006,15 +1040,7 @@
         
         // ========== 客户分级饼图 ==========
         function renderGradeChart() {
-            const students = getStudentList();
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers = allCustomers.concat(JSON.parse(data).customers || []);
-                }
-            });
+            const allCustomers = getAllCustomers();
             
             const gradeA = allCustomers.filter(c => c.grade === 'A').length;
             const gradeB = allCustomers.filter(c => c.grade === 'B').length;
@@ -1048,19 +1074,11 @@
         
         // ========== 行业分布图 ==========
         function renderIndustryChart() {
-            const students = getStudentList();
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers = allCustomers.concat(JSON.parse(data).customers || []);
-                }
-            });
+            const allCustomers = getAllCustomers();
             
             const industries = {};
             allCustomers.forEach(c => {
-                const ind = c.industry || '其他';
+                const ind = TYPE_MAP[c.type] || '其他';
                 industries[ind] = (industries[ind] || 0) + 1;
             });
             
@@ -1096,16 +1114,7 @@
             const mgrData = getMgrData();
             const targets = mgrData.targets;
             const allVisits = getAllVisits();
-            const students = getStudentList();
-            
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers = allCustomers.concat(JSON.parse(data).customers || []);
-                }
-            });
+            const allCustomers = getAllCustomers();
             
             const now = new Date();
             const thisMonth = now.getMonth();
@@ -1144,17 +1153,8 @@
         
         // ========== 预警列表 ==========
         function renderAlerts() {
-            const students = getStudentList();
-            let allCustomers = [];
-            let allVisits = getAllVisits();
-            
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers = allCustomers.concat((JSON.parse(data).customers || []).map(c => ({...c, salesName: s.name})));
-                }
-            });
+            const allCustomers = getAllCustomers();
+            const allVisits = getAllVisits();
             
             const now = new Date();
             const alerts = [];
@@ -1226,15 +1226,7 @@
         }
         
         function renderCustomerList() {
-            const students = getStudentList();
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers = allCustomers.concat((JSON.parse(data).customers || []).map(c => ({...c, salesName: s.name})));
-                }
-            });
+            let allCustomers = getAllCustomers();
             
             // 过滤
             if (currentFilter !== 'all') {
@@ -1257,7 +1249,7 @@
                     <div class="customer-grade grade-${c.grade || 'D'}">${c.grade || 'D'}</div>
                     <div class="customer-info">
                         <div class="customer-name">${c.name || '未知客户'}</div>
-                        <div class="customer-meta">${c.industry || '未分类'} · ${c.salesName}</div>
+                        <div class="customer-meta">${TYPE_MAP[c.type] || '未分类'} · ${c.salesName}</div>
                     </div>
                     <span class="customer-status ${getStatusClass(c)}">${getStatusText(c)}</span>
                 </div>
@@ -1283,16 +1275,7 @@
         
         // ========== 销售漏斗 ==========
         function renderFunnel() {
-            const allCustomers = [];
-            const students = getStudentList();
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers.push(...(JSON.parse(data).customers || []));
-                }
-            });
-            
+            const allCustomers = getAllCustomers();
             const allVisits = getAllVisits();
             const leads = allCustomers.length;
             const intent = allCustomers.filter(c => c.grade === 'A' || c.grade === 'B').length;
@@ -1318,15 +1301,7 @@
         // ========== KPI指标 ==========
         function renderKPITable() {
             const allVisits = getAllVisits();
-            const students = getStudentList();
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers.push(...(JSON.parse(data).customers || []));
-                }
-            });
+            const allCustomers = getAllCustomers();
             
             const now = new Date();
             const thisMonth = now.getMonth();
@@ -1472,14 +1447,7 @@
             salesSelect.innerHTML = students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
             
             // 收集所有客户
-            let allCustomers = [];
-            students.forEach(s => {
-                const key = getStudentStorageKey(s.id);
-                const data = localStorage.getItem(key);
-                if (data) {
-                    allCustomers = allCustomers.concat((JSON.parse(data).customers || []).map(c => ({...c, salesId: s.id})));
-                }
-            });
+            const allCustomers = getAllCustomers();
             
             const customerSelect = document.getElementById('schedule-customer');
             customerSelect.innerHTML = allCustomers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');

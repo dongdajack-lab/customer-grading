@@ -742,6 +742,15 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label class="form-label">客户分级</label>
+                    <select class="form-input form-select" id="customer-grade">
+                        <option value="A">A级 - 重点客户</option>
+                        <option value="B">B级 - 潜力客户</option>
+                        <option value="C" selected>C级 - 普通客户</option>
+                        <option value="D">D级 - 观望客户</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label class="form-label">联系人</label>
                     <input type="text" class="form-input" id="customer-contact" placeholder="请输入联系人姓名">
                 </div>
@@ -1022,6 +1031,7 @@
             
             const name = document.getElementById('customer-name').value.trim();
             const type = document.getElementById('customer-type').value;
+            const grade = document.getElementById('customer-grade').value;
             const contact = document.getElementById('customer-contact').value.trim();
             const position = document.getElementById('customer-position').value.trim();
             const purpose = document.getElementById('visit-purpose').value.trim();
@@ -1038,6 +1048,7 @@
                 studentId: currentStudentId,
                 customerName: name,
                 customerType: type,
+                customerGrade: grade,
                 contact: contact,
                 position: position,
                 visitDate: datetime,
