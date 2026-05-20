@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>管理驾驶舱 | 永锐线束版</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --purple: #8B5CF6;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+            --radius: 12px;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, #1E3A5F 0%, #2D5A87 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-subtitle {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        /* 切换标签 */
+        .tab-nav {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 70px;
+            z-index: 99;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-500);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+        .tab-content {
+            display: none;
+            padding: 16px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 统计卡片 */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+        .stat-card.highlight {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        .stat-card.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #D97706 100%);
+            color: white;
+        }
+        .stat-card.danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%);
+            color: white;
+        }
+        .stat-card.success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .stat-change {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon {
+            font-size: 18px;
+        }
+        
+        /* 图表容器 */
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin: 16px 0;
+        }
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        /* 客户列表 */
+        .customer-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .customer-item:hover {
+            background: var(--gray-200);
+        }
+        .customer-grade {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .grade-A { background: var(--success); }
+        .grade-B { background: var(--primary); }
+        .grade-C { background: var(--warning); }
+        .grade-D { background: var(--gray-500); }
+        .customer-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .customer-name {
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .customer-meta {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        .customer-status {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .status-new { background: #DCFCE7; color: #166534; }
+        .status-active { background: #DBEAFE; color: #1E40AF; }
+        .status-warning { background: #FEF3C7; color: #92400E; }
+        .status-danger { background: #FEE2E2; color: #991B1B; }
+        
+        /* 漏斗图 */
+        .funnel {
+            padding: 20px 0;
+        }
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .funnel-bar {
+            height: 40px;
+            background: linear-gradient(90deg, var(--primary) 0%, #3B82F6 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .funnel-bar.secondary {
+            background: linear-gradient(90deg, var(--purple) 0%, #A78BFA 100%);
+        }
+        .funnel-bar.tertiary {
+            background: linear-gradient(90deg, var(--success) 0%, #34D399 100%);
+        }
+        .funnel-bar.last {
+            background: linear-gradient(90deg, var(--warning) 0%, #FBBF24 100%);
+        }
+        .funnel-count {
+            margin-left: 12px;
+            font-size: 14px;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+        .funnel-rate {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-left: 8px;
+        }
+        
+        /* 预警列表 */
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            background: #FEF2F2;
+            border-left: 4px solid var(--danger);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 10px;
+        }
+        .alert-item.warning {
+            background: #FFFBEB;
+            border-left-color: var(--warning);
+        }
+        .alert-icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .alert-content {
+            flex: 1;
+        }
+        .alert-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--danger);
+        }
+        .alert-item.warning .alert-title {
+            color: #B45309;
+        }
+        .alert-desc {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-top: 2px;
+        }
+        
+        /* 目标进度 */
+        .target-section {
+            margin-bottom: 20px;
+        }
+        .target-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .target-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .target-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .progress-bar {
+            height: 12px;
+            background: var(--gray-200);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        .progress-fill.warning {
+            background: linear-gradient(90deg, var(--warning) 0%, #FBBF24 100%);
+        }
+        .progress-fill.danger {
+            background: linear-gradient(90deg, var(--danger) 0%, #F87171 100%);
+        }
+        
+        /* 拜访计划 */
+        .schedule-day {
+            margin-bottom: 16px;
+        }
+        .schedule-date {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+        .schedule-time {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+            width: 50px;
+            flex-shrink: 0;
+        }
+        .schedule-info {
+            flex: 1;
+        }
+        .schedule-customer {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .schedule-purpose {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        .schedule-sales {
+            font-size: 11px;
+            color: var(--gray-500);
+            background: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        /* 无数据状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-500);
+        }
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .empty-text {
+            font-size: 14px;
+        }
+        
+        /* 分类标签 */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .filter-tab {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            border-top: 1px solid var(--gray-200);
+            padding: 8px 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+        .nav-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 4px;
+            border: none;
+            background: none;
+            color: var(--gray-500);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn.active {
+            color: var(--primary);
+        }
+        .nav-btn .icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        
+        /* 模态框 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: flex-end;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-height: 80vh;
+            padding: 20px;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        /* 表单 */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            display: block;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* 数据表格 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 10px 8px;
+            font-size: 12px;
+            color: var(--gray-500);
+            border-bottom: 1px solid var(--gray-200);
+            font-weight: 500;
+        }
+        .data-table td {
+            padding: 10px 8px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <h1>📊 管理驾驶舱</h1>
+        <div class="header-subtitle">永锐线束 · 销售管理视角</div>
+    </div>
+    
+    <!-- 切换标签 -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('sky')">🌟 天·战略</button>
+        <button class="tab-btn" onclick="switchTab('earth')">🌍 过程</button>
+    </div>
+    
+    <!-- 天·战略页面 -->
+    <div id="sky-page" class="tab-content active">
+        <!-- 核心指标 -->
+        <div class="stat-grid">
+            <div class="stat-card highlight">
+                <div class="stat-label">客户总数</div>
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="stat-change" id="stat-month-new">本月新增 0</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-label">A级客户</div>
+                <div class="stat-value" id="stat-a">0</div>
+                <div class="stat-change" id="stat-a-percent">占比 0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">B级客户</div>
+                <div class="stat-value" id="stat-b">0</div>
+                <div class="stat-change" id="stat-b-percent">占比 0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">C+D级客户</div>
+                <div class="stat-value" id="stat-cd">0</div>
+                <div class="stat-change">待培育</div>
+            </div>
+        </div>
+        
+        <!-- 客户分级看板 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📊</span>
+                客户分级分布
+            </div>
+            <div class="chart-row">
+                <div class="chart-container" style="height: 160px;">
+                    <canvas id="gradeChart"></canvas>
+                </div>
+                <div class="chart-container" style="height: 160px;">
+                    <canvas id="industryChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 销售目标 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">🎯</span>
+                本月销售目标
+                <button onclick="showTargetModal()" style="margin-left: auto; background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer;">设置</button>
+            </div>
+            <div class="target-section">
+                <div class="target-header">
+                    <span class="target-label">新客户开发</span>
+                    <span class="target-value" id="target-new-text">0 / 0</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="target-new-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="target-section">
+                <div class="target-header">
+                    <span class="target-label">拜访次数</span>
+                    <span class="target-value" id="target-visit-text">0 / 0</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="target-visit-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="target-section">
+                <div class="target-header">
+                    <span class="target-label">A级客户转化</span>
+                    <span class="target-value" id="target-a-text">0 / 0</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="target-a-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 重点客户预警 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">⚠️</span>
+                客户预警
+                <span id="alert-count" style="margin-left: auto; background: var(--danger); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">0</span>
+            </div>
+            <div id="alert-list">
+                <div class="empty-state" style="padding: 20px;">
+                    <div class="empty-icon">✅</div>
+                    <div class="empty-text">暂无预警</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 客户列表 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">👥</span>
+                全部客户
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterCustomers('all')">全部</button>
+                <button class="filter-tab" onclick="filterCustomers('A')">A级</button>
+                <button class="filter-tab" onclick="filterCustomers('B')">B级</button>
+                <button class="filter-tab" onclick="filterCustomers('C')">C级</button>
+            </div>
+            <div id="customer-list"></div>
+        </div>
+    </div>
+    
+    <!-- 地·过程页面 -->
+    <div id="earth-page" class="tab-content">
+        <!-- 核心指标 -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">本周拜访</div>
+                <div class="stat-value" id="stat-week-visit">0</div>
+                <div class="stat-change">较上周 +0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">本月拜访</div>
+                <div class="stat-value" id="stat-month-visit">0</div>
+                <div class="stat-change">目标 0 次</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-label">平均时长</div>
+                <div class="stat-value" id="stat-avg-duration">0</div>
+                <div class="stat-change">分钟/次</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-label">待复盘</div>
+                <div class="stat-value" id="stat-pending-review">0</div>
+                <div class="stat-change">请及时复盘</div>
+            </div>
+        </div>
+        
+        <!-- 销售漏斗 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">�漏斗</span>
+                销售漏斗
+            </div>
+            <div class="funnel">
+                <div class="funnel-step">
+                    <div class="funnel-bar" id="funnel-leads" style="width: 100%;">线索客户</div>
+                    <span class="funnel-count" id="funnel-leads-count">0</span>
+                    <span class="funnel-rate">100%</span>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-bar secondary" id="funnel-intent" style="width: 75%;">意向客户</div>
+                    <span class="funnel-count" id="funnel-intent-count">0</span>
+                    <span class="funnel-rate" id="funnel-intent-rate">-</span>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-bar tertiary" id="funnel-visit" style="width: 50%;">已拜访</div>
+                    <span class="funnel-count" id="funnel-visit-count">0</span>
+                    <span class="funnel-rate" id="funnel-visit-rate">-</span>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-bar last" id="funnel-close" style="width: 30%;">已成交</div>
+                    <span class="funnel-count" id="funnel-close-count">0</span>
+                    <span class="funnel-rate" id="funnel-close-rate">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 过程指标 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📈</span>
+                过程指标看板
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>指标</th>
+                        <th>当前</th>
+                        <th>目标</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody id="kpi-table">
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 拜访计划排期 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📅</span>
+                未来7天拜访计划
+                <button onclick="showScheduleModal()" style="margin-left: auto; background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer;">添加</button>
+            </div>
+            <div id="schedule-list"></div>
+        </div>
+        
+        <!-- 学员拜访排行 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">🏆</span>
+                拜访排行榜
+            </div>
+            <div id="ranking-list"></div>
+        </div>
+    </div>
+    
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="goToStudent()">
+            <span class="icon">📱</span>
+            学员版
+        </button>
+        <button class="nav-btn" onclick="switchTab('sky'); this.classList.add('active'); this.previousElementSibling.classList.remove('active');">
+            <span class="icon">📊</span>
+            管理版
+        </button>
+    </div>
+    
+    <!-- 目标设置模态框 -->
+    <div class="modal-overlay" id="target-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">设置月度目标</div>
+                <button class="modal-close" onclick="closeTargetModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">新客户开发目标（家）</label>
+                    <input type="number" class="form-input" id="target-new-input" placeholder="输入目标数量">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">拜访次数目标（次）</label>
+                    <input type="number" class="form-input" id="target-visit-input" placeholder="输入目标次数">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">A级客户转化目标（家）</label>
+                    <input type="number" class="form-input" id="target-a-input" placeholder="输入目标数量">
+                </div>
+                <button class="btn btn-primary" onclick="saveTargets()">保存目标</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加计划模态框 -->
+    <div class="modal-overlay" id="schedule-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">添加拜访计划</div>
+                <button class="modal-close" onclick="closeScheduleModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">选择学员</label>
+                    <select class="form-input" id="schedule-sales"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">选择客户</label>
+                    <select class="form-input" id="schedule-customer"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">拜访日期</label>
+                    <input type="date" class="form-input" id="schedule-date">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">拜访目的</label>
+                    <input type="text" class="form-input" id="schedule-purpose" placeholder="输入拜访目的">
+                </div>
+                <button class="btn btn-primary" onclick="saveSchedule()">添加计划</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 数据存储 ==========
+        const STUDENT_LIST_KEY = 'yongroi-students';
+        const MGR_DATA_KEY = 'yongroi-mgr-data';
+        
+        function getStudentStorageKey(studentId) {
+            return 'yongroi-visits-' + studentId;
+        }
+        
+        function getStudentList() {
+            const data = localStorage.getItem(STUDENT_LIST_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+        
+        function getAllVisits() {
+            const students = getStudentList();
+            let allVisits = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    const visits = JSON.parse(data).visits || [];
+                    visits.forEach(v => {
+                        v.salesName = s.name;
+                        v.salesId = s.id;
+                    });
+                    allVisits = allVisits.concat(visits);
+                }
+            });
+            return allVisits;
+        }
+        
+        function getMgrData() {
+            const data = localStorage.getItem(MGR_DATA_KEY);
+            return data ? JSON.parse(data) : {
+                targets: { newCustomer: 10, visitCount: 30, aCustomer: 5 },
+                schedules: []
+            };
+        }
+        
+        function saveMgrData(data) {
+            localStorage.setItem(MGR_DATA_KEY, JSON.stringify(data));
+        }
+        
+        // ========== 图表实例 ==========
+        let gradeChart = null;
+        let industryChart = null;
+        
+        // ========== 初始化 ==========
+        function init() {
+            renderStats();
+            renderGradeChart();
+            renderIndustryChart();
+            renderTargets();
+            renderAlerts();
+            renderCustomerList();
+            renderFunnel();
+            renderKPITable();
+            renderSchedule();
+            renderRanking();
+        }
+        
+        // ========== 标签切换 ==========
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(page => page.classList.remove('active'));
+            
+            if (tab === 'sky') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('sky-page').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('earth-page').classList.add('active');
+            }
+        }
+        
+        // ========== 统计概览 ==========
+        function renderStats() {
+            const students = getStudentList();
+            const allVisits = getAllVisits();
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const thisYear = now.getFullYear();
+            
+            // 收集所有客户
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    const customers = JSON.parse(data).customers || [];
+                    allCustomers = allCustomers.concat(customers.map(c => ({...c, salesName: s.name})));
+                }
+            });
+            
+            // 统计分级
+            const gradeA = allCustomers.filter(c => c.grade === 'A').length;
+            const gradeB = allCustomers.filter(c => c.grade === 'B').length;
+            const gradeC = allCustomers.filter(c => c.grade === 'C' || c.grade === 'D').length;
+            const total = allCustomers.length;
+            
+            // 月度新增
+            const monthNew = allCustomers.filter(c => {
+                const d = new Date(c.createTime || c.createdAt);
+                return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+            }).length;
+            
+            // 拜访统计
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() - now.getDay());
+            const weekVisits = allVisits.filter(v => new Date(v.visitDate || v.date) >= weekStart).length;
+            const monthVisits = allVisits.filter(v => {
+                const d = new Date(v.visitDate || v.date);
+                return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+            }).length;
+            
+            // 待复盘
+            const pendingReview = allVisits.filter(v => v.stage === 'before' || v.stage === 'during').length;
+            
+            // 更新DOM
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-month-new').textContent = '本月新增 ' + monthNew;
+            document.getElementById('stat-a').textContent = gradeA;
+            document.getElementById('stat-a-percent').textContent = total > 0 ? '占比 ' + Math.round(gradeA/total*100) + '%' : '占比 0%';
+            document.getElementById('stat-b').textContent = gradeB;
+            document.getElementById('stat-b-percent').textContent = total > 0 ? '占比 ' + Math.round(gradeB/total*100) + '%' : '占比 0%';
+            document.getElementById('stat-cd').textContent = gradeC;
+            
+            document.getElementById('stat-week-visit').textContent = weekVisits;
+            document.getElementById('stat-month-visit').textContent = monthVisits;
+            document.getElementById('stat-pending-review').textContent = pendingReview;
+            
+            // 平均时长（模拟数据）
+            document.getElementById('stat-avg-duration').textContent = monthVisits > 0 ? Math.round(45 + Math.random() * 15) : '0';
+        }
+        
+        // ========== 客户分级饼图 ==========
+        function renderGradeChart() {
+            const students = getStudentList();
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers = allCustomers.concat(JSON.parse(data).customers || []);
+                }
+            });
+            
+            const gradeA = allCustomers.filter(c => c.grade === 'A').length;
+            const gradeB = allCustomers.filter(c => c.grade === 'B').length;
+            const gradeC = allCustomers.filter(c => c.grade === 'C').length;
+            const gradeD = allCustomers.filter(c => c.grade === 'D' || !c.grade).length;
+            
+            const ctx = document.getElementById('gradeChart').getContext('2d');
+            if (gradeChart) gradeChart.destroy();
+            
+            gradeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A级', 'B级', 'C级', 'D级'],
+                    datasets: [{
+                        data: [gradeA, gradeB, gradeC, gradeD],
+                        backgroundColor: ['#10B981', '#2563EB', '#F59E0B', '#6B7280']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { boxWidth: 12, padding: 8, font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ========== 行业分布图 ==========
+        function renderIndustryChart() {
+            const students = getStudentList();
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers = allCustomers.concat(JSON.parse(data).customers || []);
+                }
+            });
+            
+            const industries = {};
+            allCustomers.forEach(c => {
+                const ind = c.industry || '其他';
+                industries[ind] = (industries[ind] || 0) + 1;
+            });
+            
+            const labels = Object.keys(industries);
+            const data = Object.values(industries);
+            
+            const ctx = document.getElementById('industryChart').getContext('2d');
+            if (industryChart) industryChart.destroy();
+            
+            industryChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels.length ? labels : ['暂无数据'],
+                    datasets: [{
+                        data: data.length ? data : [0],
+                        backgroundColor: '#2563EB'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { display: false },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+        
+        // ========== 销售目标 ==========
+        function renderTargets() {
+            const mgrData = getMgrData();
+            const targets = mgrData.targets;
+            const allVisits = getAllVisits();
+            const students = getStudentList();
+            
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers = allCustomers.concat(JSON.parse(data).customers || []);
+                }
+            });
+            
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const thisYear = now.getFullYear();
+            const monthNew = allCustomers.filter(c => {
+                const d = new Date(c.createTime || c.createdAt);
+                return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+            }).length;
+            const monthVisits = allVisits.filter(v => {
+                const d = new Date(v.visitDate || v.date);
+                return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+            }).length;
+            const aCustomers = allCustomers.filter(c => c.grade === 'A').length;
+            
+            // 新客户
+            const newPct = targets.newCustomer > 0 ? Math.min(100, Math.round(monthNew / targets.newCustomer * 100)) : 0;
+            document.getElementById('target-new-text').textContent = monthNew + ' / ' + targets.newCustomer;
+            const newBar = document.getElementById('target-new-bar');
+            newBar.style.width = newPct + '%';
+            newBar.className = 'progress-fill' + (newPct < 50 ? ' danger' : newPct < 80 ? ' warning' : '');
+            
+            // 拜访次数
+            const visitPct = targets.visitCount > 0 ? Math.min(100, Math.round(monthVisits / targets.visitCount * 100)) : 0;
+            document.getElementById('target-visit-text').textContent = monthVisits + ' / ' + targets.visitCount;
+            const visitBar = document.getElementById('target-visit-bar');
+            visitBar.style.width = visitPct + '%';
+            visitBar.className = 'progress-fill' + (visitPct < 50 ? ' danger' : visitPct < 80 ? ' warning' : '');
+            
+            // A级转化
+            const aPct = targets.aCustomer > 0 ? Math.min(100, Math.round(aCustomers / targets.aCustomer * 100)) : 0;
+            document.getElementById('target-a-text').textContent = aCustomers + ' / ' + targets.aCustomer;
+            const aBar = document.getElementById('target-a-bar');
+            aBar.style.width = aPct + '%';
+            aBar.className = 'progress-fill' + (aPct < 50 ? ' danger' : aPct < 80 ? ' warning' : '');
+        }
+        
+        // ========== 预警列表 ==========
+        function renderAlerts() {
+            const students = getStudentList();
+            let allCustomers = [];
+            let allVisits = getAllVisits();
+            
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers = allCustomers.concat((JSON.parse(data).customers || []).map(c => ({...c, salesName: s.name})));
+                }
+            });
+            
+            const now = new Date();
+            const alerts = [];
+            
+            // 久未跟进（超过14天无拜访）
+            allCustomers.forEach(c => {
+                const customerVisits = allVisits.filter(v => v.customerId === c.id);
+                if (customerVisits.length > 0) {
+                    const lastVisit = customerVisits.sort((a, b) => new Date(b.visitDate || b.date) - new Date(a.visitDate || a.date))[0];
+                    const daysSince = Math.floor((now - new Date(lastVisit.visitDate || lastVisit.date)) / (1000 * 60 * 60 * 24));
+                    if (daysSince > 14) {
+                        alerts.push({
+                            type: 'danger',
+                            title: '久未跟进：' + c.name,
+                            desc: '距上次拜访已 ' + daysSince + ' 天（负责人：' + c.salesName + '）'
+                        });
+                    }
+                }
+            });
+            
+            // 拜访中未完成复盘
+            const pendingVisits = allVisits.filter(v => v.stage === 'during');
+            if (pendingVisits.length > 0) {
+                alerts.push({
+                    type: 'warning',
+                    title: '待完成复盘',
+                    desc: '有 ' + pendingVisits.length + ' 次拜访待复盘'
+                });
+            }
+            
+            // 无拜访记录的客户（A级）
+            const noVisitA = allCustomers.filter(c => c.grade === 'A' && !allVisits.some(v => v.customerId === c.id));
+            if (noVisitA.length > 0) {
+                alerts.push({
+                    type: 'warning',
+                    title: 'A级客户未拜访',
+                    desc: '有 ' + noVisitA.length + ' 个A级客户尚未拜访'
+                });
+            }
+            
+            // 渲染
+            const container = document.getElementById('alert-list');
+            document.getElementById('alert-count').textContent = alerts.length;
+            
+            if (alerts.length === 0) {
+                container.innerHTML = '<div class="empty-state" style="padding: 20px;"><div class="empty-icon">✅</div><div class="empty-text">暂无预警</div></div>';
+                return;
+            }
+            
+            container.innerHTML = alerts.map(a => `
+                <div class="alert-item ${a.type === 'warning' ? 'warning' : ''}">
+                    <span class="alert-icon">${a.type === 'danger' ? '🔴' : '🟡'}</span>
+                    <div class="alert-content">
+                        <div class="alert-title">${a.title}</div>
+                        <div class="alert-desc">${a.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ========== 客户列表 ==========
+        let currentFilter = 'all';
+        
+        function filterCustomers(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCustomerList();
+        }
+        
+        function renderCustomerList() {
+            const students = getStudentList();
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers = allCustomers.concat((JSON.parse(data).customers || []).map(c => ({...c, salesName: s.name})));
+                }
+            });
+            
+            // 过滤
+            if (currentFilter !== 'all') {
+                allCustomers = allCustomers.filter(c => c.grade === currentFilter);
+            }
+            
+            // 按分级排序
+            const gradeOrder = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+            allCustomers.sort((a, b) => (gradeOrder[a.grade] || 9) - (gradeOrder[b.grade] || 9));
+            
+            const container = document.getElementById('customer-list');
+            
+            if (allCustomers.length === 0) {
+                container.innerHTML = '<div class="empty-state" style="padding: 20px;"><div class="empty-icon">📋</div><div class="empty-text">暂无客户数据</div></div>';
+                return;
+            }
+            
+            container.innerHTML = allCustomers.map(c => `
+                <div class="customer-item">
+                    <div class="customer-grade grade-${c.grade || 'D'}">${c.grade || 'D'}</div>
+                    <div class="customer-info">
+                        <div class="customer-name">${c.name || '未知客户'}</div>
+                        <div class="customer-meta">${c.industry || '未分类'} · ${c.salesName}</div>
+                    </div>
+                    <span class="customer-status ${getStatusClass(c)}">${getStatusText(c)}</span>
+                </div>
+            `).join('');
+        }
+        
+        function getStatusClass(c) {
+            const visits = getAllVisits().filter(v => v.customerId === c.id);
+            if (visits.length === 0) return 'status-new';
+            const last = visits.sort((a, b) => new Date(b.visitDate || b.date) - new Date(a.visitDate || a.date))[0];
+            if (last.stage === 'after') return 'status-active';
+            return 'status-warning';
+        }
+        
+        function getStatusText(c) {
+            const visits = getAllVisits().filter(v => v.customerId === c.id);
+            if (visits.length === 0) return '待拜访';
+            const last = visits.sort((a, b) => new Date(b.visitDate || b.date) - new Date(a.visitDate || a.date))[0];
+            if (last.stage === 'after') return '已复盘';
+            if (last.stage === 'during') return '拜访中';
+            return '待复盘';
+        }
+        
+        // ========== 销售漏斗 ==========
+        function renderFunnel() {
+            const allCustomers = [];
+            const students = getStudentList();
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers.push(...(JSON.parse(data).customers || []));
+                }
+            });
+            
+            const allVisits = getAllVisits();
+            const leads = allCustomers.length;
+            const intent = allCustomers.filter(c => c.grade === 'A' || c.grade === 'B').length;
+            const visited = [...new Set(allVisits.map(v => v.customerId))].length;
+            const closed = allCustomers.filter(c => c.stage === 'closed' || c.status === '成交').length;
+            
+            document.getElementById('funnel-leads-count').textContent = leads;
+            document.getElementById('funnel-intent-count').textContent = intent;
+            document.getElementById('funnel-visit-count').textContent = visited;
+            document.getElementById('funnel-close-count').textContent = closed;
+            
+            if (leads > 0) {
+                document.getElementById('funnel-intent-rate').textContent = Math.round(intent/leads*100) + '%';
+                document.getElementById('funnel-visit-rate').textContent = Math.round(visited/leads*100) + '%';
+                document.getElementById('funnel-close-rate').textContent = Math.round(closed/leads*100) + '%';
+                
+                document.getElementById('funnel-intent').style.width = (intent/leads*100) + '%';
+                document.getElementById('funnel-visit').style.width = (visited/leads*100) + '%';
+                document.getElementById('funnel-close').style.width = (closed/leads*100) + '%';
+            }
+        }
+        
+        // ========== KPI指标 ==========
+        function renderKPITable() {
+            const allVisits = getAllVisits();
+            const students = getStudentList();
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers.push(...(JSON.parse(data).customers || []));
+                }
+            });
+            
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const thisYear = now.getFullYear();
+            const monthVisits = allVisits.filter(v => {
+                const d = new Date(v.visitDate || v.date);
+                return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+            });
+            
+            const kpis = [
+                { name: '拜访完成率', current: monthVisits.length, target: 30, unit: '次' },
+                { name: 'A级客户覆盖率', current: allCustomers.filter(c => c.grade === 'A').length, target: allCustomers.filter(c => c.grade === 'A').length || 5, unit: '家' },
+                { name: '复盘完成率', current: monthVisits.filter(v => v.stage === 'after').length, target: monthVisits.length || 30, unit: '%' },
+                { name: '客户满意度', current: 92, target: 90, unit: '%' }
+            ];
+            
+            const tbody = document.getElementById('kpi-table');
+            tbody.innerHTML = kpis.map(kpi => {
+                const pct = kpi.target > 0 ? Math.round(kpi.current / kpi.target * 100) : 0;
+                const status = pct >= 100 ? '✅' : pct >= 70 ? '🟡' : '🔴';
+                return `
+                    <tr>
+                        <td>${kpi.name}</td>
+                        <td>${kpi.current}${kpi.unit}</td>
+                        <td>${kpi.target}${kpi.unit}</td>
+                        <td>${status} ${pct}%</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // ========== 拜访计划 ==========
+        function renderSchedule() {
+            const mgrData = getMgrData();
+            const schedules = mgrData.schedules || [];
+            const students = getStudentList();
+            
+            const now = new Date();
+            const next7Days = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(now);
+                d.setDate(now.getDate() + i);
+                next7Days.push(d);
+            }
+            
+            const container = document.getElementById('schedule-list');
+            
+            const dayNames = ['今天', '明天'];
+            const weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            
+            let html = '';
+            next7Days.forEach((day, idx) => {
+                const daySchedules = schedules.filter(s => s.date === day.toISOString().split('T')[0]);
+                const dayLabel = idx < 2 ? dayNames[idx] : (day.getMonth() + 1) + '月' + day.getDate() + '日 ' + weekday[day.getDay()];
+                
+                if (daySchedules.length > 0) {
+                    html += `
+                        <div class="schedule-day">
+                            <div class="schedule-date">📅 ${dayLabel}</div>
+                            ${daySchedules.map(s => `
+                                <div class="schedule-item">
+                                    <span class="schedule-time">${s.time || '09:00'}</span>
+                                    <div class="schedule-info">
+                                        <div class="schedule-customer">${s.customerName || '客户'}</div>
+                                        <div class="schedule-purpose">${s.purpose || '拜访'}</div>
+                                    </div>
+                                    <span class="schedule-sales">${s.salesName}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            });
+            
+            if (!html) {
+                container.innerHTML = '<div class="empty-state" style="padding: 20px;"><div class="empty-icon">📅</div><div class="empty-text">暂无拜访计划</div></div>';
+                return;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // ========== 排行榜 ==========
+        function renderRanking() {
+            const students = getStudentList();
+            const allVisits = getAllVisits();
+            
+            const stats = students.map(s => {
+                const visits = allVisits.filter(v => v.salesId === s.id);
+                return {
+                    name: s.name,
+                    visitCount: visits.length,
+                    reviewCount: visits.filter(v => v.stage === 'after').length,
+                    aCustomers: 0 // 简化计算
+                };
+            });
+            
+            stats.sort((a, b) => b.visitCount - a.visitCount);
+            
+            const container = document.getElementById('ranking-list');
+            container.innerHTML = stats.map((s, idx) => `
+                <div class="customer-item">
+                    <div class="customer-grade ${idx === 0 ? 'grade-A' : idx === 1 ? 'grade-B' : 'grade-C'}" style="background: ${idx === 0 ? '#F59E0B' : idx === 1 ? '#9CA3AF' : '#CD7F32'};">
+                        ${idx + 1}
+                    </div>
+                    <div class="customer-info">
+                        <div class="customer-name">${s.name}</div>
+                        <div class="customer-meta">拜访 ${s.visitCount} 次 · 复盘 ${s.reviewCount} 次</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ========== 目标模态框 ==========
+        function showTargetModal() {
+            const mgrData = getMgrData();
+            document.getElementById('target-new-input').value = mgrData.targets.newCustomer;
+            document.getElementById('target-visit-input').value = mgrData.targets.visitCount;
+            document.getElementById('target-a-input').value = mgrData.targets.aCustomer;
+            document.getElementById('target-modal').classList.add('show');
+        }
+        
+        function closeTargetModal() {
+            document.getElementById('target-modal').classList.remove('show');
+        }
+        
+        function saveTargets() {
+            const mgrData = getMgrData();
+            mgrData.targets = {
+                newCustomer: parseInt(document.getElementById('target-new-input').value) || 10,
+                visitCount: parseInt(document.getElementById('target-visit-input').value) || 30,
+                aCustomer: parseInt(document.getElementById('target-a-input').value) || 5
+            };
+            saveMgrData(mgrData);
+            closeTargetModal();
+            renderTargets();
+        }
+        
+        // ========== 计划模态框 ==========
+        function showScheduleModal() {
+            const students = getStudentList();
+            const salesSelect = document.getElementById('schedule-sales');
+            salesSelect.innerHTML = students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            
+            // 收集所有客户
+            let allCustomers = [];
+            students.forEach(s => {
+                const key = getStudentStorageKey(s.id);
+                const data = localStorage.getItem(key);
+                if (data) {
+                    allCustomers = allCustomers.concat((JSON.parse(data).customers || []).map(c => ({...c, salesId: s.id})));
+                }
+            });
+            
+            const customerSelect = document.getElementById('schedule-customer');
+            customerSelect.innerHTML = allCustomers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            
+            // 设置默认日期为明天
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('schedule-date').value = tomorrow.toISOString().split('T')[0];
+            
+            document.getElementById('schedule-modal').classList.add('show');
+        }
+        
+        function closeScheduleModal() {
+            document.getElementById('schedule-modal').classList.remove('show');
+        }
+        
+        function saveSchedule() {
+            const mgrData = getMgrData();
+            const students = getStudentList();
+            const salesId = document.getElementById('schedule-sales').value;
+            const salesName = students.find(s => s.id === salesId)?.name || '未知';
+            
+            const schedule = {
+                id: Date.now(),
+                salesId: salesId,
+                salesName: salesName,
+                customerId: document.getElementById('schedule-customer').value,
+                customerName: document.getElementById('schedule-customer').options[document.getElementById('schedule-customer').selectedIndex].text,
+                date: document.getElementById('schedule-date').value,
+                time: '09:00',
+                purpose: document.getElementById('schedule-purpose').value || '初次拜访'
+            };
+            
+            mgrData.schedules.push(schedule);
+            saveMgrData(mgrData);
+            closeScheduleModal();
+            renderSchedule();
+        }
+        
+        // ========== 跳转学员版 ==========
+        function goToStudent() {
+            window.location.href = 'visit-yongroi.html';
+        }
+        
+        // ========== 页面加载 ==========
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
