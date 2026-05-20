@@ -837,8 +837,8 @@
             {
                 id: 'background',
                 title: '客户背景信息',
-                hint: '公司情况、决策链、痛点需求',
-                detail: '《企业信息表》、《客户个人信息表》',
+                hint: '公司情况、决策链、痛点需求、个人信息（年龄/生日/兴趣爱好）',
+                detail: '《企业信息表》：公司规模/组织架构/决策链/合作历史\n《客户个人信息表》：年龄、生日、籍贯、家庭、兴趣爱好、行事风格',
                 critical: true
             },
             {
@@ -856,7 +856,7 @@
             {
                 id: 'topics',
                 title: '有价值的话题',
-                hint: '行业动态、技术趋势、竞品对比',
+                hint: '岗位相关的痛点或爽点',
                 detail: '痛苦链话题库：总经理（成本/交付）→ 采购（价格/账期）→ 技术（性能/认证）→ 生产（良率）'
             },
             {
@@ -956,6 +956,11 @@
             if (pageMap[tab]) {
                 document.getElementById(pageMap[tab]).classList.add('active');
             }
+            
+            // 切换tab时渲染对应页面内容
+            if (tab === 'before') renderBeforePage();
+            if (tab === 'during') renderDuringPage();
+            if (tab === 'after') renderAfterPage();
         }
         
         // 打开模态框
