@@ -857,8 +857,8 @@
             {
                 id: 'greeting',
                 title: '主要活动',
-                hint: '握手、递名片、自我介绍',
-                items: ['握手', '递名片', '递材料', '入座']
+                hint: '暖场、开场、握手、递名片、自我介绍',
+                items: ['暖场', '开场（PPP）', '握手', '递名片', '自我介绍', '入座']
             },
             {
                 id: 'observe',
@@ -883,12 +883,6 @@
                 title: '总结感谢（24小时法则）',
                 hint: '当场总结要点，24小时内发送感谢',
                 items: ['总结本次会谈要点', '确认双方共识', '发送感谢短信/邮件']
-            },
-            {
-                id: 'record',
-                title: '信息录入',
-                hint: '及时记录会谈信息，制定下一步计划',
-                items: ['录入CRM系统', '填写拜访记录', '制定下次拜访计划']
             }
         ];
         
@@ -1033,11 +1027,19 @@
                     highlights: [],
                     shortcomings: [],
                     successFactors: [],
+                    successFactorsCustom: [],
                     failureCauses: [],
+                    failureCausesCustom: [],
                     keepDoing: [],
                     improveDoing: [],
                     startDoing: [],
-                    stopDoing: []
+                    stopDoing: [],
+                    recordInfo: {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    }
                 }
             };
             
@@ -1219,7 +1221,25 @@
                 stage: 'preparing',
                 prep: { checklist: {}, notes: '' },
                 during: { actions: {}, notes: '', commitment: '', nextVisit: '', summarySent: false },
-                after: { goalAchieved: '', highlights: [], shortcomings: [], successFactors: [], failureCauses: [], keepDoing: [], improveDoing: [], startDoing: [], stopDoing: [] }
+                after: { 
+                    goalAchieved: '', 
+                    highlights: [], 
+                    shortcomings: [], 
+                    successFactors: [],
+                    successFactorsCustom: [],
+                    failureCauses: [],
+                    failureCausesCustom: [],
+                    keepDoing: [], 
+                    improveDoing: [], 
+                    startDoing: [], 
+                    stopDoing: [],
+                    recordInfo: {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    }
+                }
             };
             
             // 清除预约时间
@@ -1533,11 +1553,19 @@
                 highlights: [],
                 shortcomings: [],
                 successFactors: [],
+                successFactorsCustom: [],
                 failureCauses: [],
+                failureCausesCustom: [],
                 keepDoing: [],
                 improveDoing: [],
                 startDoing: [],
-                stopDoing: []
+                stopDoing: [],
+                recordInfo: {
+                    crmEntered: false,
+                    visitLogFilled: false,
+                    nextPlanMade: false,
+                    notes: ''
+                }
             };
             
             const container = document.getElementById('after-content');
@@ -1614,11 +1642,11 @@
                     </div>
                 </div>
                 
-                <!-- 第三步：总结规律 -->
+                <!-- 第三步：分析原因 -->
                 <div class="review-section">
                     <div class="review-section-title">
                         <span class="step">3</span>
-                        总结规律
+                        分析原因
                     </div>
                     
                     <div class="form-group">
@@ -1633,6 +1661,18 @@
                             <div class="tag keep ${after.successFactors.includes('pain') ? 'selected' : ''}" 
                                 onclick="toggleTag('successFactors', 'pain', this)">挖痛到位</div>
                         </div>
+                        <div id="successFactors-custom-list">
+                            ${(after.successFactorsCustom || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateCustomFactor('successFactorsCustom', ${i}, this.value)" style="flex: 1;" placeholder="自定义成功因素...">
+                                    <button onclick="removeCustomFactor('successFactorsCustom', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" onclick="addCustomFactor('successFactorsCustom')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                            ➕ 添加自定义因素
+                        </button>
                     </div>
                     
                     <div class="form-group">
@@ -1649,6 +1689,18 @@
                             <div class="tag stop ${after.failureCauses.includes('price') ? 'selected' : ''}" 
                                 onclick="toggleTag('failureCauses', 'price', this)">价格因素</div>
                         </div>
+                        <div id="failureCauses-custom-list">
+                            ${(after.failureCausesCustom || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateCustomFactor('failureCausesCustom', ${i}, this.value)" style="flex: 1;" placeholder="自定义失败原因...">
+                                    <button onclick="removeCustomFactor('failureCausesCustom', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" onclick="addCustomFactor('failureCausesCustom')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                            ➕ 添加自定义原因
+                        </button>
                     </div>
                 </div>
                 
@@ -1721,6 +1773,50 @@
                         <button class="btn btn-danger" onclick="addActionItem('stopDoing')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px; background: var(--danger); color: white; border: none; border-radius: 6px;">
                             ➕ 添加
                         </button>
+                    </div>
+                </div>
+                
+                <!-- 信息录入 -->
+                <div class="review-section" style="background: #EFF6FF; border-radius: 12px; padding: 16px; margin-top: 16px;">
+                    <div class="review-section-title" style="color: var(--primary);">
+                        📋 信息录入（CRM同步）
+                    </div>
+                    <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 12px;">
+                        完成拜访后，请及时将信息录入公司系统
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: white; border-radius: 8px;">
+                            <div class="checklist-checkbox ${after.recordInfo && after.recordInfo.crmEntered ? 'checked' : ''}" 
+                                onclick="toggleRecordInfo('crmEntered', this)">
+                                ${after.recordInfo && after.recordInfo.crmEntered ? '✓' : ''}
+                            </div>
+                            <span style="font-size: 14px;">📇 CRM系统录入</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: white; border-radius: 8px;">
+                            <div class="checklist-checkbox ${after.recordInfo && after.recordInfo.visitLogFilled ? 'checked' : ''}" 
+                                onclick="toggleRecordInfo('visitLogFilled', this)">
+                                ${after.recordInfo && after.recordInfo.visitLogFilled ? '✓' : ''}
+                            </div>
+                            <span style="font-size: 14px;">📝 拜访日志填写</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: white; border-radius: 8px;">
+                            <div class="checklist-checkbox ${after.recordInfo && after.recordInfo.nextPlanMade ? 'checked' : ''}" 
+                                onclick="toggleRecordInfo('nextPlanMade', this)">
+                                ${after.recordInfo && after.recordInfo.nextPlanMade ? '✓' : ''}
+                            </div>
+                            <span style="font-size: 14px;">📅 下次拜访计划制定</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 12px; margin-bottom: 0;">
+                        <label class="form-label">📌 信息录入备注</label>
+                        <textarea class="form-input form-textarea" 
+                            style="min-height: 60px;"
+                            placeholder="记录录入时间、录入内容备注等..."
+                            onchange="updateRecordNotes(this.value)">${after.recordInfo && after.recordInfo.notes ? after.recordInfo.notes : ''}</textarea>
                     </div>
                 </div>
                 
@@ -1874,6 +1970,83 @@
                 saveData(data);
                 currentVisit = visit;
                 renderAfterPage();
+            }
+        }
+        
+        // 自定义因素操作
+        function addCustomFactor(field) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after[field]) visit.after[field] = [];
+                visit.after[field].push('');
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateCustomFactor(field, index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after[field]) {
+                visit.after[field][index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeCustomFactor(field, index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after[field]) {
+                visit.after[field].splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 信息录入操作
+        function toggleRecordInfo(field, element) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after.recordInfo) {
+                    visit.after.recordInfo = {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    };
+                }
+                visit.after.recordInfo[field] = !visit.after.recordInfo[field];
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateRecordNotes(value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after.recordInfo) {
+                    visit.after.recordInfo = {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    };
+                }
+                visit.after.recordInfo.notes = value;
+                saveData(data);
+                currentVisit = visit;
             }
         }
         
