@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 天地人销售体系健康度诊断 | 永锐线束定制版</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --sky: #993C1D; --sky-bg: #FAECE7; --sky-mid: #D85A30;
+    --land: #185FA5; --land-bg: #E6F1FB; --land-mid: #378ADD;
+    --people: #3B6D11; --people-bg: #EAF3DE; --people-mid: #639922;
+    --gray: #444441; --gray-light: #F1EFE8; --gray-mid: #888780;
+    --border: rgba(0,0,0,0.1); --radius: 12px; --radius-sm: 8px;
+    --yongroi: #C0392B; --yongroi-bg: #FDEDEC;
+  }
+  body { font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif; background: #f7f6f2; color: #2C2C2A; font-size: 15px; line-height: 1.7; }
+
+  /* ===== LAYOUT ===== */
+  #app { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .card { background: #fff; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+
+  /* ===== HEADER ===== */
+  .hdr { text-align: center; padding: 2rem 1rem 1.5rem; }
+  .hdr h1 { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+  .hdr p { font-size: 14px; color: var(--gray-mid); line-height: 1.6; }
+  .yongroi-badge { display: inline-block; background: var(--yongroi); color: #fff; font-size: 11px; padding: 2px 12px; border-radius: 20px; margin-bottom: 10px; font-weight: 500; letter-spacing: 1px; }
+  .company-row { display: flex; gap: 12px; margin-bottom: 1.5rem; }
+  .company-row input { flex: 1; padding: 10px 14px; border: 0.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; background: #fff; color: #2C2C2A; }
+  .company-row input:focus { outline: 2px solid var(--land-mid); }
+
+  /* ===== STEP TABS ===== */
+  .step-bar { display: flex; align-items: center; gap: 0; margin-bottom: 1.5rem; }
+  .step { flex: 1; text-align: center; padding: 9px 4px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--border); background: #fff; color: var(--gray-mid); transition: all .2s; position: relative; }
+  .step:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+  .step:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+  .step.sky.active { background: var(--sky-bg); color: var(--sky); border-color: var(--sky-mid); }
+  .step.land.active { background: var(--land-bg); color: var(--land); border-color: var(--land-mid); }
+  .step.people.active { background: var(--people-bg); color: var(--people); border-color: var(--people-mid); }
+  .step.result.active { background: #F1EFE8; color: var(--gray); border-color: #888; }
+  .step .check { display: none; }
+  .step.done .check { display: inline; margin-right: 2px; color: #639922; }
+
+  /* ===== SECTION TITLE ===== */
+  .sec-title { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .sec-sub { font-size: 13px; color: var(--gray-mid); margin-bottom: 1.25rem; line-height: 1.6; }
+
+  /* ===== QUESTION ===== */
+  .q-wrap { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 0.5px solid var(--border); }
+  .q-wrap:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .q-num { display: inline-block; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 500; line-height: 22px; text-align: center; margin-right: 6px; }
+  .q-text { font-size: 14px; line-height: 1.7; margin-bottom: 10px; }
+  .score-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0; }
+  .score-btn { padding: 5px 13px; font-size: 12px; border: 0.5px solid var(--border); border-radius: 20px; cursor: pointer; background: transparent; color: var(--gray-mid); transition: all .15s; }
+  .score-btn:hover { border-color: #888; color: var(--gray); }
+  .score-btn.sel-1 { background: #FAECE7; border-color: #D85A30; color: #993C1D; }
+  .score-btn.sel-2 { background: #FAEEDA; border-color: #BA7517; color: #854F0B; }
+  .score-btn.sel-3 { background: #E6F1FB; border-color: #378ADD; color: #185FA5; }
+  .score-btn.sel-4 { background: #EAF3DE; border-color: #639922; color: #3B6D11; }
+
+  /* ===== FOLLOWUP ===== */
+  .followup-box { margin-top: 10px; padding: 12px 14px; background: #FAEEDA; border-radius: var(--radius-sm); border-left: 3px solid #BA7517; animation: fadeIn .3s ease; }
+  .followup-label { font-size: 11px; font-weight: 500; color: #854F0B; margin-bottom: 8px; }
+  .followup-q { font-size: 13px; color: #2C2C2A; margin-bottom: 8px; line-height: 1.6; }
+  .followup-opts { display: flex; flex-direction: column; gap: 5px; }
+  .followup-opt { padding: 6px 12px; font-size: 12px; border: 0.5px solid #BA7517; border-radius: 6px; cursor: pointer; background: #fff; color: #854F0B; transition: all .15s; text-align: left; }
+  .followup-opt.sel { background: #BA7517; color: #fff; border-color: #BA7517; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== PROGRESS ===== */
+  .prog-wrap { margin: 1rem 0 0.4rem; }
+  .prog-bar-bg { background: #F1EFE8; border-radius: 4px; height: 5px; }
+  .prog-bar { height: 5px; border-radius: 4px; transition: width .4s; }
+  .prog-text { font-size: 12px; color: var(--gray-mid); margin-top: 4px; }
+
+  /* ===== BUTTONS ===== */
+  .btn { display: block; width: 100%; padding: 12px; background: #fff; border: 0.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer; text-align: center; margin-top: 1rem; color: var(--gray); transition: background .15s; }
+  .btn:hover { background: #F1EFE8; }
+  .btn-primary { background: #185FA5; color: #fff; border-color: #185FA5; }
+  .btn-primary:hover { background: #0C447C; }
+
+  /* ===== RESULT PAGE ===== */
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .score-card { background: #F1EFE8; border-radius: var(--radius-sm); padding: 0.75rem; text-align: center; }
+  .score-card .lbl { font-size: 11px; color: var(--gray-mid); margin-bottom: 4px; }
+  .score-card .val { font-size: 24px; font-weight: 500; }
+  .radar-wrap { text-align: center; margin: 1rem 0; }
+  .diag-block { border-left: 3px solid; padding: 10px 14px; margin-bottom: 10px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+  .diag-block h4 { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .diag-block p { font-size: 12px; color: #444; line-height: 1.7; }
+  .action-list { margin-top: 6px; padding-left: 1rem; }
+  .action-list li { font-size: 12px; color: #333; line-height: 1.8; }
+  .insight-box { background: #F1EFE8; border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
+  .insight-box .insight-q { color: var(--gray-mid); font-size: 11px; margin-bottom: 2px; }
+  .insight-box .insight-a { color: #2C2C2A; font-weight: 500; }
+  .level-badge { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-left: 8px; }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    #app { padding: 0; max-width: 100%; }
+    .no-print { display: none !important; }
+    .card { border: 0.5px solid #ccc; page-break-inside: avoid; margin-bottom: 0.75rem; padding: 1rem; }
+    .score-grid { break-inside: avoid; }
+    .diag-block { break-inside: avoid; }
+    .radar-wrap canvas { max-width: 280px; }
+    h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="yongroi-badge">📦 广东永锐线束定制版</div>
+    <h1>大董老师 · 天地人销售体系 · 健康度诊断</h1>
+    <p>共20题 · 低分题含深度追问 · 完成后生成可打印诊断报告</p>
+  </div>
+
+  <!-- COMPANY INFO -->
+  <div class="card no-print" id="company-card">
+    <div class="sec-title" style="margin-bottom:0.75rem">基本信息</div>
+    <div class="company-row">
+      <input type="text" id="inp-company" placeholder="公司名称（默认：广东永锐线束）" value="广东永锐线束">
+      <input type="text" id="inp-name" placeholder="填写人姓名（可选）">
+    </div>
+  </div>
+
+  <!-- STEP BAR -->
+  <div class="step-bar no-print">
+    <div class="step sky active" onclick="switchSection('sky')"><span class="check">✓</span>天 · 战略</div>
+    <div class="step land" onclick="switchSection('land')"><span class="check">✓</span>地 · 过程</div>
+    <div class="step people" onclick="switchSection('people')"><span class="check">✓</span>人 · 铁军</div>
+    <div class="step result" onclick="switchSection('result')"><span class="check">✓</span>诊断结果</div>
+  </div>
+
+  <!-- SECTIONS -->
+  <div id="sec-sky" class="section">
+    <div class="card">
+      <div class="sec-title" style="color:#993C1D">天 · 排兵布阵 · 战略聚焦</div>
+      <div class="sec-sub">考察永锐线束是否在正确的客户和产品方向上配置资源、聚焦发力（共7题）</div>
+      <div id="sky-qs"></div>
+    </div>
+    <div class="prog-wrap no-print">
+      <div class="prog-bar-bg"><div class="prog-bar" id="sky-bar" style="width:0%;background:#D85A30"></div></div>
+      <div class="prog-text" id="sky-prog-text">已完成 0 / 7 题</div>
+    </div>
+    <button class="btn no-print" onclick="switchSection('land')">下一步：地 · 销售过程 →</button>
+  </div>
+
+  <div id="sec-land" class="section" style="display:none">
+    <div class="card">
+      <div class="sec-title" style="color:#185FA5">地 · 销售过程管控</div>
+      <div class="sec-sub">考察永锐线束的销售动作是否标准化、工具化、可复制（共7题）</div>
+      <div id="land-qs"></div>
+    </div>
+    <div class="prog-wrap no-print">
+      <div class="prog-bar-bg"><div class="prog-bar" id="land-bar" style="width:0%;background:#378ADD"></div></div>
+      <div class="prog-text" id="land-prog-text">已完成 0 / 7 题</div>
+    </div>
+    <button class="btn no-print" onclick="switchSection('people')">下一步：人 · 铁军打造 →</button>
+  </div>
+
+  <div id="sec-people" class="section" style="display:none">
+    <div class="card">
+      <div class="sec-title" style="color:#3B6D11">人 · 铁军打造与激励</div>
+      <div class="sec-sub">考察永锐线束的人才配置、能力培养与激励机制是否匹配战略（共6题）</div>
+      <div id="people-qs"></div>
+    </div>
+    <div class="prog-wrap no-print">
+      <div class="prog-bar-bg"><div class="prog-bar" id="people-bar" style="width:0%;background:#639922"></div></div>
+      <div class="prog-text" id="people-prog-text">已完成 0 / 6 题</div>
+    </div>
+    <button class="btn btn-primary no-print" onclick="generateReport()">生成诊断报告 →</button>
+  </div>
+
+  <div id="sec-result" class="section" style="display:none">
+    <div id="result-body"></div>
+  </div>
+
+</div>
+
+<script>
+// ================================================================
+// 配置：SheetDB API 网址（用于接收诊断数据）
+// ================================================================
+const SHEETDB_URL = 'https://sheetdb.io/api/v1/90v836nhzopr5';
+
+// ================================================================
+// DATA: Questions + Follow-ups（永锐线束定制版）
+// ================================================================
+const QS = {
+  sky: [
+    {
+      id:'s1', w:2,
+      text:'永锐是否明确定义了目标客户画像（工程机械厂/新能源车厂/轨道交通等），并按行业/采购规模/技术要求书面记录？',
+      followup: {
+        q:'目标客户画像缺失，主要原因是什么？',
+        opts:['什么行业的单都接，没有筛选标准','知道要聚焦但没时间梳理客户特征','有口头共识（如新能源车厂优先）但没书面化','销售对「我们的目标客户是谁」理解不一致','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'s2', w:2,
+      text:'是否根据客户价值（年采购额/技术门槛/战略意义）对客户进行了SABC分级？如新能源大厂S级、小型工程机械厂C级等？',
+      followup: {
+        q:'客户分级没落地，最大的障碍是？',
+        opts:['不知道线束行业该怎么定分级标准','客户采购数据不完整，无法评估价值','有标准但销售觉得麻烦不执行','分完级不知道怎么用，对销售动作没影响','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'s3', w:2,
+      text:'不同级别客户是否有差异化策略？如S级车厂派驻工程师、C级工程机械厂走标准交付流程？',
+      followup: {
+        q:'差异化策略没落地，核心原因是？',
+        opts:['分级本身还没完成','分了级但没有写对应的差异化服务策略','有策略但销售觉得麻烦执行不到位','老板觉得都是客户，不愿差异化对待','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'s4', w:1,
+      text:'年度销售目标是否经过「五线合一」推导（历史顺推/未来倒推/市场机会/订单机会/客户预算），而非老板拍脑袋定？如800V高压线束增量、铜价波动影响等是否纳入？',
+      followup: {
+        q:'五线合一目标制定，您当前最缺失哪条线的数据或方法？',
+        opts:['历史顺推线：没有过去3年分行业/分客户的线束销售数据','未来倒推线：没有3年战略目标，不知道新能源/工程机械各自该做到多少','市场机会线：不清楚线束市场总盘子，也不知道竞品份额','订单机会线：没有销售漏斗，手上在谈项目的加权金额算不出来','客户预算线：没有调研车厂/工程机械厂的年度线束采购预算','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'s5', w:2,
+      text:'销售团队是否清楚今年战略重心：新能源车厂高压线束 vs 工程机械厂常规线束 vs 轨道交通，各占多少比例？',
+      followup: {
+        q:'战略重心不清晰，哪个描述最准确？',
+        opts:['老板知道但没有向团队明确传达','开会说过但没有书面战略和配套资源分配','每个销售自己决定主攻行业','说了重点做新能源，但提成还是按总业绩算，没区分行业','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'s6', w:1,
+      text:'是否有明确的行业聚焦策略？如重点突破华东新能源车厂、深耕华南工程机械厂，避免全国撒网、资源分散？',
+      followup: {
+        q:'资源分散的主要表现是？',
+        opts:['什么行业的线束询盘都接，没有筛选标准','区域没有规划，销售各自为战覆盖全国','行业聚焦不够，工程机械/新能源/轨道交通都想做','有聚焦方向但执行层没落实，销售还是习惯性撒网','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'s7', w:1,
+      text:'年度销售策略是否定期（季度/半年）复盘调整？如铜价大幅波动、新能源政策变化时是否及时调整策略？',
+      followup: {
+        q:'策略复盘没做的原因是？',
+        opts:['没有固定的复盘机制','复盘了但只看业绩数字，不讨论策略和行业变化','知道要做但一忙就忘了','不知道复盘策略应该看什么指标','其他（请填写）：'],
+        allowOther: true
+      }
+    }
+  ],
+  land: [
+    {
+      id:'l1', w:2,
+      text:'是否绘制了完整的线束销售流程图（从询盘→技术对接→打样→报价→送样认证→小批量→大批量→回款），各阶段有明确定义？',
+      followup: {
+        q:'销售流程没有梳理，主要原因是？',
+        opts:['每个客户定制化程度不同，觉得难以标准化','有过尝试但流程图挂在墙上没人用','认为老销售已经会了，不需要流程图','不知道如何划分线束销售的流程阶段','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'l2', w:2,
+      text:'各阶段是否有标准化动作清单（SOP）？如询盘阶段必须了解端子规格/线径/电压等级，打样阶段必须确认IP67检测要求等？',
+      followup: {
+        q:'SOP缺失最直接的影响是什么？',
+        opts:['新人培养周期长，半年以上才能独立对接技术部门','业绩严重依赖几个懂技术的老销售','报价全靠经验，不同销售报出差异很大的价格','新人经常因为漏问技术参数导致返工打样','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'l3', w:2,
+      text:'是否针对S/A级客户（如头部新能源车厂）和B/C级客户（如小型工程机械厂）制定了不同的销售动作组合？',
+      followup: {
+        q:'不同客户动作没差异化，结果是？',
+        opts:['S级车厂也只做简单报价，没有深度经营和技术绑定','C级客户占用大量技术支持精力，ROI极低','销售不知道该如何分配时间在大客户和小客户之间','有差异但靠个人经验，没有制度化','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'l4', w:2,
+      text:'关键动作是否配套了落地工具？如技术参数确认表/竞品线束对比表/客户决策链图谱（采购/技术/品质）/报价模板/样品追踪表等？',
+      followup: {
+        q:'工具缺失最严重的环节是哪个？',
+        opts:['询盘阶段没有技术参数确认清单，经常漏问导致返工','需求挖掘靠感觉，不了解客户真正的选型标准和痛点','报价全靠Excel手算，不同销售口径不一致','谈判议价没有工具，容易被采购压价到成本线','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'l5', w:1,
+      text:'是否有销售漏斗管理机制，能看到各阶段的线束项目数量和转化率？如询盘→打样→送样认证→小批量→大批量各阶段转化？',
+      followup: {
+        q:'没有漏斗管理，对业绩的影响是？',
+        opts:['不知道业绩缺口卡在哪个阶段（是询盘不够还是打样转化率低？）','无法预测下个月/季度能出多少货','不知道哪个销售在哪个环节需要辅导','出了问题只能事后追责，无法事中干预','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'l6', w:1,
+      text:'赢单/败单是否有复盘机制？如丢了某车厂的高压线束项目，是否分析过是端子品质/价格/认证周期/交期哪个环节输的？',
+      followup: {
+        q:'没有赢败单复盘，最大的损失是？',
+        opts:['同样的错误反复犯（如端子不良率问题多次导致败单）','成功案例无法复制，明星销售离职则客户流失','不知道竞品（如其他线束厂）在哪里击败了我们','招了新人但没有可传授的打单方法','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'l7', w:1,
+      text:'销售日常行为（客户拜访量/技术对接次数/打样跟进频次/报价数量）是否有过程数据可追踪？',
+      followup: {
+        q:'过程数据缺失，导致管理上最难的是？',
+        opts:['不知道销售在干什么，管理全靠信任','业绩不好找不到原因，只能催单催单','无法判断销售是不努力还是能力不够','开会都是拍脑袋，没有数据支撑','其他（请填写）：'],
+        allowOther: true
+      }
+    }
+  ],
+  people: [
+    {
+      id:'p1', w:2,
+      text:'是否根据客户分级推导出了对应的能力模型？如S级车厂要求销售懂800V高压平台技术、能对接技术总监；C级工程机械厂要求快速报价和交期响应？',
+      followup: {
+        q:'能力模型缺失，招人和培训的困境是？',
+        opts:['招人靠感觉，面试不知道该考察线束行业经验还是销售能力','培训只讲产品参数，不教如何跟车厂技术部门对话','新人不知道要提升哪些能力才能负责大客户','优秀和普通销售的差距说不清楚，无法复制','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'p2', w:2,
+      text:'是否对现有销售人员做过能力盘点？如谁擅长技术对接、谁擅长商务谈判、谁适合负责新能源车厂、谁适合工程机械厂？',
+      followup: {
+        q:'没有人员盘点，当下团队最大的问题是？',
+        opts:['不知道谁适合负责S级车厂，全凭资历分配','培训没有针对性，全员上同样的课','人员调整全靠直觉，没有依据','能力强弱心里有数，但无法说服当事人','知道谁是骨干，但不知道如何留住他们','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'p3', w:2,
+      text:'S/A级客户（如头部新能源车厂/轨道交通总包商）的负责人是否具备对应能力——懂高压线束技术、能独立对接客户技术总监和采购总监？',
+      followup: {
+        q:'S/A级客户分配最接近哪种情况？',
+        opts:['按入职时间/资历分配，不看能力和客户匹配度','谁和客户关系好就谁负责，不管技术能力','老板亲自跟进，但精力严重透支','凭感觉分配，没有明确标准','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'p4', w:1,
+      text:'招聘标准是否基于能力模型？如明确要求有线束/汽车零部件行业经验、能看懂线束图纸、理解IATF16949流程等？',
+      followup: {
+        q:'招聘质量不稳定，最常见的问题是？',
+        opts:['招来的人和预期差距大，不懂线束技术但简历写得好','面试表现好，实战中连端子型号都分不清','容易被候选人忽悠，不知道如何甄别线束行业经验','没有岗位标准，每次招聘都从头摸索','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'p5', w:2,
+      text:'销售激励方案（提成/奖金）是否与战略挂钩？如新能源车厂新客户开发奖、高压线束项目额外激励、过程指标（打样转化率/认证通过率）纳入考核？',
+      followup: {
+        q:'激励方案和战略脱钩，表现为？',
+        opts:['销售只盯总业绩额，不在意客户结构和产品结构','说要重点开发新能源车厂，但提成所有行业一样','强调要做高压线束（毛利高），但提成按统一比例','过程做得好的人（如打样转化率高）拿不到钱，只看结果','提成方案在市场上缺乏竞争力，骨干随时可被竞品挖走','其他（请填写）：'],
+        allowOther: true
+      }
+    },
+    {
+      id:'p6', w:2,
+      text:'是否有结构化的销售培训体系？如入职培训（线束基础知识/行业术语）→产品培训（端子/线径/IP等级/800V高压）→技能培训（识人/挖痛/锁单），而非仅靠老带新？',
+      followup: {
+        q:'培训体系缺失，团队能力的主要短板是？',
+        opts:['新人成长全靠运气，遇到好师傅就快，遇到坏师傅就废','线束技术知识靠自学，跟客户技术部门对话时底气不足','销售技能没有系统训练（不会挖痛/不会锁单），全靠悟性','有培训但内容和实际打单脱节，讲的都是理论','没有清晰的成长路径，骨干看不到未来，选择躺平或跳槽','其他（请填写）：'],
+        allowOther: true
+      }
+    }
+  ]
+};
+
+// ================================================================
+// STATE
+// ================================================================
+const answers = {};
+const followups = {};
+const followupCustom = {};
+
+// ================================================================
+// RENDER QUESTIONS
+// ================================================================
+function buildSection(sec) {
+  const qs = QS[sec];
+  const colors = {sky:'#993C1D',land:'#185FA5',people:'#3B6D11'};
+  const container = document.getElementById(sec+'-qs');
+  container.innerHTML = '';
+  qs.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-wrap';
+    div.id = 'qwrap-'+q.id;
+    div.innerHTML = `
+      <div class="q-text">
+        <span class="q-num" style="background:${colors[sec]}22;color:${colors[sec]}">${i+1}</span>
+        ${q.text}
+      </div>
+      <div class="score-row" id="scores-${q.id}">
+        ${['1 - 完全没有','2 - 有想法没落地','3 - 部分执行','4 - 基本完善'].map((l,idx)=>
+          `<button class="score-btn" id="sbtn-${q.id}-${idx+1}" onclick="setScore('${q.id}','${sec}',${idx+1})">${l}</button>`
+        ).join('')}
+      </div>
+      <div class="followup-box" id="fu-${q.id}" style="display:none"></div>`;
+    container.appendChild(div);
+  });
+}
+
+function setScore(qid, sec, val) {
+  answers[qid] = val;
+  for(let i=1;i<=4;i++){
+    const b = document.getElementById(`sbtn-${qid}-${i}`);
+    if(b) b.className = 'score-btn' + (i===val ? ` sel-${i}` : '');
+  }
+  const fuBox = document.getElementById(`fu-${qid}`);
+  if(val <= 2) {
+    const q = findQ(qid);
+    if(q && q.followup) {
+      fuBox.style.display = 'block';
+      const selectedOpt = followups[qid] !== undefined ? followups[qid] : -1;
+      const hasOther = !!q.followup.allowOther;
+      const otherIdx = hasOther ? q.followup.opts.length - 1 : -1;
+      let optsHtml = q.followup.opts.map((o,idx)=> {
+        if(hasOther && idx === otherIdx) {
+          const label = o.replace('（请填写）：','');
+          const isSel = idx === selectedOpt;
+          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">' +
+            '<button class="followup-opt'+(isSel?' sel':'')+'" onclick="setFollowup(\''+qid+'\','+idx+')" style="flex-shrink:0">'+label+'</button>' +
+            '<input type="text" id="fu-custom-inp-'+qid+'" placeholder="请填写具体情况" value="'+(followupCustom[qid]||'')+'" style="flex:1;padding:4px 8px;font-size:12px;border:0.5px solid '+(isSel?'#BA7517':'#ccc')+';border-radius:4px;'+(isSel?'':'opacity:0.4;pointer-events:none')+'" oninput="followupCustom[\''+qid+'\']=this.value">' +
+            '</div>';
+        }
+        return '<button class="followup-opt'+(idx===selectedOpt?' sel':'')+'" onclick="setFollowup(\''+qid+'\','+idx+')" style="margin-bottom:4px;display:block">'+o+'</button>';
+      }).join('');
+      fuBox.innerHTML =
+        '<div class="followup-label">深度追问 · 帮我们更精准定位问题</div>' +
+        '<div class="followup-q">'+q.followup.q+'</div>' +
+        '<div class="followup-opts">'+optsHtml+'</div>';
+    }
+  } else {
+    fuBox.style.display = 'none';
+    delete followups[qid];
+    delete followupCustom[qid];
+  }
+  updateProgress(sec);
+}
+
+function setFollowup(qid, idx) {
+  followups[qid] = idx;
+  const q = findQ(qid);
+  const fuBox = document.getElementById(`fu-${qid}`);
+  if(fuBox) {
+    fuBox.querySelectorAll('.followup-opt').forEach((b,i)=>{
+      b.classList.toggle('sel', i===idx);
+    });
+  }
+  if(q && q.followup && q.followup.allowOther) {
+    const otherIdx = q.followup.opts.length - 1;
+    const inp = document.getElementById('fu-custom-inp-'+qid);
+    if(inp) {
+      if(idx === otherIdx) {
+        inp.style.opacity = '1';
+        inp.style.pointerEvents = 'auto';
+        if(followupCustom[qid]) inp.value = followupCustom[qid];
+        setTimeout(()=>inp.focus(), 100);
+      } else {
+        inp.style.opacity = '0.4';
+        inp.style.pointerEvents = 'none';
+        delete followupCustom[qid];
+        inp.value = '';
+      }
+    }
+  }
+}
+
+function findQ(qid) {
+  for(const sec of ['sky','land','people']) {
+    const f = QS[sec].find(q=>q.id===qid);
+    if(f) return f;
+  }
+  return null;
+}
+
+function updateProgress(sec) {
+  const qs = QS[sec];
+  const done = qs.filter(q=>answers[q.id]!==undefined).length;
+  const pct = Math.round(done/qs.length*100);
+  document.getElementById(sec+'-bar').style.width = pct+'%';
+  document.getElementById(sec+'-prog-text').textContent = `已完成 ${done} / ${qs.length} 题`;
+}
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+function switchSection(name) {
+  ['sky','land','people','result'].forEach(s=>{
+    document.getElementById('sec-'+s).style.display = s===name?'block':'none';
+  });
+  const tabs = document.querySelectorAll('.step');
+  const names = ['sky','land','people','result'];
+  tabs.forEach((t,i)=>{
+    t.classList.remove('active');
+    if(names[i]===name) t.classList.add('active');
+  });
+  ['sky','land','people'].forEach(s=>{
+    const allDone = QS[s].every(q=>answers[q.id]!==undefined);
+    const tab = tabs[names.indexOf(s)];
+    if(allDone) tab.classList.add('done');
+  });
+}
+
+// ================================================================
+// SCORE CALCULATION
+// ================================================================
+function calcSection(sec) {
+  const qs = QS[sec];
+  let total=0, max=0;
+  qs.forEach(q=>{
+    const sc = answers[q.id]||0;
+    total += sc * q.w;
+    max += 4 * q.w;
+  });
+  return max>0 ? Math.round(total/max*100) : 0;
+}
+
+function levelInfo(score) {
+  if(score>=80) return {text:'优良', color:'#3B6D11', bg:'#EAF3DE'};
+  if(score>=60) return {text:'待改善', color:'#185FA5', bg:'#E6F1FB'};
+  if(score>=40) return {text:'薄弱', color:'#BA7517', bg:'#FAEEDA'};
+  return {text:'亟需重建', color:'#993C1D', bg:'#FAECE7'};
+}
+
+// ================================================================
+// DATA SUBMISSION
+// ================================================================
+function submitData() {
+  if (!SHEETDB_URL || SHEETDB_URL === 'YOUR_SHEETDB_URL_HERE') {
+    console.warn('SHEETDB_URL 未正确配置，跳过数据提交');
+    return Promise.resolve();
+  }
+  const total = Math.round((calcSection('sky')+calcSection('land')+calcSection('people'))/3);
+  const data = {
+    "提交时间": new Date().toLocaleString('zh-CN'),
+    "公司名称": document.getElementById('inp-company').value || '（未填写）',
+    "版本": '永锐线束定制版',
+    "填写人": document.getElementById('inp-name').value || '（未填写）',
+    "综合健康度": total + '分',
+    "天_战略聚焦": calcSection('sky') + '分',
+    "地_过程管控": calcSection('land') + '分',
+    "人_铁军激励": calcSection('people') + '分'
+  };
+
+  ['sky','land','people'].forEach(sec => {
+    QS[sec].forEach(q => {
+      const score = answers[q.id] || 0;
+      const scoreLabels = ['', '完全没有', '有想法没落地', '部分执行', '基本完善'];
+      data[q.id] = score + '分-' + scoreLabels[score];
+    });
+  });
+
+  ['sky','land','people'].forEach(sec => {
+    QS[sec].forEach(q => {
+      const fuIdx = followups[q.id];
+      if (fuIdx !== undefined && q.followup) {
+        const isOther = !!(q.followup.allowOther && fuIdx === q.followup.opts.length - 1);
+        if (isOther && followupCustom[q.id]) {
+          data[q.id + '_追问'] = '其他：' + followupCustom[q.id];
+        } else if (q.followup.opts[fuIdx]) {
+          data[q.id + '_追问'] = q.followup.opts[fuIdx];
+        }
+      } else {
+        data[q.id + '_追问'] = '';
+      }
+    });
+  });
+
+  const payload = {"data": [data]};
+  return fetch(SHEETDB_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {'Content-Type': 'application/json'}
+  }).catch(()=>{});
+}
+
+// ================================================================
+// REPORT GENERATION（永锐线束定制版）
+// ================================================================
+function generateReport() {
+  const skyS = calcSection('sky');
+  const landS = calcSection('land');
+  const peopleS = calcSection('people');
+  const total = Math.round((skyS+landS+peopleS)/3);
+  const company = document.getElementById('inp-company').value || '（未填写）';
+  const name = document.getElementById('inp-name').value || '（未填写）';
+  const date = new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'});
+  const totalLevel = levelInfo(total);
+
+  const weakItems = buildWeakItems(skyS, landS, peopleS);
+
+  let html = `
+    <!-- REPORT HEADER -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:18px;font-weight:500;margin-bottom:4px">大董老师 · 天地人销售体系健康度诊断报告</div>
+          <div style="font-size:12px;color:#C0392B;margin-bottom:4px">📦 广东永锐线束定制版</div>
+          <div style="font-size:13px;color:#888">公司：${company} &nbsp;|&nbsp; 填写人：${name} &nbsp;|&nbsp; 日期：${date}</div>
+        </div>
+        <button class="btn no-print" style="width:auto;padding:8px 18px;margin:0" onclick="window.print()">打印 / 保存PDF</button>
+      </div>
+    </div>
+
+    <!-- SCORE SUMMARY -->
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:0.75rem">综合评估结果</div>
+      <div class="score-grid">
+        <div class="score-card">
+          <div class="lbl">综合健康度</div>
+          <div class="val" style="color:${totalLevel.color}">${total}分</div>
+          <span class="level-badge" style="background:${totalLevel.bg};color:${totalLevel.color};margin-top:4px;display:inline-block;font-size:12px">${totalLevel.text}</span>
+        </div>
+        <div class="score-card" style="background:${levelInfo(skyS).bg}">
+          <div class="lbl">天 · 战略聚焦</div>
+          <div class="val" style="color:${levelInfo(skyS).color}">${skyS}分</div>
+          <div style="font-size:12px;color:${levelInfo(skyS).color};margin-top:2px">${levelInfo(skyS).text}</div>
+        </div>
+        <div class="score-card" style="background:${levelInfo(landS).bg}">
+          <div class="lbl">地 · 过程管控</div>
+          <div class="val" style="color:${levelInfo(landS).color}">${landS}分</div>
+          <div style="font-size:12px;color:${levelInfo(landS).color};margin-top:2px">${levelInfo(landS).text}</div>
+        </div>
+      </div>
+      <div class="score-grid" style="grid-template-columns:1fr 1fr;margin-top:0">
+        <div class="score-card" style="background:${levelInfo(peopleS).bg}">
+          <div class="lbl">人 · 铁军激励</div>
+          <div class="val" style="color:${levelInfo(peopleS).color}">${peopleS}分</div>
+          <div style="font-size:12px;color:${levelInfo(peopleS).color};margin-top:2px">${levelInfo(peopleS).text}</div>
+        </div>
+        <div class="score-card">
+          <div class="lbl">最需优先改善</div>
+          <div class="val" style="font-size:16px;padding-top:6px">${getWeakestDim(skyS,landS,peopleS)}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RADAR CHART -->
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:0.75rem">三维健康度雷达图</div>
+      <div class="radar-wrap">
+        <canvas id="reportRadar" width="340" height="280" role="img" aria-label="天地人三维健康度">健康度雷达图</canvas>
+      </div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:4px">满分100分，建议三维均达到60分以上</div>
+    </div>
+
+    <!-- PRIORITY ACTIONS -->
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:0.75rem">优先改善行动计划（按紧迫性排序）</div>
+      ${weakItems.actions}
+    </div>
+
+    <!-- DEEP INSIGHTS -->
+    ${weakItems.insights.length>0 ? `
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:0.75rem">深度问题洞察（追问结果）</div>
+      <div style="font-size:13px;color:#888;margin-bottom:0.75rem;line-height:1.6">以下是基于您选择的追问答案，对永锐线束核心卡点的具体分析：</div>
+      ${weakItems.insights}
+    </div>` : ''}
+
+    <!-- HEALTH SCORE DETAIL -->
+    <div class="card">
+      <div class="sec-title" style="margin-bottom:0.75rem">各题得分明细</div>
+      ${buildScoreDetail(skyS,landS,peopleS)}
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align:center;font-size:12px;color:#aaa;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid #eee">
+      天地人销售管理体系 · 大董老师出品 &nbsp;|&nbsp; 📦 永锐线束定制版 &nbsp;|&nbsp; 本报告仅供内部诊断使用
+    </div>
+
+    <button class="btn no-print" onclick="resetAll()" style="margin-top:1rem">重新诊断</button>
+  `;
+
+  document.getElementById('result-body').innerHTML = html;
+  switchSection('result');
+
+  submitData();
+
+  setTimeout(()=>{
+    new Chart(document.getElementById('reportRadar'),{
+      type:'radar',
+      data:{
+        labels:['天 · 战略聚焦','地 · 过程管控','人 · 铁军激励'],
+        datasets:[{
+          data:[skyS,landS,peopleS],
+          backgroundColor:'rgba(55,138,221,0.12)',
+          borderColor:'#378ADD',
+          borderWidth:2,
+          pointBackgroundColor:'#378ADD',
+          pointRadius:5
+        },{
+          data:[60,60,60],
+          backgroundColor:'transparent',
+          borderColor:'rgba(200,100,50,0.3)',
+          borderWidth:1,
+          borderDash:[4,4],
+          pointRadius:0,
+          label:'及格线'
+        }]
+      },
+      options:{
+        responsive:false,
+        plugins:{legend:{display:false}},
+        scales:{r:{min:0,max:100,ticks:{stepSize:25,font:{size:10},color:'#999'},pointLabels:{font:{size:13},color:'#444'},grid:{color:'rgba(0,0,0,0.07)'}}}
+      }
+    });
+  },100);
+}
+
+function getWeakestDim(s,l,p){
+  if(s < 60) return '天·战略（源头问题，先抓天）';
+  if(l < 60) return '地·过程（承接天，先建流程）';
+  if(p < 60) return '人·铁军（天地建好后再调人）';
+  const arr=[['天·战略',s],['地·过程',l],['人·铁军',p]];
+  arr.sort((a,b)=>a[1]-b[1]);
+  return arr[0][0];
+}
+
+function buildWeakItems(skyS,landS,peopleS){
+  const dims = [
+    {
+      key:'sky', score:skyS, label:'天·战略', dimFull:'天 · 排兵布阵 · 战略聚焦',
+      color:'#D85A30', bg:'#FAECE7', borderColor:'#D85A30',
+      level:'优良', levelColor:'#3B6D11', levelBg:'#EAF3DE',
+      good:{title:'战略体系基础扎实', desc:'永锐的客户分级和行业聚焦策略基本成型——新能源车厂、工程机械厂、轨道交通的客户画像清晰，团队在正确方向上发力。', actions:['定期回顾S/A级客户（如头部新能源车厂）的战略价值，及时调整分级','保持对行业聚焦策略的执行力度，避免资源分散到非目标行业','每季度做一次策略执行复盘，关注铜价波动、新能源政策变化等外部因素']},
+      mid:{title:'战略框架已建，细节待完善', desc:'永锐的战略方向基本清晰（如重点做新能源高压线束），但执行层面还需细化——建议用2-3周时间，把口头共识转化为书面标准。', actions:['完成客户SABC分级（按年采购额/技术门槛/战略意义，用大董客户分级工具3步出结果）','为S/A级车厂和C级工程机械厂分别制定差异化服务策略和资源投入标准','向团队传达新能源/工程机械/轨道交通的战略比例，配套提成和资源支持']},
+      low:{title:'战略层薄弱，需从源头抓起', desc:'客户分级与差异化策略未建立——销售什么行业的线束都接，S级车厂投入不足，C级客户浪费技术支持资源，投入产出严重失衡。这是最根本的问题，必须先解决。', actions:['第一步：完成客户SABC分级（建议使用大董老师《客户分级工具》）','第二步：为每个级别书面制定差异化服务策略','第三步：向团队传达战略重点（如新能源优先），配套资源和提成倾斜']
+      },
+      course:'推荐学习：大董老师《天字篇·排兵布阵》（含客户分级工具+SABC分级表+差异化策略模板）'
+    },
+    {
+      key:'land', score:landS, label:'地·过程', dimFull:'地 · 销售过程管控',
+      color:'#185FA5', bg:'#E6F1FB', borderColor:'#185FA5',
+      level:'优良', levelColor:'#3B6D11', levelBg:'#EAF3DE',
+      good:{title:'销售流程标准化良好', desc:'永锐的线束销售流程已有标准化基础——从询盘到回款的各阶段SOP、工具表单、漏斗管理基本成型，赢单方法可复制传承。', actions:['持续优化高频场景的SOP（如新能源车厂打样认证流程），保持更新','用漏斗数据驱动周例会，重点关注打样→认证→小批量的转化率','把赢单经验定期复盘，提炼成可传授方法（如高压线束项目怎么赢的）']},
+      mid:{title:'流程框架有，关键动作待固化', desc:'线束销售流程基本跑通，但关键动作还没固化成标准——建议先从最高频场景（如车厂首次询盘→技术对接）切入，快速出SOP。', actions:['绘制完整线束销售流程图（询盘→技术对接→打样→报价→送样认证→小批量→大批量→回款），定义各阶段进入/退出标准','选择1-2个高频场景（如新能源车厂询盘响应），制作标准动作清单','配套关键工具（技术参数确认表/客户决策链图谱/样品追踪表/报价模板）','建立漏斗管理机制，每周看各阶段项目数量和转化']},
+      low:{title:'过程层薄弱，需系统化建设', desc:'线束销售过程缺乏标准化——询盘响应靠经验，技术对接没清单，报价口径不一致，打样跟进没追踪。业绩依赖个人能力和运气，老销售离职则客户流失。', actions:['第一步：绘制完整线束销售流程图（用大董老师《销售流程图模板》）','第二步：制作关键场景SOP和工具表单包','第三步：建立漏斗管理，周周看数据']
+      },
+      course:'推荐学习：大董老师《地字篇·过程管控》（含销售流程图模板+关键动作SOP+工具表单包）'
+    },
+    {
+      key:'people', score:peopleS, label:'人·铁军', dimFull:'人 · 铁军打造与激励',
+      color:'#3B6D11', bg:'#EAF3DE', borderColor:'#3B6D11',
+      level:'优良', levelColor:'#3B6D11', levelBg:'#EAF3DE',
+      good:{title:'铁军基础建设良好', desc:'永锐的团队能力模型、激励方案基本对齐战略——销售懂线束技术、会挖痛锁单，激励方案引导团队向战略方向发力。', actions:['持续优化激励机制，保持与行业战略的动态对齐（如高压线束项目额外激励）','定期做能力盘点，确保S/A级车厂由合适的人负责','丰富培训体系，从「入职培训」延伸到「持续提升」（如800V高压平台技术培训）']},
+      mid:{title:'人才配置基本到位，激励机制待优化', desc:'永锐的团队能力基本匹配，但激励方案可能和战略脱节——建议检视提成结构，确保开发新能源车厂和做高压线束的人拿到更多。', actions:['基于客户分级定义能力要求：S级车厂销售需懂800V高压技术+能对接技术总监','对当前团队做一次能力盘点，找出人岗错配（谁适合新能源谁适合工程机械）','调整激励方案：新能源新客额外奖+高压线束项目提成系数+打样转化率纳入考核','建立结构化入职培训：线束基础→端子/线径/IP等级→销售技能（识人挖痛锁单）']},
+      low:{title:'人才层薄弱，需系统打造', desc:'人员分配未依据能力模型，激励与战略脱钩——销售只看总业绩不看客户结构，高压线束毛利高但没人主攻。注意：人出问题，很可能根子在天（没分级）和地（没流程）。建议先检查天/地，再做人的调整。', actions:['第一步：先确认「天」（客户分级）和「地」（线束销售流程）是否已建立','第二步：基于天地推导能力模型，做一次人员能力盘点','第三步：调整激励机制，让做新能源/高压线束的人得到回报']
+      },
+      course:'推荐学习：大董老师《人字篇·铁军打造》（含能力模型模板+激励机制设计+培训体系搭建方法）'
+    }
+  ];
+
+  const ordered = [...dims];
+  let actionsHtml = '';
+  let hasLow = false;
+
+  ordered.forEach((d)=>{
+    let content = '';
+
+    if(d.score >= 75) {
+      content = `
+        <div style="background:${d.bg};border-left:3px solid ${d.color};padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="background:${d.levelBg};color:${d.levelColor};font-size:11px;padding:1px 8px;border-radius:10px;font-weight:500">${d.level}</span>
+            <span style="font-size:13px;font-weight:500;color:${d.color}">${d.good.title}</span>
+            <span style="margin-left:auto;font-size:12px;color:${d.levelColor};font-weight:500">${d.score}分</span>
+          </div>
+          <p style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.7">${d.good.desc}</p>
+          <div style="font-size:11px;color:#888;margin-bottom:6px">保持建议（您可以自行处理）：</div>
+          <ul class="action-list" style="margin-top:0">
+            ${d.good.actions.map(a=>`<li>${a}</li>`).join('')}
+          </ul>
+        </div>`;
+    } else if(d.score >= 60) {
+      content = `
+        <div style="background:${d.bg};border-left:3px solid ${d.color};padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="background:#E6F1FB;color:#185FA5;font-size:11px;padding:1px 8px;border-radius:10px;font-weight:500">待改善</span>
+            <span style="font-size:13px;font-weight:500;color:${d.color}">${d.mid.title}</span>
+            <span style="margin-left:auto;font-size:12px;color:#185FA5;font-weight:500">${d.score}分</span>
+          </div>
+          <p style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.7">${d.mid.desc}</p>
+          <div style="font-size:11px;color:#888;margin-bottom:6px">自我改进建议（您可以自行处理）：</div>
+          <ul class="action-list" style="margin-top:0">
+            ${d.mid.actions.map(a=>`<li>${a}</li>`).join('')}
+          </ul>
+        </div>`;
+    } else {
+      hasLow = true;
+      content = `
+        <div style="background:${d.bg};border-left:3px solid ${d.color};padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="background:#FAECE7;color:#993C1D;font-size:11px;padding:1px 8px;border-radius:10px;font-weight:500">亟需建设</span>
+            <span style="font-size:13px;font-weight:500;color:${d.color}">${d.low.title}</span>
+            <span style="margin-left:auto;font-size:12px;color:#993C1D;font-weight:500">${d.score}分</span>
+          </div>
+          <p style="font-size:12px;color:#444;margin-bottom:6px;line-height:1.7">${d.low.desc}</p>
+          <div style="font-size:11px;color:#888;margin-bottom:6px">落地建议（有条件可自学，强烈建议借助专业体系）：</div>
+          <ul class="action-list" style="margin-top:0">
+            ${d.low.actions.map(a=>`<li>${a}</li>`).join('')}
+          </ul>
+          <div style="margin-top:10px;padding:8px 12px;background:#FFF8F0;border:0.5px dashed #D85A30;border-radius:6px;font-size:12px;color:#854F0B;line-height:1.6">
+            <strong>${d.course}</strong>
+          </div>
+        </div>`;
+    }
+    actionsHtml += content;
+  });
+
+  if(!hasLow && dims.every(d=>d.score>=75)) {
+    actionsHtml = '<div style="color:#3B6D11;font-size:14px;text-align:center;padding:1.5rem;background:#EAF3DE;border-radius:8px;margin-bottom:1rem"><strong>恭喜！</strong>永锐线束销售体系三个维度均表现优良。建议持续优化细节，定期做健康度复盘。</div>' + actionsHtml;
+  }
+
+  if(skyS < 60 && (landS < 60 || peopleS < 60)) {
+    const introHtml = `
+      <div style="background:#FAECE7;border:1px solid #D85A30;border-radius:8px;padding:12px 14px;margin-bottom:1rem;font-size:13px;color:#854F0B;line-height:1.7">
+        <strong>⚠️ 重要提醒：优先级的正确顺序是天→地→人</strong><br>
+        您当前的诊断显示「天」（${skyS}分）和${landS<60?'「地」（'+landS+'分）':''}${peopleS<60?'「人」（'+peopleS+'分）':''}都偏弱。<br>
+        <strong>建议优先从「天」开始建设</strong>——客户分级没做，线束销售流程就没有方向；流程没标准化，人才培养就没有标准。直接做「人」的调整，容易治标不治本。
+      </div>`;
+    actionsHtml = introHtml + actionsHtml;
+  }
+
+  // Build insights from followups
+  let insightsHtml = '';
+  for(const sec of ['sky','land','people']){
+    QS[sec].forEach(q=>{
+      const score = answers[q.id]||0;
+      const fuIdx = followups[q.id];
+      if(score<=2 && fuIdx!==undefined && q.followup){
+        const chosenOpt = q.followup.opts[fuIdx];
+        const isOther = !!(q.followup.allowOther && fuIdx === q.followup.opts.length - 1);
+        const displayReason = isOther && followupCustom[q.id] ? '其他：' + followupCustom[q.id] : chosenOpt;
+        const advice = getFollowupAdvice(q.id, fuIdx);
+        insightsHtml += `
+          <div class="insight-box" style="margin-bottom:8px">
+            <div class="insight-q">问题：${q.text}</div>
+            <div class="insight-a">根因：${displayReason}</div>
+            ${advice ? `<div style="font-size:12px;color:#555;margin-top:4px;line-height:1.7;border-top:0.5px solid rgba(0,0,0,0.08);padding-top:6px">${advice}</div>` : ''}
+          </div>`;
+      }
+    });
+  }
+
+  return {actions: actionsHtml, insights: insightsHtml};
+}
+
+// Follow-up specific advice（永锐线束定制版）
+function getFollowupAdvice(qid, optIdx) {
+  const adviceMap = {
+    's1': ['建议从最近12个月的TOP10成交客户开始，按行业（新能源/工程机械/轨道交通）倒推目标客户特征，1天内可完成初版','先做内部对齐会议，把老板和核心销售对「永锐的理想客户」的理解统一，再书面化','把口头共识（如新能源优先）录音整理成文字版，让老板确认签字即可','召集老板+3位核心销售开2小时会，投票确定3个最重要的客户画像维度（如行业/采购规模/技术门槛）'],
+    's2': ['推荐从年采购额+技术门槛两个维度入手，先做粗分（如年采购>500万=S级），本周内可完成','先抓ERP/Excel数据整理，按行业和年采购额排序，哪怕粗糙版也先做','先完成分级标准制定，再用3周时间逐步更新客户档案','先完成分级，再开工具培训会，告诉销售不同级别对应什么不同动作'],
+    's3': ['先写出「S级车厂一定要做、C级工程机械厂坚决不做」的差异化清单即可','从S级车厂的服务策略开始写：派驻工程师、技术深度绑定、快速打样通道等','找2个最典型的S级客户，复盘哪些动作带来了价值，提炼成服务策略','先做内部共识：老板讲清楚差异化的必要性，再推行策略'],
+    's4': ['建议：用最近3年分行业的线束销售额，计算复合增长率，用Excel 10分钟就能算出历史顺推线','建议：先定3年后永锐各行业线束做到多少，再倒推今年必须完成多少','建议：调研线束市场总规模（新能源车线束/工程机械线束），算出永锐能拿到的份额增量','建议：建立销售漏斗表，把每个在谈项目按阶段成功率加权，订单机会线让您看到最现实的底线目标','建议：调研S/A级车厂的年度线束采购预算，乘以永锐的目标份额，客户预算线是最靠谱的五线之一'],
+    's5': ['立刻召开销售策略传达会，把行业重心（新能源/工程机械/轨道交通比例）和配套资源一次性传达清楚','不只是开会说，要把行业比例写进月度工作计划和考核里','重新设计激励方案，让新能源车厂新客开发的提成高于老客户续单','在CRM或报表里增加行业分类字段，让各行业业绩数字可见'],
+    's6': ['先做「客户拒绝标准」：明确列出哪类线束询盘不接（如低毛利、小批量、无技术壁垒），减少资源分散','设计行业/区域地图，按价值密度分配销售资源（如华东新能源密集区配置最强团队）','把聚焦方向写进销售手册，让每个销售知道今年的主战场在哪里','把行业聚焦纳入季度绩效，让执行层有动力聚焦'],
+    's7': ['设定固定的季度策略复盘会，提前锁进日历，重点关注铜价波动、新能源政策变化等外部因素','设计复盘模板：行业结构变化 + 铜价/材料成本影响 + 竞品动态 + 下季度调整','设计2小时的策略复盘会议模板，让会议聚焦、高效','推荐用「天地人健康度诊断」作为每次策略复盘的起点'],
+    'l1': ['选一个典型成单案例（如某新能源车厂高压线束项目），反向拆解走过的步骤，第一版流程图就出来了','先做行业标准流程（询盘→技术对接→打样→报价→送样认证→小批量→大批量→回款），再根据企业实际调整','从SOP最完善的那个老销售开始访谈，提炼他的流程','先把流程划分为5-6个大阶段，不要追求细节，先有粗版'],
+    'l2': ['选1个最重要的销售场景（如车厂首次询盘技术对接），先做这一个场景的SOP','找1-2个最优秀的技术型销售，用录像/录音记录他们跟客户技术部门对话的过程，提炼成SOP','把SOP和新人培训绑定，新人培训需要SOP才能启动，倒逼完成','在SOP之前先做「最低要求清单」：询盘阶段至少要确认端子规格/线径/电压等级/IP等级等参数'],
+    'l3': ['先定义S/A级车厂和B/C级工程机械厂的服务动作差异，用一张表格列出来','从时间投入开始差异化：S级车厂每月技术对接N次，B/C级每季度拜访N次','从是否配置技术支持开始区分：S级车厂派驻工程师对接，B/C级走标准流程','先从频率和深度两个维度定义差异，再逐步扩展到工具和团队配置'],
+    'l4': ['先做技术参数确认清单（端子型号/线径/电压等级/IP等级/工作温度/阻燃等级），这是最容易出效果的工具','建立客户决策链图谱：采购关心价格、技术关心参数匹配、品质关心检测报告，不同人不同话术','做一套报价模板，把端子成本+线材成本+加工费+铜价浮动分开计算，不同销售口径一致','做一套议价应对话术库，收集历次采购压价场景的应对经验'],
+    'l5': ['先从Excel开始，按周更新各阶段线束项目数量，不需要CRM系统','设定5-6个阶段（询盘/技术对接/打样/认证/小批量/大批量），每周统计进入/退出数量和转化率','先只看两个关键漏斗节点（打样→认证、小批量→大批量），不要一开始就追求完整','用漏斗数据驱动周例会，把「汇报业绩」改为「分析漏斗卡点」'],
+    'l6': ['每月做一次赢单复盘会：3个最大单，分析关键动作（是技术对接到位还是报价策略对？）','建立败单分析模板：竞品是谁/客户选了谁/我们输在端子品质还是价格还是认证周期？','把赢单关键动作写进SOP，把败单教训写进培训材料','设计「赢单故事会」：每月让销售分享1个线束项目赢单故事，提炼可复制方法'],
+    'l7': ['先设定3个最关键的过程指标（周拜访量/技术对接次数/打样跟进频次）','在CRM或飞书中设置过程数据填报，每日5分钟更新','把过程数据纳入周例会汇报，和结果数据并列展示','先用过程数据做辅导，不要先用来处罚，降低销售抵触'],
+    'p1': ['从S级车厂需要的能力开始，访谈3-5个成功案例，提炼关键能力（如懂800V高压技术+能独立对接技术总监）','先定义3个最核心的能力维度（技术理解力/商务谈判力/客户经营力），不要追求面面俱到','参考天地人体系的能力模型框架，结合线束行业实际做微调','用行为化描述能力：不是「技术能力强」，而是「能看懂线束图纸、独立完成车厂技术对接并推进认证」'],
+    'p2': ['设计一张能力盘点表，对标岗位要求，让销售自评+主管评','先盘点S级车厂负责人的能力，这是最紧迫的','结合最近的项目表现，找出能力短板的具体表现（如技术对接经常卡壳）','把能力盘点结果用于制定个人培训计划，不要只是数据存档','先识别出真正的骨干（技术+商务双强），对他们建立个性化保留方案'],
+    'p3': ['制定S/A级车厂负责人的上岗标准（如需懂800V高压技术+有3年以上线束行业经验），现有人员重新匹配','给不符合要求的现有负责人设定6个月的提升期和评估标准','老板亲自跟进S级车厂时，要有计划地培养接班人，而非永久依赖','建立「客户健康度」机制：定期评估与车厂的关系强度和技术绑定深度'],
+    'p4': ['制作一份线束销售岗位行为面试题库，基于能力模型设计问题（如请描述您对接车厂技术部门的流程）','设计试用期评估标准，明确90天内要达到的里程碑（如独立完成3次技术对接）','引入结构化面试评分表，让主观感觉变成可比较的数字','在招聘JD中明确写出能力要求（线束行业经验/能看懂图纸/懂IATF16949），提升候选人自我筛选效率'],
+    'p5': ['设计「战略对齐激励公式」：提成 = 基础提成 x 客户级别系数 x 行业系数（新能源更高）','在提成方案中加入新能源车厂新客开发奖，打破只吃老客户红利的惰性','设计里程碑奖金：首次通过车厂认证给额外奖励，高压线束项目提成系数更高','把过程指标（打样转化率/认证通过率）纳入月度绩效，不能只看结果','做市场薪酬对标，关键是让骨干感到被认可，而不只是薪资数字本身'],
+    'p6': ['设计30-60-90天新人成长路径，每个里程碑有明确标准（如30天能独立完成技术参数确认）','把SOP和线束技术手册做成可自学的文档库，减少对师傅的依赖','设计月度技能主题培训：每月一个专题（如端子选型/800V高压技术/识人挖痛锁单）','建立「实战演练」机制：每次培训后做角色扮演（如模拟跟车厂技术总监对话），在安全环境中练习','设计销售晋升通道：初级→中级→高级→客户总监，每一级对应更高的能力要求、更大的客户、更高的收入']
+  };
+  const arr = adviceMap[qid];
+  if(!arr) return '';
+  return `建议：${arr[optIdx]||arr[0]}`;
+}
+
+function buildScoreDetail(skyS,landS,peopleS){
+  const secInfo = {
+    sky:{label:'天 · 战略聚焦', color:'#993C1D', bg:'#FAECE7', score:skyS},
+    land:{label:'地 · 过程管控', color:'#185FA5', bg:'#E6F1FB', score:landS},
+    people:{label:'人 · 铁军激励', color:'#3B6D11', bg:'#EAF3DE', score:peopleS}
+  };
+  let html = '';
+  for(const sec of ['sky','land','people']){
+    const info = secInfo[sec];
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:13px;font-weight:500;color:${info.color};margin-bottom:6px;padding:4px 10px;background:${info.bg};border-radius:6px;display:inline-block">${info.label}  ${info.score}分</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:#F7F6F2">
+          <th style="padding:5px 8px;text-align:left;font-weight:500;border:0.5px solid #e0ded8;width:60%">诊断题目</th>
+          <th style="padding:5px 8px;text-align:center;font-weight:500;border:0.5px solid #e0ded8;width:15%">得分</th>
+          <th style="padding:5px 8px;text-align:left;font-weight:500;border:0.5px solid #e0ded8;width:25%">状态</th>
+        </tr></thead>
+        <tbody>`;
+    QS[sec].forEach((q,i)=>{
+      const sc = answers[q.id]||0;
+      const statusMap = {0:'未作答',1:'完全没有',2:'有想法没落地',3:'部分执行',4:'基本完善'};
+      const colorMap = {0:'#aaa',1:'#D85A30',2:'#BA7517',3:'#378ADD',4:'#639922'};
+      const fuIdx = followups[q.id];
+      const fuText = sc<=2 && fuIdx!==undefined && q.followup ? (()=>{
+        const isOther = !!(q.followup.allowOther && fuIdx===q.followup.opts.length-1);
+        const display = isOther && followupCustom[q.id] ? '其他：'+followupCustom[q.id] : q.followup.opts[fuIdx];
+        return '<br><span style="color:#888;font-style:italic">&#8614; '+display+'</span>';
+      })() : '';
+      html += `<tr>
+        <td style="padding:6px 8px;border:0.5px solid #e0ded8;line-height:1.6">${q.text}${fuText}</td>
+        <td style="padding:6px 8px;border:0.5px solid #e0ded8;text-align:center;font-weight:500;color:${colorMap[sc]}">${sc||'-'}</td>
+        <td style="padding:6px 8px;border:0.5px solid #e0ded8;color:${colorMap[sc]}">${statusMap[sc]}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  return html;
+}
+
+function resetAll(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.keys(followups).forEach(k=>delete followups[k]);
+  Object.keys(followupCustom).forEach(k=>delete followupCustom[k]);
+  buildSection('sky'); buildSection('land'); buildSection('people');
+  updateProgress('sky'); updateProgress('land'); updateProgress('people');
+  document.getElementById('result-body').innerHTML='';
+  switchSection('sky');
+}
+
+// ================================================================
+// INIT
+// ================================================================
+buildSection('sky');
+buildSection('land');
+buildSection('people');
+</script>
+</body>
+</html>
