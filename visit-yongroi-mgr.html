@@ -916,7 +916,9 @@
                         salesId: v.salesId,
                         createdAt: v.createdAt,
                         visitCount: 0,
-                        lastVisitDate: v.visitDate || v.createdAt
+                        lastVisitDate: v.visitDate || v.createdAt,
+                        // 新老客户：优先使用销售选择的值，否则用拜访次数判断
+                        isNewCustomer: v.isNewCustomer !== undefined ? v.isNewCustomer : true
                     };
                 }
                 customerMap[v.customerId].visitCount++;
@@ -928,6 +930,14 @@
                 const lastDate = new Date(customerMap[v.customerId].lastVisitDate);
                 if (vDate > lastDate) {
                     customerMap[v.customerId].lastVisitDate = v.visitDate || v.createdAt;
+                }
+            });
+            
+            // 最终判定新老客户：销售明确选择的有效；未选择时，拜访次数>2视为老客户
+            Object.values(customerMap).forEach(c => {
+                // 如果销售没有明确选择（isNewCustomer为true默认值），用拜访次数判断
+                if (c.visitCount > 2) {
+                    c.isNewCustomer = false;
                 }
             });
             
@@ -1119,10 +1129,13 @@
             const now = new Date();
             const thisMonth = now.getMonth();
             const thisYear = now.getFullYear();
+            
+            // 本月新客户：根据isNewCustomer字段判断（本月新建的 OR 销售标记为新客户）
             const monthNew = allCustomers.filter(c => {
-                const d = new Date(c.createTime || c.createdAt);
-                return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+                const d = new Date(c.createdAt);
+                return c.isNewCustomer && d.getMonth() === thisMonth && d.getFullYear() === thisYear;
             }).length;
+            
             const monthVisits = allVisits.filter(v => {
                 const d = new Date(v.visitDate || v.date);
                 return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
@@ -1249,7 +1262,12 @@
                     <div class="customer-grade grade-${c.grade || 'D'}">${c.grade || 'D'}</div>
                     <div class="customer-info">
                         <div class="customer-name">${c.name || '未知客户'}</div>
-                        <div class="customer-meta">${TYPE_MAP[c.type] || '未分类'} · ${c.salesName}</div>
+                        <div class="customer-meta">
+                            ${TYPE_MAP[c.type] || '未分类'} · ${c.salesName}
+                            <span style="color: ${c.isNewCustomer ? '#10B981' : '#6B7280'}; margin-left: 6px;">
+                                ${c.isNewCustomer ? '🆕新' : '👴老'}
+                            </span>
+                        </div>
                     </div>
                     <span class="customer-status ${getStatusClass(c)}">${getStatusText(c)}</span>
                 </div>

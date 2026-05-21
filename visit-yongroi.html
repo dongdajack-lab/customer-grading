@@ -751,6 +751,13 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label class="form-label">新老客户</label>
+                    <select class="form-input form-select" id="customer-is-new">
+                        <option value="true" selected>新客户（首次接触）</option>
+                        <option value="false">老客户（已有合作基础）</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label class="form-label">联系人</label>
                     <input type="text" class="form-input" id="customer-contact" placeholder="请输入联系人姓名">
                 </div>
@@ -1032,6 +1039,7 @@
             const name = document.getElementById('customer-name').value.trim();
             const type = document.getElementById('customer-type').value;
             const grade = document.getElementById('customer-grade').value;
+            const isNew = document.getElementById('customer-is-new').value === 'true';
             const contact = document.getElementById('customer-contact').value.trim();
             const position = document.getElementById('customer-position').value.trim();
             const purpose = document.getElementById('visit-purpose').value.trim();
@@ -1049,6 +1057,7 @@
                 customerName: name,
                 customerType: type,
                 customerGrade: grade,
+                isNewCustomer: isNew,
                 contact: contact,
                 position: position,
                 visitDate: datetime,
