@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · DISC性格测评 - 识人练习</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f0f4f8; min-height:100vh; color:#333; }
+  header { background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; padding:20px 24px; text-align:center; position:relative; }
+  header h1 { font-size:22px; font-weight:700; }
+  header p { font-size:13px; opacity:0.8; margin-top:4px; }
+
+  .container { max-width:640px; margin:0 auto; padding:20px 16px 40px; }
+
+  /* 封面页 */
+  #coverPage { text-align:center; padding:20px 0; }
+  #coverPage .cover-icon { font-size:80px; margin:20px 0 10px; }
+  #coverPage h2 { font-size:24px; color:#2C3E50; margin-bottom:8px; }
+  #coverPage .subtitle { font-size:14px; color:#888; margin-bottom:24px; }
+  .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:24px 0; }
+  .feature-item { background:white; border-radius:12px; padding:16px 12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  .feature-item .fi-icon { font-size:28px; margin-bottom:8px; }
+  .feature-item .fi-label { font-size:13px; color:#555; font-weight:600; }
+  .feature-item .fi-desc { font-size:11px; color:#999; margin-top:4px; }
+  .start-btn { display:block; width:100%; padding:16px; background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; margin-top:20px; letter-spacing:2px; }
+  .start-btn:active { transform:scale(0.98); }
+  .cover-note { font-size:12px; color:#aaa; margin-top:16px; line-height:1.6; }
+
+  /* 答题页 */
+  #quizPage { display:none; }
+  .quiz-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .quiz-header .q-num { font-size:14px; color:#3498DB; font-weight:700; }
+  .quiz-header .q-total { font-size:13px; color:#999; }
+  .progress-bar { height:6px; background:#e0e6ed; border-radius:3px; margin-bottom:20px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#2C3E50,#3498DB); border-radius:3px; transition:width 0.4s; }
+  .quiz-card { background:white; border-radius:16px; padding:24px 20px; box-shadow:0 2px 16px rgba(0,0,0,0.08); min-height:380px; display:flex; flex-direction:column; }
+  .q-title { font-size:16px; font-weight:700; color:#2C3E50; margin-bottom:4px; }
+  .q-subtitle { font-size:13px; color:#aaa; margin-bottom:16px; }
+  .q-scenario { background:#f8f9fc; border-left:4px solid #3498DB; padding:14px 16px; border-radius:0 10px 10px 0; margin-bottom:18px; font-size:14px; line-height:1.8; color:#444; }
+  .q-scenario .hi { color:#3498DB; font-weight:600; }
+  .options { display:flex; flex-direction:column; gap:10px; flex:1; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #e8ecf1; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.6; }
+  .option:hover { border-color:#3498DB; background:#F0F7FF; }
+  .option.selected { border-color:#3498DB; background:#F0F7FF; }
+  .option .opt-letter { width:26px; height:26px; border-radius:50%; background:#e8ecf1; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#888; flex-shrink:0; margin-top:1px; transition:all 0.2s; }
+  .option.selected .opt-letter { background:#3498DB; color:white; }
+  .option .opt-text { flex:1; }
+  .option .opt-dim { font-size:11px; color:#aaa; margin-top:3px; }
+  .option.selected .opt-dim { color:#3498DB; }
+  .btn-row { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-prev { background:#f0f2f5; color:#666; }
+  .btn-prev:disabled { opacity:0.4; cursor:not-allowed; }
+  .btn-next { background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; }
+  .btn-next:disabled { opacity:0.4; cursor:not-allowed; }
+
+  /* 结果页 */
+  #resultPage { display:none; }
+  .result-hero { background:linear-gradient(135deg,#2C3E50,#3498DB); border-radius:20px; padding:32px 24px; text-align:center; color:white; margin-bottom:20px; position:relative; overflow:hidden; }
+  .result-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:120px; height:120px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .result-type-badge { display:inline-block; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:20px; padding:6px 18px; font-size:13px; margin-bottom:12px; }
+  .result-type-name { font-size:28px; font-weight:800; margin-bottom:6px; }
+  .result-type-label { font-size:14px; opacity:0.85; margin-bottom:20px; }
+  .radar-wrap { background:white; border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:center; }
+  .radar-wrap h3 { font-size:15px; color:#2C3E50; margin-bottom:12px; }
+  .radar-wrap canvas { max-width:280px; }
+
+  /* 维度得分条 */
+  .dim-scores { background:white; border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .dim-scores h3 { font-size:15px; color:#2C3E50; margin-bottom:16px; }
+  .dim-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .dim-row:last-child { margin-bottom:0; }
+  .dim-row .dim-label { width:28px; font-size:15px; font-weight:700; text-align:center; }
+  .dim-row .dim-bar-bg { flex:1; height:22px; background:#f0f2f5; border-radius:11px; overflow:hidden; }
+  .dim-row .dim-bar-fill { height:100%; border-radius:11px; transition:width 1s ease; }
+  .dim-row .dim-score { width:36px; font-size:14px; font-weight:700; text-align:right; }
+  .dim-D .dim-label { color:#E74C3C; }
+  .dim-D .dim-bar-fill { background:linear-gradient(90deg,#E74C3C,#C0392B); }
+  .dim-I .dim-label { color:#F39C12; }
+  .dim-I .dim-bar-fill { background:linear-gradient(90deg,#F39C12,#E67E22); }
+  .dim-S .dim-label { color:#27AE60; }
+  .dim-S .dim-bar-fill { background:linear-gradient(90deg,#27AE60,#1E8449); }
+  .dim-C .dim-label { color:#3498DB; }
+  .dim-S .dim-bar-fill { background:linear-gradient(90deg,#27AE60,#1E8449); }
+  .dim-C .dim-bar-fill { background:linear-gradient(90deg,#3498DB,#2980B9); }
+
+  /* 详情卡片 */
+  .detail-card { background:white; border-radius:16px; padding:24px 20px; margin-bottom:16px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:left; }
+  .detail-card h3 { font-size:16px; color:#2C3E50; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .detail-card h3 .icon { font-size:20px; }
+  .detail-section { margin-bottom:14px; }
+  .detail-section:last-child { margin-bottom:0; }
+  .detail-section h4 { font-size:13px; color:#aaa; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px; }
+  .detail-section p { font-size:14px; color:#444; line-height:1.8; }
+  .tag-list { display:flex; flex-wrap:wrap; gap:8px; }
+  .tag { display:inline-block; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+  .tag-adv { background:#E8F8F5; color:#1ABC9C; }
+  .tag-dis { background:#FDEDEC; color:#E74C3C; }
+  .tag-tip { background:#FEF9E7; color:#F39C12; }
+
+  /* 分享按钮 */
+  .share-row { display:flex; gap:10px; margin-top:20px; }
+  .share-btn { flex:1; padding:12px; border:2px solid #e0e6ed; border-radius:10px; background:white; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s; }
+  .share-btn:active { background:#f0f2f5; }
+  .restart-btn-full { display:block; width:100%; padding:15px; background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; margin-top:14px; letter-spacing:1px; }
+
+  /* 答题卡弹窗 */
+  .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100; align-items:center; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal-box { background:white; border-radius:20px; padding:24px; width:90%; max-width:400px; max-height:80vh; overflow-y:auto; }
+  .modal-box h3 { font-size:16px; color:#2C3E50; margin-bottom:16px; text-align:center; }
+  .answer-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+  .answer-cell { width:100%; aspect-ratio:1; border-radius:8px; border:2px solid #e0e6ed; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+  .answer-cell.answered { border-color:#3498DB; background:#F0F7FF; color:#3498DB; }
+  .answer-cell.current { border-color:#2C3E50; background:#2C3E50; color:white; }
+  .modal-close { display:block; width:100%; padding:12px; background:#f0f2f5; border:none; border-radius:10px; margin-top:16px; font-size:14px; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · DISC性格测评</h1>
+  <p>识人练习 · 科学测评你的行为风格</p>
+</header>
+
+<div class="container">
+
+  <!-- 封面页 -->
+  <div id="coverPage">
+    <div class="cover-icon">🧠</div>
+    <h2>DISC性格测评</h2>
+    <p class="subtitle">基于William Moulton Marston理论 · 25种组合类型分析</p>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="fi-icon">📋</div>
+        <div class="fi-label">24道科学题目</div>
+        <div class="fi-desc">基于DISC四维模型</div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">🎯</div>
+        <div class="fi-label">25种组合类型</div>
+        <div class="fi-desc">精准匹配你的性格</div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">📊</div>
+        <div class="fi-label">四维度雷达图</div>
+        <div class="fi-desc">可视化性格画像</div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">💡</div>
+        <div class="fi-label">优劣势+建议</div>
+        <div class="fi-desc"> actionable发展建议</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">开始测评 ✍️</button>
+    <p class="cover-note">本测评基于DISC行为风格理论，约需5-8分钟<br>请根据平时最自然的状态作答，无标准答案</p>
+  </div>
+
+  <!-- 答题页 -->
+  <div id="quizPage">
+    <div class="quiz-header">
+      <span class="q-num" id="qNum">第 1 题</span>
+      <span class="q-total" id="qTotal">共 24 题</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="quiz-card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-prev" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-next" id="btnNext" onclick="nextQ()" disabled>确认</button>
+    </div>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:#bbb;cursor:pointer;" onclick="showAnswerSheet()">📋 答题卡</p>
+  </div>
+
+  <!-- 结果页 -->
+  <div id="resultPage"></div>
+
+</div>
+
+<!-- 答题卡弹窗 -->
+<div class="modal-overlay" id="answerSheetModal">
+  <div class="modal-box">
+    <h3>答题卡</h3>
+    <div class="answer-grid" id="answerGrid"></div>
+    <button class="modal-close" onclick="closeAnswerSheet()">关闭</button>
+  </div>
+</div>
+
+<script>
+// ============ 题目数据 ============
+const questions = [
+  { q:"在团队会议上，你通常会：",
+    o:[
+      { t:"主动发言，推动议题做出决策", dim:"D" },
+      { t:"活跃气氛，鼓励每个人发表意见", dim:"I" },
+      { t:"认真倾听，确保 everyone 都有机会表达", dim:"S" },
+      { t:"提前准备数据和事实，确保讨论有据可依", dim:"C" }
+    ]
+  },
+  { q:"面对一个紧迫的项目截止日期，你的第一反应是：",
+    o:[
+      { t:"立即分配任务，明确要求，紧盯结果", dim:"D" },
+      { t:"召集团队开会，激发大家的热情和斗志", dim:"I" },
+      { t:"按部就班，稳步推进，确保每个人都不掉队", dim:"S" },
+      { t:"仔细检查每个环节，确保质量不出问题", dim:"C" }
+    ]
+  },
+  { q:"你如何描述自己的工作节奏？",
+    o:[
+      { t:"快节奏，喜欢同时推进多件事", dim:"D" },
+      { t:"灵活节奏，根据状态和灵感调整", dim:"I" },
+      { t:"稳定节奏，习惯按既定计划执行", dim:"S" },
+      { t:"深思熟虑节奏，不急于求成", dim:"C" }
+    ]
+  },
+  { q:"当团队成员工作表现不佳时，你会：",
+    o:[
+      { t:"直接指出问题，要求立即改进", dim:"D" },
+      { t:"先肯定优点，再鼓励其提升", dim:"I" },
+      { t:"耐心指导，给予足够的时间和空间", dim:"S" },
+      { t:"用数据和事实说明差距，制定改进计划", dim:"C" }
+    ]
+  },
+  { q:"你更喜欢的工作环境是：",
+    o:[
+      { t:"有挑战、有竞争、能快速看到成果", dim:"D" },
+      { t:"开放、活跃、人际关系融洽", dim:"I" },
+      { t:"稳定、和谐、流程清晰", dim:"S" },
+      { t:"专业、精准、标准明确", dim:"C" }
+    ]
+  },
+  { q:"做决策时，你更依赖：",
+    o:[
+      { t:"直觉和全局判断，快速拍板", dim:"D" },
+      { t:"团队意见和氛围，寻求共识", dim:"I" },
+      { t:"过往经验和稳妥方案", dim:"S" },
+      { t:"详尽分析和数据验证", dim:"C" }
+    ]
+  },
+  { q:"你认为自己在人际沟通中最大的特点是：",
+    o:[
+      { t:"直接、高效，直奔主题", dim:"D" },
+      { t:"热情、善于表达，感染力强", dim:"I" },
+      { t:"温和、耐心，善于倾听", dim:"S" },
+      { t:"准确、逻辑清晰，注重事实", dim:"C" }
+    ]
+  },
+  { q:"面对变化和新挑战，你的态度是：",
+    o:[
+      { t:"兴奋，主动寻求变革和突破", dim:"D" },
+      { t:"乐观，视之为学习和展示的机会", dim:"I" },
+      { t:"谨慎，希望有足够时间适应", dim:"S" },
+      { t:"理性，先评估风险和可行性", dim:"C" }
+    ]
+  },
+  { q:"你最不能容忍的团队成员类型是：",
+    o:[
+      { t:"优柔寡断、拖拖拉拉的人", dim:"D" },
+      { t:"沉闷无趣、不懂合作的人", dim:"I" },
+      { t:"自私自利、不顾团队的人", dim:"S" },
+      { t:"粗心大意、不注重质量的人", dim:"C" }
+    ]
+  },
+  { q:"在销售过程中，你的风格更接近：",
+    o:[
+      { t:"强势推进，快速达成成交", dim:"D" },
+      { t:"建立关系，用热情感染客户", dim:"I" },
+      { t:"长期跟进，做客户信赖的顾问", dim:"S" },
+      { t:"专业分析，用方案和数据说服", dim:"C" }
+    ]
+  },
+  { q:"当遇到客户强烈反对时，你会：",
+    o:[
+      { t:"坚持立场，据理力争，说服对方", dim:"D" },
+      { t:"先缓解情绪，再找共同话题", dim:"I" },
+      { t:"耐心倾听，理解对方真实顾虑", dim:"S" },
+      { t:"分析反对原因，提供精准解决方案", dim:"C" }
+    ]
+  },
+  { q:"你如何看待规则和流程？",
+    o:[
+      { t:"规则是为目标服务的，必要时可以灵活", dim:"D" },
+      { t:"规则重要，但人际关系更重要", dim:"I" },
+      { t:"规则很重要，大家遵守才有秩序", dim:"S" },
+      { t:"规则必须严谨，每个细节都要明确", dim:"C" }
+    ]
+  },
+  { q:"你给同事留下的最深印象是：",
+    o:[
+      { t:"能干、有魄力、说一不二", dim:"D" },
+      { t:"有趣、有活力、受欢迎", dim:"I" },
+      { t:"可靠、好合作、让人放心", dim:"S" },
+      { t:"专业、严谨、值得信赖", dim:"C" }
+    ]
+  },
+  { q:"工作上你最看重的是：",
+    o:[
+      { t:"成果和业绩，能否达成目标", dim:"D" },
+      { t:"认可和影响力，能否被大家肯定", dim:"I" },
+      { t:"稳定和和谐，能否持续发展", dim:"S" },
+      { t:"质量和精准，能否做到最好", dim:"C" }
+    ]
+  },
+  { q:"你如何处理工作压力？",
+    o:[
+      { t:"把压力当动力，越压越勇", dim:"D" },
+      { t:"找人倾诉，用积极心态化解", dim:"I" },
+      { t:"默默承受，不轻易表露", dim:"S" },
+      { t:"分析问题根源，系统性解决", dim:"C" }
+    ]
+  },
+  { q:"在团队协作中，你通常扮演的角色是：",
+    o:[
+      { t:"领导者，指明方向，推动执行", dim:"D" },
+      { t:"鼓手，调动气氛，促进沟通", dim:"I" },
+      { t:"协作者，默默支持，确保落地", dim:"S" },
+      { t:"参谋者，提供分析和专业建议", dim:"C" }
+    ]
+  },
+  { q:"你对「完美」的理解是：",
+    o:[
+      { t:"完美就是赢，结果说话", dim:"D" },
+      { t:"完美就是大家都满意", dim:"I" },
+      { t:"完美就是没有遗漏和冲突", dim:"S" },
+      { t:"完美就是每个细节都精准到位", dim:"C" }
+    ]
+  },
+  { q:"面对一个你不熟悉的领域，你会：",
+    o:[
+      { t:"大胆尝试，边做边学", dim:"D" },
+      { t:"找懂的人请教，快速入门", dim:"I" },
+      { t:"先观察学习，再谨慎行动", dim:"S" },
+      { t:"系统学习，掌握理论再实践", dim:"C" }
+    ]
+  },
+  { q:"你最希望得到的激励方式是：",
+    o:[
+      { t:"给我更大的挑战和权力", dim:"D" },
+      { t:"公开表扬，让我有面子", dim:"I" },
+      { t:"私下肯定，让我感到被重视", dim:"S" },
+      { t:"用事实证明我的专业能力", dim:"C" }
+    ]
+  },
+  { q:"你认为自己最大的优势是：",
+    o:[
+      { t:"决策力和执行力", dim:"D" },
+      { t:"沟通力和影响力", dim:"I" },
+      { t:"耐心和协作力", dim:"S" },
+      { t:"分析力和专业力", dim:"C" }
+    ]
+  },
+  { q:"当团队目标和个人目标冲突时，你会：",
+    o:[
+      { t:"努力说服团队接受我的方案", dim:"D" },
+      { t:"寻求平衡，让大家都能接受", dim:"I" },
+      { t:"以团队目标为重，牺牲个人", dim:"S" },
+      { t:"用数据和逻辑论证哪种方案更优", dim:"C" }
+    ]
+  },
+  { q:"你给客户做方案时，更倾向于：",
+    o:[
+      { t:"简洁有力，突出核心价值和ROI", dim:"D" },
+      { t:"生动有趣，讲故事让客户产生共鸣", dim:"I" },
+      { t:"全面周到，考虑客户所有顾虑", dim:"S" },
+      { t:"严谨详实，每个数据都有依据", dim:"C" }
+    ]
+  },
+  { q:"你认为销售最重要的能力是：",
+    o:[
+      { t:"敢闯敢拼，不怕被拒绝", dim:"D" },
+      { t:"能说会道，建立广泛人脉", dim:"I" },
+      { t:"持之以恒，长期经营关系", dim:"S" },
+      { t:"专业扎实，成为行业专家", dim:"C" }
+    ]
+  },
+  { q:"如果用一种动物形容你的工作风格，你选：",
+    o:[
+      { t:"老虎 — 强势、目标导向", dim:"D" },
+      { t:"孔雀 — 热情、善于表现", dim:"I" },
+      { t:"考拉 — 温和、稳重可靠", dim:"S" },
+      { t:"猫头鹰 — 精准、严谨专业", dim:"C" }
+    ]
+  }
+];
+
+// ============ 类型数据（基于PDF） ============
+const types = {
+  "D": {
+    name:"结果导向者",
+    fullName:"D型 · 结果导向者",
+    keywords:"征服、行动迅速、自我激励、独立",
+    desc:"控制、果断，相信自己有足够的能力来改变周围的环境和他人，好发号施令，大胆、好竞争、好冒险。在工作上有很强的成就动机，进取心强、好竞争，而且不顾一切努力实破自己的目标。",
+    adv:["自信的决策者，在掌握较少信息的情况下能够快速决策","在高压环境下能够很好适应","有不服输的冲劲，可以承担大任","精力充沛、适应能力强"],
+    dis:["攻击性太强，容易与人结怨","说的太多，不善于倾听","不喜欢表扬下属，激励方式往往不对头","有时显得过于自信和武断"],
+    tips:["主动与他人分享信息和资源","多听听他人对实现目标的看法和建议","真诚地关心他人","学会谦虚，培养自己的耐性"]
+  },
+  "DI": {
+    name:"灵感启发者",
+    fullName:"DI型 · 灵感启发者",
+    keywords:"自我激励、独立、热情、自信",
+    desc:"高度自信的人，既表现出自我肯定、大胆和直接的一面，也表现出良好的人际交往魅力。有明确的生活和工作目标，并能坚持和投入地实现此目标。希望借助自己的人际关系、竞争、权威实现自己控制周围环境和他人的目的。",
+    adv:["善于思考，高进取心，喜欢抓大方向","挑战自我、软硬兼施、成就、说服力","行动迅速，喜欢接受挑战和竞争","处理事务果断，善于说服和激励他人"],
+    dis:["可能过于关注人的因素，而忽视数据、理论和事实","关注自我多于关注他人","可能不太注意主动与他人分享资源、共享信息","面对多重任务时，主次不够分明"],
+    tips:["真诚和蔼地对待他人","明确下属的优劣势，发挥其特长","关注事实和数据","学会权衡短期利益和长期利益"]
+  },
+  "DIS": {
+    name:"咨询者",
+    fullName:"DIS型 · 咨询者",
+    keywords:"独立、自信、有韧劲",
+    desc:"行为独立、自由，对于自己追求的生活目标非常清楚，且比较执着。做事的计划性强，办事稳重，即使对于枯燥的工作也能够坚持，并努力把它完成。处事果断、敢冒险，待人热情、开放。",
+    adv:["具有很强的与周围他人打交道的能力","个人责任感和自主性强","决策时一方面比较果断，另一方面具有相当的耐性","是很好的决策者，喜欢为他人提供咨询"],
+    dis:["不喜欢受约束，有时显得懒散和过于自由","对于细节性的问题关注不够","独立性过强，不容易接受反对观点"],
+    tips:["自己约束自己的言行，不要过于随便","以身作则，遵守规章制度","培养自己的细心和耐心，多关注一些细节问题"]
+  },
+  "DIC": {
+    name:"匆忙者",
+    fullName:"DIC型 · 匆忙者",
+    keywords:"外向、自我激励、热情、好奇、对情感敏感",
+    desc:"反应迅速、总有一种紧迫感是行为表现的主要特征。多为爆发性的，充满了动力，但是耐性比较差，行为的活力一般保持的不会很久。在一般正式的场合下显得比较冷酷、威严，但在非正式场合下，会表现出亲和的一面。",
+    adv:["能够根据环境的变化采取不同的交往方式","善用「萝卜＋大棒」手段对他人进行管理和激励","果断、自信，但不冲动","适合做管理者"],
+    dis:["缺乏耐心，不喜欢做重复性的工作","容易兴奋而稳定不下来","很难对其行为预测","专业性不强"],
+    tips:["调节自己工作的节奏","培养自己的耐心","多留给自己一些时间来充电，提高自己的专业性"]
+  },
+  "DS": {
+    name:"高成就者",
+    fullName:"DS型 · 高成就者",
+    keywords:"行动迅速、独立、坚持力强、思想丰富",
+    desc:"喜欢支配他人，但又比较稳重。工作上勤奋、勤劳，具有很强的成就动机，个人目标非常明确。注重追求具体结果，对工作检查、监督严密。",
+    adv:["专注于工作和任务，有很强的责任感","分解目标、安排任务，授权","坚持、有耐心，检查、监督细致"],
+    dis:["不管大事小事，倾向于亲身过问","经常表现出烦躁不安","不善于将任务分配出去、不善于寻求资源","在压力下不善于授权"],
+    tips:["提高目标管理能力，面对多重任务时要划分先后等级","学会权衡短期利益和长期利益","事事多与他人进行沟通","不要总认为这样做可以、那样做也可以"]
+  },
+  "DC": {
+    name:"创新者",
+    fullName:"DC型 · 创新者",
+    keywords:"指使他人、机动、有计划、行动迅速、自我激励、细心精准、反应敏感",
+    desc:"对目标和任务具有前瞻性，敢于尝试运用新方法、新技术解决现有的问题，主动引导变革。既相信自己的直觉，但也是一个完美主义者。敢于尝试新方法，追求完美，有时给人的感觉是比较冷漠。",
+    adv:["创新者；机动、灵活、有计划","善于发现自己工作中的问题","非常自信，善于应对困难问题的挑战","看问题精准，追求卓越"],
+    dis:["缺乏沟通影响力","一旦失败对自己的打击会非常大","容易厌倦日常重复性的工作","独来独往、合作意识不强"],
+    tips:["待人热情一些","与他人沟通时，注意讲究一些沟通的策略","加强团队成员之间的协作","学会关心、激励和鼓舞他人"]
+  },
+  "IDC": {
+    name:"评价者",
+    fullName:"IDC型 · 评价者",
+    keywords:"自信、真诚、热情、思想丰富",
+    desc:"执行力强，针对目标的实现，不仅能够提供一些新的想法和建议，而且能够不断说服、督促和激励他人把工作完成。自信但不强势，经常替他人考虑，而不是不顾他人需要而发号施令。心态积极，看问题倾向于看到好的、积极的一面。",
+    adv:["看问题积极，能够稳定局势，给他人以信心","能够把自己与团队结合一起，推进团队目标的实现","可信、沟通影响力强"],
+    dis:["在压力下会变得烦躁不安，缺乏耐心","不敢面对失败","尽管能够接受他人的反对意见，但内心不服"],
+    tips:["对于周围他人的反对意见，要客观分析，学会接受","学会平静自己的心情，切忌急躁","做事要有坚持性，不可半途而废","凡事对事不对人，不要意气用事"]
+  },
+  "I": {
+    name:"鼓舞者",
+    fullName:"I型 · 鼓舞者",
+    keywords:"表达、鼓舞、信任、开放、夸大、有魅力",
+    desc:"善于对事物进行解释和阐述，有时喜欢夸大自己的能力。倾向于以积极的态度看待周围的事物，喜欢表扬、称赞他人。交往广泛，喜欢群聚，很容易与他人建立友谊关系。很少有意地冒犯他人，喜欢营造宽松、和谐的人际氛围。",
+    adv:["表达能力往往比较出众","好的激励鼓舞者，是团队目标实现的积极推动者","包容、可信","人际关系网络比较宽泛"],
+    dis:["计划性差，时间观念不强","考虑问题有时过于简单，太相信自己的直觉","可能容易情绪化","过多的做出承诺，往往不能兑现"],
+    tips:["客观、理性一些","安排好自己的时间","工作要有一点紧迫感","学会管理自己的情绪；信守承诺、言行一致"]
+  },
+  "IS": {
+    name:"IS咨询者",
+    fullName:"IS型 · 咨询者",
+    keywords:"开放、热情、友好、乐观、鼓舞人",
+    desc:"外向，喜欢与人打交道；亲和，容易接近，喜欢帮助他人，容易与他人建立一种和谐的人际关系。善于沟通交流，通情达理，能够开放地听取反对意见。比较重感情，态度积极，善于解决人际问题。",
+    adv:["善于激励、鼓舞他人","对于自己负责的团队，对任务完成的质量会十分关注","沟通能力一般比较强，能够开放的与他人沟通","忍耐度高"],
+    dis:["对人际因素的关注多于对任务因素的关注","办事不够果断，喜欢采取间接的方式","有时会过于信任他人，而失去辨别力","不善于批评和冒犯他人"],
+    tips:["带头完成任务，提高自己执行任务的力度","对任务完成或目标实现的最后期限，要现实一些","不要说的太多，把心思多放在工作上","学会管理自己时间"]
+  },
+  "ID": {
+    name:"说服者",
+    fullName:"ID型 · 说服者",
+    keywords:"沟通、影响力、信任、热情、外向、支配、乐观",
+    desc:"信任他人、热情；善于表达，喜欢激励和鼓舞他人，说话往往能够说到别人的心坎上。有一定的冒险精神，敢于尝试新的想法，倡导积极的变革。喜欢与人打交道，外向，拥有获得各种类型人的认可和信任的能力。",
+    adv:["乐观、热情、富有魅力和影响力","善于做说服和鼓动工作","表达能力强","富有责任感，比较自信"],
+    dis:["对自己的业绩过于乐观，可能会夸大自己说服、影响他人的能力","适应能力差，在固定环境下例行程序化的操作会很不适应","决策时往往考虑欠周到","不善于从事准备和筹划性的事情"],
+    tips:["给予更多富有挑战性的任务","把注意力放在任务定向的服务和关键的细节方面","客观、理性分析现有的资料、信息","学会用事实和数据说话"]
+  },
+  "S": {
+    name:"稳健型",
+    fullName:"S型 · 稳健型",
+    keywords:"有耐性、友好、同情、忠诚、合作、安静",
+    desc:"重视与周围他人之间的合作，倾向于创造稳定、和谐的组织环境。善于逻辑思考和分析问题，具有耐性和坚持性。生活具有计划性、办事稳妥。倾向于对周围的人表示同情和忠诚。",
+    adv:["有耐心、稳定性强","富有同情心、好帮助他人","往往专业性强","善于倾听；办事稳妥"],
+    dis:["对变革的适应比较慢","不善于灵活调整自己的做事方法","不善于表现和宣传自己的专业","一般不主动分享自己的优势"],
+    tips:["主动与他人分享自己的资源","学会自我激励，建立自己的自信心","敢于冒险；敢于尝试不同的工作方法"]
+  },
+  "SC": {
+    name:"完美主义者",
+    fullName:"SC型 · 完美主义者",
+    keywords:"精准、完美、标准化、程序化、稳重、耐心、亲和",
+    desc:"做事富有逻辑性和系统性，思考问题追求精确，不管是在工作中还是在生活中，倾向于遵循固定的程序。工作谨慎细心，从事对精确性和细节要求高的工作，往往比较有耐心和努力。",
+    adv:["做事认真、谨慎","对细节、质量问题敏感","稳重、有坚持力","原则性强"],
+    dis:["对环境的适应力较差，不能灵活转换自己的角色","决策时，容易陷入细节问题使决策变得困难","容易教条，不够开通","与他人之间的互动、协作可能不够"],
+    tips:["灵活变换自己的工作角色","学会借用别人的资源","主动与他人建立协作关系","要相信自己的价值"]
+  },
+  "CS": {
+    name:"CS完美主义者",
+    fullName:"CS型 · 完美主义者（细致版）",
+    keywords:"精准、稳重、耐心、亲和、标准化",
+    desc:"做事富有逻辑性和系统性，做事比较细心，倾向于遵循固定的程序，较传统。言行谨慎，进取心比较强，追求精确性，比较有耐心。平时显得比较独立，喜欢安静，敢于独当一面。",
+    adv:["做事认真、谨慎","有坚定信念、不屈不挠","对细节、质量问题关注","原则性强；很好的决策者"],
+    dis:["不善于表达、鼓励和影响他人","好争论，自己认定的事情一般很难改变","容易教条，不够开通","容易处心积虑，造成心理衰竭"],
+    tips:["学会表扬、激励和鼓舞他人","不要过分相信自己所掌握的事实，学会接受他人的观点","要相信自己的价值，多运用夸张的手法"]
+  },
+  "CIS": {
+    name:"技术人员",
+    fullName:"CIS型 · 技术人员",
+    keywords:"自我约束、守规矩、精准、专业",
+    desc:"喜欢在某领域有深入的钻研，追求目标是希望成为某方面的专家。自我意识强，能够有效监控自己的绩效。比较善于表达，给人的印象是知道的事情很多和掌握了多方面的知识。",
+    adv:["适合从事专业性强的工作","对成为某方面的专家有很强的动机","守规矩，纪律严明","主动提高自己，一般不需要督促"],
+    dis:["很少把自己在知识、技能方面的优势主动分享或传授给他人","容易夸大自己的重要性，降低他人的业绩","在压力很大时，会变得肆无忌惮","对来自他人的批评极其敏感"],
+    tips:["为了共同利益和目标，要真诚与他人合作","相信他人，学会把任务分配给他人","虚心一些，向比自己水平高的人学习","以积极的眼光看待他人，多肯定优点"]
+  },
+  "C": {
+    name:"客观思考者",
+    fullName:"C型 · 客观思考者",
+    keywords:"被动、精确、孤僻、多疑、观察、验证",
+    desc:"注重反思、内省，给人的感觉是沉默、疏远。喜欢辩护，防御心理强，辩证地看问题，特别重视结论和行动的事实基础。对工作关注、认真，准备和筹划严密。希望大家都遵守规范、相关制度。",
+    adv:["客观进行问题分析","有很强的纠错能力","用数据说话","强的统筹安排能力"],
+    dis:["不会主动与他人分享自己的思想和信息","不善于表达自己的感受，在人际交往方面比较被动","多疑，倾向于在内心记恨与他人之间的冲突","过于追求精确，在模糊的情景下决策会变得非常困难"],
+    tips:["开放自我，主动与他人谈心、沟通","主动与他人分享知识经验、意见和观点","不要过于追求完美，接受适度的不确定性"]
+  },
+  "CD": {
+    name:"创新者（理性版）",
+    fullName:"CD型 · 创新者",
+    keywords:"有计划、独立、冷漠、不灵活、自我激励、细心严谨、反应敏感",
+    desc:"有良好的组织性和计划性，善于理性和逻辑性的分析。严谨、冷漠、不苟言笑，显得比较正规。独立，自我约束力强。好竞争，攻击性强。敢于尝试运用新方法、新技术解决现有的问题。",
+    adv:["创新者；严谨、对事实和细节敏感","富有计划性和逻辑性","待人公正","善于应对困难问题的挑战"],
+    dis:["不善于表现自己，主动跟他人沟通的意识低","一旦失败对自己的打击会非常大","容易厌倦日常重复性的工作","独来独往、合作意识不强"],
+    tips:["待人热情一些","与他人沟通时，注意讲究一些沟通的策略","学会关心、激励和鼓舞他人","加强团队成员之间的协作"]
+  },
+  "SCD": {
+    name:"调查员",
+    fullName:"SCD型 · 调查员",
+    keywords:"分析、计划、执着、精确、坚决、多疑",
+    desc:"客观、理性，分析能力强。感情一般不表露出来。默默地执着追求个人目标。计划性强，对已定目标能够制定详细的行动计划，一旦开始执行，就会坚持不放。有时给人的感觉是比较固执。",
+    adv:["对问题注重理性的逻辑分析，系统思考能力强","计划性强，且富有耐性，能够坐得住"],
+    dis:["对他人的情感反应迟钝，且不善于表达自己的感受","多疑，倾向于在内心记恨与他人之间的冲突","有时显得比较顽固、灵活性不强"],
+    tips:["提高自己的灵活性","学会逐渐接受他人","对他人的需求学会投入个人的感情","开放性地主动与他人沟通"]
+  },
+  "SD": {
+    name:"SD高成就者",
+    fullName:"SD型 · 高成就者（勤奋版）",
+    keywords:"勤奋、目标坚定、独立、坚持力强、思想丰富、事必躬行",
+    desc:"在内心深处有很强的个人目标，并默默追求。在工作态度上，是勤奋的、勤劳的，有时会烦躁。具有很强的成就动机，个人目标非常明确。注重追求具体结果，对工作检查、监督严密。",
+    adv:["专注于工作和任务，有很强的责任感","勤奋、任劳任怨","坚持、有耐心，检查、监督细致"],
+    dis:["不管大事小事，倾向于亲身过问","不善于授权；经常表现出烦躁不安","在压力下，不善于将任务分配出去"],
+    tips:["提高目标管理能力，面对多重任务时要划分先后等级","学会权衡短期利益和长期利益","事事多与他人进行沟通"]
+  },
+  "SI": {
+    name:"SI稳重型",
+    fullName:"SI型 · 稳重型",
+    keywords:"稳重、耐心、开放、热情、亲和、助人、影响力",
+    desc:"做事稳重、有耐心，比较安分。待人亲和，喜欢帮助他人，容易与他人建立一种和谐的人际关系。外向，喜欢与人打交道。善于沟通交流，通情达理，能够开放地听取反对意见。",
+    adv:["善于说服、鼓舞他人","信任、可信","能够开放的与他人沟通","能够独立耐心地做自己的工作"],
+    dis:["对人际因素的关注多于对任务因素的关注","办事不够果断，喜欢采取间接的方式","有时会过于信任他人","在压力过大时会变得过于随意"],
+    tips:["带头完成任务，提高自己执行任务的力度","对任务完成或目标实现的最后期限，要现实一些","不要说的太多，把心思多放在工作上"]
+  },
+  "SCI": {
+    name:"SCI专家型",
+    fullName:"SCI型 · 专家型",
+    keywords:"体贴、谨慎、耐心、乐观、有计划性、体贴",
+    desc:"做事比较稳重、沉着，有耐心，而且比较细致。对待生活比较现实、乐观。为人和蔼，善良，比较体恤他人。善于听取他人意见，具有较强的包容性。心眼好，喜欢帮助他人。",
+    adv:["能够细致、耐心地完成分配给的任务","善于合作，容易相处，沟通意识好","能够换位思考，既征求他人的需求，也能给予积极反馈"],
+    dis:["比较保守、依赖，面对重大事情的决策会变得优柔寡断","不喜欢冒险和竞争","过于依赖过去的做法和经验"],
+    tips:["灵活处理个人在组织中的立场和权力","培养自己的冒险精神和果敢的精神","主动寻求新的技术、方法来解决当前的问题"]
+  },
+  "ISC": {
+    name:"代理者",
+    fullName:"ISC型 · 代理者",
+    keywords:"表达、支持、同感、高标准、谨慎",
+    desc:"善于做事务性的工作，有耐心，人缘好。能够设身处地地为他人着想，并给予支持。善于倾听他人的讲话，对他人的需求敏感，使人既善解人意，又比较亲切可信。",
+    adv:["对他人的情感和需求敏感","对他人具有容忍心和包容心","责任感强、有耐心","不用监督，能够对自己严要求"],
+    dis:["不够大胆、果断","冒险性和创新性不足","内心深处不喜欢变动的环境","遇到大事时，犹豫不定"],
+    tips:["深刻了解他人的优势在哪里","提高自己的果断性和自信心","在适当的时候，学会说「不」"]
+  },
+  "IC": {
+    name:"IC竞争型",
+    fullName:"IC型 · 竞争型",
+    keywords:"自我激励、好胜、愉快、热情、认真正经、敏感",
+    desc:"要面子，总想给人以好印象。好胜，公平竞争，喜欢用直接的方法实现目标。在工作中，能体谅他人，给人的印象是果断、自信，而不是富有攻击性。一般不会用直接命令，多数情况下采取说服的方法。",
+    adv:["善于沟通","是非分明","善于激励、鼓舞他人","做事谨慎、细心、有原则"],
+    dis:["死要面子","缺乏足够耐心","当看不惯时，言辞很难听","工作节奏时松时紧，不稳定"],
+    tips:["亲自去履行和实施","当不赞同别人的意见时，能够给予体谅","稳定自己工作节奏，培养自己的耐性"]
+  },
+  "D_high": {
+    name:"高D型",
+    fullName:"高D型 · 支配者",
+    keywords:"控制、果断、目标导向、竞争力强",
+    desc:"非常强的支配欲和掌控欲，喜欢发号施令，以目标和结果为导向。在团队中往往是天然的领导者，推动事情向前发展。",
+    adv:["极强的目标驱动力","快速决策能力","抗压能力强"],
+    dis:["容易忽视他人感受","可能过于武断","不善于细节管理"],
+    tips:["学会倾听他人意见","关注团队情感氛围","培养耐心和细节意识"]
+  },
+  "I_high": {
+    name:"高I型",
+    fullName:"高I型 · 影响者",
+    keywords:"热情、表达、社交、乐观、影响力",
+    desc:"非常强的人际交往能力和影响力，善于表达和沟通，是团队中的气氛调节者和鼓舞者。喜欢与人打交道，善于建立广泛的人脉关系。",
+    adv:["极强的人际影响力","善于激励他人","乐观积极，感染力强"],
+    dis:["可能忽视细节和事实","时间管理能力较弱","容易过度承诺"],
+    tips:["加强计划性和时间管理","关注事实和数据分析","学会兑现承诺"]
+  },
+  "S_high": {
+    name:"高S型",
+    fullName:"高S型 · 支持者",
+    keywords:"耐心、合作、稳定、忠诚、助人",
+    desc:"非常强的合作性和支持性，是团队中的稳定器和可靠成员。善于倾听和配合，重视团队和谐与稳定，不喜欢突变。",
+    adv:["极强的合作精神","耐心和稳定性","善于倾听和支持他人"],
+    dis:["对变革适应较慢","不善于果断决策","可能过于依赖他人"],
+    tips:["培养果断决策能力","主动适应变革","学会表达自己的观点"]
+  },
+  "C_high": {
+    name:"高C型",
+    fullName:"高C型 · 思考者",
+    keywords:"精准、分析、系统、严谨、质量导向",
+    desc:"非常强的分析能力和质量意识，追求精准和完美。善于系统性思考和逻辑分析，是团队中的质量把关者和专业顾问。",
+    adv:["极强的分析能力","追求卓越和质量","系统性思维"],
+    dis:["决策速度可能较慢","过于追求完美可能影响效率","不善于应对模糊情境"],
+    tips:["在信息不完整时也要学会决策","接受适度的不完美","提高决策效率"]
+  }
+];
+
+// ============ 状态 ============
+let currentQ = 0;
+let answers = new Array(questions.length).fill(null);
+let scores = { D:0, I:0, S:0, C:0 };
+
+// ============ 开始测评 ============
+function startQuiz(){
+  document.getElementById('coverPage').style.display='none';
+  document.getElementById('quizPage').style.display='block';
+  currentQ = 0;
+  answers.fill(null);
+  scores = { D:0, I:0, S:0, C:0 };
+  renderQuestion();
+}
+
+// ============ 渲染题目 ============
+function renderQuestion(){
+  const q = questions[currentQ];
+  document.getElementById('qNum').textContent = `第 ${currentQ+1} 题`;
+  document.getElementById('qTotal').textContent = `共 ${questions.length} 题`;
+  document.getElementById('progressFill').style.width = `${((currentQ)/questions.length)*100}%`;
+
+  const card = document.getElementById('questionCard');
+  const letters = ['A','B','C','D'];
+  const dimLabels = { D:'支配(D)', I:'影响(I)', S:'稳健(S)', C:'服从(C)' };
+  card.innerHTML = `
+    <div class="q-title">${q.q}</div>
+    <div class="q-subtitle">请选择最符合你平时行为的选项</div>
+    <div class="options">
+      ${q.o.map((o,i)=>`
+        <div class="option ${answers[currentQ]===i?'selected':''}" onclick="selectOpt(${i})">
+          <div class="opt-letter">${letters[i]}</div>
+          <div class="opt-text">
+            ${o.t}
+            <div class="opt-dim">${dimLabels[o.dim]}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  document.getElementById('btnPrev').disabled = currentQ===0;
+  const isLast = currentQ===questions.length-1;
+  document.getElementById('btnNext').textContent = isLast ? '查看结果' : '确认';
+  document.getElementById('btnNext').disabled = answers[currentQ]===null;
+}
+
+// ============ 选择选项 ============
+function selectOpt(idx){
+  answers[currentQ] = idx;
+  renderQuestion();
+}
+
+// ============ 上一题/下一题 ============
+function prevQ(){
+  if(currentQ>0){ currentQ--; renderQuestion(); }
+}
+function nextQ(){
+  if(answers[currentQ]===null) return;
+  if(currentQ < questions.length-1){
+    currentQ++;
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+// ============ 答题卡 ============
+function showAnswerSheet(){
+  const grid = document.getElementById('answerGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<questions.length;i++){
+    const cell = document.createElement('div');
+    cell.className = 'answer-cell' + (answers[i]!==null?' answered':'') + (i===currentQ?' current':'');
+    cell.textContent = i+1;
+    cell.onclick = ()=>{ currentQ=i; renderQuestion(); closeAnswerSheet(); };
+    grid.appendChild(cell);
+  }
+  document.getElementById('answerSheetModal').classList.add('show');
+}
+function closeAnswerSheet(){
+  document.getElementById('answerSheetModal').classList.remove('show');
+}
+
+// ============ 计算得分 & 匹配类型 ============
+function calcScores(){
+  scores = { D:0, I:0, S:0, C:0 };
+  answers.forEach((aIdx,qIdx)=>{
+    if(aIdx!==null){
+      const dim = questions[qIdx].o[aIdx].dim;
+      scores[dim]++;
+    }
+  });
+}
+
+function matchType(){
+  const max = Math.max(scores.D, scores.I, scores.S, scores.C);
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const primary = sorted[0][0];   // 最高分维度
+  const secondary = sorted[1][0]; // 次高分维度
+
+  // 尝试匹配双高类型
+  const combo = primary+secondary;
+  const comboMap = {
+    'DI':'DI','ID':'DI',
+    'DS':'DS','SD':'DS',
+    'DC':'DC','CD':'DC',
+    'IS':'IS','SI':'IS',
+    'IC':'IC','CI':'IC',
+    'SC':'SC','CS':'SC',
+    'IS':'IS','SI':'IS',
+    'DIS': primary==='D'&&sorted[1][0]==='I'&&sorted[2][0]==='S'?'DIS':null,
+  };
+
+  // 优先匹配具体类型
+  if(types[primary+secondary]) return types[primary+secondary];
+  if(types[secondary+primary]) return types[secondary+primary];
+
+  // 单维度高分
+  if(sorted[0][1] >= scores[secondary]+4){
+    return types[primary] || types[primary+'_high'];
+  }
+
+  // 三维度组合
+  const three = primary+secondary+sorted[2][0];
+  if(types[three]) return types[three];
+
+  // 默认返回主维度类型
+  return types[primary] || types[primary+'_high'];
+}
+
+// ============ 完成测评 ============
+function finishQuiz(){
+  calcScores();
+  const type = matchType();
+
+  document.getElementById('quizPage').style.display='none';
+  const rp = document.getElementById('resultPage');
+  rp.style.display='block';
+
+  const maxScore = questions.length;
+  const pctD = Math.round(scores.D/maxScore*100);
+  const pctI = Math.round(scores.I/maxScore*100);
+  const pctS = Math.round(scores.S/maxScore*100);
+  const pctC = Math.round(scores.C/maxScore*100);
+
+  rp.innerHTML = `
+    <div class="result-hero">
+      <div class="result-type-badge">🧠 你的DISC类型</div>
+      <div class="result-type-name">${type.name}</div>
+      <div class="result-type-label">${type.fullName}</div>
+      <div style="margin-top:16px;font-size:13px;opacity:0.9;">人格关键词：${type.keywords}</div>
+    </div>
+
+    <div class="radar-wrap">
+      <h3>📊 四维度雷达图</h3>
+      <canvas id="radarChart" width="280" height="280"></canvas>
+    </div>
+
+    <div class="dim-scores">
+      <h3>📈 各维度得分</h3>
+      <div class="dim-row dim-D">
+        <div class="dim-label">D</div>
+        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barD"></div></div>
+        <div class="dim-score" style="color:#E74C3C">${scores.D}分</div>
+      </div>
+      <div class="dim-row dim-I">
+        <div class="dim-label">I</div>
+        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barI"></div></div>
+        <div class="dim-score" style="color:#F39C12">${scores.I}分</div>
+      </div>
+      <div class="dim-row dim-S">
+        <div class="dim-label">S</div>
+        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barS"></div></div>
+        <div class="dim-score" style="color:#27AE60">${scores.S}分</div>
+      </div>
+      <div class="dim-row dim-C">
+        <div class="dim-label">C</div>
+        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barC"></div></div>
+        <div class="dim-score" style="color:#3498DB">${scores.C}分</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3><span class="icon">📋</span> 行为描述</h3>
+      <div class="detail-section">
+        <p>${type.desc}</p>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3><span class="icon">✅</span> 你的优势</h3>
+      <div class="tag-list">
+        ${type.adv.map(a=>`<span class="tag tag-adv">${a}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3><span class="icon">⚠️</span> 需要注意的劣势</h3>
+      <div class="tag-list">
+        ${type.dis.map(d=>`<span class="tag tag-dis">${d}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3><span class="icon">💡</span> 提升建议</h3>
+      <div class="tag-list">
+        ${type.tips.map(t=>`<span class="tag tag-tip">${t}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3><span class="icon">🎓</span> 大董老师点评</h3>
+      <div class="detail-section">
+        <p>作为销售从业者，了解自己的DISC性格类型有助于你更好地发挥优势、避开盲区。${type.name}类型的你在销售过程中，建议重点发挥<b>${type.adv[0]}</b>这一核心优势，同时有意识地改善<b>${type.dis[0]}</b>这一潜在短板。记住：没有最好的性格，只有最懂得发挥自己优势的人！</p>
+      </div>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn" onclick="shareResult()">📤 分享结果</button>
+      <button class="share-btn" onclick="saveImage()">📷 保存图片</button>
+    </div>
+    <button class="restart-btn-full" onclick="restartQuiz()">🔄 重新测评</button>
+  `;
+
+  // 动画：进度条
+  setTimeout(()=>{
+    document.getElementById('barD').style.width = `${(scores.D/questions.length)*100}%`;
+    document.getElementById('barI').style.width = `${(scores.I/questions.length)*100}%`;
+    document.getElementById('barS').style.width = `${(scores.S/questions.length)*100}%`;
+    document.getElementById('barC').style.width = `${(scores.C/questions.length)*100}%`;
+  },100);
+
+  // 画雷达图
+  setTimeout(drawRadar,200);
+}
+
+// ============ 雷达图 ============
+function drawRadar(){
+  const canvas = document.getElementById('radarChart');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const cx = w/2, cy = h/2, r = 110;
+
+  ctx.clearRect(0,0,w,h);
+
+  // 背景多边形
+  const labels = ['支配(D)','影响(I)','稳健(S)','服从(C)'];
+  const vals = [
+    scores.D/questions.length,
+    scores.I/questions.length,
+    scores.S/questions.length,
+    scores.C/questions.length
+  ];
+  const colors = ['#E74C3C','#F39C12','#27AE60','#3498DB'];
+
+  // 画网格
+  for(let g=1;g<=4;g++){
+    const gr = r*g/4;
+    ctx.beginPath();
+    for(let i=0;i<4;i++){
+      const angle = (Math.PI*2*i/4) - Math.PI/2;
+      const x = cx + Math.cos(angle)*gr;
+      const y = cy + Math.sin(angle)*gr;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#e0e6ed';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    if(g<4){
+      ctx.fillStyle = 'rgba(0,0,0,0.02)';
+      ctx.fill();
+    }
+  }
+
+  // 画标签
+  ctx.font = '12px PingFang SC, sans-serif';
+  for(let i=0;i<4;i++){
+    const angle = (Math.PI*2*i/4) - Math.PI/2;
+    const lx = cx + Math.cos(angle)*(r+20);
+    const ly = cy + Math.sin(angle)*(r+20);
+    ctx.fillStyle = colors[i];
+    ctx.fontWeight = 'bold';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(labels[i], lx, ly);
+
+    // 分数
+    ctx.font = '11px PingFang SC, sans-serif';
+    ctx.fillStyle = colors[i];
+    ctx.fillText(Math.round(vals[i]*100)+'分', lx, ly+14);
+  }
+
+  // 数据区域
+  ctx.beginPath();
+  for(let i=0;i<4;i++){
+    const angle = (Math.PI*2*i/4) - Math.PI/2;
+    const x = cx + Math.cos(angle)*r*vals[i];
+    const y = cy + Math.sin(angle)*r*vals[i];
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(52,152,219,0.25)';
+  ctx.fill();
+  ctx.strokeStyle = '#3498DB';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // 数据点
+  for(let i=0;i<4;i++){
+    const angle = (Math.PI*2*i/4) - Math.PI/2;
+    const x = cx + Math.cos(angle)*r*vals[i];
+    const y = cy + Math.sin(angle)*r*vals[i];
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,Math.PI*2);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+// ============ 分享 & 保存 ============
+function shareResult(){
+  const text = `【我的DISC性格测评结果】\n类型：${document.querySelector('.result-type-name').textContent}\n${document.querySelector('.result-type-label').textContent}\n来测测你的性格类型吧！`;
+  if(navigator.share){
+    navigator.share({title:'DISC性格测评结果',text:text});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>alert('结果已复制到剪贴板，快去分享吧！'));
+  } else {
+    alert('请截图分享您的结果！');
+  }
+}
+function saveImage(){
+  const canvas = document.getElementById('radarChart');
+  if(canvas){
+    const link = document.createElement('a');
+    link.download = 'DISC性格测评结果.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  } else {
+    alert('请直接截图保存您的结果页面！');
+  }
+}
+function restartQuiz(){
+  document.getElementById('resultPage').style.display='none';
+  document.getElementById('coverPage').style.display='block';
+}
+
+// ============ 键盘快捷键 ============
+document.addEventListener('keydown',(e)=>{
+  if(document.getElementById('quizPage').style.display!=='block') return;
+  if(e.key>='1'&&e.key<='4') selectOpt(parseInt(e.key)-1);
+  if(e.key==='ArrowRight'||e.key==='Enter') nextQ();
+  if(e.key==='ArrowLeft') prevQ();
+});
+</script>
+</body>
+</html>
