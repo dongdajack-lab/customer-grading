@@ -37,8 +37,6 @@
   .quiz-card { background:white; border-radius:16px; padding:24px 20px; box-shadow:0 2px 16px rgba(0,0,0,0.08); min-height:380px; display:flex; flex-direction:column; }
   .q-title { font-size:16px; font-weight:700; color:#2C3E50; margin-bottom:4px; }
   .q-subtitle { font-size:13px; color:#aaa; margin-bottom:16px; }
-  .q-scenario { background:#f8f9fc; border-left:4px solid #3498DB; padding:14px 16px; border-radius:0 10px 10px 0; margin-bottom:18px; font-size:14px; line-height:1.8; color:#444; }
-  .q-scenario .hi { color:#3498DB; font-weight:600; }
   .options { display:flex; flex-direction:column; gap:10px; flex:1; }
   .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #e8ecf1; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.6; }
   .option:hover { border-color:#3498DB; background:#F0F7FF; }
@@ -82,7 +80,6 @@
   .dim-S .dim-label { color:#27AE60; }
   .dim-S .dim-bar-fill { background:linear-gradient(90deg,#27AE60,#1E8449); }
   .dim-C .dim-label { color:#3498DB; }
-  .dim-S .dim-bar-fill { background:linear-gradient(90deg,#27AE60,#1E8449); }
   .dim-C .dim-bar-fill { background:linear-gradient(90deg,#3498DB,#2980B9); }
 
   /* 详情卡片 */
@@ -193,7 +190,7 @@ const questions = [
     o:[
       { t:"主动发言，推动议题做出决策", dim:"D" },
       { t:"活跃气氛，鼓励每个人发表意见", dim:"I" },
-      { t:"认真倾听，确保 everyone 都有机会表达", dim:"S" },
+      { t:"认真倾听，确保每个人都能表达", dim:"S" },
       { t:"提前准备数据和事实，确保讨论有据可依", dim:"C" }
     ]
   },
@@ -389,7 +386,7 @@ const types = {
     name:"结果导向者",
     fullName:"D型 · 结果导向者",
     keywords:"征服、行动迅速、自我激励、独立",
-    desc:"控制、果断，相信自己有足够的能力来改变周围的环境和他人，好发号施令，大胆、好竞争、好冒险。在工作上有很强的成就动机，进取心强、好竞争，而且不顾一切努力实破自己的目标。",
+    desc:"控制、果断，相信自己有足够的能力来改变周围的环境和他人，好发号施令，大胆、好竞争、好冒险。在工作上有很强的成就动机，进取心强、好竞争，而且不顾一切努力实现自己的目标。",
     adv:["自信的决策者，在掌握较少信息的情况下能够快速决策","在高压环境下能够很好适应","有不服输的冲劲，可以承担大任","精力充沛、适应能力强"],
     dis:["攻击性太强，容易与人结怨","说的太多，不善于倾听","不喜欢表扬下属，激励方式往往不对头","有时显得过于自信和武断"],
     tips:["主动与他人分享信息和资源","多听听他人对实现目标的看法和建议","真诚地关心他人","学会谦虚，培养自己的耐性"]
@@ -452,7 +449,7 @@ const types = {
     name:"鼓舞者",
     fullName:"I型 · 鼓舞者",
     keywords:"表达、鼓舞、信任、开放、夸大、有魅力",
-    desc:"善于对事物进行解释和阐述，有时喜欢夸大自己的能力。倾向于以积极的态度看待周围的事物，喜欢表扬、称赞他人。交往广泛，喜欢群聚，很容易与他人建立友谊关系。很少有意地冒犯他人，喜欢营造宽松、和谐的人际氛围。",
+    desc:"善于对事物进行解释和阐述，有时喜欢夸大自己的能力。倾向于以积极的态度看待周围的事物，喜欢表扬、称赞他人。交往广泛，很容易与他人建立友谊关系。很少有意地冒犯他人，喜欢营造宽松、和谐的人际氛围。",
     adv:["表达能力往往比较出众","好的激励鼓舞者，是团队目标实现的积极推动者","包容、可信","人际关系网络比较宽泛"],
     dis:["计划性差，时间观念不强","考虑问题有时过于简单，太相信自己的直觉","可能容易情绪化","过多的做出承诺，往往不能兑现"],
     tips:["客观、理性一些","安排好自己的时间","工作要有一点紧迫感","学会管理自己的情绪；信守承诺、言行一致"]
@@ -619,7 +616,7 @@ const types = {
     dis:["决策速度可能较慢","过于追求完美可能影响效率","不善于应对模糊情境"],
     tips:["在信息不完整时也要学会决策","接受适度的不完美","提高决策效率"]
   }
-];
+};
 
 // ============ 状态 ============
 let currentQ = 0;
@@ -631,7 +628,7 @@ function startQuiz(){
   document.getElementById('coverPage').style.display='none';
   document.getElementById('quizPage').style.display='block';
   currentQ = 0;
-  answers.fill(null);
+  answers = new Array(questions.length).fill(null);
   scores = { D:0, I:0, S:0, C:0 };
   renderQuestion();
 }
@@ -639,28 +636,30 @@ function startQuiz(){
 // ============ 渲染题目 ============
 function renderQuestion(){
   const q = questions[currentQ];
-  document.getElementById('qNum').textContent = `第 ${currentQ+1} 题`;
-  document.getElementById('qTotal').textContent = `共 ${questions.length} 题`;
-  document.getElementById('progressFill').style.width = `${((currentQ)/questions.length)*100}%`;
+  document.getElementById('qNum').textContent = '第 ' + (currentQ+1) + ' 题';
+  document.getElementById('qTotal').textContent = '共 ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ)/questions.length)*100 + '%';
 
   const card = document.getElementById('questionCard');
   const letters = ['A','B','C','D'];
   const dimLabels = { D:'支配(D)', I:'影响(I)', S:'稳健(S)', C:'服从(C)' };
-  card.innerHTML = `
-    <div class="q-title">${q.q}</div>
-    <div class="q-subtitle">请选择最符合你平时行为的选项</div>
-    <div class="options">
-      ${q.o.map((o,i)=>`
-        <div class="option ${answers[currentQ]===i?'selected':''}" onclick="selectOpt(${i})">
-          <div class="opt-letter">${letters[i]}</div>
-          <div class="opt-text">
-            ${o.t}
-            <div class="opt-dim">${dimLabels[o.dim]}</div>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `;
+
+  let optionsHtml = '';
+  for(let i=0; i<q.o.length; i++){
+    const o = q.o[i];
+    const isSelected = answers[currentQ] === i;
+    optionsHtml += '<div class="option ' + (isSelected?'selected':'') + '" onclick="selectOpt(' + i + ')">' +
+      '<div class="opt-letter">' + letters[i] + '</div>' +
+      '<div class="opt-text">' +
+        o.t +
+        '<div class="opt-dim">' + dimLabels[o.dim] + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  card.innerHTML = '<div class="q-title">' + q.q + '</div>' +
+    '<div class="q-subtitle">请选择最符合你平时行为的选项</div>' +
+    '<div class="options">' + optionsHtml + '</div>';
 
   document.getElementById('btnPrev').disabled = currentQ===0;
   const isLast = currentQ===questions.length-1;
@@ -692,11 +691,16 @@ function nextQ(){
 function showAnswerSheet(){
   const grid = document.getElementById('answerGrid');
   grid.innerHTML = '';
-  for(let i=0;i<questions.length;i++){
+  for(let i=0; i<questions.length; i++){
     const cell = document.createElement('div');
-    cell.className = 'answer-cell' + (answers[i]!==null?' answered':'') + (i===currentQ?' current':'');
+    let cls = 'answer-cell';
+    if(answers[i] !== null) cls += ' answered';
+    if(i === currentQ) cls += ' current';
+    cell.className = cls;
     cell.textContent = i+1;
-    cell.onclick = ()=>{ currentQ=i; renderQuestion(); closeAnswerSheet(); };
+    cell.onclick = (function(idx){
+      return function(){ currentQ=idx; renderQuestion(); closeAnswerSheet(); };
+    })(i);
     grid.appendChild(cell);
   }
   document.getElementById('answerSheetModal').classList.add('show');
@@ -708,48 +712,39 @@ function closeAnswerSheet(){
 // ============ 计算得分 & 匹配类型 ============
 function calcScores(){
   scores = { D:0, I:0, S:0, C:0 };
-  answers.forEach((aIdx,qIdx)=>{
-    if(aIdx!==null){
-      const dim = questions[qIdx].o[aIdx].dim;
+  for(let i=0; i<questions.length; i++){
+    if(answers[i] !== null){
+      const dim = questions[i].o[answers[i]].dim;
       scores[dim]++;
     }
-  });
+  }
 }
 
 function matchType(){
-  const max = Math.max(scores.D, scores.I, scores.S, scores.C);
-  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-  const primary = sorted[0][0];   // 最高分维度
-  const secondary = sorted[1][0]; // 次高分维度
+  const sorted = Object.entries(scores).sort(function(a,b){ return b[1]-a[1]; });
+  const primary = sorted[0][0];
+  const secondary = sorted[1][0];
 
   // 尝试匹配双高类型
-  const combo = primary+secondary;
-  const comboMap = {
-    'DI':'DI','ID':'DI',
-    'DS':'DS','SD':'DS',
-    'DC':'DC','CD':'DC',
-    'IS':'IS','SI':'IS',
-    'IC':'IC','CI':'IC',
-    'SC':'SC','CS':'SC',
-    'IS':'IS','SI':'IS',
-    'DIS': primary==='D'&&sorted[1][0]==='I'&&sorted[2][0]==='S'?'DIS':null,
-  };
-
-  // 优先匹配具体类型
-  if(types[primary+secondary]) return types[primary+secondary];
-  if(types[secondary+primary]) return types[secondary+primary];
-
-  // 单维度高分
-  if(sorted[0][1] >= scores[secondary]+4){
-    return types[primary] || types[primary+'_high'];
-  }
+  const combo1 = primary + secondary;
+  const combo2 = secondary + primary;
+  if(types[combo1]) return types[combo1];
+  if(types[combo2]) return types[combo2];
 
   // 三维度组合
-  const three = primary+secondary+sorted[2][0];
+  const third = sorted[2][0];
+  const three = primary + secondary + third;
   if(types[three]) return types[three];
 
+  // 单维度高分（领先4分以上）
+  if(sorted[0][1] >= sorted[1][1] + 4){
+    if(types[primary]) return types[primary];
+    if(types[primary+'_high']) return types[primary+'_high'];
+  }
+
   // 默认返回主维度类型
-  return types[primary] || types[primary+'_high'];
+  if(types[primary]) return types[primary];
+  return types[primary+'_high'];
 }
 
 // ============ 完成测评 ============
@@ -762,100 +757,91 @@ function finishQuiz(){
   rp.style.display='block';
 
   const maxScore = questions.length;
-  const pctD = Math.round(scores.D/maxScore*100);
-  const pctI = Math.round(scores.I/maxScore*100);
-  const pctS = Math.round(scores.S/maxScore*100);
-  const pctC = Math.round(scores.C/maxScore*100);
 
-  rp.innerHTML = `
-    <div class="result-hero">
-      <div class="result-type-badge">🧠 你的DISC类型</div>
-      <div class="result-type-name">${type.name}</div>
-      <div class="result-type-label">${type.fullName}</div>
-      <div style="margin-top:16px;font-size:13px;opacity:0.9;">人格关键词：${type.keywords}</div>
-    </div>
+  let html = '';
+  html += '<div class="result-hero">' +
+    '<div class="result-type-badge">🧠 你的DISC类型</div>' +
+    '<div class="result-type-name">' + type.name + '</div>' +
+    '<div class="result-type-label">' + type.fullName + '</div>' +
+    '<div style="margin-top:16px;font-size:13px;opacity:0.9;">人格关键词：' + type.keywords + '</div>' +
+  '</div>';
 
-    <div class="radar-wrap">
-      <h3>📊 四维度雷达图</h3>
-      <canvas id="radarChart" width="280" height="280"></canvas>
-    </div>
+  html += '<div class="radar-wrap">' +
+    '<h3>📊 四维度雷达图</h3>' +
+    '<canvas id="radarChart" width="280" height="280"></canvas>' +
+  '</div>';
 
-    <div class="dim-scores">
-      <h3>📈 各维度得分</h3>
-      <div class="dim-row dim-D">
-        <div class="dim-label">D</div>
-        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barD"></div></div>
-        <div class="dim-score" style="color:#E74C3C">${scores.D}分</div>
-      </div>
-      <div class="dim-row dim-I">
-        <div class="dim-label">I</div>
-        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barI"></div></div>
-        <div class="dim-score" style="color:#F39C12">${scores.I}分</div>
-      </div>
-      <div class="dim-row dim-S">
-        <div class="dim-label">S</div>
-        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barS"></div></div>
-        <div class="dim-score" style="color:#27AE60">${scores.S}分</div>
-      </div>
-      <div class="dim-row dim-C">
-        <div class="dim-label">C</div>
-        <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barC"></div></div>
-        <div class="dim-score" style="color:#3498DB">${scores.C}分</div>
-      </div>
-    </div>
+  html += '<div class="dim-scores">' +
+    '<h3>📈 各维度得分</h3>' +
+    '<div class="dim-row dim-D">' +
+      '<div class="dim-label">D</div>' +
+      '<div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barD"></div></div>' +
+      '<div class="dim-score" style="color:#E74C3C">' + scores.D + '分</div>' +
+    '</div>' +
+    '<div class="dim-row dim-I">' +
+      '<div class="dim-label">I</div>' +
+      '<div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barI"></div></div>' +
+      '<div class="dim-score" style="color:#F39C12">' + scores.I + '分</div>' +
+    '</div>' +
+    '<div class="dim-row dim-S">' +
+      '<div class="dim-label">S</div>' +
+      '<div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barS"></div></div>' +
+      '<div class="dim-score" style="color:#27AE60">' + scores.S + '分</div>' +
+    '</div>' +
+    '<div class="dim-row dim-C">' +
+      '<div class="dim-label">C</div>' +
+      '<div class="dim-bar-bg"><div class="dim-bar-fill" style="width:0%" id="barC"></div></div>' +
+      '<div class="dim-score" style="color:#3498DB">' + scores.C + '分</div>' +
+    '</div>' +
+  '</div>';
 
-    <div class="detail-card">
-      <h3><span class="icon">📋</span> 行为描述</h3>
-      <div class="detail-section">
-        <p>${type.desc}</p>
-      </div>
-    </div>
+  html += '<div class="detail-card">' +
+    '<h3><span class="icon">📋</span> 行为描述</h3>' +
+    '<div class="detail-section"><p>' + type.desc + '</p></div>' +
+  '</div>';
 
-    <div class="detail-card">
-      <h3><span class="icon">✅</span> 你的优势</h3>
-      <div class="tag-list">
-        ${type.adv.map(a=>`<span class="tag tag-adv">${a}</span>`).join('')}
-      </div>
-    </div>
+  html += '<div class="detail-card">' +
+    '<h3><span class="icon">✅</span> 你的优势</h3>' +
+    '<div class="tag-list">' +
+      type.adv.map(function(a){ return '<span class="tag tag-adv">' + a + '</span>'; }).join('') +
+    '</div></div>';
 
-    <div class="detail-card">
-      <h3><span class="icon">⚠️</span> 需要注意的劣势</h3>
-      <div class="tag-list">
-        ${type.dis.map(d=>`<span class="tag tag-dis">${d}</span>`).join('')}
-      </div>
-    </div>
+  html += '<div class="detail-card">' +
+    '<h3><span class="icon">⚠️</span> 需要注意的劣势</h3>' +
+    '<div class="tag-list">' +
+      type.dis.map(function(d){ return '<span class="tag tag-dis">' + d + '</span>'; }).join('') +
+    '</div></div>';
 
-    <div class="detail-card">
-      <h3><span class="icon">💡</span> 提升建议</h3>
-      <div class="tag-list">
-        ${type.tips.map(t=>`<span class="tag tag-tip">${t}</span>`).join('')}
-      </div>
-    </div>
+  html += '<div class="detail-card">' +
+    '<h3><span class="icon">💡</span> 提升建议</h3>' +
+    '<div class="tag-list">' +
+      type.tips.map(function(t){ return '<span class="tag tag-tip">' + t + '</span>'; }).join('') +
+    '</div></div>';
 
-    <div class="detail-card">
-      <h3><span class="icon">🎓</span> 大董老师点评</h3>
-      <div class="detail-section">
-        <p>作为销售从业者，了解自己的DISC性格类型有助于你更好地发挥优势、避开盲区。${type.name}类型的你在销售过程中，建议重点发挥<b>${type.adv[0]}</b>这一核心优势，同时有意识地改善<b>${type.dis[0]}</b>这一潜在短板。记住：没有最好的性格，只有最懂得发挥自己优势的人！</p>
-      </div>
-    </div>
+  html += '<div class="detail-card">' +
+    '<h3><span class="icon">🎓</span> 大董老师点评</h3>' +
+    '<div class="detail-section"><p>作为销售从业者，了解自己的DISC性格类型有助于你更好地发挥优势、避开盲区。' +
+    type.name + '类型的你在销售过程中，建议重点发挥<b>' + type.adv[0] + '</b>这一核心优势，同时有意识地改善<b>' + type.dis[0] + '</b>这一潜在短板。记住：没有最好的性格，只有最懂得发挥自己优势的人！</p></div>' +
+  '</div>';
 
-    <div class="share-row">
-      <button class="share-btn" onclick="shareResult()">📤 分享结果</button>
-      <button class="share-btn" onclick="saveImage()">📷 保存图片</button>
-    </div>
-    <button class="restart-btn-full" onclick="restartQuiz()">🔄 重新测评</button>
-  `;
+  html += '<div class="share-row">' +
+    '<button class="share-btn" onclick="shareResult()">📤 分享结果</button>' +
+    '<button class="share-btn" onclick="saveImage()">📷 保存图片</button>' +
+    '</div>' +
+    '<button class="restart-btn-full" onclick="restartQuiz()">🔄 重新测评</button>';
+
+  rp.innerHTML = html;
 
   // 动画：进度条
-  setTimeout(()=>{
-    document.getElementById('barD').style.width = `${(scores.D/questions.length)*100}%`;
-    document.getElementById('barI').style.width = `${(scores.I/questions.length)*100}%`;
-    document.getElementById('barS').style.width = `${(scores.S/questions.length)*100}%`;
-    document.getElementById('barC').style.width = `${(scores.C/questions.length)*100}%`;
-  },100);
+  setTimeout(function(){
+    document.getElementById('barD').style.width = (scores.D/questions.length)*100 + '%';
+    document.getElementById('barI').style.width = (scores.I/questions.length)*100 + '%';
+    document.getElementById('barS').style.width = (scores.S/questions.length)*100 + '%';
+    document.getElementById('barC').style.width = (scores.C/questions.length)*100 + '%';
+  }, 100);
 
   // 画雷达图
-  setTimeout(drawRadar,200);
+  setTimeout(drawRadar, 200);
 }
 
 // ============ 雷达图 ============
@@ -879,10 +865,10 @@ function drawRadar(){
   const colors = ['#E74C3C','#F39C12','#27AE60','#3498DB'];
 
   // 画网格
-  for(let g=1;g<=4;g++){
+  for(let g=1; g<=4; g++){
     const gr = r*g/4;
     ctx.beginPath();
-    for(let i=0;i<4;i++){
+    for(let i=0; i<4; i++){
       const angle = (Math.PI*2*i/4) - Math.PI/2;
       const x = cx + Math.cos(angle)*gr;
       const y = cy + Math.sin(angle)*gr;
@@ -900,7 +886,7 @@ function drawRadar(){
 
   // 画标签
   ctx.font = '12px PingFang SC, sans-serif';
-  for(let i=0;i<4;i++){
+  for(let i=0; i<4; i++){
     const angle = (Math.PI*2*i/4) - Math.PI/2;
     const lx = cx + Math.cos(angle)*(r+20);
     const ly = cy + Math.sin(angle)*(r+20);
@@ -913,12 +899,12 @@ function drawRadar(){
     // 分数
     ctx.font = '11px PingFang SC, sans-serif';
     ctx.fillStyle = colors[i];
-    ctx.fillText(Math.round(vals[i]*100)+'分', lx, ly+14);
+    ctx.fillText(Math.round(vals[i]*100) + '分', lx, ly+14);
   }
 
   // 数据区域
   ctx.beginPath();
-  for(let i=0;i<4;i++){
+  for(let i=0; i<4; i++){
     const angle = (Math.PI*2*i/4) - Math.PI/2;
     const x = cx + Math.cos(angle)*r*vals[i];
     const y = cy + Math.sin(angle)*r*vals[i];
@@ -932,7 +918,7 @@ function drawRadar(){
   ctx.stroke();
 
   // 数据点
-  for(let i=0;i<4;i++){
+  for(let i=0; i<4; i++){
     const angle = (Math.PI*2*i/4) - Math.PI/2;
     const x = cx + Math.cos(angle)*r*vals[i];
     const y = cy + Math.sin(angle)*r*vals[i];
@@ -948,11 +934,15 @@ function drawRadar(){
 
 // ============ 分享 & 保存 ============
 function shareResult(){
-  const text = `【我的DISC性格测评结果】\n类型：${document.querySelector('.result-type-name').textContent}\n${document.querySelector('.result-type-label').textContent}\n来测测你的性格类型吧！`;
+  const typeName = document.querySelector('.result-type-name');
+  const typeLabel = document.querySelector('.result-type-label');
+  const text = '【我的DISC性格测评结果】\n类型：' +
+    (typeName ? typeName.textContent : '') + '\n' +
+    (typeLabel ? typeLabel.textContent : '') + '\n来测测你的性格类型吧！';
   if(navigator.share){
     navigator.share({title:'DISC性格测评结果',text:text});
   } else if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(()=>alert('结果已复制到剪贴板，快去分享吧！'));
+    navigator.clipboard.writeText(text).then(function(){ alert('结果已复制到剪贴板，快去分享吧！'); });
   } else {
     alert('请截图分享您的结果！');
   }
@@ -974,11 +964,11 @@ function restartQuiz(){
 }
 
 // ============ 键盘快捷键 ============
-document.addEventListener('keydown',(e)=>{
-  if(document.getElementById('quizPage').style.display!=='block') return;
-  if(e.key>='1'&&e.key<='4') selectOpt(parseInt(e.key)-1);
-  if(e.key==='ArrowRight'||e.key==='Enter') nextQ();
-  if(e.key==='ArrowLeft') prevQ();
+document.addEventListener('keydown', function(e){
+  if(document.getElementById('quizPage').style.display !== 'block') return;
+  if(e.key >= '1' && e.key <= '4') selectOpt(parseInt(e.key)-1);
+  if(e.key === 'ArrowRight' || e.key === 'Enter') nextQ();
+  if(e.key === 'ArrowLeft') prevQ();
 });
 </script>
 </body>
