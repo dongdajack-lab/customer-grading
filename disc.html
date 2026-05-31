@@ -10,10 +10,7 @@
   header { background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; padding:20px 24px; text-align:center; position:relative; }
   header h1 { font-size:22px; font-weight:700; }
   header p { font-size:13px; opacity:0.8; margin-top:4px; }
-
   .container { max-width:640px; margin:0 auto; padding:20px 16px 40px; }
-
-  /* 封面页 */
   #coverPage { text-align:center; padding:20px 0; }
   #coverPage .cover-icon { font-size:80px; margin:20px 0 10px; }
   #coverPage h2 { font-size:24px; color:#2C3E50; margin-bottom:8px; }
@@ -26,8 +23,6 @@
   .start-btn { display:block; width:100%; padding:16px; background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; margin-top:20px; letter-spacing:2px; }
   .start-btn:active { transform:scale(0.98); }
   .cover-note { font-size:12px; color:#aaa; margin-top:16px; line-height:1.6; }
-
-  /* 答题页 */
   #quizPage { display:none; }
   .quiz-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
   .quiz-header .q-num { font-size:14px; color:#3498DB; font-weight:700; }
@@ -52,8 +47,6 @@
   .btn-prev:disabled { opacity:0.4; cursor:not-allowed; }
   .btn-next { background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; }
   .btn-next:disabled { opacity:0.4; cursor:not-allowed; }
-
-  /* 结果页 */
   #resultPage { display:none; }
   .result-hero { background:linear-gradient(135deg,#2C3E50,#3498DB); border-radius:20px; padding:32px 24px; text-align:center; color:white; margin-bottom:20px; position:relative; overflow:hidden; }
   .result-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:120px; height:120px; background:rgba(255,255,255,0.08); border-radius:50%; }
@@ -63,8 +56,6 @@
   .radar-wrap { background:white; border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:center; }
   .radar-wrap h3 { font-size:15px; color:#2C3E50; margin-bottom:12px; }
   .radar-wrap canvas { max-width:280px; }
-
-  /* 维度得分条 */
   .dim-scores { background:white; border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
   .dim-scores h3 { font-size:15px; color:#2C3E50; margin-bottom:16px; }
   .dim-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
@@ -81,8 +72,6 @@
   .dim-S .dim-bar-fill { background:linear-gradient(90deg,#27AE60,#1E8449); }
   .dim-C .dim-label { color:#3498DB; }
   .dim-C .dim-bar-fill { background:linear-gradient(90deg,#3498DB,#2980B9); }
-
-  /* 详情卡片 */
   .detail-card { background:white; border-radius:16px; padding:24px 20px; margin-bottom:16px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:left; }
   .detail-card h3 { font-size:16px; color:#2C3E50; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
   .detail-card h3 .icon { font-size:20px; }
@@ -95,19 +84,15 @@
   .tag-adv { background:#E8F8F5; color:#1ABC9C; }
   .tag-dis { background:#FDEDEC; color:#E74C3C; }
   .tag-tip { background:#FEF9E7; color:#F39C12; }
-
-  /* 分享按钮 */
   .share-row { display:flex; gap:10px; margin-top:20px; }
   .share-btn { flex:1; padding:12px; border:2px solid #e0e6ed; border-radius:10px; background:white; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s; }
   .share-btn:active { background:#f0f2f5; }
   .restart-btn-full { display:block; width:100%; padding:15px; background:linear-gradient(135deg,#2C3E50,#3498DB); color:white; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; margin-top:14px; letter-spacing:1px; }
-
-  /* 答题卡弹窗 */
   .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100; align-items:center; justify-content:center; }
   .modal-overlay.show { display:flex; }
   .modal-box { background:white; border-radius:20px; padding:24px; width:90%; max-width:400px; max-height:80vh; overflow-y:auto; }
   .modal-box h3 { font-size:16px; color:#2C3E50; margin-bottom:16px; text-align:center; }
-  .answer-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+  .answer-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
   .answer-cell { width:100%; aspect-ratio:1; border-radius:8px; border:2px solid #e0e6ed; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.2s; }
   .answer-cell.answered { border-color:#3498DB; background:#F0F7FF; color:#3498DB; }
   .answer-cell.current { border-color:#2C3E50; background:#2C3E50; color:white; }
@@ -127,17 +112,17 @@
   <div id="coverPage">
     <div class="cover-icon">🧠</div>
     <h2>DISC性格测评</h2>
-    <p class="subtitle">基于William Moulton Marston理论 · 25种组合类型分析</p>
+    <p class="subtitle">基于William Moulton Marston理论 · 老虎🐯孔雀🦚考拉🐨猫头鹰🦉</p>
     <div class="feature-grid">
       <div class="feature-item">
         <div class="fi-icon">📋</div>
-        <div class="fi-label">24道科学题目</div>
-        <div class="fi-desc">基于DISC四维模型</div>
+        <div class="fi-label">20道科学题目</div>
+        <div class="fi-desc">总分固定20分，科学公平</div>
       </div>
       <div class="feature-item">
         <div class="fi-icon">🎯</div>
-        <div class="fi-label">25种组合类型</div>
-        <div class="fi-desc">精准匹配你的性格</div>
+        <div class="fi-label">多种组合类型</div>
+        <div class="fi-desc">单一/组合/变色龙型</div>
       </div>
       <div class="feature-item">
         <div class="fi-icon">📊</div>
@@ -147,18 +132,18 @@
       <div class="feature-item">
         <div class="fi-icon">💡</div>
         <div class="fi-label">优劣势+建议</div>
-        <div class="fi-desc"> actionable发展建议</div>
+        <div class="fi-desc">可落地的发展建议</div>
       </div>
     </div>
     <button class="start-btn" onclick="startQuiz()">开始测评 ✍️</button>
-    <p class="cover-note">本测评基于DISC行为风格理论，约需5-8分钟<br>请根据平时最自然的状态作答，无标准答案</p>
+    <p class="cover-note">本测评基于DISC行为风格理论，约需3-5分钟<br>每题只选一项，凭第一反应作答，无标准答案</p>
   </div>
 
   <!-- 答题页 -->
   <div id="quizPage">
     <div class="quiz-header">
       <span class="q-num" id="qNum">第 1 题</span>
-      <span class="q-total" id="qTotal">共 24 题</span>
+      <span class="q-total" id="qTotal">共 20 题</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <div class="quiz-card" id="questionCard"></div>
@@ -184,17 +169,17 @@
 </div>
 
 <script>
-// ============ 题目数据 ============
+// ============ 题目数据（20题，A=D B=I C=S D=C，总分=20）============
 const questions = [
-  { q:"在团队会议上，你通常会：",
+  { q:"1. 在团队讨论中，我通常：",
     o:[
-      { t:"主动发言，推动议题做出决策", dim:"D" },
-      { t:"活跃气氛，鼓励每个人发表意见", dim:"I" },
-      { t:"认真倾听，确保每个人都能表达", dim:"S" },
-      { t:"提前准备数据和事实，确保讨论有据可依", dim:"C" }
+      { t:"主导话题，引导大家按我的思路走", dim:"D" },
+      { t:"活跃气氛，讲笑话或故事让大家都参与", dim:"I" },
+      { t:"倾听为主，不轻易发表意见", dim:"S" },
+      { t:"记录要点，关注逻辑是否自洽", dim:"C" }
     ]
   },
-  { q:"面对一个紧迫的项目截止日期，你的第一反应是：",
+  { q:"2. 面对一个紧迫的项目截止日期，你的第一反应是：",
     o:[
       { t:"立即分配任务，明确要求，紧盯结果", dim:"D" },
       { t:"召集团队开会，激发大家的热情和斗志", dim:"I" },
@@ -202,7 +187,7 @@ const questions = [
       { t:"仔细检查每个环节，确保质量不出问题", dim:"C" }
     ]
   },
-  { q:"你如何描述自己的工作节奏？",
+  { q:"3. 你如何描述自己的工作节奏？",
     o:[
       { t:"快节奏，喜欢同时推进多件事", dim:"D" },
       { t:"灵活节奏，根据状态和灵感调整", dim:"I" },
@@ -210,7 +195,7 @@ const questions = [
       { t:"深思熟虑节奏，不急于求成", dim:"C" }
     ]
   },
-  { q:"当团队成员工作表现不佳时，你会：",
+  { q:"4. 当团队成员工作表现不佳时，你会：",
     o:[
       { t:"直接指出问题，要求立即改进", dim:"D" },
       { t:"先肯定优点，再鼓励其提升", dim:"I" },
@@ -218,7 +203,7 @@ const questions = [
       { t:"用数据和事实说明差距，制定改进计划", dim:"C" }
     ]
   },
-  { q:"你更喜欢的工作环境是：",
+  { q:"5. 你更喜欢的工作环境是：",
     o:[
       { t:"有挑战、有竞争、能快速看到成果", dim:"D" },
       { t:"开放、活跃、人际关系融洽", dim:"I" },
@@ -226,7 +211,7 @@ const questions = [
       { t:"专业、精准、标准明确", dim:"C" }
     ]
   },
-  { q:"做决策时，你更依赖：",
+  { q:"6. 做决策时，你更依赖：",
     o:[
       { t:"直觉和全局判断，快速拍板", dim:"D" },
       { t:"团队意见和氛围，寻求共识", dim:"I" },
@@ -234,7 +219,7 @@ const questions = [
       { t:"详尽分析和数据验证", dim:"C" }
     ]
   },
-  { q:"你认为自己在人际沟通中最大的特点是：",
+  { q:"7. 你认为自己在人际沟通中最大的特点是：",
     o:[
       { t:"直接、高效，直奔主题", dim:"D" },
       { t:"热情、善于表达，感染力强", dim:"I" },
@@ -242,7 +227,7 @@ const questions = [
       { t:"准确、逻辑清晰，注重事实", dim:"C" }
     ]
   },
-  { q:"面对变化和新挑战，你的态度是：",
+  { q:"8. 面对变化和新挑战，你的态度是：",
     o:[
       { t:"兴奋，主动寻求变革和突破", dim:"D" },
       { t:"乐观，视之为学习和展示的机会", dim:"I" },
@@ -250,15 +235,7 @@ const questions = [
       { t:"理性，先评估风险和可行性", dim:"C" }
     ]
   },
-  { q:"你最不能容忍的团队成员类型是：",
-    o:[
-      { t:"优柔寡断、拖拖拉拉的人", dim:"D" },
-      { t:"沉闷无趣、不懂合作的人", dim:"I" },
-      { t:"自私自利、不顾团队的人", dim:"S" },
-      { t:"粗心大意、不注重质量的人", dim:"C" }
-    ]
-  },
-  { q:"在销售过程中，你的风格更接近：",
+  { q:"9. 在销售过程中，你的风格更接近：",
     o:[
       { t:"强势推进，快速达成成交", dim:"D" },
       { t:"建立关系，用热情感染客户", dim:"I" },
@@ -266,7 +243,7 @@ const questions = [
       { t:"专业分析，用方案和数据说服", dim:"C" }
     ]
   },
-  { q:"当遇到客户强烈反对时，你会：",
+  { q:"10. 当遇到客户强烈反对时，你会：",
     o:[
       { t:"坚持立场，据理力争，说服对方", dim:"D" },
       { t:"先缓解情绪，再找共同话题", dim:"I" },
@@ -274,7 +251,7 @@ const questions = [
       { t:"分析反对原因，提供精准解决方案", dim:"C" }
     ]
   },
-  { q:"你如何看待规则和流程？",
+  { q:"11. 你如何看待规则和流程？",
     o:[
       { t:"规则是为目标服务的，必要时可以灵活", dim:"D" },
       { t:"规则重要，但人际关系更重要", dim:"I" },
@@ -282,7 +259,7 @@ const questions = [
       { t:"规则必须严谨，每个细节都要明确", dim:"C" }
     ]
   },
-  { q:"你给同事留下的最深印象是：",
+  { q:"12. 你给同事留下的最深印象是：",
     o:[
       { t:"能干、有魄力、说一不二", dim:"D" },
       { t:"有趣、有活力、受欢迎", dim:"I" },
@@ -290,7 +267,7 @@ const questions = [
       { t:"专业、严谨、值得信赖", dim:"C" }
     ]
   },
-  { q:"工作上你最看重的是：",
+  { q:"13. 工作上你最看重的是：",
     o:[
       { t:"成果和业绩，能否达成目标", dim:"D" },
       { t:"认可和影响力，能否被大家肯定", dim:"I" },
@@ -298,15 +275,7 @@ const questions = [
       { t:"质量和精准，能否做到最好", dim:"C" }
     ]
   },
-  { q:"你如何处理工作压力？",
-    o:[
-      { t:"把压力当动力，越压越勇", dim:"D" },
-      { t:"找人倾诉，用积极心态化解", dim:"I" },
-      { t:"默默承受，不轻易表露", dim:"S" },
-      { t:"分析问题根源，系统性解决", dim:"C" }
-    ]
-  },
-  { q:"在团队协作中，你通常扮演的角色是：",
+  { q:"14. 在团队协作中，你通常扮演的角色是：",
     o:[
       { t:"领导者，指明方向，推动执行", dim:"D" },
       { t:"鼓手，调动气氛，促进沟通", dim:"I" },
@@ -314,15 +283,7 @@ const questions = [
       { t:"参谋者，提供分析和专业建议", dim:"C" }
     ]
   },
-  { q:"你对「完美」的理解是：",
-    o:[
-      { t:"完美就是赢，结果说话", dim:"D" },
-      { t:"完美就是大家都满意", dim:"I" },
-      { t:"完美就是没有遗漏和冲突", dim:"S" },
-      { t:"完美就是每个细节都精准到位", dim:"C" }
-    ]
-  },
-  { q:"面对一个你不熟悉的领域，你会：",
+  { q:"15. 面对一个你不熟悉的领域，你会：",
     o:[
       { t:"大胆尝试，边做边学", dim:"D" },
       { t:"找懂的人请教，快速入门", dim:"I" },
@@ -330,7 +291,7 @@ const questions = [
       { t:"系统学习，掌握理论再实践", dim:"C" }
     ]
   },
-  { q:"你最希望得到的激励方式是：",
+  { q:"16. 你最希望得到的激励方式是：",
     o:[
       { t:"给我更大的挑战和权力", dim:"D" },
       { t:"公开表扬，让我有面子", dim:"I" },
@@ -338,7 +299,7 @@ const questions = [
       { t:"用事实证明我的专业能力", dim:"C" }
     ]
   },
-  { q:"你认为自己最大的优势是：",
+  { q:"17. 你认为自己最大的优势是：",
     o:[
       { t:"决策力和执行力", dim:"D" },
       { t:"沟通力和影响力", dim:"I" },
@@ -346,7 +307,7 @@ const questions = [
       { t:"分析力和专业力", dim:"C" }
     ]
   },
-  { q:"当团队目标和个人目标冲突时，你会：",
+  { q:"18. 当团队目标和个人目标冲突时，你会：",
     o:[
       { t:"努力说服团队接受我的方案", dim:"D" },
       { t:"寻求平衡，让大家都能接受", dim:"I" },
@@ -354,7 +315,7 @@ const questions = [
       { t:"用数据和逻辑论证哪种方案更优", dim:"C" }
     ]
   },
-  { q:"你给客户做方案时，更倾向于：",
+  { q:"19. 你给客户做方案时，更倾向于：",
     o:[
       { t:"简洁有力，突出核心价值和ROI", dim:"D" },
       { t:"生动有趣，讲故事让客户产生共鸣", dim:"I" },
@@ -362,15 +323,7 @@ const questions = [
       { t:"严谨详实，每个数据都有依据", dim:"C" }
     ]
   },
-  { q:"你认为销售最重要的能力是：",
-    o:[
-      { t:"敢闯敢拼，不怕被拒绝", dim:"D" },
-      { t:"能说会道，建立广泛人脉", dim:"I" },
-      { t:"持之以恒，长期经营关系", dim:"S" },
-      { t:"专业扎实，成为行业专家", dim:"C" }
-    ]
-  },
-  { q:"如果用一种动物形容你的工作风格，你选：",
+  { q:"20. 如果用一种动物形容你的工作风格，你选：",
     o:[
       { t:"老虎 — 强势、目标导向", dim:"D" },
       { t:"孔雀 — 热情、善于表现", dim:"I" },
@@ -380,11 +333,20 @@ const questions = [
   }
 ];
 
-// ============ 类型数据（基于PDF） ============
+// ============ 类型数据（含变色龙型，共26种）============
 const types = {
+  "CHAMELEON": {
+    name:"变色龙型",
+    fullName:"变色龙型 · 灵活适应者",
+    keywords:"灵活、适应力强、善于调整、因人而异",
+    desc:"你的D/I/S/C四个维度得分非常均衡，能够根据不同的人和场景灵活调整自己的行为风格。你善于适应环境变化，在不同场合都能表现得体，是天生的协调者和外交家。在销售中，你能快速识别客户的性格类型并调整沟通方式。",
+    adv:["极强的环境适应能力","善于与不同类型的人打交道","灵活变通，不固执己见","在复杂人际环境中游刃有余"],
+    dis:["可能因为过于灵活而缺乏鲜明个性","有时难以被人记住独特风格","在需要强势决策时可能显得犹豫","容易随波逐流，缺乏主见"],
+    tips:["在适应环境的同时，也要培养自己的鲜明特色","学会在关键时刻果断表达自己的立场","找到自己最核心的竞争优势并强化它"]
+  },
   "D": {
     name:"结果导向者",
-    fullName:"D型 · 结果导向者",
+    fullName:"D型 · 结果导向者（老虎型）",
     keywords:"征服、行动迅速、自我激励、独立",
     desc:"控制、果断，相信自己有足够的能力来改变周围的环境和他人，好发号施令，大胆、好竞争、好冒险。在工作上有很强的成就动机，进取心强、好竞争，而且不顾一切努力实现自己的目标。",
     adv:["自信的决策者，在掌握较少信息的情况下能够快速决策","在高压环境下能够很好适应","有不服输的冲劲，可以承担大任","精力充沛、适应能力强"],
@@ -436,18 +398,9 @@ const types = {
     dis:["缺乏沟通影响力","一旦失败对自己的打击会非常大","容易厌倦日常重复性的工作","独来独往、合作意识不强"],
     tips:["待人热情一些","与他人沟通时，注意讲究一些沟通的策略","加强团队成员之间的协作","学会关心、激励和鼓舞他人"]
   },
-  "IDC": {
-    name:"评价者",
-    fullName:"IDC型 · 评价者",
-    keywords:"自信、真诚、热情、思想丰富",
-    desc:"执行力强，针对目标的实现，不仅能够提供一些新的想法和建议，而且能够不断说服、督促和激励他人把工作完成。自信但不强势，经常替他人考虑，而不是不顾他人需要而发号施令。心态积极，看问题倾向于看到好的、积极的一面。",
-    adv:["看问题积极，能够稳定局势，给他人以信心","能够把自己与团队结合一起，推进团队目标的实现","可信、沟通影响力强"],
-    dis:["在压力下会变得烦躁不安，缺乏耐心","不敢面对失败","尽管能够接受他人的反对意见，但内心不服"],
-    tips:["对于周围他人的反对意见，要客观分析，学会接受","学会平静自己的心情，切忌急躁","做事要有坚持性，不可半途而废","凡事对事不对人，不要意气用事"]
-  },
   "I": {
     name:"鼓舞者",
-    fullName:"I型 · 鼓舞者",
+    fullName:"I型 · 鼓舞者（孔雀型）",
     keywords:"表达、鼓舞、信任、开放、夸大、有魅力",
     desc:"善于对事物进行解释和阐述，有时喜欢夸大自己的能力。倾向于以积极的态度看待周围的事物，喜欢表扬、称赞他人。交往广泛，很容易与他人建立友谊关系。很少有意地冒犯他人，喜欢营造宽松、和谐的人际氛围。",
     adv:["表达能力往往比较出众","好的激励鼓舞者，是团队目标实现的积极推动者","包容、可信","人际关系网络比较宽泛"],
@@ -474,7 +427,7 @@ const types = {
   },
   "S": {
     name:"稳健型",
-    fullName:"S型 · 稳健型",
+    fullName:"S型 · 稳健型（考拉型）",
     keywords:"有耐性、友好、同情、忠诚、合作、安静",
     desc:"重视与周围他人之间的合作，倾向于创造稳定、和谐的组织环境。善于逻辑思考和分析问题，具有耐性和坚持性。生活具有计划性、办事稳妥。倾向于对周围的人表示同情和忠诚。",
     adv:["有耐心、稳定性强","富有同情心、好帮助他人","往往专业性强","善于倾听；办事稳妥"],
@@ -499,18 +452,9 @@ const types = {
     dis:["不善于表达、鼓励和影响他人","好争论，自己认定的事情一般很难改变","容易教条，不够开通","容易处心积虑，造成心理衰竭"],
     tips:["学会表扬、激励和鼓舞他人","不要过分相信自己所掌握的事实，学会接受他人的观点","要相信自己的价值，多运用夸张的手法"]
   },
-  "CIS": {
-    name:"技术人员",
-    fullName:"CIS型 · 技术人员",
-    keywords:"自我约束、守规矩、精准、专业",
-    desc:"喜欢在某领域有深入的钻研，追求目标是希望成为某方面的专家。自我意识强，能够有效监控自己的绩效。比较善于表达，给人的印象是知道的事情很多和掌握了多方面的知识。",
-    adv:["适合从事专业性强的工作","对成为某方面的专家有很强的动机","守规矩，纪律严明","主动提高自己，一般不需要督促"],
-    dis:["很少把自己在知识、技能方面的优势主动分享或传授给他人","容易夸大自己的重要性，降低他人的业绩","在压力很大时，会变得肆无忌惮","对来自他人的批评极其敏感"],
-    tips:["为了共同利益和目标，要真诚与他人合作","相信他人，学会把任务分配给他人","虚心一些，向比自己水平高的人学习","以积极的眼光看待他人，多肯定优点"]
-  },
   "C": {
     name:"客观思考者",
-    fullName:"C型 · 客观思考者",
+    fullName:"C型 · 客观思考者（猫头鹰型）",
     keywords:"被动、精确、孤僻、多疑、观察、验证",
     desc:"注重反思、内省，给人的感觉是沉默、疏远。喜欢辩护，防御心理强，辩证地看问题，特别重视结论和行动的事实基础。对工作关注、认真，准备和筹划严密。希望大家都遵守规范、相关制度。",
     adv:["客观进行问题分析","有很强的纠错能力","用数据说话","强的统筹安排能力"],
@@ -525,15 +469,6 @@ const types = {
     adv:["创新者；严谨、对事实和细节敏感","富有计划性和逻辑性","待人公正","善于应对困难问题的挑战"],
     dis:["不善于表现自己，主动跟他人沟通的意识低","一旦失败对自己的打击会非常大","容易厌倦日常重复性的工作","独来独往、合作意识不强"],
     tips:["待人热情一些","与他人沟通时，注意讲究一些沟通的策略","学会关心、激励和鼓舞他人","加强团队成员之间的协作"]
-  },
-  "SCD": {
-    name:"调查员",
-    fullName:"SCD型 · 调查员",
-    keywords:"分析、计划、执着、精确、坚决、多疑",
-    desc:"客观、理性，分析能力强。感情一般不表露出来。默默地执着追求个人目标。计划性强，对已定目标能够制定详细的行动计划，一旦开始执行，就会坚持不放。有时给人的感觉是比较固执。",
-    adv:["对问题注重理性的逻辑分析，系统思考能力强","计划性强，且富有耐性，能够坐得住"],
-    dis:["对他人的情感反应迟钝，且不善于表达自己的感受","多疑，倾向于在内心记恨与他人之间的冲突","有时显得比较顽固、灵活性不强"],
-    tips:["提高自己的灵活性","学会逐渐接受他人","对他人的需求学会投入个人的感情","开放性地主动与他人沟通"]
   },
   "SD": {
     name:"SD高成就者",
@@ -579,42 +514,6 @@ const types = {
     adv:["善于沟通","是非分明","善于激励、鼓舞他人","做事谨慎、细心、有原则"],
     dis:["死要面子","缺乏足够耐心","当看不惯时，言辞很难听","工作节奏时松时紧，不稳定"],
     tips:["亲自去履行和实施","当不赞同别人的意见时，能够给予体谅","稳定自己工作节奏，培养自己的耐性"]
-  },
-  "D_high": {
-    name:"高D型",
-    fullName:"高D型 · 支配者",
-    keywords:"控制、果断、目标导向、竞争力强",
-    desc:"非常强的支配欲和掌控欲，喜欢发号施令，以目标和结果为导向。在团队中往往是天然的领导者，推动事情向前发展。",
-    adv:["极强的目标驱动力","快速决策能力","抗压能力强"],
-    dis:["容易忽视他人感受","可能过于武断","不善于细节管理"],
-    tips:["学会倾听他人意见","关注团队情感氛围","培养耐心和细节意识"]
-  },
-  "I_high": {
-    name:"高I型",
-    fullName:"高I型 · 影响者",
-    keywords:"热情、表达、社交、乐观、影响力",
-    desc:"非常强的人际交往能力和影响力，善于表达和沟通，是团队中的气氛调节者和鼓舞者。喜欢与人打交道，善于建立广泛的人脉关系。",
-    adv:["极强的人际影响力","善于激励他人","乐观积极，感染力强"],
-    dis:["可能忽视细节和事实","时间管理能力较弱","容易过度承诺"],
-    tips:["加强计划性和时间管理","关注事实和数据分析","学会兑现承诺"]
-  },
-  "S_high": {
-    name:"高S型",
-    fullName:"高S型 · 支持者",
-    keywords:"耐心、合作、稳定、忠诚、助人",
-    desc:"非常强的合作性和支持性，是团队中的稳定器和可靠成员。善于倾听和配合，重视团队和谐与稳定，不喜欢突变。",
-    adv:["极强的合作精神","耐心和稳定性","善于倾听和支持他人"],
-    dis:["对变革适应较慢","不善于果断决策","可能过于依赖他人"],
-    tips:["培养果断决策能力","主动适应变革","学会表达自己的观点"]
-  },
-  "C_high": {
-    name:"高C型",
-    fullName:"高C型 · 思考者",
-    keywords:"精准、分析、系统、严谨、质量导向",
-    desc:"非常强的分析能力和质量意识，追求精准和完美。善于系统性思考和逻辑分析，是团队中的质量把关者和专业顾问。",
-    adv:["极强的分析能力","追求卓越和质量","系统性思维"],
-    dis:["决策速度可能较慢","过于追求完美可能影响效率","不善于应对模糊情境"],
-    tips:["在信息不完整时也要学会决策","接受适度的不完美","提高决策效率"]
   }
 };
 
@@ -709,7 +608,7 @@ function closeAnswerSheet(){
   document.getElementById('answerSheetModal').classList.remove('show');
 }
 
-// ============ 计算得分 & 匹配类型 ============
+// ============ 计算得分 ============
 function calcScores(){
   scores = { D:0, I:0, S:0, C:0 };
   for(let i=0; i<questions.length; i++){
@@ -720,31 +619,55 @@ function calcScores(){
   }
 }
 
+// ============ 四路判断算法 ============
 function matchType(){
-  const sorted = Object.entries(scores).sort(function(a,b){ return b[1]-a[1]; });
-  const primary = sorted[0][0];
-  const secondary = sorted[1][0];
+  const arr = [
+    { dim:'D', score:scores.D },
+    { dim:'I', score:scores.I },
+    { dim:'S', score:scores.S },
+    { dim:'C', score:scores.C }
+  ];
+  arr.sort(function(a,b){ return b.score - a.score; });
 
-  // 尝试匹配双高类型
-  const combo1 = primary + secondary;
-  const combo2 = secondary + primary;
-  if(types[combo1]) return types[combo1];
-  if(types[combo2]) return types[combo2];
+  const maxScore = arr[0].score;
+  const minScore = arr[3].score;
+  const secondScore = arr[1].score;
 
-  // 三维度组合
-  const third = sorted[2][0];
-  const three = primary + secondary + third;
-  if(types[three]) return types[three];
-
-  // 单维度高分（领先4分以上）
-  if(sorted[0][1] >= sorted[1][1] + 4){
-    if(types[primary]) return types[primary];
-    if(types[primary+'_high']) return types[primary+'_high'];
+  // 第一路：变色龙型（四维度均衡）
+  if( (maxScore - minScore) <= 3 && minScore >= 3 ){
+    return types["CHAMELEON"];
   }
 
-  // 默认返回主维度类型
-  if(types[primary]) return types[primary];
-  return types[primary+'_high'];
+  // 第二路：单一主导型（最高分明显领先）
+  if( maxScore >= secondScore + 3 ){
+    return types[arr[0].dim];
+  }
+
+  // 第三路：组合型（取前两维，按分数高低拼接）
+  var key = arr[0].dim + arr[1].dim;
+  if(types[key]){
+    return types[key];
+  }
+  var key2 = arr[1].dim + arr[0].dim;
+  if(types[key2]){
+    return types[key2];
+  }
+
+  // 第四路：无特征型（分数都低，建议重测）
+  if( maxScore <= 3 ){
+    return {
+      name:"建议重测",
+      fullName:"得分偏低 · 建议重新测评",
+      keywords:"得分分散、建议重测、结果参考性有限",
+      desc:"你的各维度得分均较低（最高分≤3），可能是答题时未能准确反映自己的真实行为风格。建议找一个安静的时间，凭第一直觉重新作答，不要过多思考「应该」怎么选，而是选「实际上」怎么做的。",
+      adv:["诚实作答才能得到准确结果","建议在放松状态下重新测评","可以请熟悉你的同事朋友帮你对照评价"],
+      dis:["当前结果参考性有限","得分过低可能意味着答题不够认真","建议重测后再查看结果"],
+      tips:["凭第一直觉作答，不要过多思考","每题选最符合你平时真实行为的选项","重测后结果会更准确"]
+    };
+  }
+
+  // 兜底：返回最高分类型
+  return types[arr[0].dim];
 }
 
 // ============ 完成测评 ============
@@ -832,19 +755,17 @@ function finishQuiz(){
 
   rp.innerHTML = html;
 
-  // 动画：进度条
   setTimeout(function(){
-    document.getElementById('barD').style.width = (scores.D/questions.length)*100 + '%';
-    document.getElementById('barI').style.width = (scores.I/questions.length)*100 + '%';
-    document.getElementById('barS').style.width = (scores.S/questions.length)*100 + '%';
-    document.getElementById('barC').style.width = (scores.C/questions.length)*100 + '%';
+    document.getElementById('barD').style.width = (scores.D/maxScore)*100 + '%';
+    document.getElementById('barI').style.width = (scores.I/maxScore)*100 + '%';
+    document.getElementById('barS').style.width = (scores.S/maxScore)*100 + '%';
+    document.getElementById('barC').style.width = (scores.C/maxScore)*100 + '%';
   }, 100);
 
-  // 画雷达图
   setTimeout(drawRadar, 200);
 }
 
-// ============ 雷达图 ============
+// ============ 雷达图（满分20）============
 function drawRadar(){
   const canvas = document.getElementById('radarChart');
   if(!canvas) return;
@@ -854,7 +775,6 @@ function drawRadar(){
 
   ctx.clearRect(0,0,w,h);
 
-  // 背景多边形
   const labels = ['支配(D)','影响(I)','稳健(S)','服从(C)'];
   const vals = [
     scores.D/questions.length,
@@ -864,7 +784,6 @@ function drawRadar(){
   ];
   const colors = ['#E74C3C','#F39C12','#27AE60','#3498DB'];
 
-  // 画网格
   for(let g=1; g<=4; g++){
     const gr = r*g/4;
     ctx.beginPath();
@@ -878,31 +797,22 @@ function drawRadar(){
     ctx.strokeStyle = '#e0e6ed';
     ctx.lineWidth = 1;
     ctx.stroke();
-    if(g<4){
-      ctx.fillStyle = 'rgba(0,0,0,0.02)';
-      ctx.fill();
-    }
   }
 
-  // 画标签
   ctx.font = '12px PingFang SC, sans-serif';
   for(let i=0; i<4; i++){
     const angle = (Math.PI*2*i/4) - Math.PI/2;
     const lx = cx + Math.cos(angle)*(r+20);
     const ly = cy + Math.sin(angle)*(r+20);
     ctx.fillStyle = colors[i];
-    ctx.fontWeight = 'bold';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(labels[i], lx, ly);
-
-    // 分数
     ctx.font = '11px PingFang SC, sans-serif';
-    ctx.fillStyle = colors[i];
     ctx.fillText(Math.round(vals[i]*100) + '分', lx, ly+14);
+    ctx.font = '12px PingFang SC, sans-serif';
   }
 
-  // 数据区域
   ctx.beginPath();
   for(let i=0; i<4; i++){
     const angle = (Math.PI*2*i/4) - Math.PI/2;
@@ -917,7 +827,6 @@ function drawRadar(){
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // 数据点
   for(let i=0; i<4; i++){
     const angle = (Math.PI*2*i/4) - Math.PI/2;
     const x = cx + Math.cos(angle)*r*vals[i];
