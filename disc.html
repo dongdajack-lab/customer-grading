@@ -627,11 +627,17 @@ function matchType(){
     { dim:'S', score:scores.S },
     { dim:'C', score:scores.C }
   ];
-  arr.sort(function(a,b){ return b.score - a.score; });
+  // 多级排序：先按分数降序，同分时按 D>C>S>I 优先级（数字小=优先）
+  const dimPriority = { 'D':0, 'C':1, 'S':2, 'I':3 };
+  arr.sort(function(a,b){
+    if(b.score !== a.score) return b.score - a.score;
+    return dimPriority[a.dim] - dimPriority[b.dim];
+  });
 
   const maxScore = arr[0].score;
   const minScore = arr[3].score;
   const secondScore = arr[1].score;
+  const thirdScore = arr[2].score;
 
   // 第一路：变色龙型（四维度均衡）
   if( (maxScore - minScore) <= 3 && minScore >= 3 ){
@@ -643,7 +649,24 @@ function matchType(){
     return types[arr[0].dim];
   }
 
-  // 第三路：组合型（取前两维，按分数高低拼接）
+  // 第三路：组合型
+  // 当第二第三同分时，优先尝试三字母类型（如 DIS, DIC, SCI, ISC）
+  if( secondScore === thirdScore ){
+    // 尝试三字母：arr[0]+arr[1]+arr[2]
+    var tripleKey = arr[0].dim + arr[1].dim + arr[2].dim;
+    if(types[tripleKey]) return types[tripleKey];
+    // 尝试 arr[0]+arr[2]+arr[1]
+    var tripleKey2 = arr[0].dim + arr[2].dim + arr[1].dim;
+    if(types[tripleKey2]) return types[tripleKey2];
+    // 尝试 arr[1]+arr[0]+arr[2]
+    var tripleKey3 = arr[1].dim + arr[0].dim + arr[2].dim;
+    if(types[tripleKey3]) return types[tripleKey3];
+    // 尝试 arr[1]+arr[2]+arr[0]
+    var tripleKey4 = arr[1].dim + arr[2].dim + arr[0].dim;
+    if(types[tripleKey4]) return types[tripleKey4];
+  }
+
+  // 取前两维拼接（按优先级排好了序）
   var key = arr[0].dim + arr[1].dim;
   if(types[key]){
     return types[key];
