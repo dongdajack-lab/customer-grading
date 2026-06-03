@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - FABE产品价值呈现</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#E67E22,#F39C12); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:28px; }
+  header p { font-size:15px; opacity:0.85; margin-top:6px; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#E67E22; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#E67E22; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #E67E22; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#E67E22; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#FEF9E7; color:#D35400; }
+  .tag-A { background:#FEF0E7; color:#E67E22; }
+  .tag-B { background:#FDEBD0; color:#CA6F1E; }
+  .tag-E { background:#FAD7A0; color:#A04000; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#E67E22; background:#FEF9E7; }
+  .option.selected { border-color:#E67E22; background:#FEF9E7; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#E67E22; background:#E67E22; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#E67E22; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#E67E22; color:white; }
+  .btn-primary:hover { background:#D35400; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#E67E22,#F39C12); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#E67E22; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#E67E22; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#E67E22; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#FEF9E7; border:1px solid #F0AD4E; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#7D6608; line-height:1.7; }
+  .tip-box strong { color:#D35400; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共8题</p>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    scenario: "你是一家工业自动化设备公司的销售，你们的旗舰产品是一款机器人焊接系统。你准备向一家汽车零部件厂老板介绍产品。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的设备相比同类产品，焊接精度高出30%，返工率行业最低。", type:"A", correct:false },
+      { text:"这套系统已经帮助17家汽车零部件厂通过了ISO/TS 16949认证审核。", type:"E", correct:false },
+      { text:"我们的机器人焊接系统，采用6轴联动结构，重复定位精度可达±0.02毫米。", type:"F", correct:true },
+      { text:"用了这套系统，您的产品报废率能从现在的3%降到1%以内，每年节省原材料成本近50万。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的参数、规格、构造——「6轴联动、±0.02mm精度」就是典型的F。<br><br>A是与竞品比较；B是给客户带来的利益；E是第三方佐证。"
+  },
+  {
+    scenario: "接上题。老板听完特征介绍后，还在犹豫，说市面上类似的焊接设备很多。",
+    question: "接下来应该说 <strong>A - 优势</strong>（与竞品相比的差异化），下列哪句话最合适？",
+    options: [
+      { text:"我们设备的技术参数是±0.02mm，而行业平均水平是±0.1mm，精度领先5倍；并且我们是唯一通过XX汽车集团一级供应商认证的品牌。", type:"A", correct:true },
+      { text:"我们的设备重复定位精度可达±0.02毫米。", type:"F", correct:false },
+      { text:"用了我们的设备，返工率能从3%降到1%，一年省50万。", type:"B", correct:false },
+      { text:"山东某汽车厂用了18个月，良品率从97%提升到99.6%，数据我可以给您看。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>优势是「对比出来的」——必须有比较对象（竞品、行业均值）才叫优势。<br><br>关键词：领先、唯一、对比、比…高/低/快/慢。不带比较的描述只是F，不是A。"
+  },
+  {
+    scenario: "老板对你们的技术优势有点兴趣，但开始问：这对我有什么好处？",
+    question: "接下来应该说 <strong>B - 利益</strong>（给客户带来的具体好处），下列哪句话最合适？",
+    options: [
+      { text:"我们的精度是±0.02mm，比行业均值高5倍。", type:"A", correct:false },
+      { text:"这套系统目前已经在全国23个城市部署了78套。", type:"E", correct:false },
+      { text:"我们设备采用进口伺服电机，性能更稳定。", type:"F", correct:false },
+      { text:"对您来说，报废率从3%降到1%以内，按您现在的年产量，每年节省材料成本约40-60万，同时客户退货率降低，有助于拿到更多大客户订单。", type:"B", correct:true }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>B是「跟客户说你的收益」，必须用客户听得懂的语言：省钱、赚钱、省时间、降风险、增客户。<br><br>B不是参数（F），不是比较（A），不是别人的故事（E）——是「您」的好处。"
+  },
+  {
+    scenario: "老板说：听起来不错，但我不确定你们实际效果怎么样，你们公司毕竟不是大品牌。",
+    question: "接下来应该说 <strong>E - 证明</strong>（用案例/数据/荣誉/证书佐证），下列哪句话最合适？",
+    options: [
+      { text:"我们的产品参数达到德国工业标准，焊接精度±0.02mm。", type:"F", correct:false },
+      { text:"我们用了我们的设备以后，良品率保证能提高。", type:"B", correct:false },
+      { text:"这是隔壁镇同行老刘的工厂，跟您规模差不多，他用了我们系统10个月，良品率从97.2%升到99.5%，我这里有他工厂的检测报告和他本人的推荐函，您有兴趣联系他聊聊吗？", type:"E", correct:true },
+      { text:"我们比其他品牌精度高5倍，是唯一通过汽车行业认证的。", type:"A", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>E是「第三方说话」——数据报告、真实案例、行业认证、客户推荐函，都是E的形式。<br><br>最好的E是：同类型客户 + 具体数字 + 可验证。「据说效果不错」不是E。"
+  },
+  {
+    scenario: "你是一家人力资源SaaS系统的销售，正在向一家300人制造企业的HR总监介绍你们的薪酬管理模块。HR总监说：我们现在用Excel，虽然麻烦，但也用习惯了。",
+    question: "你想先建立产品认知，应该先说 <strong>F - 特征</strong>，下列哪句话最合适？",
+    options: [
+      { text:"用了我们系统，每次薪酬核算时间从3天缩短到2小时，您的HR团队可以专注更有价值的工作。", type:"B", correct:false },
+      { text:"我们的薪酬模块支持多薪资结构并行管理，内置200+薪资计算规则，支持自定义公式，并与考勤、绩效系统实时同步。", type:"F", correct:true },
+      { text:"同规模的制造企业比较，用Excel的错误率平均是我们系统的8倍，每年多花在核错纠错上的人力成本超过10万。", type:"A", correct:false },
+      { text:"我们服务了全国超过2000家制造业企业，其中有20家是500强供应链企业。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>先说F，建立客户对产品功能的基础认知。「支持X功能、内置Y规则、与Z实时同步」是标准F描述。<br><br>FABE的顺序不是铁板一块，但通常F先建立认知，再用A比较差异，B给利益，E给信心。"
+  },
+  {
+    scenario: "接上题。HR总监说：这些功能听上去差不多，同类产品也都有。",
+    question: "你应该用 <strong>A - 优势</strong> 来区分，下列哪个回答最合适？",
+    options: [
+      { text:"我们是市场上唯一支持「工厂班组粒度」薪资核算的系统，精确到每条产线每个班次，这是专门为制造业开发的，其他通用HR系统没有这个能力。", type:"A", correct:true },
+      { text:"我们系统支持200+薪资计算规则，还有自定义公式功能。", type:"F", correct:false },
+      { text:"过去一年有236家制造企业从Excel迁移到我们系统，续费率达到94%。", type:"E", correct:false },
+      { text:"用了我们系统，薪酬核算时间从3天缩到2小时，错误率降低90%以上。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>有效的A必须有「比较维度」——你们能做、其他人做不了；或者你们更专业。<br><br>「唯一」「专门为X开发」「其他系统没有」都是构建优势的关键词。"
+  },
+  {
+    scenario: "你是一家工业润滑油品牌的销售顾问，客户是一家大型注塑机工厂的设备主管。他们现在用A品牌润滑油，对方说：换什么油都差不多，我们不想折腾。",
+    question: "下面四句话，按照 FABE 顺序应该最先说的是哪句（<strong>F - 特征</strong>）？",
+    options: [
+      { text:"我们的润滑油年度维保成本比A品牌平均低22%，您工厂每年可节省6-10万元维保支出。", type:"B", correct:false },
+      { text:"我们品牌已经连续8年被中国机械工业联合会评为推荐产品，并在德国、日本市场同步销售。", type:"E", correct:false },
+      { text:"我们的注塑机专用润滑油，采用全合成PAO基础油配方，黏度指数≥160，高温稳定性比普通矿物油高40%，适用温度-30℃到200℃。", type:"F", correct:true },
+      { text:"同等级注塑机里，用A品牌的换油周期平均是3个月，用我们的产品平均8个月换一次，同等价格下维护成本更低。", type:"A", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>面对「都差不多」的客户，要先用F建立产品认知，让客户知道你的产品本质上不同。<br><br>技术参数、成分、配方、性能指标都是F的素材。"
+  },
+  {
+    scenario: "你是一名企业培训销售顾问，向一家中型制造企业老板推介大董老师的「销售管理体系」课程。老板说：培训这东西，上完就忘了，没什么用。",
+    question: "你准备用完整的 FABE 结构回应。以下哪个描述是 <strong>B - 利益</strong>（对客户最直接的好处）？",
+    options: [
+      { text:"大董老师课程包含29个配套落地工具，含Excel表格、PDF工具包，学完即可直接使用。", type:"F", correct:false },
+      { text:"不同于普通培训讲完就结束，大董老师课程采用「讲-练-用」三步法，提供3个月陪跑辅导，确保学员真正落地。", type:"A", correct:false },
+      { text:"通过培训+工具落地，平均帮助企业在6个月内将销售额提升20-35%，销售流程标准化程度提升60%以上。", type:"B", correct:true },
+      { text:"已有87家中小企业参加了大董老师的培训，其中73%的企业在6个月内出现业绩明显增长，最高增幅超过50%。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>面对「培训没用」的老板，B要回答的是「上了这个培训，您的业绩/团队/利润会有什么变化」。<br><br>B要说「您的」好处，不是「课程有什么功能」（F），不是「比其他培训好」（A），不是「别人怎么了」（E）。"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answered = false;
+let results = [];
+
+function renderQuestion() {
+  selected = null;
+  answered = false;
+  var q = questions[current];
+
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+
+  var card = document.getElementById("questionCard");
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【场景】</span>' + q.scenario + '</div>';
+  html += '<div style="font-weight:600; margin:16px 0 8px; color:#333;">' + q.question + '</div>';
+  html += '<div class="options">';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '  <div class="radio"></div>';
+    html += '  <div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswer"></div>';
+  html += '<div class="explanation" id="explanation">';
+  html += '  <h4>解析</h4>';
+  html += '  <p>' + q.explain + '</p>';
+  html += '</div>';
+  card.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.toggle("selected", i === idx);
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].correct;
+  answered = true;
+
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    if (q.options[i].correct) opts[i].classList.add("correct");
+    if (i === selected && !isCorrect) opts[i].classList.add("wrong");
+    opts[i].onclick = null;
+  }
+
+  results[current] = isCorrect;
+
+  var labels = ['A', 'B', 'C', 'D'];
+  var correctIdx = q.options.findIndex(function(o) { return o.correct === true; });
+  var correctLabel = labels[correctIdx];
+  var correctText = q.options[correctIdx].text;
+  document.getElementById('correctAnswer').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabel + ' — ' + correctText + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+
+  document.getElementById("explanation").classList.add("show");
+
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  var percent = Math.round(score / results.length * 100);
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = percent;
+
+  var detailHTML = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    var icon = results[i] ? "✅" : "❌";
+    var text = results[i] ? "正确" : "错误";
+    detailHTML += '<div class="result-item"><span class="status">' + icon + '</span><span>第 ' + (i+1) + ' 题：' + text + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detailHTML;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
