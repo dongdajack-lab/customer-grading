@@ -297,9 +297,9 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
       <div class="model-card" data-model="hybrid" onclick="selectModel('hybrid')">
         <div class="model-icon">🧩</div>
         <div class="model-name">混合模式</div>
-        <div class="model-desc">设障打底 + 乘数调节。先过门槛，再加算各因素提成，最后用调节系数修正。最全面也最考验管理。</div>
-        <div class="model-tags"><span class="model-tag">复杂业务</span><span class="model-tag">全维度驱动</span></div>
-        <div class="model-formula">提成 = [门槛基础 + Σ(因素提成)] × 系数乘积<br>适合管理成熟企业</div>
+        <div class="model-desc">设障 + 乘数的完整组合：先按设障档位定基础提成，再叠加其他因素加算，最后用系数链连乘调节。最全面，适合管理成熟企业。</div>
+        <div class="model-tags"><span class="model-tag">复杂业务</span><span class="model-tag">全维度驱动</span><span class="model-tag">管理成熟企业</span></div>
+        <div class="model-formula">提成 = (设障基础 + Σ其他加算) × K₁ × K₂ × K₃...<br>先过门槛定基调，再用系数链精细调节</div>
       </div>
     </div>
 
@@ -399,17 +399,37 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 
     <!-- 混合 -->
     <div class="card" id="configHybrid" style="display:none">
-      <div class="card-title" style="font-size:16px;">🧩 混合模式 — 组合配置</div>
-      <div class="card-subtitle">设障门槛保底 + 各因素提成加总 + 调节系数修正</div>
-      <div class="param-row">
-        <div class="param-label"><div>设障基础提成率（过门槛后的起步）</div></div>
-        <div class="param-right"><input type="number" id="hybBaseRate" class="param-input" value="2" min="0.1" step="0.1"><span class="param-unit">%</span></div>
+      <div class="card-title" style="font-size:16px;">🧩 混合模式 — 设障 + 乘数组合</div>
+      <div class="card-subtitle">先用设障档位定基础提成，再用系数链精细调节，最全面的方案</div>
+
+      <!-- 设障部分 -->
+      <div style="margin-bottom:20px; padding:18px 20px; background:var(--tian-light); border-radius:var(--radius); border:1px solid #93c5fd;">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🚧 设障基础提成</div>
+        <div class="param-row">
+          <div class="param-label"><div>设障主指标</div><div class="param-desc">达成率决定进入哪个档位</div></div>
+          <div class="param-right"><select id="hybPrimarySelect" onchange="onHybPrimaryChange()"></select></div>
+        </div>
+        <div id="hybHurdleTiers"></div>
+        <button class="btn btn-outline" onclick="addHurdleTier()" style="margin-top:6px;">+ 添加档位</button>
       </div>
-      <div id="hybridDirectRates"></div>
-      <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
-        <div style="font-size:14px; font-weight:600; margin-bottom:8px;">调节系数</div>
-        <div id="hybridCoeffRanges"></div>
+
+      <!-- 其他因素加算 -->
+      <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
+        <div class="card-title" style="font-size:15px;">📎 其他直接因素加算（可选）</div>
+        <div class="card-subtitle">非主指标的直接因素按各自提成率独立计算，加算到设障基础提成</div>
+        <div id="hybOtherRates"></div>
       </div>
+
+      <!-- 乘数系数链 -->
+      <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px;">🔗 乘数系数链</div>
+        <div style="font-size:12px;color:var(--text-mid);margin-bottom:14px;">设障基础提成算完后，再用系数链连乘进行精细调节</div>
+        <div id="hybChains"></div>
+        <button class="btn btn-outline" onclick="addMulChain()" style="margin-top:8px;width:100%;justify-content:center;">+ 添加系数链 (K<sub id="hybNextKIdx">1</sub>)</button>
+      </div>
+
+      <!-- 公式预览 -->
+      <div id="hybFormulaPreview" style="margin-top:16px; padding:12px 16px; background:#f0fdf4; border-radius:8px; border:1px solid #86efac; font-family:SF Mono,monospace; font-size:13px; color:var(--di-dark);"></div>
     </div>
 
     <div class="btn-group">
@@ -573,8 +593,10 @@ function selectModel(model) {
 }
 
 // ==================== HURDLE ====================
-function renderHurdleTiers() {
-  document.getElementById('hurdleTiers').innerHTML = state.hurdleTiers.map((t, i) => `
+function renderHurdleTiers(containerId) {
+  const container = document.getElementById(containerId || 'hurdleTiers');
+  if (!container) return;
+  container.innerHTML = state.hurdleTiers.map((t, i) => `
     <div class="tier-row">
       <div><div class="tier-name">${t.name}</div><div class="tier-desc">达成率≥${t.achievement}%</div></div>
       <div><input type="range" class="param-slider" value="${t.achievement}" min="0" max="300" oninput="updateHurdleTier(${i},'achievement',this.value)"></div>
@@ -586,12 +608,16 @@ function renderHurdleTiers() {
 function addHurdleTier() {
   const last = state.hurdleTiers[state.hurdleTiers.length - 1];
   state.hurdleTiers.push({ name: '自定义档', achievement: (last ? last.achievement + 30 : 100), rate: (last ? last.rate + 2 : 5) });
-  renderHurdleTiers(); saveToStorage();
+  const hMode = state.selectedModel === 'hybrid';
+  renderHurdleTiers(hMode ? 'hybHurdleTiers' : 'hurdleTiers');
+  if (hMode) renderHybFormula();
+  saveToStorage();
 }
 
 function updateHurdleTier(i, field, value) {
   state.hurdleTiers[i][field] = field === 'achievement' ? parseInt(value) : parseFloat(value);
-  if (field === 'achievement') renderHurdleTiers();
+  const hMode = state.selectedModel === 'hybrid';
+  if (field === 'achievement') renderHurdleTiers(hMode ? 'hybHurdleTiers' : 'hurdleTiers');
   saveToStorage();
 }
 
@@ -637,8 +663,7 @@ function prepareConfigStep() {
   if (state.selectedModel === 'multiplier') {
     buildMultiplierConfig();
   } else if (state.selectedModel === 'hybrid') {
-    buildDirectRates(direct);
-    buildCoeffRanges(coeff);
+    buildHybridConfig();
   }
   if (state.selectedModel === 'matrix') {
     // Populate X/Y axis dropdowns with direct factors
@@ -680,10 +705,56 @@ function onHurdlePrimaryChange() {
   saveToStorage();
 }
 
-function buildHurdleOtherRates(direct) {
-  const container = document.getElementById('hurdleOtherRates');
+function onHybPrimaryChange() {
+  state.hybPrimaryId = document.getElementById('hybPrimarySelect').value;
+  buildHurdleOtherRates(getSelectedDirectFactors(), 'hybOtherRates');
+  renderHybFormula();
+  saveToStorage();
+}
+
+function buildHybridConfig() {
+  const direct = getSelectedDirectFactors();
+  if (direct.length === 0) {
+    document.getElementById('hybHurdleTiers').innerHTML = '<div style="color:var(--text-mid);">请先在第一步选择「直接提成」类因素</div>';
+    return;
+  }
+
+  // Init default primary
+  if (!state.hybPrimaryId) state.hybPrimaryId = direct[0]?.id || null;
+
+  // Build primary selector
+  const hSel = document.getElementById('hybPrimarySelect');
+  hSel.innerHTML = direct.map((f, i) => `<option value="${f.id}" ${(state.hybPrimaryId === f.id || (!state.hybPrimaryId && i === 0)) ? 'selected' : ''}>${f.name}</option>`).join('');
+  if (!state.hybPrimaryId) state.hybPrimaryId = direct[0]?.id || null;
+
+  // Render hurdle tiers (shared state)
+  renderHurdleTiers('hybHurdleTiers');
+
+  // Build other direct factors
+  buildHurdleOtherRates(direct, 'hybOtherRates');
+
+  // Build multiplier chains (shared state)
+  renderMulChains('hybChains', 'hybNextKIdx');
+
+  // Render formula preview
+  renderHybFormula();
+}
+
+function renderHybFormula() {
+  const el = document.getElementById('hybFormulaPreview');
+  if (!el) return;
+  let formula = `提成 = (<b>设障基础提成 + Σ其他因素加算</b>)`;
+  state.multiplierChains.forEach((c, i) => {
+    formula += ` × K<sub>${i+1}</sub>(${c.name})`;
+  });
+  el.innerHTML = formula;
+}
+
+function buildHurdleOtherRates(direct, containerId) {
+  const container = document.getElementById(containerId || 'hurdleOtherRates');
   if (!container) return;
-  const others = direct.filter(f => f.id !== state.hurdlePrimaryId);
+  const primaryId = state.selectedModel === 'hybrid' ? state.hybPrimaryId : state.hurdlePrimaryId;
+  const others = direct.filter(f => f.id !== primaryId);
   if (others.length === 0) { container.innerHTML = '<div style="color:var(--text-mid);">无其他直接提成因素</div>'; return; }
 
   container.innerHTML = others.map(f => {
@@ -766,8 +837,9 @@ function buildMultiplierConfig() {
   renderMulFormula();
 }
 
-function renderMulChains() {
-  const container = document.getElementById('mulChains');
+function renderMulChains(containerId, nextKId) {
+  const container = document.getElementById(containerId || 'mulChains');
+  if (!container) return;
   const direct = getSelectedDirectFactors();
   const allFactors = getAllSelectedFactors();
 
@@ -785,7 +857,8 @@ function renderMulChains() {
     });
   }
 
-  document.getElementById('nextKIdx').textContent = state.multiplierChains.length + 1;
+  const nk = document.getElementById(nextKId || 'nextKIdx');
+  if (nk) nk.textContent = state.multiplierChains.length + 1;
 
   container.innerHTML = state.multiplierChains.map((chain, idx) => {
     const isInterval = chain.type === 'interval';
@@ -843,20 +916,32 @@ function renderMulChains() {
   }).join('');
 }
 
-function renderMulFormula() {
-  const base = getSelectedDirectFactors().find(f => f.id === state.multiplierBase.factorId);
-  const baseName = base?.name || '基础';
-  const baseRate = state.multiplierBase.rate;
-  let formula = `提成 = <b>${baseName} × ${baseRate}%</b>`;
-  state.multiplierChains.forEach((c, i) => {
-    formula += ` × K<sub>${i+1}</sub>(${c.name})`;
-  });
-  document.getElementById('mulFormulaPreview').innerHTML = formula;
+function renderMulFormula(containerId, mode) {
+  const el = document.getElementById(containerId || 'mulFormulaPreview');
+  if (!el) return;
+  if (mode === 'hybrid') {
+    let formula = `提成 = (<b>设障基础提成 + Σ其他因素加算</b>)`;
+    state.multiplierChains.forEach((c, i) => {
+      formula += ` × K<sub>${i+1}</sub>(${c.name})`;
+    });
+    el.innerHTML = formula;
+  } else {
+    const base = getSelectedDirectFactors().find(f => f.id === state.multiplierBase.factorId);
+    const baseName = base?.name || '基础';
+    const baseRate = state.multiplierBase.rate;
+    let formula = `提成 = <b>${baseName} × ${baseRate}%</b>`;
+    state.multiplierChains.forEach((c, i) => {
+      formula += ` × K<sub>${i+1}</sub>(${c.name})`;
+    });
+    el.innerHTML = formula;
+  }
 }
 
-function buildMulOtherRates(direct) {
-  const container = document.getElementById('mulOtherRates');
-  const others = direct.filter(f => f.id !== state.multiplierBase.factorId);
+function buildMulOtherRates(direct, containerId, excludeId) {
+  const container = document.getElementById(containerId || 'mulOtherRates');
+  if (!container) return;
+  const ex = excludeId !== undefined ? excludeId : state.multiplierBase.factorId;
+  const others = direct.filter(f => f.id !== ex);
   if (others.length === 0) {
     container.innerHTML = '<div style="color:var(--text-mid);font-size:13px;">无其他直接提成因素可加算</div>';
     return;
@@ -888,6 +973,11 @@ function onMulBaseRateChange() {
   renderMulFormula();
   saveToStorage();
 }
+function getMulContainers() {
+  const hMode = state.selectedModel === 'hybrid';
+  return { chainsId: hMode ? 'hybChains' : 'mulChains', nextKId: hMode ? 'hybNextKIdx' : 'nextKIdx', formulaId: hMode ? 'hybFormulaPreview' : 'mulFormulaPreview' };
+}
+
 function addMulChain() {
   const direct = getSelectedDirectFactors();
   state.multiplierChains.push({
@@ -898,20 +988,23 @@ function addMulChain() {
     intervals: [{ min: 0, max: 100, multiplier: 1.0 }],
     categories: [{ label: '类型A', multiplier: 1 }],
   });
-  renderMulChains();
-  renderMulFormula();
+  const c = getMulContainers();
+  renderMulChains(c.chainsId, c.nextKId);
+  if (state.selectedModel === 'hybrid') renderHybFormula(); else renderMulFormula();
   saveToStorage();
 }
 function deleteMulChain(idx) {
   state.multiplierChains.splice(idx, 1);
-  renderMulChains();
-  renderMulFormula();
+  const c = getMulContainers();
+  renderMulChains(c.chainsId, c.nextKId);
+  if (state.selectedModel === 'hybrid') renderHybFormula(); else renderMulFormula();
   saveToStorage();
 }
 function updateMulChainName(idx, val) { state.multiplierChains[idx].name = val; saveToStorage(); }
 function updateMulChainType(idx, val) {
   state.multiplierChains[idx].type = val;
-  renderMulChains();
+  const c = getMulContainers();
+  renderMulChains(c.chainsId, c.nextKId);
   saveToStorage();
 }
 function updateMulChainLinked(idx, val) { state.multiplierChains[idx].linkedFactorId = val; saveToStorage(); }
@@ -921,7 +1014,8 @@ function updateMulInterval(ci, ii, key, val) {
 }
 function addMulInterval(ci) {
   state.multiplierChains[ci].intervals.push({ min: 0, max: 100, multiplier: 1.0 });
-  renderMulChains();
+  const c = getMulContainers();
+  renderMulChains(c.chainsId, c.nextKId);
   saveToStorage();
 }
 function updateMulCategory(ci, catI, key, val) {
@@ -930,7 +1024,8 @@ function updateMulCategory(ci, catI, key, val) {
 }
 function addMulCategory(ci) {
   state.multiplierChains[ci].categories.push({ label: '新分类', multiplier: 1 });
-  renderMulChains();
+  const c = getMulContainers();
+  renderMulChains(c.chainsId, c.nextKId);
   saveToStorage();
 }
 function updateMulOtherRate(id, val) {
@@ -1025,8 +1120,8 @@ function prepareSimStep() {
     </div>`;
   }).join('');
 
-  // For multiplier mode: add discrete chain dropdowns
-  if (state.selectedModel === 'multiplier' && state.multiplierChains) {
+  // For multiplier/hybrid mode: add discrete chain dropdowns
+  if ((state.selectedModel === 'multiplier' || state.selectedModel === 'hybrid') && state.multiplierChains) {
     state.multiplierChains.forEach(chain => {
       if (chain.type === 'discrete') {
         html += `<div class="scenario-row">
@@ -1061,6 +1156,7 @@ function resetSimulation() {
   state.matrixXId = null;
   state.matrixYId = null;
   state.hurdlePrimaryId = null;
+  state.hybPrimaryId = null;
   state.multiplierBase = { factorId: 'revenue', rate: 3 };
   state.multiplierChains = [];
   state.multiplierOtherDirect = {};
@@ -1087,8 +1183,8 @@ function runSimulation() {
   const simData = {};
   all.forEach(f => { const el = document.getElementById('sim_' + f.id); if (el) simData[f.id] = parseFloat(el.value) || 0; });
 
-  // For multiplier mode: collect discrete chain selections
-  if (state.selectedModel === 'multiplier' && state.multiplierChains) {
+  // For multiplier/hybrid mode: collect discrete chain selections
+  if ((state.selectedModel === 'multiplier' || state.selectedModel === 'hybrid') && state.multiplierChains) {
     state.multiplierChains.forEach(chain => {
       if (chain.type === 'discrete') {
         const el = document.getElementById('sim_disc_' + chain.id);
@@ -1132,6 +1228,18 @@ function runSimulation() {
       primaryLabel = `${periodName}${baseFactor.name}`;
       primaryValue = simData[baseFactor.id] || 0;
       achievement = periodTarget > 0 ? (primaryValue / periodTarget * 100) : 0;
+    }
+  }
+  if (state.selectedModel === 'hybrid') {
+    const direct = getSelectedDirectFactors();
+    const hybPrimary = direct.find(f => f.id === state.hybPrimaryId) || direct[0];
+    if (hybPrimary) {
+      primaryLabel = `${periodName}${hybPrimary.name}`;
+      primaryValue = simData[hybPrimary.id] || 0;
+      const grossMargin = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
+      let primaryTarget = periodTarget;
+      if (hybPrimary.id === 'profit') primaryTarget = periodTarget * grossMargin / 100;
+      achievement = primaryTarget > 0 ? (primaryValue / primaryTarget * 100) : 0;
     }
   }
 
@@ -1351,56 +1459,101 @@ function calcMatrix(simData) {
 
 // ----- HYBRID -----
 function calcHybrid(simData) {
-  const revenue = simData.revenue || 0;
+  const direct = getSelectedDirectFactors();
+  const primary = direct.find(f => f.id === state.hybPrimaryId) || direct[0];
+  if (!primary) return { commission: 0, breakdown: [], note: '⚠️ 未选择主指标' };
+
   const periodTarget = getPeriodTarget();
-  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
+  const primaryVal = simData[primary.id] || 0;
+
+  // Achievement calculation
+  let achievement, targetVal;
+  if (primary.id === 'profit') {
+    const grossMargin = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
+    targetVal = periodTarget * grossMargin / 100;
+    achievement = targetVal > 0 ? (primaryVal / targetVal * 100) : 0;
+  } else {
+    targetVal = periodTarget;
+    achievement = targetVal > 0 ? (primaryVal / targetVal * 100) : 0;
+  }
 
   // Hurdle check
   const tiers = [...state.hurdleTiers].sort((a, b) => a.achievement - b.achievement);
   let tier = null;
   for (let i = tiers.length - 1; i >= 0; i--) { if (achievement >= tiers[i].achievement) { tier = tiers[i]; break; } }
   if (!tier || tier.rate === 0) {
-    return { commission: 0, breakdown: [{ label: '业绩达成率', value: achievement.toFixed(1) + '% — 未达保底线' }], note: '⚠️ 未达到设障最低门槛，提成为0' };
+    return { commission: 0, breakdown: [{ label: `${primary.name}达成率`, value: achievement.toFixed(1) + '% — 未达保底线' }], note: '⚠️ 未达到设障最低门槛，提成为0' };
   }
 
-  const baseRate = parseFloat(document.getElementById('hybBaseRate')?.value || 2);
-  let commission = revenue * baseRate / 100;
+  // Step 1: Hurdle base commission
+  let baseCommission = primaryVal * tier.rate / 100;
   const bd = [
-    { label: '业绩达成率', value: achievement.toFixed(1) + '% → ' + tier.name },
-    { label: '设障基础提成', value: `¥${revenue}万 × ${baseRate}% = ¥${commission.toFixed(2)}万` },
+    { label: `${primary.name}达成率`, value: achievement.toFixed(1) + '% → ' + tier.name },
+    { label: `设障基础提成（¥${primaryVal}万 × ${tier.rate}%）`, value: `¥${baseCommission.toFixed(2)}万` },
   ];
 
-  // Add direct factor bonuses
-  const direct = getSelectedDirectFactors().filter(f => f.id !== 'revenue');
-  direct.forEach(f => {
+  // Step 2: Other direct factor bonuses
+  const others = direct.filter(f => f.id !== primary.id);
+  others.forEach(f => {
     const val = simData[f.id] || 0;
     const rate = state.directRates[f.id] || 0;
-    const bonus = val * rate / 100;
-    commission += bonus;
-    bd.push({ label: `${f.name}加算（¥${val}万 × ${rate}%）`, value: `+¥${bonus.toFixed(2)}万` });
+    if (rate > 0) {
+      const bonus = val * rate / 100;
+      baseCommission += bonus;
+      bd.push({ label: `+ ${f.name}加算（¥${val}万 × ${rate}%）`, value: `¥${bonus.toFixed(2)}万` });
+    }
+  });
+  bd.push({ label: '设障基础合计', value: `¥${baseCommission.toFixed(2)}万` });
+
+  // Step 3: Multiplier chains (same logic as calcMultiplier)
+  let totalMultiplier = 1.0;
+  const allFactors = getAllSelectedFactors();
+
+  state.multiplierChains.forEach((chain, i) => {
+    let k = 1.0;
+    let detail = '';
+
+    if (chain.type === 'interval') {
+      const linkedF = allFactors.find(f => f.id === chain.linkedFactorId);
+      let val;
+      if (chain.linkedFactorId === 'collectionRate') {
+        val = getCollectionRate(simData);
+      } else if (chain.linkedFactorId === 'profit') {
+        const rev = simData.revenue || 0;
+        val = rev > 0 ? ((simData.profit || 0) / rev * 100) : 0;
+      } else {
+        val = simData[chain.linkedFactorId] || 0;
+      }
+
+      const sorted = [...chain.intervals].sort((a, b) => a.max - b.max);
+      for (const iv of sorted) {
+        if (val <= iv.max) { k = iv.multiplier; break; }
+      }
+      if (val > (sorted[sorted.length - 1]?.max || 100)) {
+        k = sorted[sorted.length - 1]?.multiplier || 1;
+      }
+      detail = `K${i+1}·${chain.name}：${linkedF?.name || '—'} = ${val.toFixed(1)}% → 乘数 ${k}`;
+    } else {
+      const discKey = 'disc_' + chain.id;
+      const selectedCat = simData[discKey] || chain.categories[0]?.label || '';
+      const cat = chain.categories.find(c => c.label === selectedCat);
+      k = cat?.multiplier || 1;
+      detail = `K${i+1}·${chain.name}：「${selectedCat}」→ 乘数 ${k}`;
+    }
+
+    totalMultiplier *= k;
+    bd.push({ label: detail, value: k.toFixed(2) });
   });
 
-  // Apply coeff
-  let multiplier = 1.0;
-  const coeff = getSelectedCoeffFactors();
-  coeff.forEach(f => {
-    const actual = f.id === 'collectionRate' ? getCollectionRate(simData) : (simData[f.id] || 0);
-    const range = state.coeffRanges[f.id] || { min: '0.8', max: '1.2' };
-    const min = parseFloat(range.min), max = parseFloat(range.max);
-    let targetVal = f.id === 'collectionRate' ? parseFloat(document.getElementById('cfgCollectionRate')?.value || 90) :
-                    f.id === 'satisfaction' ? parseFloat(document.getElementById('cfgSatisfaction')?.value || 85) : 100;
-    const ratio = targetVal > 0 ? actual / targetVal : 1;
-    const c = Math.max(min, Math.min(max, ratio));
-    multiplier *= c;
-    bd.push({ label: `${f.name}系数（实际${actual.toFixed(1)}%/目标${targetVal}%）`, value: c.toFixed(2) });
-  });
+  const finalCommission = baseCommission * totalMultiplier;
+  bd.push({ label: '综合乘数系数', value: totalMultiplier.toFixed(3) });
+  bd.push({ label: '最终提成', value: `¥${baseCommission.toFixed(2)}万 × ${totalMultiplier.toFixed(3)} = ¥${finalCommission.toFixed(2)}万` });
 
-  const finalCommission = commission * multiplier;
-  bd.push({ label: '调节前合计', value: `¥${commission.toFixed(2)}万` });
-  bd.push({ label: '综合调节系数', value: multiplier.toFixed(3) });
-  bd.push({ label: '最终提成', value: `¥${finalCommission.toFixed(2)}万` });
+  const note = totalMultiplier > 1.1 ? '🚀 系数链整体利好，提成上浮'
+    : totalMultiplier < 0.9 ? '⚠️ 系数链整体压缩，提成打折'
+    : '✅ 系数链均衡，提成正常发放';
 
-  return { commission: finalCommission, breakdown: bd, note: multiplier > 1.1 ? '🚀 调节系数利好' : multiplier < 0.9 ? '⚠️ 调节系数压缩' : '✅ 各维度均衡' };
+  return { commission: finalCommission, breakdown: bd, note };
 }
 
 function getBracket(v) { if (v < 80) return '<80%'; if (v < 100) return '80-99%'; if (v < 120) return '100-119%'; if (v < 150) return '120-149%'; return '≥150%'; }
@@ -1465,9 +1618,22 @@ function prepareSummaryStep() {
     modelHtml += `<span style="font-size:13px;">· X轴：${xF?.name || '—'}</span><br>`;
     modelHtml += `<span style="font-size:13px;">· Y轴：${yF?.name || '—'}</span><br>`;
   } else if (m === 'hybrid') {
-    modelHtml = '<strong>🧩 混合模式</strong><br>';
-    modelHtml += `<span style="font-size:13px;">· 设障基础：${document.getElementById('hybBaseRate')?.value || 2}%</span><br>`;
-    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${state.directRates[f.id] || '未设置'}%</span><br>`; });
+    modelHtml = '<strong>🧩 混合模式（设障 + 乘数）</strong><br>';
+    const hybPrimary = direct.find(f => f.id === state.hybPrimaryId) || direct[0];
+    modelHtml += `<span style="font-size:13px;">· 设障主指标：${hybPrimary?.name || '—'}</span><br>`;
+    modelHtml += `<span style="font-size:13px;">· 档位：${state.hurdleTiers.map(t => `${t.name}(≥${t.achievement}%→${t.rate}%)`).join(' | ')}</span><br>`;
+    const hybOthers = direct.filter(f => f.id !== state.hybPrimaryId);
+    hybOthers.forEach(f => {
+      const r = state.directRates[f.id];
+      if (r && r > 0) modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${r}%</span><br>`;
+    });
+    (state.multiplierChains || []).forEach((c, i) => {
+      if (c.type === 'interval') {
+        modelHtml += `<span style="font-size:13px;">· K${i+1}·${c.name}（区间型）：${c.intervals.map(iv => `${iv.max}%→×${iv.multiplier}`).join(' | ')}</span><br>`;
+      } else {
+        modelHtml += `<span style="font-size:13px;">· K${i+1}·${c.name}（离散型）：${c.categories.map(cat => `${cat.label}=×${cat.multiplier}`).join(' · ')}</span><br>`;
+      }
+    });
   }
 
   let simHtml = '';
@@ -1525,6 +1691,7 @@ function saveToStorage() {
       coeffRanges: state.coeffRanges, matrixData: state.matrixData,
       matrixXId: state.matrixXId, matrixYId: state.matrixYId,
       hurdlePrimaryId: state.hurdlePrimaryId,
+      hybPrimaryId: state.hybPrimaryId,
       multiplierBase: state.multiplierBase, multiplierChains: state.multiplierChains,
       multiplierOtherDirect: state.multiplierOtherDirect,
       currentStep: state.currentStep, simulationResult: state.simulationResult,
@@ -1547,6 +1714,7 @@ function loadFromStorage() {
     if (data.matrixXId) state.matrixXId = data.matrixXId;
     if (data.matrixYId) state.matrixYId = data.matrixYId;
     if (data.hurdlePrimaryId) state.hurdlePrimaryId = data.hurdlePrimaryId;
+    if (data.hybPrimaryId) state.hybPrimaryId = data.hybPrimaryId;
     if (data.multiplierBase) state.multiplierBase = data.multiplierBase;
     if (data.multiplierChains) state.multiplierChains = data.multiplierChains;
     if (data.multiplierOtherDirect) state.multiplierOtherDirect = data.multiplierOtherDirect;
