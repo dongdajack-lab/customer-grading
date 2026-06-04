@@ -341,7 +341,7 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
     <!-- 乘数 -->
     <div class="card" id="configMultiplier" style="display:none">
       <div class="card-title" style="font-size:16px;">✖️ 乘数模式 — 各因素提成率配置</div>
-      <div class="card-subtitle">每个直接提成因素独立配置提成率，权重高的因素默认提成率更高</div>
+      <div class="card-subtitle">每个因素独立设置提成率。⏳ 权重决定重要性，提成率决定分钱比例，两者独立，不必按权重排序</div>
       <div id="directRates"></div>
       <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
         <div class="card-title" style="font-size:15px;">调节系数 — 浮动范围配置</div>
@@ -639,7 +639,7 @@ function buildDirectRates(direct) {
     return `<div class="param-row">
       <div class="param-label">
         <div>${f.name} 提成率</div>
-        <div class="param-desc">权重${f.weight}% · 单位：${f.unit}</div>
+        <div class="param-desc">${f.unit === '万元' ? '按金额的%提成' : '按' + f.unit + '的%提成'}</div>
       </div>
       <div class="param-right">
         <input type="number" class="param-input" value="${rate}" min="0" step="0.1" onchange="updateDirectRate('${f.id}',this.value)">
