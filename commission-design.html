@@ -171,6 +171,32 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 
 /* Tooltip helper */
 .help-text { font-size: 12px; color: var(--text-mid); margin-top: 4px; }
+
+/* Multiplier chain */
+.chain-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; background: var(--card); position: relative; }
+.chain-card.interval { border-left: 4px solid var(--di); }
+.chain-card.discrete { border-left: 4px solid var(--direct); }
+.chain-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.chain-header-left { display: flex; align-items: center; gap: 10px; }
+.chain-badge { font-size: 13px; font-weight: 700; color: var(--tian); background: var(--tian-light); padding: 3px 10px; border-radius: 6px; }
+.chain-name-input { width: 140px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; }
+.chain-type-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; background: #f8fafc; }
+.chain-delete { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #fca5a5; background: #fef2f2; color: #dc2626; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.chain-delete:hover { background: #fecaca; }
+.chain-body { padding-left: 0; }
+.chain-linked-select { width: 100%; max-width: 240px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; margin-bottom: 12px; }
+.chain-intervals { display: flex; flex-wrap: wrap; gap: 8px; }
+.chain-interval-item { flex: 1; min-width: 100px; padding: 8px 10px; background: #f8fafc; border-radius: 6px; text-align: center; border: 1px solid var(--border); }
+.chain-interval-item label { display: block; font-size: 11px; color: var(--text-mid); margin-bottom: 4px; }
+.chain-interval-item input { width: 60px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 13px; font-weight: 600; }
+.chain-interval-item input:focus { outline: none; border-color: var(--di); box-shadow: 0 0 0 2px rgba(5,150,105,0.1); }
+.chain-categories { display: flex; flex-wrap: wrap; gap: 8px; }
+.chain-cat-item { flex: 1; min-width: 100px; padding: 8px 10px; background: #f8fafc; border-radius: 6px; border: 1px solid var(--border); }
+.chain-cat-item label { display: block; font-size: 11px; color: var(--text-mid); margin-bottom: 4px; }
+.chain-cat-item .cat-name { width: 100%; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; margin-bottom: 4px; }
+.chain-cat-item .cat-mult { width: 60px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 13px; font-weight: 600; }
+.chain-cat-item input:focus { outline: none; border-color: var(--direct); box-shadow: 0 0 0 2px rgba(124,58,237,0.1); }
+.chain-add-cat { background: none; border: 1px dashed var(--border); color: var(--text-mid); padding: 6px 16px; border-radius: 6px; font-size: 12px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -257,9 +283,9 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
       <div class="model-card" data-model="multiplier" onclick="selectModel('multiplier')">
         <div class="model-icon">✖️</div>
         <div class="model-name">乘数模式</div>
-        <div class="model-desc">各直接提成因素独立计算后加总，再用调节系数（回款率、满意度等）乘算。最灵活，权重决定系数影响幅度。</div>
-        <div class="model-tags"><span class="model-tag">多目标平衡</span><span class="model-tag">行为引导</span></div>
-        <div class="model-formula">提成 = Σ(各因素金额×提成率) × 回款系数 × 满意度系数<br>系数浮动 = ±权重%×0.5</div>
+        <div class="model-desc">选一个基础因素设提成率，叠加多个乘数系数（K₁×K₂×K₃...）按其他因素表现浮动。如销售额×3%，毛利率高则乘1.5、回款差则乘0.6，系数链联动。</div>
+        <div class="model-tags"><span class="model-tag">行为引导</span><span class="model-tag">多维度联动</span><span class="model-tag">博商同款</span></div>
+        <div class="model-formula">提成 = 基础提成额 × K₁ × K₂ × K₃ × ...<br>系数链：每个K关联一个因素，区间型或离散型</div>
       </div>
       <div class="model-card" data-model="matrix" onclick="selectModel('matrix')">
         <div class="model-icon">📊</div>
@@ -329,14 +355,35 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 
     <!-- 乘数 -->
     <div class="card" id="configMultiplier" style="display:none">
-      <div class="card-title" style="font-size:16px;">✖️ 乘数模式 — 各因素提成率配置</div>
-      <div class="card-subtitle">每个因素独立设置提成率，根据公司实际情况填写</div>
-      <div id="directRates"></div>
-      <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
-        <div class="card-title" style="font-size:15px;">调节系数 — 浮动范围配置</div>
-        <div class="card-subtitle">设置每个调节系数的浮动范围，影响最终提成的上下幅度</div>
-        <div id="coeffRanges"></div>
+      <div class="card-title" style="font-size:16px;">✖️ 乘数模式 — 系数链配置</div>
+      <div class="card-subtitle">提成 = 基础提成额 × K₁ × K₂ × K₃ × ...（各系数连乘，可关联不同因素或分类）</div>
+
+      <!-- 基础提成 -->
+      <div style="margin-bottom:20px; padding:18px 20px; background:var(--tian-light); border-radius:var(--radius); border:1px solid #93c5fd;">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🎯 基础提成</div>
+        <div class="scenario-row">
+          <div class="scenario-field"><label>基础因素</label><select id="mulBaseFactor" onchange="onMulBaseChange()"></select></div>
+          <div class="scenario-field"><label>基础提成率（%）</label><input type="number" id="mulBaseRate" value="3" min="0.1" step="0.1" onchange="onMulBaseRateChange()"></div>
+        </div>
       </div>
+
+      <!-- 系数链 -->
+      <div style="margin-bottom:20px;">
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px;">🔗 乘数系数链</div>
+        <div style="font-size:12px;color:var(--text-mid);margin-bottom:14px;">每个系数关联一个因素，最终提成 = 基础提成 × 所有系数连乘</div>
+        <div id="mulChains"></div>
+        <button class="btn btn-outline" onclick="addMulChain()" style="margin-top:8px;width:100%;justify-content:center;">+ 添加系数链 (K<sub id="nextKIdx">1</sub>)</button>
+      </div>
+
+      <!-- 其他因素加算 -->
+      <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
+        <div class="card-title" style="font-size:15px;">📎 其他直接因素加算（可选）</div>
+        <div class="card-subtitle">非基础因素按各自提成率独立计算后，与基础提成相加，再乘系数链</div>
+        <div id="mulOtherRates"></div>
+      </div>
+
+      <!-- 公式预览 -->
+      <div id="mulFormulaPreview" style="margin-top:16px; padding:12px 16px; background:#f0fdf4; border-radius:8px; border:1px solid #86efac; font-family:SF Mono,monospace; font-size:13px; color:var(--di-dark);"></div>
     </div>
 
     <!-- 矩阵 -->
@@ -465,6 +512,10 @@ const state = {
   matrixXId: null,
   matrixYId: null,
   hurdlePrimaryId: null,
+  // 乘数模式专用
+  multiplierBase: { factorId: 'revenue', rate: 3 },
+  multiplierChains: [],
+  multiplierOtherDirect: {}, // { factorId: rate }
   simulationResult: null,
 };
 
@@ -583,7 +634,9 @@ function prepareConfigStep() {
     if (!state.hurdlePrimaryId) state.hurdlePrimaryId = direct[0]?.id || null;
     buildHurdleOtherRates(direct);
   }
-  if (state.selectedModel === 'multiplier' || state.selectedModel === 'hybrid') {
+  if (state.selectedModel === 'multiplier') {
+    buildMultiplierConfig();
+  } else if (state.selectedModel === 'hybrid') {
     buildDirectRates(direct);
     buildCoeffRanges(coeff);
   }
@@ -683,6 +736,208 @@ function updateCoeffRange(id, val) {
   saveToStorage();
 }
 
+// ==================== MULTIPLIER CONFIG ====================
+function buildMultiplierConfig() {
+  const direct = getSelectedDirectFactors();
+  if (direct.length === 0) {
+    document.getElementById('mulChains').innerHTML = '<div style="color:var(--text-mid);">请先在第一步选择「直接提成」类因素</div>';
+    return;
+  }
+
+  // Init default base
+  if (!state.multiplierBase || !state.multiplierBase.factorId) {
+    state.multiplierBase = { factorId: direct[0].id, rate: 3 };
+  }
+
+  // Build base factor selector
+  const baseSel = document.getElementById('mulBaseFactor');
+  baseSel.innerHTML = direct.map(f =>
+    `<option value="${f.id}" ${state.multiplierBase.factorId === f.id ? 'selected' : ''}>${f.name}</option>`
+  ).join('');
+  document.getElementById('mulBaseRate').value = state.multiplierBase.rate;
+
+  // Build chains
+  renderMulChains();
+
+  // Build other direct factors
+  buildMulOtherRates(direct);
+
+  // Update formula preview
+  renderMulFormula();
+}
+
+function renderMulChains() {
+  const container = document.getElementById('mulChains');
+  const direct = getSelectedDirectFactors();
+  const allFactors = getAllSelectedFactors();
+
+  if (state.multiplierChains.length === 0) {
+    // Auto-create one default chain
+    state.multiplierChains.push({
+      id: 'k1', name: '毛利率系数', type: 'interval',
+      linkedFactorId: direct.length > 1 ? (direct[1]?.id || direct[0].id) : (direct[0]?.id || ''),
+      intervals: [
+        { min: 0, max: 30, multiplier: 0.6 },
+        { min: 30, max: 40, multiplier: 1.0 },
+        { min: 40, max: 100, multiplier: 1.5 },
+      ],
+      categories: [{ label: '类型A', multiplier: 1 }],
+    });
+  }
+
+  document.getElementById('nextKIdx').textContent = state.multiplierChains.length + 1;
+
+  container.innerHTML = state.multiplierChains.map((chain, idx) => {
+    const isInterval = chain.type === 'interval';
+    const cardinal = ['一','二','三','四','五','六'][idx] || (idx+1);
+
+    // Factor dropdown for interval type
+    let body;
+    if (isInterval) {
+      body = `<div class="chain-body">
+        <label style="font-size:12px;color:var(--text-mid);">关联因素</label>
+        <select class="chain-linked-select" onchange="updateMulChainLinked(${idx}, this.value)">
+          ${allFactors.map(f => `<option value="${f.id}" ${chain.linkedFactorId === f.id ? 'selected' : ''}>${f.name}（${f.unit}）</option>`).join('')}
+        </select>
+        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px;">${cardinal}个区间定义</div>
+        <div class="chain-intervals">
+          ${chain.intervals.map((iv, i) => `
+            <div class="chain-interval-item">
+              <label>下限 ${iv.min > 0 ? `${iv.min}≤` : ''}</label>
+              <input type="number" value="${iv.max}" min="0" max="200" step="1" onchange="updateMulInterval(${idx},${i},'max',this.value)"><span style="font-size:11px;color:var(--text-mid);">%</span>
+              <label style="margin-top:6px;">乘数</label>
+              <input type="number" value="${iv.multiplier}" min="0" max="5" step="0.1" onchange="updateMulInterval(${idx},${i},'multiplier',this.value)">
+            </div>`).join('')}
+          <button class="chain-add-cat" onclick="addMulInterval(${idx})">+ 区间</button>
+        </div>
+      </div>`;
+    } else {
+      body = `<div class="chain-body">
+        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px;">${cardinal}个分类定义（如产品类型、客户来源等）</div>
+        <div class="chain-categories">
+          ${chain.categories.map((cat, i) => `
+            <div class="chain-cat-item">
+              <input class="cat-name" value="${cat.label}" placeholder="分类名" onchange="updateMulCategory(${idx},${i},'label',this.value)">
+              <label>乘数</label>
+              <input class="cat-mult" type="number" value="${cat.multiplier}" min="0" max="5" step="0.1" onchange="updateMulCategory(${idx},${i},'multiplier',this.value)">
+            </div>`).join('')}
+          <button class="chain-add-cat" onclick="addMulCategory(${idx})">+ 分类</button>
+        </div>
+      </div>`;
+    }
+
+    return `<div class="chain-card ${isInterval ? 'interval' : 'discrete'}">
+      <div class="chain-header">
+        <div class="chain-header-left">
+          <span class="chain-badge">K${idx + 1}</span>
+          <input class="chain-name-input" value="${chain.name}" onchange="updateMulChainName(${idx}, this.value)" placeholder="系数名称">
+          <select class="chain-type-select" onchange="updateMulChainType(${idx}, this.value)">
+            <option value="interval" ${isInterval ? 'selected' : ''}>区间型</option>
+            <option value="discrete" ${!isInterval ? 'selected' : ''}>离散型</option>
+          </select>
+        </div>
+        <button class="chain-delete" onclick="deleteMulChain(${idx})" title="删除此系数">✕</button>
+      </div>
+      ${body}
+    </div>`;
+  }).join('');
+}
+
+function renderMulFormula() {
+  const base = getSelectedDirectFactors().find(f => f.id === state.multiplierBase.factorId);
+  const baseName = base?.name || '基础';
+  const baseRate = state.multiplierBase.rate;
+  let formula = `提成 = <b>${baseName} × ${baseRate}%</b>`;
+  state.multiplierChains.forEach((c, i) => {
+    formula += ` × K<sub>${i+1}</sub>(${c.name})`;
+  });
+  document.getElementById('mulFormulaPreview').innerHTML = formula;
+}
+
+function buildMulOtherRates(direct) {
+  const container = document.getElementById('mulOtherRates');
+  const others = direct.filter(f => f.id !== state.multiplierBase.factorId);
+  if (others.length === 0) {
+    container.innerHTML = '<div style="color:var(--text-mid);font-size:13px;">无其他直接提成因素可加算</div>';
+    return;
+  }
+  container.innerHTML = others.map(f => {
+    const rate = state.multiplierOtherDirect[f.id] ?? '';
+    return `<div class="param-row">
+      <div class="param-label">
+        <div>${f.name} 提成率</div>
+        <div class="param-desc">按${f.unit}提成，直接加算到基础提成</div>
+      </div>
+      <div class="param-right">
+        <input type="number" class="param-input" value="${rate}" min="0" step="0.1" onchange="updateMulOtherRate('${f.id}',this.value)" placeholder="可选">
+        <span class="param-unit">%</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ---- Callbacks ----
+function onMulBaseChange() {
+  state.multiplierBase.factorId = document.getElementById('mulBaseFactor').value;
+  buildMulOtherRates(getSelectedDirectFactors());
+  renderMulFormula();
+  saveToStorage();
+}
+function onMulBaseRateChange() {
+  state.multiplierBase.rate = parseFloat(document.getElementById('mulBaseRate').value) || 3;
+  renderMulFormula();
+  saveToStorage();
+}
+function addMulChain() {
+  const direct = getSelectedDirectFactors();
+  state.multiplierChains.push({
+    id: 'k' + (state.multiplierChains.length + 1),
+    name: '新系数',
+    type: 'interval',
+    linkedFactorId: direct[0]?.id || '',
+    intervals: [{ min: 0, max: 100, multiplier: 1.0 }],
+    categories: [{ label: '类型A', multiplier: 1 }],
+  });
+  renderMulChains();
+  renderMulFormula();
+  saveToStorage();
+}
+function deleteMulChain(idx) {
+  state.multiplierChains.splice(idx, 1);
+  renderMulChains();
+  renderMulFormula();
+  saveToStorage();
+}
+function updateMulChainName(idx, val) { state.multiplierChains[idx].name = val; saveToStorage(); }
+function updateMulChainType(idx, val) {
+  state.multiplierChains[idx].type = val;
+  renderMulChains();
+  saveToStorage();
+}
+function updateMulChainLinked(idx, val) { state.multiplierChains[idx].linkedFactorId = val; saveToStorage(); }
+function updateMulInterval(ci, ii, key, val) {
+  state.multiplierChains[ci].intervals[ii][key] = (key === 'multiplier') ? parseFloat(val) || 1 : parseInt(val) || 0;
+  saveToStorage();
+}
+function addMulInterval(ci) {
+  state.multiplierChains[ci].intervals.push({ min: 0, max: 100, multiplier: 1.0 });
+  renderMulChains();
+  saveToStorage();
+}
+function updateMulCategory(ci, catI, key, val) {
+  state.multiplierChains[ci].categories[catI][key] = (key === 'multiplier') ? parseFloat(val) || 1 : val;
+  saveToStorage();
+}
+function addMulCategory(ci) {
+  state.multiplierChains[ci].categories.push({ label: '新分类', multiplier: 1 });
+  renderMulChains();
+  saveToStorage();
+}
+function updateMulOtherRate(id, val) {
+  state.multiplierOtherDirect[id] = val === '' ? null : parseFloat(val) || 0;
+  saveToStorage();
+}
+
 // ==================== MATRIX ====================
 function rebuildMatrix() {
   const direct = getSelectedDirectFactors();
@@ -759,7 +1014,7 @@ function prepareSimStep() {
     mentoring: 2, knowledge: 3, compliance: 95,
   };
 
-  container.innerHTML = all.map(f => {
+  let html = all.map(f => {
     const def = defs[f.id] ?? '';
     const isKpi = f.type === 'kpi';
     return `<div class="scenario-row">
@@ -769,6 +1024,24 @@ function prepareSimStep() {
       </div>
     </div>`;
   }).join('');
+
+  // For multiplier mode: add discrete chain dropdowns
+  if (state.selectedModel === 'multiplier' && state.multiplierChains) {
+    state.multiplierChains.forEach(chain => {
+      if (chain.type === 'discrete') {
+        html += `<div class="scenario-row">
+          <div class="scenario-field"><label>${chain.name} 选择</label></div>
+          <div class="scenario-field">
+            <select id="sim_disc_${chain.id}" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;">
+              ${chain.categories.map(c => `<option value="${c.label}">${c.label}（乘数 ×${c.multiplier}）</option>`).join('')}
+            </select>
+          </div>
+        </div>`;
+      }
+    });
+  }
+
+  container.innerHTML = html;
 }
 
 function resetSimulation() {
@@ -788,6 +1061,9 @@ function resetSimulation() {
   state.matrixXId = null;
   state.matrixYId = null;
   state.hurdlePrimaryId = null;
+  state.multiplierBase = { factorId: 'revenue', rate: 3 };
+  state.multiplierChains = [];
+  state.multiplierOtherDirect = {};
   state.simulationResult = null;
 
   // 重建 UI
@@ -811,6 +1087,16 @@ function runSimulation() {
   const simData = {};
   all.forEach(f => { const el = document.getElementById('sim_' + f.id); if (el) simData[f.id] = parseFloat(el.value) || 0; });
 
+  // For multiplier mode: collect discrete chain selections
+  if (state.selectedModel === 'multiplier' && state.multiplierChains) {
+    state.multiplierChains.forEach(chain => {
+      if (chain.type === 'discrete') {
+        const el = document.getElementById('sim_disc_' + chain.id);
+        simData['disc_' + chain.id] = el?.value || '';
+      }
+    });
+  }
+
   let result;
   switch (state.selectedModel) {
     case 'hurdle': result = calcHurdle(simData); break;
@@ -825,7 +1111,7 @@ function runSimulation() {
   const periodTarget = getPeriodTarget();
   const periodName = document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度';
 
-  // 设障模式：主指标决定达成率展示
+  // 设障/乘数模式：不同模式不同主指标
   let primaryLabel = `${periodName}销售额`, primaryValue = revenue, achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
   if (state.selectedModel === 'hurdle') {
     const direct = getSelectedDirectFactors();
@@ -837,6 +1123,15 @@ function runSimulation() {
       let primaryTarget = periodTarget;
       if (primary.id === 'profit') primaryTarget = periodTarget * grossMargin / 100;
       achievement = primaryTarget > 0 ? (primaryValue / primaryTarget * 100) : 0;
+    }
+  }
+  if (state.selectedModel === 'multiplier') {
+    const direct = getSelectedDirectFactors();
+    const baseFactor = direct.find(f => f.id === state.multiplierBase.factorId) || direct[0];
+    if (baseFactor) {
+      primaryLabel = `${periodName}${baseFactor.name}`;
+      primaryValue = simData[baseFactor.id] || 0;
+      achievement = periodTarget > 0 ? (primaryValue / periodTarget * 100) : 0;
     }
   }
 
@@ -932,43 +1227,87 @@ function calcHurdle(simData) {
   return { commission, breakdown: bd, note: tier.name === '保底线' && tier.rate === 0 ? '⚠️ 仅达保底线，主指标无提成，其他因素正常' : collNote || '✅ 提成正常发放' };
 }
 
-// ----- MULTIPLIER -----
+// ==================== MULTIPLIER CALC ====================
 function calcMultiplier(simData) {
   const direct = getSelectedDirectFactors();
-  let baseCommission = 0;
-  const bd = [];
+  const baseFactor = direct.find(f => f.id === state.multiplierBase.factorId) || direct[0];
+  if (!baseFactor) return { commission: 0, breakdown: [], note: '⚠️ 未选择基础提成因素' };
 
-  direct.forEach(f => {
-    const val = simData[f.id] || 0;
-    const rate = state.directRates[f.id] || 0;
-    const comm = val * rate / 100;
-    baseCommission += comm;
-    bd.push({ label: `${f.name}（¥${val}万 × ${rate}%）`, value: `¥${comm.toFixed(2)}万` });
+  const baseVal = simData[baseFactor.id] || 0;
+  const baseRate = state.multiplierBase.rate || 0;
+  let baseCommission = baseVal * baseRate / 100;
+  const bd = [
+    { label: `基础提成（${baseFactor.name} ¥${baseVal}万 × ${baseRate}%）`, value: `¥${baseCommission.toFixed(2)}万` },
+  ];
+
+  // ---- Other direct factors ----
+  const others = direct.filter(f => f.id !== baseFactor.id);
+  others.forEach(f => {
+    const rate = state.multiplierOtherDirect[f.id];
+    if (rate && rate > 0) {
+      const val = simData[f.id] || 0;
+      const comm = val * rate / 100;
+      baseCommission += comm;
+      bd.push({ label: `+ ${f.name}（¥${val}万 × ${rate}%）`, value: `¥${comm.toFixed(2)}万` });
+    }
   });
-
-  let multiplier = 1.0;
-  const coeff = getSelectedCoeffFactors();
-  coeff.forEach(f => {
-    const actual = f.id === 'collectionRate' ? getCollectionRate(simData) : (simData[f.id] || 0);
-    const range = state.coeffRanges[f.id] || { min: '0.8', max: '1.2' };
-    const min = parseFloat(range.min), max = parseFloat(range.max);
-    let targetVal;
-    if (f.id === 'collectionRate') targetVal = parseFloat(document.getElementById('cfgCollectionRate')?.value || 90);
-    else if (f.id === 'satisfaction') targetVal = parseFloat(document.getElementById('cfgSatisfaction')?.value || 85);
-    else targetVal = 100;
-
-    const ratio = targetVal > 0 ? actual / targetVal : 1;
-    const coeffVal = Math.max(min, Math.min(max, ratio));
-    multiplier *= coeffVal;
-    bd.push({ label: `${f.name}（实际${actual.toFixed(1)}% vs 目标${targetVal}%）`, value: `系数 ${coeffVal.toFixed(2)}` });
-  });
-
-  const commission = baseCommission * multiplier;
   bd.push({ label: '基础提成合计', value: `¥${baseCommission.toFixed(2)}万` });
-  bd.push({ label: '综合调节系数', value: multiplier.toFixed(3) });
-  bd.push({ label: '最终提成', value: `¥${baseCommission.toFixed(2)}万 × ${multiplier.toFixed(3)} = ¥${commission.toFixed(2)}万` });
 
-  return { commission, breakdown: bd, note: multiplier > 1.1 ? '🚀 调节系数利好，提成上浮' : multiplier < 0.9 ? '⚠️ 调节系数压缩，提成打折' : '✅ 调节系数正常' };
+  // ---- Multiplier chains ----
+  let totalMultiplier = 1.0;
+  const chainDetails = [];
+
+  state.multiplierChains.forEach((chain, i) => {
+    let k = 1.0;
+    let detail = '';
+
+    if (chain.type === 'interval') {
+      // Interval: get factor value, compare to intervals
+      const linkedF = getAllSelectedFactors().find(f => f.id === chain.linkedFactorId);
+      const rawVal = simData[chain.linkedFactorId];
+      let val;
+      if (chain.linkedFactorId === 'collectionRate') {
+        val = getCollectionRate(simData);
+      } else if (chain.linkedFactorId === 'profit') {
+        // Profit as margin %
+        const rev = simData.revenue || 0;
+        val = rev > 0 ? ((simData.profit || 0) / rev * 100) : 0;
+      } else {
+        val = rawVal || 0;
+      }
+
+      // Find matching interval
+      const sorted = [...chain.intervals].sort((a, b) => a.max - b.max);
+      for (const iv of sorted) {
+        if (val <= iv.max) { k = iv.multiplier; break; }
+      }
+      if (val > (sorted[sorted.length - 1]?.max || 100)) {
+        k = sorted[sorted.length - 1]?.multiplier || 1;
+      }
+      detail = `K${i+1}·${chain.name}：${linkedF?.name || '—'} = ${val.toFixed(1)}% → 乘数 ${k}`;
+    } else {
+      // Discrete: use simData field from discrete input
+      const discKey = 'disc_' + chain.id;
+      const selectedCat = simData[discKey] || chain.categories[0]?.label || '';
+      const cat = chain.categories.find(c => c.label === selectedCat);
+      k = cat?.multiplier || 1;
+      detail = `K${i+1}·${chain.name}：「${selectedCat}」→ 乘数 ${k}`;
+    }
+
+    totalMultiplier *= k;
+    chainDetails.push(detail);
+    bd.push({ label: detail, value: k.toFixed(2) });
+  });
+
+  const finalCommission = baseCommission * totalMultiplier;
+  bd.push({ label: '综合乘数系数', value: totalMultiplier.toFixed(3) });
+  bd.push({ label: '最终提成', value: `¥${baseCommission.toFixed(2)}万 × ${totalMultiplier.toFixed(3)} = ¥${finalCommission.toFixed(2)}万` });
+
+  const note = totalMultiplier > 1.1 ? '🚀 系数链整体利好，提成上浮'
+    : totalMultiplier < 0.9 ? '⚠️ 系数链整体压缩，提成打折'
+    : '✅ 系数链均衡，提成正常发放';
+
+  return { commission: finalCommission, breakdown: bd, note };
 }
 
 // ----- MATRIX -----
@@ -1105,8 +1444,20 @@ function prepareSummaryStep() {
     others.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${state.directRates[f.id] || '未设置'}%</span><br>`; });
   } else if (m === 'multiplier') {
     modelHtml = '<strong>✖️ 乘数模式</strong><br>';
-    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}：${state.directRates[f.id] || '未设置'}%</span><br>`; });
-    coeff.forEach(f => { const r = state.coeffRanges[f.id]; modelHtml += `<span style="font-size:13px;">· ${f.name}系数：${r?.min}~${r?.max}</span><br>`; });
+    const baseFactor = direct.find(f => f.id === state.multiplierBase.factorId) || direct[0];
+    modelHtml += `<span style="font-size:13px;">· 基础因素：${baseFactor?.name || '—'} × ${state.multiplierBase.rate || 0}%</span><br>`;
+    const otherDirect = direct.filter(f => f.id !== state.multiplierBase.factorId);
+    otherDirect.forEach(f => {
+      const r = state.multiplierOtherDirect[f.id];
+      if (r && r > 0) modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${r}%</span><br>`;
+    });
+    (state.multiplierChains || []).forEach((c, i) => {
+      if (c.type === 'interval') {
+        modelHtml += `<span style="font-size:13px;">· K${i+1}·${c.name}（区间型）：${c.intervals.map(iv => `${iv.max}%→×${iv.multiplier}`).join(' | ')}</span><br>`;
+      } else {
+        modelHtml += `<span style="font-size:13px;">· K${i+1}·${c.name}（离散型）：${c.categories.map(cat => `${cat.label}=×${cat.multiplier}`).join(' · ')}</span><br>`;
+      }
+    });
   } else if (m === 'matrix') {
     modelHtml = '<strong>📊 矩阵模式</strong><br>';
     const xF = direct.find(f => f.id === state.matrixXId) || direct[0];
@@ -1174,6 +1525,8 @@ function saveToStorage() {
       coeffRanges: state.coeffRanges, matrixData: state.matrixData,
       matrixXId: state.matrixXId, matrixYId: state.matrixYId,
       hurdlePrimaryId: state.hurdlePrimaryId,
+      multiplierBase: state.multiplierBase, multiplierChains: state.multiplierChains,
+      multiplierOtherDirect: state.multiplierOtherDirect,
       currentStep: state.currentStep, simulationResult: state.simulationResult,
     };
     localStorage.setItem('commissionDesignV2', JSON.stringify(data));
@@ -1194,6 +1547,9 @@ function loadFromStorage() {
     if (data.matrixXId) state.matrixXId = data.matrixXId;
     if (data.matrixYId) state.matrixYId = data.matrixYId;
     if (data.hurdlePrimaryId) state.hurdlePrimaryId = data.hurdlePrimaryId;
+    if (data.multiplierBase) state.multiplierBase = data.multiplierBase;
+    if (data.multiplierChains) state.multiplierChains = data.multiplierChains;
+    if (data.multiplierOtherDirect) state.multiplierOtherDirect = data.multiplierOtherDirect;
     if (data.simulationResult) state.simulationResult = data.simulationResult;
     if (data.selectedModel) {
       document.querySelectorAll('.model-card').forEach(c => { if (c.dataset.model === data.selectedModel) c.classList.add('selected'); });
