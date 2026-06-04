@@ -529,12 +529,31 @@ const SCOPE_LABELS = {
 
 // ===== Scope Selection =====
 function setScope(scope) {
+  const prevScope = analysisScope;
   analysisScope = scope;
   ['single','industry','category'].forEach(s => {
     const el = document.getElementById('scope' + s.charAt(0).toUpperCase() + s.slice(1));
     if (el) el.classList.toggle('active', s === scope);
   });
+  // 切换scope时清空画像字段（不同scope分析对象不同，旧数据无意义）
+  if (prevScope !== scope) {
+    clearProfileFields();
+  }
   updateScopeLabels();
+  // 提示加载示例
+  const tips = { single:'🎯 一户一策 — 可加载S类示例或手动填写', industry:'🏭 一行一策 — 可加载A类示例或手动填写', category:'📦 一类一策 — 可加载B类示例或手动填写' };
+  showToast(tips[scope]);
+}
+
+function clearProfileFields() {
+  document.getElementById('custName').value = '';
+  document.getElementById('custIndustry').value = '';
+  document.getElementById('custScale').value = '';
+  document.getElementById('custKeyPerson').value = '';
+  document.getElementById('custBudget').value = '';
+  document.getElementById('custDecision').value = '';
+  document.getElementById('custCycle').value = '';
+  document.getElementById('custPain').value = '';
 }
 
 function updateScopeLabels() {
