@@ -387,7 +387,10 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
       </div>
       <div id="simTargetDisplay" style="font-size:13px; color:var(--text-mid); margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:6px;"></div>
       <div id="simInputs"></div>
-      <button class="btn btn-primary" onclick="runSimulation()" style="margin-top:16px;">▶ 开始测算</button>
+      <div style="margin-top:16px;display:flex;gap:12px;">
+        <button class="btn btn-primary" onclick="runSimulation()">▶ 开始测算</button>
+        <button class="btn btn-outline" onclick="resetSimulation()">🔄 重新计算</button>
+      </div>
     </div>
 
     <div class="pilot-result" id="pilotResult">
@@ -766,6 +769,31 @@ function prepareSimStep() {
       </div>
     </div>`;
   }).join('');
+}
+
+function resetSimulation() {
+  // 清空测算结果
+  state.simulationResult = null;
+  document.getElementById('pilotPreview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);">输入销售数据，点击「开始测算」查看结果</div>';
+  // 重置所有模拟输入为默认值
+  const all = getAllSelectedFactors();
+  const defs = {
+    revenue: 120, profit: 38, strategicProduct: 20, collection: 100, collectionRate: 85,
+    satisfaction: 88, conversion: 30, activity: 90, retention: 50, newMarket: 15,
+    mentoring: 2, knowledge: 3, compliance: 95,
+  };
+  all.forEach(f => {
+    const el = document.getElementById('sim_' + f.id);
+    if (el) el.value = defs[f.id] ?? '';
+  });
+  // 重置周期和姓名
+  const simPeriod = document.getElementById('simPeriod');
+  if (simPeriod) simPeriod.value = 'quarterly';
+  const simName = document.getElementById('simName');
+  if (simName) simName.value = '张三';
+  const simTarget = document.getElementById('simTarget');
+  if (simTarget) simTarget.value = 500;
+  saveToStorage();
 }
 
 function runSimulation() {
