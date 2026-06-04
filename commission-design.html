@@ -250,9 +250,9 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
       <div class="model-card" data-model="hurdle" onclick="selectModel('hurdle')">
         <div class="model-icon">🚪</div>
         <div class="model-name">设障模式</div>
-        <div class="model-desc">设定业绩门槛，达标后才启动提成。多级门槛对应逐级递增的提成比例。最简单直接。</div>
+        <div class="model-desc">选一个主指标设门槛，达标后该指标按档位提成，其他直接因素按各自提成率加算。保底线思维，先过关再谈钱。</div>
         <div class="model-tags"><span class="model-tag">成熟业务</span><span class="model-tag">保底线思维</span></div>
-        <div class="model-formula">提成 = 销售额 × 对应门槛提成率<br>保底80%→0% / 达标100%→3% / 挑战120%→5%</div>
+        <div class="model-formula">主指标提成 = 主指标金额 × 对应门槛提成率<br>总提成 = 主指标提成 + Σ(其他因素×各自提成率) × 回款调节</div>
       </div>
       <div class="model-card" data-model="multiplier" onclick="selectModel('multiplier')">
         <div class="model-icon">✖️</div>
@@ -310,12 +310,20 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
     <!-- 设障 -->
     <div class="card" id="configHurdle" style="display:none">
       <div class="card-title" style="font-size:16px;">🚪 设障模式 — 门槛配置</div>
-      <div class="card-subtitle">以「销售额达成率」为主门槛，其他直接因素作为辅助验证</div>
+      <div class="card-subtitle">选一个主门槛指标，达标后该指标按档位提成，其他直接因素仍按各自提成率独立计算</div>
+      <div class="scenario-row" style="margin-bottom:16px;">
+        <div class="scenario-field" style="flex:1;"><label>主门槛指标</label><select id="hurdlePrimarySelect" onchange="onHurdlePrimaryChange()"></select></div>
+      </div>
       <div id="hurdleTiers"></div>
       <button class="btn btn-outline" onclick="addHurdleTier()" style="margin-top:12px;">+ 添加门槛</button>
       <div class="info-banner" style="margin-top:16px;">
         <span class="icon">💡</span>
         <span><b>设计原则：</b>保底线≥70%（否则失去激励），卓越线≤200%（否则无人触碰）。每档提成率建议递增1-2个百分点。</span>
+      </div>
+      <div style="margin-top:24px; padding-top:20px; border-top:2px solid var(--border);">
+        <div class="card-title" style="font-size:15px;">其他直接提成因素 — 独立提成率</div>
+        <div class="card-subtitle">以下因素不设门槛，按实际金额×提成率独立计算，与主门槛提成相加</div>
+        <div id="hurdleOtherRates"></div>
       </div>
     </div>
 
@@ -453,6 +461,7 @@ const state = {
   matrixData: null,
   matrixXId: null,
   matrixYId: null,
+  hurdlePrimaryId: null,
   simulationResult: null,
 };
 
@@ -564,6 +573,13 @@ function prepareConfigStep() {
   const direct = getSelectedDirectFactors();
   const coeff = getSelectedCoeffFactors();
 
+  if (state.selectedModel === 'hurdle') {
+    // Populate primary hurdle selector
+    const hSel = document.getElementById('hurdlePrimarySelect');
+    hSel.innerHTML = direct.map((f, i) => `<option value="${f.id}" ${(state.hurdlePrimaryId === f.id || (!state.hurdlePrimaryId && i === 0)) ? 'selected' : ''}>${f.name}</option>`).join('');
+    if (!state.hurdlePrimaryId) state.hurdlePrimaryId = direct[0]?.id || null;
+    buildHurdleOtherRates(direct);
+  }
   if (state.selectedModel === 'multiplier' || state.selectedModel === 'hybrid') {
     buildDirectRates(direct);
     buildCoeffRanges(coeff);
@@ -601,6 +617,33 @@ function buildDirectRates(direct) {
 }
 
 function updateDirectRate(id, val) { state.directRates[id] = parseFloat(val) || 0; saveToStorage(); }
+
+function onHurdlePrimaryChange() {
+  state.hurdlePrimaryId = document.getElementById('hurdlePrimarySelect').value;
+  buildHurdleOtherRates(getSelectedDirectFactors());
+  saveToStorage();
+}
+
+function buildHurdleOtherRates(direct) {
+  const container = document.getElementById('hurdleOtherRates');
+  if (!container) return;
+  const others = direct.filter(f => f.id !== state.hurdlePrimaryId);
+  if (others.length === 0) { container.innerHTML = '<div style="color:var(--text-mid);">无其他直接提成因素</div>'; return; }
+
+  container.innerHTML = others.map(f => {
+    const rate = state.directRates[f.id];
+    return `<div class="param-row">
+      <div class="param-label">
+        <div>${f.name}</div>
+        <div class="param-desc">${f.unit === '万元' ? '按金额的%提成' : '按' + f.unit + '的%提成'}</div>
+      </div>
+      <div class="param-right">
+        <input type="number" class="param-input" value="${rate}" min="0" step="0.1" onchange="updateDirectRate('${f.id}',this.value)">
+        <span class="param-unit">%</span>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 function buildCoeffRanges(coeff) {
   const container = document.getElementById(state.selectedModel === 'hybrid' ? 'hybridCoeffRanges' : 'coeffRanges');
@@ -742,14 +785,28 @@ function runSimulation() {
   state.simulationResult = result;
   const revenue = simData.revenue || 0;
   const periodTarget = getPeriodTarget();
-  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
   const periodName = document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度';
+
+  // 设障模式：主指标决定达成率展示
+  let primaryLabel = `${periodName}销售额`, primaryValue = revenue, achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
+  if (state.selectedModel === 'hurdle') {
+    const direct = getSelectedDirectFactors();
+    const primary = direct.find(f => f.id === state.hurdlePrimaryId) || direct[0];
+    if (primary) {
+      primaryLabel = `${periodName}${primary.name}`;
+      primaryValue = simData[primary.id] || 0;
+      const grossMargin = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
+      let primaryTarget = periodTarget;
+      if (primary.id === 'profit') primaryTarget = periodTarget * grossMargin / 100;
+      achievement = primaryTarget > 0 ? (primaryValue / primaryTarget * 100) : 0;
+    }
+  }
 
   const preview = document.getElementById('pilotPreview');
   preview.innerHTML = `
     <h3>📊 ${document.getElementById('simName')?.value || '销售'} · ${periodName}测算结果</h3>
     <div style="font-size:13px;opacity:0.6;margin-bottom:16px;">模式：${modelName()} · ${periodName}目标 ¥${periodTarget.toFixed(1)}万</div>
-    <div class="preview-row"><span class="preview-label">${periodName}销售额</span><span class="preview-value">¥${revenue.toLocaleString()} 万</span></div>
+    <div class="preview-row"><span class="preview-label">${primaryLabel}</span><span class="preview-value">¥${primaryValue.toLocaleString()} 万</span></div>
     <div class="preview-row"><span class="preview-label">业绩达成率</span><span class="preview-value">${achievement.toFixed(1)}%</span></div>
     <div class="preview-row"><span class="preview-label">提成金额</span><span class="preview-value highlight">¥${result.commission.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 万</span></div>
     <div class="preview-row"><span class="preview-label">综合提成率</span><span class="preview-value">${revenue > 0 ? (result.commission/revenue*100).toFixed(2) : 0}%</span></div>
@@ -772,36 +829,69 @@ function getCollectionRate(simData) {
 
 // ----- HURDLE -----
 function calcHurdle(simData) {
-  const revenue = simData.revenue || 0;
+  const direct = getSelectedDirectFactors();
+  const primary = direct.find(f => f.id === state.hurdlePrimaryId) || direct[0];
+  if (!primary) return { commission: 0, breakdown: [], note: '⚠️ 未选择直接提成因素' };
+
   const periodTarget = getPeriodTarget();
-  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
+  const grossMargin = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
+
+  // 根据主指标计算目标值和达成率
+  const primaryActual = simData[primary.id] || 0;
+  let primaryTarget = periodTarget;
+  if (primary.id === 'profit') primaryTarget = periodTarget * grossMargin / 100;
+  const achievement = primaryTarget > 0 ? (primaryActual / primaryTarget * 100) : 0;
 
   const tiers = [...state.hurdleTiers].sort((a, b) => a.achievement - b.achievement);
   let tier = null;
   for (let i = tiers.length - 1; i >= 0; i--) { if (achievement >= tiers[i].achievement) { tier = tiers[i]; break; } }
 
-  const rate = tier ? tier.rate : 0;
-  let commission = revenue * rate / 100;
+  // 未达最低门槛，全部提成为0
+  if (!tier) {
+    return { commission: 0, breakdown: [
+      { label: `${primary.name}目标`, value: `¥${primaryTarget.toFixed(1)}万` },
+      { label: `${primary.name}达成率`, value: achievement.toFixed(1) + '%' },
+      { label: '适用门槛', value: '未达最低门槛' },
+    ], note: '⚠️ 未达最低门槛，全部提成为0' };
+  }
 
-  // 辅助验证：回款率
+  // 1. 主指标按档位提成
+  const primaryRate = tier.rate;
+  let commission = primaryActual * primaryRate / 100;
+  const bd = [
+    { label: `${primary.name}目标`, value: `¥${primaryTarget.toFixed(1)}万` },
+    { label: `${primary.name}达成率`, value: achievement.toFixed(1) + '%' },
+    { label: '适用门槛', value: `${tier.name}（≥${tier.achievement}%）→ ${tier.rate}%` },
+    { label: `${primary.name}提成`, value: `¥${primaryActual}万 × ${primaryRate}% = ¥${(primaryActual * primaryRate / 100).toFixed(2)}万` },
+  ];
+
+  // 2. 其他直接因素按各自提成率独立计算
+  const others = direct.filter(f => f.id !== primary.id);
+  others.forEach(f => {
+    const actual = simData[f.id] || 0;
+    const rate = state.directRates[f.id] || 0;
+    const comm = actual * rate / 100;
+    commission += comm;
+    bd.push({ label: `${f.name}提成`, value: `¥${actual}万 × ${rate}% = ¥${comm.toFixed(2)}万` });
+  });
+
+  const subtotal = commission;
+  bd.push({ label: '小计', value: `¥${subtotal.toFixed(2)}万` });
+
+  // 3. 辅助验证：回款率
   const collRate = getCollectionRate(simData);
   const targetCollRate = parseFloat(document.getElementById('cfgCollectionRate')?.value || 90);
   let collNote = '';
   if (collRate < targetCollRate * 0.8) {
-    commission *= 0.5; collNote = `回款率${collRate}%过低，提成减半`;
+    commission *= 0.5; collNote = `回款率${collRate.toFixed(1)}%过低，提成减半`;
   } else if (collRate < targetCollRate) {
-    commission *= 0.8; collNote = `回款率${collRate}%未达标，提成打8折`;
+    commission *= 0.8; collNote = `回款率${collRate.toFixed(1)}%未达标，提成打8折`;
   }
-
-  const bd = [
-    { label: `${document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度'}目标`, value: `¥${periodTarget.toFixed(1)}万` },
-    { label: '业绩达成率', value: achievement.toFixed(1) + '%' },
-    { label: '适用门槛', value: tier ? `${tier.name}（≥${tier.achievement}%）→ ${tier.rate}%` : '未达最低门槛' },
-  ];
   if (collNote) bd.push({ label: '回款验证', value: collNote });
-  bd.push({ label: '计算', value: `¥${revenue}万 × ${rate}%${collNote ? ' × 调节' : ''} = ¥${commission.toFixed(2)}万` });
 
-  return { commission, breakdown: bd, note: !tier ? '⚠️ 未达最低门槛，提成为0' : tier.name === '保底线' && tier.rate === 0 ? '⚠️ 仅达保底线，无提成' : collNote || '✅ 提成正常发放' };
+  bd.push({ label: '最终提成', value: `¥${commission.toFixed(2)}万` });
+
+  return { commission, breakdown: bd, note: tier.name === '保底线' && tier.rate === 0 ? '⚠️ 仅达保底线，主指标无提成，其他因素正常' : collNote || '✅ 提成正常发放' };
 }
 
 // ----- MULTIPLIER -----
@@ -970,7 +1060,11 @@ function prepareSummaryStep() {
   const m = state.selectedModel;
   if (m === 'hurdle') {
     modelHtml = '<strong>🚪 设障模式</strong><br>';
-    state.hurdleTiers.forEach(t => { modelHtml += `<span style="font-size:13px;">· ${t.name}：达成率≥${t.achievement}% → 提成率${t.rate}%</span><br>`; });
+    const primary = direct.find(f => f.id === state.hurdlePrimaryId) || direct[0];
+    modelHtml += `<span style="font-size:13px;">· 主门槛：${primary?.name || '销售额'}</span><br>`;
+    state.hurdleTiers.forEach(t => { modelHtml += `<span style="font-size:13px;">· ${t.name}：达成率≥${t.achievement}% → ${primary?.name || '主指标'}提成率${t.rate}%</span><br>`; });
+    const others = direct.filter(f => f.id !== state.hurdlePrimaryId);
+    others.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${state.directRates[f.id] || '未设置'}%</span><br>`; });
   } else if (m === 'multiplier') {
     modelHtml = '<strong>✖️ 乘数模式</strong><br>';
     direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}：${state.directRates[f.id] || '未设置'}%</span><br>`; });
@@ -1041,6 +1135,7 @@ function saveToStorage() {
       hurdleTiers: state.hurdleTiers, directRates: state.directRates,
       coeffRanges: state.coeffRanges, matrixData: state.matrixData,
       matrixXId: state.matrixXId, matrixYId: state.matrixYId,
+      hurdlePrimaryId: state.hurdlePrimaryId,
       currentStep: state.currentStep, simulationResult: state.simulationResult,
     };
     localStorage.setItem('commissionDesignV2', JSON.stringify(data));
@@ -1060,6 +1155,7 @@ function loadFromStorage() {
     if (data.matrixData) state.matrixData = data.matrixData;
     if (data.matrixXId) state.matrixXId = data.matrixXId;
     if (data.matrixYId) state.matrixYId = data.matrixYId;
+    if (data.hurdlePrimaryId) state.hurdlePrimaryId = data.hurdlePrimaryId;
     if (data.simulationResult) state.simulationResult = data.simulationResult;
     if (data.selectedModel) {
       document.querySelectorAll('.model-card').forEach(c => { if (c.dataset.model === data.selectedModel) c.classList.add('selected'); });
