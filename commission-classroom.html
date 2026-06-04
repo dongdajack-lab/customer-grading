@@ -114,6 +114,12 @@ input[type=range].orange::-webkit-slider-thumb { background: var(--orange); }
 /* Subtle hint */
 .hint { font-size: 11px; color: var(--text-light); text-align: center; margin-top: 8px; }
 
+/* Segmented buttons (for discrete 4-option selectors) */
+.seg-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg-btn { flex: 1; min-width: 80px; padding: 10px 6px; border: 2px solid var(--border); border-radius: 10px; background: #f8fafc; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-mid); text-align: center; transition: all 0.15s; }
+.seg-btn:hover { border-color: #cbd5e1; background: #f1f5f9; }
+.seg-btn.active { border-color: var(--orange); background: var(--orange-light); color: var(--orange-dark); box-shadow: 0 0 0 3px rgba(217,119,6,0.12); }
+
 /* Responsive */
 @media (max-width: 640px) {
   .container { padding: 16px 10px 40px; }
@@ -588,49 +594,67 @@ function renderMatrix() {
     });
   });
 
-  // Sliders
+  // Controls: segmented buttons for discrete axes + slider for sales
   const slDiv = document.getElementById('matrix-sliders');
-  const xRange = xLabels.length - 1;
-  const yRange = yLabels.length - 1;
   slDiv.innerHTML = `
     <div class="slider-group">
       <div class="slider-label">
         <span class="name">销售额达成率</span>
         <span class="val" id="matrix-x-label">${xLabels[state.matrixTestX]}</span>
       </div>
-      <input type="range" class="orange" id="matrix-x-slider" min="0" max="${xRange}" value="${state.matrixTestX}" step="1" oninput="updateMatrix()">
+      <div class="seg-group" id="matrix-x-seg">
+        ${xLabels.map((lbl, i) => `<button class="seg-btn ${i === state.matrixTestX ? 'active' : ''}" data-axis="x" data-idx="${i}" onclick="setMatrixAxis('x',${i})">${lbl}</button>`).join('')}
+      </div>
     </div>
     <div class="slider-group">
       <div class="slider-label">
         <span class="name">毛利率</span>
         <span class="val" id="matrix-y-label">${yLabels[state.matrixTestY]}</span>
       </div>
-      <input type="range" class="orange" id="matrix-y-slider" min="0" max="${yRange}" value="${state.matrixTestY}" step="1" oninput="updateMatrix()">
+      <div class="seg-group" id="matrix-y-seg">
+        ${yLabels.map((lbl, i) => `<button class="seg-btn ${i === state.matrixTestY ? 'active' : ''}" data-axis="y" data-idx="${i}" onclick="setMatrixAxis('y',${i})">${lbl}</button>`).join('')}
+      </div>
     </div>
     <div class="slider-group">
       <div class="slider-label">
         <span class="name">基准销售额</span>
         <span><span class="val" id="matrix-sales-val">${state.matrixTestSales}</span><span class="unit"> 万元</span></span>
       </div>
-      <input type="range" class="orange" id="matrix-sales-slider" min="10" max="200" value="${state.matrixTestSales}" step="1" oninput="updateMatrix()">
+      <input type="range" class="orange" id="matrix-sales-slider" min="10" max="200" value="${state.matrixTestSales}" step="1" oninput="updateMatrixSales()">
     </div>
   `;
 
-  updateMatrix();
+  updateMatrixDisplay();
 }
 
-function updateMatrix() {
-  const xi = parseInt(document.getElementById('matrix-x-slider').value);
-  const yi = parseInt(document.getElementById('matrix-y-slider').value);
-  const sales = parseFloat(document.getElementById('matrix-sales-slider').value);
+function setMatrixAxis(axis, idx) {
+  if (axis === 'x') state.matrixTestX = idx;
+  else state.matrixTestY = idx;
 
-  state.matrixTestX = xi;
-  state.matrixTestY = yi;
-  state.matrixTestSales = sales;
+  // Update button states
+  const container = document.getElementById('matrix-' + axis + '-seg');
+  container.querySelectorAll('.seg-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+  });
 
-  document.getElementById('matrix-x-label').textContent = state.matrixXLabels[xi];
-  document.getElementById('matrix-y-label').textContent = state.matrixYLabels[yi];
-  document.getElementById('matrix-sales-val').textContent = sales;
+  // Update label
+  document.getElementById('matrix-' + axis + '-label').textContent =
+    (axis === 'x' ? state.matrixXLabels : state.matrixYLabels)[idx];
+
+  // Update grid highlight and results
+  updateMatrixDisplay();
+}
+
+function updateMatrixSales() {
+  state.matrixTestSales = parseFloat(document.getElementById('matrix-sales-slider').value);
+  document.getElementById('matrix-sales-val').textContent = state.matrixTestSales;
+  updateMatrixDisplay();
+}
+
+function updateMatrixDisplay() {
+  const xi = state.matrixTestX;
+  const yi = state.matrixTestY;
+  const sales = state.matrixTestSales;
 
   // Update highlight
   document.querySelectorAll('#matrix-grid td').forEach(td => {
