@@ -158,9 +158,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <!-- ==================== TAB 3: 风险模拟 ==================== -->
 <div id="tp-risk" class="tp">
 
+  <div class="card" style="background:linear-gradient(135deg,#fefce8 0%,#fffbeb 100%);border:1px solid #fde68a;margin-bottom:16px;padding:16px 18px;border-radius:12px;">
+    <p style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:6px;">📌 本工具的定位说明</p>
+    <p style="font-size:12px;color:#92400e;line-height:1.7;">
+      本工具模拟的是<strong>「激励体系复杂度」</strong>是否超出了<strong>「组织成熟度」</strong>的承载能力。<br><br>
+      <strong>不分阶段、单独给核心骨干分股权/期权</strong>，属于「用股权替代现金薪酬」策略——起步期没钱、用未来换现在，是常见的创业操作。这部分属于<strong>股权设计</strong>范畴，请参考博商股权课的专业方法。<br><br>
+      本工具警示的是另一种风险：<strong>在组织还没有绩效体系、没有财务透明度、没有成熟管理者的时候，试图同时运行「工资+绩效+提成+部门奖+超额奖+分红+期权」这一整套复杂激励组合</strong>。激励工具堆叠 ≠ 激励效果好，组织撑不住的时候，复杂度本身就是风险。
+    </p>
+  </div>
+
   <div class="card">
-    <h3>越级使用薪酬组合 — 风险有多大？</h3>
-    <p class="sub">选两个阶段对比，看"如果提前用高级组合"会踩哪些坑</p>
+    <h3>越级使用薪酬<strong>体系</strong> — 风险有多大？</h3>
+    <p class="sub">选两个阶段对比，看组织能力是否跟得上激励体系的复杂度</p>
 
     <div class="sim-controls">
       <div class="sim-group">
@@ -464,14 +473,14 @@ function runSim(){
     missing.push({lv:LV[i].lv, stage:LV[i].st, need});
   }
 
-  // Risks of skipping
+  // Risks of skipping — focus on system complexity, not equity itself
   const risks = [];
-  if(gap >= 2) risks.push('组织能力跟不上：给了期权但没有成熟的考核体系，期权变成"阳光普照奖"，失去激励效果');
-  if(gap >= 3) risks.push('财务透明度不足：分红了但没有清晰的核算基础，钱分了反而引发猜疑和内耗');
-  if(t >= 4 && a <= 2) risks.push('岗位错配风险：' + LV[t].lv + ' 的薪酬组合（'+LV[t].role+'）设计给管理者/核心骨干，但公司当前处于一线销售阶段，没有对应层级的管理者来承接');
-  if(t >= 5 && a <= 2) risks.push('管理者缺位：超额奖和分红需要有经营意识的管理者来承接，一线销售无法理解利润思维');
-  if(t >= 6 && a <= 3) risks.push('法律合规风险：期权/股权设计涉及公司法、税法、合同法，草率设计可能引发纠纷');
-  if(gap >= 4) risks.push('画饼风险：承诺了梦想和股权，但公司还没有稳定的盈利能力来兑现，信用破产比没有激励更可怕');
+  if(gap >= 2) risks.push('激励体系复杂度超出组织承载：在还没有基础绩效考核和过程管理体系时，就引入多层激励组合，执行成本远高于激励收益');
+  if(gap >= 3) risks.push('激励工具堆叠 ≠ 效果好：工资+绩效+提成+部门奖+超额奖一起上，考核口径打架、规则互相矛盾，团队反而不知道该往哪使劲');
+  if(t >= 4 && a <= 2) risks.push('岗位错配：' + LV[t].lv + ' 的薪酬组合（'+LV[t].role+'）设计给管理者/核心骨干，但公司当前处于一线销售阶段，没有对应层级的管理者来承接这套体系');
+  if(t >= 5 && a <= 2) risks.push('管理者缺位：超额奖和分红需要管理者有经营意识和利润思维，一线销售不具备这个视角，激励信号会被误读');
+  if(t >= 6 && a <= 3) risks.push('配套制度缺失：分红需要透明财务核算，期权需要法律合规框架——这些是激励体系的"基础设施"，不是拍脑袋就能上的');
+  if(gap >= 4) risks.push('承诺通胀风险：薪酬组合里承诺了太多远期兑现的组件，但公司当前阶段的盈利能力还撑不起这些承诺——"先承诺、后兑现"的模式一旦断链，信用破产比从来没有激励更可怕');
 
   // What you have vs what you need
   const haveComps = LV[a].comp;
@@ -511,10 +520,14 @@ function runSim(){
       <div class="note" style="margin-top:12px;">
         <strong>💡 建议</strong><br>
         ${gap >= 3
-          ? `不建议直接跳到 ${LV[t].lv}。先扎实走完中间 ${gap} 级的组织建设，薪酬组合跟着组织能力走，而不是反过来。可以先从 ${LV[a+1].lv}（${LV[a+1].nm}）开始试点。`
+          ? `不建议直接跳到 ${LV[t].lv} 的完整体系。先扎实走完中间 ${gap} 级的组织建设——激励体系复杂度跟着组织能力走，而不是反过来。可以先从 ${LV[a+1].lv}（${LV[a+1].nm}）开始试点。`
           : gap === 1
-            ? `只跨一级，风险可控。关键是把 ${LV[t].trigger} 这个前提条件做到位，再做薪酬升级。`
+            ? `只跨一级，风险可控。关键是把 ${LV[t].trigger} 这个前提条件做到位，再做体系升级。`
             : `跨两级，中等风险。建议先做 6 个月试点，用 ${LV[a+1].lv}（${LV[a+1].nm}）过渡，观察团队反应后再升级。`
+        }
+        ${LV[t].comp.some(c => c.includes('股权') || c.includes('期权'))
+          ? `<br><br><span style="font-size:11px;color:var(--pri-d);">💡 提示：本工具评估的是<strong>激励体系复杂度</strong>的风险，并非否定早期给核心骨干分股权/期权的做法。单独授予股权属于<strong>股权设计</strong>范畴（薪酬替代策略），请结合博商股权课的专业方法做设计。</span>`
+          : ''
         }
       </div>
     </div>
