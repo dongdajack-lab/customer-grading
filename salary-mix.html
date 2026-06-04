@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>薪酬组合策略推荐器 - 大董销售体系</title>
+<style>
+:root {
+  --bg: #f0f4f8;
+  --card: #fff;
+  --primary: #7c3aed;
+  --primary-light: #ede9fe;
+  --primary-dark: #5b21b6;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warn: #f59e0b;
+  --warn-light: #fef3c7;
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --radius: 16px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+  color: #fff; padding: 28px 24px; text-align: center;
+}
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.header p { font-size: 14px; opacity: .85; }
+
+.container { max-width: 780px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* Step Cards */
+.step-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 24px; margin-bottom: 20px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.step-card h2 {
+  font-size: 17px; font-weight: 700; color: var(--primary-dark);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+}
+.step-card h2 .step-num {
+  display: inline-flex; width: 28px; height: 28px;
+  background: var(--primary); color: #fff; border-radius: 50%;
+  align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+}
+.step-desc { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
+
+/* Stage Cards */
+.stage-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 640px) {
+  .stage-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stage-item {
+  border: 2px solid var(--border); border-radius: 12px;
+  padding: 14px 10px; text-align: center; cursor: pointer;
+  transition: all .2s; background: #fafbfc;
+}
+.stage-item:hover { border-color: var(--primary); background: var(--primary-light); }
+.stage-item.active {
+  border-color: var(--primary); background: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(124,58,237,.15);
+}
+.stage-item .stage-level {
+  font-size: 26px; font-weight: 800; color: var(--primary);
+  margin-bottom: 4px;
+}
+.stage-item .stage-name {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 6px; line-height: 1.3;
+}
+.stage-item .stage-sub {
+  font-size: 10px; color: var(--text-secondary); line-height: 1.4;
+}
+
+/* Role Cards */
+.role-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+@media (max-width: 640px) {
+  .role-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.role-item {
+  border: 2px solid var(--border); border-radius: 12px;
+  padding: 16px 10px; text-align: center; cursor: pointer;
+  transition: all .2s; background: #fafbfc;
+}
+.role-item:hover { border-color: var(--primary); background: var(--primary-light); }
+.role-item.active {
+  border-color: var(--primary); background: var(--primary-light);
+}
+.role-item .role-icon { font-size: 32px; margin-bottom: 6px; }
+.role-item .role-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.role-item .role-desc { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+
+/* Result Card */
+.result-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 28px 24px; box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  border: 2px solid var(--primary); margin-bottom: 20px;
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.result-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.result-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--primary); color: #fff; padding: 6px 16px;
+  border-radius: 20px; font-size: 13px; font-weight: 700;
+}
+.result-badge .lv { font-size: 22px; font-weight: 800; }
+
+/* Composition Bar */
+.comp-row {
+  display: flex; align-items: center; margin-bottom: 8px; gap: 8px;
+}
+.comp-label {
+  width: 80px; font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  text-align: right; flex-shrink: 0;
+}
+.comp-bar-wrap {
+  flex: 1; height: 32px; background: #f1f5f9; border-radius: 8px; overflow: hidden;
+  position: relative; display: flex;
+}
+.comp-seg {
+  height: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff; transition: all .4s ease;
+}
+.comp-pct { width: 56px; font-size: 12px; font-weight: 700; color: var(--text); text-align: right; flex-shrink: 0; }
+
+.comp-colors {
+  --c-salary: #3b82f6;
+  --c-perf: #8b5cf6;
+  --c-comm: #f59e0b;
+  --c-dept: #10b981;
+  --c-deptx: #06b6d4;
+  --c-bonus: #ef4444;
+  --c-div: #ec4899;
+  --c-option: #f97316;
+  --c-equity: #6366f1;
+  --c-dream: #14b8a6;
+}
+
+/* Strategic Notes */
+.note-box {
+  background: var(--info-light); border-radius: 10px;
+  padding: 16px; margin-top: 16px; border-left: 4px solid var(--info);
+}
+.note-box h4 { font-size: 13px; font-weight: 700; color: var(--info); margin-bottom: 8px; }
+.note-box ul { margin: 0; padding-left: 18px; }
+.note-box li { font-size: 13px; margin-bottom: 4px; line-height: 1.6; }
+
+.warn-box {
+  background: var(--warn-light); border-radius: 10px;
+  padding: 16px; margin-top: 12px; border-left: 4px solid var(--warn);
+}
+.warn-box h4 { font-size: 13px; font-weight: 700; color: #b45309; margin-bottom: 8px; }
+.warn-box p { font-size: 13px; margin: 0; }
+
+/* Full Table */
+.table-wrap {
+  overflow-x: auto; margin-top: 20px;
+}
+.level-table {
+  width: 100%; border-collapse: collapse; font-size: 12px; min-width: 700px;
+}
+.level-table th {
+  background: var(--primary); color: #fff; padding: 10px 8px;
+  text-align: left; font-weight: 600; font-size: 12px;
+}
+.level-table td {
+  padding: 10px 8px; border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.level-table tr:hover td { background: var(--primary-light); }
+.level-table tr.current td {
+  background: #fef3c7; font-weight: 600;
+}
+.level-table tr.current td:first-child {
+  border-left: 3px solid var(--primary);
+}
+.level-table .comp-cell {
+  font-size: 11px; line-height: 1.5;
+}
+.level-table .comp-cell span {
+  display: inline-block; padding: 2px 6px; border-radius: 4px;
+  margin: 1px 2px; font-weight: 600; color: #fff; font-size: 10px;
+}
+
+/* Legend */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-secondary);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;
+}
+
+/* Tabs */
+.tab-bar {
+  display: flex; gap: 4px; margin-bottom: 20px; background: #f1f5f9;
+  border-radius: 12px; padding: 4px;
+}
+.tab-btn {
+  flex: 1; padding: 10px; border: none; background: transparent;
+  border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600;
+  color: var(--text-secondary); transition: all .2s;
+}
+.tab-btn.active {
+  background: #fff; color: var(--primary); box-shadow: var(--shadow);
+}
+.tab-btn:hover:not(.active) { color: var(--text); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Fixed/Variable Slider */
+.fv-slider-group { margin-bottom: 16px; }
+.fv-slider-group label {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 600; margin-bottom: 4px;
+}
+.fv-slider-group label .fv-val { color: var(--primary); }
+.fv-slider-group input[type=range] {
+  width: 100%; -webkit-appearance: none; height: 6px;
+  border-radius: 3px; outline: none;
+  background: linear-gradient(to right, var(--info), var(--warn));
+}
+.fv-result {
+  display: flex; gap: 12px; margin-top: 16px;
+}
+.fv-bar {
+  flex: 1; height: 40px; border-radius: 10px; overflow: hidden; display: flex;
+}
+.fv-fixed {
+  background: var(--info); display: flex; align-items: center;
+  justify-content: center; color: #fff; font-size: 13px; font-weight: 700;
+  transition: all .2s;
+}
+.fv-var {
+  background: var(--warn); display: flex; align-items: center;
+  justify-content: center; color: #fff; font-size: 13px; font-weight: 700;
+  transition: all .2s;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .comp-label { width: 60px; font-size: 11px; }
+  .comp-pct { width: 44px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 薪酬组合策略推荐器</h1>
+  <p>公司发展阶段 + 销售岗位 → 最优薪酬组合</p>
+</div>
+
+<div class="container">
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('diagnostic')">🔍 智能推荐</button>
+    <button class="tab-btn" onclick="switchTab('table')">📋 全级速查表</button>
+    <button class="tab-btn" onclick="switchTab('ratio')">⚖️ 固浮比</button>
+  </div>
+
+  <!-- ============ TAB 1: Diagnostic ============ -->
+  <div id="tab-diagnostic" class="tab-panel active">
+
+    <!-- Step 1: Company Stage -->
+    <div class="step-card">
+      <h2><span class="step-num">1</span> 公司处于什么发展阶段？</h2>
+      <p class="step-desc">根据团队规模和业务成熟度选择最匹配的阶段</p>
+      <div class="stage-grid" id="stageGrid">
+      </div>
+    </div>
+
+    <!-- Step 2: Role -->
+    <div class="step-card" id="roleCard" style="display:none;">
+      <h2><span class="step-num">2</span> 目标岗位是什么？</h2>
+      <p class="step-desc">不同层级的岗位在同一阶段，薪酬组合会有微调</p>
+      <div class="role-grid" id="roleGrid">
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="resultArea" style="display:none;"></div>
+  </div>
+
+  <!-- ============ TAB 2: Full Table ============ -->
+  <div id="tab-table" class="tab-panel">
+    <div class="step-card">
+      <h2>📋 8级薪酬组合策略速查表</h2>
+      <p class="step-desc">从初创到生态的完整进化路径，每个阶段匹配不同的薪酬结构</p>
+      <div class="table-wrap">
+        <table class="level-table">
+          <thead>
+            <tr>
+              <th style="width:50px">层级</th>
+              <th style="width:70px">阶段</th>
+              <th style="width:130px">薪酬组合</th>
+              <th style="width:80px">关键角色</th>
+              <th>战略导向</th>
+            </tr>
+          </thead>
+          <tbody id="fullTableBody"></tbody>
+        </table>
+      </div>
+      <div class="legend" style="margin-top:12px;">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-salary)"></span> 工资</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-comm)"></span> 提成</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-perf)"></span> 绩效</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-dept)"></span> 部门奖</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-deptx)"></span> 超额奖</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-bonus)"></span> 奖金</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-div)"></span> 分红</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-option)"></span> 期权</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-equity)"></span> 股权</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--c-dream)"></span> 梦想</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: Fixed/Variable Ratio ============ -->
+  <div id="tab-ratio" class="tab-panel">
+    <div class="step-card">
+      <h2>⚖️ 固定 vs 浮动薪酬比例调校</h2>
+      <p class="step-desc">6个关键维度调整固浮比 — 拖动滑块看实时变化（每个维度1-9分）</p>
+
+      <div id="fvSliders"></div>
+
+      <div class="fv-result" id="fvResult">
+        <div class="fv-bar">
+          <div class="fv-fixed" id="fvFixedBar">固定 50%</div>
+          <div class="fv-var" id="fvVarBar">浮动 50%</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;text-align:center;">
+        总分 <strong id="fvScore">30</strong>/54 → 建议浮动占比 <strong id="fvPct">55%</strong>
+      </p>
+
+      <div class="note-box" style="margin-top:16px;">
+        <h4>💡 固浮比策略口诀</h4>
+        <ul>
+          <li><strong>高固定（60-80%）</strong>：适合老客户维护、长周期复杂销售、重团队协作的岗位 —— "农耕模式"</li>
+          <li><strong>高浮动（60-80%）</strong>：适合新客户开拓、短周期简单销售、重个人能力的岗位 —— "打猎模式"</li>
+          <li><strong>均衡（40-60%）</strong>：大多数销售管理岗位，兼顾行为考核与结果导向</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== 8-Level Data ====================
+const LEVELS = [
+  { lv: '1.0', stage: '初创摸索期', comp: ['工资'], colorKeys: ['salary'],
+    guide: '老板即是销售，团队概念模糊。提供基本保障，无战略导向。',
+    warn: '⚠️ 易导致"躺平"——只拿工资不产出。仅适用于老板亲自跑客户的极早期阶段。'
+  },
+  { lv: '2.0', stage: '快速起步期', comp: ['工资','提成'], colorKeys: ['salary','comm'],
+    guide: '开始建销售团队，强烈刺激个人开单。激励个人贡献。',
+    warn: '⚠️ 只顾个人，不管团队；吃老本，不开拓新客户。需配套客户分级和新人保护期机制。'
+  },
+  { lv: '3.0', stage: '体系建立期', comp: ['工资','绩效','目标提成'], colorKeys: ['salary','perf','comm'],
+    guide: '需要规范销售行为，引导员工关注目标。引入过程考核（如拜访量），开始导向团队目标。',
+    warn: '⚠️ 绩效指标设计不当会导致"为指标工作"而非"为客户工作"。KPI需与战略对齐。'
+  },
+  { lv: '4.0', stage: '团队扩张期', comp: ['工资','绩效','提成','部门奖'], colorKeys: ['salary','perf','comm','dept'],
+    guide: '出现销售小组或部门，需培养管理者。让初级管理者开始关注团队整体产出。',
+    warn: '⚠️ 部门奖分配不公易引发内部矛盾。需明确"个人贡献"与"团队溢出"的分配规则。'
+  },
+  { lv: '5.0', stage: '精细化初期', comp: ['工资','绩效','提成','部门超额奖'], colorKeys: ['salary','perf','comm','deptx'],
+    guide: '管理者需具备初步经营意识，控制成本。引导管理者关注利润而不仅是销售额。',
+    warn: '⚠️ 超额标准设定过高=画饼，过低=成本失控。建议设三档（挑战/冲刺/卓越），对应不同系数。'
+  },
+  { lv: '6.0', stage: '成熟发展期', comp: ['工资','奖金','部门超额奖','公司分红'], colorKeys: ['salary','bonus','deptx','div'],
+    guide: '核心骨干形成，需深度绑定避免流失。从"为公司干"变为"为自己干"。',
+    warn: '⚠️ 分红机制需透明化。若无清晰的财务核算和沟通机制，分红反而引发猜疑。'
+  },
+  { lv: '7.0', stage: '战略突破/上市前期', comp: ['工资','奖金','超额奖','分红','期权/股权'], colorKeys: ['salary','bonus','deptx','div','option'],
+    guide: '需要团队与公司共担风险、共享未来。将个人命运与公司长期价值深度绑定。',
+    warn: '⚠️ 期权/股权设计涉及法律和税务，务必请专业律师把关。行权条件要清晰可衡量。'
+  },
+  { lv: '8.0', stage: '生态/领袖期', comp: ['工资','奖金','特别奖励','股权','梦想'], colorKeys: ['salary','bonus','special','equity','dream'],
+    guide: '为顶尖人才提供实现个人抱负的舞台。公司的使命成为个人梦想的放大器。',
+    warn: '⚠️ "梦想"不是虚的——需要清晰的愿景描述和可追踪的里程碑。没有兑现能力就是画饼。'
+  }
+];
+
+// Role-based adjustments (固定比例微调)
+const ROLE_ADJUST = {
+  sales: { name: '一线销售', icon: '🎯', desc: '直接面对客户', adj: '高浮动' },
+  senior: { name: '资深销售', icon: '⭐', desc: '大客户攻坚', adj: '偏高浮动' },
+  manager: { name: '销售主管/经理', icon: '👥', desc: '带团队', adj: '均衡' },
+  director: { name: '销售总监', icon: '🏗️', desc: '战略+管理', adj: '偏高固定' }
+};
+
+// Color mapping
+const COLOR_MAP = {
+  salary: '#3b82f6',
+  perf: '#8b5cf6',
+  comm: '#f59e0b',
+  dept: '#10b981',
+  deptx: '#06b6d4',
+  bonus: '#ef4444',
+  div: '#ec4899',
+  option: '#f97316',
+  equity: '#6366f1',
+  special: '#f97316',
+  dream: '#14b8a6'
+};
+
+const COMP_CN = {
+  salary: '工资', perf: '绩效', comm: '提成', dept: '部门奖',
+  deptx: '超额奖', bonus: '奖金', div: '分红',
+  option: '期权/股权', equity: '股权', special: '特别奖励', dream: '梦想'
+};
+
+function getDefaultPcts(lvIdx) {
+  // Default percentage allocation for each level
+  const defaults = [
+    [100],                    // 1.0: 工资100%
+    [60, 40],                 // 2.0: 工资60% + 提成40%
+    [50, 20, 30],             // 3.0: 工资50% + 绩效20% + 提成30%
+    [45, 15, 25, 15],         // 4.0: 工资45% + 绩效15% + 提成25% + 部门奖15%
+    [40, 15, 25, 20],         // 5.0: 工资40% + 绩效15% + 提成25% + 超额奖20%
+    [40, 20, 20, 20],         // 6.0: 工资40% + 奖金20% + 超额奖20% + 分红20%
+    [35, 20, 15, 15, 15],     // 7.0: 工资35% + 奖金20% + 超额奖15% + 分红15% + 期权15%
+    [30, 20, 15, 20, 15]      // 8.0: 工资30% + 奖金20% + 特别奖励15% + 股权20% + 梦想15%
+  ];
+  return defaults[lvIdx] || [100];
+}
+
+// State
+let selectedStage = null;
+let selectedRole = null;
+
+// ==================== Render ====================
+function renderStageGrid() {
+  const grid = document.getElementById('stageGrid');
+  grid.innerHTML = LEVELS.map((l, i) => `
+    <div class="stage-item" data-idx="${i}" onclick="selectStage(${i})">
+      <div class="stage-level">${l.lv}</div>
+      <div class="stage-name">${l.stage}</div>
+      <div class="stage-sub">${l.comp.join('+')}</div>
+    </div>
+  `).join('');
+}
+
+function selectStage(idx) {
+  selectedStage = idx;
+  document.querySelectorAll('#stageGrid .stage-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+  document.getElementById('roleCard').style.display = 'block';
+  renderRoleGrid();
+  updateResult();
+  // Scroll
+  document.getElementById('roleCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderRoleGrid() {
+  const grid = document.getElementById('roleGrid');
+  const roles = Object.entries(ROLE_ADJUST);
+  grid.innerHTML = roles.map(([key, r]) => `
+    <div class="role-item" data-key="${key}" onclick="selectRole('${key}')">
+      <div class="role-icon">${r.icon}</div>
+      <div class="role-name">${r.name}</div>
+      <div class="role-desc">${r.desc} · ${r.adj}</div>
+    </div>
+  `).join('');
+}
+
+function selectRole(key) {
+  selectedRole = key;
+  document.querySelectorAll('#roleGrid .role-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.key === key);
+  });
+  updateResult();
+}
+
+function updateResult() {
+  if (selectedStage === null) { document.getElementById('resultArea').style.display = 'none'; return; }
+  document.getElementById('resultArea').style.display = 'block';
+  const lv = LEVELS[selectedStage];
+  const pcts = getDefaultPcts(selectedStage);
+
+  // Role-based adjustment
+  let roleNote = '';
+  if (selectedRole) {
+    const r = ROLE_ADJUST[selectedRole];
+    if (selectedRole === 'sales' || selectedRole === 'senior') {
+      // 一线销售：浮动比例+5%, 固定-5%
+      if (pcts.length > 1) {
+        pcts[0] = Math.max(pcts[0] - 5, 20);
+        const inc = 5 / (pcts.length - 1);
+        for (let i = 1; i < pcts.length; i++) pcts[i] += inc;
+      }
+      roleNote = `<strong>${r.name}</strong>岗位偏"打猎模式"，浮动部分适当上浮。`;
+    } else if (selectedRole === 'director') {
+      if (pcts.length > 1) {
+        pcts[0] = Math.min(pcts[0] + 5, 60);
+        const dec = 5 / (pcts.length - 1);
+        for (let i = 1; i < pcts.length; i++) pcts[i] = Math.max(pcts[i] - dec, 5);
+      }
+      roleNote = `<strong>${r.name}</strong>岗位偏"战略导向"，固定部分适当上浮。`;
+    } else {
+      roleNote = `<strong>${r.name}</strong>岗位保持${ROLE_ADJUST[selectedRole].adj}。`;
+    }
+  }
+
+  // Build composition bar
+  let barsHTML = '';
+  pcts.forEach((pct, i) => {
+    const key = lv.colorKeys[i];
+    const color = COLOR_MAP[key] || '#94a3b8';
+    const name = COMP_CN[key] || key;
+    barsHTML += `<div class="comp-seg" style="width:${pct}%;background:${color};">${name}</div>`;
+  });
+
+  // Build itemized list
+  let itemsHTML = lv.colorKeys.map((key, i) => {
+    const color = COLOR_MAP[key] || '#94a3b8';
+    const name = COMP_CN[key] || key;
+    return `<div class="comp-row">
+      <span class="comp-label">${name}</span>
+      <div class="comp-bar-wrap"><div style="width:${pcts[i]}%;height:100%;background:${color};border-radius:8px;"></div></div>
+      <span class="comp-pct">≈${Math.round(pcts[i])}%</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('resultArea').innerHTML = `
+    <div class="result-card">
+      <div class="result-header">
+        <div>
+          <span class="result-badge"><span class="lv">${lv.lv}</span> ${lv.stage}</span>
+          ${selectedRole ? `<span style="margin-left:8px;font-size:14px;font-weight:600;color:var(--text);">→ ${ROLE_ADJUST[selectedRole].name}</span>` : ''}
+        </div>
+      </div>
+
+      <h3 style="font-size:15px;margin-bottom:12px;">💼 推荐薪酬组合</h3>
+      <div class="comp-row">
+        <span class="comp-label" style="font-weight:700;color:var(--text);">总包拆分</span>
+        <div class="comp-bar-wrap" style="height:40px;border-radius:10px;">${barsHTML}</div>
+        <span class="comp-pct"></span>
+      </div>
+
+      <div style="margin-top:16px;">
+        ${itemsHTML}
+      </div>
+
+      ${roleNote ? `<p style="font-size:12px;color:var(--text-secondary);margin-top:12px;font-style:italic;">📌 ${roleNote}</p>` : ''}
+
+      <div class="note-box">
+        <h4>🎯 战略导向</h4>
+        <p style="font-size:13px;margin:0;">${lv.guide}</p>
+      </div>
+
+      <div class="warn-box">
+        <h4>⚠️ 注意事项</h4>
+        <p>${lv.warn}</p>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button onclick="switchTab('table');highlightRow(${selectedStage});" style="padding:8px 16px;border:1px solid var(--primary);border-radius:8px;background:var(--primary-light);color:var(--primary);cursor:pointer;font-size:13px;font-weight:600;">📋 查看全级对比表</button>
+        <button onclick="switchTab('ratio');" style="padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;">⚖️ 微调固浮比</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ==================== Tab Switching ====================
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab-btn[onclick*="${name}"]`).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+
+  if (name === 'table') renderFullTable();
+  if (name === 'ratio') renderFVRatio();
+}
+
+function highlightRow(idx) {
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#fullTableBody tr');
+    rows.forEach((r, i) => r.classList.toggle('current', i === idx));
+    if (rows[idx]) rows[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+// ==================== Full Table ====================
+function renderFullTable() {
+  const tbody = document.getElementById('fullTableBody');
+  tbody.innerHTML = LEVELS.map((lv, i) => {
+    const compHTML = lv.colorKeys.map(k => {
+      const color = COLOR_MAP[k] || '#94a3b8';
+      const name = COMP_CN[k] || k;
+      return `<span style="background:${color};">${name}</span>`;
+    }).join(' ');
+    return `<tr class="${i === selectedStage ? 'current' : ''}">
+      <td><strong>${lv.lv}</strong></td>
+      <td>${lv.stage}</td>
+      <td class="comp-cell">${compHTML}</td>
+      <td style="font-size:11px;">${lv.guide.substring(0,20)}...</td>
+      <td style="font-size:11px;color:var(--text-secondary);">${lv.warn.substring(0,40)}...</td>
+    </tr>`;
+  }).join('');
+}
+
+// ==================== F/V Ratio ====================
+const FV_DIMENSIONS = [
+  { id: 'strategy', name: '策略维度', left: '老客户留存', right: '新客户获取', low: '偏固定', high: '偏浮动' },
+  { id: 'operation', name: '运营维度', left: '服务运营为主', right: '销售为主', low: '偏固定', high: '偏浮动' },
+  { id: 'teamwork', name: '团队维度', left: '团队协作', right: '个人影响', low: '偏固定', high: '偏浮动' },
+  { id: 'cycle', name: '销售周期', left: '长周期（>6月）', right: '短周期（<1月）', low: '偏固定', high: '偏浮动' },
+  { id: 'complexity', name: '复杂性', left: '复杂方案销售', right: '简单标准品', low: '偏固定', high: '偏浮动' },
+  { id: 'customize', name: '顾客化程度', left: '标准化产品', right: '高度定制', low: '偏浮动', high: '偏固定' }
+];
+
+function renderFVRatio() {
+  const container = document.getElementById('fvSliders');
+  container.innerHTML = FV_DIMENSIONS.map(d => `
+    <div class="fv-slider-group">
+      <label>${d.name} <span class="fv-val" id="fv-${d.id}-val">5</span></label>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-secondary);margin-bottom:2px;">
+        <span>← ${d.left}（${d.low}）</span>
+        <span>${d.right}（${d.high}）→</span>
+      </div>
+      <input type="range" min="1" max="9" value="5" oninput="updateFV()" id="fv-${d.id}">
+    </div>
+  `).join('');
+  updateFV();
+}
+
+function updateFV() {
+  let total = 0;
+  FV_DIMENSIONS.forEach(d => {
+    const val = parseInt(document.getElementById('fv-' + d.id).value);
+    document.getElementById('fv-' + d.id + '-val').textContent = val;
+    total += val;
+  });
+  const pct = Math.round(total / 54 * 100);
+  document.getElementById('fvScore').textContent = total;
+  document.getElementById('fvPct').textContent = pct + '%';
+  document.getElementById('fvFixedBar').style.width = (100 - pct) + '%';
+  document.getElementById('fvFixedBar').textContent = '固定 ' + (100 - pct) + '%';
+  document.getElementById('fvVarBar').style.width = pct + '%';
+  document.getElementById('fvVarBar').textContent = '浮动 ' + pct + '%';
+}
+
+// ==================== Init ====================
+renderStageGrid();
+renderFullTable();
+renderFVRatio();
+</script>
+</body>
+</html>
