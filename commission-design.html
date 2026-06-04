@@ -78,9 +78,6 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 .factor-tag.direct { background: var(--direct-light); color: var(--direct); }
 .factor-tag.coeff { background: var(--coeff-light); color: var(--coeff); }
 .factor-tag.kpi { background: #f1f5f9; color: var(--kpi); }
-.factor-weight { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.factor-weight input { width: 44px; padding: 3px 4px; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 12px; font-weight: 600; }
-.weight-hint { font-size: 10px; color: var(--text-light); }
 
 /* Legend */
 .type-legend { display: flex; gap: 16px; margin-bottom: 16px; font-size: 12px; }
@@ -91,13 +88,6 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 .type-legend .dot.kpi { background: var(--kpi); }
 
 /* Weight bar */
-.weight-bar-container { margin-top: 12px; }
-.weight-bar-label { font-size: 13px; color: var(--text-mid); margin-bottom: 6px; display: flex; justify-content: space-between; }
-.weight-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; display: flex; }
-.weight-bar-seg { height: 100%; transition: width .3s; }
-.weight-bar-seg.tian { background: var(--tian); }
-.weight-bar-seg.di { background: var(--di); }
-.weight-bar-seg.ren { background: var(--ren); }
 
 /* Models */
 .model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
@@ -244,15 +234,6 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
       </div>
     </div>
 
-    <div class="weight-bar-container">
-      <div class="weight-bar-label"><span>天地人三维度相对侧重</span><span id="weightTotal" style="font-size:11px;color:var(--text-light);">不要求加总=100%</span></span></div>
-      <div class="weight-bar" id="weightBar">
-        <div class="weight-bar-seg tian" id="weightBarTian" style="width:0%"></div>
-        <div class="weight-bar-seg di" id="weightBarDi" style="width:0%"></div>
-        <div class="weight-bar-seg ren" id="weightBarRen" style="width:0%"></div>
-      </div>
-    </div>
-
     <div class="btn-group">
       <button class="btn btn-primary" onclick="goToStep(1)">下一步：选择提成模式 →</button>
     </div>
@@ -341,11 +322,11 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
     <!-- 乘数 -->
     <div class="card" id="configMultiplier" style="display:none">
       <div class="card-title" style="font-size:16px;">✖️ 乘数模式 — 各因素提成率配置</div>
-      <div class="card-subtitle">每个因素独立设置提成率。⏳ 权重决定重要性，提成率决定分钱比例，两者独立，不必按权重排序</div>
+      <div class="card-subtitle">每个因素独立设置提成率，根据公司实际情况填写</div>
       <div id="directRates"></div>
       <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
         <div class="card-title" style="font-size:15px;">调节系数 — 浮动范围配置</div>
-        <div class="card-subtitle">权重决定系数对最终提成的影响幅度。权重30% → 浮动±15%</div>
+        <div class="card-subtitle">设置每个调节系数的浮动范围，影响最终提成的上下幅度</div>
         <div id="coeffRanges"></div>
       </div>
     </div>
@@ -353,10 +334,10 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
     <!-- 矩阵 -->
     <div class="card" id="configMatrix" style="display:none">
       <div class="card-title" style="font-size:16px;">📊 矩阵模式 — 二维交叉配置</div>
-      <div class="card-subtitle">X轴Y轴自动取权重最高的两个直接提成因素</div>
+      <div class="card-subtitle">选择两个直接提成因素作为矩阵的 X 轴和 Y 轴</div>
       <div class="scenario-row">
-        <div class="scenario-field"><label>X轴指标（自动）</label><input type="text" id="matrixXAuto" readonly style="background:#f8fafc;"></div>
-        <div class="scenario-field"><label>Y轴指标（自动）</label><input type="text" id="matrixYAuto" readonly style="background:#f8fafc;"></div>
+        <div class="scenario-field"><label>X轴指标</label><select id="matrixXSelect" onchange="onMatrixAxisChange()"></select></div>
+        <div class="scenario-field"><label>Y轴指标</label><select id="matrixYSelect" onchange="onMatrixAxisChange()"></select></div>
       </div>
       <div style="overflow-x:auto;" id="matrixContainer"></div>
     </div>
@@ -436,23 +417,23 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 // ==================== DATA ====================
 const FACTORS = {
   tian: [
-    { id: 'revenue', name: '销售额', desc: '最直接的业绩衡量，提成主挂钩', weight: 60, type: 'direct', unit: '万元', rateDefault: 2.0 },
-    { id: 'profit', name: '毛利润', desc: '防止乱打折，卖得多不如赚得多', weight: 25, type: 'direct', unit: '万元', rateDefault: 3.0 },
-    { id: 'strategicProduct', name: '战略产品/新客户', desc: '引导卖公司想推的产品/开发新客户', weight: 15, type: 'direct', unit: '万元', rateDefault: 4.0 },
+    { id: 'revenue', name: '销售额', desc: '最直接的业绩衡量，提成主挂钩', type: 'direct', unit: '万元' },
+    { id: 'profit', name: '毛利润', desc: '防止乱打折，卖得多不如赚得多', type: 'direct', unit: '万元' },
+    { id: 'strategicProduct', name: '战略产品/新客户', desc: '引导卖公司想推的产品/开发新客户', type: 'direct', unit: '万元' },
   ],
   di: [
-    { id: 'collection', name: '回款额', desc: '签了单不算完，钱到账才给提成', weight: 50, type: 'direct', unit: '万元', rateDefault: 1.5 },
-    { id: 'collectionRate', name: '回款率', desc: '作为调节系数，影响最终提成', weight: 30, type: 'coeff', unit: '%' },
-    { id: 'satisfaction', name: '客户满意度', desc: '作为调节系数，影响最终提成', weight: 20, type: 'coeff', unit: '分' },
-    { id: 'conversion', name: '商机转化率', desc: '过程效率，建议归入绩效考核', weight: 0, type: 'kpi', unit: '%' },
-    { id: 'activity', name: '活动完成率', desc: '过程量，建议归入绩效考核', weight: 0, type: 'kpi', unit: '%' },
+    { id: 'collection', name: '回款额', desc: '签了单不算完，钱到账才给提成', type: 'direct', unit: '万元' },
+    { id: 'collectionRate', name: '回款率', desc: '作为调节系数，影响最终提成', type: 'coeff', unit: '%' },
+    { id: 'satisfaction', name: '客户满意度', desc: '作为调节系数，影响最终提成', type: 'coeff', unit: '分' },
+    { id: 'conversion', name: '商机转化率', desc: '过程效率，建议归入绩效考核', type: 'kpi', unit: '%' },
+    { id: 'activity', name: '活动完成率', desc: '过程量，建议归入绩效考核', type: 'kpi', unit: '%' },
   ],
   ren: [
-    { id: 'retention', name: '老客户复购额', desc: '存量客户的持续产出', weight: 40, type: 'direct', unit: '万元', rateDefault: 2.5 },
-    { id: 'newMarket', name: '新市场/新渠道', desc: '打开新增长空间', weight: 30, type: 'direct', unit: '万元', rateDefault: 3.5 },
-    { id: 'mentoring', name: '带教新人', desc: '组织能力，建议归入绩效考核', weight: 0, type: 'kpi', unit: '人' },
-    { id: 'knowledge', name: '知识分享/培训', desc: '团队建设，建议归入绩效考核', weight: 0, type: 'kpi', unit: '次' },
-    { id: 'compliance', name: '价值观/合规', desc: '纪律要求，建议归入绩效考核', weight: 0, type: 'kpi', unit: '分' },
+    { id: 'retention', name: '老客户复购额', desc: '存量客户的持续产出', type: 'direct', unit: '万元' },
+    { id: 'newMarket', name: '新市场/新渠道', desc: '打开新增长空间', type: 'direct', unit: '万元' },
+    { id: 'mentoring', name: '带教新人', desc: '组织能力，建议归入绩效考核', type: 'kpi', unit: '人' },
+    { id: 'knowledge', name: '知识分享/培训', desc: '团队建设，建议归入绩效考核', type: 'kpi', unit: '次' },
+    { id: 'compliance', name: '价值观/合规', desc: '纪律要求，建议归入绩效考核', type: 'kpi', unit: '分' },
   ],
 };
 
@@ -470,13 +451,15 @@ const state = {
     { name: '卓越线', achievement: 150, rate: 8 },
   ],
   matrixData: null,
+  matrixXId: null,
+  matrixYId: null,
   simulationResult: null,
 };
 
 // ==================== INIT ====================
 function init() {
   renderFactors('tian'); renderFactors('di'); renderFactors('ren');
-  renderHurdleTiers(); loadFromStorage(); updateWeightBar();
+  renderHurdleTiers(); loadFromStorage();
 }
 
 function renderFactors(category) {
@@ -485,21 +468,12 @@ function renderFactors(category) {
     const sel = state.selectedFactors[category].includes(f.id);
     const tagClass = f.type;
     const tagText = f.type === 'direct' ? '直接提成' : f.type === 'coeff' ? '调节系数' : '绩效建议';
-    // 根据类型构造副标题，展示实际含义
-    let subtitle = f.desc;
-    if (f.type === 'direct' && f.rateDefault) {
-      subtitle += ' · 提成率' + f.rateDefault + '%';
-    } else if (f.type === 'coeff') {
-      const range = Math.round((f.weight || 30) * 0.5);
-      subtitle += ' · 影响力±' + range + '%';
-    }
     return `<div class="factor-item ${sel ? 'selected ' + tagClass : ''} ${tagClass}" onclick="toggleFactor('${category}','${f.id}')">
       <div class="factor-check"></div>
       <div class="factor-info">
         <div class="factor-name">${f.name} <span class="factor-tag ${tagClass}">${tagText}</span></div>
-        <div class="factor-desc">${subtitle}</div>
+        <div class="factor-desc">${f.desc}</div>
       </div>
-      ${f.type !== 'kpi' ? `<div class="factor-weight"><input type="number" value="${f.weight}" min="0" max="100" onclick="event.stopPropagation()" onchange="updateFactorWeight('${category}','${f.id}',this.value)"><span class="weight-hint">重要性</span></div>` : ''}
     </div>`;
   }).join('');
 }
@@ -508,13 +482,7 @@ function toggleFactor(category, id) {
   const arr = state.selectedFactors[category];
   const idx = arr.indexOf(id);
   if (idx >= 0) arr.splice(idx, 1); else arr.push(id);
-  renderFactors(category); updateWeightBar(); saveToStorage();
-}
-
-function updateFactorWeight(category, id, val) {
-  const f = FACTORS[category].find(x => x.id === id);
-  if (f) { f.weight = Math.max(0, Math.min(100, parseInt(val) || 0)); }
-  updateWeightBar(); saveToStorage();
+  renderFactors(category); saveToStorage();
 }
 
 function getAllSelectedFactors() {
@@ -530,22 +498,6 @@ function getAllSelectedFactors() {
 
 function getSelectedDirectFactors() { return getAllSelectedFactors().filter(f => f.type === 'direct'); }
 function getSelectedCoeffFactors() { return getAllSelectedFactors().filter(f => f.type === 'coeff'); }
-
-function updateWeightBar() {
-  const direct = getSelectedDirectFactors();
-  const coeff = getSelectedCoeffFactors();
-  let tianW=0, diW=0, renW=0;
-  [...direct, ...coeff].forEach(f => {
-    if (f.category === 'tian') tianW += f.weight;
-    else if (f.category === 'di') diW += f.weight;
-    else renW += f.weight;
-  });
-  const total = tianW + diW + renW || 1;
-  document.getElementById('weightBarTian').style.width = (tianW/total*100) + '%';
-  document.getElementById('weightBarDi').style.width = (diW/total*100) + '%';
-  document.getElementById('weightBarRen').style.width = (renW/total*100) + '%';
-  document.getElementById('weightTotal').textContent = `天${Math.round(tianW/total*100)}% · 地${Math.round(diW/total*100)}% · 人${Math.round(renW/total*100)}%`;
-}
 
 // ==================== MODEL SELECTION ====================
 function selectModel(model) {
@@ -617,10 +569,13 @@ function prepareConfigStep() {
     buildCoeffRanges(coeff);
   }
   if (state.selectedModel === 'matrix') {
-    const sorted = [...direct].sort((a, b) => b.weight - a.weight);
-    const x = sorted[0], y = sorted[1] || sorted[0];
-    document.getElementById('matrixXAuto').value = x ? x.name : '销售额';
-    document.getElementById('matrixYAuto').value = y ? y.name : '毛利润';
+    // Populate X/Y axis dropdowns with direct factors
+    const xSel = document.getElementById('matrixXSelect');
+    const ySel = document.getElementById('matrixYSelect');
+    xSel.innerHTML = direct.map((f, i) => `<option value="${f.id}" ${(state.matrixXId === f.id || (!state.matrixXId && i === 0)) ? 'selected' : ''}>${f.name}</option>`).join('');
+    ySel.innerHTML = direct.map((f, i) => `<option value="${f.id}" ${(state.matrixYId === f.id || (!state.matrixYId && i === Math.min(1, direct.length - 1))) ? 'selected' : ''}>${f.name}</option>`).join('');
+    if (!state.matrixXId) state.matrixXId = direct[0]?.id || null;
+    if (!state.matrixYId) state.matrixYId = direct[Math.min(1, direct.length - 1)]?.id || direct[0]?.id || null;
     rebuildMatrix();
   }
 }
@@ -630,12 +585,8 @@ function buildDirectRates(direct) {
   if (!container) return;
   if (direct.length === 0) { container.innerHTML = '<div style="color:var(--text-mid);">请先在第一步选择「直接提成」类因素</div>'; return; }
 
-  direct.forEach(f => {
-    if (!(f.id in state.directRates)) state.directRates[f.id] = f.rateDefault || 2.0;
-  });
-
   container.innerHTML = direct.map(f => {
-    const rate = state.directRates[f.id] ?? f.rateDefault;
+    const rate = state.directRates[f.id];
     return `<div class="param-row">
       <div class="param-label">
         <div>${f.name} 提成率</div>
@@ -658,8 +609,7 @@ function buildCoeffRanges(coeff) {
 
   coeff.forEach(f => {
     if (!(f.id in state.coeffRanges)) {
-      const range = Math.round(f.weight / 100 * 0.5 * 100) / 100;
-      state.coeffRanges[f.id] = { min: Math.max(0.5, 1 - range).toFixed(2), max: (1 + range).toFixed(2) };
+      state.coeffRanges[f.id] = { min: '0.85', max: '1.15' };
     }
   });
 
@@ -669,7 +619,7 @@ function buildCoeffRanges(coeff) {
     return `<div class="param-row">
       <div class="param-label">
         <div>${f.name} 系数浮动</div>
-        <div class="param-desc">权重${f.weight}% → 浮动±${rangeVal}% · 范围 ${r.min} ~ ${r.max}</div>
+        <div class="param-desc">浮动±${rangeVal}% · 范围 ${r.min} ~ ${r.max}</div>
       </div>
       <div class="param-right">
         <input type="range" class="param-slider" value="${rangeVal}" min="0" max="50" style="width:80px;"
@@ -690,15 +640,15 @@ function updateCoeffRange(id, val) {
 // ==================== MATRIX ====================
 function rebuildMatrix() {
   const direct = getSelectedDirectFactors();
-  const sorted = [...direct].sort((a, b) => b.weight - a.weight);
-  const xLabel = sorted[0]?.name || '销售额';
-  const yLabel = sorted[1]?.name || '毛利润';
+  if (direct.length === 0) { document.getElementById('matrixContainer').innerHTML = '<div style="color:var(--text-mid);">请先在第一步选择直接提成因素</div>'; return; }
+  const xFactor = direct.find(f => f.id === state.matrixXId) || direct[0];
+  const yFactor = direct.find(f => f.id === state.matrixYId) || direct[Math.min(1, direct.length - 1)] || direct[0];
   const xBrackets = ['<80%', '80-99%', '100-119%', '120-149%', '≥150%'];
   const yBrackets = ['<80%', '80-99%', '100-119%', '≥120%'];
 
   if (!state.matrixData) state.matrixData = { data: {} };
 
-  let html = `<table class="matrix-table"><thead><tr><th>${yLabel} ↓ / ${xLabel} →</th>`;
+  let html = `<table class="matrix-table"><thead><tr><th>${yFactor.name} ↓ / ${xFactor.name} →</th>`;
   xBrackets.forEach(x => html += `<th>${x}</th>`);
   html += '</tr></thead><tbody>';
   yBrackets.forEach(y => {
@@ -724,6 +674,12 @@ function getDefaultMatrixVal(y, x) {
 function updateMatrixCell(key, val) {
   if (!state.matrixData) state.matrixData = { data: {} };
   state.matrixData.data[key] = parseFloat(val) || 0; saveToStorage();
+}
+
+function onMatrixAxisChange() {
+  state.matrixXId = document.getElementById('matrixXSelect').value;
+  state.matrixYId = document.getElementById('matrixYSelect').value;
+  rebuildMatrix(); saveToStorage();
 }
 
 // ==================== SIMULATION ====================
@@ -856,7 +812,7 @@ function calcMultiplier(simData) {
 
   direct.forEach(f => {
     const val = simData[f.id] || 0;
-    const rate = state.directRates[f.id] ?? f.rateDefault ?? 2;
+    const rate = state.directRates[f.id] || 0;
     const comm = val * rate / 100;
     baseCommission += comm;
     bd.push({ label: `${f.name}（¥${val}万 × ${rate}%）`, value: `¥${comm.toFixed(2)}万` });
@@ -894,8 +850,8 @@ function calcMatrix(simData) {
   const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
 
   const direct = getSelectedDirectFactors();
-  const sorted = [...direct].sort((a, b) => b.weight - a.weight);
-  const xFactor = sorted[0], yFactor = sorted[1] || sorted[0];
+  const xFactor = direct.find(f => f.id === state.matrixXId) || direct[0];
+  const yFactor = direct.find(f => f.id === state.matrixYId) || direct[Math.min(1, direct.length - 1)] || direct[0];
 
   let xVal = achievement, yVal = 100;
   if (xFactor?.id === 'profit') {
@@ -951,7 +907,7 @@ function calcHybrid(simData) {
   const direct = getSelectedDirectFactors().filter(f => f.id !== 'revenue');
   direct.forEach(f => {
     const val = simData[f.id] || 0;
-    const rate = state.directRates[f.id] ?? f.rateDefault ?? 2;
+    const rate = state.directRates[f.id] || 0;
     const bonus = val * rate / 100;
     commission += bonus;
     bd.push({ label: `${f.name}加算（¥${val}万 × ${rate}%）`, value: `+¥${bonus.toFixed(2)}万` });
@@ -1005,7 +961,7 @@ function prepareSummaryStep() {
       const f = FACTORS[cat].find(x => x.id === id);
       if (!f) return;
       const tag = f.type === 'direct' ? '<span style="color:var(--direct);font-size:11px;">[直接提成]</span>' : f.type === 'coeff' ? '<span style="color:var(--coeff);font-size:11px;">[调节系数]</span>' : '<span style="color:var(--kpi);font-size:11px;">[绩效建议]</span>';
-      factorHtml += `<div style="margin-left:16px;font-size:13px;">· ${f.name} ${tag}${f.type !== 'kpi' ? '（权重'+f.weight+'%）' : ''}</div>`;
+      factorHtml += `<div style="margin-left:16px;font-size:13px;">· ${f.name} ${tag}</div>`;
     });
     factorHtml += '</div>';
   }
@@ -1017,17 +973,18 @@ function prepareSummaryStep() {
     state.hurdleTiers.forEach(t => { modelHtml += `<span style="font-size:13px;">· ${t.name}：达成率≥${t.achievement}% → 提成率${t.rate}%</span><br>`; });
   } else if (m === 'multiplier') {
     modelHtml = '<strong>✖️ 乘数模式</strong><br>';
-    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}：${state.directRates[f.id] ?? f.rateDefault}%</span><br>`; });
+    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}：${state.directRates[f.id] || '未设置'}%</span><br>`; });
     coeff.forEach(f => { const r = state.coeffRanges[f.id]; modelHtml += `<span style="font-size:13px;">· ${f.name}系数：${r?.min}~${r?.max}</span><br>`; });
   } else if (m === 'matrix') {
     modelHtml = '<strong>📊 矩阵模式</strong><br>';
-    const sorted = [...direct].sort((a, b) => b.weight - a.weight);
-    modelHtml += `<span style="font-size:13px;">· X轴：${sorted[0]?.name || '销售额'}</span><br>`;
-    modelHtml += `<span style="font-size:13px;">· Y轴：${sorted[1]?.name || '毛利润'}</span><br>`;
+    const xF = direct.find(f => f.id === state.matrixXId) || direct[0];
+    const yF = direct.find(f => f.id === state.matrixYId) || direct[Math.min(1, direct.length - 1)] || direct[0];
+    modelHtml += `<span style="font-size:13px;">· X轴：${xF?.name || '—'}</span><br>`;
+    modelHtml += `<span style="font-size:13px;">· Y轴：${yF?.name || '—'}</span><br>`;
   } else if (m === 'hybrid') {
     modelHtml = '<strong>🧩 混合模式</strong><br>';
     modelHtml += `<span style="font-size:13px;">· 设障基础：${document.getElementById('hybBaseRate')?.value || 2}%</span><br>`;
-    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${state.directRates[f.id] ?? f.rateDefault}%</span><br>`; });
+    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${state.directRates[f.id] || '未设置'}%</span><br>`; });
   }
 
   let simHtml = '';
@@ -1083,9 +1040,9 @@ function saveToStorage() {
       selectedFactors: state.selectedFactors, selectedModel: state.selectedModel,
       hurdleTiers: state.hurdleTiers, directRates: state.directRates,
       coeffRanges: state.coeffRanges, matrixData: state.matrixData,
-      currentStep: state.currentStep, simulationResult: state.simulationResult, factorWeights: {},
+      matrixXId: state.matrixXId, matrixYId: state.matrixYId,
+      currentStep: state.currentStep, simulationResult: state.simulationResult,
     };
-    for (const cat of ['tian','di','ren']) FACTORS[cat].forEach(f => { data.factorWeights[f.id] = f.weight; });
     localStorage.setItem('commissionDesignV2', JSON.stringify(data));
   } catch(e) {}
 }
@@ -1101,18 +1058,15 @@ function loadFromStorage() {
     if (data.directRates) state.directRates = data.directRates;
     if (data.coeffRanges) state.coeffRanges = data.coeffRanges;
     if (data.matrixData) state.matrixData = data.matrixData;
+    if (data.matrixXId) state.matrixXId = data.matrixXId;
+    if (data.matrixYId) state.matrixYId = data.matrixYId;
     if (data.simulationResult) state.simulationResult = data.simulationResult;
-    if (data.factorWeights) {
-      for (const cat of ['tian','di','ren']) {
-        FACTORS[cat].forEach(f => { if (data.factorWeights[f.id] !== undefined) f.weight = data.factorWeights[f.id]; });
-      }
-    }
     if (data.selectedModel) {
       document.querySelectorAll('.model-card').forEach(c => { if (c.dataset.model === data.selectedModel) c.classList.add('selected'); });
       document.getElementById('btnModelNext').disabled = false;
     }
     renderFactors('tian'); renderFactors('di'); renderFactors('ren');
-    renderHurdleTiers(); updateWeightBar();
+    renderHurdleTiers();
     if (data.currentStep > 0) goToStep(data.currentStep);
   } catch(e) {}
 }
