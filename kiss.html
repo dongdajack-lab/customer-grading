@@ -460,14 +460,6 @@ textarea.tall { min-height: 160px; }
         <label class="form-label">📅 复盘周期 结束</label>
         <input class="form-input" type="date" id="periodEnd">
       </div>
-      <div class="form-group">
-        <label class="form-label">签单目标（可选）</label>
-        <input class="form-input" id="targetSigning" placeholder="万元 / 万美元">
-      </div>
-      <div class="form-group">
-        <label class="form-label">发运/回款目标（可选）</label>
-        <input class="form-input" id="targetRevenue" placeholder="万元 / 万美元">
-      </div>
     </div>
     <div class="section-nav">
       <div></div>
@@ -482,14 +474,6 @@ textarea.tall { min-height: 160px; }
       <h2>评估结果</h2>
     </div>
     <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">签单实际完成</label>
-        <input class="form-input" id="actualSigning" placeholder="万元">
-      </div>
-      <div class="form-group">
-        <label class="form-label">发运/回款实际完成</label>
-        <input class="form-input" id="actualRevenue" placeholder="万元">
-      </div>
       <div class="form-group full">
         <label class="form-label">✨ 亮点（与原来目标比，哪些做得好？）</label>
         <textarea id="highlights" placeholder="回顾做得好的方面：&#10;1. 结果超预期：9个月完成原定12个月的目标。&#10;2. 打法被验证：形成了一套可复制的'项目制清收'流程和方法。&#10;3. 团队士气提升：用实际行动证明了'欠款能收回'，打破了团队畏难情绪。"></textarea>
@@ -681,10 +665,6 @@ function collectData() {
     goals: document.getElementById('goals').value,
     periodStart: document.getElementById('periodStart').value,
     periodEnd: document.getElementById('periodEnd').value,
-    targetSigning: document.getElementById('targetSigning').value,
-    targetRevenue: document.getElementById('targetRevenue').value,
-    actualSigning: document.getElementById('actualSigning').value,
-    actualRevenue: document.getElementById('actualRevenue').value,
     highlights: document.getElementById('highlights').value,
     shortcomings: document.getElementById('shortcomings').value,
     completionRate: document.getElementById('completionRate').value,
@@ -707,8 +687,6 @@ function populateForm(data) {
   const mapping = {
     topic:'topic', purpose:'purpose', goals:'goals',
     periodStart:'periodStart', periodEnd:'periodEnd',
-    targetSigning:'targetSigning', targetRevenue:'targetRevenue',
-    actualSigning:'actualSigning', actualRevenue:'actualRevenue',
     highlights:'highlights', shortcomings:'shortcomings',
     completionRate:'completionRate',
     successSubjective:'successSubjective', successObjective:'successObjective',
@@ -753,10 +731,6 @@ function loadPreset() {
     goals: '一年收回240万逾期三年的欠款。\n制定并执行月度回款计划，每月收回20万元。',
     periodStart: '2025-01-01',
     periodEnd: '2025-12-31',
-    targetSigning: '',
-    targetRevenue: '240万',
-    actualSigning: '',
-    actualRevenue: '240万（9个月完成）',
     highlights: '1. 结果超预期：9个月完成原定12个月的目标。\n2. 打法被验证：形成了一套可复制的"项目制清收"流程和方法。\n3. 团队士气提升：用实际行动证明了"欠款能收回"，打破了团队畏难情绪。',
     shortcomings: '项目启动后前三个月进展极其缓慢，回款几乎为零，浪费了宝贵时间。',
     completionRate: '133',
@@ -778,7 +752,6 @@ function loadPreset() {
 function startNew() {
   const fields = [
     'topic','purpose','goals','periodStart','periodEnd',
-    'targetSigning','targetRevenue','actualSigning','actualRevenue',
     'highlights','shortcomings','completionRate',
     'successSubjective','successObjective','failureSubjective','failureObjective',
     'patterns','oneLiner'
@@ -837,9 +810,7 @@ function viewReview(id) {
     <h2>📋 ${escHtml(r.topic||'复盘报告')}</h2>
     <p style="color:var(--grey-mid);font-size:13px;margin-bottom:20px;">${fmtDate(r.createdAt)} · ${r.periodStart||'?'} ~ ${r.periodEnd||'?'}</p>
     <div class="kpi-grid">
-      <div class="kpi-card"><div class="kpi-val" style="color:${rateColor}">${compRate}%</div><div class="kpi-label">完成率</div></div>
-      ${r.targetRevenue ? `<div class="kpi-card"><div class="kpi-val">${escHtml(r.targetRevenue)}</div><div class="kpi-label">目标回款</div></div>` : ''}
-      ${r.actualRevenue ? `<div class="kpi-card"><div class="kpi-val">${escHtml(r.actualRevenue)}</div><div class="kpi-label">实际回款</div></div>` : ''}
+      <div class="kpi-card"><div class="kpi-val" style="color:${rateColor}">${compRate}%</div><div class="kpi-label">完成率自评</div></div>
     </div>
     <div class="report-section"><h3>🎯 回顾目标</h3><div class="report-text">${escHtml(r.purpose||'')}\n\n${escHtml(r.goals||'')}</div></div>
     <div class="report-section"><h3>📊 评估结果</h3><div class="report-text"><strong>✨ 亮点：</strong>\n${escHtml(r.highlights||'')}\n\n<strong>⚠️ 不足：</strong>\n${escHtml(r.shortcomings||'')}</div></div>
