@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · KISS复盘工作台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2c5aa0;
+  --primary-light: #e8f0fc;
+  --primary-dark: #1a3d6e;
+  --accent: #e67e22;
+  --accent-light: #fef3e8;
+  --success: #27ae60;
+  --success-light: #e8f8ee;
+  --danger: #c0392b;
+  --danger-light: #fdeaea;
+  --warning: #f39c12;
+  --warning-light: #fef9e7;
+  --info: #2980b9;
+  --info-light: #eaf2f8;
+  --grey-dark: #2c3e50;
+  --grey-mid: #7f8c8d;
+  --grey-light: #ecf0f1;
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --keep: #27ae60;
+  --improve: #2980b9;
+  --start: #e67e22;
+  --stop: #c0392b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--grey-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 48px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 400px; height: 400px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.header-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+header h1 {
+  font-size: 28px; font-weight: 700;
+  margin-bottom: 10px; position: relative; z-index: 1;
+}
+header p {
+  font-size: 14px; opacity: 0.85;
+  max-width: 560px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* Top Actions */
+.top-actions {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.btn {
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  padding: 12px 24px;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-accent { background: var(--accent); color: white; }
+.btn-accent:hover { background: #d35400; transform: translateY(-1px); }
+.btn-outline { background: white; color: var(--grey-mid); border: 2px solid var(--grey-light); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 8px 16px; font-size: 13px; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-danger:hover { opacity: 0.9; }
+
+/* Section */
+.section {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  transition: all 0.3s;
+}
+.section.active-section {
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--primary);
+}
+.section-title {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--primary-light);
+}
+.section-title h2 {
+  font-size: 18px; font-weight: 700; color: var(--primary);
+}
+.section-title .step-num {
+  width: 36px; height: 36px;
+  background: var(--primary); color: white;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700;
+}
+.section-title .step-num.done {
+  background: var(--success);
+}
+
+/* Progress Bar */
+.progress-bar-wrap {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 32px;
+  margin-bottom: 24px;
+}
+.progress-steps {
+  display: flex; justify-content: space-between;
+  position: relative; margin-bottom: 10px;
+}
+.progress-steps::before {
+  content: '';
+  position: absolute; top: 14px; left: 30px; right: 30px;
+  height: 3px; background: var(--grey-light);
+  z-index: 0;
+}
+.progress-fill {
+  position: absolute; top: 14px; left: 30px;
+  height: 3px; background: var(--primary);
+  z-index: 1; transition: width 0.4s;
+}
+.progress-step {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; z-index: 2; flex: 1;
+}
+.progress-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--grey-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--grey-mid);
+  transition: all 0.3s;
+}
+.progress-dot.active { background: var(--primary); color: white; }
+.progress-dot.done { background: var(--success); color: white; }
+.progress-label {
+  font-size: 11px; color: var(--grey-mid); margin-top: 6px;
+  text-align: center; max-width: 60px;
+}
+.progress-label.active { color: var(--primary); font-weight: 600; }
+
+/* Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+.form-group { display: flex; flex-direction: column; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 13px; font-weight: 600;
+  color: var(--grey-dark); margin-bottom: 8px;
+}
+.form-hint {
+  font-size: 11px; color: var(--grey-mid); margin-top: 4px;
+}
+.form-input, textarea {
+  padding: 12px 16px;
+  border: 2px solid var(--grey-light);
+  border-radius: 8px;
+  font-size: 14px; font-family: inherit;
+  transition: border-color 0.2s;
+  background: var(--white);
+  resize: vertical;
+}
+.form-input:focus, textarea:focus {
+  outline: none; border-color: var(--primary);
+}
+textarea { min-height: 100px; }
+textarea.tall { min-height: 160px; }
+.form-input::placeholder, textarea::placeholder { color: var(--grey-mid); }
+
+/* KISS四象限 */
+.kiss-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 600px) {
+  .kiss-grid { grid-template-columns: 1fr; }
+}
+.kiss-card {
+  border-radius: 12px; padding: 24px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.kiss-card:focus-within {
+  box-shadow: var(--shadow-lg);
+}
+.kiss-card.keep { background: var(--success-light); border-color: rgba(39,174,96,0.2); }
+.kiss-card.improve { background: var(--info-light); border-color: rgba(41,128,185,0.2); }
+.kiss-card.start { background: var(--accent-light); border-color: rgba(230,126,34,0.2); }
+.kiss-card.stop { background: var(--danger-light); border-color: rgba(192,57,43,0.2); }
+.kiss-card-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.kiss-card-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: white;
+}
+.kiss-card.keep .kiss-card-icon { background: var(--keep); }
+.kiss-card.improve .kiss-card-icon { background: var(--improve); }
+.kiss-card.start .kiss-card-icon { background: var(--start); }
+.kiss-card.stop .kiss-card-icon { background: var(--stop); }
+.kiss-card h3 { font-size: 16px; font-weight: 700; }
+.kiss-card.keep h3 { color: var(--keep); }
+.kiss-card.improve h3 { color: var(--improve); }
+.kiss-card.start h3 { color: var(--start); }
+.kiss-card.stop h3 { color: var(--stop); }
+.kiss-card textarea {
+  border: none; background: rgba(255,255,255,0.7);
+  min-height: 120px; width: 100%;
+}
+
+/* 预置示例按钮 */
+.preset-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px;
+  background: var(--warning-light);
+  border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 13px; color: var(--grey-dark);
+  flex-wrap: wrap;
+}
+.preset-bar .icon { font-size: 22px; }
+.preset-bar strong { color: var(--warning); }
+
+/* History List */
+.history-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px;
+  background: var(--white);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid var(--grey-light);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.history-item:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+.history-date {
+  font-size: 13px; color: var(--grey-mid); white-space: nowrap;
+}
+.history-title {
+  flex: 1; font-weight: 600; font-size: 15px;
+}
+.history-meta {
+  font-size: 12px; color: var(--grey-mid);
+}
+.history-actions {
+  display: flex; gap: 8px;
+}
+
+/* Report Modal */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  justify-content: center; align-items: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: white; border-radius: var(--radius);
+  max-width: 700px; width: 90%; max-height: 80vh;
+  overflow-y: auto; padding: 32px;
+  box-shadow: var(--shadow-lg);
+}
+.modal h2 { font-size: 20px; margin-bottom: 20px; color: var(--primary); }
+.modal .report-section { margin-bottom: 24px; }
+.modal .report-section h3 {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--grey-light);
+}
+.modal .report-text { font-size: 14px; color: var(--grey-dark); line-height: 1.8; white-space: pre-wrap; }
+.modal .kiss-badge {
+  display: inline-block; padding: 4px 12px;
+  border-radius: 6px; font-size: 12px; font-weight: 600;
+  margin: 4px 4px 4px 0;
+}
+.modal .kiss-badge.keep { background: var(--success-light); color: var(--keep); }
+.modal .kiss-badge.improve { background: var(--info-light); color: var(--improve); }
+.modal .kiss-badge.start { background: var(--accent-light); color: var(--start); }
+.modal .kiss-badge.stop { background: var(--danger-light); color: var(--stop); }
+.modal .close-btn {
+  position: sticky; top: 0; float: right;
+  background: none; border: none;
+  font-size: 24px; cursor: pointer;
+  color: var(--grey-mid);
+}
+.modal .kpi-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 16px; margin-bottom: 16px;
+}
+.modal .kpi-card {
+  text-align: center; padding: 16px;
+  background: var(--bg); border-radius: 8px;
+}
+.modal .kpi-card .kpi-val { font-size: 24px; font-weight: 700; color: var(--primary); }
+.modal .kpi-card .kpi-label { font-size: 12px; color: var(--grey-mid); margin-top: 4px; }
+
+/* Empty State */
+.empty-state {
+  text-align: center; padding: 60px 20px; color: var(--grey-mid);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--grey-dark); color: white;
+  padding: 12px 28px; border-radius: 8px;
+  font-size: 14px; z-index: 2000;
+  opacity: 0; transition: opacity 0.3s;
+}
+.toast.show { opacity: 1; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  header { padding: 32px 16px 28px; }
+  header h1 { font-size: 22px; }
+  .container { padding: 20px 12px 60px; }
+  .section { padding: 20px 16px; }
+  .progress-label { font-size: 10px; }
+}
+
+/* Section Nav */
+.section-nav {
+  display: flex; justify-content: space-between; margin-top: 24px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">大董老师 · 天地人销售体系</div>
+  <h1>📋 KISS复盘工作台</h1>
+  <p>Keep · Improve · Start · Stop — 让每一次复盘都转化为战斗力</p>
+</header>
+
+<div class="container">
+
+  <!-- 预置示例 -->
+  <div class="preset-bar" id="presetBar">
+    <span class="icon">💡</span>
+    <span>试试 <strong>"收款复盘"</strong> 示例，了解怎么用 →</span>
+    <button class="btn btn-accent btn-sm" onclick="loadPreset()">加载示例</button>
+    <button class="btn btn-outline btn-sm" onclick="startNew()">新建空白复盘</button>
+  </div>
+
+  <!-- 进度条 -->
+  <div class="progress-bar-wrap">
+    <div class="progress-steps">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      <div class="progress-step">
+        <div class="progress-dot active" id="dot1">1</div>
+        <div class="progress-label active" id="label1">回顾目标</div>
+      </div>
+      <div class="progress-step">
+        <div class="progress-dot" id="dot2">2</div>
+        <div class="progress-label" id="label2">评估结果</div>
+      </div>
+      <div class="progress-step">
+        <div class="progress-dot" id="dot3">3</div>
+        <div class="progress-label" id="label3">分析原因</div>
+      </div>
+      <div class="progress-step">
+        <div class="progress-dot" id="dot4">4</div>
+        <div class="progress-label" id="label4">总结规律</div>
+      </div>
+      <div class="progress-step">
+        <div class="progress-dot" id="dot5">5</div>
+        <div class="progress-label" id="label5">行动计划</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: 回顾目标 -->
+  <div class="section active-section" id="sec1">
+    <div class="section-title">
+      <div class="step-num">1</div>
+      <h2>回顾目标</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">复盘主题</label>
+        <input class="form-input" id="topic" placeholder="例：Q2季度业绩复盘 / XX项目复盘 / 本周工作复盘">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">当初的目的是什么？（期望的结果）</label>
+        <textarea id="purpose" placeholder="例：破解长期欠款僵局，通过攻克'最难案例'树立清收信心，固化有效打法。"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">要达成的目标 & 里程碑</label>
+        <textarea id="goals" placeholder="例：一年收回240万逾期三年的欠款，制定并执行月度回款计划，每月收回20万元。"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">📅 复盘周期 开始</label>
+        <input class="form-input" type="date" id="periodStart">
+      </div>
+      <div class="form-group">
+        <label class="form-label">📅 复盘周期 结束</label>
+        <input class="form-input" type="date" id="periodEnd">
+      </div>
+      <div class="form-group">
+        <label class="form-label">签单目标（可选）</label>
+        <input class="form-input" id="targetSigning" placeholder="万元 / 万美元">
+      </div>
+      <div class="form-group">
+        <label class="form-label">发运/回款目标（可选）</label>
+        <input class="form-input" id="targetRevenue" placeholder="万元 / 万美元">
+      </div>
+    </div>
+    <div class="section-nav">
+      <div></div>
+      <button class="btn btn-primary" onclick="goStep(2)" style="width:auto;margin-top:0;">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: 评估结果 -->
+  <div class="section" id="sec2">
+    <div class="section-title">
+      <div class="step-num">2</div>
+      <h2>评估结果</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">签单实际完成</label>
+        <input class="form-input" id="actualSigning" placeholder="万元">
+      </div>
+      <div class="form-group">
+        <label class="form-label">发运/回款实际完成</label>
+        <input class="form-input" id="actualRevenue" placeholder="万元">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">✨ 亮点（与原来目标比，哪些做得好？）</label>
+        <textarea id="highlights" placeholder="回顾做得好的方面：&#10;1. 结果超预期：9个月完成原定12个月的目标。&#10;2. 打法被验证：形成了一套可复制的'项目制清收'流程和方法。&#10;3. 团队士气提升：用实际行动证明了'欠款能收回'，打破了团队畏难情绪。"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">⚠️ 不足（与原来目标比，哪些没做好？）</label>
+        <textarea id="shortcomings" placeholder="回顾做得不好的方面：&#10;1. 项目启动后前三个月进展极其缓慢，回款几乎为零，浪费了宝贵时间。"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">📊 完成率自评</label>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <input type="range" id="completionRate" min="0" max="200" value="100" style="flex:1"
+            oninput="document.getElementById('completionDisplay').textContent=this.value+'%'">
+          <span id="completionDisplay" style="font-weight:700;font-size:18px;color:var(--primary);min-width:60px;">100%</span>
+        </div>
+        <div class="form-hint">0%=远未达标 100%=刚好达标 200%=超额一倍</div>
+      </div>
+    </div>
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(1)">← 上一步</button>
+      <button class="btn btn-primary" onclick="goStep(3)" style="width:auto;margin-top:0;">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: 分析原因 -->
+  <div class="section" id="sec3">
+    <div class="section-title">
+      <div class="step-num">3</div>
+      <h2>分析原因</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">✅ 成功关键因素 — 主观原因（我们做对了什么）</label>
+        <textarea id="successSubjective" placeholder="从人的角度分析：&#10;1. 重视程度提升&#10;2. 执行力增强"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">✅ 成功关键因素 — 客观原因（外部有利条件）</label>
+        <textarea id="successObjective" placeholder="从环境/流程/工具角度分析：&#10;1. 流程清晰&#10;2. 计划明确&#10;3. 机制保障&#10;4. 客情加压"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">❌ 失败根本原因 — 主观原因（我们哪里没做好）</label>
+        <textarea id="failureSubjective" placeholder="从人的角度分析：&#10;1. 初期重视不足&#10;2. 缺乏责任心"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">❌ 失败根本原因 — 客观原因（外部不可控因素）</label>
+        <textarea id="failureObjective" placeholder="从环境/流程/工具角度分析：&#10;1. 历史合同隐患&#10;2. 流程审批失效&#10;3. 客户付款流程不清"></textarea>
+      </div>
+    </div>
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(2)">← 上一步</button>
+      <button class="btn btn-primary" onclick="goStep(4)" style="width:auto;margin-top:0;">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: 总结规律 -->
+  <div class="section" id="sec4">
+    <div class="section-title">
+      <div class="step-num">4</div>
+      <h2>总结规律</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">📖 从这次经历中提炼的经验 & 规律</label>
+        <textarea class="tall" id="patterns" placeholder="把具体经验抽象成可复用的方法论：&#10;1. 付款流程图：梳理清楚客户内部付款的每个环节、负责人和时间节点&#10;2. 如何规避类似的欠款风险：合同条款前移、信用管理前置&#10;3. 项目制清收的打法：目标拆解→流程梳理→计划制定→机制保障"></textarea>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">💬 一句话总结（如果只能记住一件事）</label>
+        <input class="form-input" id="oneLiner" placeholder="例：回款不是催出来的，是靠流程设计和客情加压双管齐下收出来的。">
+      </div>
+    </div>
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(3)">← 上一步</button>
+      <button class="btn btn-primary" onclick="goStep(5)" style="width:auto;margin-top:0;">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 5: 行动计划 KISS -->
+  <div class="section" id="sec5">
+    <div class="section-title">
+      <div class="step-num">5</div>
+      <h2>行动计划 · KISS</h2>
+    </div>
+    <div class="kiss-grid">
+      <div class="kiss-card keep">
+        <div class="kiss-card-header">
+          <div class="kiss-card-icon">✅</div>
+          <h3>Keep 继续做</h3>
+        </div>
+        <p class="form-hint" style="margin-bottom:12px;">做得好的，固化下来，形成标准动作</p>
+        <textarea placeholder="1. 项目制清欠&#10;2. 工具化&#10;3. 强跟踪机制&#10;4. 奖惩分明"></textarea>
+      </div>
+      <div class="kiss-card improve">
+        <div class="kiss-card-header">
+          <div class="kiss-card-icon">🔧</div>
+          <h3>Improve 优化做</h3>
+        </div>
+        <p class="form-hint" style="margin-bottom:12px;">方向对但效果不够好，需要迭代优化</p>
+        <textarea placeholder="1. 合同风控前移&#10;2. 审批流程严肃化&#10;3. 客户信用管理"></textarea>
+      </div>
+      <div class="kiss-card start">
+        <div class="kiss-card-header">
+          <div class="kiss-card-icon">🚀</div>
+          <h3>Start 开始做</h3>
+        </div>
+        <p class="form-hint" style="margin-bottom:12px;">以前没做但应该开始的新动作</p>
+        <textarea placeholder="1. 启动'清收打样'机制&#10;2. 建立'回款能力认证'&#10;3. 开展'复盘文化'培训"></textarea>
+      </div>
+      <div class="kiss-card stop">
+        <div class="kiss-card-header">
+          <div class="kiss-card-icon">🛑</div>
+          <h3>Stop 停止做</h3>
+        </div>
+        <p class="form-hint" style="margin-bottom:12px;">无效的、有害的，坚决砍掉</p>
+        <textarea placeholder="1. 停止'唯签约论'&#10;2. 停止'人情审批'&#10;3. 停止'无章法清收'"></textarea>
+      </div>
+    </div>
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(4)">← 上一步</button>
+      <button class="btn btn-accent" onclick="saveReview()" style="width:auto;margin-top:0;">💾 保存复盘</button>
+    </div>
+  </div>
+
+  <!-- 历史复盘 -->
+  <div class="section" id="historySection">
+    <div class="section-title">
+      <div class="step-num" style="background:var(--grey-mid);">📚</div>
+      <h2>历史复盘</h2>
+      <div style="flex:1;"></div>
+      <button class="btn btn-outline btn-sm" onclick="exportAll()">📤 全部导出</button>
+    </div>
+    <div id="historyList">
+      <div class="empty-state">
+        <div class="icon">📝</div>
+        <p>还没有复盘记录</p>
+        <p style="font-size:12px;margin-top:8px;">完成上方5步后保存，记录将出现在这里</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 复盘报告弹窗 -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal" id="reportContent"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== State =====
+const STORAGE_KEY = 'kiss_reviews_dd';
+let currentStep = 1;
+
+// ===== Step Navigation =====
+function goStep(n) {
+  currentStep = n;
+  for (let i = 1; i <= 5; i++) {
+    const sec = document.getElementById('sec'+i);
+    sec.classList.toggle('active-section', i === n);
+    // Auto scroll
+    if (i === n) sec.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const totalSteps = 5;
+  for (let i = 1; i <= totalSteps; i++) {
+    const dot = document.getElementById('dot'+i);
+    const label = document.getElementById('label'+i);
+    dot.classList.remove('active','done');
+    label.classList.remove('active');
+    if (i < currentStep) { dot.classList.add('done'); dot.textContent = '✓'; }
+    else if (i === currentStep) { dot.classList.add('active'); dot.textContent = i; }
+    else { dot.textContent = i; }
+    if (i === currentStep) label.classList.add('active');
+  }
+  const pct = ((currentStep - 1) / (totalSteps - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ===== Collect Data =====
+function collectData() {
+  return {
+    id: Date.now().toString(),
+    topic: document.getElementById('topic').value,
+    purpose: document.getElementById('purpose').value,
+    goals: document.getElementById('goals').value,
+    periodStart: document.getElementById('periodStart').value,
+    periodEnd: document.getElementById('periodEnd').value,
+    targetSigning: document.getElementById('targetSigning').value,
+    targetRevenue: document.getElementById('targetRevenue').value,
+    actualSigning: document.getElementById('actualSigning').value,
+    actualRevenue: document.getElementById('actualRevenue').value,
+    highlights: document.getElementById('highlights').value,
+    shortcomings: document.getElementById('shortcomings').value,
+    completionRate: document.getElementById('completionRate').value,
+    successSubjective: document.getElementById('successSubjective').value,
+    successObjective: document.getElementById('successObjective').value,
+    failureSubjective: document.getElementById('failureSubjective').value,
+    failureObjective: document.getElementById('failureObjective').value,
+    patterns: document.getElementById('patterns').value,
+    oneLiner: document.getElementById('oneLiner').value,
+    keep: document.querySelector('.kiss-card.keep textarea').value,
+    improve: document.querySelector('.kiss-card.improve textarea').value,
+    start: document.querySelector('.kiss-card.start textarea').value,
+    stop: document.querySelector('.kiss-card.stop textarea').value,
+    createdAt: new Date().toISOString()
+  };
+}
+
+// ===== Populate Form =====
+function populateForm(data) {
+  const mapping = {
+    topic:'topic', purpose:'purpose', goals:'goals',
+    periodStart:'periodStart', periodEnd:'periodEnd',
+    targetSigning:'targetSigning', targetRevenue:'targetRevenue',
+    actualSigning:'actualSigning', actualRevenue:'actualRevenue',
+    highlights:'highlights', shortcomings:'shortcomings',
+    completionRate:'completionRate',
+    successSubjective:'successSubjective', successObjective:'successObjective',
+    failureSubjective:'failureSubjective', failureObjective:'failureObjective',
+    patterns:'patterns', oneLiner:'oneLiner'
+  };
+  Object.entries(mapping).forEach(([k,v]) => {
+    const el = document.getElementById(v);
+    if (el) el.value = data[k] || '';
+  });
+  if (data.keep !== undefined) document.querySelector('.kiss-card.keep textarea').value = data.keep;
+  if (data.improve !== undefined) document.querySelector('.kiss-card.improve textarea').value = data.improve;
+  if (data.start !== undefined) document.querySelector('.kiss-card.start textarea').value = data.start;
+  if (data.stop !== undefined) document.querySelector('.kiss-card.stop textarea').value = data.stop;
+  if (data.completionRate !== undefined) {
+    document.getElementById('completionDisplay').textContent = data.completionRate + '%';
+  }
+}
+
+// ===== Save =====
+function saveReview() {
+  const data = collectData();
+  if (!data.topic) { showToast('请先填写复盘主题'); goStep(1); return; }
+  const reviews = getReviews();
+  reviews.unshift(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+  showToast('✅ 复盘已保存！');
+  renderHistory();
+  goStep(1);
+}
+
+function getReviews() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+// ===== Load Preset =====
+function loadPreset() {
+  populateForm({
+    topic: '收款复盘 — 破解240万逾期欠款',
+    purpose: '破解长期欠款僵局，通过攻克"最难案例"树立清收信心，固化有效打法。',
+    goals: '一年收回240万逾期三年的欠款。\n制定并执行月度回款计划，每月收回20万元。',
+    periodStart: '2025-01-01',
+    periodEnd: '2025-12-31',
+    targetSigning: '',
+    targetRevenue: '240万',
+    actualSigning: '',
+    actualRevenue: '240万（9个月完成）',
+    highlights: '1. 结果超预期：9个月完成原定12个月的目标。\n2. 打法被验证：形成了一套可复制的"项目制清收"流程和方法。\n3. 团队士气提升：用实际行动证明了"欠款能收回"，打破了团队畏难情绪。',
+    shortcomings: '项目启动后前三个月进展极其缓慢，回款几乎为零，浪费了宝贵时间。',
+    completionRate: '133',
+    successSubjective: '1. 重视程度提升：从上到下把回款当"一号工程"\n2. 执行力增强：不再把希望寄托在客户"主动付款"上',
+    successObjective: '1. 流程清晰：付款流程图的梳理让每个环节的责任人、时间点一目了然\n2. 计划明确：不再是模糊的"尽快催"而是精确到天的付款计划\n3. 机制保障：周例会跟踪+红黄绿灯预警+奖惩分明\n4. 客情加压：对关键决策人进行分级公关',
+    failureSubjective: '1. 初期重视不足：以为"迟早会给"\n2. 缺乏责任心：把催款当成销售的"副业"而非"主业"',
+    failureObjective: '1. 历史合同隐患：合同中付款条款模糊，给了客户拖延空间\n2. 流程审批失效：公司内部审批流于形式，没有真正卡住风险\n3. 客户付款流程不清：不知道客户内部付款要走5个环节',
+    patterns: '1. 付款流程图：梳理清楚客户内部付款的每个环节、负责人和典型时间\n2. 规避欠款风险：合同条款前移（明确付款节点和违约金）、信用管理前置（新客户先审信用再签约）\n3. 项目制清收打法：目标拆解→流程梳理→计划制定→机制保障，形成闭环',
+    oneLiner: '回款不是催出来的，是靠流程设计和客情加压双管齐下收出来的。',
+    keep: '1. 项目制清欠：把每个大额欠款当项目来管\n2. 工具化：付款流程图+进度跟踪表\n3. 强跟踪机制：周例会+红黄绿灯\n4. 奖惩分明：说到做到',
+    improve: '1. 合同风控前移：签合同前就明确付款条款\n2. 审批流程严肃化：法务+财务联合审批\n3. 客户信用管理：建立客户信用评级体系',
+    start: '1. 启动"清收打样"机制：先攻坚一个最难案例\n2. 建立"回款能力认证"：销售必须通过回款实战考核\n3. 开展"复盘文化"培训：让KISS复盘成为团队肌肉记忆',
+    stop: '1. 停止"唯签约论"：签约不等于回款\n2. 停止"人情审批"：任何人不能跳过风控流程\n3. 停止"无章法清收"：没有计划就不允许行动'
+  });
+  goStep(1);
+  showToast('✅ 收款复盘示例已加载，浏览5步学习KISS复盘方法');
+}
+
+function startNew() {
+  const fields = [
+    'topic','purpose','goals','periodStart','periodEnd',
+    'targetSigning','targetRevenue','actualSigning','actualRevenue',
+    'highlights','shortcomings','completionRate',
+    'successSubjective','successObjective','failureSubjective','failureObjective',
+    'patterns','oneLiner'
+  ];
+  fields.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.querySelector('.kiss-card.keep textarea').value = '';
+  document.querySelector('.kiss-card.improve textarea').value = '';
+  document.querySelector('.kiss-card.start textarea').value = '';
+  document.querySelector('.kiss-card.stop textarea').value = '';
+  document.getElementById('completionRate').value = '100';
+  document.getElementById('completionDisplay').textContent = '100%';
+  goStep(1);
+  showToast('✅ 已清空，开始新建复盘');
+}
+
+// ===== History =====
+function renderHistory() {
+  const reviews = getReviews();
+  const el = document.getElementById('historyList');
+  if (reviews.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>还没有复盘记录</p><p style="font-size:12px;margin-top:8px;">完成上方5步后保存，记录将出现在这里</p></div>';
+    return;
+  }
+  el.innerHTML = reviews.map((r,i) => `
+    <div class="history-item" onclick="viewReview('${r.id}')">
+      <div style="font-size:24px;">📋</div>
+      <div style="flex:1;">
+        <div class="history-title">${escHtml(r.topic||'未命名复盘')}</div>
+        <div class="history-meta">${fmtDate(r.createdAt)} · 完成率 ${r.completionRate||100}%</div>
+      </div>
+      <div class="history-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-outline btn-sm" onclick="loadReview('${r.id}')">编辑</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteReview('${r.id}')">删除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadReview(id) {
+  const r = getReviews().find(x => x.id === id);
+  if (!r) return;
+  populateForm(r);
+  goStep(1);
+  showToast('✅ 复盘已加载，可继续编辑');
+}
+
+function viewReview(id) {
+  const r = getReviews().find(x => x.id === id);
+  if (!r) return;
+  const modal = document.getElementById('reportModal');
+  const content = document.getElementById('reportContent');
+  const compRate = r.completionRate || 100;
+  const rateColor = compRate >= 100 ? 'var(--success)' : 'var(--danger)';
+  content.innerHTML = `
+    <button class="close-btn" onclick="closeReport()">✕</button>
+    <h2>📋 ${escHtml(r.topic||'复盘报告')}</h2>
+    <p style="color:var(--grey-mid);font-size:13px;margin-bottom:20px;">${fmtDate(r.createdAt)} · ${r.periodStart||'?'} ~ ${r.periodEnd||'?'}</p>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-val" style="color:${rateColor}">${compRate}%</div><div class="kpi-label">完成率</div></div>
+      ${r.targetRevenue ? `<div class="kpi-card"><div class="kpi-val">${escHtml(r.targetRevenue)}</div><div class="kpi-label">目标回款</div></div>` : ''}
+      ${r.actualRevenue ? `<div class="kpi-card"><div class="kpi-val">${escHtml(r.actualRevenue)}</div><div class="kpi-label">实际回款</div></div>` : ''}
+    </div>
+    <div class="report-section"><h3>🎯 回顾目标</h3><div class="report-text">${escHtml(r.purpose||'')}\n\n${escHtml(r.goals||'')}</div></div>
+    <div class="report-section"><h3>📊 评估结果</h3><div class="report-text"><strong>✨ 亮点：</strong>\n${escHtml(r.highlights||'')}\n\n<strong>⚠️ 不足：</strong>\n${escHtml(r.shortcomings||'')}</div></div>
+    <div class="report-section"><h3>🔍 分析原因</h3><div class="report-text"><strong>成功主观：</strong>${escHtml(r.successSubjective||'')}\n<strong>成功客观：</strong>${escHtml(r.successObjective||'')}\n<strong>失败主观：</strong>${escHtml(r.failureSubjective||'')}\n<strong>失败客观：</strong>${escHtml(r.failureObjective||'')}</div></div>
+    <div class="report-section"><h3>💡 总结规律</h3><div class="report-text">${escHtml(r.patterns||'')}\n\n<strong>一句话：</strong>${escHtml(r.oneLiner||'')}</div></div>
+    <div class="report-section"><h3>📌 行动计划</h3>
+      <div><span class="kiss-badge keep">✅ Keep 继续做</span>${(r.keep||'').split('\n').filter(Boolean).map(x=>`<span class="kiss-badge keep">${escHtml(x)}</span>`).join(' ')}</div>
+      <div style="margin-top:8px;"><span class="kiss-badge improve">🔧 Improve 优化做</span>${(r.improve||'').split('\n').filter(Boolean).map(x=>`<span class="kiss-badge improve">${escHtml(x)}</span>`).join(' ')}</div>
+      <div style="margin-top:8px;"><span class="kiss-badge start">🚀 Start 开始做</span>${(r.start||'').split('\n').filter(Boolean).map(x=>`<span class="kiss-badge start">${escHtml(x)}</span>`).join(' ')}</div>
+      <div style="margin-top:8px;"><span class="kiss-badge stop">🛑 Stop 停止做</span>${(r.stop||'').split('\n').filter(Boolean).map(x=>`<span class="kiss-badge stop">${escHtml(x)}</span>`).join(' ')}</div>
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <button class="btn btn-primary" onclick="closeReport()">关闭</button>
+      <button class="btn btn-outline" onclick="printReport()" style="margin-left:12px;">🖨️ 打印</button>
+    </div>
+  `;
+  modal.classList.add('show');
+}
+
+function closeReport() { document.getElementById('reportModal').classList.remove('show'); }
+function printReport() { window.print(); }
+
+function deleteReview(id) {
+  if (!confirm('确定删除这条复盘记录吗？此操作不可撤销。')) return;
+  const reviews = getReviews().filter(x => x.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+  renderHistory();
+  showToast('🗑️ 已删除');
+}
+
+function exportAll() {
+  const reviews = getReviews();
+  if (reviews.length === 0) { showToast('没有可导出的复盘记录'); return; }
+  let text = '大董老师 · KISS复盘工作台 — 全部复盘记录\n' + '='.repeat(50) + '\n\n';
+  reviews.forEach((r,i) => {
+    text += `【${i+1}】${r.topic||'未命名'}\n`;
+    text += `日期：${fmtDate(r.createdAt)} · 周期：${r.periodStart||'?'} ~ ${r.periodEnd||'?'}\n`;
+    text += `完成率：${r.completionRate||100}%\n`;
+    text += `\n🎯 目标：${r.purpose||''}\n${r.goals||''}\n`;
+    text += `📊 亮点：${r.highlights||''}\n📊 不足：${r.shortcomings||''}\n`;
+    text += `💡 规律：${r.patterns||''}\n💡 一句话：${r.oneLiner||''}\n`;
+    text += `📌 Keep：${r.keep||''}\n📌 Improve：${r.improve||''}\n📌 Start：${r.start||''}\n📌 Stop：${r.stop||''}\n`;
+    text += '\n---\n\n';
+  });
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'KISS复盘记录_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  showToast('📤 已导出全部复盘记录');
+}
+
+// ===== Utilities =====
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Close modal on overlay click
+document.getElementById('reportModal').addEventListener('click', function(e) {
+  if (e.target === this) closeReport();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeReport();
+});
+
+// ===== Init =====
+renderHistory();
+
+// Auto-load preset if no history
+if (getReviews().length === 0) {
+  loadPreset();
+}
+</script>
+
+</body>
+</html>
