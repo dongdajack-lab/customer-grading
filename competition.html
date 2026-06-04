@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 竞争分析计算器</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0d2b45;
+  --primary-light: #1a4a7a;
+  --primary-dark: #071c2e;
+  --accent: #c9a84c;
+  --accent-light: #fdf6e3;
+  --accent-dark: #9a7d2e;
+  --success: #1e7e5c;
+  --success-light: #e6f4ee;
+  --danger: #c0392b;
+  --danger-light: #fdeaea;
+  --warning: #e67e22;
+  --warning-light: #fef3e8;
+  --grey-dark: #2c3e50;
+  --grey-mid: #7f8c8d;
+  --grey-light: #ecf0f1;
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --blue: #2980b9;
+  --blue-light: #e8f4fd;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--grey-dark); line-height: 1.6; min-height: 100vh;
+}
+
+/* Header */
+header {
+  background: linear-gradient(135deg, #071c2e 0%, #0d2b45 35%, #1a4a7a 100%);
+  color: white; padding: 40px 24px 36px; text-align: center;
+  position: relative; overflow: hidden;
+}
+header::before { content:''; position:absolute; top:-30%; right:-5%; width:350px; height:350px; background:rgba(201,168,76,0.08); border-radius:50%; }
+header::after { content:''; position:absolute; bottom:-40%; left:-10%; width:300px; height:300px; background:rgba(255,255,255,0.03); border-radius:50%; }
+.header-badge { display:inline-block; background:rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4); color:#f0d060; border-radius:20px; padding:4px 16px; font-size:12px; letter-spacing:2px; margin-bottom:14px; }
+header h1 { font-size:28px; font-weight:700; margin-bottom:8px; position:relative; z-index:1; }
+header p { font-size:14px; opacity:0.85; max-width:600px; margin:0 auto; position:relative; z-index:1; }
+
+.container { max-width:1100px; margin:0 auto; padding:36px 20px 80px; }
+
+/* Buttons */
+.btn { border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; padding:10px 20px; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px; }
+.btn-primary { background:var(--primary); color:white; }
+.btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); }
+.btn-accent { background:var(--accent); color:var(--primary-dark); }
+.btn-accent:hover { background:var(--accent-dark); color:white; transform:translateY(-1px); }
+.btn-outline { background:white; color:var(--grey-mid); border:2px solid var(--grey-light); }
+.btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+.btn-sm { padding:6px 14px; font-size:12px; }
+.btn-danger { background:var(--danger); color:white; }
+.btn-danger:hover { opacity:0.9; }
+.btn-gold { background:var(--accent); color:var(--primary-dark); font-weight:700; }
+.btn-gold:hover { background:var(--accent-dark); color:white; }
+.btn-success { background:var(--success); color:white; }
+.btn-success:hover { opacity:0.9; }
+.btn-bar { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+
+/* Section */
+.section {
+  background:var(--white); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:28px 32px; margin-bottom:24px; transition:all 0.3s;
+}
+.section.active-section { box-shadow:var(--shadow-lg); border-left:4px solid var(--primary); }
+.section-title { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:14px; border-bottom:2px solid var(--grey-light); }
+.section-title h2 { font-size:18px; font-weight:700; color:var(--primary); }
+.section-title .step-num { width:36px; height:36px; background:var(--primary); color:white; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; }
+.section-subtitle { font-size:13px; color:var(--grey-mid); margin-top:2px; }
+
+/* Progress Bar */
+.progress-bar-wrap { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 32px; margin-bottom:24px; }
+.progress-steps { display:flex; justify-content:space-between; position:relative; margin-bottom:10px; }
+.progress-steps::before { content:''; position:absolute; top:14px; left:50px; right:50px; height:3px; background:var(--grey-light); z-index:0; }
+.progress-fill { position:absolute; top:14px; left:50px; height:3px; background:var(--primary); z-index:1; transition:width 0.4s; }
+.progress-step { display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; flex:1; cursor:pointer; }
+.progress-dot { width:30px; height:30px; border-radius:50%; background:var(--grey-light); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--grey-mid); transition:all 0.3s; }
+.progress-dot.active { background:var(--primary); color:white; }
+.progress-dot.done { background:var(--success); color:white; }
+.progress-label { font-size:11px; color:var(--grey-mid); margin-top:6px; text-align:center; max-width:80px; }
+.progress-label.active { color:var(--primary); font-weight:600; }
+
+/* Form shared */
+.form-input, select.form-input, textarea.form-input {
+  padding:10px 14px; border:2px solid var(--grey-light); border-radius:8px; font-size:13px; font-family:inherit; transition:border-color 0.2s; background:var(--white); resize:vertical; width:100%;
+}
+.form-input:focus, select.form-input:focus, textarea.form-input:focus { outline:none; border-color:var(--primary); }
+textarea.form-input { min-height:60px; }
+.form-label { font-size:12px; font-weight:600; color:var(--grey-mid); margin-bottom:4px; display:block; }
+.form-hint { font-size:11px; color:var(--grey-mid); margin-top:2px; }
+
+/* Setup grid */
+.setup-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 24px; }
+@media (max-width:600px) { .setup-grid { grid-template-columns:1fr; } }
+
+/* Matrix Table */
+.matrix-wrap { overflow-x:auto; margin-top:16px; }
+.matrix-table { width:100%; border-collapse:collapse; font-size:13px; }
+.matrix-table th { background:var(--primary); color:white; padding:10px 12px; text-align:center; font-weight:600; font-size:12px; white-space:nowrap; position:sticky; top:0; z-index:1; }
+.matrix-table th.dim-col { text-align:left; min-width:140px; background:var(--primary-dark); }
+.matrix-table th:nth-child(2) { background:#132f45; }
+.matrix-table td { padding:8px 10px; text-align:center; border-bottom:1px solid var(--grey-light); }
+.matrix-table td.dim-name { text-align:left; font-weight:600; color:var(--grey-dark); }
+.matrix-table tr:hover td { background:var(--blue-light); }
+.matrix-table tr.total-row td { font-weight:700; background:var(--accent-light); border-top:3px solid var(--accent); }
+.matrix-table tr.total-row td.dim-name { color:var(--primary); }
+.matrix-table .score-input { width:56px; text-align:center; padding:6px; border:2px solid var(--grey-light); border-radius:6px; font-size:13px; font-weight:600; font-family:inherit; }
+.matrix-table .score-input:focus { outline:none; border-color:var(--primary); }
+.matrix-table .weight-input { width:64px; text-align:center; padding:6px; border:2px solid var(--grey-light); border-radius:6px; font-size:13px; font-weight:600; font-family:inherit; background:var(--accent-light); }
+.matrix-table .weight-input:focus { outline:none; border-color:var(--accent); }
+.matrix-table .weighted-cell { color:var(--accent-dark); font-weight:600; background:#fffdf5; }
+.matrix-table .me-cell { background:var(--blue-light); font-weight:600; }
+.weight-summary { margin-top:10px; font-size:12px; display:flex; align-items:center; gap:8px; }
+.weight-summary .ok { color:var(--success); }
+.weight-summary .warn { color:var(--danger); }
+.dim-desc { font-size:10px; color:var(--grey-mid); display:block; }
+
+/* Competitor Management */
+.comp-manager { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
+.comp-tag { display:inline-flex; align-items:center; gap:6px; background:var(--primary-light); color:white; border-radius:20px; padding:6px 14px; font-size:13px; font-weight:500; }
+.comp-tag .comp-color { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.comp-tag .remove-comp { cursor:pointer; margin-left:2px; opacity:0.7; font-size:16px; line-height:1; }
+.comp-tag .remove-comp:hover { opacity:1; }
+.comp-add-wrap { display:flex; gap:8px; align-items:center; }
+
+/* Results Dashboard */
+.results-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:800px) { .results-grid { grid-template-columns:1fr; } }
+.rank-card { background:var(--white); border:2px solid var(--grey-light); border-radius:var(--radius); padding:20px; text-align:center; transition:all 0.3s; }
+.rank-card.rank-1 { border-color:var(--accent); background:var(--accent-light); }
+.rank-card.rank-2 { border-color:#bdc3c7; background:#fafafa; }
+.rank-card.rank-3 { border-color:#d5b8a7; background:#fdf5f0; }
+.rank-badge { display:inline-block; width:36px; height:36px; border-radius:50%; font-weight:700; font-size:16px; line-height:36px; color:white; margin-bottom:8px; }
+.rank-1 .rank-badge { background:var(--accent); }
+.rank-2 .rank-badge { background:#95a5a6; }
+.rank-3 .rank-badge { background:#cd9770; }
+.rank-card .rank-name { font-size:15px; font-weight:700; margin-bottom:4px; }
+.rank-card .rank-score { font-size:28px; font-weight:700; color:var(--primary); }
+.rank-card .rank-label { font-size:11px; color:var(--grey-mid); margin-top:4px; }
+
+/* Chart */
+.chart-wrap { background:var(--white); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-top:20px; }
+.chart-wrap h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:16px; }
+.chart-canvas { width:100%; max-height:400px; }
+
+/* Attack/Defense Table */
+.ad-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:12px; }
+.ad-table th { background:var(--primary); color:white; padding:10px 12px; text-align:left; font-weight:600; font-size:12px; }
+.ad-table th:first-child { width:16%; }
+.ad-table th:nth-child(2) { width:28%; }
+.ad-table th:nth-child(3) { width:28%; }
+.ad-table th:nth-child(4) { width:28%; }
+.ad-table td { padding:10px 12px; border-bottom:1px solid var(--grey-light); vertical-align:top; }
+.ad-table td textarea { width:100%; border:1px dashed var(--grey-light); border-radius:6px; padding:8px; font-size:12px; font-family:inherit; resize:vertical; min-height:80px; background:#fafbfc; }
+.ad-table td textarea:focus { outline:none; border-color:var(--accent); border-style:solid; background:var(--accent-light); }
+.ad-table td .dim-select { width:100%; padding:8px; border:2px solid var(--grey-light); border-radius:6px; font-size:12px; font-family:inherit; }
+.ad-table td .dim-select:focus { outline:none; border-color:var(--primary); }
+.ad-table tr:hover td { background:#f8fafb; }
+.ad-add-row { display:flex; gap:8px; align-items:center; padding:12px 0; }
+.ad-empty { text-align:center; padding:30px; color:var(--grey-mid); font-size:14px; }
+
+/* Toolbar */
+.toolbar { display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.toolbar .left { display:flex; gap:8px; }
+.toolbar .right { display:flex; gap:8px; }
+
+/* Modal */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:100; display:flex; align-items:center; justify-content:center; }
+.modal { background:white; border-radius:var(--radius); padding:32px; max-width:700px; width:90%; max-height:85vh; overflow-y:auto; box-shadow:var(--shadow-lg); }
+.modal h3 { font-size:18px; margin-bottom:16px; color:var(--primary); }
+.modal pre { background:var(--bg); padding:16px; border-radius:8px; font-size:12px; white-space:pre-wrap; max-height:400px; overflow-y:auto; }
+.modal .btn-bar { margin-top:20px; justify-content:flex-end; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">⚔️ 大董老师 · 天地人销售体系</div>
+  <h1>竞争分析计算器</h1>
+  <p>加权评分矩阵 × 对手攻防分析 — 量化竞争优劣势，精准制定竞争策略</p>
+</header>
+
+<div class="container">
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-steps">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      <div class="progress-step" onclick="switchStep(1)">
+        <div class="progress-dot" id="dot1">1</div>
+        <div class="progress-label" id="label1">基本设置</div>
+      </div>
+      <div class="progress-step" onclick="switchStep(2)">
+        <div class="progress-dot" id="dot2">2</div>
+        <div class="progress-label" id="label2">权重配置</div>
+      </div>
+      <div class="progress-step" onclick="switchStep(3)">
+        <div class="progress-dot" id="dot3">3</div>
+        <div class="progress-label" id="label3">评分矩阵</div>
+      </div>
+      <div class="progress-step" onclick="switchStep(4)">
+        <div class="progress-dot" id="dot4">4</div>
+        <div class="progress-label" id="label4">结果分析</div>
+      </div>
+      <div class="progress-step" onclick="switchStep(5)">
+        <div class="progress-dot" id="dot5">5</div>
+        <div class="progress-label" id="label5">攻防策略</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="left">
+      <button class="btn btn-accent btn-sm" onclick="loadExample()">📋 加载示例</button>
+      <button class="btn btn-outline btn-sm" onclick="resetAll()">🔄 全部清空</button>
+    </div>
+    <div class="right">
+      <button class="btn btn-primary btn-sm" onclick="exportReport()">📥 导出报告</button>
+      <button class="btn btn-gold btn-sm" onclick="saveData()">💾 保存数据</button>
+    </div>
+  </div>
+
+  <!-- Step 1: 基本设置 -->
+  <div class="section active-section" id="sec1">
+    <div class="section-title">
+      <span class="step-num">1</span>
+      <div><h2>基本设置</h2><p class="section-subtitle">设定分析项目与竞争对手</p></div>
+    </div>
+    <div class="setup-grid">
+      <div class="form-group">
+        <label class="form-label">项目/商机名称</label>
+        <input class="form-input" id="projectName" placeholder="例如：XX公司ERP系统采购项目">
+      </div>
+      <div class="form-group">
+        <label class="form-label">客户名称</label>
+        <input class="form-input" id="customerName" placeholder="例如：XX科技有限公司">
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <label class="form-label">竞争对手（我方自动计入）</label>
+      <div class="comp-manager" id="compManager"></div>
+      <div class="comp-add-wrap">
+        <input class="form-input" id="newCompName" placeholder="输入对手名称" style="width:200px;">
+        <button class="btn btn-primary btn-sm" onclick="addCompetitor()">+ 添加对手</button>
+        <span class="form-hint">最多支持5个对手</span>
+      </div>
+    </div>
+    <div class="btn-bar">
+      <button class="btn btn-accent" onclick="switchStep(2)">下一步：权重配置 →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: 权重配置 -->
+  <div class="section" id="sec2">
+    <div class="section-title">
+      <span class="step-num">2</span>
+      <div><h2>维度权重配置</h2><p class="section-subtitle">根据客户关注点，给7个竞争维度分配权重（总和应为100%）</p></div>
+    </div>
+    <div id="weightConfig"></div>
+    <div class="weight-summary" id="weightSum"></div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(1)">← 上一步</button>
+      <button class="btn btn-accent" onclick="switchStep(3)">下一步：评分矩阵 →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: 评分矩阵 -->
+  <div class="section" id="sec3">
+    <div class="section-title">
+      <span class="step-num">3</span>
+      <div><h2>加权评分矩阵</h2><p class="section-subtitle">对每个维度，给"我方"和所有对手打分（1-5分，5=最强）</p></div>
+    </div>
+    <div class="matrix-wrap">
+      <table class="matrix-table" id="matrixTable"></table>
+    </div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(2)">← 上一步</button>
+      <button class="btn btn-accent" onclick="switchStep(4)">下一步：查看结果 →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: 结果分析 -->
+  <div class="section" id="sec4">
+    <div class="section-title">
+      <span class="step-num">4</span>
+      <div><h2>竞争分析结果</h2><p class="section-subtitle">加权总分排名 & 多维度对比</p></div>
+    </div>
+    <div class="results-grid" id="rankCards"></div>
+    <div class="chart-wrap">
+      <h3>📊 加权得分对比</h3>
+      <canvas id="chartCanvas" class="chart-canvas"></canvas>
+    </div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(3)">← 上一步</button>
+      <button class="btn btn-accent" onclick="switchStep(5)">下一步：攻防策略 →</button>
+    </div>
+  </div>
+
+  <!-- Step 5: 对手攻防分析表 -->
+  <div class="section" id="sec5">
+    <div class="section-title">
+      <span class="step-num">5</span>
+      <div><h2>对手攻防分析表</h2><p class="section-subtitle">针对客户核心关切维度，制定「我方价值主张 → 对手风险揭示 → 量化后果」攻防策略</p></div>
+    </div>
+    <table class="ad-table" id="adTable">
+      <thead>
+        <tr>
+          <th>核心关切维度</th>
+          <th>我们的价值主张</th>
+          <th>对手风险揭示</th>
+          <th>量化后果</th>
+        </tr>
+      </thead>
+      <tbody id="adBody"></tbody>
+    </table>
+    <div class="ad-add-row">
+      <button class="btn btn-primary btn-sm" onclick="addAdRow()">+ 添加攻防行</button>
+      <span class="form-hint">每条攻防对应客户一个核心关切维度</span>
+    </div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(4)">← 上一步</button>
+      <button class="btn btn-gold" onclick="exportReport()">📥 导出完整报告</button>
+      <button class="btn btn-accent" onclick="saveData()">💾 保存全部数据</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== 数据模型 =====
+const DIMS = [
+  { id:'product', name:'产品（方案）匹配度', desc:'方案功能与客户需求的契合程度' },
+  { id:'price', name:'价格', desc:'报价水平、性价比、价格策略灵活度' },
+  { id:'terms', name:'商务条款的灵活度', desc:'付款周期、质保金比例、违约责任等条款' },
+  { id:'brand', name:'品牌优势', desc:'品牌知名度、行业口碑、成功案例背书' },
+  { id:'service', name:'运维服务', desc:'售后响应速度、技术支持能力、服务体系' },
+  { id:'delivery', name:'产品交付', desc:'交付周期、项目管控能力、交付质量' },
+  { id:'relation', name:'决策链客户客情', desc:'与关键决策人的关系深度、信任基础' }
+];
+
+const COMP_COLORS = ['#e74c3c','#2ecc71','#9b59b6','#f39c12','#1abc9c'];
+const COMP_COLORS_LIGHT = ['#fdeaea','#e8f8ee','#f3eafa','#fef3e8','#e8f8f5'];
+
+let state = {
+  projectName: '',
+  customerName: '',
+  competitors: [],        // [{id, name}]
+  weights: {},            // {dimId: weight%}
+  scores: {},             // {dimId: {self: 1-5, compId1: 1-5, compId2: 1-5}}
+  adRows: []              // [{concernDim, ourValue, rivalRisk, quantifiedImpact}]
+};
+
+// ===== 初始化 =====
+function init() {
+  loadSavedData();
+  renderAll();
+  switchStep(1);
+}
+
+// ===== 渲染 =====
+function renderAll() {
+  renderCompetitors();
+  renderWeights();
+  renderMatrix();
+  renderResults();
+  renderAdTable();
+}
+
+function renderCompetitors() {
+  const wrap = document.getElementById('compManager');
+  if (state.competitors.length === 0) {
+    wrap.innerHTML = '<span style="color:var(--grey-mid);font-size:13px;">尚未添加竞争对手</span>';
+    return;
+  }
+  wrap.innerHTML = state.competitors.map((c,i) => 
+    `<span class="comp-tag">
+      <span class="comp-color" style="background:${COMP_COLORS[i]}"></span>
+      ${escHtml(c.name)}
+      <span class="remove-comp" onclick="removeCompetitor('${c.id}')" title="删除">×</span>
+    </span>`
+  ).join('');
+}
+
+function renderWeights() {
+  const wrap = document.getElementById('weightConfig');
+  let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;">';
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    html += `<div style="display:flex;align-items:center;gap:10px;">
+      <label style="font-size:13px;font-weight:600;white-space:nowrap;min-width:130px;">${d.name}</label>
+      <input type="range" min="0" max="40" value="${w}" style="flex:1;" oninput="updateWeight('${d.id}',+this.value);this.nextElementSibling.value=this.value+'%'">
+      <output style="width:42px;text-align:right;font-weight:700;color:var(--accent-dark);font-size:13px;">${w}%</output>
+    </div>`;
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+
+  const sum = DIMS.reduce((s,d) => s + (state.weights[d.id]||0), 0);
+  const sumEl = document.getElementById('weightSum');
+  if (sum === 100) {
+    sumEl.innerHTML = '<span class="ok">✅ 权重总和 = 100%，配置完成</span>';
+  } else {
+    sumEl.innerHTML = `<span class="warn">⚠️ 当前权重总和 = ${sum}%（建议调整为100%）</span>`;
+  }
+}
+
+function updateWeight(dimId, val) {
+  state.weights[dimId] = val;
+  renderWeights();
+  renderMatrix();
+}
+
+function renderMatrix() {
+  const table = document.getElementById('matrixTable');
+  let html = '<thead><tr><th class="dim-col">竞争维度</th><th>权重</th>';
+  html += '<th>我方<span style="font-size:10px;opacity:0.7">(1-5)</span></th><th>加权分</th>';
+  state.competitors.forEach((c,i) => {
+    html += `<th>${escHtml(c.name)}<span style="font-size:10px;opacity:0.7">(1-5)</span></th><th>加权分</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  let totals = { self:0 };
+  state.competitors.forEach(c => totals[c.id] = 0);
+
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    const selfScore = (state.scores[d.id] && state.scores[d.id].self) || 0;
+    const selfWeighted = (selfScore * w / 100).toFixed(1);
+    totals.self += parseFloat(selfWeighted);
+
+    html += `<tr>
+      <td class="dim-name">${d.name}<span class="dim-desc">${d.desc}</span></td>
+      <td><input class="weight-input" value="${w}%" onchange="updateWeightFromInput('${d.id}',this.value)" title="点击修改权重"></td>
+      <td class="me-cell"><input class="score-input" value="${selfScore||''}" onchange="updateScore('${d.id}','self',this.value)" placeholder="-"></td>
+      <td class="weighted-cell">${selfScore ? selfWeighted : '-'}</td>`;
+
+    state.competitors.forEach(c => {
+      const compScore = (state.scores[d.id] && state.scores[d.id][c.id]) || 0;
+      const compWeighted = (compScore * w / 100).toFixed(1);
+      totals[c.id] += parseFloat(compWeighted);
+      html += `<td><input class="score-input" value="${compScore||''}" onchange="updateScore('${d.id}','${c.id}',this.value)" placeholder="-"></td>
+      <td class="weighted-cell">${compScore ? compWeighted : '-'}</td>`;
+    });
+
+    html += '</tr>';
+  });
+
+  // Total row
+  html += `<tr class="total-row">
+    <td class="dim-name">🏆 加权总分</td><td>-</td>
+    <td class="me-cell">我方</td><td class="weighted-cell">${totals.self.toFixed(1)}</td>`;
+  state.competitors.forEach(c => {
+    html += `<td>${escHtml(c.name)}</td><td class="weighted-cell">${totals[c.id].toFixed(1)}</td>`;
+  });
+  html += '</tr>';
+
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+function updateWeightFromInput(dimId, val) {
+  const n = parseInt(val);
+  if (!isNaN(n) && n >= 0 && n <= 100) {
+    state.weights[dimId] = n;
+  }
+  renderAll();
+}
+
+function updateScore(dimId, target, val) {
+  if (!state.scores[dimId]) state.scores[dimId] = {};
+  const n = parseInt(val);
+  if (n >= 1 && n <= 5) {
+    state.scores[dimId][target] = n;
+  } else if (val === '' || val === '0') {
+    delete state.scores[dimId][target];
+  }
+  renderMatrix();
+  renderResults();
+}
+
+function renderResults() {
+  // Calculate rankings
+  const totals = calcTotals();
+  const all = [{name:'我方', id:'self', score:totals.self, isSelf:true}];
+  state.competitors.forEach(c => {
+    all.push({name:c.name, id:c.id, score:totals[c.id]||0, isSelf:false});
+  });
+  all.sort((a,b) => b.score - a.score);
+
+  // Rank cards
+  const cards = document.getElementById('rankCards');
+  cards.innerHTML = all.map((item, i) => {
+    const cls = i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : 'rank-3');
+    return `<div class="rank-card ${cls}">
+      <div class="rank-badge">${i+1}</div>
+      <div class="rank-name">${item.isSelf ? '⭐ 我方' : escHtml(item.name)}</div>
+      <div class="rank-score">${item.score.toFixed(1)}</div>
+      <div class="rank-label">加权总分</div>
+    </div>`;
+  }).join('');
+
+  // Chart
+  drawChart(all);
+}
+
+function calcTotals() {
+  let totals = { self:0 };
+  state.competitors.forEach(c => totals[c.id] = 0);
+
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    const selfScore = (state.scores[d.id] && state.scores[d.id].self) || 0;
+    totals.self += selfScore * w / 100;
+
+    state.competitors.forEach(c => {
+      const compScore = (state.scores[d.id] && state.scores[d.id][c.id]) || 0;
+      totals[c.id] += compScore * w / 100;
+    });
+  });
+
+  return totals;
+}
+
+function drawChart(all) {
+  const canvas = document.getElementById('chartCanvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  const w = canvas.parentElement.clientWidth - 40;
+  const h = 300;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+
+  ctx.clearRect(0, 0, w, h);
+
+  if (all.length === 0) return;
+
+  const maxScore = Math.max(...all.map(a=>a.score), 0.1);
+  const barH = Math.min(50, (h - 60) / all.length);
+  const startY = 40;
+
+  all.forEach((item, i) => {
+    const y = startY + i * (barH + 10);
+    const barW = Math.max(10, (item.score / maxScore) * (w - 180));
+    const color = item.isSelf ? '#2980b9' : COMP_COLORS[state.competitors.findIndex(c => c.id === item.id)];
+
+    // Label
+    ctx.fillStyle = '#2c3e50';
+    ctx.font = '600 13px "Noto Sans SC"';
+    ctx.textAlign = 'right';
+    ctx.fillText(item.isSelf ? '⭐ 我方' : item.name, 100, y + barH/2 + 5);
+
+    // Bar
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(110, y, barW, barH, 6);
+    ctx.fill();
+
+    // Score
+    ctx.fillStyle = '#2c3e50';
+    ctx.font = '700 14px "Noto Sans SC"';
+    ctx.textAlign = 'left';
+    ctx.fillText(item.score.toFixed(1), 120 + barW, y + barH/2 + 5);
+  });
+}
+
+function renderAdTable() {
+  const body = document.getElementById('adBody');
+  if (state.adRows.length === 0) {
+    body.innerHTML = '<tr><td colspan="4" class="ad-empty">暂无攻防数据，点击下方按钮添加</td></tr>';
+    return;
+  }
+  body.innerHTML = state.adRows.map((row, i) => `
+    <tr>
+      <td>
+        <select class="dim-select" onchange="updateAdRow(${i},'concernDim',this.value)">
+          <option value="">-- 选择维度 --</option>
+          ${DIMS.map(d => `<option value="${d.id}" ${row.concernDim===d.id?'selected':''}>${d.name}</option>`).join('')}
+        </select>
+      </td>
+      <td><textarea placeholder="我们的优势和价值主张..." onchange="updateAdRow(${i},'ourValue',this.value)">${escHtml(row.ourValue||'')}</textarea></td>
+      <td><textarea placeholder="竞争对手的风险点和短板..." onchange="updateAdRow(${i},'rivalRisk',this.value)">${escHtml(row.rivalRisk||'')}</textarea></td>
+      <td><textarea placeholder="量化后果：延期=损失XX万，故障=损失XX小时..." onchange="updateAdRow(${i},'quantifiedImpact',this.value)">${escHtml(row.quantifiedImpact||'')}</textarea></td>
+    </tr>
+  `).join('');
+}
+
+// ===== 数据操作 =====
+function addCompetitor() {
+  const input = document.getElementById('newCompName');
+  const name = input.value.trim();
+  if (!name) return;
+  if (state.competitors.length >= 5) { alert('最多支持5个竞争对手'); return; }
+  if (state.competitors.some(c => c.name === name)) { alert('对手名称重复'); return; }
+
+  state.competitors.push({ id:'comp_' + Date.now(), name });
+  input.value = '';
+  renderAll();
+}
+
+function removeCompetitor(id) {
+  state.competitors = state.competitors.filter(c => c.id !== id);
+  // Clean up scores
+  Object.keys(state.scores).forEach(dimId => {
+    delete state.scores[dimId][id];
+  });
+  // Clean up ad rows referencing removed dim
+  renderAll();
+}
+
+function addAdRow() {
+  state.adRows.push({
+    concernDim: '',
+    ourValue: '',
+    rivalRisk: '',
+    quantifiedImpact: ''
+  });
+  renderAdTable();
+}
+
+function updateAdRow(idx, field, val) {
+  if (state.adRows[idx]) {
+    state.adRows[idx][field] = val;
+  }
+}
+
+// ===== 步骤切换 =====
+function switchStep(n) {
+  for (let i = 1; i <= 5; i++) {
+    const sec = document.getElementById('sec'+i);
+    const dot = document.getElementById('dot'+i);
+    const label = document.getElementById('label'+i);
+
+    sec.classList.remove('active-section');
+    dot.classList.remove('active','done');
+    label.classList.remove('active');
+
+    if (i < n) dot.classList.add('done');
+    if (i === n) { dot.classList.add('active'); label.classList.add('active'); sec.classList.add('active-section'); }
+  }
+
+  const fill = document.getElementById('progressFill');
+  fill.style.width = ((n-1) / 4 * 100) + '%';
+
+  document.getElementById('sec'+n).scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Auto-render on switch
+  if (n === 4) renderResults();
+}
+
+// ===== 示例数据 =====
+function loadExample() {
+  state.projectName = '苏州XX科技自动化产线采购项目';
+  state.customerName = '苏州XX科技有限公司';
+
+  // 2 competitors
+  state.competitors = [
+    { id:'comp_a', name:'A公司（行业龙头）' },
+    { id:'comp_b', name:'B公司（低价竞品）' }
+  ];
+
+  // Weights (total = 100)
+  state.weights = {
+    product: 25, price: 15, terms: 10, brand: 15, service: 15, delivery: 10, relation: 10
+  };
+
+  // Scores
+  state.scores = {
+    product: { self:5, comp_a:4, comp_b:3 },
+    price: { self:3, comp_a:3, comp_b:5 },
+    terms: { self:4, comp_a:4, comp_b:3 },
+    brand: { self:4, comp_a:5, comp_b:2 },
+    service: { self:5, comp_a:4, comp_b:2 },
+    delivery: { self:4, comp_a:4, comp_b:3 },
+    relation: { self:3, comp_a:4, comp_b:3 }
+  };
+
+  // Attack/defense rows
+  state.adRows = [
+    {
+      concernDim: 'product',
+      ourValue: '全自动化控制：搭载CC上位机软件，配方自动识别，大循环一备一用，全泵自动控制，确保生产稳定、废品率低',
+      rivalRisk: '对手A公司半自动化依赖人工，需手动配置配方，大循环无备用，泵控手动。一旦出现人为操作失误，可能导致批次废品',
+      quantifiedImpact: '按年产XX万件计算，预计每年增加废品损失XX万元，效率损失相当于XX名人工成本'
+    },
+    {
+      concernDim: 'service',
+      ourValue: '雄厚技术根基：70人自有技术团队，确保从安装、调试到运维的全流程专业服务，责任清晰，响应及时',
+      rivalRisk: '对手B公司团队薄弱，企查查仅22人社保，严重依赖外包。出事易出现责任推诿、响应迟缓',
+      quantifiedImpact: '按行业平均故障处理时间计算，每次故障多耽误XX小时，直接损失XX万元'
+    },
+    {
+      concernDim: 'price',
+      ourValue: '节省人力：比对手节省3个操作岗位，按12万/人/年计算，每年直接节省≥36万元人工成本',
+      rivalRisk: '对手B自动化程度低，必然需要更多人力维护。两年就拉平和对手的价格差距',
+      quantifiedImpact: '长期来看总拥有成本(TCO)远高于初始投资，5年累计多支出XX万元'
+    }
+  ];
+
+  renderAll();
+  switchStep(1);
+  document.getElementById('projectName').value = state.projectName;
+  document.getElementById('customerName').value = state.customerName;
+  renderAdTable();
+}
+
+// ===== 持久化 =====
+function saveData() {
+  localStorage.setItem('competition_calc', JSON.stringify(state));
+  showToast('✅ 数据已保存');
+}
+
+function loadSavedData() {
+  const raw = localStorage.getItem('competition_calc');
+  if (raw) {
+    try {
+      const saved = JSON.parse(raw);
+      state = { ...state, ...saved };
+      document.getElementById('projectName').value = state.projectName || '';
+      document.getElementById('customerName').value = state.customerName || '';
+    } catch(e) {}
+  }
+}
+
+// Auto-sync inputs
+document.getElementById('projectName').addEventListener('input', function() {
+  state.projectName = this.value;
+});
+document.getElementById('customerName').addEventListener('input', function() {
+  state.customerName = this.value;
+});
+
+function resetAll() {
+  if (!confirm('确定要清空所有数据吗？此操作不可恢复。')) return;
+  state = {
+    projectName: '', customerName: '',
+    competitors: [], weights: {}, scores: {}, adRows: []
+  };
+  document.getElementById('projectName').value = '';
+  document.getElementById('customerName').value = '';
+  localStorage.removeItem('competition_calc');
+  renderAll();
+  switchStep(1);
+  showToast('已全部清空');
+}
+
+// ===== 导出 =====
+function exportReport() {
+  const totals = calcTotals();
+  const all = [{name:'我方', id:'self', score:totals.self, isSelf:true}];
+  state.competitors.forEach(c => {
+    all.push({name:c.name, id:c.id, score:totals[c.id]||0, isSelf:false});
+  });
+  all.sort((a,b) => b.score - a.score);
+
+  let report = `═══════════════════════════════════\n`;
+  report += `  大董老师 · 竞争分析报告\n`;
+  report += `═══════════════════════════════════\n\n`;
+
+  if (state.projectName) report += `📋 项目：${state.projectName}\n`;
+  if (state.customerName) report += `🏢 客户：${state.customerName}\n`;
+  report += `📅 日期：${new Date().toLocaleDateString('zh-CN')}\n\n`;
+
+  // Ranking
+  report += `── 加权总分排名 ──\n`;
+  all.forEach((item, i) => {
+    const medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : `${i+1}.`));
+    report += `  ${medal} ${item.isSelf?'⭐ 我方':item.name}：${item.score.toFixed(1)}分\n`;
+  });
+
+  // Detail matrix
+  report += `\n── 各维度评分明细 ──\n`;
+  report += `维度`.padEnd(18) + `权重`.padEnd(8) + `我方`;
+  state.competitors.forEach(c => report += `  ${c.name}`.padEnd(16));
+  report += `\n`;
+  report += '─'.repeat(60 + state.competitors.length * 16) + '\n';
+
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    report += `${d.name}`.padEnd(18) + `${w}%`.padEnd(8);
+    report += `${(state.scores[d.id]&&state.scores[d.id].self)||'-'}`.padEnd(4);
+    state.competitors.forEach(c => {
+      report += `  ${(state.scores[d.id]&&state.scores[d.id][c.id])||'-'}`.padEnd(14);
+    });
+    report += '\n';
+  });
+
+  // Attack/Defense
+  if (state.adRows.length > 0) {
+    report += `\n── 对手攻防分析 ──\n`;
+    state.adRows.forEach((row, i) => {
+      const dimName = DIMS.find(d => d.id === row.concernDim);
+      report += `\n【${i+1}】核心关切：${dimName ? dimName.name : row.concernDim || '未指定'}\n`;
+      report += `  我们的价值主张：${row.ourValue || '（未填写）'}\n`;
+      report += `  对手风险揭示：${row.rivalRisk || '（未填写）'}\n`;
+      report += `  量化后果：${row.quantifiedImpact || '（未填写）'}\n`;
+    });
+  }
+
+  report += `\n═══════════════════════════════════\n`;
+  report += `  大董老师 · 懂生意 · 学完就落地\n`;
+  report += `═══════════════════════════════════\n`;
+
+  // Download
+  const blob = new Blob([report], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `竞争分析报告_${state.customerName||'未命名'}_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ 报告已导出');
+}
+
+// ===== 工具函数 =====
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--primary);color:white;padding:12px 28px;border-radius:30px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+}
+
+// ===== Canvas roundRect polyfill =====
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+    if (typeof r === 'number') r = {tl:r,tr:r,br:r,bl:r};
+    this.beginPath();
+    this.moveTo(x+r.tl,y);
+    this.lineTo(x+w-r.tr,y);
+    this.quadraticCurveTo(x+w,y,x+w,y+r.tr);
+    this.lineTo(x+w,y+h-r.br);
+    this.quadraticCurveTo(x+w,y+h,x+w-r.br,y+h);
+    this.lineTo(x+r.bl,y+h);
+    this.quadraticCurveTo(x,y+h,x,y+h-r.bl);
+    this.lineTo(x,y+r.tl);
+    this.quadraticCurveTo(x,y,x+r.tl,y);
+    this.closePath();
+  };
+}
+
+// ===== 启动 =====
+init();
+</script>
+</body>
+</html>
