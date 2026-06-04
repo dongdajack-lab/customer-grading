@@ -100,6 +100,29 @@ textarea.form-input { min-height:70px; }
 @media (max-width:500px) { .profile-grid { grid-template-columns:1fr; } }
 .profile-grid .full { grid-column:span 2; }
 .profile-grid .full-wide { grid-column:1/-1; }
+
+/* Scope Selector */
+.scope-selector { display:flex; gap:8px; flex-wrap:wrap; }
+.scope-option {
+  display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+  padding:10px 14px; border:2px solid var(--grey-light); border-radius:10px;
+  cursor:pointer; transition:all 0.25s; min-width:110px; background:var(--white);
+}
+.scope-option:hover { border-color:var(--primary); background:var(--primary-light); }
+.scope-option.active { border-color:var(--primary); background:var(--primary-light); box-shadow:0 0 0 3px rgba(74,26,140,0.1); }
+.scope-option .scope-icon { font-size:20px; }
+.scope-option .scope-text { font-size:13px; font-weight:700; color:var(--grey-dark); }
+.scope-option .scope-hint { font-size:10px; color:var(--grey-mid); }
+.scope-option.active .scope-text { color:var(--primary); }
+
+/* Strategy mode badge */
+.mode-badge {
+  display:inline-block; padding:4px 12px; border-radius:14px;
+  font-size:12px; font-weight:700; margin-bottom:10px;
+}
+.mode-badge.single { background:#e8f4fd; color:#2980b9; }
+.mode-badge.industry { background:var(--success-light); color:var(--success); }
+.mode-badge.category { background:var(--accent-light); color:var(--accent); }
 .field-group { display:flex; flex-direction:column; }
 
 /* Step 2: Needs Table */
@@ -251,7 +274,7 @@ textarea.form-input { min-height:70px; }
 <header>
   <div class="header-badge">大董老师 · 天地人销售体系 · 天字篇</div>
   <h1>🎯 3C&8维 · 客户策略分析</h1>
-  <p>客户画像 → 需求打分 → 多对手对比 → 统一策略 — 知己知彼，精准出招</p>
+  <p>一户一策 · 一行一策 · 一类一策 — 按客户分类输出差异化竞争策略</p>
 </header>
 
 <div class="container">
@@ -259,9 +282,11 @@ textarea.form-input { min-height:70px; }
   <!-- 预置示例 -->
   <div class="preset-bar" id="presetBar">
     <span class="icon">💡</span>
-    <span>试试 <strong>"S类客户示例"</strong>，了解模型用法 →</span>
-    <button class="btn btn-gold btn-sm" onclick="loadPreset()">加载示例</button>
-    <button class="btn btn-outline btn-sm" onclick="startNew()">新建空白分析</button>
+    <span>快速加载示例：</span>
+    <button class="btn btn-gold btn-sm" onclick="loadPreset('S')">S类一户一策</button>
+    <button class="btn btn-outline btn-sm" onclick="loadPreset('A')">A类一行一策</button>
+    <button class="btn btn-outline btn-sm" onclick="loadPreset('B')">B类一类一策</button>
+    <button class="btn btn-outline btn-sm" onclick="startNew()">新建空白</button>
   </div>
 
   <!-- 进度条 -->
@@ -275,16 +300,39 @@ textarea.form-input { min-height:70px; }
     </div>
   </div>
 
-  <!-- ===== Step 1: 客户画像 ===== -->
+  <!-- ===== Step 1: 分析对象画像 ===== -->
   <div class="section active-section" id="sec1">
-    <div class="section-title"><div class="step-num">1</div><h2>客户长啥样？— 画像表格</h2></div>
+    <div class="section-title"><div class="step-num">1</div><h2>分析对象长啥样？— 画像表格</h2></div>
+
+    <!-- 分析范围选择 -->
+    <div class="scope-selector" style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+      <label class="scope-option active" id="scopeSingle" onclick="setScope('single')">
+        <input type="radio" name="scope" value="single" checked style="display:none;">
+        <span class="scope-icon">🎯</span>
+        <span class="scope-text">一户一策</span>
+        <span class="scope-hint">单个客户深度分析</span>
+      </label>
+      <label class="scope-option" id="scopeIndustry" onclick="setScope('industry')">
+        <input type="radio" name="scope" value="industry" style="display:none;">
+        <span class="scope-icon">🏭</span>
+        <span class="scope-text">一行一策</span>
+        <span class="scope-hint">同行业A类客户群</span>
+      </label>
+      <label class="scope-option" id="scopeCategory" onclick="setScope('category')">
+        <input type="radio" name="scope" value="category" style="display:none;">
+        <span class="scope-icon">📦</span>
+        <span class="scope-text">一类一策</span>
+        <span class="scope-hint">B类共性客户群</span>
+      </label>
+    </div>
+
     <div class="profile-grid" id="profileGrid">
       <div class="field-group">
-        <label class="form-label">客户名称 *</label>
+        <label class="form-label" id="lblCustName">客户名称 *</label>
         <input class="form-input" id="custName" placeholder="例：XX集团">
       </div>
       <div class="field-group">
-        <label class="form-label">客户等级</label>
+        <label class="form-label">目标客户等级</label>
         <select class="form-input" id="custGrade">
           <option value="S">S类 — 行业前三·集体决策</option>
           <option value="A">A类 — 中型·多人决策</option>
@@ -297,27 +345,27 @@ textarea.form-input { min-height:70px; }
         <input class="form-input" id="custIndustry" placeholder="例：通信/制造/金融">
       </div>
       <div class="field-group">
-        <label class="form-label">企业规模</label>
+        <label class="form-label" id="lblCustScale">企业规模</label>
         <input class="form-input" id="custScale" placeholder="例：年营收5亿·500人">
       </div>
       <div class="field-group">
-        <label class="form-label">关键决策人</label>
+        <label class="form-label" id="lblCustKeyPerson">关键决策人</label>
         <input class="form-input" id="custKeyPerson" placeholder="例：采购总监王总">
       </div>
       <div class="field-group">
-        <label class="form-label">采购预算</label>
+        <label class="form-label" id="lblCustBudget">采购预算</label>
         <input class="form-input" id="custBudget" placeholder="例：300-500万/年">
       </div>
       <div class="field-group">
-        <label class="form-label">决策流程</label>
+        <label class="form-label" id="lblCustDecision">决策流程</label>
         <input class="form-input" id="custDecision" placeholder="例：技术部→采购部→副总审批">
       </div>
       <div class="field-group">
-        <label class="form-label">决策周期</label>
+        <label class="form-label" id="lblCustCycle">决策周期</label>
         <input class="form-input" id="custCycle" placeholder="例：3-6个月">
       </div>
       <div class="field-group full-wide">
-        <label class="form-label">核心痛点 / 业务需求</label>
+        <label class="form-label" id="lblCustPain">核心痛点 / 业务需求</label>
         <textarea class="form-input" id="custPain" placeholder="例：网络设备老化故障频发，影响业务连续性；原供应商服务响应慢，急需替代方案" style="min-height:60px;"></textarea>
       </div>
     </div>
@@ -375,6 +423,9 @@ textarea.form-input { min-height:70px; }
   <!-- ===== Step 4: 策略推导 ===== -->
   <div class="section" id="sec4">
     <div class="section-title"><div class="step-num">4</div><h2>我们怎么办？— 逐对手策略 + 统一执行</h2></div>
+
+    <!-- Strategy Mode Badge -->
+    <div id="strategyModeBadge" style="margin-bottom:16px;"></div>
 
     <!-- Strategy Summary -->
     <div class="summary-card" id="strategySummary">
@@ -465,9 +516,78 @@ const STRATEGY_TEMPLATES = {
 };
 
 let currentStep = 1;
+let analysisScope = 'single'; // single | industry | category
 let competitors = []; // { id, name, scores: { product:3, price:3, ... } }
 let ourScores = {};   // { product:3, price:3, ... }
 let compIdCounter = 0;
+
+const SCOPE_LABELS = {
+  single: { text:'一户一策', hint:'单个客户深度分析', cls:'single', icon:'🎯' },
+  industry: { text:'一行一策', hint:'同行业A类客户群', cls:'industry', icon:'🏭' },
+  category: { text:'一类一策', hint:'B类共性客户群', cls:'category', icon:'📦' }
+};
+
+// ===== Scope Selection =====
+function setScope(scope) {
+  analysisScope = scope;
+  ['single','industry','category'].forEach(s => {
+    const el = document.getElementById('scope' + s.charAt(0).toUpperCase() + s.slice(1));
+    if (el) el.classList.toggle('active', s === scope);
+  });
+  updateScopeLabels();
+}
+
+function updateScopeLabels() {
+  const info = SCOPE_LABELS[analysisScope];
+  // Step 1 field labels
+  const lblCustName = document.getElementById('lblCustName');
+  const lblScale = document.getElementById('lblCustScale');
+  const lblKeyPerson = document.getElementById('lblCustKeyPerson');
+  const lblBudget = document.getElementById('lblCustBudget');
+  const lblDecision = document.getElementById('lblCustDecision');
+  const lblCycle = document.getElementById('lblCustCycle');
+  const lblPain = document.getElementById('lblCustPain');
+  const nameInput = document.getElementById('custName');
+
+  if (analysisScope === 'single') {
+    if (lblCustName) lblCustName.textContent = '客户名称 *';
+    if (nameInput) nameInput.placeholder = '例：XX集团';
+    if (lblScale) lblScale.textContent = '企业规模';
+    if (lblKeyPerson) lblKeyPerson.textContent = '关键决策人';
+    if (lblBudget) lblBudget.textContent = '采购预算';
+    if (lblDecision) lblDecision.textContent = '决策流程';
+    if (lblCycle) lblCycle.textContent = '决策周期';
+    if (lblPain) lblPain.textContent = '核心痛点 / 业务需求';
+  } else if (analysisScope === 'industry') {
+    if (lblCustName) lblCustName.textContent = '行业/客户群 *';
+    if (nameInput) nameInput.placeholder = '例：华东片区 制造业A类客户群';
+    if (lblScale) lblScale.textContent = '典型企业规模';
+    if (lblKeyPerson) lblKeyPerson.textContent = '典型决策角色';
+    if (lblBudget) lblBudget.textContent = '典型预算范围';
+    if (lblDecision) lblDecision.textContent = '常见决策链';
+    if (lblCycle) lblCycle.textContent = '典型决策周期';
+    if (lblPain) lblPain.textContent = '共性痛点 / 业务需求';
+  } else { // category
+    if (lblCustName) lblCustName.textContent = '客户类别描述 *';
+    if (nameInput) nameInput.placeholder = '例：B类中小型制造企业群';
+    if (lblScale) lblScale.textContent = '规模范围';
+    if (lblKeyPerson) lblKeyPerson.textContent = '决策人画像';
+    if (lblBudget) lblBudget.textContent = '预算范围';
+    if (lblDecision) lblDecision.textContent = '决策模式';
+    if (lblCycle) lblCycle.textContent = '决策周期';
+    if (lblPain) lblPain.textContent = '共性痛点 / 业务需求';
+  }
+
+  // Step 4 mode badge
+  updateModeBadge();
+}
+
+function updateModeBadge() {
+  const badge = document.getElementById('strategyModeBadge');
+  if (!badge) return;
+  const info = SCOPE_LABELS[analysisScope];
+  badge.innerHTML = `<span class="mode-badge ${info.cls}">${info.icon} ${info.text} · ${info.hint}</span>`;
+}
 
 // ===== Init =====
 DIMENSIONS.forEach(d => { ourScores[d.id] = 3; });
@@ -481,7 +601,7 @@ function goStep(n) {
   }
   updateProgress();
   if (n === 3) renderMatrix();
-  if (n === 4) generateStrategy();
+  if (n === 4) { generateStrategy(); updateModeBadge(); }
   const sec = document.getElementById('sec'+n);
   if (sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -691,9 +811,15 @@ function generateStrategy() {
     const compNames = competitors.map(c => c.name).join('、');
     summary = `面对${compNames}，每个对手的优劣势不同，打法也不同。`;
     summary += '不能用一个"最强对手"的幻影逼自己全面开战，而是逐对手分析，取其共性制定统一策略，差异部分单独出招。';
-    if (custGrade === 'S') summary += ' S类客户决策链长，需多线并行、长期经营。';
-    else if (custGrade === 'A') summary += ' A类客户在关键决策点集中资源。';
-    else summary += ' 重点关注关键人关系建设。';
+    if (analysisScope === 'single') {
+      if (custGrade === 'S') summary += ' S类客户决策链长，需多线并行、长期经营。';
+      else if (custGrade === 'A') summary += ' A类客户在关键决策点集中资源。';
+      else summary += ' 重点关注关键人关系建设。';
+    } else if (analysisScope === 'industry') {
+      summary += ' 本策略适用于该行业同类A类客户，可根据具体客户微调销售动作和执行节奏。';
+    } else {
+      summary += ' 本策略适用于该类B类客户群体，核心打法标准化、可复制，一线销售直接套用。';
+    }
   }
   document.getElementById('overallStrategy').textContent = summary;
 
@@ -899,6 +1025,7 @@ function buildCompStrategy(compName, advantages, disadvantages, activeDims) {
 function collectData() {
   return {
     id: Date.now().toString(),
+    analysisScope: analysisScope,
     customer: {
       name: document.getElementById('custName').value,
       grade: document.getElementById('custGrade').value,
@@ -949,6 +1076,11 @@ function collectStrategyTable() {
 
 // ===== Populate Form =====
 function populateForm(data) {
+  // Restore scope
+  analysisScope = data.analysisScope || 'single';
+  setScope(analysisScope);
+  updateScopeLabels();
+
   // Step 1
   const c = data.customer || {};
   document.getElementById('custName').value = c.name || '';
@@ -1053,7 +1185,7 @@ function renderHistory() {
       <div style="font-size:24px;">🎯</div>
       <div style="flex:1;">
         <div style="font-weight:600;font-size:15px;">${escHtml((a.customer&&a.customer.name)||'未命名客户')}</div>
-        <div style="font-size:12px;color:var(--grey-mid);">${fmtDate(a.createdAt)} · ${(a.customer&&a.customer.grade)||'?'}类 · ${(a.competitors||[]).length}个对手</div>
+        <div style="font-size:12px;color:var(--grey-mid);">${fmtDate(a.createdAt)} · ${(SCOPE_LABELS[a.analysisScope||'single']||SCOPE_LABELS.single).text} · ${(a.customer&&a.customer.grade)||'?'}类 · ${(a.competitors||[]).length}个对手</div>
       </div>
       <div onclick="event.stopPropagation();" style="display:flex;gap:8px;">
         <button class="btn btn-outline btn-sm" onclick="loadAnalysis('${a.id}')">编辑</button>
@@ -1085,7 +1217,8 @@ function buildExportText(analyses) {
   analyses.forEach((a, i) => {
     if (analyses.length > 1) text += `\n【${i+1}】${(a.customer&&a.customer.name)||'未命名'}\n\n`;
     const c = a.customer || {};
-    text += `📅 日期：${fmtDate(a.createdAt)} · 客户等级：${c.grade||'?'}类\n`;
+    const scopeInfo = SCOPE_LABELS[a.analysisScope || 'single'] || SCOPE_LABELS.single;
+    text += `📅 日期：${fmtDate(a.createdAt)} · 分析范围：${scopeInfo.text} · 客户等级：${c.grade||'?'}类\n`;
     text += `\n📋 客户画像：\n`;
     text += `  名称：${c.name||''}\n  行业：${c.industry||''}\n  规模：${c.scale||''}\n`;
     text += `  关键决策人：${c.keyPerson||''}\n  预算：${c.budget||''}\n`;
@@ -1166,60 +1299,101 @@ function downloadText(content, filename) {
 }
 
 // ===== Preset =====
-function loadPreset() {
+function loadPreset(type) {
   // Reset
   competitors = [];
   compIdCounter = 0;
   ourScores = {};
   DIMENSIONS.forEach(d => { ourScores[d.id] = 3; });
 
-  // Set customer profile
-  document.getElementById('custName').value = '某大型通信运营商';
-  document.getElementById('custGrade').value = 'S';
-  document.getElementById('custIndustry').value = '通信';
-  document.getElementById('custScale').value = '年营收50亿+ · 3000人';
-  document.getElementById('custKeyPerson').value = '采购总监王总 / 技术部李总';
-  document.getElementById('custBudget').value = '1000-2000万/年';
-  document.getElementById('custDecision').value = '技术部评估→采购部招标→副总审批';
-  document.getElementById('custCycle').value = '6-12个月';
-  document.getElementById('custPain').value = '网络设备老化，故障频发影响业务连续性；原供应商服务响应慢，无人主动巡检；需要高性价比的替代方案和7×24服务保障。';
+  // Set analysis scope
+  if (type === 'A') {
+    analysisScope = 'industry';
+    setScope('industry');
+  } else if (type === 'B') {
+    analysisScope = 'category';
+    setScope('category');
+  } else {
+    analysisScope = 'single';
+    setScope('single');
+  }
+
+  // Set customer profile based on type
+  if (type === 'A') {
+    document.getElementById('custName').value = '华东制造业A类客户群';
+    document.getElementById('custGrade').value = 'A';
+    document.getElementById('custIndustry').value = '制造业';
+    document.getElementById('custScale').value = '年营收1-10亿 · 200-1000人';
+    document.getElementById('custKeyPerson').value = '技术总监 / 采购经理';
+    document.getElementById('custBudget').value = '200-800万/年';
+    document.getElementById('custDecision').value = '技术评估→采购比价→总经理审批';
+    document.getElementById('custCycle').value = '3-6个月';
+    document.getElementById('custPain').value = '产线升级急需自动化设备；现有供应商交期不稳影响生产计划；需要本地化售后支持团队。';
+  } else if (type === 'B') {
+    document.getElementById('custName').value = 'B类中小型制造企业群';
+    document.getElementById('custGrade').value = 'B';
+    document.getElementById('custIndustry').value = '制造业';
+    document.getElementById('custScale').value = '年营收500万-1亿 · 50-200人';
+    document.getElementById('custKeyPerson').value = '老板 / 车间主任';
+    document.getElementById('custBudget').value = '50-200万/年';
+    document.getElementById('custDecision').value = '老板直接拍板';
+    document.getElementById('custCycle').value = '1-2个月';
+    document.getElementById('custPain').value = '人工成本高企需自动化替代；预算有限追求性价比；对供应商信任度要求高，偏好熟人介绍。';
+  } else {
+    document.getElementById('custName').value = '某大型通信运营商';
+    document.getElementById('custGrade').value = 'S';
+    document.getElementById('custIndustry').value = '通信';
+    document.getElementById('custScale').value = '年营收50亿+ · 3000人';
+    document.getElementById('custKeyPerson').value = '采购总监王总 / 技术部李总';
+    document.getElementById('custBudget').value = '1000-2000万/年';
+    document.getElementById('custDecision').value = '技术部评估→采购部招标→副总审批';
+    document.getElementById('custCycle').value = '6-12个月';
+    document.getElementById('custPain').value = '网络设备老化，故障频发影响业务连续性；原供应商服务响应慢，无人主动巡检；需要高性价比的替代方案和7×24服务保障。';
+  }
+
+  // Update scope labels
+  updateScopeLabels();
 
   // Set needs
   const presetNeeds = {
-    product: { priority:'中', desc:'设备性能满足现网需求，兼容现有架构' },
-    price: { priority:'中', desc:'预算有限，要求TCO比当前降低15%以上' },
+    product: { priority:'中', desc: type==='B' ? '够用就行，不追求高端功能' : '设备性能满足现网需求，兼容现有架构' },
+    price: { priority: type==='B'?'高':'中', desc: type==='B' ? '预算敏感，价格是首要因素' : '预算有限，要求TCO比当前降低15%以上' },
     terms: { priority:'中', desc:'希望灵活的付款节点，不加重现金流压力' },
-    brand: { priority:'中', desc:'需有通信行业成功案例，最好有本地服务团队' },
-    service: { priority:'高', desc:'必须7×24响应，要求主动巡检，故障2小时内到场' },
-    relation: { priority:'高', desc:'与中高层建立直接沟通渠道，不通过代理' },
-    org: { priority:'低', desc:'供应商资质齐全即可，不追求头部品牌' },
-    channel: { priority:'低', desc:'直销优先，暂不考虑渠道模式' }
+    brand: { priority:'低', desc: type==='B' ? '不太看重品牌，实用为主' : '需有行业成功案例' },
+    service: { priority: type==='A'?'高':'中', desc: type==='A' ? '需要本地化售后服务团队，快速响应' : '需服务保障' },
+    relation: { priority: type==='A'?'高':'中', desc: type==='A' ? '中高层关系是关键决策因素' : '与关键决策人建立信任' },
+    org: { priority:'低', desc:'供应商资质齐全即可' },
+    channel: { priority:'低', desc:'直销优先' }
   };
   renderNeeds({ needs: presetNeeds });
 
-  // Add competitors
-  addCompetitor('A公司(主导)');
-  addCompetitor('B公司(低价)');
-
-  // Set scores
-  const scoresA = { product:4, price:4, terms:4, brand:4, service:3, relation:4, org:5, channel:3 };
-  const scoresB = { product:2, price:5, terms:3, brand:1, service:2, relation:3, org:2, channel:4 };
-  competitors[0].scores = scoresA;
-  competitors[1].scores = scoresB;
-
-  ourScores = { product:4, price:2, terms:1, brand:3, service:2, relation:2, org:3, channel:1 };
+  if (type === 'B') {
+    addCompetitor('本地小厂商(低价)');
+    competitors[0].scores = { product:2, price:5, terms:4, brand:1, service:3, relation:3, org:1, channel:2 };
+    ourScores = { product:4, price:2, terms:3, brand:3, service:4, relation:2, org:3, channel:1 };
+  } else {
+    addCompetitor('A公司(主导)');
+    addCompetitor('B公司(低价)');
+    const scoresA = { product:4, price:4, terms:4, brand:4, service:3, relation:4, org:5, channel:3 };
+    const scoresB = { product:2, price:5, terms:3, brand:1, service:2, relation:3, org:2, channel:4 };
+    competitors[0].scores = scoresA;
+    competitors[1].scores = scoresB;
+    ourScores = { product:4, price:2, terms:1, brand:3, service:2, relation:2, org:3, channel:1 };
+  }
 
   renderCompBar();
   renderMatrix();
-
-  // Generate strategy
   generateStrategy();
-
   goStep(1);
-  showToast('✅ S类客户示例已加载 — 4步走完看完整策略');
+
+  const label = type==='A' ? 'A类一行一策' : (type==='B' ? 'B类一类一策' : 'S类一户一策');
+  showToast('✅ ' + label + '示例已加载 — 4步走完看完整策略');
 }
 
 function startNew() {
+  analysisScope = 'single';
+  setScope('single');
+  updateScopeLabels();
   document.getElementById('custName').value = '';
   document.getElementById('custGrade').value = 'S';
   document.getElementById('custIndustry').value = '';
