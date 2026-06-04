@@ -148,6 +148,33 @@ textarea.form-input { min-height:60px; }
 .rank-card .rank-score { font-size:28px; font-weight:700; color:var(--primary); }
 .rank-card .rank-label { font-size:11px; color:var(--grey-mid); margin-top:4px; }
 
+/* Comparison Table */
+.compare-table-wrap { margin-top:24px; background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 24px; }
+.compare-table-wrap h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:16px; }
+.compare-table { width:100%; border-collapse:collapse; font-size:13px; }
+.compare-table th { background:var(--primary); color:white; padding:10px 12px; text-align:center; font-weight:600; font-size:12px; }
+.compare-table th:first-child { text-align:left; min-width:120px; }
+.compare-table td { padding:10px 12px; text-align:center; border-bottom:1px solid var(--grey-light); }
+.compare-table td:first-child { text-align:left; font-weight:600; color:var(--grey-dark); }
+.compare-table tr.self-row td { background:var(--blue-light); font-weight:700; }
+.compare-table tr.self-row td:first-child { color:var(--blue); }
+.compare-table .gap-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
+.gap-up { background:var(--success-light); color:var(--success); }
+.gap-down { background:var(--danger-light); color:var(--danger); }
+.gap-zero { background:var(--grey-light); color:var(--grey-mid); }
+
+/* Win Probability */
+.win-prob-box { margin-top:20px; padding:20px 24px; background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); text-align:center; }
+.win-prob-box h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:12px; }
+.win-prob-bar-wrap { background:var(--grey-light); border-radius:20px; height:32px; overflow:hidden; position:relative; margin:12px 0; }
+.win-prob-bar { height:100%; border-radius:20px; transition:width 0.6s ease; position:relative; }
+.win-prob-bar.high { background:var(--success); }
+.win-prob-bar.medium { background:var(--warning); }
+.win-prob-bar.low { background:var(--danger); }
+.win-prob-text { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.3); }
+.win-prob-detail { font-size:13px; color:var(--grey-mid); margin-top:8px; }
+.win-prob-detail strong { color:var(--primary); }
+
 /* Chart */
 .chart-wrap { background:var(--white); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-top:20px; }
 .chart-wrap h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:16px; }
@@ -297,6 +324,14 @@ textarea.form-input { min-height:60px; }
       <div><h2>竞争分析结果</h2><p class="section-subtitle">加权总分排名 & 多维度对比</p></div>
     </div>
     <div class="results-grid" id="rankCards"></div>
+
+    <!-- 全量对比表 + 赢单率 -->
+    <div class="compare-table-wrap">
+      <h3>📋 全量得分对比 & 赢单概率</h3>
+      <div id="compareTable"></div>
+      <div id="winProbBox"></div>
+    </div>
+
     <div class="chart-wrap">
       <h3>📊 加权得分对比</h3>
       <canvas id="chartCanvas" class="chart-canvas"></canvas>
@@ -489,8 +524,14 @@ function updateScore(dimId, target, val) {
   renderResults();
 }
 
+function calcWinProb(myScore, bestCompScore) {
+  const diff = myScore - bestCompScore;
+  // 基准50%，每差0.1分±2%，封顶5%~95%
+  let prob = 50 + diff * 20;
+  return Math.max(5, Math.min(95, prob));
+}
+
 function renderResults() {
-  // Calculate rankings
   const totals = calcTotals();
   const all = [{name:'我方', id:'self', score:totals.self, isSelf:true}];
   state.competitors.forEach(c => {
@@ -498,7 +539,7 @@ function renderResults() {
   });
   all.sort((a,b) => b.score - a.score);
 
-  // Rank cards
+  // ========== 1. 排名卡片（所有参与方） ==========
   const cards = document.getElementById('rankCards');
   cards.innerHTML = all.map((item, i) => {
     const cls = i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : 'rank-3');
@@ -509,6 +550,66 @@ function renderResults() {
       <div class="rank-label">加权总分</div>
     </div>`;
   }).join('');
+
+  // ========== 2. 全量对比表（核心新增） ==========
+  const myScore = totals.self;
+  const compScores = state.competitors.map(c => ({ name: c.name, id: c.id, score: totals[c.id] || 0 }));
+  const bestComp = compScores.length > 0 ? compScores.reduce((a,b) => a.score > b.score ? a : b, compScores[0]) : {score:0};
+  const bestCompScore = bestComp ? bestComp.score : 0;
+
+  let tableHTML = '<table class="compare-table"><thead><tr><th>参与方</th><th>加权总分</th>';
+  compScores.forEach(c => {
+    tableHTML += `<th>vs ${escHtml(c.name)}</th>`;
+  });
+  tableHTML += '</tr></thead><tbody>';
+
+  // 我方行
+  tableHTML += `<tr class="self-row"><td>⭐ 我方</td><td style="font-size:16px;">${myScore.toFixed(1)}</td>`;
+  compScores.forEach(c => {
+    const gap = myScore - c.score;
+    const gapCls = gap > 0.05 ? 'gap-up' : (gap < -0.05 ? 'gap-down' : 'gap-zero');
+    const gapIcon = gap > 0.05 ? '↑' : (gap < -0.05 ? '↓' : '→');
+    tableHTML += `<td><span class="gap-badge ${gapCls}">${gapIcon} ${Math.abs(gap).toFixed(1)}</span></td>`;
+  });
+  tableHTML += '</tr>';
+
+  // 对手行
+  compScores.forEach(c => {
+    tableHTML += `<tr><td>${escHtml(c.name)}</td><td>${c.score.toFixed(1)}</td>`;
+    compScores.forEach(other => {
+      if (c.id === other.id) {
+        tableHTML += '<td>—</td>';
+      } else {
+        const gap = c.score - other.score;
+        const gapCls = gap > 0.05 ? 'gap-up' : (gap < -0.05 ? 'gap-down' : 'gap-zero');
+        const gapIcon = gap > 0.05 ? '↑' : (gap < -0.05 ? '↓' : '→');
+        tableHTML += `<td><span class="gap-badge ${gapCls}">${gapIcon} ${Math.abs(gap).toFixed(1)}</span></td>`;
+      }
+    });
+    tableHTML += '</tr>';
+  });
+  tableHTML += '</tbody></table>';
+  document.getElementById('compareTable').innerHTML = tableHTML;
+
+  // ========== 3. 赢单概率（核心新增） ==========
+  const winProb = calcWinProb(myScore, bestCompScore);
+  let probCls = winProb >= 60 ? 'high' : (winProb >= 40 ? 'medium' : 'low');
+  let probLabel = winProb >= 70 ? '赢面较大，保持优势' : (winProb >= 50 ? '势均力敌，需重点突破' : (winProb >= 30 ? '处于劣势，需重新定义竞争维度' : '形势严峻，考虑战略性放弃或改变游戏规则'));
+
+  let probHTML = `
+    <div class="win-prob-box">
+      <h3>🎯 预估赢单概率</h3>
+      <div style="font-size:12px;color:var(--grey-mid);margin-bottom:4px;">基于加权总分 vs 最强对手「${escHtml(bestComp.name || '暂无')}」的差距</div>
+      <div class="win-prob-bar-wrap">
+        <div class="win-prob-bar ${probCls}" style="width:${winProb}%;">
+          <div class="win-prob-text">${winProb.toFixed(0)}%</div>
+        </div>
+      </div>
+      <div class="win-prob-detail"><strong>${probLabel}</strong></div>
+      <div class="win-prob-detail">我方 <strong>${myScore.toFixed(1)}</strong> 分 vs 最强对手 <strong>${bestCompScore.toFixed(1)}</strong> 分 · 差距 <strong style="color:${myScore>=bestCompScore?'var(--success)':'var(--danger)'}">${myScore>=bestCompScore?'+':'-'}${Math.abs(myScore-bestCompScore).toFixed(1)}</strong></div>
+    </div>
+  `;
+  document.getElementById('winProbBox').innerHTML = probHTML;
 
   // Chart
   drawChart(all);
