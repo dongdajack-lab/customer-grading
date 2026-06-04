@@ -772,28 +772,38 @@ function prepareSimStep() {
 }
 
 function resetSimulation() {
-  // 清空测算结果
+  // 完全重置：回到第一步，清空所有选择
+  state.currentStep = 0;
+  state.selectedFactors = { tian: [], di: [], ren: [] };
+  state.selectedModel = null;
+  state.directRates = {};
+  state.coeffRanges = {};
+  state.hurdleTiers = [
+    { name: '保底线', achievement: 70, rate: 0 },
+    { name: '达标线', achievement: 100, rate: 3 },
+    { name: '挑战线', achievement: 120, rate: 5 },
+    { name: '卓越线', achievement: 150, rate: 8 },
+  ];
+  state.matrixData = null;
+  state.matrixXId = null;
+  state.matrixYId = null;
+  state.hurdlePrimaryId = null;
   state.simulationResult = null;
-  document.getElementById('pilotPreview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);">输入销售数据，点击「开始测算」查看结果</div>';
-  // 重置所有模拟输入为默认值
-  const all = getAllSelectedFactors();
-  const defs = {
-    revenue: 120, profit: 38, strategicProduct: 20, collection: 100, collectionRate: 85,
-    satisfaction: 88, conversion: 30, activity: 90, retention: 50, newMarket: 15,
-    mentoring: 2, knowledge: 3, compliance: 95,
-  };
-  all.forEach(f => {
-    const el = document.getElementById('sim_' + f.id);
-    if (el) el.value = defs[f.id] ?? '';
+
+  // 重建 UI
+  document.querySelectorAll('.step-content').forEach((el, i) => el.style.display = (i === 0) ? '' : 'none');
+  document.querySelectorAll('.step-dot').forEach((dot, i) => {
+    dot.classList.remove('active', 'done');
+    if (i === 0) dot.classList.add('active');
   });
-  // 重置周期和姓名
-  const simPeriod = document.getElementById('simPeriod');
-  if (simPeriod) simPeriod.value = 'quarterly';
-  const simName = document.getElementById('simName');
-  if (simName) simName.value = '张三';
-  const simTarget = document.getElementById('simTarget');
-  if (simTarget) simTarget.value = 500;
+  renderFactors('tian'); renderFactors('di'); renderFactors('ren');
+  renderHurdleTiers();
+  document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('pilotPreview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);">输入销售数据，点击「开始测算」查看结果</div>';
+  document.getElementById('simInputs').innerHTML = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   saveToStorage();
+  toast('已重置，请重新选择挂钩因素');
 }
 
 function runSimulation() {
