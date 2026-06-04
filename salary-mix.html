@@ -136,7 +136,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 
   <div class="card">
     <h3>你的公司现在处于哪个阶段？</h3>
-    <p class="sub">回答 4 个问题，系统自动匹配薪酬组合层级（不是让你对着 8 张卡片猜）</p>
+    <p class="sub">回答 4 个问题，系统自动匹配薪酬组合层级。⚠️ 1.0-3.0 适用一线销售，4.0 以上适用销售管理者/核心骨干。</p>
 
     <div id="quiz"></div>
     <div id="diagResult"></div>
@@ -192,6 +192,7 @@ const LV = [
    warn:'易导致"躺平"——只拿工资不产出。仅适用于老板亲自跑客户的极早期阶段。',
    trigger:'公司刚起步，创始人自己跑业务，还没招第一个销售。',
    nextNeed:'当你开始觉得"一个人跑不过来"，需要招第一个销售来分担时。',
+   role:'👤 一线销售 & 老板本人',
    quizScore:{sales:0,rev:0,mgr:0,proc:0}
   },
   {lv:'2.0',nm:'工资+提成',st:'快速起步期',comp:['工资','提成'],ck:['c1','c3'],
@@ -200,6 +201,7 @@ const LV = [
    warn:'只顾个人，不管团队；吃老本，不开拓。需配套客户分级和新人保护期。',
    trigger:'招了第一个销售，需要激励他多跑多签。',
    nextNeed:'当你发现销售只顾自己签单、不传帮带、新人存活率低时。',
+   role:'👤 一线销售',
    quizScore:{sales:1,rev:1,mgr:0,proc:0}
   },
   {lv:'3.0',nm:'工资+绩效+目标提成',st:'体系建立期',comp:['工资','绩效','提成'],ck:['c1','c2','c3'],
@@ -208,6 +210,7 @@ const LV = [
    warn:'绩效指标设计不当会导致"为指标工作"而非"为客户工作"。KPI需与战略对齐。',
    trigger:'销售团队3-5人，开始出现"老销售吃老本、新销售活不下来"的问题。',
    nextNeed:'当团队中出现自然的"带头大哥"，需要正式任命管理者时。',
+   role:'👤 一线销售 & 资深销售',
    quizScore:{sales:2,rev:2,mgr:0,proc:1}
   },
   {lv:'4.0',nm:'+部门奖',st:'团队扩张期',comp:['工资','绩效','提成','部门奖'],ck:['c1','c2','c3','c4'],
@@ -216,6 +219,7 @@ const LV = [
    warn:'部门奖分配不公易引发内部矛盾。需明确"个人贡献"与"团队溢出"的分配规则。',
    trigger:'团队5-10人，分了2-3个小组，每组有组长。组长需要管理激励。',
    nextNeed:'当管理者开始关心"利润"而不只是"销售额"时。',
+   role:'👥 销售主管/组长 — 管理者专属',
    quizScore:{sales:3,rev:2,mgr:1,proc:1}
   },
   {lv:'5.0',nm:'+超额奖',st:'精细化初期',comp:['工资','绩效','提成','超额奖'],ck:['c1','c2','c3','c5'],
@@ -224,6 +228,7 @@ const LV = [
    warn:'超额标准设定过高=画饼，过低=成本失控。建议设三档（挑战/冲刺/卓越），对应不同系数。',
    trigger:'部门开始独立核算，管理者需要承担盈亏责任。',
    nextNeed:'当核心骨干的流失开始让你心疼，需要深度绑定时。',
+   role:'👥 销售经理 — 管理者专属',
    quizScore:{sales:3,rev:3,mgr:2,proc:2}
   },
   {lv:'6.0',nm:'+分红',st:'成熟发展期',comp:['工资','奖金','超额奖','分红'],ck:['c1','c6','c5','c7'],
@@ -232,6 +237,7 @@ const LV = [
    warn:'分红机制需透明化。若无清晰的财务核算和沟通机制，分红反而引发猜疑。',
    trigger:'有3-5个跟你一起打天下的核心骨干，他们已经不只是要钱，要归属感。',
    nextNeed:'当公司开始有明确的上市/资本规划时。',
+   role:'👥 核心骨干 & 销售总监',
    quizScore:{sales:4,rev:3,mgr:3,proc:3}
   },
   {lv:'7.0',nm:'+期权/股权',st:'战略突破/上市前期',comp:['工资','奖金','超额奖','分红','期权/股权'],ck:['c1','c6','c5','c7','c8'],
@@ -240,6 +246,7 @@ const LV = [
    warn:'期权/股权涉及法律税务，务必请专业律师。行权条件要清晰可衡量。',
    trigger:'公司有明确的上市/并购路线图，需要核心团队"all in"。',
    nextNeed:'当公司已经成为一个行业平台，需要吸引顶尖人才来创造新的增长曲线时。',
+   role:'👥 核心高管 & 合伙人层级',
    quizScore:{sales:5,rev:4,mgr:4,proc:4}
   },
   {lv:'8.0',nm:'+股权+梦想',st:'生态/领袖期',comp:['工资','奖金','特别奖励','股权','梦想'],ck:['c1','c6','cX','c9','cX'],
@@ -248,6 +255,7 @@ const LV = [
    warn:'"梦想"不是虚的——需要清晰的愿景描述和可追踪的里程碑。没有兑现能力就是画饼。',
    trigger:'公司已是行业头部，需要吸引那些"只靠钱请不动"的顶尖人才。',
    nextNeed:'你已经站在顶层。保持梦想的吸引力，不要让"使命"变成墙上的口号。',
+   role:'👥 合伙人 & 事业伙伴',
    quizScore:{sales:5,rev:5,mgr:5,proc:5}
   }
 ];
@@ -347,10 +355,12 @@ function diagnose(){
 
   document.getElementById('diagResult').innerHTML = `
     <div class="diag-card" style="border:2px solid var(--pri);">
-      <div class="diag-badge ${BG[idx]}"><span class="lv-num">${lv.lv}</span> ${lv.stage}</div>
+      <div class="diag-badge ${BG[idx]}"><span class="lv-num">${lv.lv}</span> ${lv.st}</div>
       <p style="font-size:15px;font-weight:700;margin-bottom:4px;">推荐薪酬组合：<span style="color:var(--pri-d);">${lv.nm}</span></p>
+      <p style="font-size:12px;color:var(--pri-d);margin-bottom:12px;">${lv.role}</p>
 
       <div class="comp-list">${bars}</div>
+      <p style="font-size:11px;color:var(--txt2);margin-top:4px;">⚠️ 以上比例为示意参考值。精确固浮比请用 <a href="salary.html" style="color:var(--pri);">固浮比计算工具 →</a></p>
 
       <div class="note">
         <strong>📌 为什么是这个组合？</strong><br>
@@ -393,8 +403,8 @@ function renderEvo(){
     html += `<div class="evo-node" onclick="togEvo(this,${i})" id="evo-${i}">
       <div class="n-lv" style="background:${bgColors[i]};">${lv.lv}</div>
       <div class="n-info">
-        <div class="n-title">${lv.stage} — ${lv.nm}</div>
-        <div class="n-comp">${lv.comp.map(c=>`<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:${CO[lv.ck[lv.comp.indexOf(c)]]||'#94a3b8'};color:#fff;font-size:10px;margin:0 2px;">${c}</span>`).join(' ')}</div>
+        <div class="n-title">${lv.st} — ${lv.nm} <span style="font-size:11px;color:var(--pri-d);font-weight:600;">${lv.role}</span></div>
+        <div class="n-comp">${lv.comp.map(c=>`<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:${CO[lv.ck[lv.comp.indexOf(c)]]||'#94a3b8'};color:#fff;font-size:10px;margin:0 2px;">${c}</span>`).join(' ')} <span style="font-size:10px;color:var(--txt2);">(比例仅供参考)</span></div>
         <div class="n-trigger">触发信号：${lv.trigger}</div>
         <div class="n-detail">
           <p style="font-size:13px;margin-bottom:6px;"><strong>🎯 战略导向：</strong>${lv.guide}</p>
@@ -403,7 +413,11 @@ function renderEvo(){
         </div>
       </div>
     </div>`;
-    if(i < 7) html += '<div class="evo-arrow">↓</div>';
+    if(i < 7) {
+      html += '<div class="evo-arrow">↓</div>';
+      // Add divider between level 3 and 4
+      if(i === 2) html += '<div style="text-align:center;padding:6px 0;margin:4px 0;"><span style="background:var(--wa-l);color:#b45309;font-size:11px;font-weight:700;padding:4px 12px;border-radius:10px;">⬆ 以上适用一线销售 ｜ 以下适用销售管理者 ⬇</span></div>';
+    }
   });
   document.getElementById('evoPath').innerHTML = html;
 }
@@ -418,7 +432,7 @@ function togEvo(el, idx){
 function renderSimSelects(){
   const sel1 = document.getElementById('simActual');
   const sel2 = document.getElementById('simTarget');
-  const opts = LV.map((lv,i) => `<option value="${i}">${lv.lv} ${lv.stage} — ${lv.nm}</option>`).join('');
+  const opts = LV.map((lv,i) => `<option value="${i}">${lv.lv} ${lv.st} — ${lv.nm}</option>`).join('');
   sel1.innerHTML = opts;
   sel2.innerHTML = opts;
   sel1.value = 2; sel2.value = 5; // default: 3.0 vs 6.0
@@ -454,6 +468,7 @@ function runSim(){
   const risks = [];
   if(gap >= 2) risks.push('组织能力跟不上：给了期权但没有成熟的考核体系，期权变成"阳光普照奖"，失去激励效果');
   if(gap >= 3) risks.push('财务透明度不足：分红了但没有清晰的核算基础，钱分了反而引发猜疑和内耗');
+  if(t >= 4 && a <= 2) risks.push('岗位错配风险：' + LV[t].lv + ' 的薪酬组合（'+LV[t].role+'）设计给管理者/核心骨干，但公司当前处于一线销售阶段，没有对应层级的管理者来承接');
   if(t >= 5 && a <= 2) risks.push('管理者缺位：超额奖和分红需要有经营意识的管理者来承接，一线销售无法理解利润思维');
   if(t >= 6 && a <= 3) risks.push('法律合规风险：期权/股权设计涉及公司法、税法、合同法，草率设计可能引发纠纷');
   if(gap >= 4) risks.push('画饼风险：承诺了梦想和股权，但公司还没有稳定的盈利能力来兑现，信用破产比没有激励更可怕');
@@ -466,7 +481,7 @@ function runSim(){
   document.getElementById('simResult').innerHTML = `
     <div class="diag-card" style="border:2px solid ${riskColor};">
       <div class="diag-badge ${BG[t]}" style="margin-bottom:8px;"><span class="lv-num">${LV[t].lv}</span> ${LV[t].nm}</div>
-      <p style="font-size:13px;color:var(--txt2);margin-bottom:4px;">你当前阶段：<strong>${LV[a].lv} ${LV[a].stage}</strong> → 想用：<strong>${LV[t].lv} ${LV[t].stage}</strong>（跨越 ${gap} 级）</p>
+      <p style="font-size:13px;color:var(--txt2);margin-bottom:4px;">你当前阶段：<strong>${LV[a].lv} ${LV[a].st}</strong> → 想用：<strong>${LV[t].lv} ${LV[t].st}</strong>（跨越 ${gap} 级）</p>
 
       <div style="margin:16px 0;">
         <div class="risk-label"><span>风险指数</span><span>${riskPct}%</span></div>
