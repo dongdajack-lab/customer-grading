@@ -340,8 +340,8 @@ textarea.form-input { min-height:70px; }
           <option value="C">C类 — 小微·个人决策</option>
         </select>
       </div>
-      <div class="field-group">
-        <label class="form-label">所属行业</label>
+      <div class="field-group" id="fieldIndustry">
+        <label class="form-label" id="lblCustIndustry">所属行业</label>
         <input class="form-input" id="custIndustry" placeholder="例：通信/制造/金融">
       </div>
       <div class="field-group">
@@ -539,43 +539,82 @@ function setScope(scope) {
 
 function updateScopeLabels() {
   const info = SCOPE_LABELS[analysisScope];
-  // Step 1 field labels
+  // Fields
+  const nameInput = document.getElementById('custName');
+  const scaleInput = document.getElementById('custScale');
+  const personInput = document.getElementById('custKeyPerson');
+  const budgetInput = document.getElementById('custBudget');
+  const decisionInput = document.getElementById('custDecision');
+  const cycleInput = document.getElementById('custCycle');
+  const painInput = document.getElementById('custPain');
+  const industryInput = document.getElementById('custIndustry');
+  // Labels
   const lblCustName = document.getElementById('lblCustName');
+  const lblIndustry = document.getElementById('lblCustIndustry');
   const lblScale = document.getElementById('lblCustScale');
   const lblKeyPerson = document.getElementById('lblCustKeyPerson');
   const lblBudget = document.getElementById('lblCustBudget');
   const lblDecision = document.getElementById('lblCustDecision');
   const lblCycle = document.getElementById('lblCustCycle');
   const lblPain = document.getElementById('lblCustPain');
-  const nameInput = document.getElementById('custName');
+  // Industry field wrapper
+  const fieldIndustry = document.getElementById('fieldIndustry');
 
   if (analysisScope === 'single') {
+    // 一户一策：全部字段显示，行业字段保留
+    if (fieldIndustry) fieldIndustry.style.display = '';
+    if (lblIndustry) lblIndustry.textContent = '所属行业';
+    if (industryInput) industryInput.placeholder = '例：通信/制造/金融';
     if (lblCustName) lblCustName.textContent = '客户名称 *';
     if (nameInput) nameInput.placeholder = '例：XX集团';
     if (lblScale) lblScale.textContent = '企业规模';
+    if (scaleInput) scaleInput.placeholder = '例：年营收5亿·500人';
     if (lblKeyPerson) lblKeyPerson.textContent = '关键决策人';
+    if (personInput) personInput.placeholder = '例：采购总监王总';
     if (lblBudget) lblBudget.textContent = '采购预算';
+    if (budgetInput) budgetInput.placeholder = '例：300-500万/年';
     if (lblDecision) lblDecision.textContent = '决策流程';
+    if (decisionInput) decisionInput.placeholder = '例：技术部→采购部→副总审批';
     if (lblCycle) lblCycle.textContent = '决策周期';
+    if (cycleInput) cycleInput.placeholder = '例：3-6个月';
     if (lblPain) lblPain.textContent = '核心痛点 / 业务需求';
+    if (painInput) painInput.placeholder = '例：设备老化故障频发，影响业务连续性；原供应商服务响应慢，急需替代方案';
+
   } else if (analysisScope === 'industry') {
+    // 一行一策：隐藏「所属行业」（行业已在名称中体现），不出现具体人名
+    if (fieldIndustry) fieldIndustry.style.display = 'none';
     if (lblCustName) lblCustName.textContent = '行业/客户群 *';
     if (nameInput) nameInput.placeholder = '例：华东片区 制造业A类客户群';
     if (lblScale) lblScale.textContent = '典型企业规模';
+    if (scaleInput) scaleInput.placeholder = '例：年营收1-10亿 · 200-1000人';
     if (lblKeyPerson) lblKeyPerson.textContent = '典型决策角色';
+    if (personInput) personInput.placeholder = '例：技术总监 / 采购经理';
     if (lblBudget) lblBudget.textContent = '典型预算范围';
+    if (budgetInput) budgetInput.placeholder = '例：200-800万/年';
     if (lblDecision) lblDecision.textContent = '常见决策链';
+    if (decisionInput) decisionInput.placeholder = '例：技术评估→采购比价→总经理审批';
     if (lblCycle) lblCycle.textContent = '典型决策周期';
+    if (cycleInput) cycleInput.placeholder = '例：3-6个月';
     if (lblPain) lblPain.textContent = '共性痛点 / 业务需求';
+    if (painInput) painInput.placeholder = '例：产线升级急需自动化设备；现有供应商交期不稳影响生产计划；需要本地化售后支持团队';
+
   } else { // category
+    // 一类一策：同样隐藏「所属行业」（类别描述已含行业信息），不出现具体人名
+    if (fieldIndustry) fieldIndustry.style.display = 'none';
     if (lblCustName) lblCustName.textContent = '客户类别描述 *';
     if (nameInput) nameInput.placeholder = '例：B类中小型制造企业群';
     if (lblScale) lblScale.textContent = '规模范围';
+    if (scaleInput) scaleInput.placeholder = '例：年营收500万-1亿 · 50-200人';
     if (lblKeyPerson) lblKeyPerson.textContent = '决策人画像';
+    if (personInput) personInput.placeholder = '例：老板 / 车间主任';
     if (lblBudget) lblBudget.textContent = '预算范围';
+    if (budgetInput) budgetInput.placeholder = '例：50-200万/年';
     if (lblDecision) lblDecision.textContent = '决策模式';
+    if (decisionInput) decisionInput.placeholder = '例：老板直接拍板';
     if (lblCycle) lblCycle.textContent = '决策周期';
+    if (cycleInput) cycleInput.placeholder = '例：1-2个月';
     if (lblPain) lblPain.textContent = '共性痛点 / 业务需求';
+    if (painInput) painInput.placeholder = '例：人工成本高企需自动化替代；预算有限追求性价比；对供应商信任度要求高，偏好熟人介绍';
   }
 
   // Step 4 mode badge
