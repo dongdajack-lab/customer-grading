@@ -880,6 +880,8 @@ function exportAll() {
     text += `完成率：${r.completionRate||100}%\n`;
     text += `\n🎯 目标：${r.purpose||''}\n${r.goals||''}\n`;
     text += `📊 亮点：${r.highlights||''}\n📊 不足：${r.shortcomings||''}\n`;
+    text += `\n🔍 成功主观：${r.successSubjective||''}\n🔍 成功客观：${r.successObjective||''}\n`;
+    text += `🔍 失败主观：${r.failureSubjective||''}\n🔍 失败客观：${r.failureObjective||''}\n`;
     text += `💡 规律：${r.patterns||''}\n💡 一句话：${r.oneLiner||''}\n`;
     text += `📌 Keep：${r.keep||''}\n📌 Improve：${r.improve||''}\n📌 Start：${r.start||''}\n📌 Stop：${r.stop||''}\n`;
     text += '\n---\n\n';
