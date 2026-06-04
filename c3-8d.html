@@ -173,6 +173,33 @@ textarea.form-input { min-height:70px; }
 .strategy-table select { width:100%; padding:6px; font-size:12px; border:1px solid var(--grey-light); border-radius:6px; font-family:inherit; }
 .strategy-table input { width:100%; padding:6px; font-size:12px; border:1px solid var(--grey-light); border-radius:6px; font-family:inherit; }
 
+/* Per-competitor strategy cards */
+.comp-strategy-card { background:var(--white); border-radius:10px; border:2px solid var(--grey-light); padding:20px; margin-bottom:16px; }
+.comp-strategy-card.card-a { border-color:#e8b4b4; background:#fefafa; }
+.comp-strategy-card.card-b { border-color:#f0c8a0; background:#fef9f4; }
+.comp-strategy-card.card-c { border-color:#b8d8f0; background:#f4f9fe; }
+.comp-strategy-card.card-d { border-color:#c8d8c8; background:#f6faf6; }
+.comp-strategy-card.card-e { border-color:#d8c8e8; background:#faf6fc; }
+.comp-strategy-card h4 { font-size:15px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.comp-strategy-card h4 .comp-dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.comp-strategy-card h4 .comp-dot.dot-a { background:#c0392b; }
+.comp-strategy-card h4 .comp-dot.dot-b { background:#d35400; }
+.comp-strategy-card h4 .comp-dot.dot-c { background:#2980b9; }
+.comp-strategy-card h4 .comp-dot.dot-d { background:#27ae60; }
+.comp-strategy-card h4 .comp-dot.dot-e { background:#8e44ad; }
+.adv-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; align-items:center; font-size:13px; }
+.adv-label { font-weight:600; min-width:60px; }
+.adv-badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600; margin:1px 3px; }
+.adv-badge.green { background:var(--success-light); color:var(--success); }
+.adv-badge.red { background:var(--danger-light); color:var(--danger); }
+.adv-badge.grey { background:var(--grey-light); color:var(--grey-mid); }
+.comp-strategy-text { background:rgba(255,255,255,0.8); border-radius:8px; padding:14px; margin-top:10px; font-size:13px; line-height:1.8; border-left:3px solid var(--primary); }
+.comp-strategy-text .strat-label { font-weight:700; color:var(--primary); }
+.comp-strategy-text .core-play { margin-top:8px; padding-top:8px; border-top:1px dashed var(--grey-light); }
+
+/* Compact gap cells in matrix */
+.matrix-table .gap-sm { width:48px; font-size:11px; font-weight:700; text-align:center; padding:7px 4px; }
+
 /* Bar chart */
 .bar-chart-wrap { margin-bottom:16px; }
 .bar-row { display:flex; align-items:center; margin-bottom:6px; gap:10px; }
@@ -347,28 +374,34 @@ textarea.form-input { min-height:70px; }
 
   <!-- ===== Step 4: 策略推导 ===== -->
   <div class="section" id="sec4">
-    <div class="section-title"><div class="step-num">4</div><h2>我们怎么办？— 策略推导</h2></div>
+    <div class="section-title"><div class="step-num">4</div><h2>我们怎么办？— 逐对手策略 + 统一执行</h2></div>
 
     <!-- Strategy Summary -->
     <div class="summary-card" id="strategySummary">
-      <h3>📋 整体策略总纲</h3>
+      <h3>📋 策略总纲</h3>
       <p id="overallStrategy">请先在步骤3完成多对手对比，系统将自动生成策略。</p>
     </div>
 
     <!-- Insight Badges -->
     <div class="insight-badges" id="insightBadges"></div>
 
-    <!-- Bar Chart: Us vs Best Competitor -->
+    <!-- Bar Chart: Us vs Each Competitor -->
     <div class="bar-chart-wrap" id="barChart"></div>
 
-    <!-- Strategy Table -->
+    <!-- Per-Competitor Strategy Cards -->
+    <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin:24px 0 14px;">⚔️ 逐对手差异化策略</h3>
+    <div id="compStrategyCards"></div>
+
+    <!-- Unified Execution Table -->
+    <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin:24px 0 14px;">📊 综合策略执行表</h3>
+    <p style="font-size:12px;color:var(--grey-mid);margin-bottom:12px;">取所有对手的共性策略，提炼为统一的执行计划 — 优势之处持续放大，短板之处集中弥补</p>
     <div style="overflow-x:auto;margin-bottom:20px;">
       <table class="strategy-table" id="strategyTable">
         <thead>
-          <tr><th>客户最看重</th><th>竞争态势</th><th>策略方向</th><th>销售动作</th><th>跑动频率</th></tr>
+          <tr><th>客户最看重</th><th>策略方向</th><th>销售动作</th><th>跑动频率</th></tr>
         </thead>
         <tbody id="strategyBody">
-          <tr><td colspan="5" style="text-align:center;padding:40px;color:var(--grey-mid);">请先在步骤3完成多对手对比，然后生成策略</td></tr>
+          <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--grey-mid);">请先在步骤3完成多对手对比，然后生成策略</td></tr>
         </tbody>
       </table>
     </div>
@@ -540,36 +573,36 @@ function updateCompName(idx, name) {
 
 function updateCompScore(idx, dimId, score) {
   competitors[idx].scores[dimId] = parseInt(score);
-  updateGap(dimId);
+  updateCompGap(dimId, idx);
 }
 
 function updateOurScore(dimId, score) {
   ourScores[dimId] = parseInt(score);
-  updateGap(dimId);
+  competitors.forEach((c, i) => updateCompGap(dimId, i));
 }
 
+function updateCompGap(dimId, compIdx) {
+  const el = document.getElementById('gap_'+dimId+'_'+compIdx);
+  if (!el) return;
+  const compScore = competitors[compIdx].scores[dimId];
+  const us = ourScores[dimId];
+  const gap = us - compScore;
+  el.classList.remove('gap-pos','gap-neg','gap-zero');
+  if (gap > 0) { el.classList.add('gap-neg'); el.innerHTML = '+'+gap; }
+  else if (gap < 0) { el.classList.add('gap-pos'); el.innerHTML = String(gap); }
+  else { el.classList.add('gap-zero'); el.innerHTML = '0'; }
+}
+
+// Keep for backward compatibility
 function getBestCompScore(dimId) {
   if (competitors.length === 0) return 0;
   return Math.max(...competitors.map(c => c.scores[dimId]));
 }
-
 function getBestCompName(dimId) {
   if (competitors.length === 0) return '';
   let best = competitors[0];
   competitors.forEach(c => { if (c.scores[dimId] > best.scores[dimId]) best = c; });
-  return best.scores[dimId] >= ourScores[dimId] ? best.name : '';
-}
-
-function updateGap(dimId) {
-  const el = document.getElementById('gap_'+dimId);
-  if (!el) return;
-  const bestComp = getBestCompScore(dimId);
-  const us = ourScores[dimId];
-  const gap = us - bestComp;
-  el.classList.remove('gap-pos','gap-neg','gap-zero');
-  if (gap > 0) { el.classList.add('gap-neg'); el.innerHTML = '优势+'+gap; }
-  else if (gap < 0) { el.classList.add('gap-pos'); el.innerHTML = '劣势'+gap; }
-  else { el.classList.add('gap-zero'); el.innerHTML = '持平'; }
+  return best.name;
 }
 
 function renderCompBar() {
@@ -589,13 +622,9 @@ function renderMatrix(data) {
   const head = document.getElementById('matrixHead');
   let headHTML = '<tr><th class="th-dim">维度</th><th class="th-pri">客户需求</th>';
   competitors.forEach((c, i) => {
-    headHTML += `<th class="th-comp">${escHtml(c.name)}</th>`;
+    headHTML += `<th class="th-comp">${escHtml(c.name)}</th><th class="th-gap gap-sm">vs${escHtml(c.name)}</th>`;
   });
-  if (competitors.length > 0) {
-    headHTML += '<th class="th-us">我方</th><th class="th-gap">差距 vs 最强对手</th>';
-  } else {
-    headHTML += '<th class="th-us">我方</th>';
-  }
+  headHTML += '<th class="th-us">我方</th>';
   headHTML += '</tr>';
   head.innerHTML = headHTML;
 
@@ -609,27 +638,22 @@ function renderMatrix(data) {
     let compCells = '';
     competitors.forEach((c, i) => {
       const s = (data && data.competitors && data.competitors[i]) ? data.competitors[i].scores[dim.id] : (c.scores[dim.id] || 3);
+      const us = (data && data.ourScores) ? (data.ourScores[dim.id] || 3) : (ourScores[dim.id] || 3);
+      const gapVal = us - s;
+      let gapClass = 'gap-zero', gapText = '0';
+      if (gapVal > 0) { gapClass = 'gap-neg'; gapText = '+'+gapVal; }
+      else if (gapVal < 0) { gapClass = 'gap-pos'; gapText = String(gapVal); }
       compCells += `<td><select class="score-select" onchange="updateCompScore(${i},'${dim.id}',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${s==v?'selected':''}>${v}⭐</option>`).join('')}</select></td>`;
+      compCells += `<td class="gap-sm ${gapClass}" id="gap_${dim.id}_${i}">${gapText}</td>`;
     });
 
     const us = (data && data.ourScores) ? (data.ourScores[dim.id] || 3) : (ourScores[dim.id] || 3);
-
-    let gapHTML = '';
-    if (competitors.length > 0) {
-      const bestComp = getBestCompScore(dim.id);
-      const gap = us - bestComp;
-      let gapClass = 'gap-zero', gapText = '持平';
-      if (gap > 0) { gapClass = 'gap-neg'; gapText = '优势+'+gap; }
-      else if (gap < 0) { gapClass = 'gap-pos'; gapText = '劣势'+gap; }
-      gapHTML = `<td class="gap-cell ${gapClass}" id="gap_${dim.id}">${gapText}</td>`;
-    }
 
     return `<tr>
       <td class="dim-label">${dim.icon} ${dim.label}</td>
       <td><span class="${pc}">${np}</span></td>
       ${compCells}
       <td><select class="score-select" onchange="updateOurScore('${dim.id}',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${us==v?'selected':''}>${v}⭐</option>`).join('')}</select></td>
-      ${gapHTML}
     </tr>`;
   }).join('');
 }
@@ -644,110 +668,231 @@ function generateStrategy() {
   const dimAnalysis = DIMENSIONS.map(dim => {
     const np = needs[dim.id] ? needs[dim.id].priority : '中';
     const priorityVal = np === '高' ? 3 : (np === '中' ? 2 : 1);
-    const bestComp = getBestCompScore(dim.id);
-    const bestName = getBestCompName(dim.id);
     const us = ourScores[dim.id];
-    const gap = us - bestComp;
-    return { ...dim, priority: np, priorityVal, bestComp, bestName, us, gap };
+    return { ...dim, priority: np, priorityVal, us };
   });
 
-  // Sort: high priority first, then by gap (worst gap first)
-  dimAnalysis.sort((a, b) => {
-    if (a.priorityVal !== b.priorityVal) return b.priorityVal - a.priorityVal;
-    return a.gap - b.gap;
-  });
-
-  // Threats and advantages (high+mid priority only)
   const active = dimAnalysis.filter(d => d.priority !== '低');
-  const threats = active.filter(d => d.gap < 0);
-  const advantages = active.filter(d => d.gap > 0);
-  const topPrio = active.filter(d => d.priority === '高');
+  const highPrio = dimAnalysis.filter(d => d.priority === '高');
 
-  // Overall strategy
-  let strategy = '';
+  // ===== 1. Overall Strategy Summary =====
+  let summary = '';
   if (competitors.length === 0) {
-    strategy = `目前未添加竞争对手数据。请基于客户${custName}的${topPrio.map(d=>d.label).join('、')}等高关注维度，`;
-    strategy += '先完成竞争对比，再制定针对性策略。';
+    summary = '请先在步骤3添加竞争对手并完成评分。';
+  } else if (competitors.length === 1) {
+    const c = competitors[0];
+    const gaps = active.map(dim => ourScores[dim.id] - c.scores[dim.id]);
+    const adv = gaps.filter(g => g > 0).length;
+    const dis = gaps.filter(g => g < 0).length;
+    if (dis === 0) summary = `面对${c.name}，我们在所有关键维度均不落后。保持优势，在客户高关注维度持续施压，锁定胜局。`;
+    else if (adv > dis) summary = `面对${c.name}，我们整体占优（${adv}维领先/${dis}维落后）。放大优势维度，对落后维度采取针对性弥补措施。`;
+    else summary = `面对${c.name}，我们在多个维度落后（${dis}维落后/${adv}维领先）。紧急弥补高关注维度短板，同时用优势维度转移客户注意力，重新定义竞争维度。`;
   } else {
     const compNames = competitors.map(c => c.name).join('、');
-    strategy = `面对${compNames}`;
-    if (threats.length > 0) {
-      strategy += `，在${threats.map(d=>d.label).join('、')}维度落后于对手，需重点弥补短板；`;
-    }
-    if (advantages.length > 0) {
-      strategy += `在${advantages.map(d=>d.label).join('、')}维度领先，可放大差异化优势；`;
-    }
-    if (topPrio.length > 0) {
-      strategy += `围绕客户最看重的${topPrio.map(d=>d.label).join('、')}，`;
-    }
-    strategy += '制定集中突破策略。';
-    if (custGrade === 'S') strategy += ' S类客户决策链长，需多线并行、长期经营、高层推动。';
-    else if (custGrade === 'A') strategy += ' A类客户需在关键决策点集中资源，快速建立信任。';
-    else strategy += ' 重点关注关键人关系建设，快速决策、快速成交。';
+    summary = `面对${compNames}，每个对手的优劣势不同，打法也不同。`;
+    summary += '不能用一个"最强对手"的幻影逼自己全面开战，而是逐对手分析，取其共性制定统一策略，差异部分单独出招。';
+    if (custGrade === 'S') summary += ' S类客户决策链长，需多线并行、长期经营。';
+    else if (custGrade === 'A') summary += ' A类客户在关键决策点集中资源。';
+    else summary += ' 重点关注关键人关系建设。';
   }
+  document.getElementById('overallStrategy').textContent = summary;
 
-  document.getElementById('overallStrategy').textContent = strategy;
-
-  // Insight badges
+  // ===== 2. Insight Badges =====
   const badges = [];
-  if (threats.length > 0) {
-    badges.push(`<span class="insight-badge danger">⚠️ ${threats.length}个维度落后于对手：${threats.map(d=>d.label).join('、')}</span>`);
+  if (highPrio.length > 0) {
+    badges.push(`<span class="insight-badge info">🎯 客户最看重：${highPrio.map(d=>d.label).join('、')}</span>`);
   }
-  if (advantages.length > 0) {
-    badges.push(`<span class="insight-badge success">✅ ${advantages.length}个维度领先：${advantages.map(d=>d.label).join('、')}</span>`);
-  }
-  if (topPrio.length > 0) {
-    badges.push(`<span class="insight-badge info">🎯 客户最看重：${topPrio.map(d=>d.label).join('、')}</span>`);
-  }
-  if (competitors.length > 1) {
-    badges.push(`<span class="insight-badge warn">⚔️ ${competitors.length}个对手综合对比，取各维度最强对手分析差距</span>`);
-  }
+  competitors.forEach(comp => {
+    let advCount = 0, disCount = 0;
+    active.forEach(dim => {
+      const gap = ourScores[dim.id] - comp.scores[dim.id];
+      if (gap > 0) advCount++;
+      else if (gap < 0) disCount++;
+    });
+    if (disCount === 0) {
+      badges.push(`<span class="insight-badge success">✅ vs ${comp.name}：${advCount}维领先，全面压制</span>`);
+    } else if (disCount > advCount) {
+      badges.push(`<span class="insight-badge danger">⚠️ vs ${comp.name}：${disCount}维落后 ${advCount}维领先</span>`);
+    } else {
+      badges.push(`<span class="insight-badge warn">⚡ vs ${comp.name}：${advCount}维领先 ${disCount}维落后，整体占优</span>`);
+    }
+  });
   document.getElementById('insightBadges').innerHTML = badges.join('');
 
-  // Bar chart: us vs best competitor
+  // ===== 3. Bar Chart: Us vs Each Competitor =====
   let barHTML = '';
   active.forEach(dim => {
+    let rows = '';
+    competitors.forEach((comp, i) => {
+      const compPct = comp.scores[dim.id] * 20;
+      const color = ['#c0392b','#d35400','#2980b9','#27ae60','#8e44ad'][i%5];
+      rows += `<div class="bar-row" style="margin-bottom:2px;">
+        <div class="bar-label" style="font-size:10px;color:var(--grey-mid);">${comp.name}</div>
+        <div class="bar-track" style="height:14px;">
+          <div class="bar-fill" style="width:${compPct}%;background:${color};opacity:0.6;"></div>
+        </div>
+        <div class="bar-score" style="font-size:11px;color:${color};width:16px;">${comp.scores[dim.id]}</div>
+      </div>`;
+    });
     const usPct = dim.us * 20;
-    const compPct = dim.bestComp * 20;
-    barHTML += `<div class="bar-row">
-      <div class="bar-label">${dim.icon} ${dim.label} <span style="font-size:10px;color:var(--grey-mid);">${dim.priority}</span></div>
-      <div class="bar-track">
-        <div class="bar-fill best-comp" style="width:${compPct}%;opacity:0.5;z-index:1;">${dim.bestComp > dim.us ? '对手领先'+(dim.bestComp-dim.us)+'分' : ''}</div>
-        <div class="bar-fill us" style="width:${usPct}%;z-index:2;">${dim.us > dim.bestComp ? '我方领先'+(dim.us-dim.bestComp)+'分' : ''}</div>
+    rows += `<div class="bar-row">
+      <div class="bar-label" style="font-weight:700;">${dim.icon} ${dim.label}</div>
+      <div class="bar-track" style="height:22px;">
+        <div class="bar-fill us" style="width:${usPct}%;">${dim.us}⭐</div>
       </div>
-      <div class="bar-score best-comp">${dim.bestComp}</div>
-      <div class="bar-score us">${dim.us}</div>
+      <div class="bar-score us" style="width:16px;">${dim.us}</div>
     </div>`;
+    barHTML += `<div style="margin-bottom:8px;padding:6px 10px;background:var(--white);border-radius:8px;border:1px solid var(--grey-light);">${rows}</div>`;
   });
   document.getElementById('barChart').innerHTML = barHTML;
 
-  // Strategy table: focus on high priority + key gap dimensions
-  const focusDims = dimAnalysis.filter(d => d.priority === '高' || (d.priority === '中' && d.gap < 0));
-  const strategyDims = focusDims.length >= 3 ? focusDims.slice(0, 5) : dimAnalysis.slice(0, 5);
+  // ===== 4. Per-Competitor Strategy Cards =====
+  const cardsHTML = competitors.map((comp, i) => {
+    const advantages = [];
+    const disadvantages = [];
+    const parity = [];
 
+    active.forEach(dim => {
+      const gap = ourScores[dim.id] - comp.scores[dim.id];
+      const dimWithPrio = dimAnalysis.find(d => d.id === dim.id);
+      if (gap > 0) advantages.push({ ...dimWithPrio, gap });
+      else if (gap < 0) disadvantages.push({ ...dimWithPrio, gap });
+      else parity.push({ ...dimWithPrio });
+    });
+
+    const strategyText = buildCompStrategy(comp.name, advantages, disadvantages, active);
+
+    const colorLetter = ['a','b','c','d','e'][i%5];
+    const dotColor = ['dot-a','dot-b','dot-c','dot-d','dot-e'][i%5];
+
+    let advHTML = '', disHTML = '', parHTML = '';
+    if (advantages.length > 0) {
+      advHTML = `<div class="adv-row"><span class="adv-label">🟢 我方优势</span>${advantages.map(a=>`<span class="adv-badge green">${a.label} ${a.gap>0?'+':''}${a.gap}分</span>`).join('')}</div>`;
+    }
+    if (disadvantages.length > 0) {
+      disHTML = `<div class="adv-row"><span class="adv-label">🔴 我方劣势</span>${disadvantages.map(d=>`<span class="adv-badge red">${d.label} ${d.gap}分</span>`).join('')}</div>`;
+    }
+    if (parity.length > 0) {
+      parHTML = `<div class="adv-row"><span class="adv-label">⚪ 持平</span>${parity.map(p=>`<span class="adv-badge grey">${p.label}</span>`).join('')}</div>`;
+    }
+
+    return `<div class="comp-strategy-card card-${colorLetter}">
+      <h4><span class="comp-dot ${dotColor}"></span> 对 ${escHtml(comp.name)} 的策略</h4>
+      ${advHTML}${disHTML}${parHTML}
+      <div class="comp-strategy-text">
+        <span class="strat-label">策略方向：</span>${strategyText.direction}
+        <div class="core-play"><span class="strat-label">核心打法：</span>${strategyText.corePlay}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('compStrategyCards').innerHTML = cardsHTML || '<p style="text-align:center;color:var(--grey-mid);padding:20px;">请先在步骤3添加竞争对手</p>';
+
+  // ===== 5. Unified Execution Table =====
+  // Take commonalities across all competitors: focus on dimensions that matter against ANY competitor
+  const execDims = [];
+  active.forEach(dim => {
+    let minGap = 999, maxGap = -999;
+    competitors.forEach(c => {
+      const g = ourScores[dim.id] - c.scores[dim.id];
+      if (g < minGap) minGap = g;
+      if (g > maxGap) maxGap = g;
+    });
+    const isWeak = minGap < 0;   // behind at least one competitor
+    const isStrong = maxGap > 0; // ahead of at least one competitor
+    execDims.push({ ...dim, minGap, isWeak, isStrong });
+  });
+
+  // Sort: high priority first, then weak positions first (most urgent)
+  execDims.sort((a, b) => {
+    if (a.priorityVal !== b.priorityVal) return b.priorityVal - a.priorityVal;
+    if (a.isWeak !== b.isWeak) return a.isWeak ? -1 : 1;
+    return a.minGap - b.minGap;
+  });
+
+  const displayDims = execDims.filter(d => d.priority !== '低').slice(0, 6);
   const tbody = document.getElementById('strategyBody');
-  if (strategyDims.length === 0 || competitors.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--grey-mid);">请先添加竞争对手并完成评分</td></tr>';
+
+  if (competitors.length === 0 || displayDims.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--grey-mid);">请先添加竞争对手并完成评分</td></tr>';
   } else {
-    tbody.innerHTML = strategyDims.map(dim => {
+    tbody.innerHTML = displayDims.map(dim => {
       const tpl = STRATEGY_TEMPLATES[dim.id];
-      let situation = '';
-      if (dim.gap < 0) {
-        situation = `落后于${dim.bestName||'对手'}(${dim.gap}分)，需弥补`;
-      } else if (dim.gap > 0) {
-        situation = `领先${dim.bestName||'对手'}(${dim.gap}分)，可放大`;
+      // Pick strategy direction based on position
+      let directionOptions;
+      if (dim.isWeak && !dim.isStrong) {
+        directionOptions = dim.priority === '高' ? tpl.direction : [...tpl.direction, '寻求差异化'];
+      } else if (dim.isStrong && !dim.isWeak) {
+        directionOptions = ['放大优势', ...tpl.direction];
+      } else if (dim.isStrong && dim.isWeak) {
+        directionOptions = ['对低价对手算TCO·对强手做差异化', ...tpl.direction];
       } else {
-        situation = '与对手持平，需差异化';
+        directionOptions = tpl.direction;
       }
       return `<tr>
         <td style="font-weight:700;">${dim.icon} ${dim.label}<br><span style="font-size:11px;color:var(--grey-mid);">${dim.priority}优先级</span></td>
-        <td style="font-size:12px;">${situation}</td>
-        <td><select id="sd_${dim.id}" style="width:100%;padding:6px;font-size:12px;border:1px solid var(--grey-light);border-radius:6px;font-family:inherit;">${tpl.direction.map(d=>`<option value="${d}">${d}</option>`).join('')}</select></td>
+        <td><select id="sd_${dim.id}" style="width:100%;padding:6px;font-size:12px;border:1px solid var(--grey-light);border-radius:6px;font-family:inherit;">${directionOptions.map(d=>`<option value="${d}">${d}</option>`).join('')}</select></td>
         <td><textarea id="sa_${dim.id}">${tpl.actions}</textarea></td>
         <td><input id="sf_${dim.id}" value="${tpl.freq}" style="width:100%;padding:6px;font-size:12px;border:1px solid var(--grey-light);border-radius:6px;font-family:inherit;"></td>
       </tr>`;
     }).join('');
   }
+}
+
+function buildCompStrategy(compName, advantages, disadvantages, activeDims) {
+  // Analyze competitor type
+  const disIds = disadvantages.map(d => d.id);
+  const onlyPrice = disadvantages.length === 1 && disIds[0] === 'price';
+  const onlyBrand = disadvantages.length === 1 && disIds[0] === 'brand';
+  const pureWeak = disadvantages.length === 0;
+  const mostlyStrong = advantages.length >= disadvantages.length;
+  const highPrioDis = disadvantages.filter(d => d.priority === '高');
+  const highPrioAdv = advantages.filter(d => d.priority === '高');
+
+  let direction = '', corePlay = '';
+
+  if (pureWeak) {
+    direction = '全面压制策略';
+    corePlay = `我方在所有关键维度均领先于${compName}。持续巩固优势，在客户高关注维度加码投入，不让对手有可乘之机。`;
+    if (highPrioAdv.length > 0) {
+      corePlay += `\n重点守住${highPrioAdv.map(d=>d.label).join('、')}的领先地位，这是签单的关键。`;
+    }
+  } else if (onlyPrice) {
+    direction = '升维竞争 · 不打价格战';
+    corePlay = `${compName}的唯一优势是低价。避免陷入价格战——让客户算总账（TCO）。`;
+    corePlay += `\n` + advantages.slice(0, 3).map((a,i) => `${i+1}. 放大${a.label}优势（+${a.gap}分）：${a.label==='service'?'做好7×24响应和主动巡检' : a.label==='product'?'用技术交流和POC证明方案价值' : a.label==='brand'?'展示同行业标杆案例' : a.label==='relation'?'加强高层互访和关键人关系' : a.label==='terms'?'提供灵活的付款和交付条款' : a.label==='org'?'展示公司实力和团队专业度' : '通过渠道伙伴建立信任'}`).join('\n');
+    corePlay += `\n💰 核心话术："便宜的东西买的时候开心一次，用的时候天天糟心。我们算一笔TCO总账……"`;
+  } else if (onlyBrand) {
+    direction = '侧面突破 · 不硬拼品牌';
+    corePlay = `${compName}品牌强但其他维度未必领先。品牌是长期积累，短期无法超越，但可以绕过。`;
+    corePlay += `\n` + advantages.slice(0, 3).map((a,i) => `${i+1}. 用${a.label}差异化：${a.label==='product'?'用技术方案和POC让客户眼见为实' : a.label==='service'?'用服务响应速度和巡检频次建立信任' : a.label==='price'?'用性价比优势吸引客户' : a.label==='relation'?'用高频拜访和快速响应建立个人信任' : a.label==='terms'?'用灵活条款降低决策门槛' : a.label==='channel'?'通过渠道伙伴侧面渗透' : '用专业能力打动技术决策者'}`).join('\n');
+  } else if (highPrioDis.length >= 2 && mostlyStrong) {
+    direction = '重点弥补 · 兼顾优势';
+    corePlay = `虽然整体占优，但客户最看重的${highPrioDis.map(d=>d.label).join('、')}维度落后于${compName}，这是致命弱点。`;
+    corePlay += `\n紧急动作：\n1. 针对${highPrioDis.map(d=>d.label).join('、')}制定专项弥补计划`;
+    corePlay += `\n2. 同时放大我方优势维度（${advantages.slice(0,2).map(d=>d.label).join('、')}）转移客户关注点`;
+  } else if (highPrioDis.length >= 2 && !mostlyStrong) {
+    direction = '防守反击 · 重新定义竞争维度';
+    corePlay = `在客户最看重的${highPrioDis.map(d=>d.label).join('、')}维度，${compName}全面领先。硬碰硬成本太高。`;
+    corePlay += `\n策略：`;
+    if (advantages.length > 0) {
+      corePlay += `\n1. 用我方优势维度（${advantages.slice(0,2).map(d=>d.label).join('、')}）引导客户重新评估采购标准`;
+    }
+    corePlay += `\n2. 寻找对手服务盲区或交付短板，精准攻击`;
+    corePlay += `\n3. 在客户内部寻找"教练"，建立信息优势`;
+  } else if (!mostlyStrong) {
+    direction = '差异化定位 · 避免正面交锋';
+    corePlay = `${compName}在${disadvantages.slice(0,3).map(d=>d.label).join('、')}等维度领先。不与强者硬拼，寻找差异化突破口。`;
+    if (advantages.length > 0) {
+      corePlay += `\n我方突破口：${advantages.slice(0,3).map(d=>d.label).join('、')}（我方均领先），集中资源在这些维度建立"人无我有"的认知。`;
+    }
+  } else {
+    direction = '综合优势策略';
+    corePlay = `对${compName}整体占优（${advantages.length}维领先${disadvantages.length}维落后）。`;
+    corePlay += `\n领先维度（${advantages.slice(0,3).map(d=>d.label).join('、')}）持续放大；落后维度（${disadvantages.slice(0,3).map(d=>d.label).join('、')}）针对性弥补。`;
+  }
+
+  return { direction, corePlay };
 }
 
 // ===== Collect All Data =====
@@ -786,14 +931,13 @@ function collectStrategyTable() {
   const trs = tbody.querySelectorAll('tr');
   trs.forEach(tr => {
     const tds = tr.querySelectorAll('td');
-    if (tds.length < 5) return;
-    const select = tds[2].querySelector('select');
-    const textarea = tds[3].querySelector('textarea');
-    const input = tds[4].querySelector('input');
+    if (tds.length < 4) return;
+    const select = tds[1].querySelector('select');
+    const textarea = tds[2].querySelector('textarea');
+    const input = tds[3].querySelector('input');
     if (select && textarea && input) {
       rows.push({
         dimension: tds[0].textContent.trim().split('\n')[0],
-        situation: tds[1].textContent.trim(),
         strategyDirection: select.value,
         salesActions: textarea.value,
         frequency: input.value
@@ -867,24 +1011,24 @@ function loadAnalysis(id) {
   populateForm(a);
   goStep(1);
   if (a.strategy) generateStrategy();
-  // Restore strategy table if saved
+  // Restore strategy table edits
   if (a.strategy && a.strategy.table && a.strategy.table.length > 0) {
     setTimeout(() => {
       a.strategy.table.forEach((row, i) => {
         const trs = document.getElementById('strategyBody').querySelectorAll('tr');
         if (trs[i]) {
           const tds = trs[i].querySelectorAll('td');
-          if (tds.length >= 5) {
-            const select = tds[2].querySelector('select');
-            const textarea = tds[3].querySelector('textarea');
-            const input = tds[4].querySelector('input');
+          if (tds.length >= 4) {
+            const select = tds[1].querySelector('select');
+            const textarea = tds[2].querySelector('textarea');
+            const input = tds[3].querySelector('input');
             if (select && row.strategyDirection) select.value = row.strategyDirection;
             if (textarea && row.salesActions) textarea.value = row.salesActions;
             if (input && row.frequency) input.value = row.frequency;
           }
         }
       });
-    }, 200);
+    }, 300);
   }
   showToast('✅ 分析已加载，可继续编辑');
 }
@@ -937,7 +1081,7 @@ function exportAll() {
 }
 
 function buildExportText(analyses) {
-  let text = '大董老师 · 3C&8维客户策略分析报告（v2 多对手版）\n' + '='.repeat(60) + '\n\n';
+  let text = '大董老师 · 3C&8维客户策略分析报告（v3 逐对手策略版）\n' + '='.repeat(60) + '\n\n';
   analyses.forEach((a, i) => {
     if (analyses.length > 1) text += `\n【${i+1}】${(a.customer&&a.customer.name)||'未命名'}\n\n`;
     const c = a.customer || {};
@@ -959,34 +1103,52 @@ function buildExportText(analyses) {
 
     text += `\n⚔️ 竞争对比矩阵：\n`;
     let headerRow = '维度          | 客户需求';
-    (a.competitors||[]).forEach(c => { headerRow += ` | ${c.name||'?'}`; });
-    headerRow += ' | 我方 | 差距(vs最强)';
+    (a.competitors||[]).forEach(c => { headerRow += ` | ${c.name||'?'} | 差距`; });
+    headerRow += ' | 我方';
     text += headerRow + '\n' + '-'.repeat(60) + '\n';
     if (a.needs && a.ourScores) {
       DIMENSIONS.forEach(dim => {
         const np = a.needs[dim.id] ? a.needs[dim.id].priority : '中';
         let row = `${dim.label.padEnd(10,'　')} | ${np.padEnd(6,' ')}`;
-        let bestComp = 0;
         (a.competitors||[]).forEach(c => {
           const s = (c.scores && c.scores[dim.id]) || 3;
-          row += ` | ${s}`;
-          if (s > bestComp) bestComp = s;
+          const us = a.ourScores[dim.id] || 3;
+          const gap = us - s;
+          const gapStr = gap > 0 ? '+'+gap : (gap < 0 ? String(gap) : '0');
+          row += ` | ${s} | ${gapStr}`;
         });
-        const us = a.ourScores[dim.id] || 3;
-        const gap = us - bestComp;
-        const gapStr = gap > 0 ? '优势+'+gap : (gap < 0 ? '劣势'+gap : '持平');
-        row += ` | ${us} | ${gapStr}`;
+        row += ` | ${a.ourScores[dim.id] || 3}`;
         text += row + '\n';
+      });
+    }
+
+    // Per-competitor strategy
+    if (a.competitors && a.competitors.length > 0 && a.ourScores && a.needs) {
+      text += `\n⚔️ 逐对手策略分析：\n`;
+      a.competitors.forEach(comp => {
+        text += `\n  📌 对 ${comp.name||'?'}：\n`;
+        const adv = [], dis = [], par = [];
+        DIMENSIONS.forEach(dim => {
+          const np = a.needs[dim.id] ? a.needs[dim.id].priority : '中';
+          if (np === '低') return;
+          const gap = (a.ourScores[dim.id]||3) - ((comp.scores&&comp.scores[dim.id])||3);
+          if (gap > 0) adv.push(`${dim.label}(+${gap})`);
+          else if (gap < 0) dis.push(`${dim.label}(${gap})`);
+          else par.push(dim.label);
+        });
+        if (adv.length) text += `    🟢 优势：${adv.join('、')}\n`;
+        if (dis.length) text += `    🔴 劣势：${dis.join('、')}\n`;
+        if (par.length) text += `    ⚪ 持平：${par.join('、')}\n`;
       });
     }
 
     if (a.strategy) {
       text += `\n📋 整体策略：\n${a.strategy.summary||''}\n`;
       if (a.strategy.table && a.strategy.table.length > 0) {
-        text += `\n🎯 策略推导表：\n`;
-        text += '客户最看重 | 竞争态势 | 策略方向 | 销售动作 | 跑动频率\n' + '-'.repeat(60) + '\n';
+        text += `\n🎯 综合策略执行表：\n`;
+        text += '客户最看重 | 策略方向 | 销售动作 | 跑动频率\n' + '-'.repeat(60) + '\n';
         a.strategy.table.forEach(row => {
-          text += `${row.dimension||''} | ${row.situation||''} | ${row.strategyDirection||''} | ${(row.salesActions||'').replace(/\n/g,'；')} | ${row.frequency||''}\n`;
+          text += `${row.dimension||''} | ${row.strategyDirection||''} | ${(row.salesActions||'').replace(/\n/g,'；')} | ${row.frequency||''}\n`;
         });
       }
     }
@@ -1079,7 +1241,8 @@ function startNew() {
 
   document.getElementById('insightBadges').innerHTML = '';
   document.getElementById('barChart').innerHTML = '';
-  document.getElementById('strategyBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--grey-mid);">请先在步骤3完成多对手对比，然后生成策略</td></tr>';
+  document.getElementById('compStrategyCards').innerHTML = '';
+  document.getElementById('strategyBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--grey-mid);">请先在步骤3完成多对手对比，然后生成策略</td></tr>';
   document.getElementById('overallStrategy').textContent = '请先在步骤3完成多对手对比，系统将自动生成策略。';
 
   goStep(1);
