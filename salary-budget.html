@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 定总包：财务安全性测算</title>
+<style>
+:root {
+  --blue: #2563eb; --blue-light: #eff6ff; --blue-dark: #1d4ed8;
+  --green: #059669; --green-light: #ecfdf5; --green-dark: #047857;
+  --orange: #d97706; --orange-light: #fffbeb; --orange-dark: #b45309;
+  --red: #dc2626; --red-light: #fef2f2; --red-dark: #b91c1c;
+  --bg: #f1f5f9; --card: #ffffff; --text: #0f172a;
+  --text-mid: #475569; --text-light: #94a3b8; --border: #e2e8f0;
+  --radius: 14px; --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); color: white; padding: 24px 20px 18px; text-align: center; }
+header .badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 14px; font-size: 11px; letter-spacing: 2px; margin-bottom: 10px; }
+header h1 { font-size: 22px; font-weight: 800; }
+header p { font-size: 13px; opacity: 0.65; margin-top: 4px; }
+.container { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* Sections */
+.section { margin-bottom: 20px; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.section-num { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+.section-num.green { background: var(--green); }
+.section-num.orange { background: var(--orange); }
+.section-title { font-size: 16px; font-weight: 700; }
+
+/* Cards */
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; }
+
+/* Input groups */
+.input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 12px; }
+.input-group { display: flex; flex-direction: column; gap: 4px; }
+.input-group label { font-size: 12px; font-weight: 600; color: var(--text-mid); }
+.input-group .hint { font-size: 10px; color: var(--text-light); }
+.input-group input { width: 100%; padding: 10px 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text); transition: border-color 0.15s; background: #fafbfc; }
+.input-group input:focus { outline: none; border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.input-group input.editable { border-style: dashed; }
+.input-group input.editable:hover { border-color: var(--orange); background: var(--orange-light); }
+.input-group .suffix { position: relative; }
+.input-group .suffix input { padding-right: 42px; }
+.input-group .suffix .unit { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--text-mid); font-weight: 600; pointer-events: none; }
+
+/* Team table */
+.team-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.team-table th { background: #f1f5f9; padding: 10px 12px; text-align: center; font-weight: 700; color: var(--text); font-size: 12px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+.team-table th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+.team-table th:last-child { border-radius: 0 8px 0 0; }
+.team-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: center; }
+.team-table td:first-child { text-align: left; font-weight: 600; }
+.team-table .editable { display: inline-block; min-width: 48px; padding: 4px 6px; border: 1px dashed transparent; border-radius: 4px; cursor: pointer; transition: all 0.15s; font-size: 13px; font-weight: 600; background: transparent; text-align: center; color: var(--text); }
+.team-table .editable:hover { border-color: var(--orange); background: var(--orange-light); }
+.team-table .editable:focus { border-color: var(--orange); background: var(--orange-light); outline: none; }
+.team-table .calc { color: var(--text-light); font-size: 12px; }
+.team-table .result { font-weight: 800; color: var(--blue); }
+.team-table tr.total-row { background: #f8fafc; border-top: 2px solid var(--border); }
+.team-table tr.total-row td { font-weight: 800; padding: 12px 6px; }
+
+/* Result showcase */
+.result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.result-card { text-align: center; padding: 18px 12px; border-radius: var(--radius-sm); border: 2px solid var(--border); }
+.result-card .label { font-size: 11px; color: var(--text-mid); margin-bottom: 4px; font-weight: 500; }
+.result-card .number { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
+.result-card .sub { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+.result-card.highlight { border-color: var(--green); background: var(--green-light); }
+.result-card.highlight .number { color: var(--green-dark); }
+.result-card.warning { border-color: var(--orange); background: var(--orange-light); }
+.result-card.warning .number { color: var(--orange-dark); }
+.result-card.danger { border-color: var(--red); background: var(--red-light); }
+.result-card.danger .number { color: var(--red-dark); }
+
+/* Safety line breakdown */
+.safety-breakdown { background: #f8fafc; border-radius: var(--radius-sm); padding: 18px 22px; margin-top: 12px; }
+.safety-breakdown .formula-line { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+.safety-breakdown .formula-line:last-child { border-bottom: none; }
+.safety-breakdown .step { font-weight: 700; color: var(--blue); min-width: 48px; }
+.safety-breakdown .eq { font-family: 'SF Mono', 'Menlo', 'Monaco', monospace; font-size: 12px; color: var(--text-mid); flex: 1; }
+.safety-breakdown .eq-result { font-weight: 800; color: var(--text); min-width: 80px; text-align: right; }
+
+/* Sensitivity table */
+.sens-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.sens-table th { background: #f1f5f9; padding: 10px 12px; text-align: center; font-weight: 700; font-size: 12px; border-bottom: 2px solid var(--border); }
+.sens-table th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+.sens-table th:last-child { border-radius: 0 8px 0 0; }
+.sens-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: center; font-weight: 600; }
+.sens-table td:first-child { text-align: left; }
+.sens-table .pass { color: var(--green-dark); }
+.sens-table .warn { color: var(--orange-dark); }
+.sens-table .fail { color: var(--red-dark); }
+.sens-table .badge-cell { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+.sens-table .badge-pass { background: var(--green-light); color: var(--green-dark); }
+.sens-table .badge-warn { background: var(--orange-light); color: var(--orange-dark); }
+
+/* Verdict banner */
+.verdict { padding: 18px 22px; border-radius: var(--radius-sm); display: flex; align-items: flex-start; gap: 12px; margin-top: 12px; }
+.verdict.safe { background: var(--green-light); border: 1px solid #a7f3d0; }
+.verdict.caution { background: var(--orange-light); border: 1px solid #fcd34d; }
+.verdict .icon { font-size: 28px; flex-shrink: 0; }
+.verdict .text { font-size: 14px; line-height: 1.6; }
+.verdict .text strong { font-size: 15px; }
+
+/* Toggle explanation */
+.expand-btn { font-size: 12px; color: var(--blue); cursor: pointer; font-weight: 600; padding: 4px 0; display: inline-flex; align-items: center; gap: 4px; border: none; background: none; }
+.expand-btn:hover { text-decoration: underline; }
+.explanation-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius-sm); padding: 16px 20px; margin-top: 10px; font-size: 13px; line-height: 1.7; color: #0c4a6e; display: none; }
+.explanation-box.show { display: block; }
+.explanation-box .highlight { background: #fef08a; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
+
+/* Key points card */
+.keypoints { background: #fffbeb; border: 1px solid #fcd34d; border-radius: var(--radius-sm); padding: 16px 20px; margin-top: 16px; }
+.keypoints h4 { font-size: 12px; color: var(--orange-dark); letter-spacing: 2px; margin-bottom: 8px; }
+.keypoints ul { list-style: none; padding: 0; }
+.keypoints li { font-size: 13px; padding: 4px 0; padding-left: 20px; position: relative; color: #78350f; line-height: 1.6; }
+.keypoints li::before { content: '◆'; position: absolute; left: 0; color: var(--orange); font-size: 8px; top: 8px; }
+
+@media (max-width: 640px) {
+  .card { padding: 18px 16px; }
+  .input-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .result-grid { grid-template-columns: 1fr 1fr; }
+  .team-table { font-size: 11px; }
+  .team-table td, .team-table th { padding: 6px 4px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">天 · 排兵布阵 · 方向聚焦</div>
+  <h1>定总包：财务安全性测算</h1>
+  <p>从营收倒推销售团队薪酬预算 — 老板视角 · 兜底判断</p>
+</header>
+
+<div class="container">
+
+  <!-- ==================== 一、公司基本参数 ==================== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">公司基本参数</div>
+    </div>
+    <div class="card">
+      <div class="input-row">
+        <div class="input-group">
+          <label>年度目标营收 <span class="hint">（万元）</span></label>
+          <div class="suffix"><input type="number" class="editable" id="revenue" value="10000" oninput="recalcAll()"><span class="unit">万元</span></div>
+        </div>
+        <div class="input-group">
+          <label>毛利率</label>
+          <div class="suffix"><input type="number" class="editable" id="grossMargin" value="30" oninput="recalcAll()"><span class="unit">%</span></div>
+        </div>
+        <div class="input-group">
+          <label>非人力运营成本 <span class="hint">（房租/差旅/行政/IT等占营收%）</span></label>
+          <div class="suffix"><input type="number" class="editable" id="opCost" value="15" oninput="recalcAll()"><span class="unit">%</span></div>
+        </div>
+        <div class="input-group">
+          <label>销售薪酬占可分配利润上限 <span class="hint">（安全系数）</span></label>
+          <div class="suffix"><input type="number" class="editable" id="safetyCoeff" value="0.5" step="0.05" oninput="recalcAll()"><span class="unit">/1.0</span></div>
+        </div>
+      </div>
+
+      <!-- Safety line explanation -->
+      <button class="expand-btn" onclick="toggleExplanation()">📐 安全系数 0.5 是什么意思？</button>
+      <div class="explanation-box" id="safetyExplain">
+        <strong>0.5 代表「销售团队薪酬占可分配利润池的比例上限」= 50%。</strong><br><br>
+        <strong>推导过程：</strong><br>
+        ① 毛利 = 营收 × 毛利率<br>
+        ② 扣除非人力运营成本（房租/差旅/IT/行政等）后，≪<span class="highlight">可分配利润池</span>≫ = 营收 × (毛利率 − 非人力成本)<br>
+        ③ 这个池子要分给三件事：<span class="highlight">销售薪酬</span> + 其他部门薪酬 + 公司净利润<br>
+        ④ 经验法则：销售团队通常不超过池子的 50%（留一半给公司和其他部门）<br>
+        <br>
+        <strong>为什么是 0.5？</strong><br>
+        • <span class="highlight">保守边界</span>：实际很多公司取 0.3-0.4，0.5 已经是偏宽松的上限<br>
+        • <span class="highlight">留足安全垫</span>：剩下一半覆盖其他所有部门 + 老板利润<br>
+        • <span class="highlight">可调节</span>：如果是纯销售驱动型公司（无研发），可以调到 0.6-0.7<br>
+        <br>
+        <strong>安全线公式：</strong><br>
+        <code>安全线(占营收%) = (毛利率 − 非人力成本) × 安全系数</code><br>
+        当前：<code>(<span id="explainGM">30%</span> − <span id="explainOP">15%</span>) × <span id="explainSC">0.5</span> = <span id="explainLine">7.5%</span></code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 二、团队结构 ==================== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num green">2</div>
+      <div class="section-title">团队结构与薪酬参数</div>
+    </div>
+    <div class="card">
+      <table class="team-table" id="teamTable">
+        <thead>
+          <tr>
+            <th>角色</th>
+            <th>人数</th>
+            <th>月固薪<br>（万/人）</th>
+            <th>年固薪<br>（万）</th>
+            <th>人均目标<br>（万/年）</th>
+            <th>个人提成率<br>（%）</th>
+            <th>团队提成率<br>（%）</th>
+            <th>目标激励<br>（万）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🟢 新人</td>
+            <td><span class="editable" contenteditable="true" id="nNew" oninput="recalcAll()">3</span></td>
+            <td><span class="editable" contenteditable="true" id="fsNew" oninput="recalcAll()">1.2</span></td>
+            <td class="calc" id="fyNew">—</td>
+            <td><span class="editable" contenteditable="true" id="tgtNew" oninput="recalcAll()">150</span></td>
+            <td><span class="editable" contenteditable="true" id="rateNew" oninput="recalcAll()">5</span></td>
+            <td class="calc">—</td>
+            <td class="calc" id="incNew">—</td>
+          </tr>
+          <tr>
+            <td>🔵 骨干</td>
+            <td><span class="editable" contenteditable="true" id="nVet" oninput="recalcAll()">6</span></td>
+            <td><span class="editable" contenteditable="true" id="fsVet" oninput="recalcAll()">1.5</span></td>
+            <td class="calc" id="fyVet">—</td>
+            <td><span class="editable" contenteditable="true" id="tgtVet" oninput="recalcAll()">200</span></td>
+            <td><span class="editable" contenteditable="true" id="rateVet" oninput="recalcAll()">7.5</span></td>
+            <td class="calc">—</td>
+            <td class="calc" id="incVet">—</td>
+          </tr>
+          <tr>
+            <td>🟠 主管</td>
+            <td><span class="editable" contenteditable="true" id="nSup" oninput="recalcAll()">1</span></td>
+            <td><span class="editable" contenteditable="true" id="fsSup" oninput="recalcAll()">2.0</span></td>
+            <td class="calc" id="fySup">—</td>
+            <td><span class="editable" contenteditable="true" id="tgtSup" oninput="recalcAll()">200</span></td>
+            <td><span class="editable" contenteditable="true" id="rateSup" oninput="recalcAll()">7</span></td>
+            <td><span class="editable" contenteditable="true" id="rateSupTeam" oninput="recalcAll()">2</span></td>
+            <td class="calc" id="incSup">—</td>
+          </tr>
+          <tr>
+            <td>🔴 总监</td>
+            <td><span class="editable" contenteditable="true" id="nDir" oninput="recalcAll()">1</span></td>
+            <td><span class="editable" contenteditable="true" id="fsDir" oninput="recalcAll()">3.5</span></td>
+            <td class="calc" id="fyDir">—</td>
+            <td class="calc">—</td>
+            <td class="calc">—</td>
+            <td><span class="editable" contenteditable="true" id="rateDir" oninput="recalcAll()">0.5</span></td>
+            <td class="calc" id="incDir">—</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>合计</strong></td>
+            <td id="nTotal">—</td>
+            <td>—</td>
+            <td class="result" id="fyTotal">—</td>
+            <td id="tgtTotal">—</td>
+            <td>—</td>
+            <td>—</td>
+            <td class="result" id="incTotal">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:11px;color:var(--text-light);margin-top:8px;text-align:center;">💡 点击蓝色数字可直接修改，其他栏自动重算</div>
+    </div>
+  </div>
+
+  <!-- ==================== 三、测算结果 ==================== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num orange">3</div>
+      <div class="section-title">测算结果：100%目标达成时</div>
+    </div>
+    <div class="card">
+      <div class="result-grid" id="resultGrid">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- Safety line detail -->
+      <div class="safety-breakdown" id="safetyBreakdown">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- Verdict -->
+      <div class="verdict" id="verdict">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 四、敏感性测试 ==================== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">敏感性测试：不同达成率下的财务安全性</div>
+    </div>
+    <div class="card">
+      <table class="sens-table" id="sensTable">
+        <!-- filled by JS -->
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== 讲师核心要点 ==================== -->
+  <div class="keypoints">
+    <h4>🔑 讲师核心要点</h4>
+    <ul>
+      <li><strong>机制：</strong>从营收倒推 → 算毛利 → 扣非人力成本 → 得可分配利润池 → 销售薪酬不超过池子的 50%</li>
+      <li><strong>作用：</strong>老板定总包时做「财务兜底」——无论业绩好坏，销售团队薪酬都应在安全线内</li>
+      <li><strong>适用：</strong>适用于所有有明确营收目标的公司；安全系数 0.5 是通用基准，纯销售驱动型可调至 0.6-0.7</li>
+      <li><strong>关键洞察：</strong>真正需要警惕的不是业绩太好（提成占比会被营收增长稀释），而是业绩腰斩时固薪占比飙升</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+// ===== State =====
+function getState() {
+  return {
+    revenue:    p('revenue'),       // 万
+    grossMargin:p('grossMargin'),   // %
+    opCost:     p('opCost'),        // %
+    safetyCoeff:p('safetyCoeff'),   // 0-1
+
+    // Team
+    nNew:  i('nNew'),   fsNew:  p('fsNew'),   tgtNew:  p('tgtNew'),   rateNew:  p('rateNew'),
+    nVet:  i('nVet'),   fsVet:  p('fsVet'),   tgtVet:  p('tgtVet'),   rateVet:  p('rateVet'),
+    nSup:  i('nSup'),   fsSup:  p('fsSup'),   tgtSup:  p('tgtSup'),   rateSup:  p('rateSup'),   rateSupTeam: p('rateSupTeam'),
+    nDir:  i('nDir'),   fsDir:  p('fsDir'),   rateDir: p('rateDir'),
+  };
+}
+
+function p(id) { return parseFloat(document.getElementById(id).value || document.getElementById(id).textContent) || 0; }
+function i(id) { return parseInt(document.getElementById(id).textContent) || 0; }
+
+// ===== Core Calc =====
+function calcSalary(s) {
+  const months = 12;
+
+  // Fixed salary per role
+  const fyNew = s.nNew * s.fsNew * months;
+  const fyVet = s.nVet * s.fsVet * months;
+  const fySup = s.nSup * s.fsSup * months;
+  const fyDir = s.nDir * s.fsDir * months;
+  const fyTotal = fyNew + fyVet + fySup + fyDir;
+
+  // Total target revenue from team
+  const tgtNew = s.nNew * s.tgtNew;
+  const tgtVet = s.nVet * s.tgtVet;
+  const tgtTotal = tgtNew + tgtVet + s.nSup * s.tgtSup;
+
+  // 100% target commission
+  // New: personal target × rate
+  const incNew = tgtNew * s.rateNew / 100;
+  // Veteran: personal target × rate
+  const incVet = tgtVet * s.rateVet / 100;
+  // Supervisor: personal target × personal rate + new hire team total × team rate
+  const incSup = (s.nSup * s.tgtSup * s.rateSup / 100) + (tgtNew * s.rateSupTeam / 100);
+  // Director: total revenue × rate
+  const incDir = s.revenue * s.rateDir / 100;
+  const incTotal = incNew + incVet + incSup + incDir;
+
+  // Total budget
+  const budget = fyTotal + incTotal;
+  const budgetPct = (budget / s.revenue * 100);
+
+  // Safety line
+  const allocablePoolPct = s.grossMargin - s.opCost;
+  const safeLinePct = allocablePoolPct * s.safetyCoeff;
+  const allocablePool = s.revenue * allocablePoolPct / 100;
+  const safeLineAmt = allocablePool * s.safetyCoeff;
+  const safeLineAmtRounded = safeLineAmt;
+
+  // Verdict
+  const isSafe = budgetPct <= safeLinePct;
+  const margin = safeLinePct - budgetPct;
+
+  return {
+    fyNew, fyVet, fySup, fyDir, fyTotal,
+    tgtNew, tgtVet, tgtTotal,
+    incNew, incVet, incSup, incDir, incTotal,
+    budget, budgetPct,
+    allocablePoolPct, safeLinePct, allocablePool, safeLineAmt: safeLineAmtRounded,
+    isSafe, margin,
+    nTotal: s.nNew + s.nVet + s.nSup + s.nDir
+  };
+}
+
+// Sensitivity: compute at different attainment levels
+function sensAt(attainment, s, base) {
+  const rev = s.revenue * attainment;
+  // Commission scaling: overshoot gets higher rates (assume 1.3x multiplier for >100%)
+  let incMultiplier = 1;
+  if (attainment > 1.3) incMultiplier = 1.5;
+  else if (attainment > 1.0) incMultiplier = 1.2;
+  else if (attainment < 0.7) incMultiplier = 0.7;
+
+  const incTotal = base.incTotal * attainment * incMultiplier;
+  const budget = base.fyTotal + incTotal;
+  const pct = (budget / rev * 100);
+  const isSafe = pct <= base.safeLinePct;
+
+  return { rev, budget, pct, isSafe };
+}
+
+// ===== Render =====
+function recalcAll() {
+  const s = getState();
+  const r = calcSalary(s);
+
+  // --- Update table cells ---
+  document.getElementById('fyNew').textContent = fmtW(r.fyNew);
+  document.getElementById('fyVet').textContent = fmtW(r.fyVet);
+  document.getElementById('fySup').textContent = fmtW(r.fySup);
+  document.getElementById('fyDir').textContent = fmtW(r.fyDir);
+  document.getElementById('fyTotal').textContent = fmtW(r.fyTotal);
+
+  document.getElementById('incNew').textContent = fmtW(r.incNew);
+  document.getElementById('incVet').textContent = fmtW(r.incVet);
+  document.getElementById('incSup').textContent = fmtW(r.incSup);
+  document.getElementById('incDir').textContent = fmtW(r.incDir);
+  document.getElementById('incTotal').textContent = fmtW(r.incTotal);
+
+  document.getElementById('nTotal').textContent = r.nTotal;
+  document.getElementById('tgtTotal').textContent = fmtW(r.tgtTotal);
+
+  // --- Result grid ---
+  const grid = document.getElementById('resultGrid');
+  const safeClass = r.isSafe ? 'highlight' : (r.margin > -2 ? 'warning' : 'danger');
+  grid.innerHTML = `
+    <div class="result-card">
+      <div class="label">年固薪总额</div>
+      <div class="number">¥${fmtW(r.fyTotal)}</div>
+      <div class="sub">万元</div>
+    </div>
+    <div class="result-card">
+      <div class="label">目标激励总额<br><span style="font-weight:400;font-size:10px;">（100%达成）</span></div>
+      <div class="number">¥${fmtW(r.incTotal)}</div>
+      <div class="sub">万元</div>
+    </div>
+    <div class="result-card">
+      <div class="label">销售薪酬总预算</div>
+      <div class="number">¥${fmtW(r.budget)}</div>
+      <div class="sub">万元</div>
+    </div>
+    <div class="result-card ${safeClass}">
+      <div class="label">总预算占营收比</div>
+      <div class="number">${r.budgetPct.toFixed(2)}%</div>
+      <div class="sub">安全线 ${r.safeLinePct.toFixed(2)}%</div>
+    </div>
+  `;
+
+  // --- Safety breakdown ---
+  document.getElementById('safetyBreakdown').innerHTML = `
+    <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📐 安全线计算过程</div>
+    <div class="formula-line">
+      <span class="step">①</span>
+      <span class="eq">毛利润 = 营收 ${fmtW(s.revenue)}万 × 毛利率 ${s.grossMargin}%</span>
+      <span class="eq-result">${fmtW(s.revenue * s.grossMargin / 100)} 万</span>
+    </div>
+    <div class="formula-line">
+      <span class="step">②</span>
+      <span class="eq">可分配利润池 = 营收 × (毛利率 − 非人力成本) = ${fmtW(s.revenue)}万 × (${s.grossMargin}% − ${s.opCost}%)</span>
+      <span class="eq-result">${fmtW(r.allocablePool)} 万</span>
+    </div>
+    <div class="formula-line" style="background:#fef3c7;border-radius:4px;padding:4px 8px;">
+      <span class="step">③</span>
+      <span class="eq">销售薪酬预算上限 = 可分配利润池 × 安全系数 = ${fmtW(r.allocablePool)}万 × ${s.safetyCoeff}</span>
+      <span class="eq-result" style="color:${r.isSafe?'var(--green-dark)':'var(--red-dark)'};">${fmtW(r.safeLineAmt)} 万</span>
+    </div>
+    <div class="formula-line" style="background:#fef3c7;border-radius:4px;padding:4px 8px;">
+      <span class="step">④</span>
+      <span class="eq">安全线(占营收) = (${s.grossMargin}% − ${s.opCost}%) × ${s.safetyCoeff}</span>
+      <span class="eq-result" style="color:${r.isSafe?'var(--green-dark)':'var(--red-dark)'};">${r.safeLinePct.toFixed(2)}%</span>
+    </div>
+  `;
+
+  // --- Verdict ---
+  const vDiv = document.getElementById('verdict');
+  if (r.isSafe) {
+    vDiv.className = 'verdict safe';
+    vDiv.innerHTML = `
+      <div class="icon">✅</div>
+      <div class="text">
+        <strong>财务安全 — 当前销售薪酬占比 ${r.budgetPct.toFixed(2)}% < 安全线 ${r.safeLinePct.toFixed(2)}%</strong><br>
+        安全余量：${r.margin.toFixed(2)} 个百分点 · 可用空间 ${fmtW(r.safeLineAmt - r.budget)} 万 · 团队结构健康，可适度加人或提激励
+      </div>
+    `;
+  } else if (r.margin > -2) {
+    vDiv.className = 'verdict caution';
+    vDiv.innerHTML = `
+      <div class="icon">⚠️</div>
+      <div class="text">
+        <strong>接近红线 — 当前 ${r.budgetPct.toFixed(2)}% vs 安全线 ${r.safeLinePct.toFixed(2)}%</strong><br>
+        差距仅 ${Math.abs(r.margin).toFixed(2)} 个百分点 · 建议：降低固薪占比、提升人效目标、或调整安全系数
+      </div>
+    `;
+  } else {
+    vDiv.className = 'verdict caution';
+    vDiv.innerHTML = `
+      <div class="icon">🔴</div>
+      <div class="text">
+        <strong>超出安全线！当前 ${r.budgetPct.toFixed(2)}% > 安全线 ${r.safeLinePct.toFixed(2)}%</strong><br>
+        超出 ${Math.abs(r.margin).toFixed(2)} 个百分点 · 必须调整：降固薪或涨营收目标，否则公司利润被吃掉
+      </div>
+    `;
+  }
+
+  // --- Sensitivity table ---
+  const scenarios = [0.5, 0.8, 1.0, 1.3, 1.8];
+  const labels = ['悲观（50%）', '保守（80%）', '目标（100%）', '乐观（130%）', '极端（180%）'];
+  let sensRows = '';
+  scenarios.forEach((att, i) => {
+    const sr = sensAt(att, s, r);
+    const badgeClass = sr.isSafe ? 'badge-pass' : 'badge-warn';
+    sensRows += `
+      <tr>
+        <td>${labels[i]}</td>
+        <td>${fmtW(sr.rev)} 万</td>
+        <td>${fmtW(sr.budget)} 万</td>
+        <td>${sr.pct.toFixed(2)}%</td>
+        <td><span class="badge-cell ${badgeClass}">${sr.isSafe ? '✅ 安全' : '⚠️ 关注'}</span></td>
+      </tr>
+    `;
+  });
+
+  document.getElementById('sensTable').innerHTML = `
+    <thead>
+      <tr>
+        <th>场景</th>
+        <th>营收（万）</th>
+        <th>总预算（万）</th>
+        <th>占营收比</th>
+        <th>判断</th>
+      </tr>
+    </thead>
+    <tbody>${sensRows}</tbody>
+  `;
+
+  // --- Update explanation box ---
+  document.getElementById('explainGM').textContent = s.grossMargin + '%';
+  document.getElementById('explainOP').textContent = s.opCost + '%';
+  document.getElementById('explainSC').textContent = s.safetyCoeff;
+  document.getElementById('explainLine').textContent = r.safeLinePct.toFixed(2) + '%';
+}
+
+function fmtW(v) { return v.toLocaleString('zh-CN', {maximumFractionDigits:1}); }
+
+function toggleExplanation() {
+  document.getElementById('safetyExplain').classList.toggle('show');
+}
+
+// ===== Init =====
+recalcAll();
+</script>
+
+</body>
+</html>
