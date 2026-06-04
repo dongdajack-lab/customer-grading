@@ -7,458 +7,244 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --tian: #2563eb;
-  --tian-light: #eff6ff;
-  --tian-dark: #1d4ed8;
-  --di: #059669;
-  --di-light: #ecfdf5;
-  --di-dark: #047857;
-  --ren: #d97706;
-  --ren-light: #fffbeb;
-  --ren-dark: #b45309;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --text: #1e293b;
-  --text-mid: #64748b;
-  --text-light: #94a3b8;
-  --border: #e2e8f0;
+  --tian: #2563eb; --tian-light: #eff6ff; --tian-dark: #1d4ed8;
+  --di: #059669; --di-light: #ecfdf5; --di-dark: #047857;
+  --ren: #d97706; --ren-light: #fffbeb; --ren-dark: #b45309;
+  --direct: #7c3aed; --direct-light: #f5f3ff;
+  --coeff: #0891b2; --coeff-light: #ecfeff;
+  --kpi: #94a3b8;
+  --bg: #f8fafc; --card: #ffffff; --text: #1e293b;
+  --text-mid: #64748b; --text-light: #94a3b8; --border: #e2e8f0;
   --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg: 0 10px 15px rgba(0,0,0,0.06), 0 4px 6px rgba(0,0,0,0.04);
-  --radius: 12px;
-  --radius-sm: 8px;
+  --radius: 12px; --radius-sm: 8px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
-}
+body { font-family: 'Noto Sans SC', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
 
-/* ── Header ── */
-header {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-  color: white;
-  padding: 40px 24px 32px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--tian) 33%, var(--di) 66%, var(--ren) 100%);
-}
-.header-badge {
-  display: inline-block;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 20px;
-  padding: 4px 16px;
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-}
-header h1 { font-size: 26px; font-weight: 900; margin-bottom: 8px; position: relative; z-index: 1; }
-header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); color: white; padding: 40px 24px 32px; text-align: center; position: relative; overflow: hidden; }
+header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--tian) 33%, var(--di) 66%, var(--ren) 100%); }
+.header-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 16px; font-size: 12px; letter-spacing: 2px; margin-bottom: 16px; }
+header h1 { font-size: 26px; font-weight: 900; margin-bottom: 8px; }
+header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 
-/* ── Container ── */
-.container { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
+.container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
 
-/* ── Step Indicator ── */
-.steps { display: flex; gap: 0; margin-bottom: 36px; overflow: hidden; }
-.step-dot {
-  flex: 1; display: flex; align-items: center; gap: 8px;
-  padding: 12px 8px; cursor: pointer; transition: all .25s;
-  border-bottom: 3px solid var(--border); position: relative;
-  opacity: 0.6;
-}
+/* Steps */
+.steps { display: flex; gap: 0; margin-bottom: 36px; }
+.step-dot { flex: 1; display: flex; align-items: center; gap: 8px; padding: 12px 8px; cursor: pointer; border-bottom: 3px solid var(--border); opacity: 0.6; }
 .step-dot.active { border-bottom-color: var(--tian); opacity: 1; }
 .step-dot.done { border-bottom-color: var(--di); opacity: 1; }
-.step-num {
-  width: 28px; height: 28px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700; flex-shrink: 0;
-  background: var(--border); color: var(--text-mid);
-}
+.step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; background: var(--border); color: var(--text-mid); }
 .step-dot.active .step-num { background: var(--tian); color: white; }
 .step-dot.done .step-num { background: var(--di); color: white; }
 .step-label { font-size: 13px; font-weight: 600; white-space: nowrap; }
-.step-dot .step-label-small { font-size: 11px; color: var(--text-mid); display: none; }
+@media (max-width: 768px) { .step-label { display: none; } .step-dot { justify-content: center; } }
 
-@media (max-width: 768px) {
-  .step-label { display: none; }
-  .step-dot .step-label-small { display: inline; }
-  .step-num { width: 24px; height: 24px; font-size: 12px; }
-  .step-dot { padding: 10px 4px; justify-content: center; }
-}
-
-/* ── Cards ── */
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 28px 32px;
-  margin-bottom: 20px;
-  border: 1px solid var(--border);
-}
-.card-title {
-  font-size: 18px; font-weight: 700; margin-bottom: 6px;
-  display: flex; align-items: center; gap: 10px;
-}
+/* Cards */
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 20px; border: 1px solid var(--border); }
+.card-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
 .card-subtitle { font-size: 13px; color: var(--text-mid); margin-bottom: 20px; }
 .card-accent { border-left: 4px solid var(--tian); }
 
-/* ── Framework ── */
-.framework-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+/* Framework grid */
+.framework-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
 @media (max-width: 768px) { .framework-grid { grid-template-columns: 1fr; } }
-.fw-card {
-  background: var(--card); border: 2px solid var(--border); border-radius: var(--radius);
-  padding: 20px; transition: all .2s;
-}
-.fw-card.tian { border-color: #93c5fd; }
-.fw-card.di { border-color: #6ee7b7; }
-.fw-card.ren { border-color: #fcd34d; }
-.fw-card-header {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-  padding-bottom: 10px; border-bottom: 1px solid var(--border);
-}
-.fw-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 900;
-}
+.fw-card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.fw-card.tian { border-color: #93c5fd; } .fw-card.di { border-color: #6ee7b7; } .fw-card.ren { border-color: #fcd34d; }
+.fw-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.fw-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; }
 .fw-icon.tian { background: var(--tian-light); color: var(--tian); }
 .fw-icon.di { background: var(--di-light); color: var(--di); }
 .fw-icon.ren { background: var(--ren-light); color: var(--ren); }
 .fw-title { font-size: 15px; font-weight: 700; }
 .fw-subtitle { font-size: 11px; color: var(--text-mid); }
 
-/* ── Factor Item ── */
-.factor-list { display: flex; flex-direction: column; gap: 8px; }
-.factor-item {
-  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-  border-radius: var(--radius-sm); border: 1.5px solid var(--border);
-  cursor: pointer; transition: all .15s; background: var(--card);
-}
+/* Factor items */
+.factor-list { display: flex; flex-direction: column; gap: 6px; }
+.factor-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); cursor: pointer; transition: all .15s; background: var(--card); }
 .factor-item:hover { border-color: #94a3b8; box-shadow: var(--shadow-md); }
-.factor-item.selected { border-color: var(--tian); background: var(--tian-light); }
-.factor-item.selected.tian { border-color: var(--tian); background: var(--tian-light); }
-.factor-item.selected.di { border-color: var(--di); background: var(--di-light); }
-.factor-item.selected.ren { border-color: var(--ren); background: var(--ren-light); }
-.factor-check {
-  width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0;
-  border: 2px solid var(--border); display: flex; align-items: center;
-  justify-content: center; transition: all .15s;
-}
-.factor-item.selected .factor-check {
-  border-color: currentColor; background: currentColor;
-}
-.factor-item.selected .factor-check::after {
-  content: '✓'; color: white; font-size: 12px; font-weight: 700;
-}
-.factor-item.selected.tian .factor-check { border-color: var(--tian); background: var(--tian); }
-.factor-item.selected.di .factor-check { border-color: var(--di); background: var(--di); }
-.factor-item.selected.ren .factor-check { border-color: var(--ren); background: var(--ren); }
+.factor-item.selected { border-color: var(--direct); background: var(--direct-light); }
+.factor-item.selected.coeff { border-color: var(--coeff); background: var(--coeff-light); }
+.factor-check { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
+.factor-item.selected .factor-check { border-color: var(--direct); background: var(--direct); }
+.factor-item.selected.coeff .factor-check { border-color: var(--coeff); background: var(--coeff); }
+.factor-item.selected .factor-check::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
 .factor-info { flex: 1; min-width: 0; }
-.factor-name { font-size: 14px; font-weight: 600; }
-.factor-desc { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
-.factor-weight {
-  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-}
-.factor-weight input {
-  width: 52px; padding: 4px 6px; border: 1px solid var(--border);
-  border-radius: 4px; text-align: center; font-size: 13px; font-weight: 600;
-}
-.factor-weight span { font-size: 12px; color: var(--text-mid); }
+.factor-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.factor-desc { font-size: 11px; color: var(--text-mid); margin-top: 1px; }
+.factor-tag { font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 500; }
+.factor-tag.direct { background: var(--direct-light); color: var(--direct); }
+.factor-tag.coeff { background: var(--coeff-light); color: var(--coeff); }
+.factor-tag.kpi { background: #f1f5f9; color: var(--kpi); }
+.factor-weight { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.factor-weight input { width: 44px; padding: 3px 4px; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 12px; font-weight: 600; }
 
-/* ── Model Selection ── */
-.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-@media (max-width: 768px) { .model-grid { grid-template-columns: 1fr; } }
-.model-card {
-  border: 2px solid var(--border); border-radius: var(--radius);
-  padding: 24px; cursor: pointer; transition: all .2s; background: var(--card);
-  position: relative;
-}
-.model-card:hover { border-color: #94a3b8; box-shadow: var(--shadow-md); }
-.model-card.selected { border-color: var(--tian); background: #f0f5ff; box-shadow: var(--shadow-lg); }
-.model-card.selected::after {
-  content: '✓'; position: absolute; top: 12px; right: 16px;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--tian); color: white; font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-}
-.model-icon { font-size: 32px; margin-bottom: 10px; }
-.model-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-.model-desc { font-size: 13px; color: var(--text-mid); line-height: 1.5; margin-bottom: 10px; }
-.model-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.model-tag {
-  font-size: 11px; padding: 2px 10px; border-radius: 12px;
-  background: #f1f5f9; color: var(--text-mid); font-weight: 500;
-}
-.model-formula {
-  margin-top: 12px; padding: 10px 14px; background: #f8fafc;
-  border-radius: 6px; font-family: 'SF Mono', 'Consolas', monospace;
-  font-size: 12px; color: var(--tian); letter-spacing: 0.5px;
-}
+/* Legend */
+.type-legend { display: flex; gap: 16px; margin-bottom: 16px; font-size: 12px; }
+.type-legend span { display: flex; align-items: center; gap: 4px; }
+.type-legend .dot { width: 10px; height: 10px; border-radius: 50%; }
+.type-legend .dot.direct { background: var(--direct); }
+.type-legend .dot.coeff { background: var(--coeff); }
+.type-legend .dot.kpi { background: var(--kpi); }
 
-/* ── Params Section ── */
-.param-group { margin-bottom: 24px; }
-.param-group-title {
-  font-size: 15px; font-weight: 700; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.param-row {
-  display: flex; align-items: center; gap: 12px; padding: 10px 14px;
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  margin-bottom: 8px; background: var(--card);
-}
-.param-label { flex: 1; font-size: 14px; font-weight: 500; }
-.param-desc { font-size: 11px; color: var(--text-mid); }
-.param-input {
-  width: 80px; padding: 6px 10px; border: 1px solid var(--border);
-  border-radius: 6px; text-align: center; font-size: 14px; font-weight: 600;
-}
-.param-input:focus { outline: none; border-color: var(--tian); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-.param-right { display: flex; align-items: center; gap: 6px; }
-.param-unit { font-size: 13px; color: var(--text-mid); min-width: 24px; }
-
-.param-slider {
-  flex: 1; -webkit-appearance: none; height: 6px;
-  border-radius: 3px; background: var(--border); outline: none;
-}
-.param-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
-  background: var(--tian); cursor: pointer; box-shadow: 0 2px 6px rgba(37,99,235,0.3);
-}
-
-/* ── Tiers / Matrix ── */
-.tier-row {
-  display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 12px; align-items: center;
-  padding: 16px; margin-bottom: 8px; border: 1px solid var(--border);
-  border-radius: var(--radius-sm); background: var(--card);
-}
-.tier-name { font-size: 14px; font-weight: 700; }
-.tier-desc { font-size: 12px; color: var(--text-mid); }
-.tier-rate {
-  display: flex; align-items: center; gap: 6px; justify-content: flex-end;
-}
-
-.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
-.matrix-table th, .matrix-table td {
-  border: 1px solid var(--border); padding: 10px 8px; text-align: center;
-}
-.matrix-table th { background: #f8fafc; font-weight: 600; font-size: 12px; }
-.matrix-table td input {
-  width: 60px; padding: 4px; border: 1px solid var(--border);
-  border-radius: 4px; text-align: center; font-size: 13px;
-}
-.matrix-table .row-header { font-weight: 700; background: #f8fafc; text-align: left; padding-left: 14px; }
-.matrix-table .col-header { font-weight: 700; background: #f8fafc; }
-
-/* ── Preview ── */
-.preview-box {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: white; border-radius: var(--radius); padding: 28px;
-  margin-bottom: 20px;
-}
-.preview-box h3 { font-size: 17px; margin-bottom: 16px; opacity: 0.9; }
-.preview-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-.preview-row:last-child { border-bottom: none; padding-bottom: 0; }
-.preview-label { font-size: 14px; opacity: 0.7; }
-.preview-value { font-size: 16px; font-weight: 700; }
-.preview-value.highlight { color: #fbbf24; font-size: 20px; }
-.preview-breakdown { margin-top: 16px; }
-.preview-breakdown .row {
-  display: flex; justify-content: space-between; padding: 6px 0;
-  font-size: 13px; opacity: 0.6;
-}
-
-.summary-card {
-  background: white; border: 2px solid var(--di);
-  border-radius: var(--radius); padding: 24px;
-}
-.summary-title { font-size: 16px; font-weight: 700; color: var(--di); margin-bottom: 14px; }
-.summary-list { list-style: none; }
-.summary-list li {
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 10px; font-size: 14px;
-}
-.summary-list li::before {
-  content: '▸'; color: var(--di); font-weight: 700;
-}
-
-/* ── Toaster ── */
-.toaster {
-  position: fixed; top: 20px; right: 20px; z-index: 1000;
-  background: #0f172a; color: white; padding: 14px 24px;
-  border-radius: 10px; font-size: 14px; box-shadow: var(--shadow-lg);
-  transform: translateX(120%); transition: transform .3s;
-}
-.toaster.show { transform: translateX(0); }
-
-/* ── Buttons ── */
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 10px 20px; border-radius: 8px; font-size: 14px;
-  font-weight: 600; cursor: pointer; transition: all .15s;
-  border: none; font-family: inherit;
-}
-.btn-primary { background: var(--tian); color: white; }
-.btn-primary:hover { background: var(--tian-dark); }
-.btn-outline { background: white; color: var(--tian); border: 2px solid var(--tian); }
-.btn-outline:hover { background: var(--tian-light); }
-.btn-success { background: var(--di); color: white; }
-.btn-success:hover { background: var(--di-dark); }
-.btn-ghost { background: transparent; color: var(--text-mid); }
-.btn-ghost:hover { color: var(--text); }
-.btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 24px; }
-
-/* ── Print ── */
-@media print {
-  header, .steps, .btn-group, .card:not(.no-print-hide) { display: none; }
-  .preview-box { background: white !important; color: black !important; border: 2px solid #ccc; }
-  .preview-box .preview-label { color: #666 !important; }
-  .preview-box .preview-value { color: black !important; }
-  .preview-box .preview-value.highlight { color: #d97706 !important; }
-}
-
-/* ── Info Banner ── */
-.info-banner {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 14px 18px; border-radius: var(--radius-sm);
-  background: var(--tian-light); border: 1px solid #93c5fd;
-  font-size: 13px; color: var(--tian-dark); margin-bottom: 20px; line-height: 1.6;
-}
-.info-banner .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-/* ── Weight Bar ── */
-.weight-bar-container { margin-top: 16px; }
+/* Weight bar */
+.weight-bar-container { margin-top: 12px; }
 .weight-bar-label { font-size: 13px; color: var(--text-mid); margin-bottom: 6px; display: flex; justify-content: space-between; }
-.weight-bar {
-  height: 8px; border-radius: 4px; background: var(--border);
-  overflow: hidden; display: flex;
-}
+.weight-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; display: flex; }
 .weight-bar-seg { height: 100%; transition: width .3s; }
 .weight-bar-seg.tian { background: var(--tian); }
 .weight-bar-seg.di { background: var(--di); }
 .weight-bar-seg.ren { background: var(--ren); }
 
-/* ── Scenario Inputs ── */
-.scenario-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  margin-bottom: 12px;
-}
-.scenario-row.full { grid-template-columns: 1fr; }
-.scenario-field { }
+/* Models */
+.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 768px) { .model-grid { grid-template-columns: 1fr; } }
+.model-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; transition: all .2s; background: var(--card); position: relative; }
+.model-card:hover { border-color: #94a3b8; box-shadow: var(--shadow-md); }
+.model-card.selected { border-color: var(--tian); background: #f0f5ff; box-shadow: var(--shadow-lg); }
+.model-card.selected::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: var(--tian); color: white; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.model-icon { font-size: 32px; margin-bottom: 10px; }
+.model-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.model-desc { font-size: 13px; color: var(--text-mid); line-height: 1.5; margin-bottom: 10px; }
+.model-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.model-tag { font-size: 11px; padding: 2px 10px; border-radius: 12px; background: #f1f5f9; color: var(--text-mid); font-weight: 500; }
+.model-formula { margin-top: 12px; padding: 10px 14px; background: #f8fafc; border-radius: 6px; font-family: 'SF Mono', monospace; font-size: 12px; color: var(--tian); }
+
+/* Params */
+.param-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; background: var(--card); }
+.param-label { flex: 1; font-size: 14px; font-weight: 500; }
+.param-desc { font-size: 11px; color: var(--text-mid); }
+.param-input { width: 70px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 14px; font-weight: 600; }
+.param-input:focus { outline: none; border-color: var(--tian); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.param-right { display: flex; align-items: center; gap: 6px; }
+.param-unit { font-size: 13px; color: var(--text-mid); min-width: 24px; }
+.param-slider { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px; background: var(--border); outline: none; }
+.param-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--tian); cursor: pointer; }
+
+/* Tiers */
+.tier-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-items: center; padding: 12px 16px; margin-bottom: 6px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); }
+.tier-name { font-size: 14px; font-weight: 700; }
+.tier-desc { font-size: 12px; color: var(--text-mid); }
+.tier-input { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+
+/* Matrix */
+.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+.matrix-table th, .matrix-table td { border: 1px solid var(--border); padding: 8px 6px; text-align: center; }
+.matrix-table th { background: #f8fafc; font-weight: 600; font-size: 12px; }
+.matrix-table td input { width: 56px; padding: 4px; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 13px; }
+.matrix-table .row-header { font-weight: 700; background: #f8fafc; text-align: left; padding-left: 12px; }
+
+/* Preview */
+.preview-box { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: var(--radius); padding: 28px; margin-bottom: 20px; }
+.preview-box h3 { font-size: 17px; margin-bottom: 16px; opacity: 0.9; }
+.preview-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.preview-row:last-child { border-bottom: none; padding-bottom: 0; }
+.preview-label { font-size: 14px; opacity: 0.7; }
+.preview-value { font-size: 16px; font-weight: 700; }
+.preview-value.highlight { color: #fbbf24; font-size: 20px; }
+.preview-breakdown { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+.preview-breakdown .row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; opacity: 0.7; }
+
+/* Scenario */
+.scenario-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 10px; }
 .scenario-field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--text-mid); }
-.scenario-field input, .scenario-field select {
-  width: 100%; padding: 10px 14px; border: 1px solid var(--border);
-  border-radius: var(--radius-sm); font-size: 14px; font-family: inherit;
-}
-.scenario-field input:focus, .scenario-field select:focus {
-  outline: none; border-color: var(--tian); box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-}
+.scenario-field input, .scenario-field select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; }
+.scenario-field input:focus, .scenario-field select:focus { outline: none; border-color: var(--tian); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
-/* tabs for model detail */
-.model-detail-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
-.model-detail-tab {
-  padding: 10px 20px; cursor: pointer; font-size: 14px; font-weight: 600;
-  border-bottom: 2px solid transparent; margin-bottom: -2px;
-  color: var(--text-mid); transition: all .15s;
-}
-.model-detail-tab.active { color: var(--tian); border-bottom-color: var(--tian); }
+/* Info banner */
+.info-banner { display: flex; align-items: flex-start; gap: 10px; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--tian-light); border: 1px solid #93c5fd; font-size: 13px; color: var(--tian-dark); margin-bottom: 20px; line-height: 1.6; }
+.info-banner.warn { background: #fff7ed; border-color: #fdba74; color: #9a3412; }
+.info-banner .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 
-/* animation highlight */
-@keyframes highlightPulse {
-  0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
-  100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
-}
-.highlight-pulse { animation: highlightPulse 1.5s ease-in-out; }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; border: none; font-family: inherit; }
+.btn-primary { background: var(--tian); color: white; }
+.btn-primary:hover { background: var(--tian-dark); }
+.btn-outline { background: white; color: var(--tian); border: 2px solid var(--tian); }
+.btn-success { background: var(--di); color: white; }
+.btn-ghost { background: transparent; color: var(--text-mid); }
+.btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
 
-/* pilot calculation section */
+/* Toaster */
+.toaster { position: fixed; top: 20px; right: 20px; z-index: 1000; background: #0f172a; color: white; padding: 14px 24px; border-radius: 10px; font-size: 14px; box-shadow: var(--shadow-lg); transform: translateX(120%); transition: transform .3s; }
+.toaster.show { transform: translateX(0); }
+
+/* Print */
+@media print { header, .steps, .btn-group, .card:not(.no-print-hide) { display: none; } }
+
+/* Pilot result */
 .pilot-result { display: none; margin-top: 20px; }
 .pilot-result.show { display: block; }
+
+/* Tooltip helper */
+.help-text { font-size: 12px; color: var(--text-mid); margin-top: 4px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-badge">博商 · 懂生意 · 学完就落地</div>
-  <h1>📐 销售提成方案设计器</h1>
-  <p>基于「天地人」销售管理体系 — 帮老板设计「提成该跟什么挂钩、怎么挂钩」，让提成成为真正的指挥棒</p>
+  <h1>📐 销售提成方案设计器 v2</h1>
+  <p>基于「天地人」销售管理体系 — 提成是分钱的指挥棒，绩效是管人的工具，两码事要分清</p>
 </header>
 
 <div class="container">
 
-  <!-- Step Indicator -->
+  <!-- Steps -->
   <div class="steps" id="stepIndicator">
-    <div class="step-dot active" data-step="0"><div class="step-num">1</div><div class="step-label">选择关联因素</div><div class="step-label-small">因素</div></div>
-    <div class="step-dot" data-step="1"><div class="step-num">2</div><div class="step-label">选择提成模式</div><div class="step-label-small">模式</div></div>
-    <div class="step-dot" data-step="2"><div class="step-num">3</div><div class="step-label">配置参数</div><div class="step-label-small">参数</div></div>
-    <div class="step-dot" data-step="3"><div class="step-num">4</div><div class="step-label">模拟测算</div><div class="step-label-small">测算</div></div>
-    <div class="step-dot" data-step="4"><div class="step-num">5</div><div class="step-label">方案预览</div><div class="step-label-small">预览</div></div>
+    <div class="step-dot active" data-step="0"><div class="step-num">1</div><div class="step-label">选挂钩因素</div></div>
+    <div class="step-dot" data-step="1"><div class="step-num">2</div><div class="step-label">选提成模式</div></div>
+    <div class="step-dot" data-step="2"><div class="step-num">3</div><div class="step-label">配置参数</div></div>
+    <div class="step-dot" data-step="3"><div class="step-num">4</div><div class="step-label">模拟测算</div></div>
+    <div class="step-dot" data-step="4"><div class="step-num">5</div><div class="step-label">方案预览</div></div>
   </div>
 
-  <!-- ===== STEP 0: Choose Factors ===== -->
+  <!-- ===== STEP 0 ===== -->
   <div id="step0" class="step-content">
     <div class="card card-accent">
-      <div class="card-title">💡 提成设计的本质</div>
-      <div class="card-subtitle">提成不是「分钱」，是「指挥棒」——你想让销售往哪打，提成就往哪指。选对关联因素，就选对了方向。</div>
+      <div class="card-title">💡 提成 ≠ 绩效</div>
+      <div class="card-subtitle">提成是分钱的比例，绩效是管人的奖罚。不是所有指标都能挂钩提成——选对指标，方案才能落地。</div>
+    </div>
+
+    <div class="type-legend">
+      <span><span class="dot direct"></span> 直接挂钩提成（分钱）</span>
+      <span><span class="dot coeff"></span> 调节系数（影响幅度）</span>
+      <span><span class="dot kpi"></span> 建议归入绩效考核</span>
     </div>
 
     <div class="info-banner">
       <span class="icon">🎯</span>
-      <span><b>实操建议：</b>小公司建议选3-5个因素（聚焦核心），大公司可选5-8个。因素越多管理成本越高，但方向更精准。建议至少覆盖天、地、人各至少1个因素。</span>
+      <span><b>核心原则：</b>直接提成挂钩「销售额、利润、回款」等结果指标；过程指标（转化率、活动量）和团队建设指标（培训、带教）建议归入绩效考核奖金池，不直接参与提成计算。</span>
     </div>
 
     <div class="framework-grid">
-      <!-- 天 -->
       <div class="fw-card tian">
         <div class="fw-card-header">
           <div class="fw-icon tian">天</div>
-          <div>
-            <div class="fw-title">方向聚焦 — 钱从哪来？</div>
-            <div class="fw-subtitle">战略牵引，指挥棒指向哪里</div>
-          </div>
+          <div><div class="fw-title">方向聚焦</div><div class="fw-subtitle">战略牵引，钱从哪来</div></div>
         </div>
         <div class="factor-list" id="factors-tian"></div>
       </div>
-      <!-- 地 -->
       <div class="fw-card di">
         <div class="fw-card-header">
           <div class="fw-icon di">地</div>
-          <div>
-            <div class="fw-title">过程管控 — 钱怎么来？</div>
-            <div class="fw-subtitle">过程质量决定结果质量</div>
-          </div>
+          <div><div class="fw-title">过程管控</div><div class="fw-subtitle">过程质量决定结果质量</div></div>
         </div>
         <div class="factor-list" id="factors-di"></div>
       </div>
-      <!-- 人 -->
       <div class="fw-card ren">
         <div class="fw-card-header">
           <div class="fw-icon ren">人</div>
-          <div>
-            <div class="fw-title">铁军打造 — 人怎么跑？</div>
-            <div class="fw-subtitle">不仅要结果，还要建能力</div>
-          </div>
+          <div><div class="fw-title">铁军打造</div><div class="fw-subtitle">不仅要结果，还要建能力</div></div>
         </div>
         <div class="factor-list" id="factors-ren"></div>
       </div>
     </div>
 
     <div class="weight-bar-container">
-      <div class="weight-bar-label"><span>三维度权重分配</span><span id="weightTotal">天0% · 地0% · 人0%</span></div>
+      <div class="weight-bar-label"><span>已选因素权重分配（仅含直接提成+调节系数）</span><span id="weightTotal">天0% · 地0% · 人0%</span></div>
       <div class="weight-bar" id="weightBar">
         <div class="weight-bar-seg tian" id="weightBarTian" style="width:0%"></div>
         <div class="weight-bar-seg di" id="weightBarDi" style="width:0%"></div>
@@ -471,45 +257,41 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; pos
     </div>
   </div>
 
-  <!-- ===== STEP 1: Choose Model ===== -->
+  <!-- ===== STEP 1 ===== -->
   <div id="step1" class="step-content" style="display:none">
     <div class="card card-accent">
-      <div class="card-title">🔧 四种提成模式，你的业务适合哪一种？</div>
-      <div class="card-subtitle">不同业务阶段、不同管理成熟度，适合不同的提成结构。选对模式，事半功倍。</div>
+      <div class="card-title">🔧 四种提成模式</div>
+      <div class="card-subtitle">不同业务阶段、不同管理成熟度，适合不同的提成结构</div>
     </div>
 
-    <div class="model-grid" id="modelGrid">
-      <!-- 设障模式 -->
+    <div class="model-grid">
       <div class="model-card" data-model="hurdle" onclick="selectModel('hurdle')">
         <div class="model-icon">🚪</div>
-        <div class="model-name">设障模式 (Hurdle)</div>
-        <div class="model-desc">设定业绩门槛，达标后才启动提成。多级门槛对应逐级递增的提成比例，激励销售不断突破。</div>
-        <div class="model-tags"><span class="model-tag">成熟业务</span><span class="model-tag">保底线思维</span><span class="model-tag">简单直接</span></div>
-        <div class="model-formula">提成 = Σ(各门槛完成额 × 对应提成率)<br>典型：保底80%→0% / 达标100%→3% / 挑战120%→5%</div>
+        <div class="model-name">设障模式</div>
+        <div class="model-desc">设定业绩门槛，达标后才启动提成。多级门槛对应逐级递增的提成比例。最简单直接。</div>
+        <div class="model-tags"><span class="model-tag">成熟业务</span><span class="model-tag">保底线思维</span></div>
+        <div class="model-formula">提成 = 销售额 × 对应门槛提成率<br>保底80%→0% / 达标100%→3% / 挑战120%→5%</div>
       </div>
-      <!-- 乘数模式 -->
       <div class="model-card" data-model="multiplier" onclick="selectModel('multiplier')">
         <div class="model-icon">✖️</div>
-        <div class="model-name">乘数模式 (Multiplier)</div>
-        <div class="model-desc">基础提成 × 多个调节系数。每个系数驱动一个行为，适合需要同时管理多个指标的场景。</div>
-        <div class="model-tags"><span class="model-tag">多目标平衡</span><span class="model-tag">行为引导</span><span class="model-tag">灵活度高</span></div>
-        <div class="model-formula">提成 = 销售额×基准率 × 利润率系数 × 回款系数 × 战略产品系数<br>每系数浮动范围 0.8~1.5</div>
+        <div class="model-name">乘数模式</div>
+        <div class="model-desc">各直接提成因素独立计算后加总，再用调节系数（回款率、满意度等）乘算。最灵活，权重决定系数影响幅度。</div>
+        <div class="model-tags"><span class="model-tag">多目标平衡</span><span class="model-tag">行为引导</span></div>
+        <div class="model-formula">提成 = Σ(各因素金额×提成率) × 回款系数 × 满意度系数<br>系数浮动 = ±权重%×0.5</div>
       </div>
-      <!-- 矩阵模式 -->
       <div class="model-card" data-model="matrix" onclick="selectModel('matrix')">
         <div class="model-icon">📊</div>
-        <div class="model-name">矩阵模式 (Matrix)</div>
-        <div class="model-desc">两个核心指标交叉定位提成比例。X轴和Y轴各代表一个维度，交叉点就是提成率。</div>
-        <div class="model-tags"><span class="model-tag">双核心指标</span><span class="model-tag">可视化定价</span><span class="model-tag">公平透明</span></div>
-        <div class="model-formula">提成率 = f(X轴指标达成率, Y轴指标达成率)<br>典型：X=销售额达成率, Y=利润率达成率</div>
+        <div class="model-name">矩阵模式</div>
+        <div class="model-desc">两个核心指标交叉定位提成比例。X轴Y轴自动取权重最高的两个直接提成因素。</div>
+        <div class="model-tags"><span class="model-tag">双核心指标</span><span class="model-tag">可视化定价</span></div>
+        <div class="model-formula">提成率 = f(销售额达成率, 利润率达成率)<br>交叉点查表得提成率</div>
       </div>
-      <!-- 混合模式 -->
       <div class="model-card" data-model="hybrid" onclick="selectModel('hybrid')">
         <div class="model-icon">🧩</div>
-        <div class="model-name">混合模式 (Hybrid)</div>
-        <div class="model-desc">设障打底 + 乘数调节 + 矩阵定价，三者组合。适合复杂业务场景，最灵活也最考验管理能力。</div>
-        <div class="model-tags"><span class="model-tag">复杂业务</span><span class="model-tag">全维度驱动</span><span class="model-tag">管理成熟</span></div>
-        <div class="model-formula">提成 = 设障基础提成 × 乘数系数 × 矩阵定位系数<br>适合管理成熟度高的企业</div>
+        <div class="model-name">混合模式</div>
+        <div class="model-desc">设障打底 + 乘数调节。先过门槛，再加算各因素提成，最后用调节系数修正。最全面也最考验管理。</div>
+        <div class="model-tags"><span class="model-tag">复杂业务</span><span class="model-tag">全维度驱动</span></div>
+        <div class="model-formula">提成 = [门槛基础 + Σ(因素提成)] × 系数乘积<br>适合管理成熟企业</div>
       </div>
     </div>
 
@@ -519,70 +301,77 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; pos
     </div>
   </div>
 
-  <!-- ===== STEP 2: Configure Params ===== -->
+  <!-- ===== STEP 2 ===== -->
   <div id="step2" class="step-content" style="display:none">
     <div class="card card-accent">
       <div class="card-title">⚙️ 参数配置</div>
-      <div class="card-subtitle" id="modelConfigTitle">根据你选择的模式和因素，调整具体的参数数值</div>
+      <div class="card-subtitle" id="modelConfigTitle">根据模式和因素调整参数</div>
     </div>
 
     <div class="card" id="configCompany">
       <div class="card-title" style="font-size:16px;">🏢 企业基本参数</div>
-      <div class="card-subtitle">设定基准值，用于后续模拟测算</div>
+      <div class="card-subtitle">设定基准值，测算时自动按周期换算</div>
       <div class="scenario-row">
-        <div class="scenario-field"><label>行业类型</label><select id="cfgIndustry"><option value="制造业">制造业</option><option value="科技/软件">科技/软件</option><option value="贸易/分销">贸易/分销</option><option value="服务/咨询">服务/咨询</option><option value="工程/项目">工程/项目</option><option value="其他">其他</option></select></div>
-        <div class="scenario-field"><label>销售团队规模</label><select id="cfgTeamSize"><option value="1-5人">1-5人</option><option value="6-15人">6-15人</option><option value="16-50人">16-50人</option><option value="50人以上">50人以上</option></select></div>
+        <div class="scenario-field"><label>行业类型</label><select id="cfgIndustry"><option>制造业</option><option>科技/软件</option><option>贸易/分销</option><option>服务/咨询</option><option>工程/项目</option><option>其他</option></select></div>
+        <div class="scenario-field"><label>团队规模</label><select id="cfgTeamSize"><option>1-5人</option><option>6-15人</option><option>16-50人</option><option>50人以上</option></select></div>
       </div>
       <div class="scenario-row">
         <div class="scenario-field"><label>年度业绩目标（万元）</label><input type="number" id="cfgTarget" value="500" min="10"></div>
         <div class="scenario-field"><label>目标毛利率（%）</label><input type="number" id="cfgGrossMargin" value="30" min="0" max="100"></div>
       </div>
+      <div class="scenario-row">
+        <div class="scenario-field"><label>目标回款率（%）</label><input type="number" id="cfgCollectionRate" value="90" min="0" max="100"></div>
+        <div class="scenario-field"><label>目标客户满意度（分）</label><input type="number" id="cfgSatisfaction" value="85" min="0" max="100"></div>
+      </div>
     </div>
 
+    <!-- 设障 -->
     <div class="card" id="configHurdle" style="display:none">
-      <div class="card-title" style="font-size:16px;">🚪 设障模式 — 门槛与提成率配置</div>
-      <div class="card-subtitle">门槛以「业绩目标达成率」为单位，提成率为该档对应的提成比例</div>
+      <div class="card-title" style="font-size:16px;">🚪 设障模式 — 门槛配置</div>
+      <div class="card-subtitle">以「销售额达成率」为主门槛，其他直接因素作为辅助验证</div>
       <div id="hurdleTiers"></div>
       <button class="btn btn-outline" onclick="addHurdleTier()" style="margin-top:12px;">+ 添加门槛</button>
       <div class="info-banner" style="margin-top:16px;">
         <span class="icon">💡</span>
-        <span><b>设计原则：</b>保底线不要太低（否则失去激励意义），挑战线不要太高（否则无人触碰）。建议保底线≥70%，卓越线≤200%。</span>
+        <span><b>设计原则：</b>保底线≥70%（否则失去激励），卓越线≤200%（否则无人触碰）。每档提成率建议递增1-2个百分点。</span>
       </div>
     </div>
 
+    <!-- 乘数 -->
     <div class="card" id="configMultiplier" style="display:none">
-      <div class="card-title" style="font-size:16px;">✖️ 乘数模式 — 基准率与调节系数</div>
-      <div class="card-subtitle">设定基础提成率，以及各个调节系数的浮动范围</div>
-      <div class="param-row">
-        <div class="param-label">
-          <div>基础提成率</div>
-          <div class="param-desc">销售额 × 基准提成率 = 基础提成金额</div>
-        </div>
-        <div class="param-right"><input type="number" id="mulBaseRate" class="param-input" value="3" min="0.1" step="0.1"><span class="param-unit">%</span></div>
+      <div class="card-title" style="font-size:16px;">✖️ 乘数模式 — 各因素提成率配置</div>
+      <div class="card-subtitle">每个直接提成因素独立配置提成率，权重高的因素默认提成率更高</div>
+      <div id="directRates"></div>
+      <div style="margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
+        <div class="card-title" style="font-size:15px;">调节系数 — 浮动范围配置</div>
+        <div class="card-subtitle">权重决定系数对最终提成的影响幅度。权重30% → 浮动±15%</div>
+        <div id="coeffRanges"></div>
       </div>
-      <div id="multiplierCoefficients"></div>
     </div>
 
+    <!-- 矩阵 -->
     <div class="card" id="configMatrix" style="display:none">
       <div class="card-title" style="font-size:16px;">📊 矩阵模式 — 二维交叉配置</div>
-      <div class="card-subtitle">X轴和Y轴各选一个核心指标，交叉点填写提成率</div>
+      <div class="card-subtitle">X轴Y轴自动取权重最高的两个直接提成因素</div>
       <div class="scenario-row">
-        <div class="scenario-field"><label>X轴（横向）指标</label><select id="matrixX" onchange="rebuildMatrix()"><option value="revenue">销售额达成率</option><option value="profit">利润率达成率</option><option value="collection">回款率</option></select></div>
-        <div class="scenario-field"><label>Y轴（纵向）指标</label><select id="matrixY" onchange="rebuildMatrix()"><option value="profit">利润率达成率</option><option value="revenue">销售额达成率</option><option value="newCustomer">新客开发达成率</option></select></div>
+        <div class="scenario-field"><label>X轴指标（自动）</label><input type="text" id="matrixXAuto" readonly style="background:#f8fafc;"></div>
+        <div class="scenario-field"><label>Y轴指标（自动）</label><input type="text" id="matrixYAuto" readonly style="background:#f8fafc;"></div>
       </div>
       <div style="overflow-x:auto;" id="matrixContainer"></div>
     </div>
 
+    <!-- 混合 -->
     <div class="card" id="configHybrid" style="display:none">
       <div class="card-title" style="font-size:16px;">🧩 混合模式 — 组合配置</div>
-      <div class="card-subtitle">设障打底 + 乘数调节，适合管理成熟度高的企业</div>
+      <div class="card-subtitle">设障门槛保底 + 各因素提成加总 + 调节系数修正</div>
       <div class="param-row">
-        <div class="param-label"><div>基础提成率（销售额×此率=起步提成）</div></div>
+        <div class="param-label"><div>设障基础提成率（过门槛后的起步）</div></div>
         <div class="param-right"><input type="number" id="hybBaseRate" class="param-input" value="2" min="0.1" step="0.1"><span class="param-unit">%</span></div>
       </div>
-      <div class="info-banner" style="margin-top:12px;">
-        <span class="icon">🔧</span>
-        <span>混合模式 = 设障门槛保证底线 + 乘数系数调节多维行为。门槛和系数配置同上，此处仅需设定基础提成率。</span>
+      <div id="hybridDirectRates"></div>
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+        <div style="font-size:14px; font-weight:600; margin-bottom:8px;">调节系数</div>
+        <div id="hybridCoeffRanges"></div>
       </div>
     </div>
 
@@ -592,20 +381,21 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; pos
     </div>
   </div>
 
-  <!-- ===== STEP 3: Simulation ===== -->
+  <!-- ===== STEP 3 ===== -->
   <div id="step3" class="step-content" style="display:none">
     <div class="card card-accent">
       <div class="card-title">🧮 模拟测算</div>
-      <div class="card-subtitle">用一组典型销售数据，跑一遍你的提成方案，看看实际结果</div>
+      <div class="card-subtitle">输入实际数据，自动按周期换算目标，跑一遍你的方案</div>
     </div>
 
     <div class="card">
       <div class="card-title" style="font-size:16px;">📝 销售场景输入</div>
-      <div class="card-subtitle">输入一个典型销售人员的月度/季度数据来模拟</div>
+      <div class="card-subtitle">输入数据后自动与对应周期的目标对比</div>
       <div class="scenario-row">
-        <div class="scenario-field"><label>销售姓名</label><input type="text" id="simName" value="张三" placeholder="销售姓名"></div>
-        <div class="scenario-field"><label>测算周期</label><select id="simPeriod"><option value="monthly">月度</option><option value="quarterly" selected>季度</option><option value="yearly">年度</option></select></div>
+        <div class="scenario-field"><label>销售姓名</label><input type="text" id="simName" value="张三"></div>
+        <div class="scenario-field"><label>测算周期</label><select id="simPeriod" onchange="prepareSimStep()"><option value="monthly">月度</option><option value="quarterly" selected>季度</option><option value="yearly">年度</option></select></div>
       </div>
+      <div id="simTargetDisplay" style="font-size:13px; color:var(--text-mid); margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:6px;"></div>
       <div id="simInputs"></div>
       <button class="btn btn-primary" onclick="runSimulation()" style="margin-top:16px;">▶ 开始测算</button>
     </div>
@@ -620,17 +410,15 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; pos
     </div>
   </div>
 
-  <!-- ===== STEP 4: Final Summary ===== -->
+  <!-- ===== STEP 4 ===== -->
   <div id="step4" class="step-content" style="display:none">
     <div class="card card-accent">
       <div class="card-title">📋 方案总结</div>
-      <div class="card-subtitle">完整的提成设计方案，可直接打印或分享给团队</div>
+      <div class="card-subtitle">完整的提成设计方案，可直接打印或分享</div>
     </div>
 
     <div class="card" id="finalSummary">
-      <div style="text-align:center; padding:40px; color:var(--text-mid);">
-        请先完成前面的步骤，然后回到这里查看完整方案
-      </div>
+      <div style="text-align:center; padding:40px; color:var(--text-mid);">请先完成前面的步骤</div>
     </div>
 
     <div class="btn-group">
@@ -640,7 +428,6 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; pos
     </div>
   </div>
 
-  <!-- Toaster -->
   <div class="toaster" id="toaster"></div>
 </div>
 
@@ -648,25 +435,23 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; pos
 // ==================== DATA ====================
 const FACTORS = {
   tian: [
-    { id: 'revenue', name: '销售额达成率', desc: '实际销售 vs 目标，最直接的业绩衡量', weight: 40 },
-    { id: 'profit', name: '毛利润/利润率', desc: '卖得多不如赚得多，防止销售乱打折', weight: 30 },
-    { id: 'strategicProduct', name: '战略产品销售占比', desc: '公司想推的新品/高毛利品卖了多少', weight: 15 },
-    { id: 'newMarket', name: '新市场/新客户开拓', desc: '是否打开了新的增长空间', weight: 10 },
-    { id: 'keyAccount', name: '大客户开发数量', desc: 'KA客户的数量和质量', weight: 5 },
+    { id: 'revenue', name: '销售额', desc: '最直接的业绩衡量，提成主挂钩', weight: 60, type: 'direct', unit: '万元', rateDefault: 2.0 },
+    { id: 'profit', name: '毛利润', desc: '防止乱打折，卖得多不如赚得多', weight: 25, type: 'direct', unit: '万元', rateDefault: 3.0 },
+    { id: 'strategicProduct', name: '战略产品/新客户', desc: '引导卖公司想推的产品/开发新客户', weight: 15, type: 'direct', unit: '万元', rateDefault: 4.0 },
   ],
   di: [
-    { id: 'collection', name: '回款及时率', desc: '签了单不算完，钱到账才算闭环', weight: 35 },
-    { id: 'conversion', name: '商机转化率', desc: '从线索到签约的漏斗效率', weight: 25 },
-    { id: 'satisfaction', name: '客户满意度评分', desc: '售后回访、NPS得分，口碑是长期资产', weight: 20 },
-    { id: 'activity', name: '销售活动完成率', desc: '拜访量/演示量/报价量是否达标', weight: 15 },
-    { id: 'proposalOTD', name: '方案按时提交率', desc: '报价/方案是否按时交付给客户', weight: 5 },
+    { id: 'collection', name: '回款额', desc: '签了单不算完，钱到账才给提成', weight: 50, type: 'direct', unit: '万元', rateDefault: 1.5 },
+    { id: 'collectionRate', name: '回款率', desc: '作为调节系数，影响最终提成', weight: 30, type: 'coeff', unit: '%' },
+    { id: 'satisfaction', name: '客户满意度', desc: '作为调节系数，影响最终提成', weight: 20, type: 'coeff', unit: '分' },
+    { id: 'conversion', name: '商机转化率', desc: '过程效率，建议归入绩效考核', weight: 0, type: 'kpi', unit: '%' },
+    { id: 'activity', name: '活动完成率', desc: '过程量，建议归入绩效考核', weight: 0, type: 'kpi', unit: '%' },
   ],
   ren: [
-    { id: 'perCapita', name: '人均产出（人效）', desc: '团队整体战斗力衡量', weight: 25 },
-    { id: 'mentoring', name: '新人带教/培养', desc: '老销售带新人的成果', weight: 20 },
-    { id: 'retention', name: '客户留存率', desc: '老客户是否持续复购', weight: 25 },
-    { id: 'knowledge', name: '知识分享/培训参与', desc: '经验是否在团队内流动', weight: 15 },
-    { id: 'compliance', name: '价值观/合规执行', desc: '不做短期有利长期有害的事', weight: 15 },
+    { id: 'retention', name: '老客户复购额', desc: '存量客户的持续产出', weight: 40, type: 'direct', unit: '万元', rateDefault: 2.5 },
+    { id: 'newMarket', name: '新市场/新渠道', desc: '打开新增长空间', weight: 30, type: 'direct', unit: '万元', rateDefault: 3.5 },
+    { id: 'mentoring', name: '带教新人', desc: '组织能力，建议归入绩效考核', weight: 0, type: 'kpi', unit: '人' },
+    { id: 'knowledge', name: '知识分享/培训', desc: '团队建设，建议归入绩效考核', weight: 0, type: 'kpi', unit: '次' },
+    { id: 'compliance', name: '价值观/合规', desc: '纪律要求，建议归入绩效考核', weight: 0, type: 'kpi', unit: '分' },
   ],
 };
 
@@ -675,44 +460,37 @@ const state = {
   currentStep: 0,
   selectedFactors: { tian: [], di: [], ren: [] },
   selectedModel: null,
+  directRates: {},      // { id: rate% }
+  coeffRanges: {},      // { id: { min, max } }
   hurdleTiers: [
     { name: '保底线', achievement: 70, rate: 0 },
     { name: '达标线', achievement: 100, rate: 3 },
     { name: '挑战线', achievement: 120, rate: 5 },
     { name: '卓越线', achievement: 150, rate: 8 },
   ],
-  multiplierCoeffs: {},
   matrixData: null,
   simulationResult: null,
 };
 
 // ==================== INIT ====================
 function init() {
-  renderFactors('tian');
-  renderFactors('di');
-  renderFactors('ren');
-  renderHurdleTiers();
-  loadFromStorage();
-  updateWeightBar();
+  renderFactors('tian'); renderFactors('di'); renderFactors('ren');
+  renderHurdleTiers(); loadFromStorage(); updateWeightBar();
 }
 
 function renderFactors(category) {
   const container = document.getElementById('factors-' + category);
   container.innerHTML = FACTORS[category].map(f => {
     const sel = state.selectedFactors[category].includes(f.id);
-    return `<div class="factor-item ${sel ? 'selected ' + category : ''} ${category}" onclick="toggleFactor('${category}','${f.id}')">
+    const tagClass = f.type;
+    const tagText = f.type === 'direct' ? '直接提成' : f.type === 'coeff' ? '调节系数' : '绩效建议';
+    return `<div class="factor-item ${sel ? 'selected ' + tagClass : ''} ${tagClass}" onclick="toggleFactor('${category}','${f.id}')">
       <div class="factor-check"></div>
       <div class="factor-info">
-        <div class="factor-name">${f.name}</div>
+        <div class="factor-name">${f.name} <span class="factor-tag ${tagClass}">${tagText}</span></div>
         <div class="factor-desc">${f.desc}</div>
       </div>
-      <div class="factor-weight">
-        <input type="number" value="${f.weight}" min="0" max="100" 
-          onclick="event.stopPropagation()" 
-          onchange="updateFactorWeight('${category}','${f.id}',this.value)" 
-          style="width:48px;">
-        <span>%</span>
-      </div>
+      ${f.type !== 'kpi' ? `<div class="factor-weight"><input type="number" value="${f.weight}" min="0" max="100" onclick="event.stopPropagation()" onchange="updateFactorWeight('${category}','${f.id}',this.value)"><span>%</span></div>` : ''}
     </div>`;
   }).join('');
 }
@@ -720,61 +498,44 @@ function renderFactors(category) {
 function toggleFactor(category, id) {
   const arr = state.selectedFactors[category];
   const idx = arr.indexOf(id);
-  if (idx >= 0) arr.splice(idx, 1);
-  else arr.push(id);
-  renderFactors(category);
-  updateWeightBar();
-  saveToStorage();
+  if (idx >= 0) arr.splice(idx, 1); else arr.push(id);
+  renderFactors(category); updateWeightBar(); saveToStorage();
 }
 
 function updateFactorWeight(category, id, val) {
   const f = FACTORS[category].find(x => x.id === id);
-  if (f) f.weight = Math.max(0, Math.min(100, parseInt(val) || 0));
-  updateWeightBar();
-  saveToStorage();
-}
-
-function updateWeightBar() {
-  const all = getAllSelectedFactors();
-  const totalWeight = all.reduce((s, f) => s + f.weight, 0);
-
-  let tianW = 0, diW = 0, renW = 0;
-  state.selectedFactors.tian.forEach(id => {
-    const f = FACTORS.tian.find(x => x.id === id);
-    if (f) tianW += f.weight;
-  });
-  state.selectedFactors.di.forEach(id => {
-    const f = FACTORS.di.find(x => x.id === id);
-    if (f) diW += f.weight;
-  });
-  state.selectedFactors.ren.forEach(id => {
-    const f = FACTORS.ren.find(x => x.id === id);
-    if (f) renW += f.weight;
-  });
-
-  const total = tianW + diW + renW || 1;
-  document.getElementById('weightBarTian').style.width = (tianW / total * 100) + '%';
-  document.getElementById('weightBarDi').style.width = (diW / total * 100) + '%';
-  document.getElementById('weightBarRen').style.width = (renW / total * 100) + '%';
-  document.getElementById('weightTotal').textContent = 
-    `天${Math.round(tianW/total*100)}% · 地${Math.round(diW/total*100)}% · 人${Math.round(renW/total*100)}%`;
+  if (f) { f.weight = Math.max(0, Math.min(100, parseInt(val) || 0)); }
+  updateWeightBar(); saveToStorage();
 }
 
 function getAllSelectedFactors() {
   const all = [];
-  state.selectedFactors.tian.forEach(id => {
-    const f = FACTORS.tian.find(x => x.id === id);
-    if (f) all.push({ ...f, category: 'tian' });
-  });
-  state.selectedFactors.di.forEach(id => {
-    const f = FACTORS.di.find(x => x.id === id);
-    if (f) all.push({ ...f, category: 'di' });
-  });
-  state.selectedFactors.ren.forEach(id => {
-    const f = FACTORS.ren.find(x => x.id === id);
-    if (f) all.push({ ...f, category: 'ren' });
-  });
+  for (const cat of ['tian','di','ren']) {
+    state.selectedFactors[cat].forEach(id => {
+      const f = FACTORS[cat].find(x => x.id === id);
+      if (f) all.push({ ...f, category: cat });
+    });
+  }
   return all;
+}
+
+function getSelectedDirectFactors() { return getAllSelectedFactors().filter(f => f.type === 'direct'); }
+function getSelectedCoeffFactors() { return getAllSelectedFactors().filter(f => f.type === 'coeff'); }
+
+function updateWeightBar() {
+  const direct = getSelectedDirectFactors();
+  const coeff = getSelectedCoeffFactors();
+  let tianW=0, diW=0, renW=0;
+  [...direct, ...coeff].forEach(f => {
+    if (f.category === 'tian') tianW += f.weight;
+    else if (f.category === 'di') diW += f.weight;
+    else renW += f.weight;
+  });
+  const total = tianW + diW + renW || 1;
+  document.getElementById('weightBarTian').style.width = (tianW/total*100) + '%';
+  document.getElementById('weightBarDi').style.width = (diW/total*100) + '%';
+  document.getElementById('weightBarRen').style.width = (renW/total*100) + '%';
+  document.getElementById('weightTotal').textContent = `天${Math.round(tianW/total*100)}% · 地${Math.round(diW/total*100)}% · 人${Math.round(renW/total*100)}%`;
 }
 
 // ==================== MODEL SELECTION ====================
@@ -784,243 +545,216 @@ function selectModel(model) {
   const card = document.querySelector(`.model-card[data-model="${model}"]`);
   if (card) card.classList.add('selected');
   document.getElementById('btnModelNext').disabled = false;
-
-  // Show/hide config sections
-  document.getElementById('configHurdle').style.display = (model === 'hurdle' || model === 'hybrid') ? '' : 'none';
-  document.getElementById('configMultiplier').style.display = (model === 'multiplier' || model === 'hybrid') ? '' : 'none';
-  document.getElementById('configMatrix').style.display = (model === 'matrix') ? '' : 'none';
-  document.getElementById('configHybrid').style.display = (model === 'hybrid') ? '' : 'none';
-
-  if (model === 'matrix') rebuildMatrix();
   saveToStorage();
 }
 
-// ==================== HURDLE TIERS ====================
+// ==================== HURDLE ====================
 function renderHurdleTiers() {
-  const container = document.getElementById('hurdleTiers');
-  container.innerHTML = state.hurdleTiers.map((t, i) => `
+  document.getElementById('hurdleTiers').innerHTML = state.hurdleTiers.map((t, i) => `
     <div class="tier-row">
-      <div>
-        <div class="tier-name">${t.name}</div>
-        <div class="tier-desc">业绩目标达成率 ≥ ${t.achievement}%</div>
-      </div>
-      <div>
-        <input type="range" class="param-slider" value="${t.achievement}" min="0" max="300"
-          oninput="updateHurdleTier(${i},'achievement',this.value)">
-      </div>
-      <div class="tier-rate">
-        <input type="number" class="param-input" value="${t.rate}" min="0" step="0.1"
-          onchange="updateHurdleTier(${i},'rate',this.value)" style="width:70px;">
-        <span class="param-unit">%</span>
-      </div>
+      <div><div class="tier-name">${t.name}</div><div class="tier-desc">达成率≥${t.achievement}%</div></div>
+      <div><input type="range" class="param-slider" value="${t.achievement}" min="0" max="300" oninput="updateHurdleTier(${i},'achievement',this.value)"></div>
+      <div class="tier-input"><input type="number" class="param-input" value="${t.rate}" min="0" step="0.1" onchange="updateHurdleTier(${i},'rate',this.value)"><span class="param-unit">%</span></div>
     </div>
   `).join('');
 }
 
 function addHurdleTier() {
   const last = state.hurdleTiers[state.hurdleTiers.length - 1];
-  state.hurdleTiers.push({
-    name: '自定义档',
-    achievement: (last ? last.achievement + 30 : 100),
-    rate: (last ? last.rate + 2 : 5),
-  });
-  renderHurdleTiers();
-  saveToStorage();
+  state.hurdleTiers.push({ name: '自定义档', achievement: (last ? last.achievement + 30 : 100), rate: (last ? last.rate + 2 : 5) });
+  renderHurdleTiers(); saveToStorage();
 }
 
 function updateHurdleTier(i, field, value) {
-  const v = field === 'achievement' ? parseInt(value) : parseFloat(value);
-  if (isNaN(v)) return;
-  state.hurdleTiers[i][field] = v;
+  state.hurdleTiers[i][field] = field === 'achievement' ? parseInt(value) : parseFloat(value);
   if (field === 'achievement') renderHurdleTiers();
   saveToStorage();
 }
 
-// ==================== MATRIX ====================
-function rebuildMatrix() {
-  const xMetric = document.getElementById('matrixX')?.value || 'revenue';
-  const yMetric = document.getElementById('matrixY')?.value || 'profit';
-  const xLabel = metricLabel(xMetric);
-  const yLabel = metricLabel(yMetric);
-  const xBrackets = ['<80%', '80-99%', '100-119%', '120-149%', '≥150%'];
-  const yBrackets = ['<80%', '80-99%', '100-119%', '≥120%'];
-
-  if (!state.matrixData) {
-    state.matrixData = { xMetric, yMetric, data: {} };
-  }
-
-  let html = `<table class="matrix-table">
-    <thead><tr><th>${yLabel} ↓ / ${xLabel} →</th>`;
-  xBrackets.forEach(x => html += `<th class="col-header">${x}</th>`);
-  html += '</tr></thead><tbody>';
-
-  yBrackets.forEach(y => {
-    html += `<tr><td class="row-header">${y}</td>`;
-    xBrackets.forEach(x => {
-      const key = `${y}|${x}`;
-      const val = (state.matrixData.data[key] !== undefined) ? state.matrixData.data[key] : getDefaultMatrixVal(y, x);
-      html += `<td><input type="number" value="${val}" min="0" step="0.1" 
-        onchange="updateMatrixCell('${key}',this.value)">%</td>`;
-    });
-    html += '</tr>';
-  });
-
-  html += '</tbody></table>';
-  html += '<div style="font-size:11px;color:var(--text-mid);margin-top:8px;">数字为提成率（%），可手动修改每个交叉单元格</div>';
-  document.getElementById('matrixContainer').innerHTML = html;
-}
-
-function getDefaultMatrixVal(y, x) {
-  const yIdx = ['<80%','80-99%','100-119%','≥120%'].indexOf(y);
-  const xIdx = ['<80%','80-99%','100-119%','120-149%','≥150%'].indexOf(x);
-  const defaults = [
-    [0.5, 1.0, 1.5, 2.0, 2.5],
-    [1.0, 1.5, 2.5, 3.0, 3.5],
-    [1.5, 2.5, 3.5, 4.5, 5.5],
-    [2.0, 3.0, 4.5, 6.0, 7.0],
-  ];
-  return defaults[Math.min(yIdx, 3)]?.[Math.min(xIdx, 4)] || 1;
-}
-
-function updateMatrixCell(key, value) {
-  if (!state.matrixData) state.matrixData = { xMetric: 'revenue', yMetric: 'profit', data: {} };
-  state.matrixData.data[key] = parseFloat(value) || 0;
-  saveToStorage();
-}
-
-function metricLabel(m) {
-  const map = { revenue: '销售额达成率', profit: '利润率达成率', collection: '回款率', newCustomer: '新客开发达成率' };
-  return map[m] || m;
-}
-
 // ==================== NAVIGATION ====================
 function goToStep(step) {
-  // Validate before moving forward
-  if (step === 1 && getAllSelectedFactors().length === 0) {
-    toast('请至少选择一个关联因素');
-    return;
-  }
-  if (step === 2 && !state.selectedModel) {
-    toast('请先选择一种提成模式');
-    return;
-  }
+  if (step === 1 && getAllSelectedFactors().length === 0) { toast('请至少选择一个关联因素'); return; }
+  if (step === 2 && !state.selectedModel) { toast('请先选择一种提成模式'); return; }
 
   state.currentStep = step;
-  document.querySelectorAll('.step-content').forEach((el, i) => {
-    el.style.display = (i === step) ? '' : 'none';
-  });
-
-  // Update step indicators
+  document.querySelectorAll('.step-content').forEach((el, i) => el.style.display = (i === step) ? '' : 'none');
   document.querySelectorAll('.step-dot').forEach((dot, i) => {
     dot.classList.remove('active', 'done');
     if (i < step) dot.classList.add('done');
     if (i === step) dot.classList.add('active');
   });
 
-  // Prepare content for this step
   if (step === 2) prepareConfigStep();
   if (step === 3) prepareSimStep();
   if (step === 4) prepareSummaryStep();
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
   saveToStorage();
 }
 
 function prepareConfigStep() {
-  const modelNames = { hurdle: '设障模式', multiplier: '乘数模式', matrix: '矩阵模式', hybrid: '混合模式' };
-  document.getElementById('modelConfigTitle').textContent = 
-    `当前模式：${modelNames[state.selectedModel] || '未选择'} — 调整参数数值`;
+  const names = { hurdle: '设障模式', multiplier: '乘数模式', matrix: '矩阵模式', hybrid: '混合模式' };
+  document.getElementById('modelConfigTitle').textContent = `当前模式：${names[state.selectedModel]} — 调整参数`;
 
-  // Show relevant config cards
-  document.getElementById('configHurdle').style.display = 
-    (state.selectedModel === 'hurdle' || state.selectedModel === 'hybrid') ? '' : 'none';
-  document.getElementById('configMultiplier').style.display = 
-    (state.selectedModel === 'multiplier' || state.selectedModel === 'hybrid') ? '' : 'none';
-  document.getElementById('configMatrix').style.display = 
-    (state.selectedModel === 'matrix') ? '' : 'none';
-  document.getElementById('configHybrid').style.display = 
-    (state.selectedModel === 'hybrid') ? '' : 'none';
+  document.getElementById('configHurdle').style.display = state.selectedModel === 'hurdle' ? '' : 'none';
+  document.getElementById('configMultiplier').style.display = state.selectedModel === 'multiplier' ? '' : 'none';
+  document.getElementById('configMatrix').style.display = state.selectedModel === 'matrix' ? '' : 'none';
+  document.getElementById('configHybrid').style.display = state.selectedModel === 'hybrid' ? '' : 'none';
 
-  // Build multiplier coefficients from selected factors
+  const direct = getSelectedDirectFactors();
+  const coeff = getSelectedCoeffFactors();
+
   if (state.selectedModel === 'multiplier' || state.selectedModel === 'hybrid') {
-    buildMultiplierCoefficients();
+    buildDirectRates(direct);
+    buildCoeffRanges(coeff);
+  }
+  if (state.selectedModel === 'matrix') {
+    const sorted = [...direct].sort((a, b) => b.weight - a.weight);
+    const x = sorted[0], y = sorted[1] || sorted[0];
+    document.getElementById('matrixXAuto').value = x ? x.name : '销售额';
+    document.getElementById('matrixYAuto').value = y ? y.name : '毛利润';
+    rebuildMatrix();
   }
 }
 
-function buildMultiplierCoefficients() {
-  const all = getAllSelectedFactors();
-  const container = document.getElementById('multiplierCoefficients');
+function buildDirectRates(direct) {
+  const container = document.getElementById(state.selectedModel === 'hybrid' ? 'hybridDirectRates' : 'directRates');
   if (!container) return;
+  if (direct.length === 0) { container.innerHTML = '<div style="color:var(--text-mid);">请先在第一步选择「直接提成」类因素</div>'; return; }
 
-  // Exclude revenue (it's the base)
-  const coeffFactors = all.filter(f => f.id !== 'revenue');
-  if (coeffFactors.length === 0) {
-    container.innerHTML = '<div style="color:var(--text-mid);padding:12px;">请先在第一步选择更多关联因素</div>';
-    return;
-  }
-
-  // Init coeff state
-  coeffFactors.forEach(f => {
-    if (!(f.id in state.multiplierCoeffs)) {
-      state.multiplierCoeffs[f.id] = { 
-        name: f.name, category: f.category,
-        min: 0.8, max: 1.5, target: 1.0, weight: f.weight 
-      };
-    }
+  direct.forEach(f => {
+    if (!(f.id in state.directRates)) state.directRates[f.id] = f.rateDefault || 2.0;
   });
 
-  container.innerHTML = coeffFactors.map(f => {
-    const c = state.multiplierCoeffs[f.id];
+  container.innerHTML = direct.map(f => {
+    const rate = state.directRates[f.id] ?? f.rateDefault;
     return `<div class="param-row">
       <div class="param-label">
-        <div><span class="model-tag" style="background:${f.category==='tian'?'#eff6ff':f.category==='di'?'#ecfdf5':'#fffbeb'};color:${f.category==='tian'?'#2563eb':f.category==='di'?'#059669':'#d97706'};">${f.category==='tian'?'天':f.category==='di'?'地':'人'}</span> ${f.name} 系数</div>
-        <div class="param-desc">浮动范围：${c.min} ~ ${c.max}（达标=${c.target}）· 权重${c.weight}%</div>
+        <div>${f.name} 提成率</div>
+        <div class="param-desc">权重${f.weight}% · 单位：${f.unit}</div>
       </div>
       <div class="param-right">
-        <span style="font-size:12px;color:var(--text-mid);">${c.min}</span>
-        <input type="range" class="param-slider" value="${c.max*100}" min="100" max="300" style="width:60px;"
-          oninput="updateMultiplierCoeff('${f.id}','max',this.value/100)">
-        <span style="font-size:12px;color:var(--text-mid);">${c.max}</span>
+        <input type="number" class="param-input" value="${rate}" min="0" step="0.1" onchange="updateDirectRate('${f.id}',this.value)">
+        <span class="param-unit">%</span>
       </div>
     </div>`;
   }).join('');
 }
 
-function updateMultiplierCoeff(id, field, value) {
-  if (state.multiplierCoeffs[id]) {
-    state.multiplierCoeffs[id][field] = Math.round(value * 100) / 100;
-    saveToStorage();
-  }
+function updateDirectRate(id, val) { state.directRates[id] = parseFloat(val) || 0; saveToStorage(); }
+
+function buildCoeffRanges(coeff) {
+  const container = document.getElementById(state.selectedModel === 'hybrid' ? 'hybridCoeffRanges' : 'coeffRanges');
+  if (!container) return;
+  if (coeff.length === 0) { container.innerHTML = '<div style="color:var(--text-mid);">未选择调节系数类因素</div>'; return; }
+
+  coeff.forEach(f => {
+    if (!(f.id in state.coeffRanges)) {
+      const range = Math.round(f.weight / 100 * 0.5 * 100) / 100;
+      state.coeffRanges[f.id] = { min: Math.max(0.5, 1 - range).toFixed(2), max: (1 + range).toFixed(2) };
+    }
+  });
+
+  container.innerHTML = coeff.map(f => {
+    const r = state.coeffRanges[f.id];
+    const rangeVal = Math.round((r.max - 1) * 100);
+    return `<div class="param-row">
+      <div class="param-label">
+        <div>${f.name} 系数浮动</div>
+        <div class="param-desc">权重${f.weight}% → 浮动±${rangeVal}% · 范围 ${r.min} ~ ${r.max}</div>
+      </div>
+      <div class="param-right">
+        <input type="range" class="param-slider" value="${rangeVal}" min="0" max="50" style="width:80px;"
+          oninput="updateCoeffRange('${f.id}',this.value)">
+        <span style="font-size:12px; color:var(--text-mid); min-width:50px; text-align:right;">${r.min}~${r.max}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateCoeffRange(id, val) {
+  const v = parseInt(val) / 100;
+  state.coeffRanges[id] = { min: (1 - v).toFixed(2), max: (1 + v).toFixed(2) };
+  buildCoeffRanges(getSelectedCoeffFactors());
+  saveToStorage();
+}
+
+// ==================== MATRIX ====================
+function rebuildMatrix() {
+  const direct = getSelectedDirectFactors();
+  const sorted = [...direct].sort((a, b) => b.weight - a.weight);
+  const xLabel = sorted[0]?.name || '销售额';
+  const yLabel = sorted[1]?.name || '毛利润';
+  const xBrackets = ['<80%', '80-99%', '100-119%', '120-149%', '≥150%'];
+  const yBrackets = ['<80%', '80-99%', '100-119%', '≥120%'];
+
+  if (!state.matrixData) state.matrixData = { data: {} };
+
+  let html = `<table class="matrix-table"><thead><tr><th>${yLabel} ↓ / ${xLabel} →</th>`;
+  xBrackets.forEach(x => html += `<th>${x}</th>`);
+  html += '</tr></thead><tbody>';
+  yBrackets.forEach(y => {
+    html += `<tr><td class="row-header">${y}</td>`;
+    xBrackets.forEach(x => {
+      const key = `${y}|${x}`;
+      const val = state.matrixData.data[key] ?? getDefaultMatrixVal(y, x);
+      html += `<td><input type="number" value="${val}" min="0" step="0.1" onchange="updateMatrixCell('${key}',this.value)">%</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('matrixContainer').innerHTML = html;
+}
+
+function getDefaultMatrixVal(y, x) {
+  const yi = ['<80%','80-99%','100-119%','≥120%'].indexOf(y);
+  const xi = ['<80%','80-99%','100-119%','120-149%','≥150%'].indexOf(x);
+  const defs = [[0.5,1,1.5,2,2.5],[1,1.5,2.5,3,3.5],[1.5,2.5,3.5,4.5,5.5],[2,3,4.5,6,7]];
+  return defs[Math.min(yi,3)]?.[Math.min(xi,4)] || 1;
+}
+
+function updateMatrixCell(key, val) {
+  if (!state.matrixData) state.matrixData = { data: {} };
+  state.matrixData.data[key] = parseFloat(val) || 0; saveToStorage();
+}
+
+// ==================== SIMULATION ====================
+function getPeriodTarget() {
+  const annual = parseFloat(document.getElementById('cfgTarget')?.value || 500);
+  const period = document.getElementById('simPeriod')?.value || 'quarterly';
+  if (period === 'monthly') return annual / 12;
+  if (period === 'quarterly') return annual / 4;
+  return annual;
 }
 
 function prepareSimStep() {
   const all = getAllSelectedFactors();
   const container = document.getElementById('simInputs');
-  const metricLabels = {
-    revenue: '销售额（万元）', profit: '毛利率（%）', strategicProduct: '战略产品占比（%）',
-    newMarket: '新客开发数', keyAccount: '大客户签约数',
-    collection: '回款率（%）', conversion: '商机转化率（%）', satisfaction: '客户满意度（分）',
-    activity: '活动完成率（%）', proposalOTD: '方案按时提交率（%）',
-    perCapita: '人均产出（万元）', mentoring: '带教新人数量', retention: '客户留存率（%）',
-    knowledge: '培训参与次数', compliance: '合规评分（分）',
+  const periodTarget = getPeriodTarget();
+  const periodName = document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度';
+
+  document.getElementById('simTargetDisplay').innerHTML =
+    `<b>${periodName}目标：</b>¥${periodTarget.toFixed(1)}万（年度目标 ¥${document.getElementById('cfgTarget')?.value || 500}万 ÷ ${periodName === '月度' ? '12' : periodName === '季度' ? '4' : '1'}）`;
+
+  const labels = {
+    revenue: '销售额（万元）', profit: '毛利润（万元）', strategicProduct: '战略产品/新客户（万元）',
+    collection: '回款额（万元）', collectionRate: '回款率（%）', satisfaction: '客户满意度（分）',
+    conversion: '商机转化率（%）', activity: '活动完成率（%）',
+    retention: '老客户复购额（万元）', newMarket: '新市场/新渠道（万元）',
+    mentoring: '带教新人（人）', knowledge: '知识分享/培训（次）', compliance: '价值观/合规（分）',
+  };
+  const defs = {
+    revenue: 120, profit: 38, strategicProduct: 20, collection: 100, collectionRate: 85,
+    satisfaction: 88, conversion: 30, activity: 90, retention: 50, newMarket: 15,
+    mentoring: 2, knowledge: 3, compliance: 95,
   };
 
-  if (all.length === 0) {
-    container.innerHTML = '<div style="color:var(--text-mid);">请先选择关联因素</div>';
-    return;
-  }
-
   container.innerHTML = all.map(f => {
-    const defVals = {
-      revenue: 120, profit: 32, strategicProduct: 25, newMarket: 3, keyAccount: 1,
-      collection: 85, conversion: 30, satisfaction: 90, activity: 90, proposalOTD: 95,
-      perCapita: 100, mentoring: 2, retention: 80, knowledge: 4, compliance: 95,
-    };
+    const def = defs[f.id] ?? '';
+    const isKpi = f.type === 'kpi';
     return `<div class="scenario-row">
-      <div class="scenario-field"><label>${metricLabels[f.id] || f.name}</label></div>
+      <div class="scenario-field"><label>${labels[f.id] || f.name}${isKpi ? ' <span style="color:var(--kpi);font-size:11px;">(绩效参考)</span>' : ''}</label></div>
       <div class="scenario-field">
-        <input type="number" id="sim_${f.id}" value="${defVals[f.id] || ''}" 
-          placeholder="输入数值" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;">
+        <input type="number" id="sim_${f.id}" value="${def}" placeholder="${isKpi ? '不参与提成计算' : '输入数值'}">
       </div>
     </div>`;
   }).join('');
@@ -1029,10 +763,7 @@ function prepareSimStep() {
 function runSimulation() {
   const all = getAllSelectedFactors();
   const simData = {};
-  all.forEach(f => {
-    const el = document.getElementById('sim_' + f.id);
-    if (el) simData[f.id] = parseFloat(el.value) || 0;
-  });
+  all.forEach(f => { const el = document.getElementById('sim_' + f.id); if (el) simData[f.id] = parseFloat(el.value) || 0; });
 
   let result;
   switch (state.selectedModel) {
@@ -1040,27 +771,24 @@ function runSimulation() {
     case 'multiplier': result = calcMultiplier(simData); break;
     case 'matrix': result = calcMatrix(simData); break;
     case 'hybrid': result = calcHybrid(simData); break;
-    default: result = { error: '未选择提成模式' };
+    default: result = { commission: 0, breakdown: [], note: '未选择模式' };
   }
 
   state.simulationResult = result;
+  const revenue = simData.revenue || 0;
+  const periodTarget = getPeriodTarget();
+  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
+  const periodName = document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度';
 
   const preview = document.getElementById('pilotPreview');
-  const target = parseFloat(document.getElementById('cfgTarget')?.value || 500);
-  const revenue = simData.revenue || 0;
-  const commission = result.commission || 0;
-  const rate = revenue > 0 ? (commission / revenue * 100).toFixed(2) : '0';
-
   preview.innerHTML = `
-    <h3>📊 模拟测算结果</h3>
-    <div style="font-size:13px;opacity:0.6;margin-bottom:16px;">${document.getElementById('simName')?.value || '销售'} · ${document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度'}测算 · 模式：${modelName()}</div>
-    <div class="preview-row"><span class="preview-label">销售额</span><span class="preview-value">¥${revenue.toLocaleString()} 万</span></div>
-    <div class="preview-row"><span class="preview-label">业绩达成率</span><span class="preview-value">${target > 0 ? Math.round(revenue / target * 100) : 0}%</span></div>
-    <div class="preview-row"><span class="preview-label">提成金额</span><span class="preview-value highlight">¥${commission.toLocaleString('zh-CN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} 万</span></div>
-    <div class="preview-row"><span class="preview-label">综合提成率</span><span class="preview-value">${rate}%</span></div>
-    ${result.breakdown ? `<div class="preview-breakdown"><div style="font-size:13px;opacity:0.6;margin-bottom:8px;">计算明细：</div>${result.breakdown.map(b => 
-      `<div class="row"><span>${b.label}</span><span>${b.value}</span></div>`
-    ).join('')}</div>` : ''}
+    <h3>📊 ${document.getElementById('simName')?.value || '销售'} · ${periodName}测算结果</h3>
+    <div style="font-size:13px;opacity:0.6;margin-bottom:16px;">模式：${modelName()} · ${periodName}目标 ¥${periodTarget.toFixed(1)}万</div>
+    <div class="preview-row"><span class="preview-label">${periodName}销售额</span><span class="preview-value">¥${revenue.toLocaleString()} 万</span></div>
+    <div class="preview-row"><span class="preview-label">业绩达成率</span><span class="preview-value">${achievement.toFixed(1)}%</span></div>
+    <div class="preview-row"><span class="preview-label">提成金额</span><span class="preview-value highlight">¥${result.commission.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 万</span></div>
+    <div class="preview-row"><span class="preview-label">综合提成率</span><span class="preview-value">${revenue > 0 ? (result.commission/revenue*100).toFixed(2) : 0}%</span></div>
+    ${result.breakdown.length ? `<div class="preview-breakdown"><div style="font-size:13px;opacity:0.6;margin-bottom:8px;">计算明细：</div>${result.breakdown.map(b => `<div class="row"><span>${b.label}</span><span>${b.value}</span></div>`).join('')}</div>` : ''}
     ${result.note ? `<div style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.08);border-radius:8px;font-size:13px;opacity:0.8;">💡 ${result.note}</div>` : ''}
   `;
 
@@ -1068,356 +796,311 @@ function runSimulation() {
   saveToStorage();
 }
 
+// ----- HURDLE -----
 function calcHurdle(simData) {
   const revenue = simData.revenue || 0;
-  const target = parseFloat(document.getElementById('cfgTarget')?.value || 500);
-  const achievement = target > 0 ? (revenue / target * 100) : 0;
+  const periodTarget = getPeriodTarget();
+  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
 
-  // Sort tiers by achievement ascending
   const tiers = [...state.hurdleTiers].sort((a, b) => a.achievement - b.achievement);
+  let tier = null;
+  for (let i = tiers.length - 1; i >= 0; i--) { if (achievement >= tiers[i].achievement) { tier = tiers[i]; break; } }
 
-  // Find applicable tier
-  let applicableTier = null;
-  for (let i = tiers.length - 1; i >= 0; i--) {
-    if (achievement >= tiers[i].achievement) {
-      applicableTier = tiers[i];
-      break;
-    }
+  const rate = tier ? tier.rate : 0;
+  let commission = revenue * rate / 100;
+
+  // 辅助验证：回款率
+  const collRate = simData.collectionRate || 0;
+  const targetCollRate = parseFloat(document.getElementById('cfgCollectionRate')?.value || 90);
+  let collNote = '';
+  if (collRate < targetCollRate * 0.8) {
+    commission *= 0.5; collNote = `回款率${collRate}%过低，提成减半`;
+  } else if (collRate < targetCollRate) {
+    commission *= 0.8; collNote = `回款率${collRate}%未达标，提成打8折`;
   }
 
-  const rate = applicableTier ? applicableTier.rate : 0;
-  const commission = revenue * rate / 100;
+  const bd = [
+    { label: `${document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度'}目标`, value: `¥${periodTarget.toFixed(1)}万` },
+    { label: '业绩达成率', value: achievement.toFixed(1) + '%' },
+    { label: '适用门槛', value: tier ? `${tier.name}（≥${tier.achievement}%）→ ${tier.rate}%` : '未达最低门槛' },
+  ];
+  if (collNote) bd.push({ label: '回款验证', value: collNote });
+  bd.push({ label: '计算', value: `¥${revenue}万 × ${rate}%${collNote ? ' × 调节' : ''} = ¥${commission.toFixed(2)}万` });
 
-  return {
-    commission,
-    breakdown: [
-      { label: '业绩达成率', value: Math.round(achievement) + '%' },
-      { label: '适用门槛', value: applicableTier ? applicableTier.name + '（≥' + applicableTier.achievement + '%）' : '未达标' },
-      { label: '提成率', value: rate + '%' },
-      { label: '计算', value: revenue + '万 × ' + rate + '% = ¥' + commission.toFixed(2) + '万' },
-    ],
-    note: !applicableTier ? '⚠️ 未达到最低门槛，建议调整门槛设置或提升销售业绩' : '✅ 已达标，提成正常发放',
-  };
+  return { commission, breakdown: bd, note: !tier ? '⚠️ 未达最低门槛，提成为0' : tier.name === '保底线' && tier.rate === 0 ? '⚠️ 仅达保底线，无提成' : collNote || '✅ 提成正常发放' };
 }
 
+// ----- MULTIPLIER -----
 function calcMultiplier(simData) {
-  const revenue = simData.revenue || 0;
-  const baseRate = parseFloat(document.getElementById('mulBaseRate')?.value || 3);
-  const base = revenue * baseRate / 100;
+  const direct = getSelectedDirectFactors();
+  let baseCommission = 0;
+  const bd = [];
 
-  let multiplier = 1.0;
-  const coeffDetails = [];
-  const all = getAllSelectedFactors().filter(f => f.id !== 'revenue');
-
-  all.forEach(f => {
-    const cfg = state.multiplierCoeffs[f.id];
-    if (!cfg) return;
-    const actual = simData[f.id] || 0;
-    // Simplified: if factor doesn't have a target value for comparison, use a heuristic
-    const defaultTargets = {
-      profit: parseFloat(document.getElementById('cfgGrossMargin')?.value || 30),
-      strategicProduct: 30, newMarket: 5, keyAccount: 2,
-      collection: 90, conversion: 35, satisfaction: 85, activity: 95, proposalOTD: 95,
-      perCapita: 120, mentoring: 3, retention: 85, knowledge: 5, compliance: 100,
-    };
-    const target = defaultTargets[f.id] || 100;
-    const ratio = target > 0 ? actual / target : 1;
-    const coeff = Math.max(cfg.min, Math.min(cfg.max, ratio));
-    multiplier *= coeff;
-
-    coeffDetails.push({
-      label: f.name + '（实际' + actual + ' vs 目标' + target + '）',
-      value: '系数 ' + coeff.toFixed(2) + '（范围' + cfg.min + '-' + cfg.max + '）',
-    });
+  direct.forEach(f => {
+    const val = simData[f.id] || 0;
+    const rate = state.directRates[f.id] ?? f.rateDefault ?? 2;
+    const comm = val * rate / 100;
+    baseCommission += comm;
+    bd.push({ label: `${f.name}（¥${val}万 × ${rate}%）`, value: `¥${comm.toFixed(2)}万` });
   });
 
-  const commission = base * multiplier;
+  let multiplier = 1.0;
+  const coeff = getSelectedCoeffFactors();
+  coeff.forEach(f => {
+    const actual = simData[f.id] || 0;
+    const range = state.coeffRanges[f.id] || { min: '0.8', max: '1.2' };
+    const min = parseFloat(range.min), max = parseFloat(range.max);
+    let targetVal;
+    if (f.id === 'collectionRate') targetVal = parseFloat(document.getElementById('cfgCollectionRate')?.value || 90);
+    else if (f.id === 'satisfaction') targetVal = parseFloat(document.getElementById('cfgSatisfaction')?.value || 85);
+    else targetVal = 100;
 
-  return {
-    commission,
-    breakdown: [
-      { label: '基础提成', value: revenue + '万 × ' + baseRate + '% = ¥' + base.toFixed(2) + '万' },
-      ...coeffDetails,
-      { label: '综合乘数', value: multiplier.toFixed(3) },
-      { label: '最终提成', value: '¥' + base.toFixed(2) + '万 × ' + multiplier.toFixed(3) + ' = ¥' + commission.toFixed(2) + '万' },
-    ],
-    note: multiplier > 1.3 ? '🚀 多项指标超预期，提成显著提升' : multiplier < 0.8 ? '⚠️ 多项指标未达标，提成被大幅压缩' : '📊 整体表现符合预期',
-  };
+    const ratio = targetVal > 0 ? actual / targetVal : 1;
+    const coeffVal = Math.max(min, Math.min(max, ratio));
+    multiplier *= coeffVal;
+    bd.push({ label: `${f.name}（实际${actual} vs 目标${targetVal}）`, value: `系数 ${coeffVal.toFixed(2)}` });
+  });
+
+  const commission = baseCommission * multiplier;
+  bd.push({ label: '基础提成合计', value: `¥${baseCommission.toFixed(2)}万` });
+  bd.push({ label: '综合调节系数', value: multiplier.toFixed(3) });
+  bd.push({ label: '最终提成', value: `¥${baseCommission.toFixed(2)}万 × ${multiplier.toFixed(3)} = ¥${commission.toFixed(2)}万` });
+
+  return { commission, breakdown: bd, note: multiplier > 1.1 ? '🚀 调节系数利好，提成上浮' : multiplier < 0.9 ? '⚠️ 调节系数压缩，提成打折' : '✅ 调节系数正常' };
 }
 
+// ----- MATRIX -----
 function calcMatrix(simData) {
-  const achievement = simData.revenue ? (simData.revenue / (parseFloat(document.getElementById('cfgTarget')?.value || 500)) * 100) : 0;
-  const profitRate = simData.profit || parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
-
-  const xMetric = document.getElementById('matrixX')?.value || 'revenue';
-  const yMetric = document.getElementById('matrixY')?.value || 'profit';
   const revenue = simData.revenue || 0;
+  const periodTarget = getPeriodTarget();
+  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
 
-  // Scale profit: compare actual margin % vs target margin %
-  const targetProfit = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
-  const profitAchievement = targetProfit > 0 ? (profitRate / targetProfit * 100) : 100;
+  const direct = getSelectedDirectFactors();
+  const sorted = [...direct].sort((a, b) => b.weight - a.weight);
+  const xFactor = sorted[0], yFactor = sorted[1] || sorted[0];
 
-  const xVal = xMetric === 'revenue' ? achievement : xMetric === 'profit' ? profitAchievement : (simData.collection || 0);
-  const yVal = yMetric === 'profit' ? profitAchievement : yMetric === 'revenue' ? achievement : (simData.newMarket || 0) * 20;
+  let xVal = achievement, yVal = 100;
+  if (xFactor?.id === 'profit') {
+    const targetMargin = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
+    const actualMargin = simData.profit || targetMargin;
+    xVal = targetMargin > 0 ? (actualMargin / targetMargin * 100) : 100;
+  }
+  if (yFactor?.id === 'profit') {
+    const targetMargin = parseFloat(document.getElementById('cfgGrossMargin')?.value || 30);
+    const actualMargin = simData.profit || targetMargin;
+    yVal = targetMargin > 0 ? (actualMargin / targetMargin * 100) : 100;
+  }
 
-  const xBracket = getBracket(xVal);
-  const yBracket = getBracket2(yVal);
-  const key = `${yBracket}|${xBracket}`;
-  const rate = (state.matrixData?.data?.[key] !== undefined) ? state.matrixData.data[key] : getDefaultMatrixVal(yBracket, xBracket);
+  const xB = getBracket(xVal), yB = getBracket2(yVal);
+  const key = `${yB}|${xB}`;
+  const rate = state.matrixData?.data?.[key] ?? getDefaultMatrixVal(yB, xB);
   const commission = revenue * rate / 100;
 
   return {
     commission,
     breakdown: [
-      { label: 'X轴（' + metricLabel(xMetric) + '）', value: Math.round(xVal) + '% → ' + xBracket },
-      { label: 'Y轴（' + metricLabel(yMetric) + '）', value: Math.round(yVal) + '% → ' + yBracket },
-      { label: '交叉点提成率', value: rate + '%' },
-      { label: '计算', value: revenue + '万 × ' + rate + '% = ¥' + commission.toFixed(2) + '万' },
+      { label: `X轴（${xFactor?.name || '销售额'}）`, value: `${xVal.toFixed(1)}% → ${xB}` },
+      { label: `Y轴（${yFactor?.name || '毛利润'}）`, value: `${yVal.toFixed(1)}% → ${yB}` },
+      { label: '交叉点提成率', value: `${rate}%` },
+      { label: '计算', value: `¥${revenue}万 × ${rate}% = ¥${commission.toFixed(2)}万` },
     ],
-    note: rate >= 5 ? '🔥 双指标表现优异，提成给力' : rate <= 1 ? '📉 双指标均不理想，需关注改进' : '✅ 提成正常',
+    note: rate >= 5 ? '🔥 双指标表现优异' : rate <= 1 ? '📉 双指标均不理想' : '✅ 提成正常',
   };
 }
 
+// ----- HYBRID -----
 function calcHybrid(simData) {
   const revenue = simData.revenue || 0;
-  const target = parseFloat(document.getElementById('cfgTarget')?.value || 500);
-  const achievement = target > 0 ? (revenue / target * 100) : 0;
-  const baseRate = parseFloat(document.getElementById('hybBaseRate')?.value || 2);
+  const periodTarget = getPeriodTarget();
+  const achievement = periodTarget > 0 ? (revenue / periodTarget * 100) : 0;
 
-  // Hurdle part: check if achievement meets minimum threshold
+  // Hurdle check
   const tiers = [...state.hurdleTiers].sort((a, b) => a.achievement - b.achievement);
-  let applicableTier = null;
-  for (let i = tiers.length - 1; i >= 0; i--) {
-    if (achievement >= tiers[i].achievement) { applicableTier = tiers[i]; break; }
-  }
-  if (!applicableTier || applicableTier.rate === 0) {
-    return { commission: 0, breakdown: [{ label: '业绩达成率', value: Math.round(achievement) + '% — 未达保底线' }], note: '⚠️ 未达到设障最低门槛，提成为0' };
+  let tier = null;
+  for (let i = tiers.length - 1; i >= 0; i--) { if (achievement >= tiers[i].achievement) { tier = tiers[i]; break; } }
+  if (!tier || tier.rate === 0) {
+    return { commission: 0, breakdown: [{ label: '业绩达成率', value: achievement.toFixed(1) + '% — 未达保底线' }], note: '⚠️ 未达到设障最低门槛，提成为0' };
   }
 
-  // Base from hurdle
-  const base = revenue * baseRate / 100;
+  const baseRate = parseFloat(document.getElementById('hybBaseRate')?.value || 2);
+  let commission = revenue * baseRate / 100;
+  const bd = [
+    { label: '业绩达成率', value: achievement.toFixed(1) + '% → ' + tier.name },
+    { label: '设障基础提成', value: `¥${revenue}万 × ${baseRate}% = ¥${commission.toFixed(2)}万` },
+  ];
 
-  // Multiplier part
-  let multiplier = 1.0;
-  const coeffDetails = [];
-  const all = getAllSelectedFactors().filter(f => f.id !== 'revenue');
-  all.forEach(f => {
-    const cfg = state.multiplierCoeffs[f.id];
-    if (!cfg) return;
-    const defaultTargets = {
-      profit: parseFloat(document.getElementById('cfgGrossMargin')?.value || 30),
-      strategicProduct: 30, newMarket: 5, keyAccount: 2,
-      collection: 90, conversion: 35, satisfaction: 85, activity: 95, proposalOTD: 95,
-      perCapita: 120, mentoring: 3, retention: 85, knowledge: 5, compliance: 100,
-    };
-    const target = defaultTargets[f.id] || 100;
-    const ratio = target > 0 ? (simData[f.id] || 0) / target : 1;
-    const coeff = Math.max(cfg.min, Math.min(cfg.max, ratio));
-    multiplier *= coeff;
-    coeffDetails.push({ label: f.name + ' 系数', value: coeff.toFixed(2) });
+  // Add direct factor bonuses
+  const direct = getSelectedDirectFactors().filter(f => f.id !== 'revenue');
+  direct.forEach(f => {
+    const val = simData[f.id] || 0;
+    const rate = state.directRates[f.id] ?? f.rateDefault ?? 2;
+    const bonus = val * rate / 100;
+    commission += bonus;
+    bd.push({ label: `${f.name}加算（¥${val}万 × ${rate}%）`, value: `+¥${bonus.toFixed(2)}万` });
   });
 
-  const commission = base * multiplier;
+  // Apply coeff
+  let multiplier = 1.0;
+  const coeff = getSelectedCoeffFactors();
+  coeff.forEach(f => {
+    const actual = simData[f.id] || 0;
+    const range = state.coeffRanges[f.id] || { min: '0.8', max: '1.2' };
+    const min = parseFloat(range.min), max = parseFloat(range.max);
+    let targetVal = f.id === 'collectionRate' ? parseFloat(document.getElementById('cfgCollectionRate')?.value || 90) :
+                    f.id === 'satisfaction' ? parseFloat(document.getElementById('cfgSatisfaction')?.value || 85) : 100;
+    const ratio = targetVal > 0 ? actual / targetVal : 1;
+    const c = Math.max(min, Math.min(max, ratio));
+    multiplier *= c;
+    bd.push({ label: `${f.name}系数`, value: c.toFixed(2) });
+  });
 
-  return {
-    commission,
-    breakdown: [
-      { label: '业绩达成率', value: Math.round(achievement) + '% → ' + applicableTier.name },
-      { label: '基础提成', value: revenue + '万 × ' + baseRate + '% = ¥' + base.toFixed(2) + '万' },
-      ...coeffDetails,
-      { label: '综合乘数', value: multiplier.toFixed(3) },
-      { label: '最终提成', value: '¥' + commission.toFixed(2) + '万' },
-    ],
-    note: multiplier > 1.3 ? '🚀 超额完成，混合模式全面发力' : '✅ 达标，各维度均衡',
-  };
+  const finalCommission = commission * multiplier;
+  bd.push({ label: '调节前合计', value: `¥${commission.toFixed(2)}万` });
+  bd.push({ label: '综合调节系数', value: multiplier.toFixed(3) });
+  bd.push({ label: '最终提成', value: `¥${finalCommission.toFixed(2)}万` });
+
+  return { commission: finalCommission, breakdown: bd, note: multiplier > 1.1 ? '🚀 调节系数利好' : multiplier < 0.9 ? '⚠️ 调节系数压缩' : '✅ 各维度均衡' };
 }
 
-function getBracket(val) {
-  if (val < 80) return '<80%';
-  if (val < 100) return '80-99%';
-  if (val < 120) return '100-119%';
-  if (val < 150) return '120-149%';
-  return '≥150%';
-}
-
-function getBracket2(val) {
-  if (val < 80) return '<80%';
-  if (val < 100) return '80-99%';
-  if (val < 120) return '100-119%';
-  return '≥120%';
-}
-
-function modelName() {
-  const names = { hurdle: '设障模式', multiplier: '乘数模式', matrix: '矩阵模式', hybrid: '混合模式' };
-  return names[state.selectedModel] || '未选择';
-}
+function getBracket(v) { if (v < 80) return '<80%'; if (v < 100) return '80-99%'; if (v < 120) return '100-119%'; if (v < 150) return '120-149%'; return '≥150%'; }
+function getBracket2(v) { if (v < 80) return '<80%'; if (v < 100) return '80-99%'; if (v < 120) return '100-119%'; return '≥120%'; }
+function modelName() { return { hurdle: '设障模式', multiplier: '乘数模式', matrix: '矩阵模式', hybrid: '混合模式' }[state.selectedModel] || '未选择'; }
 
 // ==================== SUMMARY ====================
 function prepareSummaryStep() {
   const container = document.getElementById('finalSummary');
-  const all = getAllSelectedFactors();
-  if (all.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);">请先完成前面的步骤</div>';
-    return;
-  }
+  const direct = getSelectedDirectFactors();
+  const coeff = getSelectedCoeffFactors();
+  const kpi = getAllSelectedFactors().filter(f => f.type === 'kpi');
 
-  const simName = document.getElementById('simName')?.value || '—';
-  const simPeriod = document.getElementById('simPeriod')?.value === 'monthly' ? '月度' : 
-    document.getElementById('simPeriod')?.value === 'yearly' ? '年度' : '季度';
+  if (direct.length === 0) { container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);">请先完成前面的步骤</div>'; return; }
+
   const target = document.getElementById('cfgTarget')?.value || 500;
   const margin = document.getElementById('cfgGrossMargin')?.value || 30;
-  const industry = document.getElementById('cfgIndustry')?.value || '—';
-  const teamSize = document.getElementById('cfgTeamSize')?.value || '—';
 
-  const catNames = { tian: '天·方向聚焦', di: '地·过程管控', ren: '人·铁军打造' };
-
-  let factorHTML = '';
-  for (const cat of ['tian', 'di', 'ren']) {
+  let factorHtml = '';
+  for (const cat of ['tian','di','ren']) {
     const ids = state.selectedFactors[cat];
     if (ids.length === 0) continue;
-    factorHTML += `<div style="margin-bottom:12px;"><strong style="color:${cat==='tian'?'var(--tian)':cat==='di'?'var(--di)':'var(--ren)'}">${catNames[cat]}</strong>`;
+    factorHtml += `<div style="margin-bottom:12px;"><strong style="color:${cat==='tian'? 'var(--tian)' : cat==='di'? 'var(--di)' : 'var(--ren)'}">${cat==='tian'?'天·方向':cat==='di'?'地·过程':'人·铁军'}</strong>`;
     ids.forEach(id => {
       const f = FACTORS[cat].find(x => x.id === id);
-      if (f) factorHTML += `<div style="margin-left:16px;font-size:13px;color:var(--text-mid);">· ${f.name}（权重${f.weight}%）</div>`;
+      if (!f) return;
+      const tag = f.type === 'direct' ? '<span style="color:var(--direct);font-size:11px;">[直接提成]</span>' : f.type === 'coeff' ? '<span style="color:var(--coeff);font-size:11px;">[调节系数]</span>' : '<span style="color:var(--kpi);font-size:11px;">[绩效建议]</span>';
+      factorHtml += `<div style="margin-left:16px;font-size:13px;">· ${f.name} ${tag}${f.type !== 'kpi' ? '（权重'+f.weight+'%）' : ''}</div>`;
     });
-    factorHTML += '</div>';
+    factorHtml += '</div>';
   }
 
-  let modelHTML = '';
+  let modelHtml = '';
   const m = state.selectedModel;
   if (m === 'hurdle') {
-    modelHTML = '<strong>🚪 设障模式</strong><br>';
-    state.hurdleTiers.forEach(t => {
-      modelHTML += `<span style="font-size:13px;">· ${t.name}：达成率≥${t.achievement}% → 提成率${t.rate}%</span><br>`;
-    });
+    modelHtml = '<strong>🚪 设障模式</strong><br>';
+    state.hurdleTiers.forEach(t => { modelHtml += `<span style="font-size:13px;">· ${t.name}：达成率≥${t.achievement}% → 提成率${t.rate}%</span><br>`; });
   } else if (m === 'multiplier') {
-    modelHTML = '<strong>✖️ 乘数模式</strong><br>';
-    modelHTML += `<span style="font-size:13px;">· 基础提成率：${document.getElementById('mulBaseRate')?.value || 3}%</span><br>`;
-    Object.entries(state.multiplierCoeffs).forEach(([id, cfg]) => {
-      modelHTML += `<span style="font-size:13px;">· ${cfg.name} 系数：${cfg.min}~${cfg.max}</span><br>`;
-    });
+    modelHtml = '<strong>✖️ 乘数模式</strong><br>';
+    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}：${state.directRates[f.id] ?? f.rateDefault}%</span><br>`; });
+    coeff.forEach(f => { const r = state.coeffRanges[f.id]; modelHtml += `<span style="font-size:13px;">· ${f.name}系数：${r?.min}~${r?.max}</span><br>`; });
   } else if (m === 'matrix') {
-    modelHTML = '<strong>📊 矩阵模式</strong><br>';
-    modelHTML += `<span style="font-size:13px;">· X轴：${metricLabel(document.getElementById('matrixX')?.value || 'revenue')}</span><br>`;
-    modelHTML += `<span style="font-size:13px;">· Y轴：${metricLabel(document.getElementById('matrixY')?.value || 'profit')}</span><br>`;
+    modelHtml = '<strong>📊 矩阵模式</strong><br>';
+    const sorted = [...direct].sort((a, b) => b.weight - a.weight);
+    modelHtml += `<span style="font-size:13px;">· X轴：${sorted[0]?.name || '销售额'}</span><br>`;
+    modelHtml += `<span style="font-size:13px;">· Y轴：${sorted[1]?.name || '毛利润'}</span><br>`;
   } else if (m === 'hybrid') {
-    modelHTML = '<strong>🧩 混合模式</strong><br>';
-    modelHTML += `<span style="font-size:13px;">· 基础提成率：${document.getElementById('hybBaseRate')?.value || 2}%</span><br>`;
-    modelHTML += '<span style="font-size:13px;">· 设障门槛 + 乘数调节系数</span><br>';
+    modelHtml = '<strong>🧩 混合模式</strong><br>';
+    modelHtml += `<span style="font-size:13px;">· 设障基础：${document.getElementById('hybBaseRate')?.value || 2}%</span><br>`;
+    direct.forEach(f => { modelHtml += `<span style="font-size:13px;">· ${f.name}加算：${state.directRates[f.id] ?? f.rateDefault}%</span><br>`; });
   }
 
-  let simHTML = '';
+  let simHtml = '';
   if (state.simulationResult) {
     const r = state.simulationResult;
-    const rev = getAllSelectedFactors().find(f => f.id === 'revenue');
-    const revenue = rev ? (parseFloat(document.getElementById('sim_revenue')?.value) || 0) : 0;
-    simHTML = `
-      <div style="background:#f8fafc;border-radius:8px;padding:16px;margin-top:12px;">
-        <strong>测试案例：${simName} · ${simPeriod}</strong><br>
-        <span style="font-size:13px;">销售额 ¥${revenue}万 → 提成 <b style="color:var(--ren);">¥${r.commission?.toFixed(2) || 0}万</b></span><br>
-        ${r.note ? `<span style="font-size:12px;color:var(--text-mid);">${r.note}</span>` : ''}
-      </div>`;
+    const rev = simDataVal('revenue');
+    simHtml = `<div style="background:#f8fafc;border-radius:8px;padding:16px;margin-top:12px;">
+      <strong>测试案例：${document.getElementById('simName')?.value || '—'}</strong><br>
+      <span style="font-size:13px;">销售额 ¥${rev}万 → 提成 <b style="color:var(--ren);">¥${r.commission?.toFixed(2) || 0}万</b></span><br>
+      ${r.note ? `<span style="font-size:12px;color:var(--text-mid);">${r.note}</span>` : ''}
+    </div>`;
   }
 
   container.innerHTML = `
     <h3 style="margin-bottom:16px;">📐 销售提成设计方案</h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-      <div><strong>行业：</strong>${industry}</div>
-      <div><strong>团队规模：</strong>${teamSize}</div>
-      <div><strong>业绩目标：</strong>¥${target}万</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;font-size:14px;">
+      <div><strong>行业：</strong>${document.getElementById('cfgIndustry')?.value || '—'}</div>
+      <div><strong>团队：</strong>${document.getElementById('cfgTeamSize')?.value || '—'}</div>
+      <div><strong>年度目标：</strong>¥${target}万</div>
       <div><strong>目标毛利率：</strong>${margin}%</div>
     </div>
     <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
-    <h4 style="margin-bottom:8px;">一、关联因素（天地人三维）</h4>
-    ${factorHTML}
+    <h4 style="margin-bottom:8px;">一、挂钩因素</h4>
+    ${factorHtml}
     <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
     <h4 style="margin-bottom:8px;">二、提成模式</h4>
-    ${modelHTML}
-    ${simHTML}
+    ${modelHtml}
+    ${simHtml}
+    ${kpi.length ? `<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+    <h4 style="margin-bottom:8px;">三、建议归入绩效考核的因素</h4>
+    <div style="font-size:13px;color:var(--text-mid);">${kpi.map(f => `· ${f.name}`).join('<br>')}</div>` : ''}
   `;
+}
 
-  // Update the factor section with weights
+function simDataVal(id) {
+  const el = document.getElementById('sim_' + id);
+  return el ? parseFloat(el.value) || 0 : 0;
 }
 
 function exportReport() {
-  const summary = document.getElementById('finalSummary').innerText;
-  const blob = new Blob([summary], { type: 'text/plain;charset=utf-8' });
+  const text = document.getElementById('finalSummary').innerText;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = '销售提成方案_' + new Date().toISOString().slice(0, 10) + '.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('方案已导出！');
+  a.href = url; a.download = '销售提成方案_' + new Date().toISOString().slice(0,10) + '.txt'; a.click();
+  URL.revokeObjectURL(url); toast('方案已导出！');
 }
 
 // ==================== STORAGE ====================
 function saveToStorage() {
   try {
-    const data = { 
-      selectedFactors: state.selectedFactors,
-      selectedModel: state.selectedModel,
-      hurdleTiers: state.hurdleTiers,
-      multiplierCoeffs: state.multiplierCoeffs,
-      matrixData: state.matrixData,
-      currentStep: state.currentStep,
-      simulationResult: state.simulationResult,
-      factorWeights: {},
+    const data = {
+      selectedFactors: state.selectedFactors, selectedModel: state.selectedModel,
+      hurdleTiers: state.hurdleTiers, directRates: state.directRates,
+      coeffRanges: state.coeffRanges, matrixData: state.matrixData,
+      currentStep: state.currentStep, simulationResult: state.simulationResult, factorWeights: {},
     };
-    // Save factor weights
-    for (const cat of ['tian', 'di', 'ren']) {
-      FACTORS[cat].forEach(f => { data.factorWeights[f.id] = f.weight; });
-    }
-    localStorage.setItem('commissionDesign', JSON.stringify(data));
+    for (const cat of ['tian','di','ren']) FACTORS[cat].forEach(f => { data.factorWeights[f.id] = f.weight; });
+    localStorage.setItem('commissionDesignV2', JSON.stringify(data));
   } catch(e) {}
 }
 
 function loadFromStorage() {
   try {
-    const raw = localStorage.getItem('commissionDesign');
+    const raw = localStorage.getItem('commissionDesignV2');
     if (!raw) return;
     const data = JSON.parse(raw);
     if (data.selectedFactors) state.selectedFactors = data.selectedFactors;
     if (data.selectedModel) state.selectedModel = data.selectedModel;
     if (data.hurdleTiers) state.hurdleTiers = data.hurdleTiers;
-    if (data.multiplierCoeffs) state.multiplierCoeffs = data.multiplierCoeffs;
+    if (data.directRates) state.directRates = data.directRates;
+    if (data.coeffRanges) state.coeffRanges = data.coeffRanges;
     if (data.matrixData) state.matrixData = data.matrixData;
     if (data.simulationResult) state.simulationResult = data.simulationResult;
     if (data.factorWeights) {
-      for (const cat of ['tian', 'di', 'ren']) {
-        FACTORS[cat].forEach(f => {
-          if (data.factorWeights[f.id] !== undefined) f.weight = data.factorWeights[f.id];
-        });
+      for (const cat of ['tian','di','ren']) {
+        FACTORS[cat].forEach(f => { if (data.factorWeights[f.id] !== undefined) f.weight = data.factorWeights[f.id]; });
       }
     }
-    // Restore UI state
     if (data.selectedModel) {
-      document.querySelectorAll('.model-card').forEach(c => {
-        if (c.dataset.model === data.selectedModel) c.classList.add('selected');
-      });
-    }
-    renderFactors('tian');
-    renderFactors('di');
-    renderFactors('ren');
-    renderHurdleTiers();
-    updateWeightBar();
-    if (data.selectedModel) {
+      document.querySelectorAll('.model-card').forEach(c => { if (c.dataset.model === data.selectedModel) c.classList.add('selected'); });
       document.getElementById('btnModelNext').disabled = false;
     }
+    renderFactors('tian'); renderFactors('di'); renderFactors('ren');
+    renderHurdleTiers(); updateWeightBar();
     if (data.currentStep > 0) goToStep(data.currentStep);
   } catch(e) {}
 }
 
-// ==================== UTILS ====================
-function toast(msg) {
-  const t = document.getElementById('toaster');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timeout);
-  t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
-}
+function toast(msg) { const t = document.getElementById('toaster'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._timeout); t._timeout = setTimeout(() => t.classList.remove('show'), 2500); }
 
-// Init
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
