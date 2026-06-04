@@ -434,8 +434,10 @@ function renderWeights() {
     const w = state.weights[d.id] || 0;
     html += `<div style="display:flex;align-items:center;gap:10px;">
       <label style="font-size:13px;font-weight:600;white-space:nowrap;min-width:130px;">${d.name}</label>
-      <input type="range" min="0" max="40" value="${w}" style="flex:1;" oninput="updateWeight('${d.id}',+this.value);this.nextElementSibling.value=this.value+'%'">
-      <output style="width:42px;text-align:right;font-weight:700;color:var(--accent-dark);font-size:13px;">${w}%</output>
+      <div style="display:flex;align-items:center;background:white;border:2px solid var(--grey-light);border-radius:8px;overflow:hidden;">
+        <input type="number" min="0" max="100" value="${w}" style="width:56px;text-align:center;padding:8px 4px;border:none;font-size:14px;font-weight:700;color:var(--primary);font-family:inherit;background:transparent;" onchange="updateWeight('${d.id}',+this.value)">
+        <span style="background:var(--accent-light);padding:8px 10px;font-size:13px;font-weight:600;color:var(--accent-dark);">%</span>
+      </div>
     </div>`;
   });
   html += '</div>';
