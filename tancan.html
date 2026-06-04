@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 高层客户会谈剧本</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --curtain: #6b1a1a;
+  --curtain-dark: #3d0c0c;
+  --gold: #c9a84c;
+  --gold-light: #fdf3d1;
+  --gold-dark: #8b722e;
+  --script: #faf7ec;
+  --script-dark: #f0ebd8;
+  --ink: #1a1a1a;
+  --ink-mid: #555;
+  --ink-light: #999;
+  --director: #1a5276;
+  --director-light: #e8f0f8;
+  --actor: #7d3c98;
+  --actor-light: #f4ecf7;
+  --white: #ffffff;
+  --danger: #c0392b;
+  --danger-light: #fdedec;
+  --shadow: 0 2px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #f5f0e8 0%, #faf7ec 30%, #f5f0e8 100%);
+  color: var(--ink); line-height: 1.7; min-height: 100vh;
+}
+
+/* ===== Header ===== */
+header {
+  background: linear-gradient(135deg, var(--curtain-dark) 0%, var(--curtain) 50%, var(--curtain-dark) 100%);
+  color: var(--gold); padding: 28px 0 24px; text-align: center;
+  box-shadow: 0 4px 24px rgba(61,12,12,0.35);
+  position: relative; overflow: hidden;
+}
+header::before {
+  content:''; position:absolute; top:-40px; left:-20px; right:-20px; height:6px;
+  background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 20px, transparent 20px, transparent 30px);
+}
+header h1 { font-size: 26px; font-weight: 900; letter-spacing: 2px; margin-bottom: 4px; }
+header .subtitle { font-size: 13px; color: rgba(201,168,76,0.7); letter-spacing: 1px; }
+header .tagline { font-size: 11px; color: rgba(201,168,76,0.5); margin-top: 6px; }
+
+/* Role badges */
+.role-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+}
+.role-director { background: var(--director-light); color: var(--director); border: 1px solid rgba(26,82,118,0.2); }
+.role-actor    { background: var(--actor-light); color: var(--actor); border: 1px solid rgba(125,60,152,0.2); }
+
+/* ===== Container ===== */
+.container { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+
+/* Step indicators */
+.steps-bar {
+  display: flex; gap: 0; margin: 24px 0 28px;
+  background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.step-tab {
+  flex: 1; padding: 14px 10px; text-align: center; cursor: pointer;
+  font-size: 13px; font-weight: 600; color: var(--ink-light);
+  border-bottom: 3px solid transparent; transition: all 0.25s;
+  background: var(--white); position: relative;
+}
+.step-tab:hover { background: var(--gold-light); color: var(--ink-mid); }
+.step-tab.active { color: var(--curtain); border-bottom-color: var(--gold); background: var(--gold-light); font-weight: 700; }
+.step-tab .step-num { display:block; font-size: 20px; font-weight: 900; margin-bottom: 2px; }
+.step-tab .step-label { font-size: 11px; }
+
+/* ===== Sections ===== */
+.section { display: none; }
+.section.active-section { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.card {
+  background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 24px 28px; margin-bottom: 18px;
+  border-left: 4px solid var(--gold);
+}
+.card.director-card { border-left-color: var(--director); }
+.card.actor-card   { border-left-color: var(--actor); }
+
+.card-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  padding-bottom: 14px; border-bottom: 2px dashed var(--gold-light);
+}
+.card-header h3 { font-size: 16px; font-weight: 700; flex:1; }
+.card-header .icon { font-size: 22px; }
+
+/* Form elements */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block; font-size: 12px; font-weight: 600; color: var(--ink-mid);
+  margin-bottom: 5px; letter-spacing: 0.5px;
+}
+.form-label .req { color: var(--danger); margin-left: 2px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 10px 14px; border: 2px solid #e0dcd0; border-radius: 8px;
+  font-size: 14px; font-family: inherit; color: var(--ink); background: var(--script);
+  transition: all 0.2s; resize: vertical;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--gold); background: var(--white);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+}
+.form-textarea { min-height: 70px; }
+.form-select { cursor: pointer; }
+
+/* Inline row */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* ===== Goal Cards ===== */
+.goal-card {
+  background: var(--script); border-radius: 10px; padding: 20px; margin-bottom: 16px;
+  border: 2px solid #e0dcd0; transition: border-color 0.2s;
+}
+.goal-card:hover { border-color: var(--gold); }
+.goal-card .goal-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.goal-num {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; color: var(--white); flex-shrink: 0;
+}
+.goal-num.g1 { background: var(--curtain); }
+.goal-num.g2 { background: var(--gold-dark); }
+.goal-num.g3 { background: var(--director); }
+.goal-card .goal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+.goal-card .goal-subtitle { font-size: 12px; color: var(--ink-light); margin-top: 2px; }
+
+/* Script output area */
+.script-header { text-align: center; margin-bottom: 24px; }
+.script-header h2 { font-size: 22px; font-weight: 900; color: var(--curtain); letter-spacing: 2px; }
+.script-header .meta { font-size: 13px; color: var(--ink-mid); margin-top: 6px; }
+
+.script-page {
+  background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  padding: 32px 36px; position: relative; overflow: hidden;
+}
+.script-page::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+  background: repeating-linear-gradient(180deg, var(--gold) 0px, var(--gold) 8px, transparent 8px, transparent 16px);
+}
+.script-page .scene-block { margin-bottom: 20px; padding-left: 16px; }
+.script-page .scene-block h4 {
+  font-size: 14px; font-weight: 700; color: var(--curtain); margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.script-page .scene-block .actor-line {
+  padding: 6px 12px; background: var(--actor-light); border-radius: 6px;
+  font-size: 13px; margin-bottom: 6px; line-height: 1.6;
+}
+.script-page .scene-block .actor-line .who {
+  font-weight: 700; color: var(--actor); margin-right: 6px;
+}
+.script-page .caution-box {
+  margin-top: 20px; padding: 14px 18px; background: var(--danger-light);
+  border-radius: 8px; font-size: 13px; border-left: 3px solid var(--danger);
+}
+.script-page .caution-box h4 { color: var(--danger); font-size: 13px; margin-bottom: 4px; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  transition: all 0.2s; letter-spacing: 0.5px;
+}
+.btn-primary { background: var(--curtain); color: var(--gold); }
+.btn-primary:hover { background: var(--curtain-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(107,26,26,0.3); }
+.btn-gold { background: var(--gold); color: var(--curtain-dark); }
+.btn-gold:hover { background: var(--gold-dark); color: var(--white); }
+.btn-outline { background: var(--white); color: var(--curtain); border: 2px solid var(--curtain); }
+.btn-outline:hover { background: var(--curtain); color: var(--gold); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+
+/* Navigation */
+.section-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 16px; }
+
+/* Toaster */
+.toaster {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
+  padding: 10px 24px; border-radius: 24px; font-size: 13px; font-weight: 600;
+  background: var(--curtain-dark); color: var(--gold);
+  box-shadow: 0 4px 20px rgba(61,12,12,0.4); animation: slideDown 0.3s ease;
+  pointer-events: none; opacity: 0; transition: opacity 0.3s;
+}
+.toaster.show { opacity: 1; }
+@keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* Save list */
+.save-item {
+  padding: 12px 16px; background: var(--white); border-radius: 8px;
+  margin-bottom: 8px; cursor: pointer; border: 2px solid #e0dcd0;
+  transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
+}
+.save-item:hover { border-color: var(--gold); box-shadow: var(--shadow); }
+.save-item .del-btn { color: var(--ink-light); cursor:pointer; padding:4px 8px; border-radius: 4px; background: none; border: none; font-size: 16px; }
+.save-item .del-btn:hover { color: var(--danger); background: var(--danger-light); }
+
+/* Print styles */
+@media print {
+  body { background: white; }
+  header, .steps-bar, .btn, .btn-group, .section-nav, .toaster, .save-item { display: none !important; }
+  .container { max-width: 100%; padding: 0; }
+  .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+  .script-page { box-shadow: none; border: 1px solid #ccc; }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+  .script-page { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <h1>🎬 高层客户会谈 · 剧本</h1>
+  <div class="subtitle">下属是总导演 · 老总是演员 · 谈参就是剧本</div>
+  <div class="tagline">不要让老板接手订单 —— 让他按剧本演出</div>
+</header>
+
+<div class="container">
+
+<!-- Step Bar -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" onclick="goStep(1)">
+    <span class="step-num">1</span><span class="step-label">人员与背景</span>
+  </div>
+  <div class="step-tab" onclick="goStep(2)">
+    <span class="step-num">2</span><span class="step-label">会谈剧本</span>
+  </div>
+  <div class="step-tab" onclick="goStep(3)">
+    <span class="step-num">3</span><span class="step-label">注意事项</span>
+  </div>
+  <div class="step-tab" onclick="goStep(4)">
+    <span class="step-num">4</span><span class="step-label">完整剧本</span>
+  </div>
+</div>
+
+<!-- ===== STEP 1: 人员与背景 ===== -->
+<div class="section active-section" id="sec1">
+  <div class="card director-card">
+    <div class="card-header">
+      <span class="icon">📋</span>
+      <h3>一、我方出席人员 <span class="role-badge role-director">🎥 总导演填写</span></h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">会谈领导（演员）<span class="req">*</span></label>
+        <input class="form-input" id="ourLeader" placeholder="例：张总（董事长/总经理）">
+      </div>
+      <div class="form-group">
+        <label class="form-label">会谈时间<span class="req">*</span></label>
+        <input class="form-input" id="meetTime" placeholder="例：6月10日 14:00-15:30">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">会谈形式</label>
+        <select class="form-select" id="meetFormat">
+          <option value="">请选择</option>
+          <option value="正式拜访">正式拜访</option>
+          <option value="工作午餐">工作午餐</option>
+          <option value="高尔夫/茶叙">高尔夫 / 茶叙</option>
+          <option value="公司参观">公司参观</option>
+          <option value="电话/视频">电话 / 视频</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">地点</label>
+        <input class="form-input" id="meetPlace" placeholder="例：客户总部大楼 12楼会议室">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">陪同出席人员（我方）</label>
+      <textarea class="form-textarea" id="ourTeam" placeholder="列出陪同人员及角色，例：&#10;李经理 — 销售负责人（总导演）&#10;王工 — 技术专家" style="min-height:56px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--curtain);font-weight:700;">🎯 老总本次出场的具体任务（导演给演员的指令）<span class="req">*</span></label>
+      <textarea class="form-textarea" id="bossMission" placeholder="用一句话告诉老总他今天来这里干什么。&#10;例：你今天的任务就是表达公司对这个项目的重视，拍板「价格可以谈」，但不要主动报价。具体数字由李经理后续对接。"></textarea>
+    </div>
+  </div>
+
+  <div class="card actor-card">
+    <div class="card-header">
+      <span class="icon">👤</span>
+      <h3>二、会见客户信息 <span class="role-badge role-director">🎥 总导演填写</span></h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">客户名称<span class="req">*</span></label>
+        <input class="form-input" id="custName" placeholder="例：XX科技有限公司">
+      </div>
+      <div class="form-group">
+        <label class="form-label">职务<span class="req">*</span></label>
+        <input class="form-input" id="custTitle" placeholder="例：副总裁/采购总监">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">陪同客户</label>
+        <input class="form-input" id="custAccompany" placeholder="例：技术部李工">
+      </div>
+      <div class="form-group">
+        <label class="form-label">陪同客户职务</label>
+        <input class="form-input" id="custAccompanyTitle" placeholder="例：技术主管">
+      </div>
+    </div>
+  </div>
+
+  <div class="card director-card">
+    <div class="card-header">
+      <span class="icon">🔍</span>
+      <h3>三、客户情况介绍 <span class="role-badge role-director">🎥 总导演填写</span></h3>
+    </div>
+    <div class="form-group">
+      <label class="form-label">1）客户公司背景</label>
+      <textarea class="form-textarea" id="custBg" placeholder="公司规模、主营业务、行业地位、近期动态等"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">2）历史合作/拜访情况（含遗留任务）</label>
+      <textarea class="form-textarea" id="custHistory" placeholder="之前见过几次？谁见的？聊了什么？有没有答应客户的事还没办？"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">3）核心客户个人信息</label>
+      <textarea class="form-textarea" id="custPersonal" placeholder="性格特点、兴趣爱好、决策风格、与谁关系好、最近关注什么话题等"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">4）当前项目背景及进展<span class="req">*</span></label>
+      <textarea class="form-textarea" id="custProject" placeholder="项目名称、预算、当前阶段、竞争对手情况、我方优势劣势、关键卡点等"></textarea>
+    </div>
+  </div>
+
+  <div class="section-nav">
+    <button class="btn btn-outline btn-sm" onclick="loadPreset()">📥 加载示例</button>
+    <button class="btn btn-primary" onclick="goStep(2)">下一步 → 写剧本</button>
+  </div>
+</div>
+
+<!-- ===== STEP 2: 会谈剧本 ===== -->
+<div class="section" id="sec2">
+
+  <div class="card director-card">
+    <div class="card-header">
+      <span class="icon">🎯</span>
+      <h3>四、会谈要点 — 给演员的剧本 <span class="role-badge role-director">🎥 总导演编写</span></h3>
+    </div>
+    <p style="font-size:12px;color:var(--ink-mid);margin-bottom:16px;">每个目标写清楚：老总要说什么、怎么接话、什么时候把球传回给销售。老总不是来谈业务的，是来完成一个「角色」的。</p>
+
+    <!-- Goal 1 -->
+    <div class="goal-card">
+      <div class="goal-header">
+        <div class="goal-num g1">1</div>
+        <div>
+          <div class="goal-title">破冰 / 表达重视</div>
+          <div class="goal-subtitle">让客户感受到公司的诚意，建立轻松的对话氛围</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标描述</label>
+        <input class="form-input" id="g1Title" placeholder="例：破冰并表达公司对本次合作的重视">
+      </div>
+      <div class="form-group">
+        <label class="form-label">老总具体话术 / 动作（剧本）<span class="req">*</span></label>
+        <textarea class="form-textarea" id="g1Content" placeholder="写清楚老总应该说什么、做什么。&#10;例：&#10;1. 开场感谢客户抽出时间，简单寒暄（提一下上次李经理提到的XX话题）&#10;2. 表达公司对这个项目的高度重视——"所以今天我亲自来了"&#10;3. （关键）话锋一转："具体的技术细节和方案，我们李经理都比我在行，今天主要是来听听您的想法"" style="min-height:100px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="color:var(--actor);font-weight:600;">🎭 给演员的提醒（什么时候该把球传回给销售）</label>
+        <input class="form-input" id="g1Handoff" placeholder="例：客户问到具体价格或技术参数时，说"这个让李经理给您详细算"">
+      </div>
+    </div>
+
+    <!-- Goal 2 -->
+    <div class="goal-card">
+      <div class="goal-header">
+        <div class="goal-num g2">2</div>
+        <div>
+          <div class="goal-title">传递价值 / 建立信任</div>
+          <div class="goal-subtitle">让客户理解我们的核心优势和差异化</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标描述</label>
+        <input class="form-input" id="g2Title" placeholder="例：传递公司核心优势，强化客户对我们的信心">
+      </div>
+      <div class="form-group">
+        <label class="form-label">老总具体话术 / 动作（剧本）<span class="req">*</span></label>
+        <textarea class="form-textarea" id="g2Content" placeholder="例：&#10;1. 分享1-2个与客户行业类似的成功案例&#10;2. 强调公司对客户行业的长期承诺——"我们不是做一个项目就走"&#10;3. 邀请客户来公司参观/考察已交付项目" style="min-height:100px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="color:var(--actor);font-weight:600;">🎭 给演员的提醒</label>
+        <input class="form-input" id="g2Handoff" placeholder="例：客户说"你们案例不错"时，顺势说"让李经理安排一次参观"">
+      </div>
+    </div>
+
+    <!-- Goal 3 -->
+    <div class="goal-card">
+      <div class="goal-header">
+        <div class="goal-num g3">3</div>
+        <div>
+          <div class="goal-title">推进合作 / 建立机制</div>
+          <div class="goal-subtitle">明确下一步动作，为后续跟进铺路</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标描述</label>
+        <input class="form-input" id="g3Title" placeholder="例：推动更深合作，建立定期沟通机制">
+      </div>
+      <div class="form-group">
+        <label class="form-label">老总具体话术 / 动作（剧本）<span class="req">*</span></label>
+        <textarea class="form-textarea" id="g3Content" placeholder="例：&#10;1. 提议建立双方高层定期互访机制——"每季度我们碰一次"&#10;2. 表达灵活合作的意愿，但不承诺具体条款&#10;3. 确认下次沟通的时间节点" style="min-height:100px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="color:var(--actor);font-weight:600;">🎭 给演员的提醒</label>
+        <input class="form-input" id="g3Handoff" placeholder="例：达成共识后，具体执行安排让李经理和对方对接">
+      </div>
+    </div>
+
+    <!-- Add custom goal -->
+    <button class="btn btn-outline btn-sm" onclick="addCustomGoal()" style="margin-bottom:16px;">+ 添加自定义目标</button>
+    <div id="customGoals"></div>
+  </div>
+
+  <div class="section-nav">
+    <button class="btn btn-outline" onclick="goStep(1)">← 上一步</button>
+    <button class="btn btn-primary" onclick="goStep(3)">下一步 → 注意事项</button>
+  </div>
+</div>
+
+<!-- ===== STEP 3: 注意事项 ===== -->
+<div class="section" id="sec3">
+  <div class="card director-card">
+    <div class="card-header">
+      <span class="icon">⚠️</span>
+      <h3>五、会谈注意事项 <span class="role-badge role-director">🎥 总导演填写</span></h3>
+    </div>
+    <div class="form-group">
+      <label class="form-label">敏感话题 / 禁忌<span class="req">*</span></label>
+      <textarea class="form-textarea" id="caution" placeholder="哪些话题绝对不能碰？&#10;例：&#10;1. 不要提竞争对手A公司的名字——客户和A公司老板是同学&#10;2. 不要承诺交货日期——目前产线排期还不确定&#10;3. 客户不喜欢被叫"X总"，喜欢被叫"X老师"" style="min-height:80px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">关键提醒（导演给演员的最后叮嘱）</label>
+      <textarea class="form-textarea" id="reminder" placeholder="例：&#10;1. 今天的目的不是签单，是建立信任。不要主动提合同。&#10;2. 如果客户提到价格，只说"我们会给出有竞争力的方案"，具体数字留给李经理。&#10;3. 会谈结束后不要马上离开，和李经理在楼下碰一下复盘。" style="min-height:80px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">需要携带的材料</label>
+      <input class="form-input" id="materials" placeholder="例：公司画册、案例集、小礼品">
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color: var(--gold);">
+    <div class="card-header">
+      <span class="icon">💾</span>
+      <h3>保存与导出</h3>
+    </div>
+    <div class="form-group">
+      <label class="form-label">给这份剧本起个名字</label>
+      <input class="form-input" id="saveName" placeholder="例：XX集团王总-6月10日会谈剧本">
+    </div>
+    <div class="btn-group" style="justify-content: flex-start;">
+      <button class="btn btn-gold" onclick="saveScript()">💾 保存到本地</button>
+      <button class="btn btn-primary" onclick="goStep(4)">📜 预览完整剧本</button>
+    </div>
+  </div>
+
+  <div class="section-nav">
+    <button class="btn btn-outline" onclick="goStep(2)">← 上一步</button>
+    <button class="btn btn-primary" onclick="goStep(4)">完成 → 看剧本</button>
+  </div>
+</div>
+
+<!-- ===== STEP 4: 完整剧本预览 ===== -->
+<div class="section" id="sec4">
+  <div class="script-header">
+    <h2>📜 高层客户会谈剧本</h2>
+    <div class="meta" id="scriptMeta"></div>
+    <div style="margin-top:8px;">
+      <span class="role-badge role-director">🎥 总导演：销售负责人</span>
+      <span class="role-badge role-actor" style="margin-left:6px;">🎭 演员：<span id="scriptActor">老总</span></span>
+    </div>
+  </div>
+
+  <div class="script-page" id="scriptContent"></div>
+
+  <div class="btn-group" style="margin-top: 24px;">
+    <button class="btn btn-outline" onclick="goStep(3)">← 返回修改</button>
+    <button class="btn btn-gold" onclick="window.print()">🖨️ 打印剧本</button>
+    <button class="btn btn-primary" onclick="exportTXT()">📄 导出文本</button>
+    <button class="btn btn-outline btn-sm" onclick="copyScript()">📋 复制</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- Toaster -->
+<div class="toaster" id="toaster"></div>
+
+<script>
+// ===== Data =====
+let currentStep = 1;
+let customGoalCount = 0;
+let savedScripts = [];
+
+// ===== Navigation =====
+function goStep(n) {
+  // Validate before leaving step 1
+  if (currentStep === 1 && n > 1) {
+    if (!document.getElementById('ourLeader').value.trim()) {
+      showToast('⚠️ 请填写会谈领导（演员）');
+      return;
+    }
+    if (!document.getElementById('custName').value.trim()) {
+      showToast('⚠️ 请填写客户名称');
+      return;
+    }
+  }
+
+  currentStep = n;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+  document.getElementById('sec' + n).classList.add('active-section');
+
+  // Step tabs
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    t.classList.toggle('active', i + 1 === n);
+  });
+
+  // Render script on step 4
+  if (n === 4) renderScript();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Custom Goals =====
+function addCustomGoal() {
+  customGoalCount++;
+  const div = document.getElementById('customGoals');
+  const html = `
+    <div class="goal-card" id="customGoal${customGoalCount}" style="border-color:var(--director);">
+      <div class="goal-header">
+        <div class="goal-num" style="background:var(--director);">${customGoalCount+3}</div>
+        <div>
+          <div class="goal-title">自定义目标</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('customGoal${customGoalCount}').remove()" style="margin-left:auto;">删除</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标描述</label>
+        <input class="form-input" id="cg${customGoalCount}Title" placeholder="自定义目标名称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">老总具体话术 / 动作（剧本）</label>
+        <textarea class="form-textarea" id="cg${customGoalCount}Content" placeholder="写清楚老总应该说什么、做什么" style="min-height:80px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="color:var(--actor);font-weight:600;">🎭 给演员的提醒</label>
+        <input class="form-input" id="cg${customGoalCount}Handoff" placeholder="什么时候把球传回给销售">
+      </div>
+    </div>
+  `;
+  div.insertAdjacentHTML('beforeend', html);
+  showToast('✅ 自定义目标已添加');
+}
+
+// ===== Render Script =====
+function renderScript() {
+  const ourLeader = getVal('ourLeader');
+  const meetTime = getVal('meetTime');
+  const meetFormat = getVal('meetFormat');
+  const meetPlace = getVal('meetPlace');
+  const ourTeam = getVal('ourTeam');
+  const bossMission = getVal('bossMission');
+  const custName = getVal('custName');
+  const custTitle = getVal('custTitle');
+  const custAccompany = getVal('custAccompany');
+  const custAccompanyTitle = getVal('custAccompanyTitle');
+  const custBg = getVal('custBg');
+  const custHistory = getVal('custHistory');
+  const custPersonal = getVal('custPersonal');
+  const custProject = getVal('custProject');
+
+  document.getElementById('scriptActor').textContent = ourLeader || '老总';
+  document.getElementById('scriptMeta').textContent = `${meetTime || '待定'} · ${meetFormat || '未指定'} · ${meetPlace || '待定'}`;
+
+  // Build goals
+  const goals = [
+    { num: 1, title: getVal('g1Title'), content: getVal('g1Content'), handoff: getVal('g1Handoff') },
+    { num: 2, title: getVal('g2Title'), content: getVal('g2Content'), handoff: getVal('g2Handoff') },
+    { num: 3, title: getVal('g3Title'), content: getVal('g3Content'), handoff: getVal('g3Handoff') }
+  ];
+  for (let i = 1; i <= customGoalCount; i++) {
+    const el = document.getElementById('customGoal' + i);
+    if (!el) continue;
+    goals.push({
+      num: i + 3,
+      title: getVal('cg' + i + 'Title'),
+      content: getVal('cg' + i + 'Content'),
+      handoff: getVal('cg' + i + 'Handoff')
+    });
+  }
+
+  const caution = getVal('caution');
+  const reminder = getVal('reminder');
+  const materials = getVal('materials');
+
+  let html = '';
+
+  // Cast section
+  html += `<div class="scene-block"><h4>🎭 演员表</h4>`;
+  html += `<div class="actor-line"><span class="who">主演：</span>${escHtml(ourLeader || '未指定')}（我方） → ${escHtml(custName || '未指定')} ${escHtml(custTitle || '')}（客户）</div>`;
+  if (ourTeam) html += `<div class="actor-line"><span class="who">陪演：</span>${escHtml(ourTeam).replace(/\n/g, ' / ')}</div>`;
+  if (custAccompany) html += `<div class="actor-line"><span class="who">客户方陪同：</span>${escHtml(custAccompany)} ${escHtml(custAccompanyTitle)}</div>`;
+  html += `</div>`;
+
+  // Boss mission
+  if (bossMission) {
+    html += `<div class="scene-block"><h4>🎯 导演指令（老总本次任务）</h4>`;
+    html += `<div class="actor-line" style="background:var(--director-light);"><span class="who" style="color:var(--director);">任务：</span>${escHtml(bossMission)}</div>`;
+    html += `</div>`;
+  }
+
+  // Project background
+  if (custProject || custBg || custHistory || custPersonal) {
+    html += `<div class="scene-block"><h4>📖 剧情背景（老总了解即可，不用背）</h4>`;
+    if (custBg) html += `<div class="actor-line" style="background:#f9f9f5;"><span class="who" style="color:var(--ink-mid);">公司背景：</span>${escHtml(custBg)}</div>`;
+    if (custHistory) html += `<div class="actor-line" style="background:#f9f9f5;"><span class="who" style="color:var(--ink-mid);">历史往来：</span>${escHtml(custHistory)}</div>`;
+    if (custPersonal) html += `<div class="actor-line" style="background:#f9f9f5;"><span class="who" style="color:var(--ink-mid);">关键人物：</span>${escHtml(custPersonal)}</div>`;
+    if (custProject) html += `<div class="actor-line" style="background:#f9f9f5;"><span class="who" style="color:var(--ink-mid);">项目现状：</span>${escHtml(custProject)}</div>`;
+    html += `</div>`;
+  }
+
+  // Goals - the actual script
+  html += `<div class="scene-block"><h4>🎬 正式剧本</h4>`;
+  goals.forEach(g => {
+    if (!g.content) return;
+    html += `<div style="margin-bottom:16px;padding:12px;background:var(--script-dark);border-radius:8px;">`;
+    html += `<div style="font-weight:700;color:var(--curtain);margin-bottom:6px;font-size:14px;">🎯 第${g.num}幕：${escHtml(g.title || '未命名')}</div>`;
+    html += `<div class="actor-line"><span class="who">台词：</span>${escHtml(g.content).replace(/\n/g, '<br>')}</div>`;
+    if (g.handoff) html += `<div class="actor-line" style="background:var(--actor-light);margin-top:6px;"><span class="who">🎭 传球时机：</span>${escHtml(g.handoff)}</div>`;
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  // Caution
+  if (caution || reminder) {
+    html += `<div class="caution-box">`;
+    html += `<h4>⚠️ 禁忌 & 重要提醒</h4>`;
+    if (caution) html += `<div>${escHtml(caution).replace(/\n/g, '<br>')}</div>`;
+    if (reminder) html += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(192,57,43,0.2);"><strong>导演最后叮嘱：</strong><br>${escHtml(reminder).replace(/\n/g, '<br>')}</div>`;
+    html += `</div>`;
+  }
+
+  // Materials
+  if (materials) {
+    html += `<div class="scene-block" style="margin-top:16px;"><h4>📦 需要携带</h4>`;
+    html += `<div class="actor-line">${escHtml(materials)}</div></div>`;
+  }
+
+  document.getElementById('scriptContent').innerHTML = html;
+}
+
+// ===== Save / Load =====
+function saveScript() {
+  const name = document.getElementById('saveName').value.trim() || ('剧本_' + new Date().toLocaleDateString('zh-CN'));
+  const data = {
+    name: name,
+    createdAt: new Date().toISOString(),
+    fields: {}
+  };
+
+  // Collect all input values
+  const allIds = ['ourLeader','meetTime','meetFormat','meetPlace','ourTeam','bossMission',
+    'custName','custTitle','custAccompany','custAccompanyTitle',
+    'custBg','custHistory','custPersonal','custProject',
+    'g1Title','g1Content','g1Handoff',
+    'g2Title','g2Content','g2Handoff',
+    'g3Title','g3Content','g3Handoff',
+    'caution','reminder','materials'];
+  allIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data.fields[id] = el.value;
+  });
+
+  // Custom goals
+  data.customGoals = [];
+  for (let i = 1; i <= customGoalCount; i++) {
+    const el = document.getElementById('customGoal' + i);
+    if (!el) continue;
+    data.customGoals.push({
+      title: getVal('cg' + i + 'Title'),
+      content: getVal('cg' + i + 'Content'),
+      handoff: getVal('cg' + i + 'Handoff')
+    });
+  }
+  data.customGoalCount = customGoalCount;
+
+  // Load existing saves
+  try {
+    savedScripts = JSON.parse(localStorage.getItem('tancan_scripts') || '[]');
+  } catch(e) { savedScripts = []; }
+
+  savedScripts.unshift(data);
+  if (savedScripts.length > 20) savedScripts = savedScripts.slice(0, 20);
+  localStorage.setItem('tancan_scripts', JSON.stringify(savedScripts));
+
+  document.getElementById('saveName').value = name;
+  showToast('✅ 剧本「' + name + '」已保存');
+  renderSaveList();
+}
+
+function loadScript(index) {
+  const script = savedScripts[index];
+  if (!script) return;
+
+  // Restore fields
+  if (script.fields) {
+    Object.keys(script.fields).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = script.fields[id];
+    });
+  }
+
+  // Restore custom goals
+  document.getElementById('customGoals').innerHTML = '';
+  customGoalCount = script.customGoalCount || 0;
+  if (script.customGoals) {
+    script.customGoals.forEach((g, i) => {
+      const n = i + 1;
+      const div = document.getElementById('customGoals');
+      const html = `
+        <div class="goal-card" id="customGoal${n}" style="border-color:var(--director);">
+          <div class="goal-header">
+            <div class="goal-num" style="background:var(--director);">${n+3}</div>
+            <div><div class="goal-title">自定义目标</div></div>
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('customGoal${n}').remove()" style="margin-left:auto;">删除</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">目标描述</label>
+            <input class="form-input" id="cg${n}Title" value="${escHtml(g.title||'')}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">老总具体话术 / 动作（剧本）</label>
+            <textarea class="form-textarea" id="cg${n}Content" style="min-height:80px;">${escHtml(g.content||'')}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="color:var(--actor);font-weight:600;">🎭 给演员的提醒</label>
+            <input class="form-input" id="cg${n}Handoff" value="${escHtml(g.handoff||'')}">
+          </div>
+        </div>`;
+      div.insertAdjacentHTML('beforeend', html);
+    });
+  }
+
+  document.getElementById('saveName').value = script.name || '';
+  goStep(1);
+  showToast('✅ 已加载「' + (script.name || '未命名') + '」');
+  renderSaveList();
+}
+
+function deleteScript(index) {
+  if (!confirm('确定删除这个剧本吗？此操作不可恢复。')) return;
+  savedScripts.splice(index, 1);
+  localStorage.setItem('tancan_scripts', JSON.stringify(savedScripts));
+  renderSaveList();
+  showToast('🗑️ 已删除');
+}
+
+function renderSaveList() {
+  try {
+    savedScripts = JSON.parse(localStorage.getItem('tancan_scripts') || '[]');
+  } catch(e) { savedScripts = []; }
+
+  const container = document.getElementById('saveList');
+  if (!container) return;
+
+  if (savedScripts.length === 0) {
+    container.innerHTML = '<p style="color:var(--ink-light);font-size:13px;">暂无保存的剧本</p>';
+    return;
+  }
+
+  container.innerHTML = savedScripts.map((s, i) => `
+    <div class="save-item" onclick="loadScript(${i})">
+      <div>
+        <div style="font-weight:600;font-size:14px;">📜 ${escHtml(s.name)}</div>
+        <div style="font-size:12px;color:var(--ink-light);">${fmtDate(s.createdAt)}</div>
+      </div>
+      <button class="del-btn" onclick="event.stopPropagation();deleteScript(${i})" title="删除">×</button>
+    </div>
+  `).join('');
+}
+
+// Add save list to step 3
+document.addEventListener('DOMContentLoaded', function() {
+  const card = document.querySelector('#sec3 .card:last-child');
+  if (card) {
+    const div = document.createElement('div');
+    div.id = 'saveList';
+    div.style.marginTop = '18px';
+    div.innerHTML = '<p style="color:var(--ink-light);font-size:13px;">暂无保存的剧本</p>';
+    card.appendChild(div);
+    renderSaveList();
+  }
+});
+
+// ===== Export =====
+function exportTXT() {
+  renderScript();
+  const ourLeader = getVal('ourLeader');
+  const meetTime = getVal('meetTime');
+
+  let text = `高层客户会谈剧本\n`;
+  text += `========================\n\n`;
+  text += `演员：${ourLeader || '未指定'}\n`;
+  text += `时间：${meetTime || '待定'}\n`;
+  text += `总导演：销售负责人\n\n`;
+
+  // Extract script content as text
+  const content = document.getElementById('scriptContent');
+  if (content) {
+    text += content.innerText;
+  }
+
+  // Download
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '会谈剧本_' + (ourLeader || '未命名') + '_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📄 剧本已导出');
+}
+
+function copyScript() {
+  renderScript();
+  const content = document.getElementById('scriptContent');
+  if (!content) return;
+  const text = content.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('📋 剧本已复制到剪贴板');
+  }).catch(() => {
+    showToast('⚠️ 复制失败，请手动选择复制');
+  });
+}
+
+// ===== Preset =====
+function loadPreset() {
+  document.getElementById('ourLeader').value = '张总（董事长）';
+  document.getElementById('meetTime').value = '6月15日 15:00-16:30';
+  document.getElementById('meetFormat').value = '正式拜访';
+  document.getElementById('meetPlace').value = 'XX科技总部 18楼会议室';
+  document.getElementById('ourTeam').value = '李经理 — 销售负责人（总导演）\n王工 — 技术方案专家';
+  document.getElementById('bossMission').value = '你今天只有一个任务：让客户觉得我们公司很重视他。表达重视、拍板态度，但不要承诺任何具体价格或交期。技术细节和商务条款全部由李经理后续对接。';
+  document.getElementById('custName').value = 'XX精密制造有限公司';
+  document.getElementById('custTitle').value = '副总裁 / 采购负责人';
+  document.getElementById('custAccompany').value = '陈主任';
+  document.getElementById('custAccompanyTitle').value = '技术部主任';
+  document.getElementById('custBg').value = '华东地区精密制造龙头，年营收约12亿，近两年在推进产线自动化升级。近期刚拿到一笔产业基金投资，扩产意愿强烈。';
+  document.getElementById('custHistory').value = '李经理已拜访过两次：第一次见了陈主任了解需求，第二次与技术团队做了初步方案交流。客户对我们的技术方案认可，但还在比价。遗留任务：答应给客户做的ROI测算还没发。';
+  document.getElementById('custPersonal').value = '王总：50岁左右，技术出身，务实派。喜欢聊行业趋势和新技术，不喜欢被推销。爱好高尔夫。最近在关注工业4.0和AI质检。上次李经理送了一本行业白皮书，王总表示很有兴趣。';
+  document.getElementById('custProject').value = '客户计划Q3启动一条新产线的自动化改造，预算约800万。我方是三家候选供应商之一。竞争对手：A公司（老牌，价格高）、B公司（新进入者，低价但案例少）。我方优势：方案定制化程度高，劣势：品牌知名度不如A。目前卡在：客户管理层还没拍板。';
+  document.getElementById('g1Title').value = '破冰并表达公司对项目的重视';
+  document.getElementById('g1Content').value = '1. 感谢王总百忙之中抽出时间。提一下："上次李经理说您对工业AI质检很感兴趣，我今天特意带了一些我们在这方面的新案例。"\n2. 表达重视："这个项目我一直在关注，今天专程飞过来，就是想当面听听您的想法。"\n3. （关键传球）"具体的技术方案和商务细节，李经理比我专业。今天我来主要是表个态——这个项目是我们公司的优先级。"';
+  document.getElementById('g1Handoff').value = '客户一旦问到具体技术参数、实施周期，立刻说"这个让李经理给您详细讲"';
+  document.getElementById('g2Title').value = '传递公司核心优势和成功案例';
+  document.getElementById('g2Content').value = '1. 分享一个与客户同行业的成功案例："去年我们给XX集团（同行业top3）做的产线改造，效率提升了35%。"\n2. 强调公司对精密制造行业的长期投入："我们不是接一个项目就走的公司，这个行业我们深耕了5年。"\n3. 主动邀请："如果方便，可以安排您和陈主任来我们公司实地看一下，也让技术团队当面演示。"';
+  document.getElementById('g2Handoff').value = '客户表现出兴趣时，说"李经理，你安排一下参观事宜"，制造"这是已经决定的事"的氛围';
+  document.getElementById('g3Title').value = '推动建立定期沟通机制';
+  document.getElementById('g3Content').value = '1. 提议："我建议我们双方建立一个定期沟通机制，每季度碰一次。不管有没有项目，保持联系。"\n2. 表达灵活合作意愿："在商务条件上，我们可以根据项目的具体情况灵活调整。"（不说具体数字）\n3. 收尾："今天聊得很愉快。后续让李经理和王总这边保持密切对接，争取尽快把方案定下来。"';
+  document.getElementById('g3Handoff').value = '只要达成"保持联系"的共识就算成功。具体下次见谁、聊什么，由李经理安排。';
+  document.getElementById('caution').value = '1. 绝对不要提A公司的名字——王总和A公司华东区总经理是大学同学\n2. 不要承诺具体交付日期——我们目前的产线排期还有不确定性\n3. 不要在会谈中主动报价格——客户可能会试探"你们能比A便宜多少"，标准回答是"李经理会根据整体方案给出最优报价"';
+  document.getElementById('reminder').value = '1. 今天的目标：建立信任 + 推动高层互访。不是签合同。\n2. 全程保持"我来是表个态"的姿态，不要变成"我来是谈业务的"。\n3. 会谈结束后和李经理在楼下碰头复盘5分钟，确认下一步行动。';
+  document.getElementById('materials').value = '公司画册 ×2、成功案例集 ×2、定制笔记本套装（小礼品）';
+  document.getElementById('saveName').value = 'XX精密制造王总-6月15日会谈剧本';
+
+  showToast('✅ 示例剧本已加载');
+}
+
+// ===== Helpers =====
+function getVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('zh-CN', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+// ===== Toast =====
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toaster');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ===== Init =====
+goStep(1);
+</script>
+</body>
+</html>
