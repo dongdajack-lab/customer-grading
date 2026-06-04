@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 情感账户储蓄工具</title>
+<style>
+:root {
+  --blue: #2563eb; --blue-light: #eff6ff; --blue-dark: #1d4ed8;
+  --green: #059669; --green-light: #ecfdf5; --green-dark: #047857;
+  --orange: #d97706; --orange-light: #fffbeb; --orange-dark: #b45309;
+  --red: #dc2626; --red-light: #fef2f2; --red-dark: #b91c1c;
+  --bg: #f1f5f9; --card: #ffffff; --text: #0f172a;
+  --text-mid: #475569; --text-light: #94a3b8; --border: #e2e8f0;
+  --radius: 14px; --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); color: white; padding: 24px 20px 18px; text-align: center; }
+header .badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 14px; font-size: 11px; letter-spacing: 2px; margin-bottom: 10px; }
+header h1 { font-size: 22px; font-weight: 800; }
+header p { font-size: 13px; opacity: 0.65; margin-top: 4px; }
+.container { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; margin-bottom: 24px; background: var(--card); border-radius: var(--radius); padding: 6px; box-shadow: var(--shadow); }
+.tab-btn { flex: 1; padding: 14px 12px; border: none; background: transparent; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-mid); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.tab-btn:hover { background: #f8fafc; }
+.tab-btn.active { color: white; box-shadow: var(--shadow-md); }
+.tab-btn[data-tab="1"].active { background: var(--blue); }
+.tab-btn[data-tab="2"].active { background: var(--orange); }
+.tab-btn[data-tab="3"].active { background: var(--green); }
+
+/* Cards */
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 16px; }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.card-sub { font-size: 12px; color: var(--text-mid); margin-bottom: 16px; line-height: 1.5; }
+
+/* Score ring */
+.score-ring { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: white; flex-shrink: 0; }
+.score-deep { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); }
+.score-trust { background: linear-gradient(135deg, var(--green), var(--green-dark)); }
+.score-basic { background: linear-gradient(135deg, var(--orange), var(--orange-dark)); }
+.score-deficit { background: linear-gradient(135deg, var(--red), var(--red-dark)); }
+
+/* Person card */
+.person-card { border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 12px; transition: all 0.2s; background: white; }
+.person-card:hover { border-color: #cbd5e1; box-shadow: var(--shadow-md); }
+.person-header { display: flex; align-items: center; gap: 14px; }
+.person-info { flex: 1; }
+.person-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.person-role { font-size: 12px; color: var(--text-mid); }
+.score-input { width: 70px; padding: 6px 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 16px; font-weight: 700; text-align: center; outline: none; transition: all 0.2s; }
+.score-input:focus { border-color: var(--blue); }
+.score-label { font-size: 11px; color: var(--text-light); margin-top: 4px; text-align: center; }
+.score-tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 4px; }
+.tag-deep { background: var(--blue-light); color: var(--blue-dark); }
+.tag-trust { background: var(--green-light); color: var(--green-dark); }
+.tag-basic { background: var(--orange-light); color: var(--orange-dark); }
+.tag-deficit { background: var(--red-light); color: var(--red-dark); }
+
+/* Add button */
+.add-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: var(--blue); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.add-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.del-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--red-light); color: var(--red); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.del-btn:hover { background: var(--red); color: white; }
+
+/* Legend */
+.legend { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+.legend-item { padding: 10px 12px; border-radius: var(--radius-sm); font-size: 12px; text-align: center; }
+.legend-item strong { display: block; font-size: 13px; margin-bottom: 2px; }
+.legend-deep { background: var(--blue-light); color: var(--blue-dark); }
+.legend-trust { background: var(--green-light); color: var(--green-dark); }
+.legend-basic { background: var(--orange-light); color: var(--orange-dark); }
+.legend-deficit { background: var(--red-light); color: var(--red-dark); }
+
+/* Action plan */
+.action-category { border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 12px; }
+.action-category:hover { border-color: #cbd5e1; }
+.cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.cat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.cat-title { font-size: 14px; font-weight: 700; }
+.cat-sub { font-size: 11px; color: var(--text-mid); }
+.cat-blue .cat-icon { background: var(--blue-light); }
+.cat-blue .cat-title { color: var(--blue-dark); }
+.cat-green .cat-icon { background: var(--green-light); }
+.cat-green .cat-title { color: var(--green-dark); }
+.cat-orange .cat-icon { background: var(--orange-light); }
+.cat-orange .cat-title { color: var(--orange-dark); }
+.cat-red .cat-icon { background: var(--red-light); }
+.cat-red .cat-title { color: var(--red-dark); }
+
+.action-row { display: grid; grid-template-columns: 1fr 140px 80px; gap: 10px; align-items: center; margin-bottom: 8px; }
+.action-row input[type="text"] { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+.action-row input[type="text"]:focus { border-color: var(--blue); }
+.action-row input.time-input { text-align: center; }
+.action-row .del-small { width: 28px; height: 28px; border-radius: 6px; border: none; background: #f1f5f9; color: var(--text-light); cursor: pointer; font-size: 14px; }
+.action-row .del-small:hover { background: var(--red-light); color: var(--red); }
+.add-action { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border: 1px dashed var(--text-light); border-radius: 8px; background: transparent; color: var(--text-mid); font-size: 12px; cursor: pointer; margin-top: 4px; }
+.add-action:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+.example-tip { font-size: 11px; color: var(--text-light); margin-top: 6px; font-style: italic; }
+
+/* Person selector for step 2 */
+.person-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.person-pill { padding: 8px 16px; border: 2px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; background: white; transition: all 0.2s; }
+.person-pill:hover { border-color: var(--blue); }
+.person-pill.active { border-color: var(--blue); background: var(--blue-light); color: var(--blue-dark); }
+
+/* Review table */
+.review-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.review-table th { background: #f8fafc; padding: 12px 10px; text-align: left; font-weight: 600; font-size: 12px; color: var(--text-mid); border-bottom: 2px solid var(--border); }
+.review-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.review-table tr:last-child td { border-bottom: none; }
+.review-table input[type="text"], .review-table textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: inherit; resize: vertical; outline: none; }
+.review-table input[type="text"]:focus, .review-table textarea:focus { border-color: var(--blue); }
+.review-table textarea { min-height: 60px; }
+.review-table .score-small { width: 60px; padding: 6px 8px; text-align: center; font-weight: 700; }
+
+/* Stats */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { text-align: center; padding: 16px 12px; border-radius: var(--radius-sm); }
+.stat-card .num { font-size: 28px; font-weight: 800; }
+.stat-card .label { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+.stat-deep { background: var(--blue-light); color: var(--blue-dark); }
+.stat-trust { background: var(--green-light); color: var(--green-dark); }
+.stat-basic { background: var(--orange-light); color: var(--orange-dark); }
+.stat-deficit { background: var(--red-light); color: var(--red-dark); }
+
+/* Save / export */
+.tool-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.tool-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: white; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.tool-btn:hover { background: #f8fafc; }
+.tool-btn.primary { background: var(--blue); color: white; border-color: var(--blue); }
+.tool-btn.primary:hover { background: var(--blue-dark); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .container { padding: 16px 10px 40px; }
+  .card { padding: 16px; }
+  .legend { grid-template-columns: repeat(2, 1fr); }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .action-row { grid-template-columns: 1fr; gap: 6px; }
+  .review-table { font-size: 11px; }
+  .review-table th, .review-table td { padding: 8px 6px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">博商 · 懂生意 · 学完就落地</div>
+  <h1>情感账户储蓄工具</h1>
+  <p>梳理核心利益人 → 制定储蓄计划 → 定期复盘</p>
+</header>
+
+<div class="container">
+
+<!-- Tabs -->
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="1" onclick="switchTab(1)">
+    <span>📊</span> 第一步：评估
+  </button>
+  <button class="tab-btn" data-tab="2" onclick="switchTab(2)">
+    <span>📝</span> 第二步：计划
+  </button>
+  <button class="tab-btn" data-tab="3" onclick="switchTab(3)">
+    <span>📋</span> 第三步：复盘
+  </button>
+</div>
+
+<!-- ==================== STEP 1: 评估 ==================== -->
+<div id="tab-1" class="tab-content">
+
+  <div class="card">
+    <div class="card-title">📊 核心利益人评估</div>
+    <div class="card-sub">列出你需要重点维系的5-8位关键成员，输入当前信任得分（0-100分），系统将自动分级</div>
+
+    <div class="legend">
+      <div class="legend-item legend-deep"><strong>90-100分</strong>深度信任<br>无条件支持，可托付重要任务</div>
+      <div class="legend-item legend-trust"><strong>80-89分</strong>信赖信任<br>合作顺畅，有私人层面交流</div>
+      <div class="legend-item legend-basic"><strong>60-79分</strong>基本信任<br>能完成工作协作，关系脆弱</div>
+      <div class="legend-item legend-deficit"><strong>60分以下</strong>信任赤字<br>存在隔阂，协作困难</div>
+    </div>
+
+    <div id="people-list"></div>
+
+    <div style="margin-top: 16px;">
+      <button class="add-btn" onclick="addPerson()">+ 添加利益人</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 评估总览</div>
+    <div class="stats-row" id="stats-overview"></div>
+  </div>
+
+  <div class="card" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-color: #bae6fd;">
+    <div class="card-title" style="color: #0369a1;">💡 评估后思考</div>
+    <div style="font-size: 13px; color: #0c4a6e; line-height: 1.8;">
+      <p>• <strong>谁是你的"信任赤字"？</strong> 这些人最影响你的工作推进，需要优先制定储蓄计划。</p>
+      <p>• <strong>谁在"基本信任"区间？</strong> 关系脆弱，一次冲突就可能降级，需要持续投入。</p>
+      <p>• <strong>你的"深度信任"够吗？</strong> 至少要有2-3个深度信任的核心盟友，关键时刻能托付。</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== STEP 2: 计划 ==================== -->
+<div id="tab-2" class="tab-content" style="display:none">
+
+  <div class="card">
+    <div class="card-title">🎯 选择利益人制定计划</div>
+    <div class="card-sub">先选一个人，针对他的信任等级和特点，制定四类储蓄行动计划</div>
+    <div class="person-pills" id="plan-pills"></div>
+  </div>
+
+  <div id="plan-panel"></div>
+
+</div>
+
+<!-- ==================== STEP 3: 复盘 ==================== -->
+<div id="tab-3" class="tab-content" style="display:none">
+
+  <div class="card">
+    <div class="card-title">📋 定期复盘表</div>
+    <div class="card-sub">回顾你执行的储蓄行动，记录对方反应，评估期末情感分，调整下一步方向</div>
+    <table class="review-table">
+      <thead>
+        <tr>
+          <th style="width:80px;">姓名</th>
+          <th style="width:90px;">行动执行<br>情况</th>
+          <th>效果反馈<br>（做了什么？对方反应如何？）</th>
+          <th style="width:70px;">期末<br>情感分</th>
+          <th style="width:120px;">下次调整<br>方向</th>
+        </tr>
+      </thead>
+      <tbody id="review-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-color: #a7f3d0;">
+    <div class="card-title" style="color: #047857;">💡 复盘要点</div>
+    <div style="font-size: 13px; color: #065f46; line-height: 1.8;">
+      <p>• <strong>行动是否落地？</strong> 不要只停留在"想"，要记录实际做了什么。</p>
+      <p>• <strong>对方反应是关键信号。</strong> 热情回应 = 关系升温，冷淡/回避 = 需要换方式。</p>
+      <p>• <strong>调整方向要具体。</strong> "多关心"太虚，"下周请他吃饭聊聊孩子升学"才有效。</p>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ==================== STATE ====================
+let people = JSON.parse(localStorage.getItem('eba_people') || '[]');
+let plans = JSON.parse(localStorage.getItem('eba_plans') || '{}');
+let reviews = JSON.parse(localStorage.getItem('eba_reviews') || '{}');
+let activePlanPerson = null;
+
+const CATEGORIES = [
+  { id: 'recognition', name: '工作认可', sub: '公开/私下表扬其贡献', icon: '🏆', cls: 'cat-blue',
+    examples: ['在部门月会上点名感谢他在XX项目中的贡献', '私下发消息肯定他最近的某个成果', '在周报中特别提到他的帮助'] },
+  { id: 'growth', name: '成长投资', sub: '关注其能力与发展', icon: '🌱', cls: 'cat-green',
+    examples: ['推荐他参加下月的销售培训，一周后听取分享', '分享一篇对他岗位有帮助的文章', '主动提出做他的导师，每周抽30分钟交流'] },
+  { id: 'care', name: '个人关怀', sub: '关心工作外的生活', icon: '❤️', cls: 'cat-orange',
+    examples: ['在他孩子生日当天发祝福并送个小礼物', '生病时主动问候并帮忙分担工作', '记住他的爱好，分享相关的话题/物品'] },
+  { id: 'empower', name: '信任赋能', sub: '授权、征询意见', icon: '🔑', cls: 'cat-red',
+    examples: ['重要客户策略单独征询他的看法', '授权他独立负责一个小项目', '在关键决策前主动征求他的建议'] }
+];
+
+function saveAll() {
+  localStorage.setItem('eba_people', JSON.stringify(people));
+  localStorage.setItem('eba_plans', JSON.stringify(plans));
+  localStorage.setItem('eba_reviews', JSON.stringify(reviews));
+}
+
+// ==================== TAB ====================
+function switchTab(n) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + n).style.display = 'block';
+  document.querySelector('.tab-btn[data-tab="' + n + '"]').classList.add('active');
+  if (n === 1) renderAssessment();
+  if (n === 2) renderPlanSelector();
+  if (n === 3) renderReview();
+}
+
+// ==================== STEP 1: ASSESSMENT ====================
+function getScoreClass(score) {
+  if (score >= 90) return { cls: 'score-deep', tag: 'tag-deep', label: '深度信任' };
+  if (score >= 80) return { cls: 'score-trust', tag: 'tag-trust', label: '信赖信任' };
+  if (score >= 60) return { cls: 'score-basic', tag: 'tag-basic', label: '基本信任' };
+  return { cls: 'score-deficit', tag: 'tag-deficit', label: '信任赤字' };
+}
+
+function renderAssessment() {
+  const container = document.getElementById('people-list');
+  if (people.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">点击上方"+ 添加利益人"开始评估</div>';
+  } else {
+    container.innerHTML = people.map((p, i) => {
+      const sc = getScoreClass(p.score || 0);
+      return `
+        <div class="person-card">
+          <div class="person-header">
+            <div class="score-ring ${sc.cls}">${p.score || 0}</div>
+            <div class="person-info">
+              <input type="text" class="person-name" value="${p.name}" placeholder="姓名" style="border:none;font-size:15px;font-weight:700;background:transparent;outline:none;width:100%;" onchange="updatePerson(${i},'name',this.value)">
+              <input type="text" class="person-role" value="${p.role || ''}" placeholder="角色/关系（如：直属上级、关键客户）" style="border:none;font-size:12px;color:var(--text-mid);background:transparent;outline:none;width:100%;margin-top:2px;" onchange="updatePerson(${i},'role',this.value)">
+              <div><span class="score-tag ${sc.tag}">${sc.label}</span></div>
+            </div>
+            <div style="text-align:center;">
+              <input type="number" class="score-input" value="${p.score || 0}" min="0" max="100" onchange="updatePerson(${i},'score',this.value)">
+              <div class="score-label">信任分</div>
+            </div>
+            <button class="del-btn" onclick="removePerson(${i})">×</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  renderStats();
+}
+
+function renderStats() {
+  const counts = { deep: 0, trust: 0, basic: 0, deficit: 0 };
+  people.forEach(p => {
+    const s = p.score || 0;
+    if (s >= 90) counts.deep++;
+    else if (s >= 80) counts.trust++;
+    else if (s >= 60) counts.basic++;
+    else counts.deficit++;
+  });
+  document.getElementById('stats-overview').innerHTML = `
+    <div class="stat-card stat-deep"><div class="num">${counts.deep}</div><div class="label">深度信任</div></div>
+    <div class="stat-card stat-trust"><div class="num">${counts.trust}</div><div class="label">信赖信任</div></div>
+    <div class="stat-card stat-basic"><div class="num">${counts.basic}</div><div class="label">基本信任</div></div>
+    <div class="stat-card stat-deficit"><div class="num">${counts.deficit}</div><div class="label">信任赤字</div></div>
+  `;
+}
+
+function addPerson() {
+  people.push({ name: '', role: '', score: 60 });
+  saveAll();
+  renderAssessment();
+}
+
+function updatePerson(i, field, val) {
+  if (field === 'score') val = Math.max(0, Math.min(100, parseInt(val) || 0));
+  people[i][field] = val;
+  saveAll();
+  renderAssessment();
+}
+
+function removePerson(i) {
+  people.splice(i, 1);
+  saveAll();
+  renderAssessment();
+}
+
+// ==================== STEP 2: PLAN ====================
+function renderPlanSelector() {
+  const pills = document.getElementById('plan-pills');
+  if (people.length === 0) {
+    pills.innerHTML = '<div style="color:var(--text-light);font-size:13px;">请先在第一步添加利益人</div>';
+    document.getElementById('plan-panel').innerHTML = '';
+    return;
+  }
+  pills.innerHTML = people.map((p, i) => {
+    const sc = getScoreClass(p.score || 0);
+    return `<button class="person-pill ${activePlanPerson === i ? 'active' : ''}" onclick="selectPlanPerson(${i})">${p.name || '未命名'} <span style="opacity:0.6;font-size:11px;">(${p.score || 0}分)</span></button>`;
+  }).join('');
+
+  if (activePlanPerson === null && people.length > 0) activePlanPerson = 0;
+  renderPlanPanel();
+}
+
+function selectPlanPerson(i) {
+  activePlanPerson = i;
+  renderPlanSelector();
+}
+
+function renderPlanPanel() {
+  const panel = document.getElementById('plan-panel');
+  if (activePlanPerson === null || !people[activePlanPerson]) {
+    panel.innerHTML = '';
+    return;
+  }
+  const person = people[activePlanPerson];
+  const pid = person.name || 'p' + activePlanPerson;
+  if (!plans[pid]) plans[pid] = {};
+
+  panel.innerHTML = `
+    <div class="card">
+      <div class="card-title">📝 ${person.name || '未命名'} 的储蓄计划</div>
+      <div class="card-sub">当前信任等级：${getScoreClass(person.score || 0).label}（${person.score || 0}分）。针对性地在四个维度制定行动。</div>
+      ${CATEGORIES.map(cat => {
+        const actions = plans[pid][cat.id] || [];
+        return `
+          <div class="action-category ${cat.cls}">
+            <div class="cat-header">
+              <div class="cat-icon">${cat.icon}</div>
+              <div>
+                <div class="cat-title">${cat.name}</div>
+                <div class="cat-sub">${cat.sub}</div>
+              </div>
+            </div>
+            <div id="actions-${cat.id}">
+              ${actions.length === 0 ? '<div style="color:var(--text-light);font-size:12px;padding:4px 0;">暂无行动，点击添加</div>' : actions.map((a, ai) => `
+                <div class="action-row">
+                  <input type="text" value="${a.text}" placeholder="具体行动内容" onchange="updateAction('${pid}','${cat.id}',${ai},'text',this.value)">
+                  <input type="text" class="time-input" value="${a.time || ''}" placeholder="时机/时间" onchange="updateAction('${pid}','${cat.id}',${ai},'time',this.value)">
+                  <button class="del-small" onclick="removeAction('${pid}','${cat.id}',${ai})">×</button>
+                </div>
+              `).join('')}
+            </div>
+            <button class="add-action" onclick="addAction('${pid}','${cat.id}')">+ 添加行动</button>
+            <div class="example-tip">💡 示例：${cat.examples[Math.floor(Math.random() * cat.examples.length)]}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function addAction(pid, catId) {
+  if (!plans[pid]) plans[pid] = {};
+  if (!plans[pid][catId]) plans[pid][catId] = [];
+  plans[pid][catId].push({ text: '', time: '' });
+  saveAll();
+  renderPlanPanel();
+}
+
+function updateAction(pid, catId, idx, field, val) {
+  plans[pid][catId][idx][field] = val;
+  saveAll();
+}
+
+function removeAction(pid, catId, idx) {
+  plans[pid][catId].splice(idx, 1);
+  saveAll();
+  renderPlanPanel();
+}
+
+// ==================== STEP 3: REVIEW ====================
+function renderReview() {
+  const tbody = document.getElementById('review-tbody');
+  if (people.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-light);padding:40px;">请先在第一步添加利益人</td></tr>';
+    return;
+  }
+  tbody.innerHTML = people.map((p, i) => {
+    const pid = p.name || 'p' + i;
+    const rev = reviews[pid] || { exec: '', feedback: '', score: p.score || 0, direction: '' };
+    return `
+      <tr>
+        <td><strong>${p.name || '未命名'}</strong><br><span style="font-size:11px;color:var(--text-light);">${getScoreClass(p.score || 0).label}</span></td>
+        <td><input type="text" value="${rev.exec}" placeholder="做了什么？" onchange="updateReview('${pid}','exec',this.value)"></td>
+        <td><textarea placeholder="对方反应如何？是否达到预期？" onchange="updateReview('${pid}','feedback',this.value)">${rev.feedback}</textarea></td>
+        <td><input type="number" class="score-small" value="${rev.score}" min="0" max="100" onchange="updateReview('${pid}','score',this.value)"></td>
+        <td><input type="text" value="${rev.direction}" placeholder="下一步方向" onchange="updateReview('${pid}','direction',this.value)"></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function updateReview(pid, field, val) {
+  if (!reviews[pid]) reviews[pid] = { exec: '', feedback: '', score: 0, direction: '' };
+  if (field === 'score') val = Math.max(0, Math.min(100, parseInt(val) || 0));
+  reviews[pid][field] = val;
+  saveAll();
+}
+
+// ==================== INIT ====================
+if (people.length === 0) {
+  // Demo data
+  people = [
+    { name: '张总', role: '直属上级', score: 75 },
+    { name: '李经理', role: '跨部门协作', score: 85 },
+    { name: '王客户', role: '关键客户决策人', score: 55 },
+  ];
+  saveAll();
+}
+renderAssessment();
+</script>
+
+</body>
+</html>
