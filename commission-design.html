@@ -80,6 +80,7 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
 .factor-tag.kpi { background: #f1f5f9; color: var(--kpi); }
 .factor-weight { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .factor-weight input { width: 44px; padding: 3px 4px; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 12px; font-weight: 600; }
+.weight-hint { font-size: 10px; color: var(--text-light); }
 
 /* Legend */
 .type-legend { display: flex; gap: 16px; margin-bottom: 16px; font-size: 12px; }
@@ -244,7 +245,7 @@ header p { font-size: 14px; opacity: 0.75; max-width: 600px; margin: 0 auto; }
     </div>
 
     <div class="weight-bar-container">
-      <div class="weight-bar-label"><span>已选因素权重分配（仅含直接提成+调节系数）</span><span id="weightTotal">天0% · 地0% · 人0%</span></div>
+      <div class="weight-bar-label"><span>天地人三维度相对侧重</span><span id="weightTotal" style="font-size:11px;color:var(--text-light);">不要求加总=100%</span></span></div>
       <div class="weight-bar" id="weightBar">
         <div class="weight-bar-seg tian" id="weightBarTian" style="width:0%"></div>
         <div class="weight-bar-seg di" id="weightBarDi" style="width:0%"></div>
@@ -484,13 +485,21 @@ function renderFactors(category) {
     const sel = state.selectedFactors[category].includes(f.id);
     const tagClass = f.type;
     const tagText = f.type === 'direct' ? '直接提成' : f.type === 'coeff' ? '调节系数' : '绩效建议';
+    // 根据类型构造副标题，展示实际含义
+    let subtitle = f.desc;
+    if (f.type === 'direct' && f.rateDefault) {
+      subtitle += ' · 提成率' + f.rateDefault + '%';
+    } else if (f.type === 'coeff') {
+      const range = Math.round((f.weight || 30) * 0.5);
+      subtitle += ' · 影响力±' + range + '%';
+    }
     return `<div class="factor-item ${sel ? 'selected ' + tagClass : ''} ${tagClass}" onclick="toggleFactor('${category}','${f.id}')">
       <div class="factor-check"></div>
       <div class="factor-info">
         <div class="factor-name">${f.name} <span class="factor-tag ${tagClass}">${tagText}</span></div>
-        <div class="factor-desc">${f.desc}</div>
+        <div class="factor-desc">${subtitle}</div>
       </div>
-      ${f.type !== 'kpi' ? `<div class="factor-weight"><input type="number" value="${f.weight}" min="0" max="100" onclick="event.stopPropagation()" onchange="updateFactorWeight('${category}','${f.id}',this.value)"><span>%</span></div>` : ''}
+      ${f.type !== 'kpi' ? `<div class="factor-weight"><input type="number" value="${f.weight}" min="0" max="100" onclick="event.stopPropagation()" onchange="updateFactorWeight('${category}','${f.id}',this.value)"><span class="weight-hint">重要性</span></div>` : ''}
     </div>`;
   }).join('');
 }
