@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 3C&8维客户策略分析 · 756班定制</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #4a1a8c;
+  --primary-light: #f0e8fc;
+  --primary-dark: #2a0d52;
+  --accent: #e67e22;
+  --accent-light: #fef3e8;
+  --success: #27ae60;
+  --success-light: #e8f8ee;
+  --danger: #c0392b;
+  --danger-light: #fdeaea;
+  --gold: #d4a017;
+  --gold-light: #fff8e8;
+  --grey-dark: #2c3e50;
+  --grey-mid: #7f8c8d;
+  --grey-light: #ecf0f1;
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --blue: #2980b9;
+  --blue-light: #e8f4fd;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--grey-dark); line-height: 1.6; min-height: 100vh;
+}
+
+/* Header */
+/* === 统一品牌头部 === */
+header {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 50%, #1a3a5c 100%);
+  color: #fff; padding: 36px 24px 32px; text-align: center;
+  position: relative; overflow: hidden;
+}
+header::before { content:''; position:absolute; top:-50%; right:-10%; width:400px; height:400px; background:rgba(255,255,255,0.04); border-radius:50%; }
+header::after { content:''; position:absolute; bottom:-30%; left:-5%; width:300px; height:300px; background:rgba(255,255,255,0.03); border-radius:50%; }
+.header-badge { display:inline-block; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:20px; padding:4px 16px; font-size:12px; letter-spacing:2px; margin-bottom:12px; position:relative; z-index:1; }
+header h1 { font-size:26px; font-weight:700; margin-bottom:6px; position:relative; z-index:1; }
+header p { font-size:14px; opacity:0.85; max-width:560px; margin:0 auto; position:relative; z-index:1; }
+
+.container { max-width:1100px; margin:0 auto; padding:36px 20px 80px; }
+
+/* Buttons */
+.btn { border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; padding:10px 20px; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px; }
+.btn-primary { background:var(--primary); color:white; }
+.btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); }
+.btn-accent { background:var(--accent); color:white; }
+.btn-accent:hover { background:#d35400; transform:translateY(-1px); }
+.btn-outline { background:white; color:var(--grey-mid); border:2px solid var(--grey-light); }
+.btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+.btn-sm { padding:6px 14px; font-size:12px; }
+.btn-danger { background:var(--danger); color:white; }
+.btn-danger:hover { opacity:0.9; }
+.btn-gold { background:var(--gold); color:white; }
+.btn-gold:hover { background:#b8860b; }
+
+/* Section */
+.section {
+  background:var(--white); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:28px 32px; margin-bottom:24px; transition:all 0.3s;
+}
+.section.active-section { box-shadow:var(--shadow-lg); border-left:4px solid var(--primary); }
+.section-title { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:14px; border-bottom:2px solid var(--primary-light); }
+.section-title h2 { font-size:18px; font-weight:700; color:var(--primary); }
+.section-title .step-num { width:36px; height:36px; background:var(--primary); color:white; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; }
+
+/* Progress Bar */
+.progress-bar-wrap { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 32px; margin-bottom:24px; }
+.progress-steps { display:flex; justify-content:space-between; position:relative; margin-bottom:10px; }
+.progress-steps::before { content:''; position:absolute; top:14px; left:50px; right:50px; height:3px; background:var(--grey-light); z-index:0; }
+.progress-fill { position:absolute; top:14px; left:50px; height:3px; background:var(--primary); z-index:1; transition:width 0.4s; }
+.progress-step { display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; flex:1; }
+.progress-dot { width:30px; height:30px; border-radius:50%; background:var(--grey-light); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--grey-mid); transition:all 0.3s; }
+.progress-dot.active { background:var(--primary); color:white; }
+.progress-dot.done { background:var(--success); color:white; }
+.progress-label { font-size:11px; color:var(--grey-mid); margin-top:6px; text-align:center; max-width:80px; }
+.progress-label.active { color:var(--primary); font-weight:600; }
+
+/* Form shared */
+.form-input, select.form-input, textarea {
+  padding:10px 14px; border:2px solid var(--grey-light); border-radius:8px; font-size:13px; font-family:inherit; transition:border-color 0.2s; background:var(--white); resize:vertical;
+}
+.form-input:focus, select.form-input:focus, textarea:focus { outline:none; border-color:var(--primary); }
+textarea.form-input { min-height:70px; }
+.form-label { font-size:12px; font-weight:600; color:var(--grey-mid); margin-bottom:4px; }
+.form-hint { font-size:11px; color:var(--grey-mid); margin-top:2px; }
+
+/* Step 1: Customer Profile Grid */
+.profile-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px 20px; }
+@media (max-width:900px) { .profile-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:500px) { .profile-grid { grid-template-columns:1fr; } }
+.profile-grid .full { grid-column:span 2; }
+.profile-grid .full-wide { grid-column:1/-1; }
+
+/* Scope Selector */
+.scope-selector { display:flex; gap:8px; flex-wrap:wrap; }
+.scope-option {
+  display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+  padding:10px 14px; border:2px solid var(--grey-light); border-radius:10px;
+  cursor:pointer; transition:all 0.25s; min-width:110px; background:var(--white);
+}
+.scope-option:hover { border-color:var(--primary); background:var(--primary-light); }
+.scope-option.active { border-color:var(--primary); background:var(--primary-light); box-shadow:0 0 0 3px rgba(74,26,140,0.1); }
+.scope-option .scope-icon { font-size:20px; }
+.scope-option .scope-text { font-size:13px; font-weight:700; color:var(--grey-dark); }
+.scope-option .scope-hint { font-size:10px; color:var(--grey-mid); }
+.scope-option.active .scope-text { color:var(--primary); }
+
+/* Strategy mode badge */
+.mode-badge {
+  display:inline-block; padding:4px 12px; border-radius:14px;
+  font-size:12px; font-weight:700; margin-bottom:10px;
+}
+.mode-badge.single { background:#e8f4fd; color:#2980b9; }
+.mode-badge.industry { background:var(--success-light); color:var(--success); }
+.mode-badge.category { background:var(--accent-light); color:var(--accent); }
+.field-group { display:flex; flex-direction:column; }
+
+/* Step 2: Needs Table */
+.needs-table { width:100%; border-collapse:separate; border-spacing:0; border-radius:10px; overflow:hidden; font-size:13px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.needs-table thead th { background:var(--blue); color:white; padding:10px 12px; font-weight:600; font-size:12px; text-align:center; }
+.needs-table thead th:first-child { text-align:left; padding-left:16px; width:100px; }
+.needs-table thead th:nth-child(2) { width:90px; }
+.needs-table tbody td { padding:8px 12px; border-bottom:1px solid var(--grey-light); background:var(--white); vertical-align:middle; }
+.needs-table tbody tr:hover td { background:var(--blue-light); }
+.needs-table .dim-label { font-weight:600; text-align:left; padding-left:16px; }
+.needs-table select { width:72px; padding:6px 8px; border:2px solid var(--grey-light); border-radius:6px; font-size:13px; text-align:center; cursor:pointer; font-family:inherit; }
+.needs-table select:focus { border-color:var(--blue); outline:none; }
+.needs-table textarea { width:100%; min-height:50px; border:1px dashed var(--grey-light); padding:8px; font-size:12px; border-radius:6px; resize:vertical; font-family:inherit; }
+.needs-table textarea:focus { border-color:var(--blue); outline:none; }
+.priority-high { color:var(--danger); font-weight:700; }
+.priority-mid { color:var(--accent); font-weight:700; }
+.priority-low { color:var(--grey-mid); font-weight:700; }
+
+/* Competitor Management */
+.competitor-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 20px; background:var(--danger-light); border-radius:10px; margin-bottom:16px; }
+.competitor-bar .section-label { font-weight:700; color:var(--danger); font-size:14px; white-space:nowrap; }
+.comp-tag { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+.comp-tag.a { background:#fdeaea; color:#c0392b; border:2px solid #e8b4b4; }
+.comp-tag.b { background:#fef3e8; color:#d35400; border:2px solid #f0c8a0; }
+.comp-tag.c { background:#e8f4fd; color:#2980b9; border:2px solid #b8d8f0; }
+.comp-tag .comp-name-input { border:none; background:transparent; font-size:13px; font-weight:600; font-family:inherit; width:70px; outline:none; padding:2px 0; color:inherit; }
+.comp-tag .comp-name-input:focus { border-bottom:2px solid currentColor; }
+.comp-remove { cursor:pointer; opacity:0.5; font-size:16px; line-height:1; transition:opacity 0.2s; }
+.comp-remove:hover { opacity:1; }
+
+/* Step 3: Matrix Table */
+.matrix-wrap { overflow-x:auto; }
+.matrix-table { width:100%; border-collapse:separate; border-spacing:0; border-radius:10px; overflow:hidden; font-size:12px; box-shadow:0 1px 4px rgba(0,0,0,0.06); min-width:600px; }
+.matrix-table thead th { padding:10px 8px; font-weight:700; font-size:11px; text-align:center; vertical-align:bottom; }
+.matrix-table thead th.th-dim { background:var(--primary); color:white; text-align:left; padding-left:14px; width:95px; }
+.matrix-table thead th.th-pri { background:var(--blue); color:white; width:65px; }
+.matrix-table thead th.th-comp { background:#e8d5d5; color:#8b2020; }
+.matrix-table thead th.th-us { background:var(--primary-light); color:var(--primary-dark); }
+.matrix-table thead th.th-gap { background:var(--gold-light); color:var(--gold); width:70px; }
+.matrix-table .comp-name-row { font-size:11px; color:inherit; padding:4px 8px; white-space:nowrap; max-width:80px; overflow:hidden; text-overflow:ellipsis; }
+.matrix-table tbody td { padding:7px 8px; text-align:center; border-bottom:1px solid var(--grey-light); background:var(--white); vertical-align:middle; }
+.matrix-table tbody tr:hover td { background:var(--primary-light); }
+.matrix-table .dim-label { text-align:left; padding-left:14px; font-weight:600; font-size:13px; }
+.matrix-table select.score-select { width:52px; padding:5px 4px; border:2px solid var(--grey-light); border-radius:6px; font-size:12px; text-align:center; cursor:pointer; font-family:inherit; background:white; }
+.matrix-table select.score-select:focus { border-color:var(--primary); outline:none; }
+.matrix-table .gap-cell { font-weight:700; font-size:13px; }
+.gap-pos { color:var(--danger); }
+.gap-neg { color:var(--success); }
+.gap-zero { color:var(--grey-mid); }
+
+/* Step 4: Strategy */
+.summary-card { background:linear-gradient(135deg, var(--primary-light) 0%, var(--gold-light) 100%); border-radius:12px; padding:24px; margin-bottom:20px; border:2px solid rgba(74,26,140,0.1); }
+.summary-card h3 { font-size:16px; font-weight:700; color:var(--primary); margin-bottom:10px; }
+.summary-card p { font-size:14px; line-height:1.8; color:var(--grey-dark); }
+.insight-badges { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+.insight-badge { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+.insight-badge.danger { background:var(--danger-light); color:var(--danger); }
+.insight-badge.success { background:var(--success-light); color:var(--success); }
+.insight-badge.info { background:var(--blue-light); color:var(--blue); }
+.insight-badge.warn { background:var(--accent-light); color:var(--accent); }
+
+.strategy-table { width:100%; border-collapse:separate; border-spacing:0; border-radius:10px; overflow:hidden; font-size:13px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.strategy-table thead th { background:linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color:white; padding:10px 12px; font-weight:600; font-size:12px; }
+.strategy-table thead th:first-child { width:105px; }
+.strategy-table thead th:nth-child(2) { width:130px; }
+.strategy-table thead th:nth-child(4) { width:110px; }
+.strategy-table tbody td { padding:10px 12px; border-bottom:1px solid var(--grey-light); background:var(--white); vertical-align:top; line-height:1.7; }
+.strategy-table tbody tr:hover td { background:var(--primary-light); }
+.strategy-table textarea { width:100%; min-height:50px; border:1px dashed var(--grey-light); padding:8px; font-size:12px; border-radius:6px; resize:vertical; font-family:inherit; background:rgba(255,255,255,0.8); }
+.strategy-table textarea:focus { border-color:var(--primary); outline:none; }
+.strategy-table select { width:100%; padding:6px; font-size:12px; border:1px solid var(--grey-light); border-radius:6px; font-family:inherit; }
+.strategy-table input { width:100%; padding:6px; font-size:12px; border:1px solid var(--grey-light); border-radius:6px; font-family:inherit; }
+
+/* Per-competitor strategy cards */
+.comp-strategy-card { background:var(--white); border-radius:10px; border:2px solid var(--grey-light); padding:20px; margin-bottom:16px; }
+.comp-strategy-card.card-a { border-color:#e8b4b4; background:#fefafa; }
+.comp-strategy-card.card-b { border-color:#f0c8a0; background:#fef9f4; }
+.comp-strategy-card.card-c { border-color:#b8d8f0; background:#f4f9fe; }
+.comp-strategy-card.card-d { border-color:#c8d8c8; background:#f6faf6; }
+.comp-strategy-card.card-e { border-color:#d8c8e8; background:#faf6fc; }
+.comp-strategy-card h4 { font-size:15px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.comp-strategy-card h4 .comp-dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
+.comp-strategy-card h4 .comp-dot.dot-a { background:#c0392b; }
+.comp-strategy-card h4 .comp-dot.dot-b { background:#d35400; }
+.comp-strategy-card h4 .comp-dot.dot-c { background:#2980b9; }
+.comp-strategy-card h4 .comp-dot.dot-d { background:#27ae60; }
+.comp-strategy-card h4 .comp-dot.dot-e { background:#8e44ad; }
+.adv-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; align-items:center; font-size:13px; }
+.adv-label { font-weight:600; min-width:60px; }
+.adv-badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600; margin:1px 3px; }
+.adv-badge.green { background:var(--success-light); color:var(--success); }
+.adv-badge.red { background:var(--danger-light); color:var(--danger); }
+.adv-badge.grey { background:var(--grey-light); color:var(--grey-mid); }
+.comp-strategy-text { background:rgba(255,255,255,0.8); border-radius:8px; padding:14px; margin-top:10px; font-size:13px; line-height:1.8; border-left:3px solid var(--primary); }
+.comp-strategy-text .strat-label { font-weight:700; color:var(--primary); }
+.comp-strategy-text .core-play { margin-top:8px; padding-top:8px; border-top:1px dashed var(--grey-light); }
+
+/* Compact gap cells in matrix */
+.matrix-table .gap-sm { width:48px; font-size:11px; font-weight:700; text-align:center; padding:7px 4px; }
+
+/* Bar chart */
+.bar-chart-wrap { margin-bottom:16px; }
+.bar-row { display:flex; align-items:center; margin-bottom:6px; gap:10px; }
+.bar-label { width:80px; font-size:12px; font-weight:600; text-align:right; flex-shrink:0; }
+.bar-track { flex:1; height:22px; background:var(--grey-light); border-radius:11px; position:relative; overflow:hidden; }
+.bar-fill { height:100%; border-radius:11px; position:absolute; left:0; top:0; transition:width 0.5s; display:flex; align-items:center; padding-left:8px; font-size:10px; font-weight:600; color:white; }
+.bar-fill.us { background:linear-gradient(90deg, var(--primary), #7b4fb8); z-index:2; }
+.bar-fill.best-comp { background:linear-gradient(90deg, var(--danger), #e07373); z-index:1; }
+.bar-score { width:36px; font-size:13px; font-weight:700; text-align:center; flex-shrink:0; }
+.bar-score.us { color:var(--primary); }
+.bar-score.best-comp { color:var(--danger); }
+
+/* Nav */
+.section-nav { display:flex; justify-content:space-between; margin-top:20px; }
+
+/* Preset */
+.preset-bar { display:flex; align-items:center; gap:12px; padding:14px 20px; background:var(--gold-light); border-radius:10px; margin-bottom:24px; font-size:13px; color:var(--grey-dark); flex-wrap:wrap; }
+.preset-bar .icon { font-size:20px; }
+.preset-bar strong { color:var(--gold); }
+
+/* History */
+.history-item { cursor:pointer; display:flex; align-items:center; gap:16px; padding:16px 20px; background:var(--white); border-radius:10px; margin-bottom:12px; border:1px solid var(--grey-light); transition:all 0.2s; }
+.history-item:hover { box-shadow:var(--shadow); border-color:var(--primary); }
+
+/* Empty */
+.empty-state { text-align:center; padding:60px 20px; color:var(--grey-mid); }
+.empty-state .icon { font-size:48px; margin-bottom:16px; }
+
+/* Toast */
+.toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--grey-dark); color:white; padding:12px 28px; border-radius:8px; font-size:14px; z-index:2000; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+.toast.show { opacity:1; }
+
+/* Action bar */
+.export-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:20px; }
+
+/* Responsive */
+@media (max-width:640px) {
+  header { padding:28px 16px 24px; }
+  header h1 { font-size:22px; }
+  .container { padding:20px 12px 60px; }
+  .section { padding:20px 16px; }
+  .matrix-table { font-size:10px; }
+  .matrix-table select.score-select { width:44px; font-size:10px; padding:3px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">大董老师天地人销售管理体系 · 756班定制</div>
+  <h1>🎯 3C&8维 · 客户策略分析</h1>
+  <p>一户一策 · 一行一策 · 一类一策 — 按客户分类输出差异化竞争策略</p>
+</header>
+
+<div class="container">
+
+  <!-- 预置示例 -->
+  <div class="preset-bar" id="presetBar">
+    <span class="icon">💡</span>
+    <span>快速加载示例：</span>
+    <button class="btn btn-gold btn-sm" onclick="loadPreset('S')">S类一户一策</button>
+    <button class="btn btn-outline btn-sm" onclick="loadPreset('A')">A类一行一策</button>
+    <button class="btn btn-outline btn-sm" onclick="loadPreset('B')">B类一类一策</button>
+    <button class="btn btn-outline btn-sm" onclick="startNew()">新建空白</button>
+  </div>
+
+  <!-- 进度条 -->
+  <div class="progress-bar-wrap">
+    <div class="progress-steps">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      <div class="progress-step"><div class="progress-dot active" id="dot1">1</div><div class="progress-label active" id="label1">客户画像</div></div>
+      <div class="progress-step"><div class="progress-dot" id="dot2">2</div><div class="progress-label" id="label2">客户需求</div></div>
+      <div class="progress-step"><div class="progress-dot" id="dot3">3</div><div class="progress-label" id="label3">多对手对比</div></div>
+      <div class="progress-step"><div class="progress-dot" id="dot4">4</div><div class="progress-label" id="label4">策略推导</div></div>
+    </div>
+  </div>
+
+  <!-- ===== Step 1: 分析对象画像 ===== -->
+  <div class="section active-section" id="sec1">
+    <div class="section-title"><div class="step-num">1</div><h2>分析对象长啥样？— 画像表格</h2></div>
+
+    <!-- 分析范围选择 -->
+    <div class="scope-selector" style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+      <label class="scope-option active" id="scopeSingle" onclick="setScope('single')">
+        <input type="radio" name="scope" value="single" checked style="display:none;">
+        <span class="scope-icon">🎯</span>
+        <span class="scope-text">一户一策</span>
+        <span class="scope-hint">单个客户深度分析</span>
+      </label>
+      <label class="scope-option" id="scopeIndustry" onclick="setScope('industry')">
+        <input type="radio" name="scope" value="industry" style="display:none;">
+        <span class="scope-icon">🏭</span>
+        <span class="scope-text">一行一策</span>
+        <span class="scope-hint">同行业A类客户群</span>
+      </label>
+      <label class="scope-option" id="scopeCategory" onclick="setScope('category')">
+        <input type="radio" name="scope" value="category" style="display:none;">
+        <span class="scope-icon">📦</span>
+        <span class="scope-text">一类一策</span>
+        <span class="scope-hint">B类共性客户群</span>
+      </label>
+    </div>
+
+    <div class="profile-grid" id="profileGrid">
+      <div class="field-group">
+        <label class="form-label" id="lblCustName">客户名称 *</label>
+        <input class="form-input" id="custName" placeholder="例：XX集团">
+      </div>
+      <div class="field-group">
+        <label class="form-label">目标客户等级</label>
+        <select class="form-input" id="custGrade">
+          <option value="S">S类 — 行业前三·集体决策</option>
+          <option value="A">A类 — 中型·多人决策</option>
+          <option value="B">B类 — 中小·老板决策</option>
+          <option value="C">C类 — 小微·个人决策</option>
+        </select>
+      </div>
+      <div class="field-group" id="fieldIndustry">
+        <label class="form-label" id="lblCustIndustry">所属行业</label>
+        <input class="form-input" id="custIndustry" placeholder="例：通信/制造/金融">
+      </div>
+      <div class="field-group">
+        <label class="form-label" id="lblCustScale">企业规模</label>
+        <input class="form-input" id="custScale" placeholder="例：年营收5亿·500人">
+      </div>
+      <div class="field-group">
+        <label class="form-label" id="lblCustKeyPerson">关键决策人</label>
+        <input class="form-input" id="custKeyPerson" placeholder="例：采购总监王总">
+      </div>
+      <div class="field-group">
+        <label class="form-label" id="lblCustBudget">采购预算</label>
+        <input class="form-input" id="custBudget" placeholder="例：300-500万/年">
+      </div>
+      <div class="field-group">
+        <label class="form-label" id="lblCustDecision">决策流程</label>
+        <input class="form-input" id="custDecision" placeholder="例：技术部→采购部→副总审批">
+      </div>
+      <div class="field-group">
+        <label class="form-label" id="lblCustCycle">决策周期</label>
+        <input class="form-input" id="custCycle" placeholder="例：3-6个月">
+      </div>
+      <div class="field-group full-wide">
+        <label class="form-label" id="lblCustPain">核心痛点 / 业务需求</label>
+        <textarea class="form-input" id="custPain" placeholder="例：网络设备老化故障频发，影响业务连续性；原供应商服务响应慢，急需替代方案" style="min-height:60px;"></textarea>
+      </div>
+    </div>
+    <div class="section-nav"><div></div><button class="btn btn-primary" onclick="goStep(2)">下一步 →</button></div>
+  </div>
+
+  <!-- ===== Step 2: 客户需求8维 ===== -->
+  <div class="section" id="sec2">
+    <div class="section-title"><div class="step-num">2</div><h2>客户啥问题？— 8维需求打分</h2></div>
+    <p style="font-size:13px;color:var(--grey-mid);margin-bottom:16px;">逐维度评估：客户对该维度的关注度（高/中/低），以及具体需求描述</p>
+    <div style="overflow-x:auto;">
+      <table class="needs-table" id="needsTable">
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>客户关注度</th>
+            <th>具体需求描述</th>
+          </tr>
+        </thead>
+        <tbody id="needsBody"></tbody>
+      </table>
+    </div>
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(1)">← 上一步</button>
+      <button class="btn btn-primary" onclick="goStep(3)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- ===== Step 3: 竞争对比矩阵 ===== -->
+  <div class="section" id="sec3">
+    <div class="section-title"><div class="step-num">3</div><h2>对手有哪些？我们咋样？— 多对手矩阵</h2></div>
+    <p style="font-size:13px;color:var(--grey-mid);margin-bottom:12px;">添加竞争对手，逐维度对比打分。有几个对手就加几列。</p>
+
+    <!-- Competitor management bar -->
+    <div class="competitor-bar" id="compBar">
+      <span class="section-label">⚔️ 已添加对手：</span>
+      <span id="compTags" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"></span>
+      <button class="btn btn-outline btn-sm" onclick="addCompetitor()" id="btnAddComp" style="margin-left:auto;">+ 添加对手</button>
+    </div>
+
+    <!-- Matrix Table -->
+    <div class="matrix-wrap">
+      <table class="matrix-table" id="matrixTable">
+        <thead id="matrixHead"></thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(2)">← 上一步</button>
+      <button class="btn btn-primary" onclick="goStep(4); generateStrategy();">🔮 下一步 →</button>
+    </div>
+  </div>
+
+  <!-- ===== Step 4: 策略推导 ===== -->
+  <div class="section" id="sec4">
+    <div class="section-title"><div class="step-num">4</div><h2>我们怎么办？— 逐对手策略 + 统一执行</h2></div>
+
+    <!-- Strategy Mode Badge -->
+    <div id="strategyModeBadge" style="margin-bottom:16px;"></div>
+
+    <!-- Strategy Summary -->
+    <div class="summary-card" id="strategySummary">
+      <h3>📋 策略总纲</h3>
+      <p id="overallStrategy">请先在步骤3完成多对手对比，系统将自动生成策略。</p>
+    </div>
+
+    <!-- Insight Badges -->
+    <div class="insight-badges" id="insightBadges"></div>
+
+    <!-- Bar Chart: Us vs Each Competitor -->
+    <div class="bar-chart-wrap" id="barChart"></div>
+
+    <!-- Per-Competitor Strategy Cards -->
+    <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin:24px 0 14px;">⚔️ 逐对手差异化策略</h3>
+    <div id="compStrategyCards"></div>
+
+    <!-- Unified Execution Table -->
+    <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin:24px 0 14px;">📊 综合策略执行表</h3>
+    <p style="font-size:12px;color:var(--grey-mid);margin-bottom:12px;">取所有对手的共性策略，提炼为统一的执行计划 — 优势之处持续放大，短板之处集中弥补</p>
+    <div style="overflow-x:auto;margin-bottom:20px;">
+      <table class="strategy-table" id="strategyTable">
+        <thead>
+          <tr><th>客户最看重</th><th>策略方向</th><th>销售动作</th><th>跑动频率</th></tr>
+        </thead>
+        <tbody id="strategyBody">
+          <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--grey-mid);">请先在步骤3完成多对手对比，然后生成策略</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn btn-outline" onclick="goStep(3)">← 上一步</button>
+      <div style="display:flex;gap:12px;">
+        <button class="btn btn-primary" onclick="generateStrategy()">🔮 重新生成策略</button>
+      </div>
+    </div>
+
+    <div class="export-actions">
+      <button class="btn btn-accent" onclick="saveAnalysis()">💾 保存分析</button>
+      <button class="btn btn-outline" onclick="exportAnalysis()">📤 导出报告</button>
+    </div>
+  </div>
+
+  <!-- ===== History ===== -->
+  <div class="section" id="historySection">
+    <div class="section-title">
+      <div class="step-num" style="background:var(--grey-mid);">📚</div>
+      <h2>历史分析</h2>
+      <div style="flex:1;"></div>
+      <button class="btn btn-outline btn-sm" onclick="exportAll()">📤 全部导出</button>
+    </div>
+    <div id="historyList">
+      <div class="empty-state"><div class="icon">📝</div><p>还没有客户策略分析记录</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== Constants =====
+const DIMENSIONS = [
+  { id:'product', label:'产品/方案', icon:'📦' },
+  { id:'price', label:'价格/成本', icon:'💰' },
+  { id:'terms', label:'商务条款', icon:'📋' },
+  { id:'brand', label:'品牌/案例', icon:'🏆' },
+  { id:'service', label:'服务/交付', icon:'🔧' },
+  { id:'relation', label:'客情关系', icon:'🤝' },
+  { id:'org', label:'组织实力', icon:'🏗️' },
+  { id:'channel', label:'渠道/营销', icon:'📡' }
+];
+
+const COMP_COLORS = ['a','b','c'];
+const STORAGE_KEY = 'c3_8d_v2_analyses_dd';
+
+// Strategy templates (same as before)
+const STRATEGY_TEMPLATES = {
+  product: { direction: ['技术交流会','方案定制','免费试用/POC'], actions: '1. 组织技术交流会，展示方案优势\n2. 针对客户痛点定制解决方案\n3. 提供免费试用或POC验证', freq: '每周1-2次技术交流' },
+  price: { direction: ['TCO对比分析','灵活定价','融资方案'], actions: '1. 输出全生命周期成本(TCO)对比\n2. 设计阶梯定价或打包优惠\n3. 提供融资租赁/分期付款方案', freq: '每月1次商务汇报' },
+  terms: { direction: ['降低合作门槛','灵活条款','对赌方案'], actions: '1. 简化合同条款，降低决策阻力\n2. 提供灵活的付款/交付条款\n3. 设计对赌或效果付费方案', freq: '每季度1次商务谈判' },
+  brand: { direction: ['标杆案例展示','行业背书','专家站台'], actions: '1. 展示同行业标杆案例和成果\n2. 邀请行业专家或第三方背书\n3. 组织客户参观公司/样板点', freq: '每月1次品牌活动' },
+  service: { direction: ['打"服务牌"','主动巡检','快速响应'], actions: '1. 输出网络健康报告/巡检报告\n2. 提供7×24响应承诺\n3. 定期上门巡检，及时解决问题', freq: '每周2-3次上门/远程' },
+  relation: { direction: ['高层互访','多部门公关','定期汇报'], actions: '1. 安排高层互访，建立顶层关系\n2. 多维度多部门客情公关\n3. 定期汇报服务和交付进展', freq: '每周2次关键人拜访' },
+  org: { direction: ['实力展示','技术资质','团队背书'], actions: '1. 展示公司技术资质和研发投入\n2. 组织客户参观生产基地/研发中心\n3. 突出团队专业背景和成功项目', freq: '每季度1次实力展示' },
+  channel: { direction: ['渠道引荐','联合营销','行业活动'], actions: '1. 通过渠道伙伴获取引荐\n2. 联合举办行业研讨会/沙龙\n3. 参与行业展会和评奖活动', freq: '每月1-2次渠道活动' }
+};
+
+let currentStep = 1;
+let analysisScope = 'single'; // single | industry | category
+let competitors = []; // { id, name, scores: { product:3, price:3, ... } }
+let ourScores = {};   // { product:3, price:3, ... }
+let compIdCounter = 0;
+
+const SCOPE_LABELS = {
+  single: { text:'一户一策', hint:'单个客户深度分析', cls:'single', icon:'🎯' },
+  industry: { text:'一行一策', hint:'同行业A类客户群', cls:'industry', icon:'🏭' },
+  category: { text:'一类一策', hint:'B类共性客户群', cls:'category', icon:'📦' }
+};
+
+// ===== Scope Selection =====
+function setScope(scope) {
+  const prevScope = analysisScope;
+  analysisScope = scope;
+  ['single','industry','category'].forEach(s => {
+    const el = document.getElementById('scope' + s.charAt(0).toUpperCase() + s.slice(1));
+    if (el) el.classList.toggle('active', s === scope);
+  });
+  // 切换scope时清空画像字段（不同scope分析对象不同，旧数据无意义）
+  if (prevScope !== scope) {
+    clearProfileFields();
+  }
+  updateScopeLabels();
+  // 提示加载示例
+  const tips = { single:'🎯 一户一策 — 可加载S类示例或手动填写', industry:'🏭 一行一策 — 可加载A类示例或手动填写', category:'📦 一类一策 — 可加载B类示例或手动填写' };
+  showToast(tips[scope]);
+}
+
+function clearProfileFields() {
+  document.getElementById('custName').value = '';
+  document.getElementById('custIndustry').value = '';
+  document.getElementById('custScale').value = '';
+  document.getElementById('custKeyPerson').value = '';
+  document.getElementById('custBudget').value = '';
+  document.getElementById('custDecision').value = '';
+  document.getElementById('custCycle').value = '';
+  document.getElementById('custPain').value = '';
+}
+
+function updateScopeLabels() {
+  const info = SCOPE_LABELS[analysisScope];
+  // Fields
+  const nameInput = document.getElementById('custName');
+  const scaleInput = document.getElementById('custScale');
+  const personInput = document.getElementById('custKeyPerson');
+  const budgetInput = document.getElementById('custBudget');
+  const decisionInput = document.getElementById('custDecision');
+  const cycleInput = document.getElementById('custCycle');
+  const painInput = document.getElementById('custPain');
+  const industryInput = document.getElementById('custIndustry');
+  // Labels
+  const lblCustName = document.getElementById('lblCustName');
+  const lblIndustry = document.getElementById('lblCustIndustry');
+  const lblScale = document.getElementById('lblCustScale');
+  const lblKeyPerson = document.getElementById('lblCustKeyPerson');
+  const lblBudget = document.getElementById('lblCustBudget');
+  const lblDecision = document.getElementById('lblCustDecision');
+  const lblCycle = document.getElementById('lblCustCycle');
+  const lblPain = document.getElementById('lblCustPain');
+  // Industry field wrapper
+  const fieldIndustry = document.getElementById('fieldIndustry');
+
+  if (analysisScope === 'single') {
+    // 一户一策：全部字段显示，行业字段保留
+    if (fieldIndustry) fieldIndustry.style.display = '';
+    if (lblIndustry) lblIndustry.textContent = '所属行业';
+    if (industryInput) industryInput.placeholder = '例：通信/制造/金融';
+    if (lblCustName) lblCustName.textContent = '客户名称 *';
+    if (nameInput) nameInput.placeholder = '例：XX集团';
+    if (lblScale) lblScale.textContent = '企业规模';
+    if (scaleInput) scaleInput.placeholder = '例：年营收5亿·500人';
+    if (lblKeyPerson) lblKeyPerson.textContent = '关键决策人';
+    if (personInput) personInput.placeholder = '例：采购总监王总';
+    if (lblBudget) lblBudget.textContent = '采购预算';
+    if (budgetInput) budgetInput.placeholder = '例：300-500万/年';
+    if (lblDecision) lblDecision.textContent = '决策流程';
+    if (decisionInput) decisionInput.placeholder = '例：技术部→采购部→副总审批';
+    if (lblCycle) lblCycle.textContent = '决策周期';
+    if (cycleInput) cycleInput.placeholder = '例：3-6个月';
+    if (lblPain) lblPain.textContent = '核心痛点 / 业务需求';
+    if (painInput) painInput.placeholder = '例：设备老化故障频发，影响业务连续性；原供应商服务响应慢，急需替代方案';
+
+  } else if (analysisScope === 'industry') {
+    // 一行一策：隐藏「所属行业」（行业已在名称中体现），不出现具体人名
+    if (fieldIndustry) fieldIndustry.style.display = 'none';
+    if (lblCustName) lblCustName.textContent = '行业/客户群 *';
+    if (nameInput) nameInput.placeholder = '例：华东片区 制造业A类客户群';
+    if (lblScale) lblScale.textContent = '典型企业规模';
+    if (scaleInput) scaleInput.placeholder = '例：年营收1-10亿 · 200-1000人';
+    if (lblKeyPerson) lblKeyPerson.textContent = '典型决策角色';
+    if (personInput) personInput.placeholder = '例：技术总监 / 采购经理';
+    if (lblBudget) lblBudget.textContent = '典型预算范围';
+    if (budgetInput) budgetInput.placeholder = '例：200-800万/年';
+    if (lblDecision) lblDecision.textContent = '常见决策链';
+    if (decisionInput) decisionInput.placeholder = '例：技术评估→采购比价→总经理审批';
+    if (lblCycle) lblCycle.textContent = '典型决策周期';
+    if (cycleInput) cycleInput.placeholder = '例：3-6个月';
+    if (lblPain) lblPain.textContent = '共性痛点 / 业务需求';
+    if (painInput) painInput.placeholder = '例：产线升级急需自动化设备；现有供应商交期不稳影响生产计划；需要本地化售后支持团队';
+
+  } else { // category
+    // 一类一策：同样隐藏「所属行业」（类别描述已含行业信息），不出现具体人名
+    if (fieldIndustry) fieldIndustry.style.display = 'none';
+    if (lblCustName) lblCustName.textContent = '客户类别描述 *';
+    if (nameInput) nameInput.placeholder = '例：B类中小型制造企业群';
+    if (lblScale) lblScale.textContent = '规模范围';
+    if (scaleInput) scaleInput.placeholder = '例：年营收500万-1亿 · 50-200人';
+    if (lblKeyPerson) lblKeyPerson.textContent = '决策人画像';
+    if (personInput) personInput.placeholder = '例：老板 / 车间主任';
+    if (lblBudget) lblBudget.textContent = '预算范围';
+    if (budgetInput) budgetInput.placeholder = '例：50-200万/年';
+    if (lblDecision) lblDecision.textContent = '决策模式';
+    if (decisionInput) decisionInput.placeholder = '例：老板直接拍板';
+    if (lblCycle) lblCycle.textContent = '决策周期';
+    if (cycleInput) cycleInput.placeholder = '例：1-2个月';
+    if (lblPain) lblPain.textContent = '共性痛点 / 业务需求';
+    if (painInput) painInput.placeholder = '例：人工成本高企需自动化替代；预算有限追求性价比；对供应商信任度要求高，偏好熟人介绍';
+  }
+
+  // Step 4 mode badge
+  updateModeBadge();
+}
+
+function updateModeBadge() {
+  const badge = document.getElementById('strategyModeBadge');
+  if (!badge) return;
+  const info = SCOPE_LABELS[analysisScope];
+  badge.innerHTML = `<span class="mode-badge ${info.cls}">${info.icon} ${info.text} · ${info.hint}</span>`;
+}
+
+// ===== Init =====
+DIMENSIONS.forEach(d => { ourScores[d.id] = 3; });
+
+// ===== Step Navigation =====
+function goStep(n) {
+  currentStep = n;
+  for (let i = 1; i <= 4; i++) {
+    const sec = document.getElementById('sec'+i);
+    if (sec) sec.classList.toggle('active-section', i === n);
+  }
+  updateProgress();
+  if (n === 3) renderMatrix();
+  if (n === 4) { generateStrategy(); updateModeBadge(); }
+  const sec = document.getElementById('sec'+n);
+  if (sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function updateProgress() {
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot'+i);
+    const label = document.getElementById('label'+i);
+    if (!dot) continue;
+    dot.classList.remove('active','done');
+    if (label) label.classList.remove('active');
+    if (i < currentStep) { dot.classList.add('done'); dot.textContent = '✓'; }
+    else if (i === currentStep) { dot.classList.add('active'); dot.textContent = i; }
+    else { dot.textContent = i; }
+    if (label && i === currentStep) label.classList.add('active');
+  }
+  document.getElementById('progressFill').style.width = ((currentStep-1)/3*100)+'%';
+}
+
+// ===== Step 2: Needs Table =====
+function renderNeeds(data) {
+  const tbody = document.getElementById('needsBody');
+  tbody.innerHTML = DIMENSIONS.map(dim => {
+    const n = (data && data.needs && data.needs[dim.id]) ? data.needs[dim.id] : { priority:'中', desc:'' };
+    const pc = n.priority === '高' ? 'priority-high' : (n.priority === '低' ? 'priority-low' : 'priority-mid');
+    return `<tr>
+      <td class="dim-label">${dim.icon} ${dim.label}</td>
+      <td>
+        <select id="np_${dim.id}" onchange="onNeedPriorityChange('${dim.id}')" class="${pc}">
+          <option value="高" ${n.priority==='高'?'selected':''}>高 🔴</option>
+          <option value="中" ${n.priority==='中'?'selected':''}>中 🟡</option>
+          <option value="低" ${n.priority==='低'?'selected':''}>低 ⚪</option>
+        </select>
+      </td>
+      <td><textarea id="nd_${dim.id}" placeholder="客户在该维度的具体需求…">${escHtml(n.desc)}</textarea></td>
+    </tr>`;
+  }).join('');
+}
+
+function onNeedPriorityChange(dimId) {
+  const sel = document.getElementById('np_'+dimId);
+  sel.classList.remove('priority-high','priority-mid','priority-low');
+  if (sel.value === '高') sel.classList.add('priority-high');
+  else if (sel.value === '中') sel.classList.add('priority-mid');
+  else sel.classList.add('priority-low');
+}
+
+function collectNeeds() {
+  const needs = {};
+  DIMENSIONS.forEach(dim => {
+    const pEl = document.getElementById('np_'+dim.id);
+    const dEl = document.getElementById('nd_'+dim.id);
+    needs[dim.id] = {
+      priority: pEl ? pEl.value : '中',
+      desc: dEl ? dEl.value : ''
+    };
+  });
+  return needs;
+}
+
+// ===== Step 3: Competitor Management =====
+function addCompetitor(name) {
+  if (competitors.length >= 5) { showToast('最多添加5个竞争对手'); return; }
+  compIdCounter++;
+  const id = 'c' + compIdCounter;
+  competitors.push({
+    id: id,
+    name: name || ('对手' + String.fromCharCode(64 + competitors.length + 1)),
+    scores: {}
+  });
+  DIMENSIONS.forEach(d => {
+    competitors[competitors.length-1].scores[d.id] = 3;
+  });
+  renderCompBar();
+  renderMatrix();
+}
+
+function removeCompetitor(idx) {
+  competitors.splice(idx, 1);
+  renderCompBar();
+  renderMatrix();
+}
+
+function updateCompName(idx, name) {
+  competitors[idx].name = name || ('对手' + String.fromCharCode(64 + idx + 1));
+  renderCompBar();
+  renderMatrix();
+}
+
+function updateCompScore(idx, dimId, score) {
+  competitors[idx].scores[dimId] = parseInt(score);
+  updateCompGap(dimId, idx);
+}
+
+function updateOurScore(dimId, score) {
+  ourScores[dimId] = parseInt(score);
+  competitors.forEach((c, i) => updateCompGap(dimId, i));
+}
+
+function updateCompGap(dimId, compIdx) {
+  const el = document.getElementById('gap_'+dimId+'_'+compIdx);
+  if (!el) return;
+  const compScore = competitors[compIdx].scores[dimId];
+  const us = ourScores[dimId];
+  const gap = us - compScore;
+  el.classList.remove('gap-pos','gap-neg','gap-zero');
+  if (gap > 0) { el.classList.add('gap-neg'); el.innerHTML = '+'+gap; }
+  else if (gap < 0) { el.classList.add('gap-pos'); el.innerHTML = String(gap); }
+  else { el.classList.add('gap-zero'); el.innerHTML = '0'; }
+}
+
+// Keep for backward compatibility
+function getBestCompScore(dimId) {
+  if (competitors.length === 0) return 0;
+  return Math.max(...competitors.map(c => c.scores[dimId]));
+}
+function getBestCompName(dimId) {
+  if (competitors.length === 0) return '';
+  let best = competitors[0];
+  competitors.forEach(c => { if (c.scores[dimId] > best.scores[dimId]) best = c; });
+  return best.name;
+}
+
+function renderCompBar() {
+  const container = document.getElementById('compTags');
+  container.innerHTML = competitors.map((c, i) => {
+    const color = COMP_COLORS[i % 3];
+    return `<span class="comp-tag ${color}">
+      <input class="comp-name-input" value="${escHtml(c.name)}" onchange="updateCompName(${i},this.value)" onfocus="this.select()" title="点击编辑名称">
+      <span class="comp-remove" onclick="removeCompetitor(${i})" title="删除">✕</span>
+    </span>`;
+  }).join('');
+  document.getElementById('btnAddComp').style.marginLeft = competitors.length > 0 ? '' : 'auto';
+}
+
+function renderMatrix(data) {
+  // Build header
+  const head = document.getElementById('matrixHead');
+  let headHTML = '<tr><th class="th-dim">维度</th><th class="th-pri">客户需求</th>';
+  competitors.forEach((c, i) => {
+    headHTML += `<th class="th-comp">${escHtml(c.name)}</th><th class="th-gap gap-sm">vs${escHtml(c.name)}</th>`;
+  });
+  headHTML += '<th class="th-us">我方</th>';
+  headHTML += '</tr>';
+  head.innerHTML = headHTML;
+
+  // Build body
+  const body = document.getElementById('matrixBody');
+  body.innerHTML = DIMENSIONS.map(dim => {
+    const needs = collectNeeds();
+    const np = needs[dim.id] ? needs[dim.id].priority : '中';
+    const pc = np === '高' ? 'priority-high' : (np === '低' ? 'priority-low' : 'priority-mid');
+
+    let compCells = '';
+    competitors.forEach((c, i) => {
+      const s = (data && data.competitors && data.competitors[i]) ? data.competitors[i].scores[dim.id] : (c.scores[dim.id] || 3);
+      const us = (data && data.ourScores) ? (data.ourScores[dim.id] || 3) : (ourScores[dim.id] || 3);
+      const gapVal = us - s;
+      let gapClass = 'gap-zero', gapText = '0';
+      if (gapVal > 0) { gapClass = 'gap-neg'; gapText = '+'+gapVal; }
+      else if (gapVal < 0) { gapClass = 'gap-pos'; gapText = String(gapVal); }
+      compCells += `<td><select class="score-select" onchange="updateCompScore(${i},'${dim.id}',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${s==v?'selected':''}>${v}⭐</option>`).join('')}</select></td>`;
+      compCells += `<td class="gap-sm ${gapClass}" id="gap_${dim.id}_${i}">${gapText}</td>`;
+    });
+
+    const us = (data && data.ourScores) ? (data.ourScores[dim.id] || 3) : (ourScores[dim.id] || 3);
+
+    return `<tr>
+      <td class="dim-label">${dim.icon} ${dim.label}</td>
+      <td><span class="${pc}">${np}</span></td>
+      ${compCells}
+      <td><select class="score-select" onchange="updateOurScore('${dim.id}',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${us==v?'selected':''}>${v}⭐</option>`).join('')}</select></td>
+    </tr>`;
+  }).join('');
+}
+
+// ===== Step 4: Strategy =====
+function generateStrategy() {
+  const needs = collectNeeds();
+  const custGrade = document.getElementById('custGrade').value;
+  const custName = document.getElementById('custName').value || '该客户';
+
+  // Build dimension analysis
+  const dimAnalysis = DIMENSIONS.map(dim => {
+    const np = needs[dim.id] ? needs[dim.id].priority : '中';
+    const priorityVal = np === '高' ? 3 : (np === '中' ? 2 : 1);
+    const us = ourScores[dim.id];
+    return { ...dim, priority: np, priorityVal, us };
+  });
+
+  const active = dimAnalysis.filter(d => d.priority !== '低');
+  const highPrio = dimAnalysis.filter(d => d.priority === '高');
+
+  // ===== 1. Overall Strategy Summary =====
+  let summary = '';
+  if (competitors.length === 0) {
+    summary = '请先在步骤3添加竞争对手并完成评分。';
+  } else if (competitors.length === 1) {
+    const c = competitors[0];
+    const gaps = active.map(dim => ourScores[dim.id] - c.scores[dim.id]);
+    const adv = gaps.filter(g => g > 0).length;
+    const dis = gaps.filter(g => g < 0).length;
+    if (dis === 0) summary = `面对${c.name}，我们在所有关键维度均不落后。保持优势，在客户高关注维度持续施压，锁定胜局。`;
+    else if (adv > dis) summary = `面对${c.name}，我们整体占优（${adv}维领先/${dis}维落后）。放大优势维度，对落后维度采取针对性弥补措施。`;
+    else summary = `面对${c.name}，我们在多个维度落后（${dis}维落后/${adv}维领先）。紧急弥补高关注维度短板，同时用优势维度转移客户注意力，重新定义竞争维度。`;
+  } else {
+    const compNames = competitors.map(c => c.name).join('、');
+    summary = `面对${compNames}，每个对手的优劣势不同，打法也不同。`;
+    summary += '不能用一个"最强对手"的幻影逼自己全面开战，而是逐对手分析，取其共性制定统一策略，差异部分单独出招。';
+    if (analysisScope === 'single') {
+      if (custGrade === 'S') summary += ' S类客户决策链长，需多线并行、长期经营。';
+      else if (custGrade === 'A') summary += ' A类客户在关键决策点集中资源。';
+      else summary += ' 重点关注关键人关系建设。';
+    } else if (analysisScope === 'industry') {
+      summary += ' 本策略适用于该行业同类A类客户，可根据具体客户微调销售动作和执行节奏。';
+    } else {
+      summary += ' 本策略适用于该类B类客户群体，核心打法标准化、可复制，一线销售直接套用。';
+    }
+  }
+  document.getElementById('overallStrategy').textContent = summary;
+
+  // ===== 2. Insight Badges =====
+  const badges = [];
+  if (highPrio.length > 0) {
+    badges.push(`<span class="insight-badge info">🎯 客户最看重：${highPrio.map(d=>d.label).join('、')}</span>`);
+  }
+  competitors.forEach(comp => {
+    let advCount = 0, disCount = 0;
+    active.forEach(dim => {
+      const gap = ourScores[dim.id] - comp.scores[dim.id];
+      if (gap > 0) advCount++;
+      else if (gap < 0) disCount++;
+    });
+    if (disCount === 0) {
+      badges.push(`<span class="insight-badge success">✅ vs ${comp.name}：${advCount}维领先，全面压制</span>`);
+    } else if (disCount > advCount) {
+      badges.push(`<span class="insight-badge danger">⚠️ vs ${comp.name}：${disCount}维落后 ${advCount}维领先</span>`);
+    } else {
+      badges.push(`<span class="insight-badge warn">⚡ vs ${comp.name}：${advCount}维领先 ${disCount}维落后，整体占优</span>`);
+    }
+  });
+  document.getElementById('insightBadges').innerHTML = badges.join('');
+
+  // ===== 3. Bar Chart: Us vs Each Competitor =====
+  let barHTML = '';
+  active.forEach(dim => {
+    let rows = '';
+    competitors.forEach((comp, i) => {
+      const compPct = comp.scores[dim.id] * 20;
+      const color = ['#c0392b','#d35400','#2980b9','#27ae60','#8e44ad'][i%5];
+      rows += `<div class="bar-row" style="margin-bottom:2px;">
+        <div class="bar-label" style="font-size:10px;color:var(--grey-mid);">${comp.name}</div>
+        <div class="bar-track" style="height:14px;">
+          <div class="bar-fill" style="width:${compPct}%;background:${color};opacity:0.6;"></div>
+        </div>
+        <div class="bar-score" style="font-size:11px;color:${color};width:16px;">${comp.scores[dim.id]}</div>
+      </div>`;
+    });
+    const usPct = dim.us * 20;
+    rows += `<div class="bar-row">
+      <div class="bar-label" style="font-weight:700;">${dim.icon} ${dim.label}</div>
+      <div class="bar-track" style="height:22px;">
+        <div class="bar-fill us" style="width:${usPct}%;">${dim.us}⭐</div>
+      </div>
+      <div class="bar-score us" style="width:16px;">${dim.us}</div>
+    </div>`;
+    barHTML += `<div style="margin-bottom:8px;padding:6px 10px;background:var(--white);border-radius:8px;border:1px solid var(--grey-light);">${rows}</div>`;
+  });
+  document.getElementById('barChart').innerHTML = barHTML;
+
+  // ===== 4. Per-Competitor Strategy Cards =====
+  const cardsHTML = competitors.map((comp, i) => {
+    const advantages = [];
+    const disadvantages = [];
+    const parity = [];
+
+    active.forEach(dim => {
+      const gap = ourScores[dim.id] - comp.scores[dim.id];
+      const dimWithPrio = dimAnalysis.find(d => d.id === dim.id);
+      if (gap > 0) advantages.push({ ...dimWithPrio, gap });
+      else if (gap < 0) disadvantages.push({ ...dimWithPrio, gap });
+      else parity.push({ ...dimWithPrio });
+    });
+
+    const strategyText = buildCompStrategy(comp.name, advantages, disadvantages, active);
+
+    const colorLetter = ['a','b','c','d','e'][i%5];
+    const dotColor = ['dot-a','dot-b','dot-c','dot-d','dot-e'][i%5];
+
+    let advHTML = '', disHTML = '', parHTML = '';
+    if (advantages.length > 0) {
+      advHTML = `<div class="adv-row"><span class="adv-label">🟢 我方优势</span>${advantages.map(a=>`<span class="adv-badge green">${a.label} ${a.gap>0?'+':''}${a.gap}分</span>`).join('')}</div>`;
+    }
+    if (disadvantages.length > 0) {
+      disHTML = `<div class="adv-row"><span class="adv-label">🔴 我方劣势</span>${disadvantages.map(d=>`<span class="adv-badge red">${d.label} ${d.gap}分</span>`).join('')}</div>`;
+    }
+    if (parity.length > 0) {
+      parHTML = `<div class="adv-row"><span class="adv-label">⚪ 持平</span>${parity.map(p=>`<span class="adv-badge grey">${p.label}</span>`).join('')}</div>`;
+    }
+
+    return `<div class="comp-strategy-card card-${colorLetter}">
+      <h4><span class="comp-dot ${dotColor}"></span> 对 ${escHtml(comp.name)} 的策略</h4>
+      ${advHTML}${disHTML}${parHTML}
+      <div class="comp-strategy-text">
+        <span class="strat-label">策略方向：</span>${strategyText.direction}
+        <div class="core-play"><span class="strat-label">核心打法：</span>${strategyText.corePlay}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('compStrategyCards').innerHTML = cardsHTML || '<p style="text-align:center;color:var(--grey-mid);padding:20px;">请先在步骤3添加竞争对手</p>';
+
+  // ===== 5. Unified Execution Table =====
+  // Take commonalities across all competitors: focus on dimensions that matter against ANY competitor
+  const execDims = [];
+  active.forEach(dim => {
+    let minGap = 999, maxGap = -999;
+    competitors.forEach(c => {
+      const g = ourScores[dim.id] - c.scores[dim.id];
+      if (g < minGap) minGap = g;
+      if (g > maxGap) maxGap = g;
+    });
+    const isWeak = minGap < 0;   // behind at least one competitor
+    const isStrong = maxGap > 0; // ahead of at least one competitor
+    execDims.push({ ...dim, minGap, isWeak, isStrong });
+  });
+
+  // Sort: high priority first, then weak positions first (most urgent)
+  execDims.sort((a, b) => {
+    if (a.priorityVal !== b.priorityVal) return b.priorityVal - a.priorityVal;
+    if (a.isWeak !== b.isWeak) return a.isWeak ? -1 : 1;
+    return a.minGap - b.minGap;
+  });
+
+  const displayDims = execDims.filter(d => d.priority !== '低').slice(0, 6);
+  const tbody = document.getElementById('strategyBody');
+
+  if (competitors.length === 0 || displayDims.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--grey-mid);">请先添加竞争对手并完成评分</td></tr>';
+  } else {
+    tbody.innerHTML = displayDims.map(dim => {
+      const tpl = STRATEGY_TEMPLATES[dim.id];
+      // Pick strategy direction based on position
+      let directionOptions;
+      if (dim.isWeak && !dim.isStrong) {
+        directionOptions = dim.priority === '高' ? tpl.direction : [...tpl.direction, '寻求差异化'];
+      } else if (dim.isStrong && !dim.isWeak) {
+        directionOptions = ['放大优势', ...tpl.direction];
+      } else if (dim.isStrong && dim.isWeak) {
+        directionOptions = ['对低价对手算TCO·对强手做差异化', ...tpl.direction];
+      } else {
+        directionOptions = tpl.direction;
+      }
+      return `<tr>
+        <td style="font-weight:700;">${dim.icon} ${dim.label}<br><span style="font-size:11px;color:var(--grey-mid);">${dim.priority}优先级</span></td>
+        <td><select id="sd_${dim.id}" style="width:100%;padding:6px;font-size:12px;border:1px solid var(--grey-light);border-radius:6px;font-family:inherit;">${directionOptions.map(d=>`<option value="${d}">${d}</option>`).join('')}</select></td>
+        <td><textarea id="sa_${dim.id}">${tpl.actions}</textarea></td>
+        <td><input id="sf_${dim.id}" value="${tpl.freq}" style="width:100%;padding:6px;font-size:12px;border:1px solid var(--grey-light);border-radius:6px;font-family:inherit;"></td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function buildCompStrategy(compName, advantages, disadvantages, activeDims) {
+  // Analyze competitor type
+  const disIds = disadvantages.map(d => d.id);
+  const onlyPrice = disadvantages.length === 1 && disIds[0] === 'price';
+  const onlyBrand = disadvantages.length === 1 && disIds[0] === 'brand';
+  const pureWeak = disadvantages.length === 0;
+  const mostlyStrong = advantages.length >= disadvantages.length;
+  const highPrioDis = disadvantages.filter(d => d.priority === '高');
+  const highPrioAdv = advantages.filter(d => d.priority === '高');
+
+  let direction = '', corePlay = '';
+
+  if (pureWeak) {
+    direction = '全面压制策略';
+    corePlay = `我方在所有关键维度均领先于${compName}。持续巩固优势，在客户高关注维度加码投入，不让对手有可乘之机。`;
+    if (highPrioAdv.length > 0) {
+      corePlay += `\n重点守住${highPrioAdv.map(d=>d.label).join('、')}的领先地位，这是签单的关键。`;
+    }
+  } else if (onlyPrice) {
+    direction = '升维竞争 · 不打价格战';
+    corePlay = `${compName}的唯一优势是低价。避免陷入价格战——让客户算总账（TCO）。`;
+    corePlay += `\n` + advantages.slice(0, 3).map((a,i) => `${i+1}. 放大${a.label}优势（+${a.gap}分）：${a.label==='service'?'做好7×24响应和主动巡检' : a.label==='product'?'用技术交流和POC证明方案价值' : a.label==='brand'?'展示同行业标杆案例' : a.label==='relation'?'加强高层互访和关键人关系' : a.label==='terms'?'提供灵活的付款和交付条款' : a.label==='org'?'展示公司实力和团队专业度' : '通过渠道伙伴建立信任'}`).join('\n');
+    corePlay += `\n💰 核心话术："便宜的东西买的时候开心一次，用的时候天天糟心。我们算一笔TCO总账……"`;
+  } else if (onlyBrand) {
+    direction = '侧面突破 · 不硬拼品牌';
+    corePlay = `${compName}品牌强但其他维度未必领先。品牌是长期积累，短期无法超越，但可以绕过。`;
+    corePlay += `\n` + advantages.slice(0, 3).map((a,i) => `${i+1}. 用${a.label}差异化：${a.label==='product'?'用技术方案和POC让客户眼见为实' : a.label==='service'?'用服务响应速度和巡检频次建立信任' : a.label==='price'?'用性价比优势吸引客户' : a.label==='relation'?'用高频拜访和快速响应建立个人信任' : a.label==='terms'?'用灵活条款降低决策门槛' : a.label==='channel'?'通过渠道伙伴侧面渗透' : '用专业能力打动技术决策者'}`).join('\n');
+  } else if (highPrioDis.length >= 2 && mostlyStrong) {
+    direction = '重点弥补 · 兼顾优势';
+    corePlay = `虽然整体占优，但客户最看重的${highPrioDis.map(d=>d.label).join('、')}维度落后于${compName}，这是致命弱点。`;
+    corePlay += `\n紧急动作：\n1. 针对${highPrioDis.map(d=>d.label).join('、')}制定专项弥补计划`;
+    corePlay += `\n2. 同时放大我方优势维度（${advantages.slice(0,2).map(d=>d.label).join('、')}）转移客户关注点`;
+  } else if (highPrioDis.length >= 2 && !mostlyStrong) {
+    direction = '防守反击 · 重新定义竞争维度';
+    corePlay = `在客户最看重的${highPrioDis.map(d=>d.label).join('、')}维度，${compName}全面领先。硬碰硬成本太高。`;
+    corePlay += `\n策略：`;
+    if (advantages.length > 0) {
+      corePlay += `\n1. 用我方优势维度（${advantages.slice(0,2).map(d=>d.label).join('、')}）引导客户重新评估采购标准`;
+    }
+    corePlay += `\n2. 寻找对手服务盲区或交付短板，精准攻击`;
+    corePlay += `\n3. 在客户内部寻找"教练"，建立信息优势`;
+  } else if (!mostlyStrong) {
+    direction = '差异化定位 · 避免正面交锋';
+    corePlay = `${compName}在${disadvantages.slice(0,3).map(d=>d.label).join('、')}等维度领先。不与强者硬拼，寻找差异化突破口。`;
+    if (advantages.length > 0) {
+      corePlay += `\n我方突破口：${advantages.slice(0,3).map(d=>d.label).join('、')}（我方均领先），集中资源在这些维度建立"人无我有"的认知。`;
+    }
+  } else {
+    direction = '综合优势策略';
+    corePlay = `对${compName}整体占优（${advantages.length}维领先${disadvantages.length}维落后）。`;
+    corePlay += `\n领先维度（${advantages.slice(0,3).map(d=>d.label).join('、')}）持续放大；落后维度（${disadvantages.slice(0,3).map(d=>d.label).join('、')}）针对性弥补。`;
+  }
+
+  return { direction, corePlay };
+}
+
+// ===== Collect All Data =====
+function collectData() {
+  return {
+    id: Date.now().toString(),
+    analysisScope: analysisScope,
+    customer: {
+      name: document.getElementById('custName').value,
+      grade: document.getElementById('custGrade').value,
+      industry: document.getElementById('custIndustry').value,
+      scale: document.getElementById('custScale').value,
+      keyPerson: document.getElementById('custKeyPerson').value,
+      budget: document.getElementById('custBudget').value,
+      decisionProcess: document.getElementById('custDecision').value,
+      decisionCycle: document.getElementById('custCycle').value,
+      painPoints: document.getElementById('custPain').value
+    },
+    needs: collectNeeds(),
+    competitors: competitors.map(c => ({
+      id: c.id,
+      name: c.name,
+      scores: { ...c.scores }
+    })),
+    ourScores: { ...ourScores },
+    strategy: {
+      summary: document.getElementById('overallStrategy').textContent,
+      table: collectStrategyTable()
+    },
+    createdAt: new Date().toISOString()
+  };
+}
+
+function collectStrategyTable() {
+  const rows = [];
+  const tbody = document.getElementById('strategyBody');
+  const trs = tbody.querySelectorAll('tr');
+  trs.forEach(tr => {
+    const tds = tr.querySelectorAll('td');
+    if (tds.length < 4) return;
+    const select = tds[1].querySelector('select');
+    const textarea = tds[2].querySelector('textarea');
+    const input = tds[3].querySelector('input');
+    if (select && textarea && input) {
+      rows.push({
+        dimension: tds[0].textContent.trim().split('\n')[0],
+        strategyDirection: select.value,
+        salesActions: textarea.value,
+        frequency: input.value
+      });
+    }
+  });
+  return rows;
+}
+
+// ===== Populate Form =====
+function populateForm(data) {
+  // Restore scope
+  analysisScope = data.analysisScope || 'single';
+  setScope(analysisScope);
+  updateScopeLabels();
+
+  // Step 1
+  const c = data.customer || {};
+  document.getElementById('custName').value = c.name || '';
+  document.getElementById('custGrade').value = c.grade || 'S';
+  document.getElementById('custIndustry').value = c.industry || '';
+  document.getElementById('custScale').value = c.scale || '';
+  document.getElementById('custKeyPerson').value = c.keyPerson || '';
+  document.getElementById('custBudget').value = c.budget || '';
+  document.getElementById('custDecision').value = c.decisionProcess || '';
+  document.getElementById('custCycle').value = c.decisionCycle || '';
+  document.getElementById('custPain').value = c.painPoints || '';
+
+  // Step 2
+  renderNeeds(data);
+
+  // Step 3
+  competitors = (data.competitors || []).map(c => ({ ...c, scores: { ...c.scores } }));
+  compIdCounter = competitors.length;
+  ourScores = data.ourScores ? { ...data.ourScores } : {};
+  if (Object.keys(ourScores).length === 0) {
+    DIMENSIONS.forEach(d => { ourScores[d.id] = 3; });
+  }
+  renderCompBar();
+  renderMatrix(data);
+
+  // Step 4
+  if (data.strategy && data.strategy.summary) {
+    document.getElementById('overallStrategy').textContent = data.strategy.summary;
+  }
+  if (data.strategy && data.strategy.table) {
+    restoreStrategyTable(data.strategy.table);
+  }
+}
+
+function restoreStrategyTable(table) {
+  // We'll regenerate via generateStrategy which will populate the table
+  // But for loaded data with custom edits, let's just trigger generateStrategy
+}
+
+// ===== Save / Load =====
+function saveAnalysis() {
+  const data = collectData();
+  if (!data.customer.name) { showToast('请先填写客户名称'); goStep(1); return; }
+  data.strategy.table = collectStrategyTable();
+  const analyses = getAnalyses();
+  analyses.unshift(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(analyses));
+  showToast('✅ 策略分析已保存！');
+  renderHistory();
+}
+
+function getAnalyses() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function loadAnalysis(id) {
+  const a = getAnalyses().find(x => x.id === id);
+  if (!a) return;
+  populateForm(a);
+  goStep(1);
+  if (a.strategy) generateStrategy();
+  // Restore strategy table edits
+  if (a.strategy && a.strategy.table && a.strategy.table.length > 0) {
+    setTimeout(() => {
+      a.strategy.table.forEach((row, i) => {
+        const trs = document.getElementById('strategyBody').querySelectorAll('tr');
+        if (trs[i]) {
+          const tds = trs[i].querySelectorAll('td');
+          if (tds.length >= 4) {
+            const select = tds[1].querySelector('select');
+            const textarea = tds[2].querySelector('textarea');
+            const input = tds[3].querySelector('input');
+            if (select && row.strategyDirection) select.value = row.strategyDirection;
+            if (textarea && row.salesActions) textarea.value = row.salesActions;
+            if (input && row.frequency) input.value = row.frequency;
+          }
+        }
+      });
+    }, 300);
+  }
+  showToast('✅ 分析已加载，可继续编辑');
+}
+
+function deleteAnalysis(id) {
+  if (!confirm('确定删除这条策略分析吗？此操作不可撤销。')) return;
+  const analyses = getAnalyses().filter(x => x.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(analyses));
+  renderHistory();
+  showToast('🗑️ 已删除');
+}
+
+function renderHistory() {
+  const analyses = getAnalyses();
+  const el = document.getElementById('historyList');
+  if (analyses.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>还没有客户策略分析记录</p></div>';
+    return;
+  }
+  el.innerHTML = analyses.map(a => `
+    <div class="history-item" onclick="loadAnalysis('${a.id}')">
+      <div style="font-size:24px;">🎯</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;font-size:15px;">${escHtml((a.customer&&a.customer.name)||'未命名客户')}</div>
+        <div style="font-size:12px;color:var(--grey-mid);">${fmtDate(a.createdAt)} · ${(SCOPE_LABELS[a.analysisScope||'single']||SCOPE_LABELS.single).text} · ${(a.customer&&a.customer.grade)||'?'}类 · ${(a.competitors||[]).length}个对手</div>
+      </div>
+      <div onclick="event.stopPropagation();" style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="loadAnalysis('${a.id}')">编辑</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAnalysis('${a.id}')">删除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== Export =====
+function exportAnalysis() {
+  const data = collectData();
+  data.strategy.table = collectStrategyTable();
+  const text = buildExportText([data]);
+  downloadText(text, '客户策略分析_' + (data.customer.name||'未命名') + '.txt');
+  showToast('📤 已导出当前分析报告');
+}
+
+function exportAll() {
+  const analyses = getAnalyses();
+  if (analyses.length === 0) { showToast('没有可导出的分析记录'); return; }
+  const text = buildExportText(analyses);
+  downloadText(text, '3C8维策略分析全集_' + new Date().toISOString().slice(0,10) + '.txt');
+  showToast('📤 已导出全部分析记录');
+}
+
+function buildExportText(analyses) {
+  let text = '大董老师 · 3C&8维客户策略分析报告（v3 逐对手策略版）\n' + '='.repeat(60) + '\n\n';
+  analyses.forEach((a, i) => {
+    if (analyses.length > 1) text += `\n【${i+1}】${(a.customer&&a.customer.name)||'未命名'}\n\n`;
+    const c = a.customer || {};
+    const scopeInfo = SCOPE_LABELS[a.analysisScope || 'single'] || SCOPE_LABELS.single;
+    text += `📅 日期：${fmtDate(a.createdAt)} · 分析范围：${scopeInfo.text} · 客户等级：${c.grade||'?'}类\n`;
+    text += `\n📋 客户画像：\n`;
+    text += `  名称：${c.name||''}\n  行业：${c.industry||''}\n  规模：${c.scale||''}\n`;
+    text += `  关键决策人：${c.keyPerson||''}\n  预算：${c.budget||''}\n`;
+    text += `  决策流程：${c.decisionProcess||''} · 周期：${c.decisionCycle||''}\n`;
+    text += `  痛点：${c.painPoints||''}\n`;
+
+    text += `\n📊 8维客户需求：\n`;
+    text += '维度          | 关注度 | 需求描述\n' + '-'.repeat(60) + '\n';
+    if (a.needs) {
+      DIMENSIONS.forEach(dim => {
+        const n = a.needs[dim.id];
+        if (n) text += `${dim.label.padEnd(10,'　')} | ${n.priority.padEnd(5,' ')} | ${n.desc||''}\n`;
+      });
+    }
+
+    text += `\n⚔️ 竞争对比矩阵：\n`;
+    let headerRow = '维度          | 客户需求';
+    (a.competitors||[]).forEach(c => { headerRow += ` | ${c.name||'?'} | 差距`; });
+    headerRow += ' | 我方';
+    text += headerRow + '\n' + '-'.repeat(60) + '\n';
+    if (a.needs && a.ourScores) {
+      DIMENSIONS.forEach(dim => {
+        const np = a.needs[dim.id] ? a.needs[dim.id].priority : '中';
+        let row = `${dim.label.padEnd(10,'　')} | ${np.padEnd(6,' ')}`;
+        (a.competitors||[]).forEach(c => {
+          const s = (c.scores && c.scores[dim.id]) || 3;
+          const us = a.ourScores[dim.id] || 3;
+          const gap = us - s;
+          const gapStr = gap > 0 ? '+'+gap : (gap < 0 ? String(gap) : '0');
+          row += ` | ${s} | ${gapStr}`;
+        });
+        row += ` | ${a.ourScores[dim.id] || 3}`;
+        text += row + '\n';
+      });
+    }
+
+    // Per-competitor strategy
+    if (a.competitors && a.competitors.length > 0 && a.ourScores && a.needs) {
+      text += `\n⚔️ 逐对手策略分析：\n`;
+      a.competitors.forEach(comp => {
+        text += `\n  📌 对 ${comp.name||'?'}：\n`;
+        const adv = [], dis = [], par = [];
+        DIMENSIONS.forEach(dim => {
+          const np = a.needs[dim.id] ? a.needs[dim.id].priority : '中';
+          if (np === '低') return;
+          const gap = (a.ourScores[dim.id]||3) - ((comp.scores&&comp.scores[dim.id])||3);
+          if (gap > 0) adv.push(`${dim.label}(+${gap})`);
+          else if (gap < 0) dis.push(`${dim.label}(${gap})`);
+          else par.push(dim.label);
+        });
+        if (adv.length) text += `    🟢 优势：${adv.join('、')}\n`;
+        if (dis.length) text += `    🔴 劣势：${dis.join('、')}\n`;
+        if (par.length) text += `    ⚪ 持平：${par.join('、')}\n`;
+      });
+    }
+
+    if (a.strategy) {
+      text += `\n📋 整体策略：\n${a.strategy.summary||''}\n`;
+      if (a.strategy.table && a.strategy.table.length > 0) {
+        text += `\n🎯 综合策略执行表：\n`;
+        text += '客户最看重 | 策略方向 | 销售动作 | 跑动频率\n' + '-'.repeat(60) + '\n';
+        a.strategy.table.forEach(row => {
+          text += `${row.dimension||''} | ${row.strategyDirection||''} | ${(row.salesActions||'').replace(/\n/g,'；')} | ${row.frequency||''}\n`;
+        });
+      }
+    }
+    text += '\n' + '='.repeat(60) + '\n\n';
+  });
+  return text;
+}
+
+function downloadText(content, filename) {
+  const blob = new Blob(['\uFEFF'+content], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+// ===== Preset =====
+function loadPreset(type) {
+  // Reset
+  competitors = [];
+  compIdCounter = 0;
+  ourScores = {};
+  DIMENSIONS.forEach(d => { ourScores[d.id] = 3; });
+
+  // Set analysis scope
+  if (type === 'A') {
+    analysisScope = 'industry';
+    setScope('industry');
+  } else if (type === 'B') {
+    analysisScope = 'category';
+    setScope('category');
+  } else {
+    analysisScope = 'single';
+    setScope('single');
+  }
+
+  // Set customer profile based on type
+  if (type === 'A') {
+    document.getElementById('custName').value = '华东制造业A类客户群';
+    document.getElementById('custGrade').value = 'A';
+    document.getElementById('custIndustry').value = '制造业';
+    document.getElementById('custScale').value = '年营收1-10亿 · 200-1000人';
+    document.getElementById('custKeyPerson').value = '技术总监 / 采购经理';
+    document.getElementById('custBudget').value = '200-800万/年';
+    document.getElementById('custDecision').value = '技术评估→采购比价→总经理审批';
+    document.getElementById('custCycle').value = '3-6个月';
+    document.getElementById('custPain').value = '产线升级急需自动化设备；现有供应商交期不稳影响生产计划；需要本地化售后支持团队。';
+  } else if (type === 'B') {
+    document.getElementById('custName').value = 'B类中小型制造企业群';
+    document.getElementById('custGrade').value = 'B';
+    document.getElementById('custIndustry').value = '制造业';
+    document.getElementById('custScale').value = '年营收500万-1亿 · 50-200人';
+    document.getElementById('custKeyPerson').value = '老板 / 车间主任';
+    document.getElementById('custBudget').value = '50-200万/年';
+    document.getElementById('custDecision').value = '老板直接拍板';
+    document.getElementById('custCycle').value = '1-2个月';
+    document.getElementById('custPain').value = '人工成本高企需自动化替代；预算有限追求性价比；对供应商信任度要求高，偏好熟人介绍。';
+  } else {
+    document.getElementById('custName').value = '某大型通信运营商';
+    document.getElementById('custGrade').value = 'S';
+    document.getElementById('custIndustry').value = '通信';
+    document.getElementById('custScale').value = '年营收50亿+ · 3000人';
+    document.getElementById('custKeyPerson').value = '采购总监王总 / 技术部李总';
+    document.getElementById('custBudget').value = '1000-2000万/年';
+    document.getElementById('custDecision').value = '技术部评估→采购部招标→副总审批';
+    document.getElementById('custCycle').value = '6-12个月';
+    document.getElementById('custPain').value = '网络设备老化，故障频发影响业务连续性；原供应商服务响应慢，无人主动巡检；需要高性价比的替代方案和7×24服务保障。';
+  }
+
+  // Update scope labels
+  updateScopeLabels();
+
+  // Set needs
+  const presetNeeds = {
+    product: { priority:'中', desc: type==='B' ? '够用就行，不追求高端功能' : '设备性能满足现网需求，兼容现有架构' },
+    price: { priority: type==='B'?'高':'中', desc: type==='B' ? '预算敏感，价格是首要因素' : '预算有限，要求TCO比当前降低15%以上' },
+    terms: { priority:'中', desc:'希望灵活的付款节点，不加重现金流压力' },
+    brand: { priority:'低', desc: type==='B' ? '不太看重品牌，实用为主' : '需有行业成功案例' },
+    service: { priority: type==='A'?'高':'中', desc: type==='A' ? '需要本地化售后服务团队，快速响应' : '需服务保障' },
+    relation: { priority: type==='A'?'高':'中', desc: type==='A' ? '中高层关系是关键决策因素' : '与关键决策人建立信任' },
+    org: { priority:'低', desc:'供应商资质齐全即可' },
+    channel: { priority:'低', desc:'直销优先' }
+  };
+  renderNeeds({ needs: presetNeeds });
+
+  if (type === 'B') {
+    addCompetitor('本地小厂商(低价)');
+    competitors[0].scores = { product:2, price:5, terms:4, brand:1, service:3, relation:3, org:1, channel:2 };
+    ourScores = { product:4, price:2, terms:3, brand:3, service:4, relation:2, org:3, channel:1 };
+  } else {
+    addCompetitor('A公司(主导)');
+    addCompetitor('B公司(低价)');
+    const scoresA = { product:4, price:4, terms:4, brand:4, service:3, relation:4, org:5, channel:3 };
+    const scoresB = { product:2, price:5, terms:3, brand:1, service:2, relation:3, org:2, channel:4 };
+    competitors[0].scores = scoresA;
+    competitors[1].scores = scoresB;
+    ourScores = { product:4, price:2, terms:1, brand:3, service:2, relation:2, org:3, channel:1 };
+  }
+
+  renderCompBar();
+  renderMatrix();
+  generateStrategy();
+  goStep(1);
+
+  const label = type==='A' ? 'A类一行一策' : (type==='B' ? 'B类一类一策' : 'S类一户一策');
+  showToast('✅ ' + label + '示例已加载 — 4步走完看完整策略');
+}
+
+function startNew() {
+  analysisScope = 'single';
+  setScope('single');
+  updateScopeLabels();
+  document.getElementById('custName').value = '';
+  document.getElementById('custGrade').value = 'S';
+  document.getElementById('custIndustry').value = '';
+  document.getElementById('custScale').value = '';
+  document.getElementById('custKeyPerson').value = '';
+  document.getElementById('custBudget').value = '';
+  document.getElementById('custDecision').value = '';
+  document.getElementById('custCycle').value = '';
+  document.getElementById('custPain').value = '';
+
+  competitors = [];
+  compIdCounter = 0;
+  ourScores = {};
+  DIMENSIONS.forEach(d => { ourScores[d.id] = 3; });
+
+  renderNeeds(null);
+  renderCompBar();
+  renderMatrix();
+
+  document.getElementById('insightBadges').innerHTML = '';
+  document.getElementById('barChart').innerHTML = '';
+  document.getElementById('compStrategyCards').innerHTML = '';
+  document.getElementById('strategyBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--grey-mid);">请先在步骤3完成多对手对比，然后生成策略</td></tr>';
+  document.getElementById('overallStrategy').textContent = '请先在步骤3完成多对手对比，系统将自动生成策略。';
+
+  goStep(1);
+  showToast('✅ 已清空，开始新建客户策略分析');
+}
+
+// ===== Utilities =====
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== Init =====
+renderNeeds(null);
+renderCompBar();
+renderMatrix();
+renderHistory();
+
+// Auto-load preset if no data
+if (getAnalyses().length === 0) {
+  setTimeout(loadPreset, 300);
+}
+
+</script>
+</body>
+</html>

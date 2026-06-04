@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>薪酬进化导航器 - 大董销售体系 · 756班定制</title>
+<style>
+:root {
+  --bg: #f5f3ff;
+  --card: #fff;
+  --pri: #7c3aed; --pri-l: #ede9fe; --pri-d: #5b21b6;
+  --txt: #1e293b; --txt2: #64748b; --bd: #e2e8f0;
+  --su: #10b981; --su-l: #d1fae5; --wa: #f59e0b; --wa-l: #fef3c7;
+  --in: #3b82f6; --in-l: #dbeafe; --er: #ef4444; --er-l: #fee2e2;
+  --ra: 16px; --sh: 0 1px 3px rgba(0,0,0,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh}
+.header {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 50%, #1a3a5c 100%);
+  color: #fff;
+  padding: 36px 24px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 400px; height: 400px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -30%; left: -5%;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 50%;
+}
+.header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 1; }
+.header p { font-size: 14px; opacity: 0.85; position: relative; z-index: 1; }
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 80px}
+
+/* Tabs */
+.tb{display:flex;gap:4px;margin-bottom:24px;background:#fff;border-radius:14px;padding:5px;box-shadow:var(--sh)}
+.tb button{flex:1;padding:12px 8px;border:none;background:transparent;border-radius:11px;cursor:pointer;font-size:14px;font-weight:600;color:var(--txt2);transition:all .2s}
+.tb button.on{background:var(--pri);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.25)}
+.tb button:hover:not(.on){color:var(--txt)}
+.tp{display:none}
+.tp.on{display:block}
+
+/* Cards */
+.card{background:var(--card);border-radius:var(--ra);padding:24px;margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.card h3{font-size:16px;font-weight:700;color:var(--pri-d);margin-bottom:4px}
+.card .sub{font-size:12px;color:var(--txt2);margin-bottom:16px}
+
+/* ===== TAB 1: Diagnosis ===== */
+.q-block{margin-bottom:20px}
+.q-block:last-child{margin-bottom:0}
+.q-title{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.q-title .q-num{display:inline-flex;width:24px;height:24px;background:var(--pri);color:#fff;border-radius:50%;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.opt-row{display:flex;gap:8px;flex-wrap:wrap}
+.opt{flex:1;min-width:120px;padding:12px;border:2px solid var(--bd);border-radius:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;background:#fafbfc}
+.opt:hover{border-color:var(--pri);background:var(--pri-l)}
+.opt.sel{border-color:var(--pri);background:var(--pri-l);color:var(--pri-d)}
+.opt .o-icon{font-size:22px;display:block;margin-bottom:4px}
+.opt .o-label{font-size:12px;color:var(--txt2);font-weight:400;margin-top:2px}
+
+/* Result diagnosis */
+.diag-card{padding:20px;border-radius:14px;margin-top:20px;animation:fadeIn .4s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.diag-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:12px}
+.diag-badge.lv1{background:#f1f5f9;color:#475569}
+.diag-badge.lv2{background:#dbeafe;color:#1d4ed8}
+.diag-badge.lv3{background:#d1fae5;color:#065f46}
+.diag-badge.lv4{background:#fef3c7;color:#92400e}
+.diag-badge.lv5{background:#fce7f3;color:#9d174d}
+.diag-badge.lv6{background:#ede9fe;color:#5b21b6}
+.diag-badge.lv7{background:#fce7f3;color:#be185d}
+.diag-badge.lv8{background:#fef2f2;color:#991b1b}
+.diag-badge .lv-num{font-size:20px;font-weight:800}
+
+/* Comp bars */
+.comp-list{margin-top:16px}
+.comp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.comp-name{width:72px;font-size:12px;font-weight:600;color:var(--txt2);text-align:right;flex-shrink:0}
+.comp-bar{flex:1;height:28px;background:#f1f5f9;border-radius:7px;overflow:hidden;position:relative}
+.comp-fill{height:100%;border-radius:7px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:700;color:#fff;transition:width .5s ease}
+.comp-pct{width:50px;font-size:12px;font-weight:700;flex-shrink:0}
+
+.colors{--c1:#3b82f6;--c2:#8b5cf6;--c3:#f59e0b;--c4:#10b981;--c5:#06b6d4;--c6:#ef4444;--c7:#ec4899;--c8:#f97316;--c9:#6366f1;--cX:#14b8a6}
+
+.note{background:var(--in-l);border-radius:10px;padding:14px;margin-top:14px;border-left:4px solid var(--in);font-size:13px}
+.note strong{color:var(--in)}
+.warn{background:var(--wa-l);border-radius:10px;padding:14px;margin-top:10px;border-left:4px solid var(--wa);font-size:13px}
+.warn strong{color:#b45309}
+
+/* ===== TAB 2: Evolution ===== */
+.evo-path{position:relative;padding:20px 0}
+.evo-node{display:flex;align-items:flex-start;gap:16px;padding:18px 16px;border-radius:14px;margin-bottom:12px;cursor:pointer;transition:all .2s;border:2px solid var(--bd);background:#fff;position:relative}
+.evo-node:hover{border-color:var(--pri);box-shadow:0 4px 16px rgba(124,58,237,.1)}
+.evo-node.active{border-color:var(--pri);background:var(--pri-l)}
+.evo-node .n-lv{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
+.evo-node .n-info{flex:1}
+.evo-node .n-title{font-size:15px;font-weight:700;margin-bottom:2px}
+.evo-node .n-comp{font-size:12px;color:var(--txt2);margin-bottom:4px}
+.evo-node .n-trigger{font-size:11px;color:var(--pri-d);font-style:italic}
+.evo-node .n-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--bd)}
+.evo-node.active .n-detail{display:block}
+.evo-arrow{text-align:center;font-size:20px;color:var(--pri);margin:-6px 0;position:relative;z-index:1}
+
+/* ===== TAB 3: Risk Sim ===== */
+.sim-controls{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:20px}
+.sim-group{flex:1;min-width:160px}
+.sim-group label{font-size:12px;font-weight:600;color:var(--txt2);display:block;margin-bottom:4px}
+.sim-group select{width:100%;padding:10px 12px;border:2px solid var(--bd);border-radius:10px;font-size:13px;font-weight:600;background:#fafbfc;cursor:pointer;appearance:none}
+.sim-group select:focus{outline:none;border-color:var(--pri)}
+.sim-btn{padding:10px 24px;background:var(--pri);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.sim-btn:hover{background:var(--pri-d);transform:translateY(-1px)}
+
+.risk-bar{height:12px;background:#f1f5f9;border-radius:6px;overflow:hidden;margin:12px 0;display:flex}
+.risk-fill{height:100%;transition:width .4s;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
+.risk-label{display:flex;justify-content:space-between;font-size:11px;color:var(--txt2);margin-bottom:4px}
+
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:600px){.gap-grid{grid-template-columns:1fr}}
+.gap-item{padding:14px;border-radius:10px;font-size:13px}
+.gap-item.gap-miss{background:var(--er-l);border:1px solid #fca5a5}
+.gap-item.gap-ok{background:var(--su-l);border:1px solid #6ee7b7}
+.gap-item strong{display:block;margin-bottom:4px}
+
+/* Legend */
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.leg span{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--txt2)}
+.leg .dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 16px;font-size:12px;letter-spacing:2px;margin-bottom:12px;position:relative;z-index:1;">大董老师天地人销售管理体系 · 756班定制</div>
+  <h1>🧭 薪酬进化导航器</h1>
+  <p>不只是查表 — 诊断你在哪、为什么在这、怎么到下一级</p>
+</div>
+
+<div class="wrap">
+
+<div class="tb">
+  <button class="on" onclick="sw('diag')">🔍 阶段诊断</button>
+  <button onclick="sw('evo')">🗺️ 进化罗盘</button>
+  <button onclick="sw('risk')">⚠️ 风险模拟</button>
+</div>
+
+<!-- ==================== TAB 1: 阶段诊断 ==================== -->
+<div id="tp-diag" class="tp on">
+
+  <div class="card">
+    <h3>你的公司现在处于哪个阶段？</h3>
+    <p class="sub">回答 4 个问题，系统自动匹配薪酬组合层级。⚠️ 1.0-3.0 适用一线销售，4.0 以上适用销售管理者/核心骨干。</p>
+
+    <div id="quiz"></div>
+    <div id="diagResult"></div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB 2: 进化罗盘 ==================== -->
+<div id="tp-evo" class="tp">
+
+  <div class="card">
+    <h3>从 1.0 到 8.0 的完整进化路径</h3>
+    <p class="sub">点击每一级查看：当前薪酬包 → 触发本级的信号 → 升到下一级的条件</p>
+    <div class="evo-path" id="evoPath"></div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB 3: 风险模拟 ==================== -->
+<div id="tp-risk" class="tp">
+
+  <div class="card" style="background:linear-gradient(135deg,#fefce8 0%,#fffbeb 100%);border:1px solid #fde68a;margin-bottom:16px;padding:16px 18px;border-radius:12px;">
+    <p style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:6px;">📌 本工具的定位说明</p>
+    <p style="font-size:12px;color:#92400e;line-height:1.7;">
+      本工具模拟的是<strong>「激励体系复杂度」</strong>是否超出了<strong>「组织成熟度」</strong>的承载能力。<br><br>
+      <strong>不分阶段、单独给核心骨干分股权/期权</strong>，属于「用股权替代现金薪酬」策略——起步期没钱、用未来换现在，是常见的创业操作。这部分属于<strong>股权设计</strong>范畴，请参考博商股权课的专业方法。<br><br>
+      本工具警示的是另一种风险：<strong>在组织还没有绩效体系、没有财务透明度、没有成熟管理者的时候，试图同时运行「工资+绩效+提成+部门奖+超额奖+分红+期权」这一整套复杂激励组合</strong>。激励工具堆叠 ≠ 激励效果好，组织撑不住的时候，复杂度本身就是风险。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>越级使用薪酬<strong>体系</strong> — 风险有多大？</h3>
+    <p class="sub">选两个阶段对比，看组织能力是否跟得上激励体系的复杂度</p>
+
+    <div class="sim-controls">
+      <div class="sim-group">
+        <label>公司实际阶段</label>
+        <select id="simActual" onchange="runSim()"></select>
+      </div>
+      <div class="sim-group">
+        <label>想用的薪酬组合</label>
+        <select id="simTarget" onchange="runSim()"></select>
+      </div>
+      <button class="sim-btn" onclick="runSim()">开始模拟</button>
+    </div>
+
+    <div id="simResult">
+      <p style="color:var(--txt2);font-size:13px;text-align:center;padding:40px 0;">👆 先选好两个阶段，点击「开始模拟」</p>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+// ==================== DATA ====================
+const LV = [
+  {lv:'1.0',nm:'工资制',st:'初创摸索期',comp:['工资'],ck:['c1'],
+   pct:[100],
+   guide:'老板即是销售，团队概念模糊。提供基本保障，无战略导向。',
+   warn:'易导致"躺平"——只拿工资不产出。仅适用于老板亲自跑客户的极早期阶段。',
+   trigger:'公司刚起步，创始人自己跑业务，还没招第一个销售。',
+   nextNeed:'当你开始觉得"一个人跑不过来"，需要招第一个销售来分担时。',
+   role:'👤 一线销售 & 老板本人',
+   quizScore:{sales:0,rev:0,mgr:0,proc:0}
+  },
+  {lv:'2.0',nm:'工资+提成',st:'快速起步期',comp:['工资','提成'],ck:['c1','c3'],
+   pct:[60,40],
+   guide:'开始建销售团队，强烈刺激个人开单。激励个人贡献。',
+   warn:'只顾个人，不管团队；吃老本，不开拓。需配套客户分级和新人保护期。',
+   trigger:'招了第一个销售，需要激励他多跑多签。',
+   nextNeed:'当你发现销售只顾自己签单、不传帮带、新人存活率低时。',
+   role:'👤 一线销售',
+   quizScore:{sales:1,rev:1,mgr:0,proc:0}
+  },
+  {lv:'3.0',nm:'工资+绩效+目标提成',st:'体系建立期',comp:['工资','绩效','提成'],ck:['c1','c2','c3'],
+   pct:[50,20,30],
+   guide:'需要规范销售行为，引导员工关注目标。引入过程考核，开始导向团队目标。',
+   warn:'绩效指标设计不当会导致"为指标工作"而非"为客户工作"。KPI需与战略对齐。',
+   trigger:'销售团队3-5人，开始出现"老销售吃老本、新销售活不下来"的问题。',
+   nextNeed:'当团队中出现自然的"带头大哥"，需要正式任命管理者时。',
+   role:'👤 一线销售 & 资深销售',
+   quizScore:{sales:2,rev:2,mgr:0,proc:1}
+  },
+  {lv:'4.0',nm:'+部门奖',st:'团队扩张期',comp:['工资','绩效','提成','部门奖'],ck:['c1','c2','c3','c4'],
+   pct:[45,15,25,15],
+   guide:'出现销售小组或部门，需培养管理者。让初级管理者开始关注团队整体产出。',
+   warn:'部门奖分配不公易引发内部矛盾。需明确"个人贡献"与"团队溢出"的分配规则。',
+   trigger:'团队5-10人，分了2-3个小组，每组有组长。组长需要管理激励。',
+   nextNeed:'当管理者开始关心"利润"而不只是"销售额"时。',
+   role:'👥 销售主管/组长 — 管理者专属',
+   quizScore:{sales:3,rev:2,mgr:1,proc:1}
+  },
+  {lv:'5.0',nm:'+超额奖',st:'精细化初期',comp:['工资','绩效','提成','超额奖'],ck:['c1','c2','c3','c5'],
+   pct:[40,15,25,20],
+   guide:'管理者需具备初步经营意识，控制成本。引导关注利润而不仅是销售额。',
+   warn:'超额标准设定过高=画饼，过低=成本失控。建议设三档（挑战/冲刺/卓越），对应不同系数。',
+   trigger:'部门开始独立核算，管理者需要承担盈亏责任。',
+   nextNeed:'当核心骨干的流失开始让你心疼，需要深度绑定时。',
+   role:'👥 销售经理 — 管理者专属',
+   quizScore:{sales:3,rev:3,mgr:2,proc:2}
+  },
+  {lv:'6.0',nm:'+分红',st:'成熟发展期',comp:['工资','奖金','超额奖','分红'],ck:['c1','c6','c5','c7'],
+   pct:[40,20,20,20],
+   guide:'核心骨干形成，需深度绑定避免流失。从"为公司干"变为"为自己干"。',
+   warn:'分红机制需透明化。若无清晰的财务核算和沟通机制，分红反而引发猜疑。',
+   trigger:'有3-5个跟你一起打天下的核心骨干，他们已经不只是要钱，要归属感。',
+   nextNeed:'当公司开始有明确的上市/资本规划时。',
+   role:'👥 核心骨干 & 销售总监',
+   quizScore:{sales:4,rev:3,mgr:3,proc:3}
+  },
+  {lv:'7.0',nm:'+期权/股权',st:'战略突破/上市前期',comp:['工资','奖金','超额奖','分红','期权/股权'],ck:['c1','c6','c5','c7','c8'],
+   pct:[35,20,15,15,15],
+   guide:'需要团队与公司共担风险、共享未来。将个人命运与公司长期价值深度绑定。',
+   warn:'期权/股权涉及法律税务，务必请专业律师。行权条件要清晰可衡量。',
+   trigger:'公司有明确的上市/并购路线图，需要核心团队"all in"。',
+   nextNeed:'当公司已经成为一个行业平台，需要吸引顶尖人才来创造新的增长曲线时。',
+   role:'👥 核心高管 & 合伙人层级',
+   quizScore:{sales:5,rev:4,mgr:4,proc:4}
+  },
+  {lv:'8.0',nm:'+股权+梦想',st:'生态/领袖期',comp:['工资','奖金','特别奖励','股权','梦想'],ck:['c1','c6','cX','c9','cX'],
+   pct:[30,20,15,20,15],
+   guide:'为顶尖人才提供实现个人抱负的舞台。公司的使命成为个人梦想的放大器。',
+   warn:'"梦想"不是虚的——需要清晰的愿景描述和可追踪的里程碑。没有兑现能力就是画饼。',
+   trigger:'公司已是行业头部，需要吸引那些"只靠钱请不动"的顶尖人才。',
+   nextNeed:'你已经站在顶层。保持梦想的吸引力，不要让"使命"变成墙上的口号。',
+   role:'👥 合伙人 & 事业伙伴',
+   quizScore:{sales:5,rev:5,mgr:5,proc:5}
+  }
+];
+
+const CO = {c1:'#3b82f6',c2:'#8b5cf6',c3:'#f59e0b',c4:'#10b981',c5:'#06b6d4',c6:'#ef4444',c7:'#ec4899',c8:'#f97316',c9:'#6366f1',cX:'#14b8a6'};
+const CN = {c1:'工资',c2:'绩效',c3:'提成',c4:'部门奖',c5:'超额奖',c6:'奖金',c7:'分红',c8:'期权/股权',c9:'股权',cX:'梦想'};
+const BG = ['lv1','lv2','lv3','lv4','lv5','lv6','lv7','lv8'];
+
+// ==================== TAB 1: Diagnosis Quiz ====================
+const QUIZ = [
+  {q:'销售团队有多少人？',id:'sales',opts:[
+    {v:0,icon:'🧑‍💼',label:'只有老板自己跑'},
+    {v:1,icon:'👤',label:'1-2个销售'},
+    {v:2,icon:'👥',label:'3-5个销售'},
+    {v:3,icon:'🏢',label:'5-10人，分了小组'},
+    {v:4,icon:'🏗️',label:'10人以上，有管理层'},
+    {v:5,icon:'🌐',label:'多区域/多事业部'}
+  ]},
+  {q:'公司年营收处于什么水平？',id:'rev',opts:[
+    {v:0,icon:'🌱',label:'500万以下'},
+    {v:1,icon:'🌿',label:'500万-2000万'},
+    {v:2,icon:'🪴',label:'2000万-5000万'},
+    {v:3,icon:'🌳',label:'5000万-2亿'},
+    {v:4,icon:'🏔️',label:'2亿-10亿'},
+    {v:5,icon:'🌟',label:'10亿以上'}
+  ]},
+  {q:'有专职销售管理者吗？',id:'mgr',opts:[
+    {v:0,icon:'❌',label:'没有，老板自己管'},
+    {v:1,icon:'🔄',label:'有"带头大哥"，没正式任命'},
+    {v:2,icon:'✅',label:'有正式任命的销售主管'},
+    {v:3,icon:'📊',label:'有销售经理+独立考核'},
+    {v:4,icon:'🏛️',label:'有销售总监/VP'},
+    {v:5,icon:'👑',label:'有完整的销售高管团队'}
+  ]},
+  {q:'销售流程标准化程度？',id:'proc',opts:[
+    {v:0,icon:'📝',label:'没有标准流程'},
+    {v:1,icon:'📋',label:'有一些口头规则'},
+    {v:2,icon:'📊',label:'有文档化的销售流程'},
+    {v:3,icon:'💻',label:'有CRM系统在跑'},
+    {v:4,icon:'📈',label:'有数据驱动的销售管理'},
+    {v:5,icon:'🤖',label:'高度数字化+AI辅助'}
+  ]}
+];
+
+function renderQuiz(){
+  document.getElementById('quiz').innerHTML = QUIZ.map(q => {
+    let opts = q.opts.map(o => `
+      <div class="opt" data-q="${q.id}" data-v="${o.v}" onclick="selQuiz(this,'${q.id}',${o.v})">
+        <span class="o-icon">${o.icon}</span>${o.label}
+      </div>`).join('');
+    return `<div class="q-block"><div class="q-title"><span class="q-num">?</span>${q.q}</div><div class="opt-row">${opts}</div></div>`;
+  }).join('');
+  document.getElementById('diagResult').innerHTML = '';
+}
+
+const quizAns = {};
+function selQuiz(el, qid, v){
+  document.querySelectorAll(`[data-q="${qid}"]`).forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  quizAns[qid] = v;
+  // Auto-diagnose when all 4 answered
+  if(Object.keys(quizAns).length === 4) diagnose();
+}
+
+function diagnose(){
+  const s = quizAns;
+  if(!s.sales && s.sales!==0) return;
+  // Score = average of all 4 dimensions, rounded
+  const avg = (s.sales + s.rev + s.mgr + s.proc) / 4;
+  // Map to level: 0-0.5→L0, 0.5-1.5→L1, 1.5-2.5→L2, 2.5-3.5→L3, 3.5-4.5→L4, 4.5-5→L5
+  let idx = Math.round(avg);
+  if(avg <= 0.5) idx = 0;
+  else if(avg <= 1.5) idx = 1;
+  else if(avg <= 2.5) idx = 2;
+  else if(avg <= 3.5) idx = 3;
+  else if(avg <= 4.5) idx = 4;
+  else if(avg <= 5.5) idx = 5;
+  else if(avg <= 6.5) idx = 6;
+  else idx = 7;
+
+  // Also check: if sales=0, force L0
+  if(s.sales === 0) idx = 0;
+  if(s.sales === 1 && s.rev <= 1) idx = Math.min(idx, 1);
+
+  const lv = LV[idx];
+  const bars = lv.ck.map((k,i) => {
+    const color = CO[k]||'#94a3b8';
+    const name = CN[k]||k;
+    return `<div class="comp-row">
+      <span class="comp-name">${name}</span>
+      <div class="comp-bar"><div class="comp-fill" style="width:${lv.pct[i]}%;background:${color};">${name}</div></div>
+      <span class="comp-pct">≈${Math.round(lv.pct[i])}%</span>
+    </div>`;
+  }).join('');
+
+  const next = idx < 7 ? LV[idx+1] : null;
+
+  document.getElementById('diagResult').innerHTML = `
+    <div class="diag-card" style="border:2px solid var(--pri);">
+      <div class="diag-badge ${BG[idx]}"><span class="lv-num">${lv.lv}</span> ${lv.st}</div>
+      <p style="font-size:15px;font-weight:700;margin-bottom:4px;">推荐薪酬组合：<span style="color:var(--pri-d);">${lv.nm}</span></p>
+      <p style="font-size:12px;color:var(--pri-d);margin-bottom:12px;">${lv.role}</p>
+
+      <div class="comp-list">${bars}</div>
+      <p style="font-size:11px;color:var(--txt2);margin-top:4px;">⚠️ 以上比例为示意参考值。精确固浮比请用 <a href="salary.html" style="color:var(--pri);">固浮比计算工具 →</a></p>
+
+      <div class="note">
+        <strong>📌 为什么是这个组合？</strong><br>
+        ${lv.guide}
+      </div>
+      <div class="warn">
+        <strong>⚠️ 这个阶段的常见坑</strong><br>
+        ${lv.warn}
+      </div>
+
+      ${next ? `
+      <div class="note" style="background:#f0fdf4;border-color:#10b981;margin-top:12px;">
+        <strong>🔼 什么时候该升级到 ${next.lv}？</strong><br>
+        ${lv.nextNeed}<br>
+        <span style="font-size:12px;color:var(--txt2);">下一级薪酬包将新增：<strong>${next.comp.slice(lv.comp.length).join('、')}</strong></span>
+      </div>` : `
+      <div class="note" style="background:#fef2f2;border-color:#ef4444;margin-top:12px;">
+        <strong>🏆 已达顶层</strong><br>${lv.nextNeed}
+      </div>`}
+
+      <p style="font-size:11px;color:var(--txt2);margin-top:12px;">
+        💡 诊断依据：团队规模 ${['0-老板','1-2人','3-5人','5-10人','10人+','多区域'][quizAns.sales]} · 
+        营收 ${['<500万','500-2000万','2000-5000万','5000万-2亿','2-10亿','>10亿'][quizAns.rev]} · 
+        管理者 ${['无','非正式','主管','经理','总监','高管团队'][quizAns.mgr]} · 
+        流程 ${['无','口头','文档化','CRM','数据驱动','AI化'][quizAns.proc]}
+      </p>
+    </div>
+  `;
+  document.getElementById('diagResult').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ==================== TAB 2: Evolution ====================
+function renderEvo(){
+  let html = '';
+  LV.forEach((lv,i) => {
+    const bgColors = ['#94a3b8','#3b82f6','#10b981','#f59e0b','#ec4899','#8b5cf6','#be185d','#ef4444'];
+    const nextAdd = i < 7 ? LV[i+1].comp.filter(c => !lv.comp.includes(c)) : [];
+    const nextNeed = i < 7 ? LV[i].nextNeed : '已达顶层，保持吸引力。';
+
+    html += `<div class="evo-node" onclick="togEvo(this,${i})" id="evo-${i}">
+      <div class="n-lv" style="background:${bgColors[i]};">${lv.lv}</div>
+      <div class="n-info">
+        <div class="n-title">${lv.st} — ${lv.nm} <span style="font-size:11px;color:var(--pri-d);font-weight:600;">${lv.role}</span></div>
+        <div class="n-comp">${lv.comp.map(c=>`<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:${CO[lv.ck[lv.comp.indexOf(c)]]||'#94a3b8'};color:#fff;font-size:10px;margin:0 2px;">${c}</span>`).join(' ')} <span style="font-size:10px;color:var(--txt2);">(比例仅供参考)</span></div>
+        <div class="n-trigger">触发信号：${lv.trigger}</div>
+        <div class="n-detail">
+          <p style="font-size:13px;margin-bottom:6px;"><strong>🎯 战略导向：</strong>${lv.guide}</p>
+          <p style="font-size:13px;margin-bottom:6px;"><strong>⚠️ 风险：</strong>${lv.warn}</p>
+          <p style="font-size:13px;"><strong>🔼 升级条件：</strong>${nextNeed}${nextAdd.length ? ' → 新增 <strong>'+nextAdd.join('、')+'</strong>' : ''}</p>
+        </div>
+      </div>
+    </div>`;
+    if(i < 7) {
+      html += '<div class="evo-arrow">↓</div>';
+      // Add divider between level 3 and 4
+      if(i === 2) html += '<div style="text-align:center;padding:6px 0;margin:4px 0;"><span style="background:var(--wa-l);color:#b45309;font-size:11px;font-weight:700;padding:4px 12px;border-radius:10px;">⬆ 以上适用一线销售 ｜ 以下适用销售管理者 ⬇</span></div>';
+    }
+  });
+  document.getElementById('evoPath').innerHTML = html;
+}
+
+function togEvo(el, idx){
+  document.querySelectorAll('.evo-node').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ==================== TAB 3: Risk Sim ====================
+function renderSimSelects(){
+  const sel1 = document.getElementById('simActual');
+  const sel2 = document.getElementById('simTarget');
+  const opts = LV.map((lv,i) => `<option value="${i}">${lv.lv} ${lv.st} — ${lv.nm}</option>`).join('');
+  sel1.innerHTML = opts;
+  sel2.innerHTML = opts;
+  sel1.value = 2; sel2.value = 5; // default: 3.0 vs 6.0
+}
+
+function runSim(){
+  const a = parseInt(document.getElementById('simActual').value);
+  const t = parseInt(document.getElementById('simTarget').value);
+  const gap = t - a;
+
+  if(gap <= 0){
+    document.getElementById('simResult').innerHTML = `
+      <div class="diag-card" style="border:2px solid var(--su);">
+        <p style="font-size:15px;font-weight:700;color:#065f46;">✅ 匹配或降级 — 风险极低</p>
+        <p style="font-size:13px;color:var(--txt2);">目标组合 ≤ 实际阶段，薪酬结构不会超前于组织能力。可以安全使用。</p>
+      </div>`;
+    return;
+  }
+
+  // Calculate risk score (0-100)
+  const riskPct = Math.min(gap * 20, 95);
+  const riskColor = riskPct < 30 ? '#10b981' : riskPct < 60 ? '#f59e0b' : '#ef4444';
+  const riskLabel = riskPct < 30 ? '低风险' : riskPct < 60 ? '中等风险' : '高风险';
+
+  // Missing capabilities
+  const missing = [];
+  for(let i = a+1; i <= t; i++){
+    const need = LV[i].trigger;
+    missing.push({lv:LV[i].lv, stage:LV[i].st, need});
+  }
+
+  // Risks of skipping — focus on system complexity, not equity itself
+  const risks = [];
+  if(gap >= 2) risks.push('激励体系复杂度超出组织承载：在还没有基础绩效考核和过程管理体系时，就引入多层激励组合，执行成本远高于激励收益');
+  if(gap >= 3) risks.push('激励工具堆叠 ≠ 效果好：工资+绩效+提成+部门奖+超额奖一起上，考核口径打架、规则互相矛盾，团队反而不知道该往哪使劲');
+  if(t >= 4 && a <= 2) risks.push('岗位错配：' + LV[t].lv + ' 的薪酬组合（'+LV[t].role+'）设计给管理者/核心骨干，但公司当前处于一线销售阶段，没有对应层级的管理者来承接这套体系');
+  if(t >= 5 && a <= 2) risks.push('管理者缺位：超额奖和分红需要管理者有经营意识和利润思维，一线销售不具备这个视角，激励信号会被误读');
+  if(t >= 6 && a <= 3) risks.push('配套制度缺失：分红需要透明财务核算，期权需要法律合规框架——这些是激励体系的"基础设施"，不是拍脑袋就能上的');
+  if(gap >= 4) risks.push('承诺通胀风险：薪酬组合里承诺了太多远期兑现的组件，但公司当前阶段的盈利能力还撑不起这些承诺——"先承诺、后兑现"的模式一旦断链，信用破产比从来没有激励更可怕');
+
+  // What you have vs what you need
+  const haveComps = LV[a].comp;
+  const targetComps = LV[t].comp;
+  const newComps = targetComps.filter(c => !haveComps.includes(c));
+
+  document.getElementById('simResult').innerHTML = `
+    <div class="diag-card" style="border:2px solid ${riskColor};">
+      <div class="diag-badge ${BG[t]}" style="margin-bottom:8px;"><span class="lv-num">${LV[t].lv}</span> ${LV[t].nm}</div>
+      <p style="font-size:13px;color:var(--txt2);margin-bottom:4px;">你当前阶段：<strong>${LV[a].lv} ${LV[a].st}</strong> → 想用：<strong>${LV[t].lv} ${LV[t].st}</strong>（跨越 ${gap} 级）</p>
+
+      <div style="margin:16px 0;">
+        <div class="risk-label"><span>风险指数</span><span>${riskPct}%</span></div>
+        <div class="risk-bar">
+          <div class="risk-fill" style="width:${riskPct}%;background:${riskColor};">${riskLabel}</div>
+        </div>
+      </div>
+
+      <div class="gap-grid">
+        <div class="gap-item gap-ok">
+          <strong>✅ 你已有</strong>
+          ${haveComps.map(c=>`<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:var(--su);color:#fff;font-size:11px;margin:2px;">${c}</span>`).join(' ')}
+        </div>
+        <div class="gap-item gap-miss">
+          <strong>❌ 需要新增但组织未ready</strong>
+          ${newComps.map(c=>`<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:var(--er);color:#fff;font-size:11px;margin:2px;">${c}</span>`).join(' ')}
+        </div>
+      </div>
+
+      <div class="warn" style="margin-top:16px;">
+        <strong>⚠️ 越级风险清单</strong>
+        <ul style="margin:8px 0 0 18px;font-size:12px;">
+          ${risks.map(r=>`<li style="margin-bottom:4px;">${r}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="note" style="margin-top:12px;">
+        <strong>💡 建议</strong><br>
+        ${gap >= 3
+          ? `不建议直接跳到 ${LV[t].lv} 的完整体系。先扎实走完中间 ${gap} 级的组织建设——激励体系复杂度跟着组织能力走，而不是反过来。可以先从 ${LV[a+1].lv}（${LV[a+1].nm}）开始试点。`
+          : gap === 1
+            ? `只跨一级，风险可控。关键是把 ${LV[t].trigger} 这个前提条件做到位，再做体系升级。`
+            : `跨两级，中等风险。建议先做 6 个月试点，用 ${LV[a+1].lv}（${LV[a+1].nm}）过渡，观察团队反应后再升级。`
+        }
+        ${LV[t].comp.some(c => c.includes('股权') || c.includes('期权'))
+          ? `<br><br><span style="font-size:11px;color:var(--pri-d);">💡 提示：本工具评估的是<strong>激励体系复杂度</strong>的风险，并非否定早期给核心骨干分股权/期权的做法。单独授予股权属于<strong>股权设计</strong>范畴（薪酬替代策略），请结合博商股权课的专业方法做设计。</span>`
+          : ''
+        }
+      </div>
+    </div>
+  `;
+}
+
+// ==================== Tab Switch ====================
+function sw(name){
+  document.querySelectorAll('.tb button').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  document.querySelector(`.tb button[onclick*="${name}"]`).classList.add('on');
+  document.getElementById('tp-'+name).classList.add('on');
+  if(name==='evo') renderEvo();
+  if(name==='risk') renderSimSelects();
+}
+
+// ==================== Init ====================
+renderQuiz();
+</script>
+</body>
+</html>
