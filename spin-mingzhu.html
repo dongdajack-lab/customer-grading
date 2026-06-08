@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - 明珠公司定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 50%, #1a3a5c 100%); color: #fff; padding: 36px 24px 32px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: rgba(255,255,255,0.04); border-radius: 50%; }
+  header::after { content: ''; position: absolute; bottom: -30%; left: -5%; width: 300px; height: 300px; background: rgba(255,255,255,0.03); border-radius: 50%; }
+  .header-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 16px; font-size: 12px; letter-spacing: 2px; margin-bottom: 12px; position: relative; z-index: 1; }
+  header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 1; }
+  header p { font-size: 14px; opacity: 0.85; max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#8E44AD; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#8E44AD; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #8E44AD; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#8E44AD; }
+  .spin-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .spin-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-S { background:#EBF5FB; color:#2980B9; }
+  .tag-P { background:#FDEDEC; color:#E67E22; }
+  .tag-I { background:#FADBD8; color:#C0392B; }
+  .tag-N { background:#E8F8F5; color:#27AE60; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#8E44AD; background:#F4ECF7; }
+  .option.selected { border-color:#8E44AD; background:#F4ECF7; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#8E44AD; background:#8E44AD; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#8E44AD; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#8E44AD; color:white; }
+  .btn-primary:hover { background:#7D3C98; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#27AE60,#2ECC71); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .label { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#8E44AD; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#8E44AD; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#8E44AD; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">江苏明珠 · 定制版 | 大董老师天地人销售管理体系</div>
+  <h1>挖痛练习 · SPIN提问训练</h1>
+  <p>暖通设备工程销售场景 — 练出顾问式提问直觉</p>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="label">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    scenario: "你是江苏明珠的暖通销售顾问，接触了一家新建商务酒店的项目经理。酒店共15层，需要中央空调+新风+热水系统。你想先了解对方现状。",
+    question: "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解酒店暖通需求？",
+    options: [
+      { text:"酒店目前设计到什么阶段了？总制冷量大概多少？客房间数和公共区域面积各多少？之前有没有看过其他品牌的方案？", type:"S", correct:true },
+      { text:"如果选错了空调系统，对酒店运营影响大吗？", type:"I", correct:false },
+      { text:"之前看的方案您最不满意的地方在哪？", type:"P", correct:false },
+      { text:"如果能帮您一次性解决暖通设计+安装+售后，您觉得值多少？", type:"N", correct:false }
+    ],
+    explain:"<strong>✅ S - 现状问题</strong><br><br>先了解项目基本情况：设计进度、冷量需求、面积分布、竞品接触情况。S型问题的目的是建立完整的需求画像。<br>暖通工程必须有数据基础才能给出专业方案。"
+  },
+  {
+    scenario: "项目经理：设计已经做完了，也看了两个品牌的方案。但都不太满意，他们只卖设备，不负责整体暖通设计和多品牌协调，我们得自己管安装、对接装修，太费劲。",
+    question: "客户说出了痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
+    options: [
+      { text:"多品牌协调带来的麻烦，具体耽误了你们多少时间？有没有因此差点影响工期？", type:"I", correct:false },
+      { text:"如果有一家公司能帮您一站式搞定从设计到安装到售后的暖通工程，您愿意了解吗？", type:"N", correct:false },
+      { text:"自己管多个品牌的安装协调，具体碰到了哪些麻烦？除了费时间，还有别的困扰吗？", type:"P", correct:true },
+      { text:"酒店总共多少个房间？公共区域面积多大？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ P - 难点问题</strong><br><br>P型问题揭示更深层的困扰。"多品牌协调"只是表面，深挖下去可能是：工期风险、责任扯皮、售后多头对接。"还有别的吗？"是关键追问。"
+  },
+  {
+    scenario: "项目经理：对，麻烦得很。之前有个项目，空调装完夏天制冷效果不均匀，3楼冷得要命、12楼热得不行，客人投诉了好几次，最后又花了几十万整改。",
+    question: "客户说出了具体的失败案例，接下来哪句话是 <strong>I - 影响问题</strong>，能放大问题的严重性？",
+    options: [
+      { text:"如果这个问题解决了，对酒店开业和运营有什么帮助？", type:"N", correct:false },
+      { text:"你们酒店现在主要用什么方式管理空调系统？", type:"S", correct:false },
+      { text:"那次整改花了多少冤枉钱？当时影响了多少客人的入住体验？如果这次酒店开业后再出类似问题，对网评和入住率影响有多大？", type:"I", correct:true },
+      { text:"你们之前找的设计公司是哪家？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ I - 影响问题</strong><br><br>I型问题是扩大影响、制造紧迫感。酒店最怕客人投诉→网评差→入住率降→收入下滑。把技术问题量化成经营损失，客户才会真正感到痛。"
+  },
+  {
+    scenario: "项目经理：哎，确实。上次光整改就花了40多万，还影响了开业第一个月的入住率。酒店最怕的就是客人投诉，现在网评一差就完了…",
+    question: "客户已经感受到问题的严重性，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导对方说出解决方案的价值？",
+    options: [
+      { text:"这个问题大概给你们造成了多少损失？", type:"I", correct:false },
+      { text:"如果有一家公司能帮您从暖通设计、设备选型、多品牌安装协调到售后全部一站式搞定，确保开业不因暖通问题掉链子，您觉得对酒店项目意味着什么？", type:"N", correct:true },
+      { text:"你们现在主要靠谁管安装协调？", type:"S", correct:false },
+      { text:"你们觉得最难协调的是什么？", type:"P", correct:false }
+    ],
+    explain:"<strong>✅ N - 需求回报问题</strong><br><br>N型问题引导客户自己说出需求的价值。"一站式搞定"解决的是客户最痛的点：省心、不踩坑、不花冤枉钱。<br>I是让客户感到痛，N是让客户看到解决方案的希望。"
+  },
+  {
+    scenario: "你是明珠公司的销售，客户是一家电子元器件工厂的生产主管。工厂有3个车间共8000平米，现有空调已经用了12年，夏天车间温度经常超过32℃。",
+    question: "第一步应该问 <strong>S - 现状问题</strong>，下列哪句话最合适？",
+    options: [
+      { text:"如果车间温控稳定了，对你们产能和质量有什么帮助？", type:"N", correct:false },
+      { text:"你们现在用的什么品牌、什么类型的空调？每年维保费用多少？车间对温湿度有什么具体要求？最近一年因为温度问题停过几次线？", type:"S", correct:true },
+      { text:"温度超标对你们产线影响大吗？损失大概多少？", type:"I", correct:false },
+      { text:"目前空调最大的困扰是什么？", type:"P", correct:false }
+    ],
+    explain:"<strong>✅ S - 现状问题</strong><br><br>先了解现状：设备品牌/类型/年限、维保成本、温湿度要求、故障频率。这些数据是后面算账的基础。<br>工厂暖通改造的关键数据：车间面积、温湿度标准、使用年限、故障历史。"
+  },
+  {
+    scenario: "接上题。生产主管：用了12年的老机器了，每年维保就要花8万多，夏天经常过热停机，一停就是半天。最烦的是品牌售后响应太慢了，报修要等两三天才来人。",
+    question: "接下来应该问 <strong>P - 难点问题</strong>，下列哪句话最合适？",
+    options: [
+      { text:"维保费用高对你们整体生产成本有什么影响？", type:"I", correct:false },
+      { text:"除了维保贵和售后慢之外，这些老空调还给你们带来了哪些麻烦？比如能耗高不高？噪音大不大？有没有因为温度问题影响过产品质量？", type:"P", correct:true },
+      { text:"如果换了节能新系统，对你们成本有什么好处？", type:"N", correct:false },
+      { text:"你们现在空调总功率大概多少？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ P - 难点问题</strong><br><br>客户已经说了维保贵、售后慢，P要更深挖：能耗、噪音、质量影响。"还带来了哪些麻烦？"是关键追问，往往能挖出客户自己都没意识到的问题。"
+  },
+  {
+    scenario: "接上题。生产主管：你说到点上了！老空调能耗高得离谱，一年电费比同行高出30多万。而且温度不稳定，精密车间的温漂导致去年报废了两批产品，损失至少20万。",
+    question: "客户已经说出具体的损失，接下来应该问 <strong>I - 影响问题</strong>，下列哪句话最合适？",
+    options: [
+      { text:"如果换了节能系统解决了这些问题，对你们有什么价值？", type:"N", correct:false },
+      { text:"你们现在空调总功率多少？", type:"S", correct:false },
+      { text:"电费一年多花30万、产品报废20万，加起来一年损失50万以上。这个问题持续了几年？如果继续拖下去，设备彻底老化后全换和现在升级改造，你觉得哪个更划算？", type:"I", correct:true },
+      { text:"你觉得维保方面最大的困难是什么？", type:"P", correct:false }
+    ],
+    explain:"<strong>✅ I - 影响问题</strong><br><br>I要帮客户"算总账"：电费+维保+报废+停机损失，一年50万+。再引导思考"现在改 vs 拖到全换"，制造紧迫感。<br>工厂决策者最在意的是：不解决会亏多少。"
+  },
+  {
+    scenario: "接上题。生产主管：哎，你不说我还没算过，一年真亏了50多万，用了12年也该换了…",
+    question: "客户已经感受到问题的严重性，接下来应该问 <strong>N - 需求回报问题</strong>，下列哪句话最合适？",
+    options: [
+      { text:"如果换一套新的节能中央空调系统，一年电费省30多万、维保费省到2万以内、温控精确到±1℃，避免产品报废损失，你觉得对工厂的效益意味着什么？值得投入多少预算解决？", type:"N", correct:true },
+      { text:"这个问题持续多久了？", type:"I", correct:false },
+      { text:"你们之前有考虑过换新系统吗？", type:"P", correct:false },
+      { text:"你们现在用的什么品牌？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ N - 需求回报问题</strong><br><br>N型问题帮客户看到"解决问题的画面"。把之前算的账（50万/年损失）转变为"省30万+免20万"，投资回报清晰可见。<br>这一步做完，客户已经准备好听你的方案介绍了！"
+  }
+];
+
+let current = 0, selected = null, answered = false, results = [];
+
+function renderQuestion() {
+  selected = null; answered = false;
+  var q = questions[current];
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+  var labels = ['A', 'B', 'C', 'D'];
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【场景】</span>' + q.scenario + '</div>';
+  html += '<div style="font-weight:600; margin:16px 0 8px; color:#333;">' + q.question + '</div>';
+  html += '<div class="options">';
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '<div class="radio"></div><div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div></div>';
+  }
+  html += '</div><div class="correct-answer" id="correctAnswer"></div><div class="explanation" id="explanation"><h4>解析</h4><p>' + q.explain + '</p></div>';
+  document.getElementById("questionCard").innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  document.querySelectorAll(".option").forEach(function(el,i) { el.classList.toggle("selected", i === idx); });
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].correct;
+  answered = true;
+  document.querySelectorAll(".option").forEach(function(el,i) {
+    if (q.options[i].correct) el.classList.add("correct");
+    if (i === selected && !isCorrect) el.classList.add("wrong");
+    el.onclick = null;
+  });
+  results[current] = isCorrect;
+  var labels = ['A', 'B', 'C', 'D'];
+  var correctIdx = q.options.findIndex(function(o) { return o.correct === true; });
+  document.getElementById('correctAnswer').innerHTML = '<div class="label">✅ 正确答案：' + labels[correctIdx] + ' — ' + q.options[correctIdx].text + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+  document.getElementById("explanation").classList.add("show");
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() { if (current > 0) { current--; renderQuestion(); } }
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = 0;
+  for (var i = 0; i < results.length; i++) { if (results[i]) score++; }
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = Math.round(score / results.length * 100);
+  var detail = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    detail += '<div class="result-item"><span class="status">' + (results[i] ? '✅' : '❌') + '</span><span>第 ' + (i+1) + ' 题：' + (results[i] ? '正确' : '错误') + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detail;
+}
+
+function restart() {
+  current = 0; selected = null; answered = false; results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

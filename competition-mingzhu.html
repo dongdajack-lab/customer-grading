@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 竞争分析计算器 - 明珠公司定制版</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0d2b45;
+  --primary-light: #1a4a7a;
+  --primary-dark: #071c2e;
+  --accent: #c9a84c;
+  --accent-light: #fdf6e3;
+  --accent-dark: #9a7d2e;
+  --success: #1e7e5c;
+  --success-light: #e6f4ee;
+  --danger: #c0392b;
+  --danger-light: #fdeaea;
+  --warning: #e67e22;
+  --warning-light: #fef3e8;
+  --grey-dark: #2c3e50;
+  --grey-mid: #7f8c8d;
+  --grey-light: #ecf0f1;
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --blue: #2980b9;
+  --blue-light: #e8f4fd;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--grey-dark); line-height: 1.6; min-height: 100vh; }
+header { background: linear-gradient(135deg, #071c2e 0%, #0d2b45 35%, #1a4a7a 100%); color: white; padding: 40px 24px 36px; text-align: center; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-30%; right:-5%; width:350px; height:350px; background:rgba(201,168,76,0.08); border-radius:50%; }
+header::after { content:''; position:absolute; bottom:-40%; left:-10%; width:300px; height:300px; background:rgba(255,255,255,0.03); border-radius:50%; }
+.header-badge { display:inline-block; background:rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4); color:#f0d060; border-radius:20px; padding:4px 16px; font-size:12px; letter-spacing:2px; margin-bottom:14px; }
+.header-badge2 { display:inline-block; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:20px; padding:3px 12px; font-size:11px; margin-bottom:6px; }
+header h1 { font-size:28px; font-weight:700; margin-bottom:8px; position:relative; z-index:1; }
+header p { font-size:14px; opacity:0.85; max-width:600px; margin:0 auto; position:relative; z-index:1; }
+.container { max-width:1100px; margin:0 auto; padding:36px 20px 80px; }
+.btn { border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; padding:10px 20px; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px; }
+.btn-primary { background:var(--primary); color:white; }
+.btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); }
+.btn-accent { background:var(--accent); color:var(--primary-dark); }
+.btn-accent:hover { background:var(--accent-dark); color:white; transform:translateY(-1px); }
+.btn-outline { background:white; color:var(--grey-mid); border:2px solid var(--grey-light); }
+.btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+.btn-sm { padding:6px 14px; font-size:12px; }
+.btn-danger { background:var(--danger); color:white; }
+.btn-danger:hover { opacity:0.9; }
+.btn-gold { background:var(--accent); color:var(--primary-dark); font-weight:700; }
+.btn-gold:hover { background:var(--accent-dark); color:white; }
+.btn-success { background:var(--success); color:white; }
+.btn-success:hover { opacity:0.9; }
+.btn-bar { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.section { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:28px 32px; margin-bottom:24px; transition:all 0.3s; }
+.section.active-section { box-shadow:var(--shadow-lg); border-left:4px solid var(--primary); }
+.section-title { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:14px; border-bottom:2px solid var(--grey-light); }
+.section-title h2 { font-size:18px; font-weight:700; color:var(--primary); }
+.section-title .step-num { width:36px; height:36px; background:var(--primary); color:white; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; }
+.section-subtitle { font-size:13px; color:var(--grey-mid); margin-top:2px; }
+.progress-bar-wrap { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 32px; margin-bottom:24px; }
+.progress-steps { display:flex; justify-content:space-between; position:relative; margin-bottom:10px; }
+.progress-steps::before { content:''; position:absolute; top:14px; left:50px; right:50px; height:3px; background:var(--grey-light); z-index:0; }
+.progress-fill { position:absolute; top:14px; left:50px; height:3px; background:var(--primary); z-index:1; transition:width 0.4s; }
+.progress-step { display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; flex:1; cursor:pointer; }
+.progress-dot { width:30px; height:30px; border-radius:50%; background:var(--grey-light); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--grey-mid); transition:all 0.3s; }
+.progress-dot.active { background:var(--primary); color:white; }
+.progress-dot.done { background:var(--success); color:white; }
+.progress-label { font-size:11px; color:var(--grey-mid); margin-top:6px; text-align:center; max-width:80px; }
+.progress-label.active { color:var(--primary); font-weight:600; }
+.form-input, select.form-input, textarea.form-input { padding:10px 14px; border:2px solid var(--grey-light); border-radius:8px; font-size:13px; font-family:inherit; transition:border-color 0.2s; background:var(--white); resize:vertical; width:100%; }
+.form-input:focus, select.form-input:focus, textarea.form-input:focus { outline:none; border-color:var(--primary); }
+textarea.form-input { min-height:60px; }
+.form-label { font-size:12px; font-weight:600; color:var(--grey-mid); margin-bottom:4px; display:block; }
+.form-hint { font-size:11px; color:var(--grey-mid); margin-top:2px; }
+.setup-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 24px; }
+@media (max-width:600px) { .setup-grid { grid-template-columns:1fr; } }
+.matrix-wrap { overflow-x:auto; margin-top:16px; }
+.matrix-table { width:100%; border-collapse:collapse; font-size:13px; }
+.matrix-table th { background:var(--primary); color:white; padding:10px 12px; text-align:center; font-weight:600; font-size:12px; white-space:nowrap; position:sticky; top:0; z-index:1; }
+.matrix-table th.dim-col { text-align:left; min-width:140px; background:var(--primary-dark); }
+.matrix-table th:nth-child(2) { background:#132f45; }
+.matrix-table td { padding:8px 10px; text-align:center; border-bottom:1px solid var(--grey-light); }
+.matrix-table td.dim-name { text-align:left; font-weight:600; color:var(--grey-dark); }
+.matrix-table tr:hover td { background:var(--blue-light); }
+.matrix-table tr.total-row td { font-weight:700; background:var(--accent-light); border-top:3px solid var(--accent); }
+.matrix-table tr.total-row td.dim-name { color:var(--primary); }
+.matrix-table .score-input { width:56px; text-align:center; padding:6px; border:2px solid var(--grey-light); border-radius:6px; font-size:13px; font-weight:600; font-family:inherit; }
+.matrix-table .score-input:focus { outline:none; border-color:var(--primary); }
+.matrix-table .weight-input { width:64px; text-align:center; padding:6px; border:2px solid var(--grey-light); border-radius:6px; font-size:13px; font-weight:600; font-family:inherit; background:var(--accent-light); }
+.matrix-table .weight-input:focus { outline:none; border-color:var(--accent); }
+.matrix-table .weighted-cell { color:var(--accent-dark); font-weight:600; background:#fffdf5; }
+.matrix-table .me-cell { background:var(--blue-light); font-weight:600; }
+.weight-summary { margin-top:10px; font-size:12px; display:flex; align-items:center; gap:8px; }
+.weight-summary .ok { color:var(--success); }
+.weight-summary .warn { color:var(--danger); }
+.dim-desc { font-size:10px; color:var(--grey-mid); display:block; }
+.comp-manager { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
+.comp-tag { display:inline-flex; align-items:center; gap:6px; background:var(--primary-light); color:white; border-radius:20px; padding:6px 14px; font-size:13px; font-weight:500; }
+.comp-tag .comp-color { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.comp-tag .remove-comp { cursor:pointer; margin-left:2px; opacity:0.7; font-size:16px; line-height:1; }
+.comp-tag .remove-comp:hover { opacity:1; }
+.comp-add-wrap { display:flex; gap:8px; align-items:center; }
+.results-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:800px) { .results-grid { grid-template-columns:1fr; } }
+.rank-card { background:var(--white); border:2px solid var(--grey-light); border-radius:var(--radius); padding:20px; text-align:center; transition:all 0.3s; }
+.rank-card.rank-1 { border-color:var(--accent); background:var(--accent-light); }
+.rank-card.rank-2 { border-color:#bdc3c7; background:#fafafa; }
+.rank-card.rank-3 { border-color:#d5b8a7; background:#fdf5f0; }
+.rank-badge { display:inline-block; width:36px; height:36px; border-radius:50%; font-weight:700; font-size:16px; line-height:36px; color:white; margin-bottom:8px; }
+.rank-1 .rank-badge { background:var(--accent); }
+.rank-2 .rank-badge { background:#95a5a6; }
+.rank-3 .rank-badge { background:#cd9770; }
+.rank-card .rank-name { font-size:15px; font-weight:700; margin-bottom:4px; }
+.rank-card .rank-score { font-size:28px; font-weight:700; color:var(--primary); }
+.rank-card .rank-label { font-size:11px; color:var(--grey-mid); margin-top:4px; }
+.compare-table-wrap { margin-top:24px; background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 24px; }
+.compare-table-wrap h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:16px; }
+.compare-table { width:100%; border-collapse:collapse; font-size:13px; }
+.compare-table th { background:var(--primary); color:white; padding:10px 12px; text-align:center; font-weight:600; font-size:12px; }
+.compare-table th:first-child { text-align:left; min-width:120px; }
+.compare-table td { padding:10px 12px; text-align:center; border-bottom:1px solid var(--grey-light); }
+.compare-table td:first-child { text-align:left; font-weight:600; color:var(--grey-dark); }
+.compare-table tr.self-row td { background:var(--blue-light); font-weight:700; }
+.compare-table tr.self-row td:first-child { color:var(--blue); }
+.compare-table .gap-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
+.gap-up { background:var(--success-light); color:var(--success); }
+.gap-down { background:var(--danger-light); color:var(--danger); }
+.gap-zero { background:var(--grey-light); color:var(--grey-mid); }
+.win-prob-box { margin-top:20px; padding:20px 24px; background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); text-align:center; }
+.win-prob-box h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:12px; }
+.win-prob-bar-wrap { background:var(--grey-light); border-radius:20px; height:32px; overflow:hidden; position:relative; margin:12px 0; }
+.win-prob-bar { height:100%; border-radius:20px; transition:width 0.6s ease; position:relative; }
+.win-prob-bar.high { background:var(--success); }
+.win-prob-bar.medium { background:var(--warning); }
+.win-prob-bar.low { background:var(--danger); }
+.win-prob-text { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.3); }
+.win-prob-detail { font-size:13px; color:var(--grey-mid); margin-top:8px; }
+.win-prob-detail strong { color:var(--primary); }
+.chart-wrap { background:var(--white); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-top:20px; }
+.chart-wrap h3 { font-size:15px; font-weight:700; color:var(--primary); margin-bottom:16px; }
+.chart-canvas { width:100%; max-height:400px; }
+.ad-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:12px; }
+.ad-table th { background:var(--primary); color:white; padding:10px 12px; text-align:left; font-weight:600; font-size:12px; }
+.ad-table th:first-child { width:16%; }
+.ad-table th:nth-child(2) { width:28%; }
+.ad-table th:nth-child(3) { width:28%; }
+.ad-table th:nth-child(4) { width:28%; }
+.ad-table td { padding:10px 12px; border-bottom:1px solid var(--grey-light); vertical-align:top; }
+.ad-table td textarea { width:100%; border:1px dashed var(--grey-light); border-radius:6px; padding:8px; font-size:12px; font-family:inherit; resize:vertical; min-height:80px; background:#fafbfc; }
+.ad-table td textarea:focus { outline:none; border-color:var(--accent); border-style:solid; background:var(--accent-light); }
+.ad-table td .dim-select { width:100%; padding:8px; border:2px solid var(--grey-light); border-radius:6px; font-size:12px; font-family:inherit; }
+.ad-table td .dim-select:focus { outline:none; border-color:var(--primary); }
+.toolbar { display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.toolbar .left { display:flex; gap:8px; }
+.toolbar .right { display:flex; gap:8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">⚔️ 大董老师 · 天地人销售体系</div>
+  <div class="header-badge2">🏗️ 江苏明珠 · 暖通设备 · 定制版</div>
+  <h1>竞争分析计算器</h1>
+  <p>加权评分矩阵 × 对手攻防分析 — 量化暖通行业竞争优劣势，精准制定竞争策略</p>
+</header>
+
+<div class="container">
+
+  <div class="progress-bar-wrap">
+    <div class="progress-steps">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      <div class="progress-step" onclick="switchStep(1)"><div class="progress-dot" id="dot1">1</div><div class="progress-label" id="label1">基本设置</div></div>
+      <div class="progress-step" onclick="switchStep(2)"><div class="progress-dot" id="dot2">2</div><div class="progress-label" id="label2">权重配置</div></div>
+      <div class="progress-step" onclick="switchStep(3)"><div class="progress-dot" id="dot3">3</div><div class="progress-label" id="label3">评分矩阵</div></div>
+      <div class="progress-step" onclick="switchStep(4)"><div class="progress-dot" id="dot4">4</div><div class="progress-label" id="label4">结果分析</div></div>
+      <div class="progress-step" onclick="switchStep(5)"><div class="progress-dot" id="dot5">5</div><div class="progress-label" id="label5">攻防策略</div></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="left">
+      <button class="btn btn-accent btn-sm" onclick="loadExample()">📋 加载暖通行业示例</button>
+      <button class="btn btn-outline btn-sm" onclick="resetAll()">🔄 全部清空</button>
+    </div>
+    <div class="right">
+      <button class="btn btn-primary btn-sm" onclick="exportReport()">📥 导出报告</button>
+      <button class="btn btn-gold btn-sm" onclick="saveData()">💾 保存数据</button>
+    </div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="section active-section" id="sec1">
+    <div class="section-title"><span class="step-num">1</span><div><h2>基本设置</h2><p class="section-subtitle">设定暖通项目与竞争对手</p></div></div>
+    <div class="setup-grid">
+      <div><label class="form-label">项目/商机名称</label><input class="form-input" id="projectName" placeholder="例如：昆山XX酒店中央空调+新风项目"></div>
+      <div><label class="form-label">客户名称</label><input class="form-input" id="customerName" placeholder="例如：昆山XX酒店管理有限公司"></div>
+    </div>
+    <div style="margin-top:20px;">
+      <label class="form-label">竞争对手（我方「江苏明珠」自动计入）</label>
+      <div class="comp-manager" id="compManager"></div>
+      <div class="comp-add-wrap">
+        <input class="form-input" id="newCompName" placeholder="输入对手名称" style="width:220px;">
+        <button class="btn btn-primary btn-sm" onclick="addCompetitor()">+ 添加对手</button>
+        <span class="form-hint">暖通行业常见对手：国产品牌代理/线上平台/本地工程公司</span>
+      </div>
+    </div>
+    <div class="btn-bar"><button class="btn btn-accent" onclick="switchStep(2)">下一步：权重配置 →</button></div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="section" id="sec2">
+    <div class="section-title"><span class="step-num">2</span><div><h2>暖通行业竞争维度权重配置</h2><p class="section-subtitle">根据客户关注点，给7个竞争维度分配权重（总和100%）</p></div></div>
+    <div id="weightConfig"></div>
+    <div class="weight-summary" id="weightSum"></div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(1)">← 上一步</button>
+      <button class="btn btn-accent" onclick="switchStep(3)">下一步：评分矩阵 →</button>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="section" id="sec3">
+    <div class="section-title"><span class="step-num">3</span><div><h2>加权评分矩阵</h2><p class="section-subtitle">对每个维度，给"明珠"和所有对手打分（1-5分，5=最强）</p></div></div>
+    <div class="matrix-wrap"><table class="matrix-table" id="matrixTable"></table></div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(2)">← 上一步</button>
+      <button class="btn btn-accent" onclick="switchStep(4)">下一步：查看结果 →</button>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="section" id="sec4">
+    <div class="section-title"><span class="step-num">4</span><div><h2>竞争分析结果</h2><p class="section-subtitle">加权总分排名 & 多维度对比</p></div></div>
+    <div class="results-grid" id="rankCards"></div>
+    <div class="compare-table-wrap"><h3>📋 全量得分对比 & 赢单概率</h3><div id="compareTable"></div><div id="winProbBox"></div></div>
+    <div class="chart-wrap"><h3>📊 加权得分对比</h3><canvas id="chartCanvas" class="chart-canvas"></canvas></div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(3)">← 上一步</button>
+      <button class="btn btn-accent" onclick="switchStep(5)">下一步：攻防策略 →</button>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="section" id="sec5">
+    <div class="section-title"><span class="step-num">5</span><div><h2>对手攻防分析表</h2><p class="section-subtitle">针对客户核心关切维度，制定「明珠价值主张 → 对手风险揭示 → 量化后果」攻防策略</p></div></div>
+    <table class="ad-table" id="adTable">
+      <thead><tr><th>核心关切维度</th><th>我们的价值主张</th><th>对手风险揭示</th><th>量化后果</th></tr></thead>
+      <tbody id="adBody"></tbody>
+    </table>
+    <div class="ad-add-row"><button class="btn btn-primary btn-sm" onclick="addAdRow()">+ 添加攻防行</button><span class="form-hint">每条攻防对应客户一个核心关切维度</span></div>
+    <div class="btn-bar">
+      <button class="btn btn-outline" onclick="switchStep(4)">← 上一步</button>
+      <button class="btn btn-gold" onclick="exportReport()">📥 导出完整报告</button>
+      <button class="btn btn-accent" onclick="saveData()">💾 保存全部数据</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DIMS = [
+  { id:'brand', name:'品牌 & 产品线丰富度', desc:'国际品牌代理权、多品牌多品类覆盖、产品档次梯度' },
+  { id:'price', name:'价格竞争力', desc:'报价水平、批量折扣、价格策略灵活度' },
+  { id:'install', name:'安装施工能力', desc:'自有安装团队规模、施工质量、工期保障、多项目并行能力' },
+  { id:'service', name:'售后维保服务', desc:'售后响应速度、配件库存、维保团队覆盖、服务承诺' },
+  { id:'design', name:'方案设计能力', desc:'暖通系统设计专业性、节能优化方案、BIM出图能力' },
+  { id:'terms', name:'商务条款灵活度', desc:'付款方式、质保期、质保金比例、违约责任条款' },
+  { id:'relation', name:'客户关系 & 口碑', desc:'老客户转介绍率、行业口碑、关键决策人关系深度' }
+];
+
+const COMP_COLORS = ['#e74c3c','#2ecc71','#9b59b6','#f39c12','#1abc9c'];
+
+let state = {
+  projectName: '', customerName: '',
+  competitors: [], weights: {}, scores: {}, adRows: []
+};
+
+function init() {
+  loadSavedData();
+  renderAll();
+  switchStep(1);
+}
+
+function renderAll() {
+  renderCompetitors();
+  renderWeights();
+  renderMatrix();
+  renderResults();
+  renderAdTable();
+}
+
+function renderCompetitors() {
+  const wrap = document.getElementById('compManager');
+  if (state.competitors.length === 0) {
+    wrap.innerHTML = '<span style="color:var(--grey-mid);font-size:13px;">尚未添加竞争对手</span>';
+    return;
+  }
+  wrap.innerHTML = state.competitors.map((c,i) => 
+    `<span class="comp-tag"><span class="comp-color" style="background:${COMP_COLORS[i]}"></span>${escHtml(c.name)}<span class="remove-comp" onclick="removeCompetitor('${c.id}')" title="删除">×</span></span>`
+  ).join('');
+}
+
+function renderWeights() {
+  const wrap = document.getElementById('weightConfig');
+  let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;">';
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    html += `<div style="display:flex;align-items:center;gap:10px;">
+      <label style="font-size:13px;font-weight:600;white-space:nowrap;min-width:140px;">${d.name}</label>
+      <div style="display:flex;align-items:center;background:white;border:2px solid var(--grey-light);border-radius:8px;overflow:hidden;">
+        <input type="number" min="0" max="100" value="${w}" style="width:56px;text-align:center;padding:8px 4px;border:none;font-size:14px;font-weight:700;color:var(--primary);font-family:inherit;background:transparent;" onchange="updateWeight('${d.id}',+this.value)">
+        <span style="background:var(--accent-light);padding:8px 10px;font-size:13px;font-weight:600;color:var(--accent-dark);">%</span>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+  const sum = DIMS.reduce((s,d) => s + (state.weights[d.id]||0), 0);
+  const sumEl = document.getElementById('weightSum');
+  sumEl.innerHTML = sum === 100 ? '<span class="ok">✅ 权重总和 = 100%，配置完成</span>' : `<span class="warn">⚠️ 当前权重总和 = ${sum}%（建议调整为100%）</span>`;
+}
+
+function updateWeight(dimId, val) { state.weights[dimId] = val; renderWeights(); renderMatrix(); }
+
+function renderMatrix() {
+  const table = document.getElementById('matrixTable');
+  let html = '<thead><tr><th class="dim-col">竞争维度</th><th>权重</th><th>明珠<span style="font-size:10px;opacity:0.7">(1-5)</span></th><th>加权分</th>';
+  state.competitors.forEach((c,i) => { html += `<th>${escHtml(c.name)}<span style="font-size:10px;opacity:0.7">(1-5)</span></th><th>加权分</th>`; });
+  html += '</tr></thead><tbody>';
+  let totals = { self:0 }; state.competitors.forEach(c => totals[c.id] = 0);
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    const selfScore = (state.scores[d.id] && state.scores[d.id].self) || 0;
+    const selfWeighted = (selfScore * w / 100).toFixed(1);
+    totals.self += parseFloat(selfWeighted);
+    html += `<tr><td class="dim-name">${d.name}<span class="dim-desc">${d.desc}</span></td>
+      <td><input class="weight-input" value="${w}%" onchange="updateWeightFromInput('${d.id}',this.value)" title="点击修改权重"></td>
+      <td class="me-cell"><input class="score-input" value="${selfScore||''}" onchange="updateScore('${d.id}','self',this.value)" placeholder="-"></td>
+      <td class="weighted-cell">${selfScore ? selfWeighted : '-'}</td>`;
+    state.competitors.forEach(c => {
+      const compScore = (state.scores[d.id] && state.scores[d.id][c.id]) || 0;
+      const compWeighted = (compScore * w / 100).toFixed(1);
+      totals[c.id] += parseFloat(compWeighted);
+      html += `<td><input class="score-input" value="${compScore||''}" onchange="updateScore('${d.id}','${c.id}',this.value)" placeholder="-"></td>
+      <td class="weighted-cell">${compScore ? compWeighted : '-'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += `<tr class="total-row"><td class="dim-name">🏆 加权总分</td><td>-</td><td class="me-cell">明珠</td><td class="weighted-cell">${totals.self.toFixed(1)}</td>`;
+  state.competitors.forEach(c => { html += `<td>${escHtml(c.name)}</td><td class="weighted-cell">${totals[c.id].toFixed(1)}</td>`; });
+  html += '</tr></tbody>';
+  table.innerHTML = html;
+}
+
+function updateWeightFromInput(dimId, val) { const n = parseInt(val); if (!isNaN(n) && n >= 0 && n <= 100) { state.weights[dimId] = n; } renderAll(); }
+function updateScore(dimId, target, val) {
+  if (!state.scores[dimId]) state.scores[dimId] = {};
+  const n = parseInt(val);
+  if (n >= 1 && n <= 5) { state.scores[dimId][target] = n; } else if (val === '' || val === '0') { delete state.scores[dimId][target]; }
+  renderMatrix(); renderResults();
+}
+
+function calcWinProb(myScore, bestCompScore) {
+  const diff = myScore - bestCompScore;
+  return Math.max(5, Math.min(95, 50 + diff * 20));
+}
+
+function renderResults() {
+  const totals = calcTotals();
+  const all = [{name:'江苏明珠', id:'self', score:totals.self, isSelf:true}];
+  state.competitors.forEach(c => { all.push({name:c.name, id:c.id, score:totals[c.id]||0, isSelf:false}); });
+  all.sort((a,b) => b.score - a.score);
+  const cards = document.getElementById('rankCards');
+  cards.innerHTML = all.map((item, i) => {
+    const cls = i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : 'rank-3');
+    return `<div class="rank-card ${cls}"><div class="rank-badge">${i+1}</div><div class="rank-name">${item.isSelf ? '⭐ 江苏明珠' : escHtml(item.name)}</div><div class="rank-score">${item.score.toFixed(1)}</div><div class="rank-label">加权总分</div></div>`;
+  }).join('');
+
+  const myScore = totals.self;
+  const compScores = state.competitors.map(c => ({ name: c.name, id: c.id, score: totals[c.id] || 0 }));
+  const bestComp = compScores.length > 0 ? compScores.reduce((a,b) => a.score > b.score ? a : b, compScores[0]) : {name:'暂无', score:0};
+  let tableHTML = '<table class="compare-table"><thead><tr><th>参与方</th><th>加权总分</th>';
+  compScores.forEach(c => { tableHTML += `<th>vs ${escHtml(c.name)}</th>`; });
+  tableHTML += '</tr></thead><tbody>';
+  tableHTML += `<tr class="self-row"><td>⭐ 江苏明珠</td><td style="font-size:16px;">${myScore.toFixed(1)}</td>`;
+  compScores.forEach(c => {
+    const gap = myScore - c.score;
+    const gapCls = gap > 0.05 ? 'gap-up' : (gap < -0.05 ? 'gap-down' : 'gap-zero');
+    tableHTML += `<td><span class="gap-badge ${gapCls}">${gap>0.05?'↑':(gap<-0.05?'↓':'→')} ${Math.abs(gap).toFixed(1)}</span></td>`;
+  });
+  tableHTML += '</tr>';
+  compScores.forEach(c => {
+    tableHTML += `<tr><td>${escHtml(c.name)}</td><td>${c.score.toFixed(1)}</td>`;
+    compScores.forEach(other => {
+      if (c.id === other.id) { tableHTML += '<td>—</td>'; } else {
+        const gap = c.score - other.score;
+        tableHTML += `<td><span class="gap-badge ${gap>0.05?'gap-up':(gap<-0.05?'gap-down':'gap-zero')}">${gap>0.05?'↑':(gap<-0.05?'↓':'→')} ${Math.abs(gap).toFixed(1)}</span></td>`;
+      }
+    });
+    tableHTML += '</tr>';
+  });
+  tableHTML += '</tbody></table>';
+  document.getElementById('compareTable').innerHTML = tableHTML;
+
+  const winProb = calcWinProb(myScore, bestComp.score);
+  document.getElementById('winProbBox').innerHTML = `
+    <div class="win-prob-box">
+      <h3>🎯 预估赢单概率</h3>
+      <div style="font-size:12px;color:var(--grey-mid);margin-bottom:4px;">基于明珠加权总分 vs 最强对手「${escHtml(bestComp.name)}」的差距</div>
+      <div class="win-prob-bar-wrap">
+        <div class="win-prob-bar ${winProb>=60?'high':(winProb>=40?'medium':'low')}" style="width:${winProb}%;">
+          <div class="win-prob-text">${winProb.toFixed(0)}%</div>
+        </div>
+      </div>
+      <div class="win-prob-detail"><strong>${winProb>=70?'赢面较大，保持优势':(winProb>=50?'势均力敌，需重点突破':(winProb>=30?'处于劣势，需重新定义竞争维度':'形势严峻，考虑战略性调整'))}</strong></div>
+      <div class="win-prob-detail">明珠 <strong>${myScore.toFixed(1)}</strong> 分 vs 最强对手 <strong>${bestComp.score.toFixed(1)}</strong> 分 · 差距 <strong style="color:${myScore>=bestComp.score?'var(--success)':'var(--danger)'}">${myScore>=bestComp.score?'+':'-'}${Math.abs(myScore-bestComp.score).toFixed(1)}</strong></div>
+    </div>`;
+  drawChart(all);
+}
+
+function calcTotals() {
+  let totals = { self:0 }; state.competitors.forEach(c => totals[c.id] = 0);
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    totals.self += ((state.scores[d.id]&&state.scores[d.id].self)||0) * w / 100;
+    state.competitors.forEach(c => { totals[c.id] += ((state.scores[d.id]&&state.scores[d.id][c.id])||0) * w / 100; });
+  });
+  return totals;
+}
+
+function drawChart(all) {
+  const canvas = document.getElementById('chartCanvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.parentElement.clientWidth - 40;
+  const h = 300;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+  if (all.length === 0) return;
+  const maxScore = Math.max(...all.map(a=>a.score), 0.1);
+  const barH = Math.min(50, (h - 60) / all.length);
+  all.forEach((item, i) => {
+    const y = 40 + i * (barH + 10);
+    const barW = Math.max(10, (item.score / maxScore) * (w - 180));
+    const color = item.isSelf ? '#2980b9' : COMP_COLORS[state.competitors.findIndex(c => c.id === item.id)];
+    ctx.fillStyle = '#2c3e50'; ctx.font = '600 13px "Noto Sans SC"'; ctx.textAlign = 'right';
+    ctx.fillText(item.isSelf ? '⭐ 明珠' : item.name, 100, y + barH/2 + 5);
+    ctx.fillStyle = color; ctx.beginPath(); ctx.roundRect(110, y, barW, barH, 6); ctx.fill();
+    ctx.fillStyle = '#2c3e50'; ctx.font = '700 14px "Noto Sans SC"'; ctx.textAlign = 'left';
+    ctx.fillText(item.score.toFixed(1), 120 + barW, y + barH/2 + 5);
+  });
+}
+
+function renderAdTable() {
+  const body = document.getElementById('adBody');
+  if (state.adRows.length === 0) {
+    body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--grey-mid);font-size:14px;">暂无攻防数据，点击下方按钮添加</td></tr>';
+    return;
+  }
+  body.innerHTML = state.adRows.map((row, i) => `
+    <tr>
+      <td><select class="dim-select" onchange="updateAdRow(${i},'concernDim',this.value)"><option value="">-- 选择维度 --</option>${DIMS.map(d => `<option value="${d.id}" ${row.concernDim===d.id?'selected':''}>${d.name}</option>`).join('')}</select></td>
+      <td><textarea placeholder="明珠的优势和价值主张..." onchange="updateAdRow(${i},'ourValue',this.value)">${escHtml(row.ourValue||'')}</textarea></td>
+      <td><textarea placeholder="竞争对手的风险点和短板..." onchange="updateAdRow(${i},'rivalRisk',this.value)">${escHtml(row.rivalRisk||'')}</textarea></td>
+      <td><textarea placeholder="量化后果：延期=损失XX万，故障=影响XX投诉..." onchange="updateAdRow(${i},'quantifiedImpact',this.value)">${escHtml(row.quantifiedImpact||'')}</textarea></td>
+    </tr>`).join('');
+}
+
+function addCompetitor() {
+  const input = document.getElementById('newCompName');
+  const name = input.value.trim();
+  if (!name) return;
+  if (state.competitors.length >= 5) { alert('最多支持5个竞争对手'); return; }
+  if (state.competitors.some(c => c.name === name)) { alert('对手名称重复'); return; }
+  state.competitors.push({ id:'comp_' + Date.now(), name });
+  input.value = ''; renderAll();
+}
+
+function removeCompetitor(id) {
+  state.competitors = state.competitors.filter(c => c.id !== id);
+  Object.keys(state.scores).forEach(dimId => { delete state.scores[dimId][id]; });
+  renderAll();
+}
+
+function addAdRow() { state.adRows.push({ concernDim:'', ourValue:'', rivalRisk:'', quantifiedImpact:'' }); renderAdTable(); }
+function updateAdRow(idx, field, val) { if (state.adRows[idx]) { state.adRows[idx][field] = val; } }
+
+function switchStep(n) {
+  for (let i = 1; i <= 5; i++) {
+    const sec = document.getElementById('sec'+i), dot = document.getElementById('dot'+i), label = document.getElementById('label'+i);
+    sec.classList.remove('active-section'); dot.classList.remove('active','done'); label.classList.remove('active');
+    if (i < n) dot.classList.add('done');
+    if (i === n) { dot.classList.add('active'); label.classList.add('active'); sec.classList.add('active-section'); }
+  }
+  document.getElementById('progressFill').style.width = ((n-1) / 4 * 100) + '%';
+  document.getElementById('sec'+n).scrollIntoView({behavior:'smooth',block:'start'});
+  if (n === 4) renderResults();
+}
+
+function loadExample() {
+  state.projectName = '昆山XX商务酒店中央空调+新风+热水项目';
+  state.customerName = '昆山XX酒店管理有限公司';
+  state.competitors = [
+    { id:'comp_a', name:'A公司（国产品牌代理）' },
+    { id:'comp_b', name:'B公司（线上暖通平台）' }
+  ];
+  state.weights = { brand:20, price:15, install:20, service:15, design:10, terms:10, relation:10 };
+  state.scores = {
+    brand: { self:5, comp_a:3, comp_b:2 },
+    price: { self:3, comp_a:4, comp_b:5 },
+    install: { self:5, comp_a:3, comp_b:2 },
+    service: { self:5, comp_a:3, comp_b:2 },
+    design: { self:4, comp_a:3, comp_b:2 },
+    terms: { self:3, comp_a:4, comp_b:3 },
+    relation: { self:4, comp_a:3, comp_b:2 }
+  };
+  state.adRows = [
+    {
+      concernDim: 'brand',
+      ourValue: '31年暖通老兵，大金/三菱/松下/阿里斯顿区域总代，多品牌多品类一站式供应，品牌信任度高',
+      rivalRisk: 'A公司仅代理1-2个国产品牌，产品线单一无法提供多品牌组合方案，客户需多头对接',
+      quantifiedImpact: '多头采购导致协调成本增加30%，方案整合周期延长2-3周，酒店开业可能延期'
+    },
+    {
+      concernDim: 'install',
+      ourValue: '自有60人安装团队，31年施工经验，同时可并行5个项目，安装工艺标准化，责任清晰',
+      rivalRisk: 'A公司依赖外包安装队，人员流动性大，安装质量不稳定，出现问题时责任推诿',
+      quantifiedImpact: '安装质量问题后期整改费用平均10-30万/项目，酒店开业延期每天损失约2-5万元'
+    },
+    {
+      concernDim: 'service',
+      ourValue: '自建售后服务中心，30分钟响应、2小时到场（写进合同），全年无休，配件库存充足',
+      rivalRisk: 'B线上平台无自有售后团队，售后依赖品牌厂家派单，响应周期3-5天，旺季排队更久',
+      quantifiedImpact: '酒店空调故障每耽误1天，至少影响5-10间客房入住，按房价500元/间计算=2500-5000元/天'
+    }
+  ];
+  renderAll();
+  switchStep(1);
+  document.getElementById('projectName').value = state.projectName;
+  document.getElementById('customerName').value = state.customerName;
+  renderAdTable();
+  showToast('✅ 已加载暖通行业示例数据');
+}
+
+function saveData() { localStorage.setItem('competition_calc_mingzhu', JSON.stringify(state)); showToast('✅ 数据已保存'); }
+function loadSavedData() {
+  const raw = localStorage.getItem('competition_calc_mingzhu');
+  if (raw) { try { const saved = JSON.parse(raw); state = { ...state, ...saved }; document.getElementById('projectName').value = state.projectName || ''; document.getElementById('customerName').value = state.customerName || ''; } catch(e) {} }
+}
+document.getElementById('projectName').addEventListener('input', function() { state.projectName = this.value; });
+document.getElementById('customerName').addEventListener('input', function() { state.customerName = this.value; });
+
+function resetAll() {
+  if (!confirm('确定要清空所有数据吗？此操作不可恢复。')) return;
+  state = { projectName:'', customerName:'', competitors:[], weights:{}, scores:{}, adRows:[] };
+  document.getElementById('projectName').value = ''; document.getElementById('customerName').value = '';
+  localStorage.removeItem('competition_calc_mingzhu');
+  renderAll(); switchStep(1); showToast('已全部清空');
+}
+
+function exportReport() {
+  const totals = calcTotals();
+  const all = [{name:'江苏明珠', id:'self', score:totals.self, isSelf:true}];
+  state.competitors.forEach(c => { all.push({name:c.name, id:c.id, score:totals[c.id]||0, isSelf:false}); });
+  all.sort((a,b) => b.score - a.score);
+  let report = `═══════════════════════════════════\n  大董老师 · 竞争分析报告（明珠公司）\n═══════════════════════════════════\n\n`;
+  if (state.projectName) report += `📋 项目：${state.projectName}\n`;
+  if (state.customerName) report += `🏢 客户：${state.customerName}\n`;
+  report += `📅 日期：${new Date().toLocaleDateString('zh-CN')}\n\n`;
+  report += `── 加权总分排名 ──\n`;
+  all.forEach((item, i) => { report += `  ${i===0?'🥇':(i===1?'🥈':(i===2?'🥉':`${i+1}.`))} ${item.isSelf?'⭐ 江苏明珠':item.name}：${item.score.toFixed(1)}分\n`; });
+  report += `\n── 各维度评分明细 ──\n`;
+  report += `维度`.padEnd(18) + `权重`.padEnd(8) + `明珠`; state.competitors.forEach(c => report += `  ${c.name}`.padEnd(16)); report += `\n`;
+  DIMS.forEach(d => {
+    const w = state.weights[d.id] || 0;
+    report += `${d.name}`.padEnd(18) + `${w}%`.padEnd(8) + `${(state.scores[d.id]&&state.scores[d.id].self)||'-'}`.padEnd(4);
+    state.competitors.forEach(c => { report += `  ${(state.scores[d.id]&&state.scores[d.id][c.id])||'-'}`.padEnd(14); });
+    report += '\n';
+  });
+  if (state.adRows.length > 0) {
+    report += `\n── 对手攻防分析 ──\n`;
+    state.adRows.forEach((row, i) => {
+      const dimName = DIMS.find(d => d.id === row.concernDim);
+      report += `\n【${i+1}】核心关切：${dimName ? dimName.name : row.concernDim || '未指定'}\n  明珠价值主张：${row.ourValue || '（未填写）'}\n  对手风险揭示：${row.rivalRisk || '（未填写）'}\n  量化后果：${row.quantifiedImpact || '（未填写）'}\n`;
+    });
+  }
+  report += `\n═══════════════════════════════════\n  大董老师 · 懂生意 · 学完就落地\n═══════════════════════════════════\n`;
+  const blob = new Blob([report], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `竞争分析报告_明珠_${state.customerName||'未命名'}_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('✅ 报告已导出');
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function showToast(msg) {
+  let toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--primary);color:white;padding:12px 28px;border-radius:30px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;'; document.body.appendChild(toast); }
+  toast.textContent = msg; toast.style.opacity = '1'; setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+}
+
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+    if (typeof r === 'number') r = {tl:r,tr:r,br:r,bl:r};
+    this.beginPath(); this.moveTo(x+r.tl,y); this.lineTo(x+w-r.tr,y); this.quadraticCurveTo(x+w,y,x+w,y+r.tr);
+    this.lineTo(x+w,y+h-r.br); this.quadraticCurveTo(x+w,y+h,x+w-r.br,y+h); this.lineTo(x+r.bl,y+h);
+    this.quadraticCurveTo(x,y+h,x,y+h-r.bl); this.lineTo(x,y+r.tl); this.quadraticCurveTo(x,y,x+r.tl,y); this.closePath();
+  };
+}
+
+init();
+</script>
+</body>
+</html>
