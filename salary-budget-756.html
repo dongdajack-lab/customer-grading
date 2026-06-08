@@ -216,8 +216,8 @@ header p { font-size: 14px; opacity: 0.85; max-width: 560px; margin: 0 auto; pos
             <td><span class="editable" contenteditable="true" id="nNew" oninput="recalcAll()">3</span></td>
             <td><span class="editable" contenteditable="true" id="fsNew" oninput="recalcAll()">1.2</span></td>
             <td class="calc" id="fyNew">—</td>
-            <td><span class="editable" contenteditable="true" id="tgtNew" oninput="recalcAll()">150</span></td>
-            <td><span class="editable" contenteditable="true" id="rateNew" oninput="recalcAll()">5</span></td>
+            <td><span class="editable" contenteditable="true" id="tgtNew" oninput="recalcAll()">700</span></td>
+            <td><span class="editable" contenteditable="true" id="rateNew" oninput="recalcAll()">2</span></td>
             <td class="calc">—</td>
             <td class="calc" id="incNew">—</td>
           </tr>
@@ -226,8 +226,8 @@ header p { font-size: 14px; opacity: 0.85; max-width: 560px; margin: 0 auto; pos
             <td><span class="editable" contenteditable="true" id="nVet" oninput="recalcAll()">6</span></td>
             <td><span class="editable" contenteditable="true" id="fsVet" oninput="recalcAll()">1.5</span></td>
             <td class="calc" id="fyVet">—</td>
-            <td><span class="editable" contenteditable="true" id="tgtVet" oninput="recalcAll()">200</span></td>
-            <td><span class="editable" contenteditable="true" id="rateVet" oninput="recalcAll()">7.5</span></td>
+            <td><span class="editable" contenteditable="true" id="tgtVet" oninput="recalcAll()">1100</span></td>
+            <td><span class="editable" contenteditable="true" id="rateVet" oninput="recalcAll()">3</span></td>
             <td class="calc">—</td>
             <td class="calc" id="incVet">—</td>
           </tr>
@@ -236,9 +236,9 @@ header p { font-size: 14px; opacity: 0.85; max-width: 560px; margin: 0 auto; pos
             <td><span class="editable" contenteditable="true" id="nSup" oninput="recalcAll()">1</span></td>
             <td><span class="editable" contenteditable="true" id="fsSup" oninput="recalcAll()">2.0</span></td>
             <td class="calc" id="fySup">—</td>
-            <td><span class="editable" contenteditable="true" id="tgtSup" oninput="recalcAll()">200</span></td>
-            <td><span class="editable" contenteditable="true" id="rateSup" oninput="recalcAll()">7</span></td>
-            <td><span class="editable" contenteditable="true" id="rateSupTeam" oninput="recalcAll()">2</span></td>
+            <td><span class="editable" contenteditable="true" id="tgtSup" oninput="recalcAll()">1300</span></td>
+            <td><span class="editable" contenteditable="true" id="rateSup" oninput="recalcAll()">3</span></td>
+            <td><span class="editable" contenteditable="true" id="rateSupTeam" oninput="recalcAll()">1</span></td>
             <td class="calc" id="incSup">—</td>
           </tr>
           <tr>
@@ -352,15 +352,15 @@ function calcSalary(s) {
   const tgtVet = s.nVet * s.tgtVet;
   const tgtTotal = tgtNew + tgtVet + s.nSup * s.tgtSup;
 
-  // 100% target commission
+  // 100% target commission — 人数为0时激励强制归零
   // New: personal target × rate
-  const incNew = tgtNew * s.rateNew / 100;
+  const incNew = s.nNew > 0 ? tgtNew * s.rateNew / 100 : 0;
   // Veteran: personal target × rate
-  const incVet = tgtVet * s.rateVet / 100;
+  const incVet = s.nVet > 0 ? tgtVet * s.rateVet / 100 : 0;
   // Supervisor: personal target × personal rate + new hire team total × team rate
-  const incSup = (s.nSup * s.tgtSup * s.rateSup / 100) + (tgtNew * s.rateSupTeam / 100);
+  const incSup = s.nSup > 0 ? (s.nSup * s.tgtSup * s.rateSup / 100) + (tgtNew * s.rateSupTeam / 100) : 0;
   // Director: total revenue × rate
-  const incDir = s.revenue * s.rateDir / 100;
+  const incDir = s.nDir > 0 ? s.revenue * s.rateDir / 100 : 0;
   const incTotal = incNew + incVet + incSup + incDir;
 
   // Total budget
