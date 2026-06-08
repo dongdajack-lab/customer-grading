@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN课堂演练 · 江苏明珠定制版 | 大董老师天地人销售体系</title>
+<style>
+  :root {
+    --s: #2B6CB0;
+    --p: #C05621;
+    --i: #C53030;
+    --n: #276749;
+    --s-bg: #EBF8FF;
+    --p-bg: #FFFAF0;
+    --i-bg: #FFF5F5;
+    --n-bg: #F0FFF4;
+    --s-border: #90CDF4;
+    --p-border: #FBD38D;
+    --i-border: #FEB2B2;
+    --n-border: #9AE6B4;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #f7f8fc;
+    color: #2d3748;
+    line-height: 1.7;
+  }
+
+  .page { max-width:960px; margin:24px auto; }
+
+  .header {
+    background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #1a365d 100%);
+    color: #fff; padding: 40px 32px 36px; text-align: center; border-radius: 16px 16px 0 0;
+    position: relative; overflow: hidden;
+  }
+  .header::after { content:''; position:absolute; top:-40%; right:-15%; width:320px; height:320px; background:rgba(255,255,255,0.03); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:20px; padding:4px 18px; font-size:12px; letter-spacing:2px; position:relative; z-index:1; }
+  .header h1 { font-size:28px; font-weight:600; margin:10px 0 6px; position:relative; z-index:1; }
+  .header .sub { font-size:14px; opacity:.85; position:relative; z-index:1; }
+
+  .content { background:#fff; padding:32px 36px; border-radius:0 0 16px 16px; box-shadow:0 2px 24px rgba(0,0,0,0.06); }
+
+  .exercise-overview {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px;
+  }
+  .step-card {
+    background:#f7fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; text-align:center;
+  }
+  .step-card .step-num {
+    display:inline-block; width:36px; height:36px; border-radius:50%; background:#2b6cb0; color:#fff;
+    font-size:16px; font-weight:600; line-height:36px; margin-bottom:8px;
+  }
+  .step-card .step-title { font-size:15px; font-weight:500; color:#1a365d; margin-bottom:4px; }
+  .step-card .step-time { font-size:13px; color:#718096; }
+  .step-card .step-desc { font-size:13px; color:#4a5568; margin-top:6px; }
+
+  .section-title {
+    font-size:18px; font-weight:500; color:#1a365d; border-left:4px solid #2b6cb0;
+    padding-left:14px; margin:28px 0 16px;
+  }
+
+  .scenario-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+
+  .scenario-card {
+    border:2px solid #e2e8f0; border-radius:14px; padding:24px; transition:all 0.2s;
+    cursor:pointer; position:relative;
+  }
+  .scenario-card:hover { border-color:#2b6cb0; box-shadow:0 4px 16px rgba(43,108,176,0.08); }
+  .scenario-card .scenario-label {
+    display:inline-block; background:#2b6cb0; color:#fff; border-radius:20px;
+    padding:3px 16px; font-size:13px; font-weight:500; margin-bottom:14px;
+  }
+  .scenario-card h3 { font-size:17px; font-weight:500; margin-bottom:12px; color:#1a365d; }
+  .scenario-card .info-row { display:flex; align-items:baseline; gap:8px; margin-bottom:8px; font-size:13px; }
+  .scenario-card .info-label { color:#718096; min-width:56px; flex-shrink:0; }
+  .scenario-card .info-value { color:#4a5568; }
+  .scenario-card .role-tag {
+    display:inline-block; border-radius:6px; padding:2px 10px; font-size:12px; margin-right:6px; margin-top:4px;
+  }
+  .role-sales { background:#EBF8FF; color:#2B6CB0; border:1px solid #90CDF4; }
+  .role-client { background:#FFFAF0; color:#C05621; border:1px solid #FBD38D; }
+
+  .spin-worksheet {
+    border:2px dashed #cbd5e0; border-radius:14px; padding:24px;
+    background:#fafbfc; margin-top:20px;
+  }
+  .spin-worksheet h4 { font-size:15px; font-weight:500; color:#1a365d; margin-bottom:16px; text-align:center; }
+  .spin-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  .spin-box { border-radius:12px; padding:18px; border:1px solid transparent; }
+  .spin-box.s { background:var(--s-bg); border-color:var(--s-border); }
+  .spin-box.p { background:var(--p-bg); border-color:var(--p-border); }
+  .spin-box.i { background:var(--i-bg); border-color:var(--i-border); }
+  .spin-box.n { background:var(--n-bg); border-color:var(--n-border); }
+
+  .spin-box .spin-label {
+    display:inline-block; padding:2px 12px; border-radius:20px; font-size:12px; font-weight:600;
+    margin-bottom:8px;
+  }
+  .spin-box.s .spin-label { background:var(--s); color:#fff; }
+  .spin-box.p .spin-label { background:var(--p); color:#fff; }
+  .spin-box.i .spin-label { background:var(--i); color:#fff; }
+  .spin-box.n .spin-label { background:var(--n); color:#fff; }
+
+  .spin-box .spin-hint { font-size:12px; color:#718096; margin-bottom:8px; }
+  .spin-box .spin-example { font-size:12px; color:#4a5568; font-style:italic; background:rgba(255,255,255,0.6); padding:6px 10px; border-radius:6px; margin-bottom:8px; }
+  .spin-box textarea {
+    width:100%; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; font-size:13px;
+    font-family: inherit; resize:vertical; min-height:60px; line-height:1.6; background:#fff;
+  }
+  .spin-box textarea:focus { outline:none; border-color:currentColor; }
+
+  .roleplay-section { margin-top:28px; }
+  .role-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .role-card {
+    border:1px solid #e2e8f0; border-radius:12px; padding:20px; background:#fff;
+  }
+  .role-card .role-icon { font-size:32px; margin-bottom:8px; }
+  .role-card h5 { font-size:15px; font-weight:500; margin-bottom:8px; }
+  .role-card ul { list-style:none; padding:0; }
+  .role-card ul li { font-size:13px; color:#4a5568; padding:3px 0; position:relative; padding-left:16px; }
+  .role-card ul li::before { content:'•'; position:absolute; left:0; color:#2b6cb0; }
+
+  .debrief-box {
+    background:#fffbeb; border:1px solid #fbd38d; border-radius:12px;
+    padding:20px 24px; margin-top:24px;
+  }
+  .debrief-box h4 { font-size:15px; font-weight:500; color:#975a16; margin-bottom:8px; }
+  .debrief-box ul { margin:0; padding-left:20px; }
+  .debrief-box ul li { font-size:13px; color:#4a5568; margin-bottom:4px; }
+
+  .btn-row { text-align:center; margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn {
+    padding:12px 28px; border:none; border-radius:10px; font-size:15px; font-weight:500;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .btn-print { background:#2b6cb0; color:#fff; }
+  .btn-print:hover { background:#1a4f8a; }
+  .btn-secondary { background:#e2e8f0; color:#4a5568; }
+  .btn-secondary:hover { background:#cbd5e0; }
+
+  @media print {
+    body { background:#fff; }
+    .page { max-width:100%; margin:0; }
+    .content { box-shadow:none; border-radius:0; padding:20px 24px; }
+    .header { border-radius:0; padding:24px 20px; }
+    .btn-row { display:none; }
+    .scenario-card, .spin-box, .role-card, .debrief-box { break-inside:avoid; }
+    .spin-box textarea { border:1px dashed #cbd5e0; background:#fff; }
+  }
+
+  @media (max-width:768px) {
+    .scenario-grid, .spin-grid, .role-cards { grid-template-columns:1fr; }
+    .exercise-overview { grid-template-columns:1fr; }
+    .content { padding:20px; }
+    .header { padding:28px 16px; }
+    .header h1 { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="header">
+    <div class="header-badge">江苏明珠 · 内训定制 | 大董老师天地人销售体系</div>
+    <h1>SPIN 挖痛提问 — 课堂实战演练</h1>
+    <div class="sub">暖通设备工程销售场景 · 15分钟沉浸式训练</div>
+  </div>
+
+  <div class="content">
+
+    <div class="exercise-overview">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">场景介绍</div>
+        <div class="step-time">2 分钟</div>
+        <div class="step-desc">二选一，两人一组<br>一人扮销售，一人扮客户</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">准备执行</div>
+        <div class="step-time">10 分钟</div>
+        <div class="step-desc">使用SPIN提问工具<br>设计3分钟销售对话脚本</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">角色扮演排练</div>
+        <div class="step-time">3 分钟</div>
+        <div class="step-desc">按脚本进行角色扮演<br>讲师抽选2组上台展示</div>
+      </div>
+    </div>
+
+    <div class="section-title">场景选择（二选一）</div>
+
+    <div class="scenario-grid">
+      <div class="scenario-card" id="scenarioA">
+        <div class="scenario-label">场景 A · To B 工程销售</div>
+        <h3>酒店中央空调整体改造项目</h3>
+
+        <div class="info-row"><span class="info-label">客户</span><span class="info-value">王总，某四星级酒店总经理，48岁，务实派</span></div>
+        <div class="info-row"><span class="info-label">酒店</span><span class="info-value">150间客房+大堂+宴会厅，年营收约6000万</span></div>
+        <div class="info-row"><span class="info-label">现状</span><span class="info-value">现有中央空调系统运行12年，品牌老化，维修频繁。夏季高峰月电费超25万，客房投诉率同比上升30%。</span></div>
+        <div class="info-row"><span class="info-label">触发</span><span class="info-value">上周又发生一次压缩机故障，整层楼停冷气4小时，携程出现3条差评。集团要求各酒店降本10%。</span></div>
+        <div class="info-row"><span class="info-label">目标</span><span class="info-value">向王总推荐<b>大金VRV X系列</b>中央空调系统（含智能分控+新风联动），总预算约280万。</span></div>
+        <div class="info-row"><span class="info-label">痛点</span><span class="info-value">能耗高/故障频发/差评影响入住率/集团降本压力</span></div>
+        <div style="margin-top:12px;">
+          <span class="role-tag role-sales">销售：明珠工程销售代表</span>
+          <span class="role-tag role-client">客户：酒店总经理 王总</span>
+        </div>
+      </div>
+
+      <div class="scenario-card" id="scenarioB">
+        <div class="scenario-label">场景 B · To B 工业销售</div>
+        <h3>电子工厂车间恒温改造项目</h3>
+
+        <div class="info-row"><span class="info-label">客户</span><span class="info-value">李厂，某电子元器件厂厂长，52岁，技术出身</span></div>
+        <div class="info-row"><span class="info-label">工厂</span><span class="info-value">3条SMT贴片产线+2条组装线，年产值约8000万</span></div>
+        <div class="info-row"><span class="info-label">现状</span><span class="info-value">车间使用老式水冷空调+工业风扇降温。每年6-9月车间温度经常突破35℃，设备报警频发，良品率从98%降至93%。</span></div>
+        <div class="info-row"><span class="info-label">触发</span><span class="info-value">今年接了某新能源汽车客户的订单，交期紧、良率要求严。上周因车间过热导致一批PCB板报废，直接损失12万。</span></div>
+        <div class="info-row"><span class="info-label">目标</span><span class="info-value">向李厂推荐<b>大金精密空调+松下全热交换新风</b>组合方案，实现车间恒温26±1℃、洁净度达标，总预算约180万。</span></div>
+        <div class="info-row"><span class="info-label">痛点</span><span class="info-value">良品率下降/设备故障/订单交期风险/工人安全</span></div>
+        <div style="margin-top:12px;">
+          <span class="role-tag role-sales">销售：明珠工程销售代表</span>
+          <span class="role-tag role-client">客户：工厂厂长 李厂</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">SPIN 提问设计工作单</div>
+    <p style="font-size:13px;color:#718096;margin-bottom:16px;">根据所选场景，每个环节设计 2-3 个具体问题。注意：S→P→I→N 的顺序不能乱，上一环是下一环的铺垫。</p>
+
+    <div class="spin-worksheet">
+      <h4>SPIN 问题设计表 — 场景____（请填写 A 或 B）</h4>
+
+      <div class="spin-grid">
+        <div class="spin-box s">
+          <div class="spin-label">S 现状问题</div>
+          <div class="spin-hint">目的：了解客户现状，建立信任。不要急于推销。</div>
+          <div class="spin-example">例："王总，咱们酒店现在用的是哪套空调系统？日常能耗大概什么水平？"</div>
+          <textarea placeholder="请在此写下你的S类问题（2-3个）&#10;&#10;1.&#10;&#10;2.&#10;&#10;3."></textarea>
+        </div>
+
+        <div class="spin-box p">
+          <div class="spin-label">P 难点问题</div>
+          <div class="spin-hint">目的：挖掘客户遇到的困难、不满、痛点。</div>
+          <div class="spin-example">例："这12年老系统带来的最大困扰是什么？客人投诉多不多？"</div>
+          <textarea placeholder="请在此写下你的P类问题（2-3个）&#10;&#10;1.&#10;&#10;2.&#10;&#10;3."></textarea>
+        </div>
+
+        <div class="spin-box i">
+          <div class="spin-label">I 影响问题</div>
+          <div class="spin-hint">目的：让客户意识到问题的严重性和连锁后果。</div>
+          <div class="spin-example">例："如果继续用老系统，差评持续增加，对您的入住率和房价会产生多大影响？"</div>
+          <textarea placeholder="请在此写下你的I类问题（2-3个）&#10;&#10;1.&#10;&#10;2.&#10;&#10;3."></textarea>
+        </div>
+
+        <div class="spin-box n">
+          <div class="spin-label">N 需求回报问题</div>
+          <div class="spin-hint">目的：引导客户自己说出解决方案的价值，而不是你来说。</div>
+          <div class="spin-example">例："如果换一套新系统能让能耗降40%、投诉降80%，从住客体验和经营角度，对您意味着什么？"</div>
+          <textarea placeholder="请在此写下你的N类问题（2-3个）&#10;&#10;1.&#10;&#10;2.&#10;&#10;3."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">角色扮演指引</div>
+
+    <div class="role-cards">
+      <div class="role-card">
+        <div class="role-icon">🎯</div>
+        <h5>角色：明珠销售代表</h5>
+        <ul>
+          <li>先寒暄破冰（1句），不要上来就提问</li>
+          <li>严格按照 S → P → I → N 的顺序提问</li>
+          <li>每类问题至少问1个，重点发挥 P 和 I</li>
+          <li>Client回答后要回应/追问，不要像念稿</li>
+          <li>N 阶段让客户自己说出价值，忍住不要推销产品</li>
+          <li>全程时长控制在3分钟以内</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-icon">🎭</div>
+        <h5>角色：客户（王总/李厂）</h5>
+        <ul>
+          <li>真实扮演一位理性、有预算压力的决策者</li>
+          <li>被问到 S 类问题：如实介绍现状</li>
+          <li>被问到 P 类问题：承认困难，但不说解决方案</li>
+          <li>被问到 I 类问题：表现出担忧、焦虑（但不是绝望）</li>
+          <li>被问到 N 类问题：开始主动思考"如果解决会怎样"</li>
+          <li>不要主动提出"我要买你的空调"，等销售引导</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="debrief-box">
+      <h4>讲师点评要点（讲师用）</h4>
+      <ul>
+        <li><b>S→P 衔接</b>：是否从现状自然过渡到痛点？还是跳跃太大？</li>
+        <li><b>P 的深度</b>：是问了表面困难，还是挖到了客户真正的焦虑？</li>
+        <li><b>I 的力度</b>：是否让客户自己意识到"不解决不行了"？有数据支撑吗？</li>
+        <li><b>N 的火候</b>：是销售在说产品有多好，还是客户在说"如果这样就好了"？</li>
+        <li><b>节奏感</b>：有没有给客户足够的回答空间？对话自然还是生硬？</li>
+        <li><b>明珠特质</b>：是否结合了暖通工程销售的实际场景？问题是否接地气？</li>
+      </ul>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-print" onclick="window.print()">打印讲义</button>
+      <button class="btn btn-secondary" onclick="clearWorksheets()">清空工作单</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function clearWorksheets() {
+  if (confirm('确定清空所有已填写内容？')) {
+    document.querySelectorAll('textarea').forEach(t => t.value = '');
+  }
+}
+</script>
+</body>
+</html>
