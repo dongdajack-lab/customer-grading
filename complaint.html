@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 投诉处理 - 零成本化解客户冲突</title>
+<style>
+  * { margin:0; padding:0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #FAF8F5; min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #B85042, #D4705A); color: white; padding: 24px 32px; text-align: center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-50%; right:-10%; width:200px; height:200px; background:rgba(249,231,149,0.15); border-radius:50%; }
+  header::after { content:''; position:absolute; bottom:-30%; left:-5%; width:150px; height:150px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  header h1 { font-size: 26px; position:relative; z-index:1; }
+  header p { font-size: 14px; opacity: 0.85; margin-top: 6px; position:relative; z-index:1; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 24px 16px 40px; }
+
+  .tab-row { display:flex; gap:0; margin-bottom:20px; background:white; border-radius:14px; overflow:hidden; box-shadow: 0 2px 10px rgba(184,80,66,0.08); flex-wrap:wrap; }
+  .tab { flex:1; min-width:120px; padding:12px 8px; text-align:center; font-size:13.5px; font-weight:600; cursor:pointer; transition:all .2s; color:#999; border-bottom:3px solid transparent; }
+  .tab.active { color:#B85042; border-bottom-color:#B85042; background:#FDF5E7; }
+  .tab:hover { background:#f9f3eb; }
+  .tab .tab-icon { display:block; font-size:18px; margin-bottom:2px; }
+
+  .progress-bar { height:6px; background:#e8e0d8; border-radius:3px; margin-bottom:4px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#B85042,#F96167); border-radius:3px; transition:width .4s; }
+  .progress-text { text-align:right; font-size:12.5px; color:#aaa; margin-bottom:16px; }
+
+  .card { background:white; border-radius:16px; padding:26px; box-shadow: 0 2px 16px rgba(184,80,66,0.07); }
+
+  .section-title { display:inline-block; background:#B85042; color:white; border-radius:20px; padding:4px 16px; font-size:13px; margin-bottom:14px; }
+  .scenario { background:#FDF5E7; border-left:4px solid #B85042; padding:14px 18px; border-radius:0 12px 12px 0; margin:14px 0; font-size:14.5px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:700; color:#B85042; }
+
+  .options { display:flex; flex-direction:column; gap:10px; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:13px 16px; border:2px solid #eee; border-radius:12px; cursor:pointer; transition:all .2s; font-size:14px; line-height:1.6; }
+  .option:hover { border-color:#B85042; background:#FDF5E7; }
+  .option.selected { border-color:#B85042; background:#FDF5E7; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .2s; margin-top:1px; }
+  .option.selected .radio { border-color:#B85042; background:#B85042; }
+  .option.selected .radio::after { content:''; width:7px; height:7px; background:white; border-radius:50%; }
+  .option .text { flex:1; }
+
+  .explanation { margin-top:16px; padding:14px 18px; background:#FDF5E7; border-radius:12px; display:none; }
+  .explanation.show { display:block; animation:fadeIn .3s ease; }
+  .explanation h4 { color:#B85042; font-size:14px; margin-bottom:6px; }
+  .explanation p { font-size:13px; color:#444; line-height:1.7; }
+
+  .correct-answer { margin-top:16px; padding:14px 18px; background:#FFF8E1; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:13px; line-height:1.6; }
+  .correct-answer.show { display:block; animation:fadeIn .3s ease; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#B85042; margin-right:6px; }
+
+  .btn-row { display:flex; gap:12px; margin-top:20px; }
+  .btn { flex:1; padding:12px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-primary { background:linear-gradient(135deg,#B85042,#D4705A); color:white; }
+  .btn-primary:hover { background:linear-gradient(135deg,#a04335,#a85f48); }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0ece6; color:#555; }
+  .btn-secondary:hover { background:#e0dcd6; }
+  .btn-gold { background:linear-gradient(135deg,#F9D56D,#F9E795); color:#7a5900; font-weight:600; }
+  .btn-gold:hover { background:linear-gradient(135deg,#f0c84b,#F9D56D); }
+
+  /* ===== Section 1: Timeline Sort ===== */
+  .timeline-container { margin-top:16px; }
+  .timeline-item { display:flex; align-items:center; gap:10px; padding:12px 14px; background:#FAF8F5; border:2px dashed #d4cfc8; border-radius:10px; margin-bottom:8px; cursor:grab; transition:all .2s; user-select:none; }
+  .timeline-item:hover { border-color:#B85042; background:#FDF5E7; }
+  .timeline-item .order-num { min-width:28px; height:28px; border-radius:50%; background:#e0dcd6; color:#777; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
+  .timeline-item .step-text { flex:1; font-size:14px; color:#333; }
+  .timeline-item.dragging { opacity:0.5; transform:scale(1.02); }
+  .timeline-item.correct-flash { animation:correctPulse .5s ease; border-color:#27AE60; background:#E8F8F5; }
+  .timeline-item.wrong-flash { animation:wrongShake .4s ease; border-color:#E74C3C; }
+
+  .insight-box { display:none; margin-top:20px; padding:20px; background:linear-gradient(135deg,#2F3C7E,#4a5aa0); color:white; border-radius:14px; animation:fadeIn .5s ease; }
+  .insight-box.show { display:block; }
+  .insight-box h3 { font-size:17px; margin-bottom:12px; color:#F9E795; }
+  .insight-box .three-no { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+  .insight-box .no-item { display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(255,255,255,0.1); border-radius:8px; font-size:14px; }
+  .insight-box .no-item .no-icon { font-size:20px; }
+  .insight-box .core-msg { text-align:center; padding:14px; background:rgba(249,231,149,0.2); border-radius:10px; font-size:16px; font-weight:700; color:#F9E795; letter-spacing:1px; }
+
+  /* ===== Section 2: Quiz ===== */
+  .quiz-q { margin-bottom:18px; }
+  .quiz-q .q-text { font-size:14px; font-weight:600; color:#333; margin-bottom:10px; line-height:1.6; }
+
+  /* ===== Section 3: Four-Step Practice ===== */
+  .scene-tabs { display:flex; gap:0; margin-bottom:16px; }
+  .scene-tab { flex:1; padding:10px 4px; text-align:center; font-size:12.5px; font-weight:600; cursor:pointer; background:#f5f0ea; color:#888; border-radius:8px 8px 0 0; transition:all .2s; }
+  .scene-tab.active { background:#B85042; color:white; }
+  .step-input-area { margin-bottom:14px; }
+  .step-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .step-num { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:#B85042; color:white; font-size:12px; font-weight:700; }
+  .step-name { font-size:14px; font-weight:600; color:#333; }
+  .step-desc { font-size:11.5px; color:#aaa; margin-left:auto; }
+  textarea.step-textarea { width:100%; min-height:60px; padding:12px; border:2px solid #e8e0d8; border-radius:10px; font-size:14px; resize:vertical; font-family:inherit; line-height:1.6; transition:border-color .2s; background:#FAF8F5; }
+  textarea.step-textarea:focus { outline:none; border-color:#B85042; background:#fff; }
+  .ref-toggle { display:inline-flex; align-items:center; gap:4px; font-size:12px; color:#B85042; cursor:pointer; margin-top:6px; font-weight:600; padding:4px 10px; background:#FDF5E7; border-radius:14px; transition:all .2s; }
+  .ref-toggle:hover { background:#f0e0cc; }
+  .ref-answer { display:none; margin-top:8px; padding:12px 14px; background:#E8F8F5; border-left:3px solid #27AE60; border-radius:0 8px 8px 0; font-size:13px; line-height:1.7; color:#2c3e50; animation:fadeIn .3s ease; }
+  .ref-answer.show { display:block; }
+
+  /* ===== Section 4: Six Techniques ===== */
+  .tech-case { margin-bottom:20px; padding:16px; background:#faf8f5; border-radius:12px; border:1px solid #efe8e0; }
+  .tech-case .case-scenario { font-size:14px; line-height:1.7; color:#333; margin-bottom:10px; }
+  .tech-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .tech-opt { padding:10px 12px; border:2px solid #e8e0d8; border-radius:10px; font-size:12.5px; cursor:pointer; text-align:center; transition:all .2s; font-weight:500; }
+  .tech-opt:hover { border-color:#B85042; background:#FDF5E7; }
+  .tech-opt.selected { border-color:#B85042; background:#B85042; color:white; }
+  .tech-opt.correct { border-color:#27AE60; background:#E8F8F5; color:#27AE60; }
+  .tech-opt.wrong { border-color:#E74C3C; background:#FDEDEC; color:#E74C3C; }
+  .tech-detail { display:none; margin-top:12px; padding:14px; background:white; border:1px solid #B85042; border-radius:10px; animation:fadeIn .3s ease; }
+  .tech-detail.show { display:block; }
+  .tech-detail h4 { color:#B85042; font-size:14px; margin-bottom:6px; }
+  .tech-detail p { font-size:13px; color:#555; line-height:1.7; margin-bottom:6px; }
+  .tech-detail .koujue { display:inline-block; background:#FFF8E1; border:1px solid #F0AD4E; padding:6px 14px; border-radius:16px; font-size:13px; font-weight:600; color:#E67E22; margin-top:8px; }
+
+  /* Radar chart */
+  .radar-wrap { display:flex; justify-content:center; margin:20px 0; }
+  .radar-svg { width:280px; height:260px; }
+
+  /* ===== Section 5: Role Play ===== */
+  .difficulty-row { display:flex; gap:10px; justify-content:center; margin-bottom:18px; }
+  .diff-btn { padding:10px 20px; border:2px solid #e8e0d8; border-radius:10px; background:white; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; color:#666; }
+  .diff-btn.active { border-color:#B85042; background:#B85042; color:white; }
+  .diff-btn:hover:not(.active) { border-color:#B85042; color:#B85042; }
+
+  .rp-dialog { display:flex; flex-direction:column; gap:12px; }
+  .rp-bubble { max-width:82%; padding:14px 18px; border-radius:14px; font-size:14.5px; line-height:1.7; animation:bubbleIn .3s ease; }
+  .rp-bubble.client { align-self:flex-start; background:#FDEDEC; border-bottom-left-radius:4px; color:#333; }
+  .rp-bubble.client .bubble-label { font-size:11px; color:#E74C3C; font-weight:700; margin-bottom:4px; }
+  .rp-bubble.manager { align-self:flex-end; background:#E8F8F5; border-bottom-right-radius:4px; color:#333; }
+  .rp-bubble.manager .bubble-label { font-size:11px; color:#27AE60; font-weight:700; margin-bottom:4px; }
+
+  .satisfaction-bar { margin:14px 0; }
+  .sat-label { display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; }
+  .sat-track { height:20px; background:#eee; border-radius:10px; overflow:hidden; }
+  .sat-fill { height:100%; border-radius:10px; transition:width .5s ease, background .5s ease; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; }
+  .sat-fill.high { background:linear-gradient(90deg,#27AE60,#2ECC71); }
+  .sat-fill.mid { background:linear-gradient(90deg,#F0AD4E,#F39C12); }
+  .sat-fill.low { background:linear-gradient(90deg,#E74C3C,#C0392B); }
+
+  .round-indicator { text-align:center; font-size:13px; color:#888; margin-bottom:10px; font-weight:600; }
+
+  /* ===== Results ===== */
+  .result-page { display:none; }
+  .result-page.show { display:block; animation:fadeIn .4s ease; }
+  .score-circle { width:150px; height:150px; border-radius:50%; background:linear-gradient(135deg,#B85042,#D4705A); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 8px 30px rgba(184,80,66,0.3); }
+  .score-circle .num { font-size:44px; font-weight:700; line-height:1; }
+  .score-circle .label { font-size:12px; margin-top:2px; opacity:.85; }
+  .result-detail { background:white; border-radius:14px; padding:18px 22px; margin-top:14px; text-align:left; }
+  .result-detail h3 { font-size:15px; margin-bottom:10px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f0f0f0; font-size:13px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:16px; }
+  .restart-btn { display:block; margin:20px auto; padding:12px 40px; background:linear-gradient(135deg,#B85042,#D4705A); color:white; border:none; border-radius:10px; font-size:15px; cursor:pointer; font-weight:600; }
+
+  /* Animations */
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes correctPulse { 0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
+  @keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+  @keyframes bubbleIn { from{opacity:0;transform:translateY(10px) scale(.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+  /* Mobile */
+  @media(max-width:600px) {
+    header { padding:18px 16px; } header h1 { font-size:21px; }
+    .container { padding:16px 12px 32px; } .card { padding:18px; }
+    .tab { font-size:12px; padding:10px 4px; }
+    .tech-options { grid-template-columns:1fr 1fr; gap:6px; }
+    .tech-opt { font-size:11.5px; padding:8px 8px; }
+    .diff-btn { padding:8px 14px; font-size:13px; }
+  }
+
+  .hidden { display:none!important; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎯 大董老师 · 投诉处理</h1>
+  <p>零成本化解客户冲突 · 朱喆式沟通训练</p>
+</header>
+
+<div class="container">
+
+<!-- Tab Navigation -->
+<div class="tab-row" id="tabRow">
+  <div class="tab active" onclick="switchSec(0)"><span class="tab-icon">📺</span>朱喆拆解</div>
+  <div class="tab" onclick="switchSec(1)"><span class="tab-icon">❓</span>灵魂三问</div>
+  <div class="tab" onclick="switchSec(2)"><span class="tab-icon">🗣️</span>四步演练</div>
+  <div class="tab" onclick="switchSec(3)"><span class="tab-icon">🛠️</span>六大技巧</div>
+  <div class="tab" onclick="switchSec(4)"><span class="tab-icon">⚔️</span>红蓝对抗</div>
+</div>
+
+<!-- ============ SECTION 1: 朱喆案例拆解 ============ -->
+<div id="sec0" class="section">
+  <div class="card">
+    <span class="section-title">模块一 · 朱喆案例拆解</span>
+
+    <div class="scenario">
+      <span class="label">📺 案例背景（欢乐颂3 第1集）：</span><br>
+      保洁阿姨用客房毛巾擦拭洗手台水渍，客人崔先生撞见后勃然大怒，冲到前台投诉。<br>
+      酒店经理<strong>朱喆</strong>出面处理——她既让客人满意离店，又没有免一分钱房费，还妥善安抚了工作量超负荷的保洁员工。<br><br>
+      <strong style="color:#B85042;">请将朱喆的处理步骤按正确顺序排列（点击选中两个步骤可交换位置）：</strong>
+    </div>
+
+    <div class="timeline-container" id="timelineContainer"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="resetTimeline()">重置顺序</button>
+      <button class="btn btn-primary" onclick="checkTimeline()">验证答案</button>
+    </div>
+
+    <!-- 三个没有 解析 -->
+    <div class="insight-box" id="insightBox">
+      <h3>✨ 朱喆的「三个没有」</h3>
+      <div class="three-no">
+        <div class="no-item"><span class="no-icon">❌</span> <strong>没有给客人免房费</strong> —— 用换毛巾+清洁+果盘代替真金白银赔偿</div>
+        <div class="no-item"><span class="no-icon">❌</span> <strong>没有当着客人面处罚员工</strong> —— 维护员工尊严，私下合理处置</div>
+        <div class="no-item"><span class="no-icon">❌</span> <strong>没有推卸责任</strong> —— 主动承担，不甩锅给保洁或制度</div>
+      </div>
+      <div class="core-msg">核心思想：解决问题 ≠ 赔钱</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SECTION 2: 灵魂三问自测 ============ -->
+<div id="sec1" class="section hidden">
+  <div class="card">
+    <span class="section-title">模块二 · 灵魂三问自测</span>
+
+    <div class="scenario">
+      <span class="label">📞 场景模拟：</span><br>
+      你是利兴纺织的销售经理。周一早上刚到公司，品牌方采购张经理打来电话，声音很大：<br><br>
+      <strong style="color:#E74C3C;">「你们这批布的色差太大了！我们裁剪车间都停了！你们怎么搞的？！」</strong>
+    </div>
+
+    <div id="quizArea"></div>
+    <div class="btn-row" id="quizBtnRow">
+      <button class="btn btn-primary" onclick="submitQuiz()" id="quizSubmitBtn">提交答案</button>
+    </div>
+    <div class="explanation" id="quizResult"></div>
+    <div class="correct-answer" id="quizAnswerDetail"></div>
+
+    <!-- 结果页 -->
+    <div class="result-page" id="quizResultPage">
+      <div class="score-circle" id="quizScoreCircle"><span class="num" id="quizScoreNum">0</span><span class="label">分 / 30分</span></div>
+      <div id="quizRatingText" style="font-size:18px;font-weight:700;color:#B85042;margin-bottom:8px;"></div>
+      <div class="result-detail" id="quizDetail"></div>
+      <button class="restart-btn" onclick="resetQuiz()">重新测试</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SECTION 3: 先跟后带四步法演练 ============ -->
+<div id="sec2" class="section hidden">
+  <div class="card">
+    <span class="section-title">模块三 · 先跟后带四步法演练</span>
+    <p style="font-size:13px;color:#888;margin-bottom:14px;">选择场景 → 在每一步填入你的话术 → 展开查看参考答案对比</p>
+
+    <div class="scene-tabs" id="sceneTabs">
+      <div class="scene-tab active" onclick="switchScene(0)">场景A<br>色差投诉</div>
+      <div class="scene-tab" onclick="switchScene(1)">场景B<br>交期延误</div>
+      <div class="scene-tab" onclick="switchScene(2)">场景C<br>手感抱怨</div>
+    </div>
+
+    <div id="sceneContent"></div>
+
+    <div class="btn-row" style="margin-top:20px;">
+      <button class="btn btn-gold" onclick="showAllRefs()">展开全部参考话术</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SECTION 4: 六大技巧场景匹配 ============ -->
+<div id="sec3" class="section hidden">
+  <div class="card">
+    <span class="section-title">模块四 · 六大零成本技巧</span>
+    <p style="font-size:13px;color:#888;margin-bottom:14px;">阅读案例 → 选择最适合的技巧 → 掌握口诀</p>
+
+    <div class="progress-text" id="techProgress">技巧 1 / 6</div>
+    <div class="progress-bar"><div class="progress-fill" id="techProgressFill" style="width:16.66%"></div></div>
+
+    <div id="techArea"></div>
+    <div class="btn-row" id="techBtnRow">
+      <button class="btn btn-secondary" onclick="prevTech()" id="techPrevBtn" disabled>上一个</button>
+      <button class="btn btn-primary" onclick="nextTech()" id="techNextBtn" disabled>确认选择</button>
+    </div>
+
+    <!-- 技巧总结果 -->
+    <div class="result-page" id="techResultPage">
+      <h3 style="text-align:center;font-size:18px;color:#333;margin-bottom:6px;">技巧掌握度雷达</h3>
+      <div class="radar-wrap">
+        <svg class="radar-svg" viewBox="0 0 280 250" id="radarChart"></svg>
+      </div>
+      <div id="techSummary" style="margin-top:12px;"></div>
+      <button class="restart-btn" onclick="resetTech()" style="margin-top:16px;">重新挑战</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SECTION 5: 红蓝对抗角色扮演 ============ -->
+<div id="sec4" class="section hidden">
+  <div class="card">
+    <span class="section-title">模块五 · 红蓝对抗角色扮演</span>
+    <p style="font-size:13px;color:#888;margin-bottom:14px;">系统扮演愤怒客户 · 你扮演销售经理 · 连续3轮 · 目标：<strong style="color:#B85042;">不赔真金白银</strong></p>
+
+    <div class="difficulty-row" id="diffRow">
+      <div class="diff-btn active" onclick="setDifficulty(0,this)">⭐ 简单</div>
+      <div class="diff-btn" onclick="setDifficulty(1,this)">⭐⭐ 中等</div>
+      <div class="diff-btn" onclick="setDifficulty(2,this)">⭐⭐⭐ 困难</div>
+    </div>
+
+    <div id="rpStartArea">
+      <div style="text-align:center;padding:30px 0;">
+        <div style="font-size:48px;margin-bottom:12px;">⚔️</div>
+        <div style="font-size:16px;color:#333;margin-bottom:8px;"><strong>红蓝对抗</strong></div>
+        <div style="font-size:13px;color:#888;line-height:1.8;">
+          🔴 红方：愤怒的客户（由AI扮演）<br>
+          🔵 蓝方：销售经理（由你来扮演）<br><br>
+          你需要在每轮对话中选择最佳回应策略<br>
+          成功避免直接赔钱 = 胜利！
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="startRP()">开始对抗</button>
+    </div>
+
+    <div id="rpGameArea" class="hidden">
+      <div class="round-indicator" id="rpRoundIndicator">第 1 轮 / 共 3 轮</div>
+      <div class="satisfaction-bar">
+        <div class="sat-label"><span>😠 客户情绪</span><span id="satValue">30%</span></div>
+        <div class="sat-track"><div class="sat-fill low" id="satFill" style="width:30%">30%</div></div>
+      </div>
+      <div class="rp-dialog" id="rpDialog"></div>
+      <div class="options" id="rpOptions"></div>
+      <div class="explanation" id="rpFeedback"></div>
+    </div>
+
+    <!-- RP Result -->
+    <div class="result-page" id="rpResultPage">
+      <div class="score-circle" style="background:linear-gradient(135deg,#2F3C7E,#4a5aa0);">
+        <span class="num" id="rpSavedNum">$0</span>
+        <span class="label">避免的直接赔偿</span>
+      </div>
+      <div id="rpRatingText" style="font-size:18px;font-weight:700;color:#2F3C7E;margin-bottom:8px;text-align:center;"></div>
+      <div class="result-detail" id="rpDetail"></div>
+      <button class="restart-btn" onclick="resetRP()" style="background:linear-gradient(135deg,#2F3C7E,#4a5aa0);">再来一局</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+// ===================== GLOBAL STATE =====================
+let currentSec = 0;
+
+function switchSec(i) {
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  document.querySelectorAll('.section').forEach((s,idx)=>s.classList.toggle('hidden',idx!==i));
+  currentSec = i;
+}
+
+
+// ===================== SECTION 1: TIMELINE SORT =====================
+const timelineData = [
+  { id:0, text:'接到投诉，立即赶到现场' },
+  { id:1, text:'先安抚客人情绪（递水、道歉、"我理解您"）' },
+  { id:2, text:'完整倾听客人的描述，不打断、不辩解' },
+  { id:3, text:'查实情况（核实保洁操作），确认事实' },
+  { id:4, text:'给出解决方案（换新毛巾+重新清洁+送果盘）' },
+  { id:5, text:'私下处理员工 + 送客人回房 + 后续跟进' },
+];
+const correctOrder = [0,1,2,3,4,5];
+let currentOrder = [0,1,2,3,4,5];
+let selectedIdx = -1;
+
+function renderTimeline() {
+  const c = document.getElementById('timelineContainer');
+  c.innerHTML = currentOrder.map((di,i)=>{
+    const d = timelineData[di];
+    return `<div class="timeline-item" data-idx="${i}" onclick="selectTLItem(${i})">
+      <div class="order-num">${i+1}</div>
+      <div class="step-text">${d.text}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectTLItem(idx) {
+  if(selectedIdx === -1) {
+    selectedIdx = idx;
+    document.querySelectorAll('.timeline-item')[idx].style.borderColor='#B85042';
+    document.querySelectorAll('.timeline-item')[idx].style.background='#FDF5E7';
+  } else if(selectedIdx === idx) {
+    selectedIdx = -1;
+    renderTimeline();
+  } else {
+    // swap
+    const tmp = currentOrder[selectedIdx];
+    currentOrder[selectedIdx] = currentOrder[idx];
+    currentOrder[idx] = tmp;
+    selectedIdx = -1;
+    renderTimeline();
+  }
+}
+
+function resetTimeline() {
+  currentOrder = [0,1,2,3,4,5];
+  selectedIdx = -1;
+  document.getElementById('insightBox').classList.remove('show');
+  renderTimeline();
+}
+
+function checkTimeline() {
+  const items = document.querySelectorAll('.timeline-item');
+  let allCorrect = true;
+  items.forEach((item,i)=>{
+    if(currentOrder[i] === correctOrder[i]) {
+      item.className = 'timeline-item correct-flash';
+    } else {
+      item.className = 'timeline-item wrong-flash';
+      allCorrect = false;
+    }
+  });
+  if(allCorrect) {
+    setTimeout(()=>document.getElementById('insightBox').classList.add('show'),600);
+  }
+}
+
+renderTimeline();
+
+
+// ===================== SECTION 2: QUIZ =====================
+const quizQuestions = [
+  {
+    q: '灵魂第一问：面对张经理的愤怒电话，你的第一反应是什么？',
+    options: [
+      { text:'立即接听并回应："张经理您好，我马上了解情况给您回复。"', correct:true, feedback:'✅ 正确！态度及时 = 处理投诉的第一要义。第一时间回应能降低对方焦虑。' },
+      { text:'先挂掉电话，等品质部出完色差报告后再回复他。', correct:false, feedback:'❌ 不妥。"等一下再回复"会让客户觉得你在拖延，怒气值会继续攀升。' },
+      { text:'把电话转给品质部同事，让他们来解释技术问题。', correct:false, feedback:'❌ 危险！推给下属等于告诉客户"你不重要"。投诉处理必须由有决策权的人亲自接手。' },
+    ]
+  },
+  {
+    q: '灵魂第二问：你接通电话后，首先应该怎么做？',
+    options: [
+      { text:'先听完张经理完整的抱怨和诉求，期间只做记录不插嘴。', correct:true, feedback:'✅ 正确！"先心情，后事情"。倾听是最好的灭火器，让对方说完，怒气自然减半。' },
+      { text:'一边听一边解释："其实我们的色差在国标允差范围内的..."', correct:false, feedback:'❌ 边听边解释是大忌！客户在情绪头上时，任何"但是""其实"都会被视为推卸责任。' },
+      { text:'直接提出方案："这样吧，这批货我给您打个八折。"', correct:false, feedback:'❌ 还没搞清楚事实就急着赔钱，这是最常见的错误！而且一旦开了折扣先例，下次还会被要求更多。' },
+    ]
+  },
+  {
+    q: '灵魂第三问：听完描述后，你应该给出什么类型的解决方案？',
+    options: [
+      { text:'具体行动方案+明确时间节点："今天下午4点前给您分析报告+替代方案"', correct:true,反馈:'✅ 正确！给"确定性"比给钱更有效。客户真正要的是问题能解决，而不是赔偿金。' },
+      { text:'承诺性方案："好的我明白了，我请示一下领导再回复您。"', correct:false,feedback:'❌ "我请示领导"等于告诉客户你没有决策权，会降低客户对你的信任度。' },
+      { text:'赔偿性方案："实在抱歉，这批货我们给您打八折作为补偿。"', correct:false,feedback:'❌ 这是最后手段而非首选！朱喆用果盘+清洁就解决了问题，你也应该先用非金钱方案。' },
+    ]
+  },
+  {
+    q: '【进阶】如果张经理坚持要求现金赔偿/折扣，否则要升级投诉到你老板，你怎么回应？',
+    options: [
+      { text:'"张经理，我完全理解您的压力。在我们讨论赔偿之前，能不能先给我半天时间，让我先把有问题的几卷布挑出来、给您一份检测报告？如果确实是我们的问题，我一定负责到底。"', correct:true, feedback:'✅ 最佳策略！先共情→争取时间→用数据和事实说话→把话题从"赔多少"转移到"什么问题、怎么解决"。' },
+      { text:'"好的好的，那就给您打八折吧，别生气了。"', correct:false, feedback:'❌ 太快认输！这会让客户觉得"原来只要发火就有折扣"，形成恶性循环。' },
+      { text:'"那没办法了，您要投诉就投诉吧，反正不是我们的问题。"', correct:false, feedback:'❌ 绝对禁止！这句话会让小投诉变成大危机，甚至可能丢掉整个客户。' },
+    ]
+  },
+  {
+    q: '【综合】回顾整个过程，以下哪句话最符合朱喆式处理原则？',
+    options: [
+      { text:'"客户要的不是钱，是确定性。先心情，后事情。"', correct:true, feedback:'✅ 完全正确！这就是投诉处理的终极心法。记住它，用好它。' },
+      { text:'"遇到投诉赶紧赔钱了事，越快平息越好。"', correct:false, feedback:'❌ 这恰恰是最贵的做法！短期省事，长期亏损。' },
+      { text:'"投诉都是客户无理取闹，坚持立场不能退让。"', correct:false, feedback:'❌ 与客户对抗没有赢家。即使你"赢"了道理，也可能输了订单。' },
+    ]
+  }
+];
+
+let quizAnswers = new Array(quizQuestions.length).fill(-1);
+let quizSubmitted = false;
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = quizQuestions.map((qi,i)=>`
+    <div class="quiz-q">
+      <div class="q-text">${i+1}. ${qi.q}</div>
+      <div class="options">
+        ${qi.options.map((oi,j)=>`
+          <div class="option ${quizAnswers[i]===j?'selected':''} ${quizSubmitted?oi.correct?'correct':'wrong':''}" onclick="selectQuizOpt(${i},${j})">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">${['A','B','C'][j]}.</span>${oi.text}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+renderQuiz();
+
+function selectQuizOpt(qi, oi) {
+  if(quizSubmitted) return;
+  quizAnswers[qi] = oi;
+  renderQuiz();
+}
+
+function submitQuiz() {
+  if(quizAnswers.includes(-1)) { alert('还有题目未作答哦！'); return; }
+  quizSubmitted = true;
+  renderQuiz();
+  let score = 0;
+  let detailHTML = '';
+  quizQuestions.forEach((qi,i)=>{
+    if(qi.options[quizAnswers[i]].correct) score += 6;
+    else detailHTML += `<div class="result-item"><span class="status">${qi.options[quizAnswers[i]].correct?'✅':'❌'}</span>第${i+1}题：${qi.options[quizAnswers[i]].correct?'回答正确':'需要改进'}</div>`;
+  });
+
+  // show per-question feedback
+  let resultHTML = '<h4>📊 你的得分分析</h4><p>';
+  quizQuestions.forEach((qi,i)=>{
+    const sel = qi.options[quizAnswers[i]];
+    resultHTML += `<br><strong>第${i+1}题：</strong>${sel.correct?'<span style="color:#27AE60">✔ '+sel.feedback.split('！')[0]+'！</span>':'<span style="color:#E74C3C">✘ '+sel.feedback.split('！')[0]+'！</span>'}<br><span style="color:#666;font-size:12px">${sel.feedback}</span>`;
+  });
+  resultHTML += '</p>';
+  document.getElementById('quizResult').innerHTML = resultHTML;
+  document.getElementById('quizResult').className = 'explanation show';
+
+  // answer detail
+  document.getElementById('quizAnswerDetail').innerHTML = `<div class="label">💡 参考要点</div>` + quizQuestions.map(qi=>{
+    const cor = qi.options.find(o=>o.correct);
+    return `• ${cor.text}`;
+  }).join('<br>');
+  document.getElementById('quizAnswerDetail').className = 'correct-answer show';
+
+  document.getElementById('quizScoreNum').textContent = score;
+  const rating = score>=24?'🏆 金牌销售经理':score>=18?'🥈 银牌销售经理':'🥉 继续加油！';
+  document.getElementById('quizRatingText').textContent = rating;
+  document.getElementById('quizDetail').innerHTML = detailHTML;
+
+  document.getElementById('quizBtnRow').className = 'hidden';
+  document.getElementById('quizResultPage').className = 'result-page show';
+}
+
+function resetQuiz() {
+  quizAnswers.fill(-1);
+  quizSubmitted = false;
+  document.getElementById('quizResult').className = 'explanation';
+  document.getElementById('quizAnswerDetail').className = 'correct-answer';
+  document.getElementById('quizResultPage').className = 'result-page';
+  document.getElementById('quizBtnRow').className = 'btn-row';
+  renderQuiz();
+}
+
+
+// ===================== SECTION 3: FOUR-STEP PRACTICE =====================
+const scenes = [
+  {
+    title: '场景A：品牌方采购经理愤怒来电 —— "色差太大！"',
+    scenario: '<span class="label">📞 来电内容：</span><br>利兴纺织的老客户——某国际运动品牌采购经理张女士打来电话，声音明显带着怒气：<br><br><strong style="color:#E74C3C;">「大董，你们这次发的涤氨面料色差太大了！我们品控那边根本过不了关！这批货是给秋季新品用的，现在生产线都停了！你们怎么回事？！」</strong>',
+    steps: [
+      { name:'跟情绪', desc:'共情 · 降低对方怒火', ref:'张经理，我完全理解您的焦急。换作是我，面对这种情况也会非常着急。秋季新品的生产线停一天就是一天的损失，这个压力我懂。' },
+      { name:'跟事实', desc:'复述确认 · 让对方感觉被听见', ref:'让我确认一下您说的情况：这批涤氨面料主要问题是色差超出了预期，已经影响到你们品控和生产线的正常运转了，对吗？除了色差，还有其他方面的问题吗？' },
+      { name:'带行动', desc:'具体动作 · 给予确定性', ref:'我现在立刻做三件事：<br>① 让品质部把这批货的Lab色差值报告发给您（半小时内）<br>② 我安排人把所有布卷号列出来，帮您一起挑出有色差的几卷<br>③ 如果确实超出允差范围，我24小时内给您替代方案（补货或调换）<br>您看这样可以吗？' },
+      { name:'带承诺', desc:'时间节点 · 建立信任', ref:'最晚今天下午4点前，您会收到我的正式分析报告和解决方案书面文件。之后我会每天跟进一次直到问题彻底解决。我的手机24小时开机，有任何进展我会第一时间通知您。' },
+    ]
+  },
+  {
+    title: '场景B：服装厂老板微信轰炸 —— "交期延误导致停工！"',
+    scenario: '<span class="label">💬 微信消息：</span><br>惠州合作多年的服装厂王老板连续发了10条微信，语气越来越急：<br><br><strong style="color:#E74C3C;">「大董！你们越南工厂这批货怎么说好上周五到的？！现在已经周三了！我这边裁剪车间工人闲了三天了！你们要么今天发货，要么赔我停工损失！我跟你说，这批货赶不上我就真的翻脸了！！」</strong>',
+    steps: [
+      { name:'跟情绪', desc:'共情 · 认可对方的正当愤怒', ref:'王总，看到您的消息我非常抱歉！让您等了这么久确实不应该，工人停工三天造成的损失我完全理解。这事是我这边跟进不到位，我先向您道歉。' },
+      { name:'跟事实', desc:'复述确认', ref:'我确认一下目前的情况：原定上周五到的货至今未到，导致贵司裁剪车间停工3天。您现在最关心的是什么时候能拿到货，以及停工损失的补偿问题，对吗？' },
+      { name:'带行动', desc:'具体动作', ref:'我现在已经做了以下安排：<br>① 刚才联系了越南工厂，货物实际已于昨天装车出境，预计本周五到达深圳口岸<br>② 为了不让您继续停工，我从惠州仓库紧急调拨了1000米同类面料，今天下午用货车送到您工厂（运费我们出）<br>③ 到货后我派专人协助贵司质检，确保即到即用<br>这批应急货足够您先启动生产。' },
+      { name:'带承诺', desc:'时间节点', ref:'应急面料今天下午5点前送到您工厂门口。正货预计周五到港，我周六上午亲自送货上门验收。后续这批订单我全程盯紧，每周主动向您汇报进度。' },
+    ]
+  },
+  {
+    title: '场景C：老客户群内公开抱怨 —— "手感完全不对！"',
+    scenario: '<span class="label">💬 群聊截图：</span><br>在一个有20个行业客户的微信群里，与你合作了两年的内衣品牌李总监突然@了你：<br><br><strong style="color:#E74C3C;">「@大董 你们上次送的模杯布料手感完全不对啊！跟我们之前确认的手版样差太多了！我们现在都不敢开裁了！群里这么多同行在这，你们利兴的品质就是这么做的吗？」</strong><br><br><em style="color:#888;">（注意：这是公开场合，你的回应会被所有人看到！）</em>',
+    steps: [
+      { name:'跟情绪', desc:'共情 + 移到私聊', ref:'李总，感谢您直接反馈问题！手感差异确实会影响产品体验，您指出这个问题说明对我们还抱有期待。为了更高效地帮您解决，方便的话我给您打个电话详细了解一下具体情况？' },
+      { name:'跟事实', desc:'复述确认（电话中）', ref:'李总，我在电话里跟您确认一下：您说的手感不对，主要是指触感偏硬还是偏滑？是跟之前哪一批的手版样对比有差异？大概有多少米的面料涉及这个问题？我好针对性地安排处理。' },
+      { name:'带行动', desc:'具体动作', ref:'根据您刚才描述的情况，我安排如下：<br>① 我明天上午带着原始手版样和这批货的留样，去您工厂当面做对比手感测试<br>② 同时安排技术员检查是否定型温度参数有偏差（有时候同款面料不同批次会有轻微差异，可通过调整定型工艺改善）<br>③ 如果确属我们品质问题，无条件退换；如果是工艺参数问题，我免费派技师到您工厂调整设备参数' },
+      { name:'带承诺', desc:'时间节点 + 群内体面收尾', ref:'明天中午12点前我到您工厂。另外李总，在群里我跟各位同行报备一下：李总反馈的手感问题我们已经高度重视，正在积极处理中，有结果会在群里同步。感谢各位对利兴的监督！<br><em style="color:#888;">（注：在群里的回应要做到——承认问题+展示态度+不给细节+移至私聊）</em>' },
+    ]
+  }
+];
+let currentScene = 0;
+
+function switchScene(idx) {
+  currentScene = idx;
+  document.querySelectorAll('.scene-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  renderScene();
+}
+
+function renderScene() {
+  const s = scenes[currentScene];
+  const saved = JSON.parse(localStorage.getItem('complaint_scene'+currentScene)||'{}');
+  document.getElementById('sceneContent').innerHTML = `
+    <div class="scenario">${s.scenario}</div>
+    ${s.steps.map((step,i)=>`
+      <div class="step-input-area">
+        <div class="step-header">
+          <div class="step-num">${i+1}</div>
+          <div class="step-name">${step.name}</div>
+          <div class="step-desc">${step.desc}</div>
+        </div>
+        <textarea class="step-textarea" id="sceneInput${i}" placeholder="在这里写下你的话术...">${saved[i]||''}</textarea>
+        <div class="ref-toggle" onclick="toggleRef(${i})">📖 查看参考话术</div>
+        <div class="ref-answer" id="refAnswer${i}">${step.ref}</div>
+      </div>
+    `).join('');
+  // restore save handlers
+  s.steps.forEach((_,i)=>{
+    document.getElementById('sceneInput'+i).addEventListener('input',e=>{
+      const obj = JSON.parse(localStorage.getItem('complaint_scene'+currentScene)||'{}');
+      obj[i]=e.target.value;
+      localStorage.setItem('complaint_scene'+currentScene,JSON.stringify(obj));
+    });
+  });
+}
+renderScene();
+
+function toggleRef(i){
+  const el=document.getElementById('refAnswer'+i);
+  el.classList.toggle('show');
+}
+function showAllRefs(){
+  scenes[currentScene].steps.forEach((_,i)=>document.getElementById('refAnswer'+i)?.classList.add('show'));
+}
+
+
+// ===================== SECTION 4: SIX TECHNIQUES =====================
+const techniques = [
+  { name:'补货代替退款', koujue:'补你新的，旧的检测', icon:'📦',
+    cases:[{
+      scene:'客户因色差问题要求整批货打8折（约$5000损失），但大部分布料实际上可用。',
+      options:['补货代替退款','技术服务抵赔偿','账期换取不降价','第三方检测背书','拆解责任链条','情感补偿'],
+      answer:0,
+      detail:`<h4>📦 技巧1：补货代替退款</h4>
+<p><strong>适用场景：</strong>质量瑕疵类投诉（色差、局部瑕疵、少量次品）</p>
+<p><strong>操作方法：</strong>不直接打折/退款，而是免费补发一部分新货，同时将有问题的旧货隔离检测。</p>
+<p><strong>话术模板：</strong>"XX经理，与其整批打折，不如这样——我们立刻补发XXX米同规格新货给您，免费空运。有问题的那部分布我们先隔离，派人抽检。如果确属我们问题，补货全免费；如果不是，您相当于多得了库存。"</p>
+<p><strong>成本对比：</strong>8折损失 ≈ $5000 vs 补货成本 ≈ $300~800</p>
+<p><strong>关键点：</strong>补货量要有诚意但不能过量；旧货检测是必要的证据保全步骤。</p>`,
+    }]
+  },
+  { name:'技术服务抵赔偿', koujue:'我去调机，你签确认', icon:'🔧',
+    cases:[{
+      scene:'客户投诉染色牢度不达标（摩擦牢度2级，要求3级），威胁要退货索赔$8000。',
+      options:['补货代替退款','技术服务抵赔偿','账期换取不降价','第三方检测背书','拆解责任链条','情感补偿'],
+      answer:1,
+      detail:`<h4>🔧 技巧2：技术服务抵赔偿</h4>
+<p><strong>适用场景：</strong>功能性/工艺参数类问题（染色牢度、缩水率、功能性指标）</p>
+<p><strong>操作方法：</strong>派技术员携带专业助剂/设备到客户现场，帮助调整工艺参数使产品达标。</p>
+<p><strong>话术模板：</strong>"XX总，染色牢度问题我们可以通过调整后整理工艺来解决。我明天派我们的高级工程师带固色助剂过去，现场帮你们调整定型工艺参数。调整完后请贵司重新检测，合格后麻烦签份《问题已解决确认书》就行。"</p>
+<p><strong>成本对比：</strong>退货索赔 ≈ $8000 vs 技术员出差+助剂 ≈ $500~1000</p>
+<p><strong>关键点：</strong>一定要拿到签字确认书关闭投诉；技术员必须是资深人员。</p>`,
+    }]
+  },
+  { name:'账期换取不降价', koujue:'晚点付，不降价', icon:'📅',
+    cases:[{
+      scene:'长期合作的服装厂客户以"今年行情不好"为由，强烈要求每米降价5%（年采购额$50万，降5%=$25000/年）。',
+      options:['补货代替退款','技术服务抵赔偿','账期换取不降价','第三方检测背书','拆解责任链条','情感补偿'],
+      answer:2,
+      detail:`<h4>📅 技巧3：账期换取不降价</h4>
+<p><strong>适用场景：</strong>客户以各种理由要求价格折扣/返点</p>
+<p><strong>操作方法：</strong>用延长账期/灵活付款方式替代直接降价，减轻客户现金流压力。</p>
+<p><strong>话术模板：</strong>"李总，我理解今年的压力。不过您也知道，如果直接降价会影响您之前谈好的累计返点政策（降了价返点基数也变少了）。不如这样——我们把这批货的账期从30天延长到60天，相当于您多用了30天的资金却不用付利息，对您现金流更有实质帮助。您看怎么样？"</p>
+<p><strong>成本对比：</strong>降价5% = $25000/年 vs 账期延长的资金占用成本 ≈ 利息$1500/年</p>
+<p><strong>关键点：</strong>强调降价的隐性代价（返点、基准价）；账期延长要在授权范围内。</p>`,
+    }]
+  },
+  { name:'第三方检测背书', koujue:'送SGS，用报告说话', icon:'🔬',
+    cases:[{
+      scene:'客户主观判断"手感不好"、"颜色不正"，但所有检测报告都显示在标准范围内。客户仍然坚持要求打折。',
+      options:['补货代替退款','技术服务抵赔偿','账期换取不降价','第三方检测背书','拆解责任链条','情感补偿'],
+      answer:3,
+      detail:`<h4>🔬 技巧4：第三方检测背书</h4>
+<p><strong>适用场景：</strong>主观感受争议（手感、色感、视觉差异）、双方各执一词</p>
+<p><strong>操作方法：</strong>邀请共同取样送权威第三方检测机构（SGS/ITS/Intertek），以客观报告为准。</p>
+<p><strong>话术模板：</strong>"张经理，关于手感这个问题，每个人的主观感受确实有差异。为了避免咱们双方都不放心，我建议这样——我们共同取样，一起送到SGS去做全套物理指标检测，费用我来出。如果报告显示不合格，我们双倍补货；如果合格，希望您继续按原计划使用。用数据说话，您看行吗？"</p>
+<p><strong>效果：</strong>大多数客户听到要送检就会退缩（因为心里没底）；即使真的送检，数据通常站在你这边。</p>
+<p><strong>关键点：</strong>态度要诚恳不要挑衅；费用主动提出来出；提前对自己的产品质量有把握。</p>`,
+    }]
+  },
+  { name:'拆解责任链条', koujule:'你拍照片，我找原因', icon:'🔍',
+    cases:[{
+      scene:'客户投诉布面出现破洞和小瑕疵，声称是面料质量问题要求全额退款$12000。但你怀疑可能是客户裁剪或缝纫环节造成。',
+      options:['补货代替退款','技术服务抵赔偿','账期换取不降价','第三方检测背书','拆解责任链条','情感补偿'],
+      answer:4,
+      detail:`<h4>🔍 技巧5：拆解责任链条</h4>
+<p><strong>适用场景：</strong>责任不清的质量问题（破洞、疵点、损伤），可能涉及多方原因</p>
+<p><strong>操作方法：</strong>引导客户提供从收货到生产的每个环节数据/照片，逐步定位真实原因。</p>
+<p><strong>话术模板：</strong>"陈总，破洞问题我们非常重视。为了准确找出原因，能否请您帮忙提供一些信息：①面料入库时的检验照片 ②裁剪台的针板照片（有时候针板毛刺会勾丝）③缝纫环节使用的针号和线张力设置。我们这边也同步检查出厂记录。找出原因后该谁的责任就是谁的，绝不推诿。"</p>
+<p><strong>效果：</strong>如果确实是客户方设备/操作问题，他们通常会自行撤回索赔要求；如果是你的问题，也能精确定位改进。</p>
+<p><strong>关键点：</strong>态度要配合而非对抗；要求信息时要逐条列出，显得专业；如果确认是己方问题要勇于承担责任。</p>`,
+    }]
+  },
+  { name:'情感补偿', koujule:'小礼物上门，大赔偿归零', icon:'🎁',
+    cases:[{
+      scene:'合作5年的VIP老客户因一次交期延误在电话里情绪失控，说"我对利兴太失望了"，暗示要转单给竞争对手。',
+      options:['补货代替退款','技术服务抵赔偿','账期换取不降价','第三方检测背书','拆解责任链条','情感补偿'],
+      answer:5,
+      detail:`<h4>🎁 技巧6：情感补偿</h4>
+<p><strong>适用场景：</strong>长期老客户情绪激动、关系受损、面临流失风险的情况</p>
+<p><strong>操作方法：</strong>像朱喆送果盘一样，用低成本的真诚举动修复关系——登门拜访+小礼物+私人承诺。</p>
+<p><strong>话术模板：</strong>"刘总，这次延误确实对不起您的信任。我知道这批货对您很重要。我今天下午专程过来拜访您，顺便带了些我们越南工厂的新品样品和一点小礼物。这单货我亲自全程盯着走完全流程，保证不再出任何岔子。晚上如果方便的话，我想请您的团队吃个便饭，当面道个歉。"</p>
+<p><strong>成本对比：</strong>客户流失的终身价值 = 数十万美金 vs 登门拜访+礼品+饭局 < $200</p>
+<p><strong>关键点：</strong>真诚是前提——虚情假意一眼就被看穿；礼物要有心思（特产、定制礼品优于通用礼品）；"我亲自盯"是最有力量的承诺。</p>`,
+    }]
+  }
+];
+
+let techCurrent = 0;
+let techAnswers = new Array(6).fill(-1);
+let techSubmitted = new Array(6).fill(false);
+
+function renderTech(){
+  const t = techniques[techCurrent];
+  const c = t.cases[0];
+  document.getElementById('techProgress').textContent=`技巧 ${techCurrent+1} / ${techniques.length}`;
+  document.getElementById('techProgressFill').style.width=((techCurrent+1)/techniques.length*100)+'%';
+  const ans = techSubmitted[techCurrent]?`<div class="explanation show" style="margin-top:14px;"><h4>${techAnswers[techCurrent]===c.answer?'✅ 回答正确！':'❌ 再想想...'}</h4><p>${techniques[c.answer].name}才是此场景的最佳选择。理由：${c.detail.split('</p>')[1]?.replace('<p>','')||''}</p></div><div class="tech-detail show">${c.detail}`:'';
+  document.getElementById('techArea').innerHTML=`
+    <div class="tech-case">
+      <div class="case-scenario"><span class="label">${t.icon} 案例${techCurrent+1}：</span>${c.scene}</div>
+      <div class="tech-options">${t.nameList||techniques.map(tt=>tt.name).map((n,i)=>`<div class="tech-opt ${techAnswers[techCurrent]===i?'selected':''}${techSubmitted[techCurrent]&&i===c.answer?' correct':''}${techSubmitted[techCurrent]&&techAnswers[techCurrent]===i&&i!==c.answer?' wrong':''}" onclick="selectTechOpt(${i})">${n}</div>`).join('')}</div>
+    </div>
+    ${ans}`;
+  // prev/next btn state
+  document.getElementById('techPrevBtn').disabled = techCurrent===0;
+  document.getElementById('techNextBtn').disabled = techAnswers[techCurrent]===-1;
+  if(techSubmitted[techCurrent]){
+    document.getElementById('techNextBtn').textContent = techCurrent<techniques.length-1 ? '下一个技巧' : '查看结果';
+  } else {
+    document.getElementById('techNextBtn').textContent = '确认选择';
+  }
+}
+renderTech();
+
+function selectTechOpt(i){ if(techSubmitted[techCurrent])return; techAnswers[techCurrent]=i; renderTech(); }
+function prevTech(){ if(techCurrent>0){techCurrent--;renderTech();} }
+function nextTech(){
+  if(!techSubmitted[techCurrent]){ techSubmitted[techCurrent]=true; renderTech(); return; }
+  if(techCurrent < techniques.length-1){ techCurrent++; renderTech(); }
+  else showTechResult();
+}
+
+function showTechResult(){
+  document.getElementById('techArea').className='hidden';
+  document.getElementById('techBtnRow').className='hidden';
+  document.getElementById('techProgress').className='hidden';
+  document.querySelector('#sec3 .progress-bar').className='hidden';
+  document.getElementById('techResultPage').className='result-page show';
+  drawRadar();
+  let rights = techniques.map((t,i)=>techAnswers[i]===t.cases[0].answer).filter(Boolean).length;
+  document.getElementById('techSummary').innerHTML=`<div style="text-align:center;padding:10px;background:#FDF5E7;border-radius:10px;font-size:14px;">
+    🎯 答对 ${rights}/${techniques.length} 个场景<br>
+    ${rights>=5?'<span style="color:#27AE60;font-weight:700">你已经掌握投诉处理的核心技巧！</span>':rights>=3?'<span style="color:#E67E22;font-weight:700">不错！再多练几次就能熟练运用。</span>':'<span style="color:#E74C3C;font-weight:700">建议回到每个技巧认真学习口诀和应用场景。</span>'}
+  </div>`;
+}
+
+function drawRadar(){
+  const svg = document.getElementById('radarChart');
+  const cx=140,cy=125,radius=90;
+  const labels = techniques.map(t=>t.name.replace(/^[^\u4e00-\u9fa5]*/,''));
+  // calc scores (each technique's correctness)
+  const values = techniques.map((t,i)=>techAnswers[i]===t.cases[0].answer?100:(techAnswers[i]!==-1?30:0));
+  const angles = labels.map((_,i)=>Math.PI*2*i/labels.length - Math.PI/2);
+
+  // bg hexagons
+  let html = '';
+  for(let level=1;level<=4;level++){
+    let rr = radius*level/4;
+    let pts = angles.map(a=>`${cx+rr*Math.cos(a)},${cy+rr*Math.sin(a)}`).join(' ');
+    html+=`<polygon points="${pts}" fill="none" stroke="#e8e0d8" stroke-width="1"/>\n`;
+  }
+  // axis lines
+  angles.forEach(a=>{
+    html+=`<line x1="${cx}" y1="${cy}" x2="${cx+radius*Math.cos(a)}" y2="${cy+radius*Math.sin(a)}" stroke="#e8e0d8" stroke-width="1"/>\n`;
+  });
+  // data polygon
+  let dataPts = values.map((v,i)=>{let rr=radius*v/100;return`${cx+rr*Math.cos(angles[i])},${cy+rr*Math.sin(angles[i])}`}).join(' ');
+  html+=`<polygon points="${dataPts}" fill="rgba(184,80,66,0.25)" stroke="#B85042" stroke-width="2"/>\n`;
+  // data dots
+  values.forEach((v,i)=>{
+    let rr=radius*v/100;
+    html+=`<circle cx="${cx+rr*Math.cos(angles[i])}" cy="${cy+rr*Math.sin(angles[i])}" r="5" fill="#B85042"/>\n`;
+  });
+  // labels
+  labels.forEach((l,i)=>{
+    let lr=radius+22;
+    let lx=cx+lr*Math.cos(angles[i]);
+    let ly=cy+lr*Math.sin(angles[i]);
+    html+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#555">${l}</text>\n`;
+  });
+  svg.innerHTML = html;
+}
+
+function resetTech(){
+  techAnswers.fill(-1); techSubmitted.fill(false); techCurrent=0;
+  document.getElementById('techArea').className='';
+  document.getElementById('techBtnRow').className='btn-row';
+  document.getElementById('techProgress').className='progress-text';
+  document.querySelector('#sec3 .progress-bar').id='temp';document.querySelector('#sec3 .progress-bar').id='';// keep visible
+  document.querySelector('#sec3 .progress-bar').style.display='';
+  document.getElementById('techResultPage').className='result-page';
+  renderTech();
+}
+
+
+// ===================== SECTION 5: RED-BLUE ROLE PLAY =====================
+const rpScenarios = [
+  {
+    rounds:[
+      {
+        clientMsg:'「你们这批货的色差也太离谱了吧！我拿着布对着灯光一看，两边颜色都不一样！你们是怎么做品质管控的？！我要求这批货打七折！」',
+        options:[
+          { text:'好的，打七折就打七折，您消消气。', satChange:-5, cost:3500, feedback:'❌ 直接认赔！这是最低效的做法。', best:false },
+          { text:'张经理我理解您的着急。色差问题我们马上处理——我让人把所有布卷的编号列出来，24小时给您逐卷分析报告。在结果出来之前，我们先看看能不能挑出问题卷单独处理，不影响整批使用。', satChange:+15, cost:0, feedback:'✅ 很好！共情+给确定性+转移焦点，没有提到赔钱。', best:true },
+          { text:'这不是我们的问题，你们的灯光有问题。', satChange:-20, cost:0, feedback:'❌ 辩解只会激化矛盾！', best:false },
+          { text:'打折的事我做不了主，得请示老板。', satChange:-10, cost:0, feedback:'❌ "请示老板"显得你没决策权。', best:false },
+        ]
+      },
+      {
+        clientMsg:'我不想听什么报告！我现在就要一个明确的答复！我的生产线等着用料呢！你们耽误我一天就是几十万的损失！',
+        options:[
+          { text:'那我赔您停工损失费。', satChange:+10, cost:50000, feedback:'❌ 天价赔偿！绝对不行。', best:false },
+          { text:'我完全明白时间的紧迫性。这样——我立刻从惠州仓库调拨1000米同类面料，今天下午货车送到您工厂，费用我们出。您先恢复生产，这批货的问题我们并行处理。', satChange:+20, cost:200, feedback:'✅ 完美！用低成本应急方案替代高额赔偿。', best:true },
+          { text:'物流延误是不可抗力，我们也控制不了。', satChange:-15, cost:0, feedback:'❌ 找借口是最差的选择。', best:false },
+          { text:'要不这样，我给您下个订单打个九折补偿一下？', satChange:+5, cost:2000, feedback:'⚠️ 有进步但还是花钱。可以做得更好。', best:false },
+        ]
+      },
+      {
+        clientMsg:'……算了算了，你们先送应急面料过来吧。但我丑话说在前头，如果这批货还是有问题，我可不会就这么算了！',
+        options:[
+          { text:'好的好的，您放心吧。', satChange:0, cost:0, feedback:'😐 过于被动。', best:false },
+          { text:'一定不会让您失望！这批应急货到了之后我亲自到场验收。后续正货我也全程跟踪，每天向您汇报进度。对了张经理，下次您有什么新需求也可以优先告诉我，我给您安排插单。', satChange:+15, cost:0, feedback:'✅ 加固关系！把投诉转化为更深度的合作关系。', best:true },
+          { text:'那行，有事再联系。', satChange:0, cost:0, feedback:'😐 浪费了一个加固关系的好机会。', best:false },
+          { text:'以后我们会注意的，不好意思啊。', satChange:+3, cost:0, feedback:'⚠️ 太弱了。', best:false },
+        ]
+      }
+    ]
+  },
+  {
+    rounds:[
+      {
+        clientMsg:「大董！你们越南工厂的货怎么说上个月底到的？现在都10号了！你知道我这边裁剪车间停了多久吗？我告诉你，今天不给我一个满意的说法，我就把尾款扣了不付了！',
+        options:[
+          { text:'好好好，尾款您可以先扣一部分。', satChange:+5, cost:15000, feedback:'❌ 承认扣款等于默认你有重大过失！', best:false },
+          { text:'陈总，尾款的事我们稍后再谈。当务之急是让您尽快恢复生产——我刚确认了，货已经在清关，预计后天到达。今天下午我安排惠州仓库送500米同类面料应急，运费我们来出。', satChange:+12, cost:150, feedback:'✅ 好！先解决生产问题，避开尾款争论。', best:true },
+          { text:'清关 delays 我们也控制不了啊。', satChange:-18, cost:0, feedback:'❌ 客户不在乎原因，只在乎结果。', best:false },
+          { text:'合同上写了不可抗力条款的。', satChange:-15, cost:0, feedback:'❌ 搬合同压客户是关系杀手。', best:false },
+        ]
+      },
+      {
+        clientMsg:'后天？后天黄花菜都凉了！我跟你讲，这次的停工损失你们必须赔！少说也要两万美金！',
+        options:[
+          { text:'两万...能不能商量一下一万五？', satChange:+5, cost:15000, feedback:'❌ 还是在砍价赔钱！方向错了。', best:false },
+          { text:'陈总，两万美金的损失我理解。但在确定责任之前，我想先做一件事——我人后天到港后第一时间送货上门，同时带上完整的物流时间链证明。如果确实是我方延误导致的，合理的损失我们不会推脱；但如果中间有第三方因素，我们也需要公平对待。最重要的是，先让您的车间动起来。', satChange:+10, cost:0, feedback:'✅ 不拒绝承担责任，但不盲目接受天价索赔。', best:true },
+          { text:'不可能的，两万美金太多了。', satChange:-10, cost:0, feedback:'❌ 直接拒绝太生硬。', best:false },
+          { text:'我向公司申请一下看看。', satChange:-5, cost:0, feedback:'⚠️ 又是"请示"...', best:false },
+        ]
+      },
+      {
+        clientMsg:'行了行了，你人来就行了。但这事儿没完啊！',
+        options:[
+          { text:'嗯嗯，好的。', satChange:-2, cost:0, feedback:'😐 太敷衍。', best:false },
+          { text:'肯定没完——我会一直跟进到您满意为止。对了陈总，这次延误暴露了我们物流环节的一些短板，我已经在推动优化了。作为补偿，下一单给您开通绿色通道，排期优先权+延长15天账期。希望能弥补这次的困扰。', satChange:+18, cost:0, feedback:'✅ 把危机变成展示服务升级的机会！', best:true },
+          { text:'下次不会再发生了。', satChange:+3, cost:0, feedback:'⚠️ 空头承诺。', best:false },
+        ]
+      }
+    ]
+  },
+  {
+    rounds:[
+      {
+        clientMsg:「大董，我真是服了你们利兴了！你们送的这批模杯布，手感跟我之前确认的手版样完全不一样！我们在行业群里都说了这件事了，你们让我的脸往哪搁？！我要退货！全额退款！不然我曝光你们！」',
+        options:[
+          { text:'别别别！千万别曝光！我给您全额退款！', satChange:+5, cost:25000, feedback:'❌ 被威胁就屈服，以后每次都会被威胁。', best:false },
+          { text:'李总，我听到了您的不满，也非常抱歉让您在同行面前为难。关于手感差异，我想明天上午带着原始手版样和这批货的留样，到您工厂当面做对比测试。如果是我们的问题，无条件退换；如果有调整空间，我派技术员现场帮您调工艺。在群里这边，我先做个诚恳的回应表明态度，然后我们转到线下详细沟通，您看如何？', satChange:+10, cost:0, feedback:'✅ 既维护面子又解决问题，还没花一分钱。', best:true },
+          { text:'手感这种主观感受每个人不一样的。', satChange:-25, cost:0, feedback:'❌ 否定客户的感受是自杀行为。', best:false },
+          { text:'群里的事我们先不管，私下解决吧。', satChange:-8, cost:0, feedback:'⚠️ 公开场合不回应会更糟糕。', best:false },
+        ]
+      },
+      {
+        clientMsg：「我不管！我现在就要一个痛快话！退不退？!',
+        options:[
+          { text:'退！马上退！', satChange:+8, cost:25000, feedback:'❌ 又是被情绪绑架。', best:false },
+          { text:'李总，我可以给您一个痛快话——但不是"退"或"不退"，而是"怎么解决"。我明天上午10点到您工厂，带齐所有样品和数据。给我半天时间，如果您还不满意，那时候再谈退款的事，我绝不含糊。但现在直接退款，对双方都是最大的损失——您要重新找供应商打样开模至少一个月，我这里也是实打实的成本。给我们彼此一个机会，就半天。', satChange:+12, cost:0, feedback:'✅ 用时间和专业度换取谈判空间。', best:true },
+          { text:'那您先冷静一下。', satChange:-20, cost:0, feedback:'❌ "你冷静一下"是火上浇油。', best:false },
+        ]
+      },
+      {
+        clientMsg:'……好吧，你明天上午来。但我丑话说前面，如果到时候你给我的方案我不满意，我可不客气了。',
+        options:[
+          { text:'好的好的，我一定让您满意。', satChange:+2, cost:0, feedback:'😐 空头承诺太多反而不可信。', best:false },
+          { text:'应该的。李总，明天见面的时候我也会带一份专门为您准备的新季度样品册和一些越南特色小小心意。这次让您操心是我的失职。另外——以后您的任何订单我都会设为VIP优先级，有新款出来第一个寄给您。希望用实际行动重建您的信任。', satChange:+20, cost:50, feedback:'✅ 专业+情感双重加固，几乎零成本。', best:false },
+        ]
+      }
+    ]
+  }
+];
+
+let rpDifficulty = 0;
+let rpRound = 0;
+let rpSat = 30;
+let rpTotalCost = 0;
+
+function setDifficulty(d,el){
+  rpDifficulty=d;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startRP(){
+  rpRound=0; rpSat=30; rpTotalCost=0;
+  document.getElementById('rpStartArea').className='hidden';
+  document.getElementById('rpGameArea').className='';
+  document.getElementById('rpResultPage').className='result-page';
+  renderRPRound();
+}
+
+function renderRPRound(){
+  const scen = rpScenarios[rpDifficulty];
+  const round = scen.rounds[rpRound];
+  rpRound++;
+  document.getElementById('rpRoundIndicator').textContent=`第 ${rpRound} 轮 / 共 ${scen.rounds.length} 轮`;
+
+  updateSatUI();
+
+  // client message
+  const dialog = document.getElementById('rpDialog');
+  dialog.innerHTML = `<div class="rp-bubble client"><div class="bubble-label">🔴 愤怒的客户</div>${round.clientMsg}</div>`;
+
+  // options
+  const opts = document.getElementById('rpOptions');
+  opts.innerHTML = round.options.map((o,i)=>`
+    <div class="option" onclick="selectRPOpt(${i})">
+      <div class="radio"></div>
+      <div class="text">${o.text}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('rpFeedback').className='explanation';
+}
+
+function selectRPOpt(idx){
+  const round = rpScenarios[rpDifficulty].rounds[rpRound-1];
+  const opt = round.options[idx];
+  rpSat = Math.max(0, Math.min(100, rpSat + opt.satChange));
+  rpTotalCost += opt.cost;
+
+  // show manager response
+  const dialog = document.getElementById('rpDialog');
+  dialog.innerHTML += `<div class="rp-bubble manager"><div class="bubble-label">🔵 你的回应</div>${opt.text}</div>`;
+
+  updateSatUI();
+
+  // disable options
+  document.querySelectorAll('#rpOptions .option').forEach(o=>o.style.pointerEvents='none');
+  document.querySelectorAll('#rpOptions .option')[idx].classList.add('selected');
+
+  // feedback
+  const fb = document.getElementById('rpFeedback');
+  fb.innerHTML = `<h4>${opt.best?'👍':'💡'} ${opt.feedback}</h4>
+    <p>满意度变化：<strong style="color:${opt.satChange>=0?'#27AE60':'#E74C3C'}">${opt.satChange>=0?'+':''}${opt.satChange}%</strong>
+    | 本次成本：<strong style="color:${opt.cost>0?'#E74C3C':'#27AE60'}">$${opt.cost.toLocaleString()}</strong></p>`;
+  fb.className='explanation show';
+
+  // change button
+  const btnRow = document.getElementById('rpBtnRowRP') || (()=>{
+    const div=document.createElement('div');div.id='rpBtnRowRP';div.className='btn-row';
+    document.getElementById('rpGameArea').appendChild(div); return div;
+  })();
+  if(rpRound >= rpScenarios[rpDifficulty].rounds.length){
+    btnRow.innerHTML=`<button class="btn btn-primary" onclick="showRPResult()">查看对抗结果</button>`;
+  } else {
+    btnRow.innerHTML=`<button class="btn btn-primary" onclick="renderRPRound()">进入下一轮</button>`;
+  }
+}
+
+function updateSatUI(){
+  document.getElementById('satValue').textContent=rpSat+'%';
+  const fill = document.getElementById('satFill');
+  fill.style.width=rpSat+'%';
+  fill.textContent=rpSat+'%';
+  fill.className='sat-fill '+(rpSat>=70?'high':rpSat>=40?'mid':'low');
+}
+
+function showRPResult(){
+  document.getElementById('rpGameArea').className='hidden';
+  document.getElementById('rpResultPage').className='result-page show';
+  document.getElementById('rpSavedNum').textContent='$'+Math.max(0,50000-rpTotalCost).toLocaleString();
+  const rating = rpSat>=70&&rpTotalCost<500?'🏆 投诉处理大师':rpSat>=50&&rpTotalCost<5000?'🥈 合格的销售经理':'🥉 还需修炼';
+  document.getElementById('rpRatingText').textContent=rating;
+  document.getElementById('rpDetail').innerHTML=`
+    <div class="result-item"><span>📊 最终客户满意度</span><span><strong>${rpSat}%</strong></span></div>
+    <div class="result-item"><span>💰 直接赔偿支出</span><span><strong style="color:${rpTotalCost>0?'#E74C3C':'#27AE60'}">$${rpTotalCost.toLocaleString()}</strong></span></div>
+    <div class="result-item"><span>🛡️ 为公司节省</span><span><strong style="color:#27AE60">$${Math.max(0,50000-rpTotalCost).toLocaleString()}</strong></span></div>
+    <div class="result-item"><span>⭐ 对抗难度</span><span>${['⭐简单','⭐⭐中等','⭐⭐⭐困难'][rpDifficulty]}</span></div>
+  `;
+}
+
+function resetRP(){
+  document.getElementById('rpStartArea').className='';
+  document.getElementById('rpGameArea').className='hidden';
+  document.getElementById('rpResultPage').className='result-page';
+  const b=document.getElementById('rpBtnRowRP');if(b)b.remove();
+  rpSat=30;rpRound=0;rpTotalCost=0;
+}
+
+</script>
+</body>
+</html>
