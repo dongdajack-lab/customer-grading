@@ -176,16 +176,42 @@
         }
 
         .api-config {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
         }
 
         .api-config h3 {
-            color: #856404;
+            color: #2e7d32;
             margin-bottom: 10px;
+        }
+
+        .api-tips {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .api-tips h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+
+        .api-tips ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .api-tips code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
         }
 
         .btn-copy {
@@ -231,10 +257,10 @@
                 <h2>📋 客户画像（6维度）</h2>
                 
                 <div class="api-config">
-                    <h3>⚙️ AI模型配置</h3>
+                    <h3>⚙️ AI模型配置（默认：DeepSeek（国内最划算））</h3>
                     <div class="form-group">
                         <label>API地址（OpenAI兼容格式）</label>
-                        <input type="text" id="apiUrl" value="https://api.openai.com/v1/chat/completions" placeholder="例如：https://api.openai.com/v1/chat/completions">
+                        <input type="text" id="apiUrl" value="https://api.deepseek.com/chat/completions" placeholder="例如：https://api.deepseek.com/chat/completions">
                     </div>
                     <div class="form-group">
                         <label>API密钥（请输入您自己的Key）</label>
@@ -243,14 +269,26 @@
                     <div class="form-group">
                         <label>选择模型</label>
                         <select id="model">
+                            <option value="deepseek-chat" selected>DeepSeek Chat（推荐·便宜）</option>
+                            <option value="deepseek-reasoner">DeepSeek Reasoner（推理模型）</option>
                             <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                             <option value="gpt-4">GPT-4</option>
                             <option value="gpt-4-turbo">GPT-4 Turbo</option>
                             <option value="qwen-turbo">通义千问 Turbo</option>
                             <option value="qwen-plus">通义千问 Plus</option>
-                            <option value="deepseek-chat">DeepSeek Chat</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="api-tips">
+                    <h3>💰 如何获取免费/低价API密钥？</h3>
+                    <ol>
+                        <li><strong>DeepSeek（最推荐）</strong>：访问 <code>https://platform.deepseek.com/</code> 注册，新用户送500万tokens（约价值10-50元）</li>
+                        <li><strong>通义千问</strong>：访问 <code>https://dashscope.aliyun.com/</code> 开通，新用户有免费额度</li>
+                        <li><strong>文心一言</strong>：访问 <code>https://cloud.baidu.com/product/wenxinworkshop</code> 申请，有免费调用次数</li>
+                        <li><strong>讯飞星火</strong>：访问 <code>https://xinghuo.xfyun.cn/</code> 申请免费版本</li>
+                    </ol>
+                    <p style="margin-top: 10px; color: #e65100;"><strong>💡 提示：</strong>DeepSeek是目前国内最便宜的选择，1元可以调用约100万tokens（相当于75万字）</p>
                 </div>
 
                 <div class="form-group">
