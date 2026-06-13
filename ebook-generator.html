@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高转化电子资料生成器 - 大董销售体系</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-generate:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            display: none;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .step-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .step-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .step-card .content {
+            color: #333;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .api-config {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .api-config h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .btn-copy {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+
+        .btn-copy:hover {
+            background: #218838;
+        }
+
+        .btn-download {
+            padding: 10px 20px;
+            background: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-download:hover {
+            background: #138496;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 高转化电子资料生成器</h1>
+            <p>基于天地人销售体系 · 5步法自动生成高转化方案</p>
+        </div>
+
+        <div class="main-content">
+            <!-- 左侧：输入表单 -->
+            <div class="card">
+                <h2>📋 客户画像（6维度）</h2>
+                
+                <div class="api-config">
+                    <h3>⚙️ AI模型配置</h3>
+                    <div class="form-group">
+                        <label>API地址（OpenAI兼容格式）</label>
+                        <input type="text" id="apiUrl" value="https://api.openai.com/v1/chat/completions" placeholder="例如：https://api.openai.com/v1/chat/completions">
+                    </div>
+                    <div class="form-group">
+                        <label>API密钥（请输入您自己的Key）</label>
+                        <input type="password" id="apiKey" placeholder="sk-...">
+                    </div>
+                    <div class="form-group">
+                        <label>选择模型</label>
+                        <select id="model">
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="qwen-turbo">通义千问 Turbo</option>
+                            <option value="qwen-plus">通义千问 Plus</option>
+                            <option value="deepseek-chat">DeepSeek Chat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>1️⃣ 行业/领域</label>
+                    <input type="text" id="industry" placeholder="例如：企业培训、SaaS软件、咨询服务">
+                </div>
+
+                <div class="form-group">
+                    <label>2️⃣ 企业规模/阶段</label>
+                    <select id="companyStage">
+                        <option value="">请选择</option>
+                        <option value="初创期（0-20人）">初创期（0-20人）</option>
+                        <option value="成长期（20-100人）">成长期（20-100人）</option>
+                        <option value="扩张期（100-500人）">扩张期（100-500人）</option>
+                        <option value="成熟期（500人以上）">成熟期（500人以上）</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>3️⃣ 决策人职位</label>
+                    <input type="text" id="decisionMaker" placeholder="例如：老板、总经理、采购总监">
+                </div>
+
+                <div class="form-group">
+                    <label>4️⃣ 核心痛点</label>
+                    <textarea id="painPoint" placeholder="描述客户最迫切需要解决的问题..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>5️⃣ 购买决策方式</label>
+                    <select id="decisionType">
+                        <option value="">请选择</option>
+                        <option value="单人决策">单人决策</option>
+                        <option value="多人决策（需要上级审批）">多人决策（需要上级审批）</option>
+                        <option value="委员会决策">委员会决策</option>
+                        <option value="招标采购">招标采购</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>6️⃣ 消费能力和频次</label>
+                    <input type="text" id="budget" placeholder="例如：客单价5-10万，年采购2-3次">
+                </div>
+
+                <button class="btn-generate" onclick="generateContent()">✨ 一键生成高转化方案</button>
+            </div>
+
+            <!-- 右侧：结果展示 -->
+            <div class="card">
+                <h2>📊 生成结果（5步法）</h2>
+                
+                <div id="loading" class="loading" style="display: none;">AI正在生成方案，请稍候</div>
+                
+                <div id="result" class="result-section">
+                    <div class="step-card">
+                        <h3>1️⃣ 选痛点</h3>
+                        <div class="content" id="step1"></div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3>2️⃣ 定标题</h3>
+                        <div class="content" id="step2"></div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3>3️⃣ 写内容</h3>
+                        <div class="content" id="step3"></div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3>4️⃣ 做排版</h3>
+                        <div class="content" id="step4"></div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3>5️⃣ 放钩子</h3>
+                        <div class="content" id="step5"></div>
+                    </div>
+
+                    <button class="btn-copy" onclick="copyResult()">📋 复制全部内容</button>
+                    <button class="btn-download" onclick="downloadResult()">💾 下载为文本</button>
+                </div>
+
+                <div id="emptyState" style="text-align: center; padding: 40px; color: #999;">
+                    <p style="font-size: 3em; margin-bottom: 20px;">📝</p>
+                    <p>填写左侧表单，点击"一键生成"按钮</p>
+                    <p>AI将自动生成完整的高转化方案</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function generateContent() {
+            // 获取表单数据
+            const industry = document.getElementById('industry').value;
+            const companyStage = document.getElementById('companyStage').value;
+            const decisionMaker = document.getElementById('decisionMaker').value;
+            const painPoint = document.getElementById('painPoint').value;
+            const decisionType = document.getElementById('decisionType').value;
+            const budget = document.getElementById('budget').value;
+
+            // 验证必填项
+            if (!industry || !painPoint || !decisionMaker) {
+                alert('请填写完整的客户画像信息（行业、决策人、痛点至少为必填项）');
+                return;
+            }
+
+            // 获取API配置
+            const apiUrl = document.getElementById('apiUrl').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const model = document.getElementById('model').value;
+
+            if (!apiKey) {
+                alert('请输入API密钥（API Key）');
+                return;
+            }
+
+            // 显示加载状态
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('emptyState').style.display = 'none';
+
+            // 构建Prompt
+            const userProfile = `
+行业/领域：${industry}
+企业规模/阶段：${companyStage}
+决策人职位：${decisionMaker}
+核心痛点：${painPoint}
+购买决策方式：${decisionType}
+消费能力和频次：${budget}
+            `.trim();
+
+            const systemPrompt = `你是一位顶尖的营销文案专家，擅长制作高转化的电子资料和白皮书。
+请根据用户提供的客户画像，按照"5步法"生成一份完整的高转化电子资料方案。
+
+5步法包括：
+1️⃣ 选痛点：从客户画像中提炼最关键的1个痛点，用一句话描述
+2️⃣ 定标题：基于痛点，生成3-5个吸引人的标题（包含痛点+解决方案+紧迫感）
+3️⃣ 写内容：设计3-5页的内容框架，包括每页的小标题、核心观点、案例提示
+4️⃣ 做排版：给出具体的排版建议（图文配比、重点标注、视觉层次等）
+5️⃣ 放钩子：设计3个转化话术，引导读者添加微信/私信咨询
+
+输出格式要求：
+- 每个步骤单独输出
+- 内容要具体、可操作
+- 语言要吸引人、有说服力
+- 符合B2B销售的专业风格`;
+
+            const userPrompt = `请根据以下客户画像，生成高转化电子资料方案：
+
+${userProfile}
+
+请严格按照5步法输出，每个步骤的内容要详细、具体、可操作。`;
+
+            try {
+                // 调用AI API
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            { role: 'user', content: userPrompt }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 2000
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API调用失败：${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const result = data.choices[0].message.content;
+
+                // 解析结果并显示
+                displayResult(result);
+
+            } catch (error) {
+                alert('生成失败：' + error.message);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+            }
+        }
+
+        function displayResult(result) {
+            // 隐藏加载状态
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('result').classList.add('active');
+
+            // 尝试解析5步法的内容
+            // 简单的内容分割逻辑
+            const steps = result.split(/(?=1️⃣|2️⃣|3️⃣|4️⃣|5️⃣)/);
+            
+            if (steps.length >= 5) {
+                document.getElementById('step1').textContent = steps[1] || '生成失败';
+                document.getElementById('step2').textContent = steps[2] || '生成失败';
+                document.getElementById('step3').textContent = steps[3] || '生成失败';
+                document.getElementById('step4').textContent = steps[4] || '生成失败';
+                document.getElementById('step5').textContent = steps[5] || '生成失败';
+            } else {
+                // 如果分割失败，显示全部内容
+                document.getElementById('step1').textContent = result;
+                document.getElementById('step2').textContent = '';
+                document.getElementById('step3').textContent = '';
+                document.getElementById('step4').textContent = '';
+                document.getElementById('step5').textContent = '';
+            }
+        }
+
+        function copyResult() {
+            const resultText = document.getElementById('result').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert('✅ 已复制到剪贴板！');
+            });
+        }
+
+        function downloadResult() {
+            const resultText = document.getElementById('result').innerText;
+            const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `高转化方案_${new Date().getTime()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
