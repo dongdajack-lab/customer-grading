@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>客户拜访管理 | 天地人销售体系</title>
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+            --radius: 12px;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-sub {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .nav-item {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+        }
+        .nav-item.active {
+            color: var(--primary);
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 0 0 3px 3px;
+        }
+        .nav-item {
+            position: relative;
+        }
+        .nav-icon {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+        
+        /* 页面 */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        
+        /* 客户选择页 */
+        .customer-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid var(--primary);
+        }
+        .customer-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .customer-card .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        .customer-card .info {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        .customer-card .visit-count {
+            float: right;
+            background: var(--gray-100);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--gray-700);
+        }
+        
+        /* 新建客户按钮 */
+        .btn-add-customer {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: 2px dashed var(--primary);
+            border-radius: var(--radius);
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-add-customer:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* 模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: flex-end;
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal {
+            background: white;
+            width: 100%;
+            max-height: 90vh;
+            border-radius: 20px 20px 0 0;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 表单元素 */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-select {
+            appearance: none;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center;
+            padding-right: 36px;
+        }
+        
+        /* 按钮 */
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+        .btn-block {
+            width: 100%;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* 阶段卡片 */
+        .stage-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+        .stage-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .stage-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .stage-icon.before { background: #DBEAFE; }
+        .stage-icon.during { background: #FEF3C7; }
+        .stage-icon.after { background: #D1FAE5; }
+        .stage-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .stage-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        .stage-status {
+            margin-left: auto;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .stage-status.done { background: #D1FAE5; color: #059669; }
+        .stage-status.doing { background: #FEF3C7; color: #D97706; }
+        .stage-status.pending { background: var(--gray-100); color: var(--gray-500); }
+        
+        /* 准备清单 */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        .checklist-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            margin-top: 2px;
+        }
+        .checklist-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .checklist-content {
+            flex: 1;
+        }
+        .checklist-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+        .checklist-hint {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        .checklist-input {
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 13px;
+            display: none;
+        }
+        .checklist-item.expanded .checklist-input {
+            display: block;
+        }
+        
+        /* 准备度评分 */
+        .score-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #3B82F6 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+        .score-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .score-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .score-tips {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+        .score-tips.warning {
+            background: rgba(245, 158, 11, 0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        
+        /* 关键动作 */
+        .action-item {
+            background: var(--gray-50);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .action-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .action-number {
+            width: 26px;
+            height: 26px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .action-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* 复盘表单 */
+        .review-section {
+            margin-bottom: 20px;
+        }
+        .review-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .review-section-title .step {
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .tag {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid var(--gray-300);
+            background: white;
+            transition: all 0.2s;
+        }
+        .tag.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .tag.keep { border-color: var(--success); color: var(--success); }
+        .tag.keep.selected { background: var(--success); color: white; }
+        .tag.improve { border-color: var(--warning); color: var(--warning); }
+        .tag.improve.selected { background: var(--warning); color: white; }
+        .tag.start { border-color: #8B5CF6; color: #8B5CF6; }
+        .tag.start.selected { background: #8B5CF6; color: white; }
+        .tag.stop { border-color: var(--danger); color: var(--danger); }
+        .tag.stop.selected { background: var(--danger); color: white; }
+        
+        /* 行动清单 */
+        .action-list {
+            background: #FEF9C3;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 16px;
+        }
+        .action-list-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #92400E;
+            margin-bottom: 10px;
+        }
+        .action-item-list {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #FCD34D;
+            font-size: 13px;
+        }
+        .action-item-list:last-child {
+            border-bottom: none;
+        }
+        .action-item-list .type-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .action-item-list .type-keep { background: #D1FAE5; color: #059669; }
+        .action-item-list .type-improve { background: #FEF3C7; color: #D97706; }
+        .action-item-list .type-start { background: #EDE9FE; color: #7C3AED; }
+        .action-item-list .type-stop { background: #FEE2E2; color: #DC2626; }
+        
+        /* 客户详情页 */
+        .customer-header {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+        .customer-header .name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .customer-header .meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--gray-500);
+            flex-wrap: wrap;
+        }
+        .customer-header .level-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .level-A { background: #FEE2E2; color: #DC2626; }
+        .level-B { background: #FEF3C7; color: #D97706; }
+        .level-C { background: #DBEAFE; color: #2563EB; }
+        .level-D { background: var(--gray-100); color: var(--gray-500); }
+        
+        /* 历史拜访 */
+        .visit-record {
+            background: white;
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+        .visit-record:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        .visit-record .date {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+        .visit-record .title {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 4px 0;
+        }
+        .visit-record .summary {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--gray-900);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 300;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-500);
+        }
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .empty-state .text {
+            font-size: 14px;
+        }
+        
+        /* 隐藏类 */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <h1>📋 客户拜访管理</h1>
+        <div class="header-sub">天地人销售体系 · 拜访前中后全流程管控</div>
+    </div>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <!-- 客户列表页 -->
+        <div id="page-customers" class="page active">
+            <div id="customer-list"></div>
+            <button class="btn-add-customer" onclick="openNewCustomerModal()">
+                <span>➕</span> 新建客户拜访
+            </button>
+        </div>
+        
+        <!-- 拜访详情页 -->
+        <div id="page-visit-detail" class="page">
+            <div id="visit-detail-content"></div>
+        </div>
+        
+        <!-- 拜访前页 -->
+        <div id="page-before" class="page">
+            <div id="before-content"></div>
+        </div>
+        
+        <!-- 拜访中页 -->
+        <div id="page-during" class="page">
+            <div id="during-content"></div>
+        </div>
+        
+        <!-- 拜访后页 -->
+        <div id="page-after" class="page">
+            <div id="after-content"></div>
+        </div>
+    </div>
+    
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('customers')">
+            <span class="nav-icon">🏠</span>
+            客户列表
+        </button>
+        <button class="nav-item" onclick="switchTab('before')" id="nav-before">
+            <span class="nav-icon">📝</span>
+            拜访前
+        </button>
+        <button class="nav-item" onclick="switchTab('during')" id="nav-during">
+            <span class="nav-icon">🤝</span>
+            拜访中
+        </button>
+        <button class="nav-item" onclick="switchTab('after')" id="nav-after">
+            <span class="nav-icon">📊</span>
+            拜访后
+        </button>
+    </div>
+    
+    <!-- 新建客户模态框 -->
+    <div class="modal-overlay" id="modal-new-customer">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">新建客户拜访</span>
+                <button class="modal-close" onclick="closeModal('modal-new-customer')">✕</button>
+            </div>
+            <form id="form-new-customer">
+                <div class="form-group">
+                    <label class="form-label">客户名称 *</label>
+                    <input type="text" class="form-input" id="customer-name" placeholder="请输入客户公司名称" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">客户行业</label>
+                    <select class="form-input form-select" id="customer-type">
+                        <option value="manufacturing">🏭 制造业</option>
+                        <option value="tech">💻 科技/互联网</option>
+                        <option value="finance">🏦 金融/保险</option>
+                        <option value="medical">🏥 医疗/医药</option>
+                        <option value="education">🎓 教育/培训</option>
+                        <option value="realestate">🏗️ 房产/建筑</option>
+                        <option value="retail">🛒 零售/消费品</option>
+                        <option value="service">🔧 专业服务</option>
+                        <option value="energy">⚡ 能源/环保</option>
+                        <option value="logistics">🚚 物流/供应链</option>
+                        <option value="government">🏛️ 政府/公共事业</option>
+                        <option value="other">📦 其他行业</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">客户分级</label>
+                    <select class="form-input form-select" id="customer-grade">
+                        <option value="A">A级 - 重点客户</option>
+                        <option value="B">B级 - 潜力客户</option>
+                        <option value="C" selected>C级 - 普通客户</option>
+                        <option value="D">D级 - 观望客户</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">新老客户</label>
+                    <select class="form-input form-select" id="customer-is-new">
+                        <option value="true" selected>新客户（首次接触）</option>
+                        <option value="false">老客户（已有合作基础）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">联系人</label>
+                    <input type="text" class="form-input" id="customer-contact" placeholder="请输入联系人姓名">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">职位</label>
+                    <input type="text" class="form-input" id="customer-position" placeholder="如：采购经理、技术总监、CEO">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">拜访目的 *</label>
+                    <textarea class="form-input form-textarea" id="visit-purpose" placeholder="本次拜访的主要目标是什么？" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">预约时间</label>
+                    <input type="datetime-local" class="form-input" id="visit-datetime">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">创建拜访计划</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        // ==================== 数据存储 ====================
+        const STORAGE_KEY = 'visit-management-data';
+        
+        function getData() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : { visits: [] };
+        }
+        
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+        
+        // 生成唯一ID
+        function genId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        
+        // ==================== 全局状态 ====================
+        let currentVisit = null;
+        
+        // ==================== 拜访前清单配置（通用版） ====================
+        const PREP_ITEMS = [
+            {
+                id: 'appearance',
+                title: '形象礼仪',
+                hint: '仪容仪表、穿着得体、商务礼仪',
+                detail: '参照公司销售人员形象标准检查：着装、发型、个人卫生、名片准备'
+            },
+            {
+                id: 'tools',
+                title: '销售工具',
+                hint: '产品手册、公司介绍、案例集等',
+                detail: '产品手册/画册、公司介绍PPT、成功案例集、名片、笔、笔记本'
+            },
+            {
+                id: 'demo',
+                title: '演示/样品准备',
+                hint: '产品样品、演示设备、测试报告、资质证书',
+                detail: '根据行业准备：产品样品/Demo账号、测试报告、认证证书、客户见证材料',
+                expandable: true
+            },
+            {
+                id: 'background',
+                title: '客户背景信息',
+                hint: '公司情况、决策链、痛点需求、个人信息',
+                detail: '《企业信息表》：公司规模/组织架构/决策链/合作历史\n《客户个人信息表》：年龄、生日、籍贯、家庭、兴趣爱好、行事风格',
+                critical: true
+            },
+            {
+                id: 'purpose',
+                title: '明确拜访目的',
+                hint: '本次拜访要达成的具体目标',
+                detail: '介绍产品优势 → 提供选择理由 → 表达服务诚意 → 留下深刻印象 → 建立合作意向'
+            },
+            {
+                id: 'opening',
+                title: '开场白准备（PPP）',
+                hint: 'Purpose目的、Process过程、Payoff利益',
+                detail: '准备开场白话术：寒暄 → 目的 → 价值（我能为你带来什么）'
+            },
+            {
+                id: 'topics',
+                title: '有价值的话题',
+                hint: '客户岗位相关的痛点或爽点',
+                detail: '痛苦链话题库：老板（成本/增长）→ 采购（价格/账期）→ 技术（性能/兼容）→ 使用者（效率/体验）'
+            },
+            {
+                id: 'warmup',
+                title: '暖场话题',
+                hint: '行业新闻、客户动态、共同话题',
+                detail: '客户公司最新动态、行业政策变化、客户个人关注的话题'
+            },
+            {
+                id: 'knowledge',
+                title: '产品/行业知识',
+                hint: '产品卖点、竞品对比、行业趋势',
+                detail: '核心卖点FABE、与竞品的差异化优势、行业最新趋势和政策'
+            },
+            {
+                id: 'timing',
+                title: '拜访时间选择',
+                hint: '选择最佳拜访时间',
+                detail: '避开周一早会、周五下午、午休时间；选择客户相对空闲的时段'
+            },
+            {
+                id: 'appointment',
+                title: '预约确认',
+                hint: '提前确认时间地点、提醒客户',
+                detail: '提前预约、前一天或出发前再次确认、确认拜访地点和接待人'
+            }
+        ];
+        
+        // ==================== 拜访中关键动作配置（通用版） ====================
+        const DURING_ACTIONS = [
+            {
+                id: 'greeting',
+                title: '开场活动',
+                hint: '自我介绍、暖场、PPP开场',
+                items: ['自我介绍', '暖场寒暄', 'PPP开场（目的→过程→收益）']
+            },
+            {
+                id: 'observe',
+                title: '细心观察',
+                hint: '观察客户反应、捕捉需求信号',
+                items: ['公司环境、办公室陈设', '客户表情、眼神、音调变化', '客户反复提及的问题', '客户表现出兴趣的点']
+            },
+            {
+                id: 'listen',
+                title: '多听多问（30/70法则）',
+                hint: '30%时间说(以提问为主)，70%时间倾听',
+                items: ['使用SPIN挖痛提问', '现状问题 → 难点问题 → 暗示问题 → 需求效益满足问题']
+            },
+            {
+                id: 'commit',
+                title: '获取客户承诺',
+                hint: '明确下一步行动和承诺事项',
+                items: ['获取承诺：试用、报价、安排会面', '约定下一步：提交方案、产品演示', '确认决策时间节点']
+            },
+            {
+                id: 'summary',
+                title: '总结感谢（24小时法则）',
+                hint: '当场总结要点，24小时内发送感谢',
+                items: ['总结本次会谈要点', '确认双方共识', '24小时内发送感谢短信/邮件']
+            }
+        ];
+        
+        // ==================== UI渲染函数 ====================
+        
+        // 显示提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+        
+        // 切换标签页
+        function switchTab(tab) {
+            // 更新导航高亮
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const navMap = {
+                'customers': 0,
+                'before': 1,
+                'during': 2,
+                'after': 3
+            };
+            const navItems = document.querySelectorAll('.nav-item');
+            if (navMap[tab] !== undefined && navItems[navMap[tab]]) {
+                navItems[navMap[tab]].classList.add('active');
+            }
+            
+            // 切换页面
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            const pageMap = {
+                'customers': 'page-customers',
+                'before': 'page-before',
+                'during': 'page-during',
+                'after': 'page-after',
+                'visit-detail': 'page-visit-detail'
+            };
+            if (pageMap[tab]) {
+                document.getElementById(pageMap[tab]).classList.add('active');
+            }
+            
+            // 切换tab时渲染对应页面内容
+            if (tab === 'before') renderBeforePage();
+            if (tab === 'during') renderDuringPage();
+            if (tab === 'after') renderAfterPage();
+        }
+        
+        // 打开模态框
+        function openModal(id) {
+            document.getElementById(id).classList.add('show');
+        }
+        
+        // 关闭模态框
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+        
+        // 渲染客户列表
+        function renderCustomerList() {
+            const data = getData();
+            const container = document.getElementById('customer-list');
+            
+            if (data.visits.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📋</div>
+                        <div class="text">暂无拜访记录<br>点击下方按钮创建第一个拜访</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = data.visits.map(visit => {
+                const stageClass = visit.stage === 'completed' ? 'done' : 
+                                   visit.stage === 'during' ? 'doing' : 'pending';
+                const stageText = visit.stage === 'completed' ? '已完成' : 
+                                 visit.stage === 'during' ? '进行中' : '准备中';
+                const stageIcon = visit.stage === 'completed' ? '✅' : 
+                                 visit.stage === 'during' ? '🔄' : '📝';
+                
+                return `
+                    <div class="customer-card" onclick="openVisitDetail('${visit.id}')">
+                        <div class="name">${visit.customerName} <span class="visit-count">${stageIcon} ${stageText}</span></div>
+                        <div class="info">
+                            ${visit.customerType || ''} · ${visit.contact || ''} ${visit.position ? '· ' + visit.position : ''}
+                        </div>
+                        <div class="info" style="margin-top: 4px;">
+                            📅 ${visit.visitDate || '未设置时间'} | 🎯 ${visit.purpose ? visit.purpose.substring(0, 20) + '...' : '未填写目的'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 打开新建客户模态框
+        function openNewCustomerModal() {
+            document.getElementById('form-new-customer').reset();
+            openModal('modal-new-customer');
+        }
+        
+        // 创建新拜访
+        document.getElementById('form-new-customer').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('customer-name').value.trim();
+            const type = document.getElementById('customer-type').value;
+            const grade = document.getElementById('customer-grade').value;
+            const isNew = document.getElementById('customer-is-new').value === 'true';
+            const contact = document.getElementById('customer-contact').value.trim();
+            const position = document.getElementById('customer-position').value.trim();
+            const purpose = document.getElementById('visit-purpose').value.trim();
+            const datetime = document.getElementById('visit-datetime').value;
+            
+            if (!name || !purpose) {
+                showToast('请填写必填项');
+                return;
+            }
+            
+            const visit = {
+                id: genId(),
+                customerName: name,
+                customerType: type,
+                customerGrade: grade,
+                isNewCustomer: isNew,
+                contact: contact,
+                position: position,
+                visitDate: datetime,
+                purpose: purpose,
+                stage: 'preparing',
+                createdAt: new Date().toISOString(),
+                
+                // 拜访前数据
+                prep: {
+                    checklist: {},
+                    notes: ''
+                },
+                
+                // 拜访中数据
+                during: {
+                    actions: {},
+                    notes: '',
+                    commitment: '',
+                    nextVisit: '',
+                    summarySent: false
+                },
+                
+                // 拜访后数据
+                after: {
+                    goalAchieved: '',
+                    highlights: [],
+                    shortcomings: [],
+                    successFactors: [],
+                    successFactorsCustom: [],
+                    failureCauses: [],
+                    failureCausesCustom: [],
+                    keepDoing: [],
+                    improveDoing: [],
+                    startDoing: [],
+                    stopDoing: [],
+                    recordInfo: {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    }
+                }
+            };
+            
+            const data = getData();
+            data.visits.unshift(visit);
+            saveData(data);
+            
+            closeModal('modal-new-customer');
+            renderCustomerList();
+            showToast('拜访计划已创建！');
+            
+            // 自动打开拜访详情
+            openVisitDetail(visit.id);
+        });
+        
+        // 打开拜访详情
+        function openVisitDetail(visitId) {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === visitId);
+            if (!visit) return;
+            
+            currentVisit = visit;
+            
+            const container = document.getElementById('visit-detail-content');
+            
+            // 获取类型标签
+            const typeMap = {
+                'manufacturing': '🏭 制造业',
+                'tech': '💻 科技/互联网',
+                'finance': '🏦 金融/保险',
+                'medical': '🏥 医疗/医药',
+                'education': '🎓 教育/培训',
+                'realestate': '🏗️ 房产/建筑',
+                'retail': '🛒 零售/消费品',
+                'service': '🔧 专业服务',
+                'energy': '⚡ 能源/环保',
+                'logistics': '🚚 物流/供应链',
+                'government': '🏛️ 政府/公共事业',
+                'other': '📦 其他行业'
+            };
+            
+            // 获取阶段状态
+            const getStageStatus = (stage) => {
+                if (stage === 'completed') return '<span class="stage-status done">✅ 已完成</span>';
+                if (stage === 'during') return '<span class="stage-status doing">🔄 进行中</span>';
+                return '<span class="stage-status pending">📝 准备中</span>';
+            };
+            
+            container.innerHTML = `
+                <div class="customer-header">
+                    <div class="name">${visit.customerName}</div>
+                    <div class="meta">
+                        <span>${typeMap[visit.customerType] || '其他'}</span>
+                        <span>${visit.contact || ''} ${visit.position ? '· ' + visit.position : ''}</span>
+                    </div>
+                    <div class="meta" style="margin-top: 8px;">
+                        📅 ${visit.visitDate ? new Date(visit.visitDate).toLocaleString('zh-CN') : '时间待定'}
+                    </div>
+                </div>
+                
+                <div style="font-size: 13px; color: var(--gray-700); margin-bottom: 16px; padding: 12px; background: var(--gray-50); border-radius: 8px;">
+                    <strong>🎯 拜访目的：</strong>${visit.purpose}
+                </div>
+                
+                <div class="stage-card" onclick="goToBefore('${visit.id}')">
+                    <div class="stage-header">
+                        <div class="stage-icon before">📝</div>
+                        <div>
+                            <div class="stage-title">拜访前准备</div>
+                            <div class="stage-desc">11项准备清单检查</div>
+                        </div>
+                        ${visit.stage === 'preparing' || visit.stage === 'during' ? getStageStatus('preparing') : ''}
+                    </div>
+                    <div style="font-size: 13px; color: var(--gray-500);">
+                        ${visit.prep && Object.keys(visit.prep.checklist).length > 0 ? 
+                            `已完成 ${Object.values(visit.prep.checklist).filter(v => v).length}/11 项准备` : 
+                            '点击开始准备'}
+                    </div>
+                </div>
+                
+                <div class="stage-card" onclick="goToDuring('${visit.id}')">
+                    <div class="stage-header">
+                        <div class="stage-icon during">🤝</div>
+                        <div>
+                            <div class="stage-title">拜访中执行</div>
+                            <div class="stage-desc">关键动作确认 + 会谈记录</div>
+                        </div>
+                        ${visit.stage === 'during' ? getStageStatus('during') : ''}
+                    </div>
+                    <div style="font-size: 13px; color: var(--gray-500);">
+                        ${visit.during && visit.during.actions && Object.keys(visit.during.actions).length > 0 ? 
+                            `已完成 ${Object.values(visit.during.actions).filter(v => v).length}/5 项关键动作` : 
+                            '点击开始执行'}
+                    </div>
+                </div>
+                
+                <div class="stage-card" onclick="goToAfter('${visit.id}')">
+                    <div class="stage-header">
+                        <div class="stage-icon after">📊</div>
+                        <div>
+                            <div class="stage-title">拜访后复盘</div>
+                            <div class="stage-desc">复盘四步法 + 行动计划</div>
+                        </div>
+                        ${visit.stage === 'completed' ? getStageStatus('completed') : ''}
+                    </div>
+                    <div style="font-size: 13px; color: var(--gray-500);">
+                        ${visit.after && visit.after.goalAchieved ? 
+                            `评估结果：${visit.after.goalAchieved}` : 
+                            '点击开始复盘'}
+                    </div>
+                </div>
+                
+                ${visit.stage !== 'completed' ? `
+                    <button class="btn btn-success btn-block" style="margin-top: 16px;" onclick="markComplete('${visit.id}')">
+                        ✅ 标记拜访完成
+                    </button>
+                ` : `
+                    <button class="btn btn-outline btn-block" style="margin-top: 16px;" onclick="restartVisit('${visit.id}')">
+                        🔄 新建下次拜访
+                    </button>
+                `}
+                
+                <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="switchTab('customers')">
+                    ← 返回客户列表
+                </button>
+            `;
+            
+            switchTab('visit-detail');
+        }
+        
+        // 跳转到拜访前
+        function goToBefore(visitId) {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === visitId);
+            if (!visit) return;
+            
+            currentVisit = visit;
+            renderBeforePage();
+            switchTab('before');
+        }
+        
+        // 跳转到拜访中
+        function goToDuring(visitId) {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === visitId);
+            if (!visit) return;
+            
+            currentVisit = visit;
+            renderDuringPage();
+            switchTab('during');
+        }
+        
+        // 跳转到拜访后
+        function goToAfter(visitId) {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === visitId);
+            if (!visit) return;
+            
+            currentVisit = visit;
+            renderAfterPage();
+            switchTab('after');
+        }
+        
+        // 标记完成
+        function markComplete(visitId) {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === visitId);
+            if (visit) {
+                visit.stage = 'completed';
+                saveData(data);
+                showToast('拜访已标记完成！');
+                openVisitDetail(visitId);
+            }
+        }
+        
+        // 重新开始
+        function restartVisit(visitId) {
+            const data = getData();
+            const oldVisit = data.visits.find(v => v.id === visitId);
+            if (!oldVisit) return;
+            
+            // 创建新拜访，继承客户信息
+            const newVisit = {
+                ...JSON.parse(JSON.stringify(oldVisit)),
+                id: genId(),
+                createdAt: new Date().toISOString(),
+                stage: 'preparing',
+                visitDate: '',
+                prep: { checklist: {}, notes: '' },
+                during: { actions: {}, notes: '', commitment: '', nextVisit: '', summarySent: false },
+                after: { 
+                    goalAchieved: '', 
+                    highlights: [], 
+                    shortcomings: [], 
+                    successFactors: [],
+                    successFactorsCustom: [],
+                    failureCauses: [],
+                    failureCausesCustom: [],
+                    keepDoing: [], 
+                    improveDoing: [], 
+                    startDoing: [], 
+                    stopDoing: [],
+                    recordInfo: {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    }
+                }
+            };
+            
+            data.visits.unshift(newVisit);
+            saveData(data);
+            
+            renderCustomerList();
+            openVisitDetail(newVisit.id);
+        }
+        
+        // ==================== 拜访前页面渲染 ====================
+        function renderBeforePage() {
+            if (!currentVisit) {
+                document.getElementById('before-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📝</div>
+                        <div class="text">请先选择一个拜访记录<br>从「客户列表」进入拜访详情</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const visit = currentVisit;
+            const prep = visit.prep || { checklist: {}, notes: '' };
+            const checkedCount = Object.values(prep.checklist).filter(v => v).length;
+            const score = Math.round((checkedCount / PREP_ITEMS.length) * 100);
+            
+            // 检查关键项
+            const criticalItems = PREP_ITEMS.filter(item => item.critical);
+            const hasCriticalUnchecked = criticalItems.some(item => !prep.checklist[item.id]);
+            
+            const container = document.getElementById('before-content');
+            
+            container.innerHTML = `
+                <div class="score-card">
+                    <div class="score-circle">
+                        <div>
+                            <div class="score-value">${score}%</div>
+                            <div class="score-label">准备度</div>
+                        </div>
+                    </div>
+                    <div>已完成 ${checkedCount}/${PREP_ITEMS.length} 项准备</div>
+                    ${hasCriticalUnchecked ? `
+                        <div class="score-tips warning">
+                            ⚠️ 关键项未完成（客户背景信息），可能影响切入效率
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <strong>${visit.customerName}</strong> · 拜访前准备清单
+                </div>
+                
+                ${PREP_ITEMS.map(item => `
+                    <div class="checklist-item ${prep.checklist[item.id] ? 'checked' : ''}" onclick="togglePrepItem('${item.id}', this)">
+                        <div class="checklist-checkbox ${prep.checklist[item.id] ? 'checked' : ''}" onclick="event.stopPropagation(); togglePrepItem('${item.id}', this.parentElement)">
+                            ${prep.checklist[item.id] ? '✓' : ''}
+                        </div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                ${item.title}
+                                ${item.critical ? '<span style="color: var(--danger); font-size: 12px;"> ⭐关键</span>' : ''}
+                            </div>
+                            <div class="checklist-hint">${item.hint}</div>
+                            <textarea class="checklist-input" 
+                                placeholder="${item.detail}"
+                                onclick="event.stopPropagation()"
+                                onchange="updatePrepNote('${item.id}', this.value)">${prep.notes && prep.notes[item.id] ? prep.notes[item.id] : ''}</textarea>
+                        </div>
+                    </div>
+                `).join('')}
+                
+                <!-- 拜访目标 -->
+                <div style="margin-top: 20px; background: #EFF6FF; border-radius: 12px; padding: 16px;">
+                    <label class="form-label" style="color: var(--primary);">🎯 拜访目标</label>
+                    <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 12px;">
+                        写下本次拜访要达成的具体目标
+                    </div>
+                    <div id="custom-goals-list">
+                        ${(visit.customGoals || []).map((goal, i) => `
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <input type="text" class="form-input" value="${goal}" 
+                                    onchange="updateCustomGoal(${i}, this.value)" style="flex: 1;" placeholder="输入拜访目标...">
+                                <button onclick="removeCustomGoal(${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn btn-outline" onclick="addCustomGoal()" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                        ➕ 添加拜访目标
+                    </button>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <label class="form-label">准备备注（可选）</label>
+                    <textarea class="form-input form-textarea" 
+                        placeholder="如有其他准备事项或特别说明，在此记录..."
+                        onchange="updatePrepGlobalNote(this.value)">${prep.globalNote || ''}</textarea>
+                </div>
+                
+                <button class="btn btn-primary btn-block" style="margin-top: 20px;" onclick="saveBeforeAndNext()">
+                    💾 保存并继续 → 拜访中
+                </button>
+                
+                <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="openVisitDetail('${visit.id}')">
+                    ← 返回拜访详情
+                </button>
+            `;
+        }
+        
+        // 切换准备项
+        function togglePrepItem(itemId, element) {
+            if (!currentVisit) return;
+            
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (!visit) return;
+            
+            visit.prep.checklist[itemId] = !visit.prep.checklist[itemId];
+            saveData(data);
+            currentVisit = visit;
+            
+            renderBeforePage();
+        }
+        
+        // 更新准备备注
+        function updatePrepNote(itemId, value) {
+            if (!currentVisit) return;
+            
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (!visit) return;
+            
+            if (!visit.prep.notes) visit.prep.notes = {};
+            visit.prep.notes[itemId] = value;
+            saveData(data);
+            currentVisit = visit;
+        }
+        
+        // 更新全局备注
+        function updatePrepGlobalNote(value) {
+            if (!currentVisit) return;
+            
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (!visit) return;
+            
+            visit.prep.globalNote = value;
+            saveData(data);
+            currentVisit = visit;
+        }
+        
+        // 自定义拜访目标操作
+        function addCustomGoal() {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.customGoals) visit.customGoals = [];
+                visit.customGoals.push('');
+                saveData(data);
+                currentVisit = visit;
+                renderBeforePage();
+            }
+        }
+        
+        function updateCustomGoal(index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.customGoals) {
+                visit.customGoals[index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeCustomGoal(index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.customGoals) {
+                visit.customGoals.splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderBeforePage();
+            }
+        }
+        
+        // 保存并继续
+        function saveBeforeAndNext() {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.stage = 'during';
+                saveData(data);
+                currentVisit = visit;
+                showToast('已保存！进入拜访中...');
+                renderDuringPage();
+                switchTab('during');
+            }
+        }
+        
+        // ==================== 拜访中页面渲染 ====================
+        function renderDuringPage() {
+            if (!currentVisit) {
+                document.getElementById('during-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🤝</div>
+                        <div class="text">请先选择一个拜访记录<br>从「客户列表」进入拜访详情</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const visit = currentVisit;
+            const during = visit.during || { actions: {}, notes: '', commitment: '', nextVisit: '', summarySent: false };
+            const actionCount = Object.values(during.actions).filter(v => v).length;
+            
+            const container = document.getElementById('during-content');
+            
+            container.innerHTML = `
+                <div style="background: #FEF3C7; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                    <div style="font-weight: 600; color: #92400E; margin-bottom: 8px;">
+                        💡 30/70法则提醒
+                    </div>
+                    <div style="font-size: 13px; color: #78350F;">
+                        70%时间倾听客户，30%时间提问和表达。<br>
+                        多用SPIN挖痛提问：现状问题 → 难点问题 → 暗示问题 → 需求效益满足问题。
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <strong>${visit.customerName}</strong> · 拜访中关键动作
+                </div>
+                
+                ${DURING_ACTIONS.map((action, index) => `
+                    <div class="action-item">
+                        <div class="action-header">
+                            <div class="action-number">${index + 1}</div>
+                            <div class="action-title">${action.title}</div>
+                            <div style="margin-left: auto;">
+                                <div class="checklist-checkbox ${during.actions[action.id] ? 'checked' : ''}" 
+                                    onclick="toggleDuringAction('${action.id}', this)">
+                                    ${during.actions[action.id] ? '✓' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 10px;">${action.hint}</div>
+                        <div style="font-size: 12px; color: var(--gray-600); background: white; padding: 8px; border-radius: 6px;">
+                            ${action.items.map(item => `• ${item}`).join('<br>')}
+                        </div>
+                    </div>
+                `).join('')}
+                
+                <div class="form-group" style="margin-top: 16px;">
+                    <label class="form-label">📝 会谈要点记录</label>
+                    <textarea class="form-input form-textarea" 
+                        style="min-height: 120px;"
+                        placeholder="记录会谈中客户提到的痛点、需求、关注点..."
+                        onchange="updateDuringNotes(this.value)">${during.notes || ''}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">🤝 客户承诺（关键！）</label>
+                    <textarea class="form-input" 
+                        placeholder="客户承诺了什么？如：下周三前给反馈、安排试用、提供需求文档..."
+                        onchange="updateCommitment(this.value)">${during.commitment || ''}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">📅 下次拜访时间</label>
+                    <input type="datetime-local" class="form-input" 
+                        value="${during.nextVisit || ''}"
+                        onchange="updateNextVisit(this.value)">
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <div class="checklist-checkbox ${during.summarySent ? 'checked' : ''}" 
+                            onclick="toggleSummarySent(this)">
+                            ${during.summarySent ? '✓' : ''}
+                        </div>
+                        <span class="form-label" style="margin: 0;">✅ 已发送24小时感谢（24小时法则）</span>
+                    </label>
+                </div>
+                
+                <button class="btn btn-success btn-block" style="margin-top: 20px;" onclick="saveDuringAndNext()">
+                    💾 保存并继续 → 拜访后复盘
+                </button>
+                
+                <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="openVisitDetail('${visit.id}')">
+                    ← 返回拜访详情
+                </button>
+            `;
+        }
+        
+        // 切换拜访中动作
+        function toggleDuringAction(actionId, element) {
+            if (!currentVisit) return;
+            
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (!visit) return;
+            
+            if (!visit.during.actions) visit.during.actions = {};
+            visit.during.actions[actionId] = !visit.during.actions[actionId];
+            saveData(data);
+            currentVisit = visit;
+            
+            renderDuringPage();
+        }
+        
+        // 更新会谈笔记
+        function updateDuringNotes(value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.during.notes = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        // 更新客户承诺
+        function updateCommitment(value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.during.commitment = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        // 更新下次拜访时间
+        function updateNextVisit(value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.during.nextVisit = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        // 切换感谢发送状态
+        function toggleSummarySent(element) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.during.summarySent = !visit.during.summarySent;
+                saveData(data);
+                currentVisit = visit;
+                renderDuringPage();
+            }
+        }
+        
+        // 保存并继续到复盘
+        function saveDuringAndNext() {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                saveData(data);
+                currentVisit = visit;
+                showToast('已保存！进入拜访后复盘...');
+                renderAfterPage();
+                switchTab('after');
+            }
+        }
+        
+        // ==================== 拜访后复盘页面渲染 ====================
+        function renderAfterPage() {
+            if (!currentVisit) {
+                document.getElementById('after-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📊</div>
+                        <div class="text">请先选择一个拜访记录<br>从「客户列表」进入拜访详情</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const visit = currentVisit;
+            const after = visit.after || {
+                goalAchieved: '',
+                highlights: [],
+                shortcomings: [],
+                successFactors: [],
+                successFactorsCustom: [],
+                failureCauses: [],
+                failureCausesCustom: [],
+                keepDoing: [],
+                improveDoing: [],
+                startDoing: [],
+                stopDoing: [],
+                recordInfo: {
+                    crmEntered: false,
+                    visitLogFilled: false,
+                    nextPlanMade: false,
+                    notes: ''
+                }
+            };
+            
+            const container = document.getElementById('after-content');
+            
+            container.innerHTML = `
+                <div style="background: linear-gradient(135deg, #059669 0%, #10B981 100%); color: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; text-align: center;">
+                    <div style="font-size: 14px; opacity: 0.9;">复盘四步法</div>
+                    <div style="font-size: 18px; font-weight: 600; margin-top: 8px;">
+                        ${visit.customerName}
+                    </div>
+                </div>
+                
+                <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 16px;">
+                    🎯 原定目标：${visit.purpose}
+                </div>
+                
+                <!-- 第一步：回顾目标 -->
+                <div class="review-section">
+                    <div class="review-section-title">
+                        <span class="step">1</span>
+                        回顾目标
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">目标达成情况</label>
+                        <div class="tag-group">
+                            <div class="tag ${after.goalAchieved === 'fully' ? 'selected' : ''}" 
+                                onclick="selectGoal(this, 'fully')">✅ 完全达成</div>
+                            <div class="tag ${after.goalAchieved === 'partially' ? 'selected' : ''}" 
+                                onclick="selectGoal(this, 'partially')">⚡ 部分达成</div>
+                            <div class="tag ${after.goalAchieved === 'failed' ? 'selected' : ''}" 
+                                onclick="selectGoal(this, 'failed')">❌ 未达成</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第二步：评估结果 -->
+                <div class="review-section">
+                    <div class="review-section-title">
+                        <span class="step">2</span>
+                        评估结果
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">✨ 亮点（做得好的地方）</label>
+                        <div id="highlights-list">
+                            ${(after.highlights || []).map((h, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${h}" 
+                                        onchange="updateHighlight(${i}, this.value)" style="flex: 1;">
+                                    <button onclick="removeHighlight(${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" onclick="addHighlight()" style="margin-top: 8px;">
+                            ➕ 添加亮点
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📉 不足（需要改进的地方）</label>
+                        <div id="shortcomings-list">
+                            ${(after.shortcomings || []).map((s, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${s}" 
+                                        onchange="updateShortcoming(${i}, this.value)" style="flex: 1;">
+                                    <button onclick="removeShortcoming(${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" onclick="addShortcoming()" style="margin-top: 8px;">
+                            ➕ 添加不足
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 第三步：分析原因 -->
+                <div class="review-section">
+                    <div class="review-section-title">
+                        <span class="step">3</span>
+                        分析原因
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🔑 成功关键因素</label>
+                        <div class="tag-group">
+                            <div class="tag keep ${after.successFactors.includes('knowledge') ? 'selected' : ''}" 
+                                onclick="toggleTag('successFactors', 'knowledge', this)">产品知识扎实</div>
+                            <div class="tag keep ${after.successFactors.includes('timing') ? 'selected' : ''}" 
+                                onclick="toggleTag('successFactors', 'timing', this)">时机把握好</div>
+                            <div class="tag keep ${after.successFactors.includes('relation') ? 'selected' : ''}" 
+                                onclick="toggleTag('successFactors', 'relation', this)">客情关系好</div>
+                            <div class="tag keep ${after.successFactors.includes('pain') ? 'selected' : ''}" 
+                                onclick="toggleTag('successFactors', 'pain', this)">挖痛到位</div>
+                            <div class="tag keep ${after.successFactors.includes('value') ? 'selected' : ''}" 
+                                onclick="toggleTag('successFactors', 'value', this)">价值传递清晰</div>
+                        </div>
+                        <div id="successFactors-custom-list">
+                            ${(after.successFactorsCustom || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateCustomFactor('successFactorsCustom', ${i}, this.value)" style="flex: 1;" placeholder="自定义成功因素...">
+                                    <button onclick="removeCustomFactor('successFactorsCustom', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" onclick="addCustomFactor('successFactorsCustom')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                            ➕ 添加自定义因素
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">⚠️ 失败根本原因</label>
+                        <div class="tag-group">
+                            <div class="tag stop ${after.failureCauses.includes('knowledge') ? 'selected' : ''}" 
+                                onclick="toggleTag('failureCauses', 'knowledge', this)">产品知识不足</div>
+                            <div class="tag stop ${after.failureCauses.includes('preparation') ? 'selected' : ''}" 
+                                onclick="toggleTag('failureCauses', 'preparation', this)">准备不充分</div>
+                            <div class="tag stop ${after.failureCauses.includes('timing') ? 'selected' : ''}" 
+                                onclick="toggleTag('failureCauses', 'timing', this)">时机不对</div>
+                            <div class="tag stop ${after.failureCauses.includes('competing') ? 'selected' : ''}" 
+                                onclick="toggleTag('failureCauses', 'competing', this)">竞品抢先</div>
+                            <div class="tag stop ${after.failureCauses.includes('price') ? 'selected' : ''}" 
+                                onclick="toggleTag('failureCauses', 'price', this)">价格因素</div>
+                            <div class="tag stop ${after.failureCauses.includes('objection') ? 'selected' : ''}" 
+                                onclick="toggleTag('failureCauses', 'objection', this)">抗拒处理不当</div>
+                        </div>
+                        <div id="failureCauses-custom-list">
+                            ${(after.failureCausesCustom || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateCustomFactor('failureCausesCustom', ${i}, this.value)" style="flex: 1;" placeholder="自定义失败原因...">
+                                    <button onclick="removeCustomFactor('failureCausesCustom', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" onclick="addCustomFactor('failureCausesCustom')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                            ➕ 添加自定义原因
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 第四步：行动计划 -->
+                <div class="review-section">
+                    <div class="review-section-title">
+                        <span class="step">4</span>
+                        行动计划（KISS法）
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">✅ 继续做（保持好习惯）</label>
+                        <div id="keepDoing-list">
+                            ${(after.keepDoing || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateActionItem('keepDoing', ${i}, this.value)" style="flex: 1;">
+                                    <button onclick="removeActionItem('keepDoing', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-success" onclick="addActionItem('keepDoing')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px;">
+                            ➕ 添加
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🔄 优化做（改进方法）</label>
+                        <div id="improveDoing-list">
+                            ${(after.improveDoing || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateActionItem('improveDoing', ${i}, this.value)" style="flex: 1;">
+                                    <button onclick="removeActionItem('improveDoing', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="addActionItem('improveDoing')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px; background: var(--warning); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            ➕ 添加
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🆕 开始做（下次拜访采用）</label>
+                        <div id="startDoing-list">
+                            ${(after.startDoing || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateActionItem('startDoing', ${i}, this.value)" style="flex: 1;">
+                                    <button onclick="removeActionItem('startDoing', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="addActionItem('startDoing')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px; background: #8B5CF6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            ➕ 添加
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🛑 停止做（避免再犯）</label>
+                        <div id="stopDoing-list">
+                            ${(after.stopDoing || []).map((item, i) => `
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <input type="text" class="form-input" value="${item}" 
+                                        onchange="updateActionItem('stopDoing', ${i}, this.value)" style="flex: 1;">
+                                    <button onclick="removeActionItem('stopDoing', ${i})" style="padding: 0 12px; background: var(--gray-100); border: none; border-radius: 6px; cursor: pointer;">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="addActionItem('stopDoing')" style="margin-top: 8px; font-size: 13px; padding: 8px 14px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            ➕ 添加
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 信息录入 -->
+                <div class="review-section" style="background: #EFF6FF; border-radius: 12px; padding: 16px; margin-top: 16px;">
+                    <div class="review-section-title" style="color: var(--primary);">
+                        📋 信息录入（CRM同步）
+                    </div>
+                    <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 12px;">
+                        完成拜访后，请及时将信息录入公司系统
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: white; border-radius: 8px;">
+                            <div class="checklist-checkbox ${after.recordInfo && after.recordInfo.crmEntered ? 'checked' : ''}" 
+                                onclick="toggleRecordInfo('crmEntered', this)">
+                                ${after.recordInfo && after.recordInfo.crmEntered ? '✓' : ''}
+                            </div>
+                            <span style="font-size: 14px;">📇 CRM系统录入</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: white; border-radius: 8px;">
+                            <div class="checklist-checkbox ${after.recordInfo && after.recordInfo.visitLogFilled ? 'checked' : ''}" 
+                                onclick="toggleRecordInfo('visitLogFilled', this)">
+                                ${after.recordInfo && after.recordInfo.visitLogFilled ? '✓' : ''}
+                            </div>
+                            <span style="font-size: 14px;">📝 拜访日志填写</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: white; border-radius: 8px;">
+                            <div class="checklist-checkbox ${after.recordInfo && after.recordInfo.nextPlanMade ? 'checked' : ''}" 
+                                onclick="toggleRecordInfo('nextPlanMade', this)">
+                                ${after.recordInfo && after.recordInfo.nextPlanMade ? '✓' : ''}
+                            </div>
+                            <span style="font-size: 14px;">📅 下次拜访计划制定</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 12px; margin-bottom: 0;">
+                        <label class="form-label">📌 信息录入备注</label>
+                        <textarea class="form-input form-textarea" 
+                            style="min-height: 60px;"
+                            placeholder="记录录入时间、录入内容备注等..."
+                            onchange="updateRecordNotes(this.value)">${after.recordInfo && after.recordInfo.notes ? after.recordInfo.notes : ''}</textarea>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary btn-block" style="margin-top: 20px;" onclick="saveAfterAndComplete()">
+                    ✅ 保存复盘并完成拜访
+                </button>
+                
+                <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="openVisitDetail('${visit.id}')">
+                    ← 返回拜访详情
+                </button>
+            `;
+        }
+        
+        // 选择目标达成情况
+        function selectGoal(element, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.after.goalAchieved = value;
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 添加亮点
+        function addHighlight() {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after.highlights) visit.after.highlights = [];
+                visit.after.highlights.push('');
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateHighlight(index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after.highlights) {
+                visit.after.highlights[index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeHighlight(index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after.highlights) {
+                visit.after.highlights.splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 添加不足
+        function addShortcoming() {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after.shortcomings) visit.after.shortcomings = [];
+                visit.after.shortcomings.push('');
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateShortcoming(index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after.shortcomings) {
+                visit.after.shortcomings[index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeShortcoming(index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after.shortcomings) {
+                visit.after.shortcomings.splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 切换标签
+        function toggleTag(field, value, element) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after[field]) visit.after[field] = [];
+                const index = visit.after[field].indexOf(value);
+                if (index > -1) {
+                    visit.after[field].splice(index, 1);
+                } else {
+                    visit.after[field].push(value);
+                }
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 行动项操作
+        function addActionItem(field) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after[field]) visit.after[field] = [];
+                visit.after[field].push('');
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateActionItem(field, index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after[field]) {
+                visit.after[field][index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeActionItem(field, index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after[field]) {
+                visit.after[field].splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 自定义因素操作
+        function addCustomFactor(field) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after[field]) visit.after[field] = [];
+                visit.after[field].push('');
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateCustomFactor(field, index, value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after[field]) {
+                visit.after[field][index] = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        function removeCustomFactor(field, index) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit && visit.after[field]) {
+                visit.after[field].splice(index, 1);
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        // 信息录入操作
+        function toggleRecordInfo(field, element) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after.recordInfo) {
+                    visit.after.recordInfo = {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    };
+                }
+                visit.after.recordInfo[field] = !visit.after.recordInfo[field];
+                saveData(data);
+                currentVisit = visit;
+                renderAfterPage();
+            }
+        }
+        
+        function updateRecordNotes(value) {
+            if (!currentVisit) return;
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                if (!visit.after.recordInfo) {
+                    visit.after.recordInfo = {
+                        crmEntered: false,
+                        visitLogFilled: false,
+                        nextPlanMade: false,
+                        notes: ''
+                    };
+                }
+                visit.after.recordInfo.notes = value;
+                saveData(data);
+                currentVisit = visit;
+            }
+        }
+        
+        // 保存并完成
+        function saveAfterAndComplete() {
+            const data = getData();
+            const visit = data.visits.find(v => v.id === currentVisit.id);
+            if (visit) {
+                visit.stage = 'completed';
+                saveData(data);
+                currentVisit = visit;
+                showToast('复盘完成！恭喜你完成了一次完整的客户拜访！🎉');
+                renderCustomerList();
+                switchTab('customers');
+            }
+        }
+        
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCustomerList();
+        });
+    </script>
+</body>
+</html>
