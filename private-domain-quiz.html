@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>私域引流四步法 - 课堂测验</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 20px; }
+.card { background: #fff; border-radius: 20px; max-width: 640px; width: 100%; padding: 36px 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+h1 { text-align: center; color: #1a1a2e; font-size: 22px; margin-bottom: 6px; }
+.subtitle { text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 24px; }
+.step-badge { display: inline-block; background: #667eea; color: #fff; border-radius: 12px; padding: 2px 12px; font-size: 13px; margin-bottom: 16px; }
+.progress { font-size: 13px; color: #7f8c8d; margin-bottom: 12px; }
+.progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 3px; transition: width 0.4s; }
+.q-title { font-size: 17px; font-weight: 600; color: #1a1a2e; margin-bottom: 16px; line-height: 1.6; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.opt-btn { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border: 2px solid #e8e8e8; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafbfc; }
+.opt-btn:hover { border-color: #667eea; background: #f0f0ff; }
+.opt-btn.selected { border-color: #667eea; background: #eef0ff; }
+.opt-label { display: inline-block; background: #667eea; color: #fff; border-radius: 6px; padding: 1px 8px; font-size: 13px; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+.opt-btn.correct { border-color: #27ae60; background: #eafaf1; }
+.opt-btn.correct .opt-label { background: #27ae60; }
+.opt-btn.wrong { border-color: #e74c3c; background: #fdf2f0; }
+.opt-btn.wrong .opt-label { background: #e74c3c; }
+.opt-text { font-size: 15px; color: #2c3e50; line-height: 1.5; }
+.feedback { display: none; margin-top: 16px; padding: 16px; border-radius: 12px; }
+.feedback.show { display: block; }
+.feedback.correct-fb { background: #eafaf1; border: 1px solid #27ae60; }
+.feedback.wrong-fb { background: #fdf2f0; border: 1px solid #e74c3c; }
+.fb-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.fb-title.correct-title { color: #27ae60; }
+.fb-title.wrong-title { color: #e74c3c; }
+.fb-text { font-size: 14px; color: #34495e; line-height: 1.7; }
+.btn-row { display: flex; gap: 12px; margin-top: 20px; }
+button { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+#btnSubmit { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+#btnSubmit:disabled { background: #ccc; cursor: not-allowed; }
+#btnNext { background: #f0f0f0; color: #333; }
+#btnRestart { background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; }
+.result-box { display: none; text-align: center; padding: 30px 0; }
+.result-box.show { display: block; }
+.score-circle { width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px; color: #fff; }
+#scoreNum { font-size: 48px; font-weight: 700; line-height: 1; }
+#scoreLabel { font-size: 14px; opacity: 0.9; }
+.result-msg { font-size: 16px; color: #2c3e50; margin-bottom: 10px; }
+.result-detail { font-size: 14px; color: #7f8c8d; margin-bottom: 24px; }
+.answer-review { text-align: left; margin-top: 20px; }
+.review-item { padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 14px; }
+.review-item.correct-review { background: #eafaf1; }
+.review-item.wrong-review { background: #fdf2f0; }
+.review-q { font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+.review-a { color: #27ae60; }
+.review-a.wrong-answer { color: #e74c3c; }
+@media (max-width: 480px) { .card { padding: 24px 16px; } h1 { font-size: 19px; } }
+</style>
+</head>
+<body>
+<div class="card" id="quizCard">
+  <h1>私域引流四步法<span style="font-size:14px;color:#7f8c8d;font-weight:400;margin-left:6px">课堂测验</span></h1>
+  <p class="subtitle">看看你掌握了多少</p>
+  <div id="quizArea">
+    <div class="step-badge" id="stepBadge">四步框架</div>
+    <div class="progress"><span id="qIdx">1</span> / <span id="qTotal">10</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="q-title" id="qTitle"></div>
+    <div class="options" id="optBox"></div>
+    <div class="feedback" id="feedback">
+      <div class="fb-title" id="fbTitle"></div>
+      <div class="fb-text" id="fbText"></div>
+    </div>
+    <div class="btn-row">
+      <button id="btnSubmit" disabled>确认答案</button>
+      <button id="btnNext" style="display:none">下一题</button>
+    </div>
+  </div>
+  <div class="result-box" id="resultBox">
+    <div class="score-circle">
+      <div id="scoreNum">0</div>
+      <div id="scoreLabel">总分 100</div>
+    </div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="result-detail" id="resultDetail"></div>
+    <div class="answer-review" id="answerReview"></div>
+    <button id="btnRestart" style="margin-top:10px;width:100%">重新测试</button>
+  </div>
+</div>
+<script>
+var questions = [
+  {
+    q: "私域引流四步法的正确顺序是？",
+    options: [
+      { text: "建立信任 → 释放钩子 → 引到私域 → 持续运营", correct: true },
+      { text: "释放钩子 → 建立信任 → 引到私域 → 持续运营", correct: false },
+      { text: "引到私域 → 建立信任 → 释放钩子 → 持续运营", correct: false },
+      { text: "持续运营 → 建立信任 → 释放钩子 → 引到私域", correct: false }
+    ],
+    explanation: "正确顺序是：先建立信任（让人认识你），再释放钩子（让人想加你），然后引到私域（完成加微），最后持续运营（转化成交）。顺序不能乱，信任是地基。",
+    step: "四步框架"
+  },
+  {
+    q: "下面哪个做法最符合 Step1「建立信任」的核心理念？",
+    options: [
+      { text: "先加对方微信，然后每天群发广告", correct: false },
+      { text: "在朋友圈持续展示专业形象和真实案例，让陌生人翻朋友圈就信你", correct: true },
+      { text: "私信每个陌生人推销课程", correct: false },
+      { text: "直播时只讲干货，不讲自己是谁", correct: false }
+    ],
+    explanation: "Step1 的核心是「先给后要」——先让人感受到你的专业和价值，再谈引流。朋友圈的专业形象展示、真实案例是成本最低、效果最好的信任建立方式。",
+    step: "Step1 建立信任"
+  },
+  {
+    q: "「加我微信，发『资料』两个字，免费领《销售话术宝典》PDF」——这属于哪种钩子？",
+    options: [
+      { text: "钩子A：免费资料（低门槛）", correct: true },
+      { text: "钩子B：咨询机会（高价值）", correct: false },
+      { text: "不是钩子，是硬广", correct: false },
+      { text: "属于Step4的动作", correct: false }
+    ],
+    explanation: "这是典型的「资料钩子」——低门槛、可自动化、适合冷启动。用户只需发一个关键词就能领取，决策成本极低，适合大量引流。",
+    step: "Step2 释放钩子"
+  },
+  {
+    q: "咨询钩子（钩子B）相比资料钩子，最大的优势是？",
+    options: [
+      { text: "可以获得更多微信号（数量优势）", correct: false },
+      { text: "可以自动化发送，不需要人工介入", correct: false },
+      { text: "质量更高，能筛选出真正有需求的人（质量优势）", correct: true },
+      { text: "制作成本更低", correct: false }
+    ],
+    explanation: "咨询钩子（如1对1诊断、免费方案评估）需要你的人工介入，门槛更高，但能筛选出真正有需求、有付费能力的人，转化率高得多。适合精准转化阶段。",
+    step: "Step2 释放钩子"
+  },
+  {
+    q: "Step3「引到私域」中，最关键的一点是？",
+    options: [
+      { text: "只放二维码，让用户自己扫", correct: false },
+      { text: "每个触点都要有一个明确的「加我理由」，不能只放二维码", correct: true },
+      { text: "越多渠道越好，越多越好", correct: false },
+      { text: "一定要用企业微信，不能用个人微信", correct: false }
+    ],
+    explanation: "很多人引流失败，是因为只放了二维码，没有说「加我干嘛」。用户需要理由——「加我领XX」「加我进XX群」「加我获得XX诊断」。没有理由，用户就不会行动。",
+    step: "Step3 引到私域"
+  },
+  {
+    q: "加了微信后，Step4「持续运营」的第一步应该做什么？",
+    options: [
+      { text: "马上推付费课程", correct: false },
+      { text: "立刻拉进付费群", correct: false },
+      { text: "发送承诺的免费资料，并做欢迎语介绍", correct: true },
+      { text: "先不理他，等他有需求再说", correct: false }
+    ],
+    explanation: "加了微信后的24小时内是黄金窗口期。第一步必须兑现承诺（发送免费资料），同时用欢迎语再次建立信任。如果连承诺的资料都不发，信任瞬间崩塌，后面再也无法转化。",
+    step: "Step4 持续运营"
+  },
+  {
+    q: "标签管理体系中，「阶段标签」的作用是？",
+    options: [
+      { text: "标记客户从哪里来的", correct: false },
+      { text: "标记客户处在什么阶段（新粉/意向/成交/沉睡），用于分层运营", correct: true },
+      { text: "标记客户喜欢什么内容", correct: false },
+      { text: "标记客户的支付能力", correct: false }
+    ],
+    explanation: "阶段标签（新粉/活跃/意向/成交/复购/沉睡）让你能对不同的客户说不同的话。对新粉讲信任，对意向客户讲价值，对沉睡客户做唤醒——这才是精细化运营。",
+    step: "Step4 持续运营"
+  },
+  {
+    q: "下面哪种情况，最适合使用「资料钩子 + 咨询钩子」组合策略？",
+    options: [
+      { text: "只需要数量，不需要质量", correct: false },
+      { text: "先用资料钩子广泛引流，再用咨询钩子深度筛选高意向客户", correct: true },
+      { text: "两个钩子只能用其中一个", correct: false },
+      { text: "咨询钩子效果不好，不建议用", correct: false }
+    ],
+    explanation: "组合策略是最佳实践：资料钩子做广度（大量引流），咨询钩子做深度（筛选高意向）。先用低门槛钩子把人引进来，再用高价值钩子做深度转化，两层漏斗，转化率最高。",
+    step: "Step2 释放钩子"
+  },
+  {
+    q: "董老师直播诊断中发现的最大问题是「直播后48小时追单完全缺失」——这对应四步法中的哪一步没做好？",
+    options: [
+      { text: "Step1 建立信任", correct: false },
+      { text: "Step2 释放钩子", correct: false },
+      { text: "Step3 引到私域", correct: false },
+      { text: "Step4 持续运营", correct: true }
+    ],
+    explanation: "直播下单只是开始，真正的转化发生在课后48小时的追单运营。这属于 Step4 持续运营的范畴——有了私域流量，还要持续触达、提供价值、适时转化。追单不是骚扰，是服务。",
+    step: "Step4 持续运营"
+  },
+  {
+    q: "四步法框架下，以下哪个说法是错的？",
+    options: [
+      { text: "Step1 和 Step2 可以同步进行", correct: false },
+      { text: "没有私域池子，裂变就无从谈起", correct: false },
+      { text: "钩子越贵重越好，价格越高的课程钩子效果越好", correct: true },
+      { text: "持续运营的关键是「定期提供价值，不硬推」", correct: false }
+    ],
+    explanation: "钩子不是越贵重越好——关键是「感知价值高，但获取成本低」。一个精心制作的PDF（成本几乎为0），如果能解决用户的一个具体问题，比一个昂贵的实物礼品效果更好，因为用户要的是「马上能用的解决方案」，不是礼品。",
+    step: "四步框架"
+  }
+];
+
+var current = 0, score = 0, answered = [];
+
+function render() {
+  var q = questions[current];
+  document.getElementById('stepBadge').textContent = q.step;
+  document.getElementById('qIdx').textContent = current + 1;
+  document.getElementById('qTotal').textContent = questions.length;
+  document.getElementById('progFill').style.width = ((current + 1) / questions.length * 100) + '%';
+  document.getElementById('qTitle').textContent = (current + 1) + '. ' + q.q;
+  var optBox = document.getElementById('optBox');
+  optBox.innerHTML = '';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < q.options.length; i++) {
+    (function(idx) {
+      var o = q.options[idx];
+      var div = document.createElement('div');
+      div.className = 'opt-btn';
+      div.innerHTML = '<span class="opt-label">' + labels[idx] + '</span><span class="opt-text">' + o.text + '</span>';
+      div.onclick = function() { selectOpt(idx, div); };
+      optBox.appendChild(div);
+    })(i);
+  }
+  document.getElementById('btnSubmit').disabled = true;
+  document.getElementById('btnSubmit').style.display = '';
+  document.getElementById('btnNext').style.display = 'none';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').style.display = 'none';
+}
+
+function selectOpt(idx, el) {
+  var optBox = document.getElementById('optBox');
+  var btns = optBox.querySelectorAll('.opt-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('selected');
+  el.classList.add('selected');
+  window._selectedIdx = idx;
+  document.getElementById('btnSubmit').disabled = false;
+}
+
+document.getElementById('btnSubmit').onclick = function() {
+  var q = questions[current];
+  var idx = window._selectedIdx;
+  var isCorrect = q.options[idx].correct;
+  if (isCorrect) score++;
+  answered.push({ q: current + 1, correct: isCorrect, selected: idx });
+
+  var optBox = document.getElementById('optBox');
+  var btns = optBox.querySelectorAll('.opt-btn');
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = null;
+    if (q.options[i].correct) btns[i].classList.add('correct');
+    else if (i === idx && !isCorrect) btns[i].classList.add('wrong');
+  }
+
+  var fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  document.getElementById('fbTitle').className = 'fb-title ' + (isCorrect ? 'correct-title' : 'wrong-title');
+  document.getElementById('fbTitle').textContent = isCorrect ? '✅ 回答正确！' : '❌ 回答错误';
+  document.getElementById('fbText').innerHTML = '<b>正确答案：' + labels[q.options.findIndex(function(o){return o.correct;})] + '</b><br><br>' + q.explanation;
+  fb.style.display = 'block';
+
+  document.getElementById('btnSubmit').style.display = 'none';
+  document.getElementById('btnNext').style.display = '';
+};
+
+document.getElementById('btnNext').onclick = function() {
+  current++;
+  if (current >= questions.length) { showResult(); return; }
+  render();
+};
+
+function showResult() {
+  document.getElementById('quizArea').style.display = 'none';
+  var rb = document.getElementById('resultBox');
+  rb.className = 'result-box show';
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = percent;
+  var msgs = ['', '刚入门，建议重看四步框架再测一次', '有基础但不扎实，重点复习Step3和Step4', '掌握不错！注意细节可以更好', '太棒了！你已完全掌握私域引流四步法'];
+  var levels = ['', '需加油', '基础级', '良好', '优秀'];
+  document.getElementById('resultMsg').textContent = '你的得分：' + percent + '分（' + levels[Math.min(4, Math.ceil(percent / 25))] + '）';
+  document.getElementById('resultDetail').textContent = msgs[Math.min(4, Math.ceil(percent / 25))];
+  var review = document.getElementById('answerReview');
+  review.innerHTML = '<h3 style="font-size:15px;color:#1a1a2e;margin-bottom:12px;">答题回顾</h3>';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < answered.length; i++) {
+    var a = answered[i];
+    var q = questions[a.q - 1];
+    var div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'correct-review' : 'wrong-review');
+    var correctLabel = labels[q.options.findIndex(function(o){return o.correct;})];
+    div.innerHTML = '<div class="review-q">第' + a.q + '题 ' + (a.correct ? '✅' : '❌') + '</div>' +
+      '<div class="review-a ' + (a.correct ? '' : 'wrong-answer') + '">正确答案：' + correctLabel + ' — ' + q.options[q.options.findIndex(function(o){return o.correct;})].text + '</div>';
+    review.appendChild(div);
+  }
+}
+
+document.getElementById('btnRestart').onclick = function() {
+  current = 0; score = 0; answered = []; window._selectedIdx = undefined;
+  document.getElementById('resultBox').className = 'result-box';
+  document.getElementById('quizArea').style.display = '';
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
