@@ -5,81 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>高转化电子资料提示词生成器 - 大董销售体系</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-
+        
         .header {
             text-align: center;
             color: white;
             margin-bottom: 30px;
         }
-
+        
         .header h1 {
-            font-size: 2.5em;
+            font-size: 2.2em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-
+        
         .header p {
-            font-size: 1.2em;
+            font-size: 1.1em;
             opacity: 0.9;
         }
-
+        
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
-
+        
         @media (max-width: 968px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
+            .main-content { grid-template-columns: 1fr; }
         }
-
+        
         .card {
             background: white;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
+        
         .card h2 {
             color: #667eea;
             margin-bottom: 20px;
-            font-size: 1.8em;
+            font-size: 1.6em;
             border-bottom: 3px solid #667eea;
             padding-bottom: 10px;
         }
-
+        
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
-
+        
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #333;
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.05em;
         }
-
+        
+        .form-group label .required {
+            color: #e74c3c;
+        }
+        
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -88,156 +86,287 @@
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 1em;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background: white;
         }
-
+        
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
         }
-
+        
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #aaa;
+        }
+        
         .form-group textarea {
             min-height: 80px;
             resize: vertical;
+            line-height: 1.6;
         }
 
+        /* 必填项高亮 */
+        .form-group.required-field input,
+        .form-group.required-field textarea {
+            border-color: #ffeaa7;
+        }
+        
         .btn-generate {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             margin-top: 20px;
         }
-
+        
         .btn-generate:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
-
-        .result-section {
-            display: none;
+        
+        .btn-generate:active {
+            transform: translateY(0);
         }
 
-        .result-section.active {
-            display: block;
-        }
-
-        .prompt-output {
-            background: #f8f9fa;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            white-space: pre-wrap;
-            line-height: 1.8;
-            font-size: 1em;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
+        /* 使用步骤 */
         .usage-steps {
             background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 20px;
+            border-left: 5px solid #4caf50;
+            padding: 18px 22px;
             margin-bottom: 20px;
             border-radius: 10px;
         }
-
+        
         .usage-steps h3 {
             color: #2e7d32;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-size: 1.15em;
         }
-
+        
         .usage-steps ol {
             margin-left: 20px;
             line-height: 2;
+            font-size: 1em;
+        }
+        
+        .usage-steps li strong {
+            color: #2e7d32;
         }
 
-        .usage-steps li {
-            margin-bottom: 10px;
-        }
-
-        .btn-copy {
-            padding: 12px 24px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            margin-right: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .btn-copy:hover {
-            background: #218838;
-        }
-
-        .btn-reset {
-            padding: 12px 24px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .btn-reset:hover {
-            background: #5a6268;
-        }
-
-        .ai-links {
-            background: #fff3e0;
-            border-left: 4px solid #ff9800;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 10px;
-        }
-
-        .ai-links h4 {
-            color: #e65100;
-            margin-bottom: 10px;
-        }
-
-        .ai-links a {
-            display: inline-block;
-            margin-right: 15px;
-            margin-bottom: 8px;
-            padding: 8px 15px;
-            background: white;
-            border: 2px solid #ff9800;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #e65100;
-            font-weight: bold;
-        }
-
-        .ai-links a:hover {
-            background: #ff9800;
-            color: white;
-        }
-
+        /* 空状态 */
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #999;
+            padding: 50px 20px;
+            color: #bbb;
+        }
+        
+        .empty-state .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 1.1em;
+            line-height: 1.8;
         }
 
-        .empty-state p {
-            font-size: 3em;
-            margin-bottom: 20px;
+        /* 结果区域 */
+        .result-section {
+            display: none;
+        }
+        
+        .result-section.show {
+            display: block;
+            animation: fadeInUp 0.4s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .result-header h3 {
+            color: #667eea;
+            font-size: 1.2em;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
+        /* 提示词输出框 */
+        .prompt-output-wrapper {
+            position: relative;
+        }
+        
+        .prompt-output {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 24px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.85;
+            font-size: 0.95em;
+            max-height: 550px;
+            overflow-y: auto;
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        .prompt-output::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .prompt-output::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .prompt-output::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .prompt-output::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-action {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .btn-copy:hover {
+            background: linear-gradient(135deg, #218838, #1aa87a);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40,167,69,0.35);
+        }
+        
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* AI平台链接 */
+        .ai-links {
+            background: #fff8e1;
+            border-left: 5px solid #ffc107;
+            padding: 16px 20px;
+            margin-top: 18px;
+            border-radius: 10px;
+        }
+        
+        .ai-links h4 {
+            color: #f57c00;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        
+        .ai-links .link-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .ai-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #f57c00;
+            font-weight: 600;
+            font-size: 0.92em;
+            transition: all 0.3s;
+        }
+        
+        .ai-links a:hover {
+            background: #ffc107;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,193,7,0.4);
+        }
+
+        /* Toast消息 */
+        .toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            padding: 16px 28px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            animation: toastIn 0.35s ease-out forwards;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .toast.success { background: linear-gradient(135deg, #28a745, #20c997); }
+        .toast.error { background: linear-gradient(135deg, #dc3545, #e74c3c); }
+        
+        @keyframes toastIn {
+            from { transform: translateX(80px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes toastOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(80px); opacity: 0; }
         }
     </style>
 </head>
@@ -245,23 +374,23 @@
     <div class="container">
         <div class="header">
             <h1>🚀 高转化电子资料提示词生成器</h1>
-            <p>基于天地人销售体系 · 5步法 · 课堂教学专用版</p>
+            <p>基于天地人销售体系 · 5步法 · 填写画像 → 复制提示词 → 粘贴到AI即可生成方案</p>
         </div>
 
         <div class="main-content">
-            <!-- 左侧：输入表单 -->
+            <!-- ===== 左侧：输入表单 ===== -->
             <div class="card">
-                <h2>📋 客户画像（6维度）</h2>
+                <h2>📋 第一步：填写客户画像（6维度）</h2>
                 
-                <div class="form-group">
-                    <label>1️⃣ 行业/领域 <span style="color: red;">*</span></label>
-                    <input type="text" id="industry" placeholder="例如：企业培训、SaaS软件、咨询服务、装修设计">
+                <div class="form-group required-field">
+                    <label>1️⃣ 行业/领域 <span class="required">*</span></label>
+                    <input type="text" id="industry" placeholder="例：企业培训、SaaS软件、咨询服务、装修设计">
                 </div>
 
                 <div class="form-group">
                     <label>2️⃣ 企业规模/阶段</label>
                     <select id="companyStage">
-                        <option value="">请选择（可选）</option>
+                        <option value="">— 请选择（可选）—</option>
                         <option value="初创期（0-20人）">初创期（0-20人）</option>
                         <option value="成长期（20-100人）">成长期（20-100人）</option>
                         <option value="扩张期（100-500人）">扩张期（100-500人）</option>
@@ -269,20 +398,20 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>3️⃣ 决策人职位 <span style="color: red;">*</span></label>
-                    <input type="text" id="decisionMaker" placeholder="例如：老板、总经理、采购总监、技术负责人">
+                <div class="form-group required-field">
+                    <label>3️⃣ 决策人职位 <span class="required">*</span></label>
+                    <input type="text" id="decisionMaker" placeholder="例：老板、总经理、采购总监、技术负责人">
                 </div>
 
-                <div class="form-group">
-                    <label>4️⃣ 核心痛点 <span style="color: red;">*</span></label>
-                    <textarea id="painPoint" placeholder="描述客户最迫切需要解决的问题，越具体越好..."></textarea>
+                <div class="form-group required-field">
+                    <label>4️⃣ 核心痛点 <span class="required">*</span></label>
+                    <textarea id="painPoint" placeholder="描述客户最迫切需要解决的问题，越具体越好…"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label>5️⃣ 购买决策方式</label>
                     <select id="decisionType">
-                        <option value="">请选择（可选）</option>
+                        <option value="">— 请选择（可选）—</option>
                         <option value="单人决策">单人决策</option>
                         <option value="多人决策（需要上级审批）">多人决策（需要上级审批）</option>
                         <option value="委员会决策">委员会决策</option>
@@ -292,46 +421,59 @@
 
                 <div class="form-group">
                     <label>6️⃣ 消费能力和频次</label>
-                    <input type="text" id="budget" placeholder="例如：客单价5-10万，年采购2-3次（可选）">
+                    <input type="text" id="budget" placeholder="例：客单价5-10万，年采购2-3次">
                 </div>
 
-                <button class="btn-generate" onclick="generatePrompt()">✨ 生成AI提示词</button>
+                <button class="btn-generate" id="generateBtn" onclick="handleGenerate()">✨ 第二步：生成AI提示词</button>
             </div>
 
-            <!-- 右侧：结果展示 -->
+            <!-- ===== 右侧：使用说明 + 结果展示 ===== -->
             <div class="card">
-                <h2>📝 使用步骤 & 生成结果</h2>
+                <h2>📝 使用方法 & 生成结果</h2>
                 
+                <!-- 使用步骤（始终显示） -->
                 <div class="usage-steps">
-                    <h3>📖 使用方法（3步）</h3>
+                    <h3>📖 三步使用法</h3>
                     <ol>
-                        <li><strong>填写左侧表单</strong> → 点击"生成AI提示词"按钮</li>
-                        <li><strong>复制下方提示词</strong> → 点击"📋 复制提示词"按钮</li>
-                        <li><strong>粘贴到AI对话框</strong> → 打开任意AI（DeepSeek/ChatGPT/通义千问等），粘贴并发送</li>
+                        <li><strong>第一步</strong>：填写左侧表单 → 点击「生成AI提示词」按钮</li>
+                        <li><strong>第二步</strong>：复制下方生成的提示词 → 点击「📋 一键复制」</li>
+                        <li><strong>第三步</strong>：打开任意AI平台 → 粘贴提示词并发送 → AI自动输出方案</li>
                     </ol>
                 </div>
 
+                <!-- 空状态（默认显示） -->
                 <div id="emptyState" class="empty-state">
-                    <p>📝</p>
-                    <p><strong>填写左侧表单</strong></p>
-                    <p>点击"生成AI提示词"按钮</p>
-                    <p>即可获得专业的AI提示词</p>
+                    <div class="icon">📝</div>
+                    <p><strong>请先在左侧填写客户画像</strong></p>
+                    <p>然后点击「生成AI提示词」按钮</p>
+                    <p style="margin-top: 10px; color: #ddd;">↓ 右侧将自动出现专属提示词 ↓</p>
                 </div>
 
-                <div id="result" class="result-section">
-                    <h3 style="color: #667eea; margin-bottom: 15px;">✅ 您的专属AI提示词（复制后粘贴到AI）</h3>
+                <!-- 结果区域（默认隐藏） -->
+                <div id="resultSection" class="result-section">
+                    <div class="result-header">
+                        <h3>✅ 你的专属AI提示词已生成</h3>
+                        <span class="badge">可直接复制</span>
+                    </div>
                     
-                    <div class="prompt-output" id="promptOutput"></div>
+                    <div class="prompt-output-wrapper">
+                        <div class="prompt-output" id="promptOutput"></div>
+                    </div>
 
-                    <button class="btn-copy" onclick="copyPrompt()">📋 复制提示词</button>
-                    <button class="btn-reset" onclick="resetAll()">🔄 重新填写</button>
+                    <div class="button-group">
+                        <button class="btn-action btn-copy" onclick="handleCopy()">📋 一键复制提示词</button>
+                        <button class="btn-action btn-reset" onclick="handleReset()">🔄 重新填写</button>
+                    </div>
 
                     <div class="ai-links">
-                        <h4>💡 推荐AI平台（点击打开）</h4>
-                        <a href="https://chat.deepseek.com/" target="_blank">DeepSeek（免费）</a>
-                        <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>
-                        <a href="https://tongyi.aliyun.com/" target="_blank">通义千问</a>
-                        <a href="https://xinghuo.xfyun.cn/" target="_blank">讯飞星火</a>
+                        <h4>💡 第三步：打开以下任一AI平台，粘贴提示词发送即可</h4>
+                        <div class="link-row">
+                            <a href="https://chat.deepseek.com/" target="_blank" rel="noopener">🤖 DeepSeek（免费推荐）</a>
+                            <a href="https://tongyi.aliyun.com/" target="_blank" rel="noopener">🤖 通义千问</a>
+                            <a href="https://xinghuo.xfyun.cn/" target="_blank" rel="noopener">🤖 讯飞星火</a>
+                            <a href="https://yiyan.baidu.com/" target="_blank" rel="noopener">🤖 文心一言</a>
+                            <a href="https://chat.openai.com/" target="_blank" rel="noopener">🤖 ChatGPT</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -339,223 +481,212 @@
     </div>
 
     <script>
-        function generatePrompt() {
-            // 获取表单数据
-            const industry = document.getElementById('industry').value.trim();
-            const companyStage = document.getElementById('companyStage').value;
-            const decisionMaker = document.getElementById('decisionMaker').value.trim();
-            const painPoint = document.getElementById('painPoint').value.trim();
-            const decisionType = document.getElementById('decisionType').value;
-            const budget = document.getElementById('budget').value.trim();
+    // ========== 主函数 ==========
+    function handleGenerate() {
+        try {
+            var industry   = document.getElementById('industry').value.trim();
+            var companyStage = document.getElementById('companyStage').value;
+            var decisionMaker = document.getElementById('decisionMaker').value.trim();
+            var painPoint    = document.getElementById('painPoint').value.trim();
+            var decisionType = document.getElementById('decisionType').value;
+            var budget       = document.getElementById('budget').value.trim();
 
             // 验证必填项
-            if (!industry || !decisionMaker || !painPoint) {
-                alert('⚠️ 请至少填写标星号（*）的必填项：\n\n1️⃣ 行业/领域\n3️⃣ 决策人职位\n4️⃣ 核心痛点');
-                return;
+            if (!industry && !decisionMaker && !painPoint) {
+                showToast('请至少填写标红星的必填项：行业、决策人、痛点', 'error');
+                return false;
+            }
+            if (!industry) {
+                showToast('请填写第1项「行业/领域」', 'error');
+                document.getElementById('industry').focus();
+                return false;
+            }
+            if (!decisionMaker) {
+                showToast('请填写第3项「决策人职位」', 'error');
+                document.getElementById('decisionMaker').focus();
+                return false;
+            }
+            if (!painPoint) {
+                showToast('请填写第4项「核心痛点」', 'error');
+                document.getElementById('painPoint').focus();
+                return false;
             }
 
-            // 生成提示词
-            const prompt = `你是一位顶尖的B2B营销文案专家，擅长制作高转化的电子书、白皮书和行业报告。
-
-请根据以下客户画像，严格按照"5步法"为我生成一份完整的高转化电子资料方案。
-
----
-
-【客户画像】
-• 行业/领域：${industry}
-• 企业规模/阶段：${companyStage || '未指定'}
-• 决策人职位：${decisionMaker}
-• 核心痛点：${painPoint}
-• 购买决策方式：${decisionType || '未指定'}
-• 消费能力和频次：${budget || '未指定'}
-
----
-
-【5步法要求】
-
-请按照以下5个步骤，逐一输出详细内容：
-
-**1️⃣ 选痛点**
-- 从客户画像中提炼最关键的1个痛点
-- 用一句话精准描述这个痛点
-- 说明为什么这是最核心的痛点（对客户的影响）
-
-**2️⃣ 定标题**
-- 基于上述痛点，生成5个吸引人的电子资料标题
-- 标题要包含：痛点 + 解决方案 + 紧迫感/价值感
-- 每个标题后面用括号说明标题策略（如：恐惧诉求、利益诉求、权威诉求等）
-
-**3️⃣ 写内容**
-- 设计一份3-5页的电子资料内容框架
-- 每一页包括：
-  - 页面标题
-  - 核心观点（2-3个）
-  - 关键数据/案例提示
-  - 视觉元素建议
-- 内容要专业、有深度、能真正帮到读者
-
-**4️⃣ 做排版**
-- 给出具体的排版建议，包括：
-  - 整体视觉风格（色彩、字体、版式）
-  - 图文配比建议
-  - 重点内容如何标注（加粗、高亮、框选等）
-  - 每页的信息密度控制
-  - 引导阅读的视觉动线设计
-
-**5️⃣ 放钩子**
-- 设计3个转化引导话术，包括：
-  - 文末的"下一步行动"号召
-  - 添加微信/咨询的引导语
-  - 限时优惠/专属福利的话术
-- 话术要自然、不推销感、提供真实价值
-
----
-
-【输出格式】
-请按照以下格式输出：
-
-═════════════════════════════════
-1️⃣ 选痛点
-═════════════════════════════════
-[内容]
-
-═════════════════════════════════
-2️⃣ 定标题
-═════════════════════════════════
-[内容]
-
-═════════════════════════════════
-3️⃣ 写内容
-═════════════════════════════════
-[内容]
-
-═════════════════════════════════
-4️⃣ 做排版
-═════════════════════════════════
-[内容]
-
-═════════════════════════════════
-5️⃣ 放钩子
-═════════════════════════════════
-[内容]
-
----
-
-【风格要求】
-- 专业但不学术，易懂但不浅薄
-- 站在客户视角思考问题
-- 提供可落地的具体建议
-- 语言要有说服力，但不夸张
-
-现在，请开始生成这份高转化电子资料方案。`;
+            // 构建提示词
+            var prompt = buildPrompt(industry, companyStage, decisionMaker, painPoint, decisionType, budget);
 
             // 显示结果
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('result').classList.add('active');
-            document.getElementById('promptOutput').textContent = prompt;
+            var emptyState = document.getElementById('emptyState');
+            var resultSection = document.getElementById('resultSection');
+            var promptOutputEl = document.getElementById('promptOutput');
+
+            emptyState.style.display = 'none';
+            resultSection.className = 'result-section show';
+            promptOutputEl.textContent = prompt;
 
             // 滚动到结果区域
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-        }
+            setTimeout(function() {
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
 
-        function copyPrompt() {
-            const promptText = document.getElementById('promptOutput').textContent;
-            
-            // 使用现代API复制
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(promptText).then(() => {
-                    showMessage('✅ 提示词已复制到剪贴板！现在可以粘贴到AI对话框了。', 'success');
-                }).catch(err => {
-                    fallbackCopy(promptText);
-                });
+        } catch(e) {
+            console.error('生成失败:', e);
+            showToast('出错了：' + e.message, 'error');
+        }
+    }
+
+    // ========== 提示词构建函数 ==========
+    function buildPrompt(industry, companyStage, decisionMaker, painPoint, decisionType, budget) {
+        return [
+            '你是一位顶尖的B2B营销文案专家，擅长制作高转化的电子书、白皮书和行业报告。',
+            '',
+            '请根据以下【客户画像】，严格按照"5步法"为我生成一份完整的高转化电子资料方案。',
+            '',
+            '─────────────────────────────',
+            '【客户画像】',
+            '• 行业/领域：' + industry,
+            '• 企业规模/阶段：' + (companyStage || '未指定'),
+            '• 决策人职位：' + decisionMaker,
+            '• 核心痛点：' + painPoint,
+            '• 购买决策方式：' + (decisionType || '未指定'),
+            '• 消费能力和频次：' + (budget || '未指定'),
+            '─────────────────────────────',
+            '',
+            '【5步法要求 — 请逐一详细输出】',
+            '',
+            '**1️⃣ 选痛点（提炼最关键的1个痛点）',
+            '- 从上述画像中提炼最核心的1个痛点',
+            '- 用一句话精准描述这个痛点及其对客户的负面影响',
+            '- 说明为什么这是最值得优先解决的痛点',
+            '',
+            '**2️⃣ 定标题（生成5个吸引人的标题）',
+            '- 每个标题必须包含：痛点 + 解决方案 + 紧迫感或价值感',
+            '- 每个标题后用括号标注策略类型：如（恐惧诉求）（利益诉求）（权威诉求）（好奇心诉求）（数据冲击）',
+            '',
+            '**3️⃣ 写内容（设计3-5页的内容框架）',
+            '- 每页需包含：页面标题 | 核心观点（2-3个）| 关键数据/案例提示 | 视觉元素建议',
+            '- 内容要专业有深度，能真正帮到读者',
+            '',
+            '**4️⃣ 做排版（具体排版方案）',
+            '- 整体视觉风格（色彩/字体/版式）',
+            '- 图文配比建议',
+            '- 重点内容如何标注（加粗/高亮/框选等）',
+            '- 信息密度控制 & 引导阅读的视觉动线设计',
+            '',
+            '**5️⃣ 放钩子（转化引导话术 × 3）',
+            '- 文末"下一步行动"号召语',
+            '- 加微信/咨询的自然引导语',
+            '- 限时优惠/专属福利话术（不夸张、提供真实价值）',
+            '',
+            '─────────────────────────────',
+            '【严格按此格式输出，每个步骤用分隔线隔开】',
+            '',
+            '═══════════════════════════',
+            '1️⃣ 选痛点',
+            '═══════════════════════════',
+            '[你的分析内容]',
+            '',
+            '═══════════════════════════',
+            '2️⃣ 定标题',
+            '═══════════════════════════',
+            '[5个备选标题]',
+            '',
+            '═══════════════════════════',
+            '3️⃣ 写内容',
+            '═══════════════════════════',
+            '[内容框架]',
+            '',
+            '═══════════════════════════',
+            '4️⃣ 做排版',
+            '═══════════════════════════',
+            '[排版建议]',
+            '',
+            '═══════════════════════════',
+            '5️⃣ 放钩子',
+            '═══════════════════════════',
+            '[转化话术]',
+            '',
+            '─────────────────────────────',
+            '【风格要求】',
+            '- 专业但不学术，易懂但不浅薄',
+            '- 站在客户视角思考问题',
+            '- 提供可落地的具体建议',
+            '- 语言有说服力但不夸张',
+            '',
+            '现在开始，请生成这份高转化电子资料的完整方案。'
+        ].join('\n');
+    }
+
+    // ========== 复制功能 ==========
+    function handleCopy() {
+        var text = document.getElementById('promptOutput').textContent;
+
+        // 方式1：现代 Clipboard API
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('✅ 提示词已复制！现在去AI平台粘贴吧 🎯', 'success');
+            }).catch(function(err) {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+            var ok = document.execCommand('copy');
+            if (ok) {
+                showToast('✅ 提示词已复制！现在去AI平台粘贴吧 🎯', 'success');
             } else {
-                fallbackCopy(promptText);
+                showToast('❌ 浏览器不支持自动复制，请手动全选复制', 'error');
             }
+        } catch(e) {
+            showToast('❌ 复制失败，请手动选择文本复制', 'error');
         }
+        document.body.removeChild(ta);
+    }
 
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                document.execCommand('copy');
-                showMessage('✅ 提示词已复制到剪贴板！', 'success');
-            } catch (err) {
-                showMessage('❌ 复制失败，请手动选择并复制', 'error');
-            }
-            
-            document.body.removeChild(textarea);
-        }
+    // ========== 重置 ==========
+    function handleReset() {
+        document.getElementById('industry').value      = '';
+        document.getElementById('companyStage').value   = '';
+        document.getElementById('decisionMaker').value  = '';
+        document.getElementById('painPoint').value      = '';
+        document.getElementById('decisionType').value   = '';
+        document.getElementById('budget').value         = '';
 
-        function showMessage(message, type) {
-            // 创建提示消息
-            const msgDiv = document.createElement('div');
-            msgDiv.textContent = message;
-            msgDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#4caf50' : '#f44336'};
-                color: white;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                z-index: 1000;
-                font-weight: bold;
-                animation: slideIn 0.3s ease;
-            `;
-            
-            document.body.appendChild(msgDiv);
-            
-            setTimeout(() => {
-                msgDiv.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => document.body.removeChild(msgDiv), 300);
-            }, 3000);
-        }
+        var resultSection = document.getElementById('resultSection');
+        resultSection.className = 'result-section';
+        document.getElementById('emptyState').style.display = 'block';
 
-        function resetAll() {
-            // 清空表单
-            document.getElementById('industry').value = '';
-            document.getElementById('companyStage').value = '';
-            document.getElementById('decisionMaker').value = '';
-            document.getElementById('painPoint').value = '';
-            document.getElementById('decisionType').value = '';
-            document.getElementById('budget').value = '';
-            
-            // 隐藏结果
-            document.getElementById('result').classList.remove('active');
-            document.getElementById('emptyState').style.display = 'block';
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-        // 添加CSS动画
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+    // ========== Toast消息 ==========
+    function showToast(msg, type) {
+        // 移除已有toast
+        var existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+
+        var toast = document.createElement('div');
+        toast.className = 'toast ' + (type || 'success');
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+
+        setTimeout(function() {
+            toast.style.animation = 'toastOut 0.3s ease forwards';
+            setTimeout(function() { toast.remove(); }, 320);
+        }, 2800);
+    }
     </script>
 </body>
 </html>
