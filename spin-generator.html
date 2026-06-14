@@ -518,6 +518,7 @@
         <div class="collapse-inner">
           <div class="save-bar">
             <span id="saveStatus">💡 填写后点击"保存公司信息"，下次自动加载</span>
+            <button class="btn-sm btn-sm-outline" onclick="loadExampleCompany()" style="border-color:#27ae60;color:#27ae60;">📥 加载示例</button>
             <button class="btn-sm btn-sm-primary" onclick="saveCompanyInfo()">💾 保存</button>
             <button class="btn-sm btn-sm-outline" onclick="loadCompanyInfo()">📂 加载已保存</button>
             <button class="btn-sm btn-sm-outline" onclick="clearCompanyInfo()" style="border-color:#e74c3c;color:#e74c3c;">🗑️ 清除</button>
@@ -559,6 +560,12 @@
       <div class="form-group">
         <label>补充说明 <span class="hint">（选填，可补充更多背景信息）</span></label>
         <textarea id="extraInfo" placeholder="例如：该公司最近在扩产，正在考察新的供应商..."></textarea>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+        <span style="font-size:13px;color:#7f8c8d;">快速填入示例数据：</span>
+        <button class="btn-sm btn-sm-outline" onclick="loadExampleCustomer()" style="border-color:#27ae60;color:#27ae60;">📥 加载示例客户</button>
+        <button class="btn-sm btn-sm-outline" onclick="fillAllExample()" style="border-color:#8e44ad;color:#8e44ad;">📦 一键填入全部示例</button>
       </div>
 
       <div class="api-key-section">
@@ -739,6 +746,47 @@ function restoreCompanyInfo() {
     if (info.intro) document.getElementById('myCompanyIntro').value = info.intro;
     if (info.highlights) document.getElementById('myProductHighlights').value = info.highlights;
   } catch(e) {}
+}
+
+// ========== 示例数据加载 ==========
+function loadExampleCompany() {
+  document.getElementById('myCompany').value = '江苏明珠阀门有限公司';
+  document.getElementById('myCompanyIntro').value = '江苏明珠成立于2003年，专注工业阀门研发制造，产品涵盖球阀、闸阀、截止阀等，广泛应用于石油、化工、电力、冶金等行业，年产值超8亿元，服务客户超过3000家。';
+  document.getElementById('myProductHighlights').value =
+`• 产品通过API、CE、TS等多项国际认证，质量达到行业TOP级
+• 阀门使用寿命比同行平均长30%，减少客户停机维护成本
+• 支持非标定制，7天内出图，15天内交付样品
+• 全国30个省市设有服务中心，48小时内上门响应
+• 已为中石化、中石油、万华化学等头部客户长期供货
+• 提供阀门全生命周期管理方案，帮助客户降低采购总成本`;
+  // 展开折叠面板以便用户看到填入的内容
+  const body = document.getElementById('collapseBody');
+  const arrow = document.getElementById('collapseArrow');
+  if (!body.classList.contains('open')) {
+    body.classList.add('open');
+    arrow.classList.add('open');
+  }
+  const bar = document.getElementById('saveStatus');
+  bar.innerHTML = '<span class="saved-ok">📥 已填入江苏明珠示例数据（可编辑修改后保存）</span>';
+  setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 4000);
+}
+
+function loadExampleCustomer() {
+  document.getElementById('industry').value = '化工行业';
+  document.getElementById('companySize').value = '500-1000人';
+  document.getElementById('role').value = '采购总监';
+  document.getElementById('extraInfo').value = '该公司正在扩建年产20万吨新材料项目，计划年底前完成主要设备采购，预算较充裕，但对公司现有供应商交期不满，正在考察新供应商。';
+  const bar = document.getElementById('saveStatus');
+  bar.innerHTML = '<span class="saved-ok">📥 已填入示例客户数据（化工行业/采购总监）</span>';
+  setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 4000);
+}
+
+function fillAllExample() {
+  loadExampleCompany();
+  loadExampleCustomer();
+  const bar = document.getElementById('saveStatus');
+  bar.innerHTML = '<span class="saved-ok">📦 已填入全部示例数据，可直接点击「分析痛点」体验完整流程</span>';
+  setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 5000);
 }
 
 function getCompanyContext() {
