@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>明珠销售工具箱 · 江苏明珠定制 | 大董老师天地人销售体系</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #f0f2f8;
+    color: #2d3748;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0d2b45 0%, #1a4a7a 40%, #2563a0 70%, #0d2b45 100%);
+    color: #fff;
+    padding: 48px 32px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -15%;
+    width: 500px;
+    height: 500px;
+    background: rgba(201,168,76,0.06);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.25);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 20px;
+    padding: 5px 20px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .hero-sub {
+    font-size: 15px;
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .hero-accent {
+    color: #c9a84c;
+    font-weight: 600;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  .stage-section {
+    margin-bottom: 36px;
+  }
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stage-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .stage-icon.pre { background: #ebf8ff; }
+  .stage-icon.during { background: #fffaf0; }
+  .stage-icon.after { background: #f0fff4; }
+  .stage-icon.strategy { background: #fef3e8; }
+
+  .stage-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a365d;
+  }
+  .stage-desc {
+    font-size: 13px;
+    color: #718096;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .tool-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 2px solid transparent;
+    transition: all 0.25s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .tool-card:hover {
+    border-color: #1a4a7a;
+    box-shadow: 0 6px 24px rgba(26,74,122,0.12);
+    transform: translateY(-2px);
+  }
+  .tool-card::after {
+    content: '→';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #cbd5e0;
+    transition: all 0.25s;
+  }
+  .tool-card:hover::after {
+    color: #1a4a7a;
+    right: 16px;
+  }
+
+  .tool-tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .tag-spin { background: #e8f4fd; color: #2980b9; }
+  .tag-lscpa { background: #e8f8f5; color: #27ae60; }
+  .tag-fabe { background: #fef9e7; color: #d35400; }
+  .tag-competition { background: #fdf6e3; color: #9a7d2e; }
+  .tag-classroom { background: #f4ecf7; color: #8e44ad; }
+
+  .tool-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1a365d;
+    margin-bottom: 6px;
+    padding-right: 24px;
+  }
+  .tool-desc {
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .tool-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #a0aec0;
+  }
+  .tool-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 13px;
+    color: #a0aec0;
+  }
+  .footer a {
+    color: #1a4a7a;
+    text-decoration: none;
+  }
+
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #c9a84c;
+  }
+  .stat-label {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 32px 16px 28px; }
+    .hero h1 { font-size: 24px; }
+    .container { padding: 20px 16px 32px; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 24px; }
+    .stat-num { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">江苏明珠 · 内训定制</div>
+  <h1>明珠销售工具箱</h1>
+  <div class="hero-sub">大董老师 <span class="hero-accent">天地人销售体系</span> · 课后落地工具集</div>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">5</div>
+      <div class="stat-label">实战工具</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">销售技能</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1</div>
+      <div class="stat-label">入口网址</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 拜访前：策略准备 -->
+  <div class="stage-section">
+    <div class="stage-header">
+      <div class="stage-icon strategy">🏆</div>
+      <div>
+        <div class="stage-title">竞争分析 · 知己知彼</div>
+        <div class="stage-desc">拜访前分析竞争对手，制定差异化打法</div>
+      </div>
+    </div>
+    <div class="tool-grid">
+      <a class="tool-card" href="competition-mingzhu.html">
+        <div class="tool-tag tag-competition">竞争分析</div>
+        <div class="tool-name">竞争分析计算器</div>
+        <div class="tool-desc">5步完成竞品对标：设置对手→选权重→加权评分→排名→攻防策略，用数据说话不凭感觉</div>
+        <div class="tool-meta">
+          <span>📊 量化评分</span>
+          <span>⚔️ 攻防策略</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 拜访中：沟通技能 -->
+  <div class="stage-section">
+    <div class="stage-header">
+      <div class="stage-icon during">💬</div>
+      <div>
+        <div class="stage-title">拜访沟通 · 技能训练</div>
+        <div class="stage-desc">SPIN挖痛 → FABE介绍 → LSCPA锁单，三步推进成交</div>
+      </div>
+    </div>
+    <div class="tool-grid">
+      <a class="tool-card" href="spin-mingzhu.html">
+        <div class="tool-tag tag-spin">SPIN</div>
+        <div class="tool-name">挖痛练习 · SPIN提问训练</div>
+        <div class="tool-desc">8道实战题，练就S→P→I→N提问力。涵盖工程/工业/家装/经销商四大明珠业务场景</div>
+        <div class="tool-meta">
+          <span>❓ 8题训练</span>
+          <span>🎯 4大场景</span>
+        </div>
+      </a>
+      <a class="tool-card" href="spin-classroom-mingzhu.html">
+        <div class="tool-tag tag-classroom">课堂演练</div>
+        <div class="tool-name">SPIN课堂实战演练</div>
+        <div class="tool-desc">15分钟沉浸式训练：选场景→填SPIN工作单→角色扮演排练，经销商/工业/家装三线场景</div>
+        <div class="tool-meta">
+          <span>🎭 角色扮演</span>
+          <span>📝 工作单</span>
+        </div>
+      </a>
+      <a class="tool-card" href="fabe-mingzhu.html">
+        <div class="tool-tag tag-fabe">FABE</div>
+        <div class="tool-name">介绍练习 · FABE产品价值</div>
+        <div class="tool-desc">8道实战题，掌握F特征→A优势→B利益→E证明的产品介绍逻辑，让客户心动而非被动听</div>
+        <div class="tool-meta">
+          <span>💡 8题训练</span>
+          <span>🔥 特征→利益</span>
+        </div>
+      </a>
+      <a class="tool-card" href="lscpa-mingzhu.html">
+        <div class="tool-tag tag-lscpa">LSCPA</div>
+        <div class="tool-name">锁单练习 · 抗拒处理+成交</div>
+        <div class="tool-desc">8道实战题，学会L倾听→S分享→C澄清→P呈现→A请求的抗拒化解五步法，把"不要"变"要"</div>
+        <div class="tool-meta">
+          <span>🛡️ 8题训练</span>
+          <span>✅ 化抗拒为成交</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 销售全流程图 -->
+  <div class="stage-section">
+    <div class="stage-header">
+      <div class="stage-icon pre">📋</div>
+      <div>
+        <div class="stage-title">使用建议</div>
+        <div class="stage-desc">按销售流程顺序使用工具，效果最佳</div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:24px 28px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;font-size:14px;color:#4a5568;">
+        <span style="background:#fef3e8;color:#9a7d2e;padding:6px 14px;border-radius:20px;font-weight:600;">🏆 竞争分析</span>
+        <span style="color:#cbd5e0;font-size:18px;">→</span>
+        <span style="background:#e8f4fd;color:#2980b9;padding:6px 14px;border-radius:20px;font-weight:600;">❓ SPIN挖痛</span>
+        <span style="color:#cbd5e0;font-size:18px;">→</span>
+        <span style="background:#fef9e7;color:#d35400;padding:6px 14px;border-radius:20px;font-weight:600;">💡 FABE介绍</span>
+        <span style="color:#cbd5e0;font-size:18px;">→</span>
+        <span style="background:#e8f8f5;color:#27ae60;padding:6px 14px;border-radius:20px;font-weight:600;">🛡️ LSCPA锁单</span>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#a0aec0;margin-top:14px;">先分析对手，再挖痛需求，然后展示价值，最后化解抗拒锁定成交</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  江苏明珠 · 大董老师天地人销售体系 · 课后落地工具箱<br>
+  <span style="font-size:12px;margin-top:4px;display:inline-block;">博商·懂生意·学完就落地</span>
+</div>
+
+</body>
+</html>
