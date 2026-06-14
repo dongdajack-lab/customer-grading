@@ -750,15 +750,16 @@ function restoreCompanyInfo() {
 
 // ========== 示例数据加载 ==========
 function loadExampleCompany() {
-  document.getElementById('myCompany').value = '江苏明珠阀门有限公司';
-  document.getElementById('myCompanyIntro').value = '江苏明珠成立于2003年，专注工业阀门研发制造，产品涵盖球阀、闸阀、截止阀等，广泛应用于石油、化工、电力、冶金等行业，年产值超8亿元，服务客户超过3000家。';
+  document.getElementById('myCompany').value = '江苏明珠家用设备集成有限公司（明珠舒适家）';
+  document.getElementById('myCompanyIntro').value = '始创于1995年，总部位于江苏昆山，注册资本2800万元。是一家集空调、地暖、新风、净水等产品批发、零售、设计、安装、售后服务为一体的综合家居集成服务商。同时面向地产、政府、医疗、企事业单位提供工程集成服务。';
   document.getElementById('myProductHighlights').value =
-`• 产品通过API、CE、TS等多项国际认证，质量达到行业TOP级
-• 阀门使用寿命比同行平均长30%，减少客户停机维护成本
-• 支持非标定制，7天内出图，15天内交付样品
-• 全国30个省市设有服务中心，48小时内上门响应
-• 已为中石化、中石油、万华化学等头部客户长期供货
-• 提供阀门全生命周期管理方案，帮助客户降低采购总成本`;
+`• 七大系统集成：空调/采暖/新风/净水/智能/生活家电一站式解决方案
+• M+Care明珠会员：一次购买享受长达10年安心售后服务
+• 专业团队全程跟进：上门送货、安装、调试、验收一体化服务
+• 365天售后服务支持，强大技术与施工团队，经验丰富
+• 已服务多个地产项目、政府单位、医疗机构、企事业单位工程
+• 代理大金、松下、三菱、海信等一线品牌，产品品质有保障
+• 对公维保服务：为企事业单位提供定期维护、快速响应`;
   // 展开折叠面板以便用户看到填入的内容
   const body = document.getElementById('collapseBody');
   const arrow = document.getElementById('collapseArrow');
@@ -767,17 +768,17 @@ function loadExampleCompany() {
     arrow.classList.add('open');
   }
   const bar = document.getElementById('saveStatus');
-  bar.innerHTML = '<span class="saved-ok">📥 已填入江苏明珠示例数据（可编辑修改后保存）</span>';
+  bar.innerHTML = '<span class="saved-ok">📥 已填入江苏明珠（明珠舒适家）示例数据（可编辑修改后保存）</span>';
   setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 4000);
 }
 
 function loadExampleCustomer() {
-  document.getElementById('industry').value = '化工行业';
-  document.getElementById('companySize').value = '500-1000人';
+  document.getElementById('industry').value = '房地产开发';
+  document.getElementById('companySize').value = '1000-3000人';
   document.getElementById('role').value = '采购总监';
-  document.getElementById('extraInfo').value = '该公司正在扩建年产20万吨新材料项目，计划年底前完成主要设备采购，预算较充裕，但对公司现有供应商交期不满，正在考察新供应商。';
+  document.getElementById('extraInfo').value = '该公司正在开发一处大型住宅小区项目（共8栋楼、约1200户），需集中采购户式中央空调及地暖系统，预算较充裕，但对公司现有供应商方案不满意，认为能耗偏高、售后响应慢，正在考察新供应商。项目预计9月前确定合作方。';
   const bar = document.getElementById('saveStatus');
-  bar.innerHTML = '<span class="saved-ok">📥 已填入示例客户数据（化工行业/采购总监）</span>';
+  bar.innerHTML = '<span class="saved-ok">📥 已填入示例客户数据（房地产开发/采购总监）</span>';
   setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 4000);
 }
 
