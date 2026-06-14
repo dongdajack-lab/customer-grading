@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN话术生成器 - 大董销售体系</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #333;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 30px 0 20px;
+    color: #fff;
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header p {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin: 24px 0 32px;
+    position: relative;
+  }
+  .progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background: rgba(255,255,255,0.15);
+    z-index: 0;
+  }
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    flex: 1;
+    max-width: 200px;
+  }
+  .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+  }
+  .progress-step.active .step-circle {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    border-color: transparent;
+    color: #1a1a2e;
+    box-shadow: 0 0 20px rgba(247, 151, 30, 0.4);
+  }
+  .progress-step.done .step-circle {
+    background: #27ae60;
+    border-color: transparent;
+    color: #fff;
+  }
+  .step-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+  .progress-step.active .step-label { color: #ffd200; }
+  .progress-step.done .step-label { color: #27ae60; }
+
+  /* Card */
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  /* Step Content */
+  .step-content { display: none; }
+  .step-content.active { display: block; }
+
+  /* Form */
+  .form-group {
+    margin-bottom: 24px;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-size: 15px;
+  }
+  .form-group label .hint {
+    font-weight: 400;
+    color: #95a5a6;
+    font-size: 13px;
+    margin-left: 6px;
+  }
+  input[type="text"], select, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    background: #fafafa;
+  }
+  input[type="text"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #f7971e;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(247,151,30,0.1);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* Pain Points */
+  .pain-points-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .pain-point-card {
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafafa;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .pain-point-card:hover {
+    border-color: #f7971e;
+    background: #fffbf0;
+  }
+  .pain-point-card.selected {
+    border-color: #f7971e;
+    background: linear-gradient(135deg, #fffbf0, #fff5e6);
+    box-shadow: 0 0 0 3px rgba(247,151,30,0.15);
+  }
+  .pain-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e74c3c;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .pain-content { flex: 1; }
+  .pain-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-size: 15px;
+  }
+  .pain-desc {
+    color: #7f8c8d;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* SPIN Result */
+  .spin-section {
+    margin-bottom: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+  }
+  .spin-header {
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .spin-header .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .spin-body {
+    padding: 16px 20px;
+    background: #fefefe;
+  }
+  .spin-body .question-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .spin-body .question-item:last-child { border-bottom: none; }
+  .spin-body .q-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .spin-body .q-text {
+    font-size: 14px;
+    color: #2c3e50;
+    line-height: 1.6;
+  }
+
+  /* Colors for SPIN sections */
+  .spin-S .spin-header { background: #e8f4f8; color: #16a085; }
+  .spin-S .icon { background: #16a085; }
+  .spin-P .spin-header { background: #fdedec; color: #e74c3c; }
+  .spin-P .icon { background: #e74c3c; }
+  .spin-I .spin-header { background: #fef5e7; color: #f39c12; }
+  .spin-I .icon { background: #f39c12; }
+  .spin-N .spin-header { background: #eafaf1; color: #27ae60; }
+  .spin-N .icon { background: #27ae60; }
+
+  /* Buttons */
+  .btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #1a1a2e;
+    box-shadow: 0 4px 15px rgba(247,151,30,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(247,151,30,0.4);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn-secondary {
+    background: #f0f0f0;
+    color: #555;
+  }
+  .btn-secondary:hover { background: #e0e0e0; }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #f7971e;
+    color: #f7971e;
+  }
+  .btn-outline:hover {
+    background: #fffbf0;
+  }
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+  .btn-group-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: #95a5a6;
+  }
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-top: 3px solid #f7971e;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Selected pain point display */
+  .selected-pain-banner {
+    background: linear-gradient(135deg, #fffbf0, #fff5e6);
+    border: 1px solid #f7971e;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .selected-pain-banner .pain-num {
+    background: #f7971e;
+  }
+  .selected-pain-banner .pain-title { color: #e67e22; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #bdc3c7;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .container { padding: 12px; }
+    .header h1 { font-size: 24px; }
+    .card { padding: 20px; }
+    .progress-bar::before { left: 10%; right: 10%; }
+    .step-label { font-size: 11px; }
+  }
+
+  /* Tooltip */
+  .api-key-section {
+    background: #f8f9fa;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .api-key-section label {
+    font-size: 13px;
+    color: #7f8c8d;
+    white-space: nowrap;
+  }
+  .api-key-section input {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .api-status {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .api-status.ok { background: #d5f5e3; color: #27ae60; }
+  .api-status.fail { background: #fdedec; color: #e74c3c; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">大董销售体系 · 天地人销售管理</div>
+    <h1>SPIN话术生成器</h1>
+    <p>输入客户信息，AI智能分析痛点，生成专业SPIN提问话术</p>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress-step active" id="prog-1">
+      <div class="step-circle">1</div>
+      <div class="step-label">输入客户信息</div>
+    </div>
+    <div class="progress-step" id="prog-2">
+      <div class="step-circle">2</div>
+      <div class="step-label">选择痛点</div>
+    </div>
+    <div class="progress-step" id="prog-3">
+      <div class="step-circle">3</div>
+      <div class="step-label">生成SPIN话术</div>
+    </div>
+  </div>
+
+  <!-- Step 1: Input -->
+  <div class="step-content active" id="step-1">
+    <div class="card">
+      <h2 style="font-size:20px;margin-bottom:6px;color:#2c3e50;">📋 输入客户信息</h2>
+      <p style="color:#95a5a6;margin-bottom:24px;font-size:14px;">请填写以下信息，帮助AI精准分析客户痛点</p>
+
+      <div class="form-group">
+        <label>客户所在行业 <span class="hint">（如：制造业、互联网、医疗器械）</span></label>
+        <input type="text" id="industry" placeholder="请输入行业，例如：智能制造">
+      </div>
+
+      <div class="form-group">
+        <label>公司规模 <span class="hint">（如：50人以下、200-500人、1000人以上）</span></label>
+        <input type="text" id="companySize" placeholder="请输入公司规模，例如：200-500人">
+      </div>
+
+      <div class="form-group">
+        <label>拜访对象的岗位/角色 <span class="hint">（如：采购经理、CEO、技术总监）</span></label>
+        <input type="text" id="role" placeholder="请输入岗位，例如：采购总监">
+      </div>
+
+      <div class="form-group">
+        <label>补充说明 <span class="hint">（选填，可补充更多背景信息）</span></label>
+        <textarea id="extraInfo" placeholder="例如：该公司最近在扩产，正在考察新的供应商..."></textarea>
+      </div>
+
+      <div class="api-key-section">
+        <label>🔑 DeepSeek API密钥</label>
+        <input type="password" id="apiKey" value="sk-05f031513a8b4caf93564eaf666f2947" placeholder="sk-...">
+        <span class="api-status" id="apiStatus">待验证</span>
+      </div>
+
+      <div class="btn-group">
+        <div></div>
+        <div class="btn-group-right">
+          <button class="btn btn-primary" onclick="analyzePainPoints()">
+            🔍 分析痛点
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Pain Points -->
+  <div class="step-content" id="step-2">
+    <div class="card">
+      <h2 style="font-size:20px;margin-bottom:6px;color:#2c3e50;">🎯 选择客户痛点</h2>
+      <p style="color:#95a5a6;margin-bottom:16px;font-size:14px;" id="painHint">
+        AI已分析<span id="roleDisplay"></span>的潜在痛点，请选择最贴合实际的一个：
+      </p>
+      <div id="painPointsContainer" class="pain-points-grid">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>AI正在分析痛点...</p>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="goToStep(1)">← 返回修改</button>
+        <button class="btn btn-primary" id="confirmPainBtn" onclick="generateSPIN()" disabled>
+          确认并生成SPIN话术 →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: SPIN Result -->
+  <div class="step-content" id="step-3">
+    <div class="card">
+      <h2 style="font-size:20px;margin-bottom:6px;color:#2c3e50;">💬 SPIN话术结果</h2>
+      <p style="color:#95a5a6;margin-bottom:20px;font-size:14px;">基于所选痛点，生成的四类SPIN提问话术</p>
+
+      <div class="selected-pain-banner" id="selectedPainBanner">
+        <div class="pain-num">!</div>
+        <div>
+          <div class="pain-title" id="selectedPainTitle">所选痛点</div>
+          <div class="pain-desc" id="selectedPainDesc">描述</div>
+        </div>
+      </div>
+
+      <div id="spinResult">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>AI正在生成SPIN话术...</p>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="goToStep(2)">← 重新选择痛点</button>
+        <div class="btn-group-right">
+          <button class="btn btn-outline" onclick="restart()">🔄 重新开始</button>
+          <button class="btn btn-primary" onclick="copySPIN()">📋 复制话术</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DEEPSEEK_API = 'https://api.deepseek.com/chat/completions';
+let currentStep = 1;
+let painPoints = [];
+let selectedPainIndex = -1;
+
+// Validate API key on load
+window.addEventListener('DOMContentLoaded', () => {
+  validateApiKey();
+});
+
+document.getElementById('apiKey').addEventListener('input', validateApiKey);
+
+function validateApiKey() {
+  const key = document.getElementById('apiKey').value.trim();
+  const status = document.getElementById('apiStatus');
+  if (!key) {
+    status.textContent = '请输入密钥';
+    status.className = 'api-status fail';
+    return false;
+  }
+  if (!key.startsWith('sk-')) {
+    status.textContent = '格式错误';
+    status.className = 'api-status fail';
+    return false;
+  }
+  status.textContent = '格式正确 ✓';
+  status.className = 'api-status ok';
+  return true;
+}
+
+function getApiKey() {
+  return document.getElementById('apiKey').value.trim();
+}
+
+async function callDeepSeek(messages, temperature = 0.7) {
+  const key = getApiKey();
+  if (!key) throw new Error('请先填写DeepSeek API密钥');
+
+  const resp = await fetch(DEEPSEEK_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${key}`
+    },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: messages,
+      temperature: temperature,
+      max_tokens: 2000
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`API调用失败 (${resp.status}): ${err}`);
+  }
+
+  const data = await resp.json();
+  return data.choices[0].message.content;
+}
+
+function goToStep(step) {
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.progress-step').forEach(el => {
+    const s = parseInt(el.id.replace('prog-', ''));
+    el.classList.remove('active', 'done');
+    if (s === step) el.classList.add('active');
+    else if (s < step) el.classList.add('done');
+  });
+  document.getElementById(`step-${step}`).classList.add('active');
+  currentStep = step;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function analyzePainPoints() {
+  const industry = document.getElementById('industry').value.trim();
+  const size = document.getElementById('companySize').value.trim();
+  const role = document.getElementById('role').value.trim();
+  const extra = document.getElementById('extraInfo').value.trim();
+
+  if (!industry || !size || !role) {
+    alert('请填写行业、公司规模和拜访岗位');
+    return;
+  }
+  if (!validateApiKey()) {
+    alert('请检查API密钥格式');
+    return;
+  }
+
+  goToStep(2);
+  document.getElementById('roleDisplay').textContent = `${role}（${industry}，${size}）`;
+  document.getElementById('painPointsContainer').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>AI正在分析 ${role} 的潜在痛点...</p>
+    </div>`;
+
+  try {
+    const prompt = `你是一位资深的B2B销售专家，精通SPIN销售法。请根据以下客户信息，分析该拜访对象最可能出现的6个业务痛点。
+
+客户信息：
+- 行业：${industry}
+- 公司规模：${size}
+- 拜访对象岗位：${role}
+${extra ? `- 补充信息：${extra}` : ''}
+
+请输出JSON格式，包含6个痛点，每个痛点包含：
+- title: 痛点标题（简短，15字以内）
+- desc: 痛点描述（50字以内，具体说明该痛点在该岗位上的表现）
+
+只输出JSON，不要有其他内容，格式如下：
+[{"title":"痛点标题","desc":"痛点描述"}, ...]`;
+
+    const content = await callDeepSeek([
+      { role: 'system', content: '你是资深B2B销售专家，精通SPIN销售法。只输出要求的JSON格式，不要有其他内容。' },
+      { role: 'user', content: prompt }
+    ], 0.8);
+
+    // Parse JSON from response
+    const jsonStr = extractJSON(content);
+    painPoints = JSON.parse(jsonStr);
+
+    renderPainPoints();
+  } catch (e) {
+    document.getElementById('painPointsContainer').innerHTML = `
+      <div class="empty-state">
+        <p style="color:#e74c3c;margin-bottom:12px;">❌ 分析失败</p>
+        <p style="font-size:13px;">${e.message}</p>
+        <button class="btn btn-secondary" style="margin-top:16px;" onclick="goToStep(1)">返回重新填写</button>
+      </div>`;
+  }
+}
+
+function extractJSON(str) {
+  // Try direct parse
+  try { return str; } catch(e) {}
+  // Extract from code block
+  const match = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+  if (match) return match[1];
+  // Extract array
+  const arrMatch = str.match(/\[[\s\S]*\]/);
+  if (arrMatch) return arrMatch[0];
+  throw new Error('无法解析AI返回的JSON');
+}
+
+function renderPainPoints() {
+  const container = document.getElementById('painPointsContainer');
+  container.innerHTML = '';
+
+  painPoints.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'pain-point-card';
+    card.id = `pain-${i}`;
+    card.innerHTML = `
+      <div class="pain-num">${i + 1}</div>
+      <div class="pain-content">
+        <div class="pain-title">${escHtml(p.title)}</div>
+        <div class="pain-desc">${escHtml(p.desc)}</div>
+      </div>
+    `;
+    card.onclick = () => selectPainPoint(i);
+    container.appendChild(card);
+  });
+}
+
+function selectPainPoint(index) {
+  document.querySelectorAll('.pain-point-card').forEach(el => el.classList.remove('selected'));
+  document.getElementById(`pain-${index}`).classList.add('selected');
+  selectedPainIndex = index;
+  document.getElementById('confirmPainBtn').disabled = false;
+}
+
+async function generateSPIN() {
+  if (selectedPainIndex < 0) return;
+
+  goToStep(3);
+  const pain = painPoints[selectedPainIndex];
+  document.getElementById('selectedPainTitle').textContent = pain.title;
+  document.getElementById('selectedPainDesc').textContent = pain.desc;
+
+  document.getElementById('spinResult').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>AI正在生成SPIN话术...</p>
+    </div>`;
+
+  const industry = document.getElementById('industry').value.trim();
+  const size = document.getElementById('companySize').value.trim();
+  const role = document.getElementById('role').value.trim();
+
+  try {
+    const prompt = `你是资深B2B销售专家，精通SPIN销售法（Situation问题、Problem问题、Implication问题、Need-payoff问题）。
+
+客户背景：
+- 行业：${industry}
+- 公司规模：${size}
+- 拜访对象：${role}
+- 核心痛点：${pain.title} — ${pain.desc}
+
+请针对这个痛点，生成SPIN四类提问话术。
+
+要求：
+1. Situation问题（现状问题）3条：了解客户当前现状的开放式问题
+2. Problem问题（问题问题）3条：引导客户说出当前困难的问题
+3. Implication问题（暗示问题）3条：让客户意识到问题不解决会有严重后果的问题
+4. Need-payoff问题（需求满足问题）3条：引导客户自己说出解决方案价值的问题
+
+话术要自然、口语化，符合中文销售场景，不要生硬翻译英文句式。
+
+请严格按照以下JSON格式输出（只输出JSON，不要其他内容）：
+{
+  "situation": [{"q": "问题内容", "tip": "提问目的"}],
+  "problem": [{"q": "问题内容", "tip": "提问目的"}],
+  "implication": [{"q": "问题内容", "tip": "提问目的"}],
+  "needpayoff": [{"q": "问题内容", "tip": "提问目的"}]
+}`;
+
+    const content = await callDeepSeek([
+      { role: 'system', content: '你是资深B2B销售专家，精通SPIN销售法。只输出要求的JSON格式，不要有其他内容。' },
+      { role: 'user', content: prompt }
+    ], 0.7);
+
+    const jsonStr = extractJSON(content);
+    const spinData = JSON.parse(jsonStr);
+
+    renderSPINResult(spinData);
+  } catch (e) {
+    document.getElementById('spinResult').innerHTML = `
+      <div class="empty-state">
+        <p style="color:#e74c3c;margin-bottom:12px;">❌ 生成失败</p>
+        <p style="font-size:13px;">${e.message}</p>
+        <button class="btn btn-secondary" style="margin-top:16px;" onclick="goToStep(2)">返回重新选择</button>
+      </div>`;
+  }
+}
+
+function renderSPINResult(data) {
+  const container = document.getElementById('spinResult');
+  container.innerHTML = '';
+
+  const sections = [
+    { key: 'situation', label: 'S - 现状问题', sub: 'Situation Questions', desc: '了解客户当前现状，建立对话基础', color: '#16a085' },
+    { key: 'problem', label: 'P - 问题问题', sub: 'Problem Questions', desc: '引导客户说出当前困难与不满', color: '#e74c3c' },
+    { key: 'implication', label: 'I - 暗示问题', sub: 'Implication Questions', desc: '让客户意识到问题不解决的严重后果', color: '#f39c12' },
+    { key: 'needpayoff', label: 'N - 需求满足问题', sub: 'Need-payoff Questions', desc: '引导客户自己说出解决方案的价值', color: '#27ae60' }
+  ];
+
+  sections.forEach(sec => {
+    const items = data[sec.key] || [];
+    if (items.length === 0) return;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = `spin-section spin-${sec.key.charAt(0).toUpperCase()}`;
+    let bodyHTML = '';
+    items.forEach(item => {
+      bodyHTML += `
+        <div class="question-item">
+          <div class="q-text">${escHtml(item.q)}</div>
+          ${item.tip ? `<div style="font-size:12px;color:#95a5a6;margin-top:4px;">💡 ${escHtml(item.tip)}</div>` : ''}
+        </div>`;
+    });
+
+    sectionEl.innerHTML = `
+      <div class="spin-header">
+        <div class="icon">${sec.label.charAt(0)}</div>
+        <div>
+          <div style="font-size:16px;">${sec.label}</div>
+          <div style="font-size:12px;opacity:0.7;font-weight:400;">${sec.sub} · ${sec.desc}</div>
+        </div>
+      </div>
+      <div class="spin-body">${bodyHTML}</div>
+    `;
+    container.appendChild(sectionEl);
+  });
+}
+
+function copySPIN() {
+  const el = document.getElementById('spinResult');
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target.closest('button');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ 已复制';
+    setTimeout(() => btn.innerHTML = orig, 2000);
+  }).catch(() => {
+    alert('复制失败，请手动选择复制');
+  });
+}
+
+function restart() {
+  painPoints = [];
+  selectedPainIndex = -1;
+  document.getElementById('confirmPainBtn').disabled = true;
+  goToStep(1);
+}
+
+function escHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+
+</body>
+</html>
