@@ -125,7 +125,7 @@
 
   /* Form */
   .form-group {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   .form-group label {
     display: block;
@@ -157,6 +157,80 @@
     box-shadow: 0 0 0 3px rgba(247,151,30,0.1);
   }
   textarea { resize: vertical; min-height: 80px; }
+
+  /* Collapsible Panel */
+  .collapse-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 14px 0;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+    user-select: none;
+  }
+  .collapse-toggle .arrow {
+    display: inline-block;
+    transition: transform 0.2s;
+    font-size: 12px;
+    color: #f7971e;
+  }
+  .collapse-toggle .arrow.open { transform: rotate(90deg); }
+  .collapse-toggle .label {
+    font-weight: 600;
+    color: #f7971e;
+    font-size: 15px;
+  }
+  .collapse-toggle .label-hint {
+    font-weight: 400;
+    color: #bdc3c7;
+    font-size: 13px;
+    margin-left: 8px;
+  }
+  .collapse-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .collapse-body.open {
+    max-height: 800px;
+  }
+  .collapse-inner {
+    padding: 4px 0 12px;
+  }
+
+  /* Save bar */
+  .save-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #7f8c8d;
+    flex-wrap: wrap;
+  }
+  .save-bar .saved-ok { color: #27ae60; font-weight: 600; }
+  .btn-sm {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-sm-primary {
+    background: #f7971e;
+    color: #fff;
+  }
+  .btn-sm-outline {
+    background: transparent;
+    border: 1.5px solid #f7971e;
+    color: #f7971e;
+  }
 
   /* Pain Points */
   .pain-points-grid {
@@ -434,7 +508,40 @@
       <h2 style="font-size:20px;margin-bottom:6px;color:#2c3e50;">📋 输入客户信息</h2>
       <p style="color:#95a5a6;margin-bottom:24px;font-size:14px;">请填写以下信息，帮助AI精准分析客户痛点</p>
 
-      <div class="form-group">
+      <!-- 我方公司信息（折叠） -->
+      <div class="collapse-toggle" onclick="toggleCollapse()">
+        <span class="arrow" id="collapseArrow">▶</span>
+        <span class="label">🏢 我方公司信息</span>
+        <span class="label-hint">（选填，填写后SPIN话术将结合我方产品优势）</span>
+      </div>
+      <div class="collapse-body" id="collapseBody">
+        <div class="collapse-inner">
+          <div class="save-bar">
+            <span id="saveStatus">💡 填写后点击"保存公司信息"，下次自动加载</span>
+            <button class="btn-sm btn-sm-primary" onclick="saveCompanyInfo()">💾 保存</button>
+            <button class="btn-sm btn-sm-outline" onclick="loadCompanyInfo()">📂 加载已保存</button>
+            <button class="btn-sm btn-sm-outline" onclick="clearCompanyInfo()" style="border-color:#e74c3c;color:#e74c3c;">🗑️ 清除</button>
+          </div>
+          <div class="form-group">
+            <label>我方公司名称 <span class="hint">（选填）</span></label>
+            <input type="text" id="myCompany" placeholder="例如：XX科技有限公司">
+          </div>
+          <div class="form-group">
+            <label>公司简介 <span class="hint">（选填，50字以内：主营业务、服务客户类型等）</span></label>
+            <textarea id="myCompanyIntro" placeholder="例如：专注为制造业提供智能制造解决方案，服务超过500家中大型工厂"></textarea>
+          </div>
+          <div class="form-group">
+            <label>产品/服务亮点 <span class="hint">（选填，逐条列出核心优势，生成话术时会重点参考）</span></label>
+            <textarea id="myProductHighlights" style="min-height:100px;" placeholder="例如：
+• 实施周期比同行快30%
+• 支持定制化开发
+• 7×24小时售后服务
+• 已服务行业TOP3客户"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:20px;">
         <label>客户所在行业 <span class="hint">（如：制造业、互联网、医疗器械）</span></label>
         <input type="text" id="industry" placeholder="请输入行业，例如：智能制造">
       </div>
@@ -499,6 +606,10 @@
       <h2 style="font-size:20px;margin-bottom:6px;color:#2c3e50;">💬 SPIN话术结果</h2>
       <p style="color:#95a5a6;margin-bottom:20px;font-size:14px;">基于所选痛点，生成的四类SPIN提问话术</p>
 
+      <div id="myCompanyUsed" class="hidden" style="background:#eafaf1;border:1px solid #27ae60;border-radius:10px;padding:10px 16px;margin-bottom:20px;font-size:13px;color:#1e8449;">
+        ✅ 已结合我方公司信息生成话术
+      </div>
+
       <div class="selected-pain-banner" id="selectedPainBanner">
         <div class="pain-num">!</div>
         <div>
@@ -538,12 +649,20 @@ let painPoints = [];
 let selectedPainIndex = -1;
 let currentProxyIdx = 0;
 
-// Validate API key on load
+// 页面加载时恢复保存的公司信息
 window.addEventListener('DOMContentLoaded', () => {
   validateApiKey();
+  restoreCompanyInfo();
 });
 
 document.getElementById('apiKey').addEventListener('input', validateApiKey);
+
+function toggleCollapse() {
+  const body = document.getElementById('collapseBody');
+  const arrow = document.getElementById('collapseArrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
 
 function validateApiKey() {
   const key = document.getElementById('apiKey').value.trim();
@@ -567,7 +686,73 @@ function getApiKey() {
   return document.getElementById('apiKey').value.trim();
 }
 
-// 带自动重试的API调用函数
+// ========== 公司信息本地保存 ==========
+function getCompanyInfo() {
+  return {
+    name: document.getElementById('myCompany').value.trim(),
+    intro: document.getElementById('myCompanyIntro').value.trim(),
+    highlights: document.getElementById('myProductHighlights').value.trim()
+  };
+}
+
+function saveCompanyInfo() {
+  const info = getCompanyInfo();
+  if (!info.name && !info.intro && !info.highlights) {
+    alert('请先填写公司信息再保存');
+    return;
+  }
+  localStorage.setItem('spin_company_info', JSON.stringify(info));
+  const bar = document.getElementById('saveStatus');
+  bar.innerHTML = '<span class="saved-ok">✅ 已保存到本地浏览器</span>';
+  setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 3000);
+}
+
+function loadCompanyInfo() {
+  const saved = localStorage.getItem('spin_company_info');
+  if (!saved) { alert('暂无保存的公司信息'); return; }
+  try {
+    const info = JSON.parse(saved);
+    document.getElementById('myCompany').value = info.name || '';
+    document.getElementById('myCompanyIntro').value = info.intro || '';
+    document.getElementById('myProductHighlights').value = info.highlights || '';
+    const bar = document.getElementById('saveStatus');
+    bar.innerHTML = '<span class="saved-ok">📂 已加载保存的公司信息</span>';
+    setTimeout(() => { bar.innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载'; }, 3000);
+  } catch(e) { alert('加载失败：' + e.message); }
+}
+
+function clearCompanyInfo() {
+  if (!confirm('确定清除已保存的公司信息？')) return;
+  localStorage.removeItem('spin_company_info');
+  document.getElementById('myCompany').value = '';
+  document.getElementById('myCompanyIntro').value = '';
+  document.getElementById('myProductHighlights').value = '';
+  document.getElementById('saveStatus').innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载';
+}
+
+function restoreCompanyInfo() {
+  const saved = localStorage.getItem('spin_company_info');
+  if (!saved) return;
+  try {
+    const info = JSON.parse(saved);
+    if (info.name) document.getElementById('myCompany').value = info.name;
+    if (info.intro) document.getElementById('myCompanyIntro').value = info.intro;
+    if (info.highlights) document.getElementById('myProductHighlights').value = info.highlights;
+  } catch(e) {}
+}
+
+function getCompanyContext() {
+  const info = getCompanyInfo();
+  if (!info.name && !info.intro && !info.highlights) return '';
+  let ctx = '\n\n我方（销售方）信息：\n';
+  if (info.name) ctx += `- 公司名称：${info.name}\n`;
+  if (info.intro) ctx += `- 公司简介：${info.intro}\n`;
+  if (info.highlights) ctx += `- 产品/服务亮点：\n${info.highlights}\n`;
+  ctx += '\n请在生成Need-payoff问题时，自然融入我方产品/服务的上述优势，让客户感受到我们的价值。';
+  return ctx;
+}
+
+// ========== API调用 ==========
 async function callDeepSeek(messages, temperature = 0.7, retryFromProxy = 0) {
   const key = getApiKey();
   if (!key) throw new Error('请先填写DeepSeek API密钥');
@@ -575,7 +760,6 @@ async function callDeepSeek(messages, temperature = 0.7, retryFromProxy = 0) {
   const proxyUrl = retryFromProxy < PROXY_LIST.length
     ? PROXY_LIST[retryFromProxy]
     : null;
-  // 如果所有代理都失败过，最后尝试直接调用（某些环境下可能可行）
   const finalUrl = proxyUrl
     ? proxyUrl + encodeURIComponent(DEEPSEEK_API)
     : DEEPSEEK_API;
@@ -598,7 +782,6 @@ async function callDeepSeek(messages, temperature = 0.7, retryFromProxy = 0) {
       body: requestBody
     });
   } catch (fetchErr) {
-    // 网络错误或CORS被拦截 → 尝试下一个代理
     if (retryFromProxy + 1 < PROXY_LIST.length) {
       console.warn(`代理 ${PROXY_LIST[retryFromProxy]} 失败，尝试下一个...`);
       return callDeepSeek(messages, temperature, retryFromProxy + 1);
@@ -613,14 +796,12 @@ async function callDeepSeek(messages, temperature = 0.7, retryFromProxy = 0) {
 
   if (!resp.ok) {
     const errText = await resp.text().catch(() => '');
-    // 某些代理返回的错误格式不同
     if (errText.includes('Access-Control') || errText.includes('blocked') || errText.includes('CORS')) {
       if (retryFromProxy + 1 < PROXY_LIST.length) {
         return callDeepSeek(messages, temperature, retryFromProxy + 1);
       }
     }
 
-    // 尝试从可能的包装结构中提取实际响应
     let errBody = errText;
     try { errBody = JSON.parse(errText); } catch(e) {}
 
@@ -638,11 +819,8 @@ async function callDeepSeek(messages, temperature = 0.7, retryFromProxy = 0) {
   }
 
   const data = await resp.json();
-
-  // 代理可能将整个响应包装了一层
   const content = data.choices?.[0]?.message?.content;
   if (!content) {
-    // 可能是代理返回了原始字符串
     if (typeof data === 'string') {
       const innerData = JSON.parse(data);
       return innerData.choices[0].message.content;
@@ -689,13 +867,14 @@ async function analyzePainPoints() {
     </div>`;
 
   try {
+    const companyCtx = getCompanyContext();
     const prompt = `你是一位资深的B2B销售专家，精通SPIN销售法。请根据以下客户信息，分析该拜访对象最可能出现的6个业务痛点。
 
 客户信息：
 - 行业：${industry}
 - 公司规模：${size}
 - 拜访对象岗位：${role}
-${extra ? `- 补充信息：${extra}` : ''}
+${extra ? `- 补充信息：${extra}` : ''}${companyCtx ? `\n注意：我方公司信息如下，请在分析痛点时考虑我方产品/服务可以解决的那些痛点，优先输出这类痛点。` + companyCtx : ''}
 
 请输出JSON格式，包含6个痛点，每个痛点包含：
 - title: 痛点标题（简短，15字以内）
@@ -709,7 +888,6 @@ ${extra ? `- 补充信息：${extra}` : ''}
       { role: 'user', content: prompt }
     ], 0.8);
 
-    // Parse JSON from response
     const jsonStr = extractJSON(content);
     painPoints = JSON.parse(jsonStr);
 
@@ -728,14 +906,11 @@ ${extra ? `- 补充信息：${extra}` : ''}
 }
 
 function extractJSON(str) {
-  // Try direct parse
-  try { return str; } catch(e) {}
-  // Extract from code block
+  try { JSON.parse(str); return str; } catch(e) {}
   const match = str.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-  if (match) return match[1];
-  // Extract array
+  if (match) { try { JSON.parse(match[1]); return match[1]; } catch(e) {} }
   const arrMatch = str.match(/\[[\s\S]*\]/);
-  if (arrMatch) return arrMatch[0];
+  if (arrMatch) { try { JSON.parse(arrMatch[0]); return arrMatch[0]; } catch(e) {} }
   throw new Error('无法解析AI返回的JSON');
 }
 
@@ -774,6 +949,15 @@ async function generateSPIN() {
   document.getElementById('selectedPainTitle').textContent = pain.title;
   document.getElementById('selectedPainDesc').textContent = pain.desc;
 
+  // 显示是否使用了公司信息
+  const companyCtx = getCompanyContext();
+  const usedBanner = document.getElementById('myCompanyUsed');
+  if (companyCtx) {
+    usedBanner.classList.remove('hidden');
+  } else {
+    usedBanner.classList.add('hidden');
+  }
+
   document.getElementById('spinResult').innerHTML = `
     <div class="loading">
       <div class="spinner"></div>
@@ -785,13 +969,14 @@ async function generateSPIN() {
   const role = document.getElementById('role').value.trim();
 
   try {
+    const ctx = getCompanyContext();
     const prompt = `你是资深B2B销售专家，精通SPIN销售法（Situation问题、Problem问题、Implication问题、Need-payoff问题）。
 
 客户背景：
 - 行业：${industry}
 - 公司规模：${size}
 - 拜访对象：${role}
-- 核心痛点：${pain.title} — ${pain.desc}
+- 核心痛点：${pain.title} — ${pain.desc}${ctx}
 
 请针对这个痛点，生成SPIN四类提问话术。
 
@@ -799,7 +984,7 @@ async function generateSPIN() {
 1. Situation问题（现状问题）3条：了解客户当前现状的开放式问题
 2. Problem问题（问题问题）3条：引导客户说出当前困难的问题
 3. Implication问题（暗示问题）3条：让客户意识到问题不解决会有严重后果的问题
-4. Need-payoff问题（需求满足问题）3条：引导客户自己说出解决方案价值的问题
+4. Need-payoff问题（需求满足问题）3条：引导客户自己说出解决方案价值的问题${ctx ? '，并且在Need-payoff问题中自然融入我方产品/服务的优势，让客户感受到选择我们的价值' : ''}
 
 话术要自然、口语化，符合中文销售场景，不要生硬翻译英文句式。
 
