@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首尔 5 日旅游行程</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --blue1: #0ea5e9;
+    --blue2: #6366f1;
+    --blue3: #06b6d4;
+    --attraction: #3b82f6;
+    --food: #f97316;
+    --culture: #8b5cf6;
+    --shopping: #ec4899;
+    --night: #14b8a6;
+    --card-bg: #fff;
+    --text: #1e293b;
+    --subtext: #64748b;
+    --border: #e2e8f0;
+    --timeline-line: #cbd5e1;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: var(--text); min-height: 100vh; }
+
+  /* ===== BANNER ===== */
+  .banner {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f172a 0%, #0c4a6e 30%, #164e63 60%, #0f3460 100%);
+  }
+  .banner-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .blob1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(14,165,233,0.45) 0%, transparent 70%); top: -150px; left: -80px; }
+  .blob2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%); top: -80px; left: 300px; }
+  .blob3 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(6,182,212,0.35) 0%, transparent 70%); top: -100px; right: 200px; }
+  .blob4 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%); bottom: -80px; right: 50px; }
+  .blob5 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(14,165,233,0.25) 0%, transparent 70%); bottom: -60px; left: 500px; }
+
+  .banner-content {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 100%; padding: 0 48px;
+  }
+  .banner-title-wrap { text-align: center; flex: 1; }
+  .banner-title-sub { font-size: 13px; letter-spacing: 4px; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-bottom: 8px; }
+  .banner-title { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1px; text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+  .banner-title span { color: #7dd3fc; }
+
+  .glass-badges { display: flex; gap: 12px; flex-shrink: 0; }
+  .glass-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    padding: 12px 20px;
+    text-align: center;
+    color: #fff;
+    min-width: 80px;
+  }
+  .glass-badge .val { font-size: 24px; font-weight: 700; line-height: 1; }
+  .glass-badge .lbl { font-size: 11px; opacity: 0.7; margin-top: 4px; letter-spacing: 1px; }
+
+  /* ===== TABS ===== */
+  .tabs-wrap { background: #fff; border-bottom: 1px solid var(--border); sticky top:0; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+  .tabs { display: flex; padding: 0 48px; gap: 0; }
+  .tab-btn {
+    padding: 14px 24px; cursor: pointer; border: none; background: none;
+    font-size: 14px; font-weight: 600; color: var(--subtext);
+    border-bottom: 3px solid transparent; transition: all 0.2s;
+    position: relative; letter-spacing: 0.5px;
+  }
+  .tab-btn:hover { color: var(--blue1); }
+  .tab-btn.active { color: var(--blue1); border-bottom-color: var(--blue1); }
+  .tab-btn .day-emoji { margin-right: 6px; font-size: 16px; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main { display: flex; gap: 0; height: calc(100vh - 270px); min-height: 560px; }
+
+  /* ===== TIMELINE ===== */
+  .timeline-wrap { width: 420px; flex-shrink: 0; overflow-y: auto; padding: 28px 24px 28px 48px; background: #f8fafc; border-right: 1px solid var(--border); }
+  .day-header { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .day-sub { font-size: 13px; color: var(--subtext); margin-bottom: 24px; }
+
+  .timeline { position: relative; padding-left: 36px; }
+  .poi-item { position: relative; margin-bottom: 20px; cursor: pointer; transition: transform 0.15s; }
+  .poi-item:hover { transform: translateX(4px); }
+  .poi-item:last-child { margin-bottom: 0; }
+
+  /* dot and line */
+  .poi-dot {
+    position: absolute; left: -36px; top: 14px;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #fff; z-index: 2;
+  }
+  .poi-dot::after {
+    content: '';
+    position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: calc(100% + 20px - 22px);
+    border-left: 2px dashed var(--timeline-line);
+    z-index: 1;
+  }
+  .poi-item:last-child .poi-dot::after { display: none; }
+
+  .type-attraction .poi-dot { background: var(--attraction); }
+  .type-food .poi-dot { background: var(--food); }
+  .type-culture .poi-dot { background: var(--culture); }
+  .type-shopping .poi-dot { background: var(--shopping); }
+  .type-night .poi-dot { background: var(--night); }
+
+  .poi-card {
+    background: #fff; border-radius: 12px; padding: 12px 14px;
+    border: 1.5px solid var(--border); transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .poi-item:hover .poi-card, .poi-item.active-poi .poi-card {
+    border-color: var(--blue1); box-shadow: 0 4px 16px rgba(14,165,233,0.15);
+  }
+  .poi-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .poi-type-tag {
+    font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; letter-spacing: 0.5px;
+  }
+  .type-attraction .poi-type-tag { background: #eff6ff; color: var(--attraction); }
+  .type-food .poi-type-tag { background: #fff7ed; color: var(--food); }
+  .type-culture .poi-type-tag { background: #faf5ff; color: var(--culture); }
+  .type-shopping .poi-type-tag { background: #fdf2f8; color: var(--shopping); }
+  .type-night .poi-type-tag { background: #f0fdfa; color: var(--night); }
+
+  .poi-time { font-size: 11px; color: var(--subtext); margin-left: auto; }
+  .poi-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .poi-desc { font-size: 12px; color: var(--subtext); line-height: 1.5; }
+  .poi-tip { font-size: 11px; color: #f97316; margin-top: 4px; }
+
+  /* legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--subtext); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* ===== MAP ===== */
+  .map-wrap { flex: 1; position: relative; }
+  #map-container { width: 100%; height: 100%; }
+  .map-info {
+    position: absolute; bottom: 20px; right: 20px; z-index: 10;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+    border-radius: 12px; padding: 10px 16px; font-size: 12px; color: var(--subtext);
+    border: 1px solid var(--border); max-width: 200px;
+  }
+  .map-poi-name { font-weight: 700; color: var(--text); font-size: 13px; margin-bottom: 2px; }
+
+  /* Scrollbar */
+  .timeline-wrap::-webkit-scrollbar { width: 4px; }
+  .timeline-wrap::-webkit-scrollbar-track { background: transparent; }
+  .timeline-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+  /* Map fallback */
+  .map-fallback {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    color: var(--subtext); font-size: 14px; gap: 12px;
+  }
+  .map-fallback svg { opacity: 0.4; }
+
+  /* Day panel */
+  .day-panel { display: none; height: 100%; }
+  .day-panel.active { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-blob blob1"></div>
+  <div class="banner-blob blob2"></div>
+  <div class="banner-blob blob3"></div>
+  <div class="banner-blob blob4"></div>
+  <div class="banner-blob blob5"></div>
+  <div class="banner-content">
+    <div style="width:220px;flex-shrink:0;"></div>
+    <div class="banner-title-wrap">
+      <div class="banner-title-sub">Travel Itinerary · 旅游行程</div>
+      <div class="banner-title">🇰🇷 <span>首尔</span> 五日深度游</div>
+    </div>
+    <div class="glass-badges">
+      <div class="glass-badge"><div class="val">5</div><div class="lbl">天数</div></div>
+      <div class="glass-badge"><div class="val">31</div><div class="lbl">POI 数</div></div>
+      <div class="glass-badge"><div class="val">¥4800</div><div class="lbl">预算/人</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" onclick="goDay(0)"><span class="day-emoji">🏯</span>DAY 1 历史首尔</button>
+    <button class="tab-btn" onclick="goDay(1)"><span class="day-emoji">🌸</span>DAY 2 文化漫步</button>
+    <button class="tab-btn" onclick="goDay(2)"><span class="day-emoji">🌿</span>DAY 3 自然之旅</button>
+    <button class="tab-btn" onclick="goDay(3)"><span class="day-emoji">🛍️</span>DAY 4 购物美食</button>
+    <button class="tab-btn" onclick="goDay(4)"><span class="day-emoji">🌃</span>DAY 5 夜生活告别</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-panels">
+
+  <!-- DAY 1 -->
+  <div class="day-panel active" id="panel-0">
+    <div class="timeline-wrap">
+      <div class="day-header">DAY 1 · 历史首尔</div>
+      <div class="day-sub">景福宫 → 北村韩屋村 → 仁寺洞 → 明洞夜市</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--attraction)"></div>景点</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--food)"></div>美食</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--culture)"></div>文化</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--shopping)"></div>购物</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--night)"></div>夜生活</div>
+      </div>
+      <div class="timeline" id="timeline-0">
+        <div class="poi-item type-attraction" data-day="0" data-idx="0" onclick="flyToPoi(0,0)">
+          <div class="poi-dot">1</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">景点</span><span class="poi-time">09:00</span></div>
+            <div class="poi-name">景福宫</div>
+            <div class="poi-desc">朝鲜王朝正宫，换岗仪式09:00/14:00，穿韩服免费入场</div>
+            <div class="poi-tip">💡 建议提前在线购票，节省排队时间</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="0" data-idx="1" onclick="flyToPoi(0,1)">
+          <div class="poi-dot">2</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">11:30</span></div>
+            <div class="poi-name">通仁市场传统便当</div>
+            <div class="poi-desc">用铜钱兑换市场内各摊位小食，打包成专属便当盒，体验老首尔烟火气</div>
+            <div class="poi-tip">💡 铜钱兑换处在市场入口，5000韩元=5枚</div>
+          </div>
+        </div>
+        <div class="poi-item type-culture" data-day="0" data-idx="2" onclick="flyToPoi(0,2)">
+          <div class="poi-dot">3</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">13:30</span></div>
+            <div class="poi-name">北村韩屋村</div>
+            <div class="poi-desc">保存最完整的传统韩屋聚集地，巷道迷宫中感受600年历史，最佳拍照时段为下午光线</div>
+          </div>
+        </div>
+        <div class="poi-item type-culture" data-day="0" data-idx="3" onclick="flyToPoi(0,3)">
+          <div class="poi-dot">4</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">15:30</span></div>
+            <div class="poi-name">仁寺洞传统文化街</div>
+            <div class="poi-desc">画廊、茶室、传统工艺品云集，쌈지길（Ssamziegil）四合院内小店值得逛</div>
+          </div>
+        </div>
+        <div class="poi-item type-night" data-day="0" data-idx="4" onclick="flyToPoi(0,4)">
+          <div class="poi-dot">5</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">夜生活</span><span class="poi-time">18:30</span></div>
+            <div class="poi-name">明洞夜市</div>
+            <div class="poi-desc">韩国最繁华购物街兼夜市，鸡蛋糕、辣炒年糕、奶酪棒必试，化妆品大牌林立</div>
+            <div class="poi-tip">💡 夜市约18:30开始，越晚越热闹</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="0" data-idx="5" onclick="flyToPoi(0,5)">
+          <div class="poi-dot">6</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">20:00</span></div>
+            <div class="poi-name">明洞八色烤肉</div>
+            <div class="poi-desc">韩国知名烤肉连锁，8种口味五花肉，分量足、服务好，适合第一晚体验地道韩烤</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap"><div id="map-0" style="width:100%;height:100%;"></div></div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-panel" id="panel-1">
+    <div class="timeline-wrap">
+      <div class="day-header">DAY 2 · 文化漫步</div>
+      <div class="day-sub">昌德宫秘苑 → 东大门设计广场 → 梨泰院 → 汉江公园</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--attraction)"></div>景点</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--food)"></div>美食</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--culture)"></div>文化</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--shopping)"></div>购物</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--night)"></div>夜生活</div>
+      </div>
+      <div class="timeline" id="timeline-1">
+        <div class="poi-item type-culture" data-day="1" data-idx="0" onclick="flyToPoi(1,0)">
+          <div class="poi-dot">1</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">09:00</span></div>
+            <div class="poi-name">昌德宫与秘苑</div>
+            <div class="poi-desc">世界遗产，秘苑需预约导览，300年古树与亭台映日，为韩国最美宫苑</div>
+            <div class="poi-tip">💡 秘苑每日场次有限，提前2周预约官网</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="1" data-idx="1" onclick="flyToPoi(1,1)">
+          <div class="poi-dot">2</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">12:00</span></div>
+            <div class="poi-name">广藏市场韩式早午餐</div>
+            <div class="poi-desc">首尔最古老传统市场，绿豆煎饼、麻辣拌、生牛肉是镇场三宝</div>
+            <div class="poi-tip">💡 绿豆煎饼现场煎制，趁热吃最香</div>
+          </div>
+        </div>
+        <div class="poi-item type-attraction" data-day="1" data-idx="2" onclick="flyToPoi(1,2)">
+          <div class="poi-dot">3</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">景点</span><span class="poi-time">14:00</span></div>
+            <div class="poi-name">东大门设计广场 DDP</div>
+            <div class="poi-desc">扎哈·哈迪德设计的未来感建筑，内有设计博物馆、创意市集，夜晚灯光更震撼</div>
+          </div>
+        </div>
+        <div class="poi-item type-culture" data-day="1" data-idx="3" onclick="flyToPoi(1,3)">
+          <div class="poi-dot">4</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">16:30</span></div>
+            <div class="poi-name">梨泰院多元文化街</div>
+            <div class="poi-desc">首尔最国际化街区，各国餐厅、独立设计师店、Homo Hill，《梨泰院 Class》取景地</div>
+          </div>
+        </div>
+        <div class="poi-item type-night" data-day="1" data-idx="4" onclick="flyToPoi(1,4)">
+          <div class="poi-dot">5</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">夜生活</span><span class="poi-time">19:30</span></div>
+            <div class="poi-name">汉江公园炸鸡啤酒局</div>
+            <div class="poi-desc">用 Baemin/Yogiyo 外卖 App 点炸鸡送到汉江边，首尔人的周末仪式感</div>
+            <div class="poi-tip">💡 盘浦汉江公园月光彩虹喷泉 20:00/21:00 各一场</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap"><div id="map-1" style="width:100%;height:100%;"></div></div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-panel" id="panel-2">
+    <div class="timeline-wrap">
+      <div class="day-header">DAY 3 · 自然之旅</div>
+      <div class="day-sub">北汉山 → 水原华城 → 益善洞 → 钟路夜食</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--attraction)"></div>景点</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--food)"></div>美食</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--culture)"></div>文化</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--shopping)"></div>购物</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--night)"></div>夜生活</div>
+      </div>
+      <div class="timeline" id="timeline-2">
+        <div class="poi-item type-attraction" data-day="2" data-idx="0" onclick="flyToPoi(2,0)">
+          <div class="poi-dot">1</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">景点</span><span class="poi-time">07:30</span></div>
+            <div class="poi-name">北汉山国立公园</div>
+            <div class="poi-desc">首尔市内花岗岩山脉，Dobongsan 初级线路约3小时，山顶俯瞰首尔全景震撼</div>
+            <div class="poi-tip">💡 带足饮用水，山上补给有限</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="2" data-idx="1" onclick="flyToPoi(2,1)">
+          <div class="poi-dot">2</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">12:00</span></div>
+            <div class="poi-name">道峰山入口部队锅</div>
+            <div class="poi-desc">登山后元气补给，部队锅发源于韩战后，午餐肉+年糕+方便面的奇妙组合</div>
+          </div>
+        </div>
+        <div class="poi-item type-culture" data-day="2" data-idx="2" onclick="flyToPoi(2,2)">
+          <div class="poi-dot">3</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">14:30</span></div>
+            <div class="poi-name">水原华城（世界遗产）</div>
+            <div class="poi-desc">距首尔1小时，朝鲜最完整城郭，5.7km城墙可全程步行，华虹门外小吃街</div>
+            <div class="poi-tip">💡 乘地铁1号线直达水原站，再转公交</div>
+          </div>
+        </div>
+        <div class="poi-item type-culture" data-day="2" data-idx="3" onclick="flyToPoi(2,3)">
+          <div class="poi-dot">4</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">17:00</span></div>
+            <div class="poi-name">益善洞韩屋咖啡街</div>
+            <div class="poi-desc">老韩屋改造的网红咖啡街，每家都独具风格，适合打卡和买手作纪念品</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="2" data-idx="4" onclick="flyToPoi(2,4)">
+          <div class="poi-dot">5</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">19:30</span></div>
+            <div class="poi-name">钟路3街煎饼胡同</div>
+            <div class="poi-desc">老首尔人的宝藏夜食，小酒馆密集，配马格利米酒的海鲜煎饼是经典吃法</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap"><div id="map-2" style="width:100%;height:100%;"></div></div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-panel" id="panel-3">
+    <div class="timeline-wrap">
+      <div class="day-header">DAY 4 · 购物美食</div>
+      <div class="day-sub">江南 COEX → 狎鸥亭罗德奥 → 新沙林荫道 → 弘大夜店街</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--attraction)"></div>景点</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--food)"></div>美食</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--culture)"></div>文化</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--shopping)"></div>购物</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--night)"></div>夜生活</div>
+      </div>
+      <div class="timeline" id="timeline-3">
+        <div class="poi-item type-shopping" data-day="3" data-idx="0" onclick="flyToPoi(3,0)">
+          <div class="poi-dot">1</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">购物</span><span class="poi-time">10:00</span></div>
+            <div class="poi-name">COEX Mall 星空图书馆</div>
+            <div class="poi-desc">亚洲最大地下购物中心，馆内 Starfield Library 网红打卡必去，书墙高达两层</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="3" data-idx="1" onclick="flyToPoi(3,1)">
+          <div class="poi-dot">2</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">12:00</span></div>
+            <div class="poi-name">江南区传统刀切面</div>
+            <div class="poi-desc">清淡鸡汤刀切面，江南上班族最爱午餐，配泡菜解腻</div>
+          </div>
+        </div>
+        <div class="poi-item type-shopping" data-day="3" data-idx="2" onclick="flyToPoi(3,2)">
+          <div class="poi-dot">3</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">购物</span><span class="poi-time">13:30</span></div>
+            <div class="poi-name">狎鸥亭罗德奥街</div>
+            <div class="poi-desc">韩国顶级富人区购物街，奢侈品牌+整形医院林立，整条街都是美容产业生态</div>
+          </div>
+        </div>
+        <div class="poi-item type-shopping" data-day="3" data-idx="3" onclick="flyToPoi(3,3)">
+          <div class="poi-dot">4</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">购物</span><span class="poi-time">15:30</span></div>
+            <div class="poi-name">新沙洞林荫道</div>
+            <div class="poi-desc">法国梧桐树下的时尚街区，独立设计师品牌、精品咖啡、美食聚集，适合漫步</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="3" data-idx="4" onclick="flyToPoi(3,4)">
+          <div class="poi-dot">5</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">18:00</span></div>
+            <div class="poi-name">新村铁板牛肉烧</div>
+            <div class="poi-desc">韩国大学生聚集区，铁板烤肉人均400-600元，配大量小菜和生菜卷肉</div>
+          </div>
+        </div>
+        <div class="poi-item type-night" data-day="3" data-idx="5" onclick="flyToPoi(3,5)">
+          <div class="poi-dot">6</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">夜生活</span><span class="poi-time">21:00</span></div>
+            <div class="poi-name">弘大夜生活街区</div>
+            <div class="poi-desc">首尔最著名夜生活区，Club Octagon / NB2 全球榜单常客，街头艺人表演至深夜</div>
+            <div class="poi-tip">💡 弘大地下通道周末有街头表演，免费观看</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap"><div id="map-3" style="width:100%;height:100%;"></div></div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-panel" id="panel-4">
+    <div class="timeline-wrap">
+      <div class="day-header">DAY 5 · 南山 & 告别</div>
+      <div class="day-sub">南山首尔塔 → 梨泰院购物收尾 → 仁川机场</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--attraction)"></div>景点</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--food)"></div>美食</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--culture)"></div>文化</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--shopping)"></div>购物</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--night)"></div>夜生活</div>
+      </div>
+      <div class="timeline" id="timeline-4">
+        <div class="poi-item type-attraction" data-day="4" data-idx="0" onclick="flyToPoi(4,0)">
+          <div class="poi-dot">1</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">景点</span><span class="poi-time">08:00</span></div>
+            <div class="poi-name">南山首尔塔日出</div>
+            <div class="poi-desc">乘缆车上南山，朝阳映照首尔全城，情侣锁栏上挂锁留念，480m塔尖在云端</div>
+            <div class="poi-tip">💡 早6点缆车开始运营，日出最美</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="4" data-idx="1" onclick="flyToPoi(4,1)">
+          <div class="poi-dot">2</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">09:30</span></div>
+            <div class="poi-name">南山脚下解忧汤饭</div>
+            <div class="poi-desc">黄金参鸡汤或牛骨汤饭，营养暖胃，告别首尔前最后一顿韩食仪式</div>
+          </div>
+        </div>
+        <div class="poi-item type-shopping" data-day="4" data-idx="2" onclick="flyToPoi(4,2)">
+          <div class="poi-dot">3</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">购物</span><span class="poi-time">11:00</span></div>
+            <div class="poi-name">明洞免税店扫货</div>
+            <div class="poi-desc">乐天、新世界免税店集中于此，护肤品、香水享免税价，行前最后采购机会</div>
+            <div class="poi-tip">💡 退税记得在机场办理，消费满15000韩元即可</div>
+          </div>
+        </div>
+        <div class="poi-item type-culture" data-day="4" data-idx="3" onclick="flyToPoi(4,3)">
+          <div class="poi-dot">4</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">文化</span><span class="poi-time">13:00</span></div>
+            <div class="poi-name">国立中央博物馆告别打卡</div>
+            <div class="poi-desc">亚洲最大博物馆之一，三韩时代至近代文物，镇馆之宝高丽青瓷不可错过</div>
+          </div>
+        </div>
+        <div class="poi-item type-food" data-day="4" data-idx="4" onclick="flyToPoi(4,4)">
+          <div class="poi-dot">5</div>
+          <div class="poi-card">
+            <div class="poi-card-top"><span class="poi-type-tag">美食</span><span class="poi-time">15:30</span></div>
+            <div class="poi-name">仁川机场韩国料理收尾</div>
+            <div class="poi-desc">机场4层美食城有正宗石锅拌饭和冷面，候机时享用，完美收尾首尔之行</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap"><div id="map-4" style="width:100%;height:100%;"></div></div>
+  </div>
+
+</div>
+
+<!-- Floating info box -->
+<div class="map-info" id="map-info" style="display:none;">
+  <div class="map-poi-name" id="info-name"></div>
+  <div id="info-desc" style="font-size:11px;color:#64748b;margin-top:2px;"></div>
+</div>
+
+<!-- Load Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<!-- Load Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// ============================================================
+//   DATA — Seoul 5-day itinerary POIs
+// ============================================================
+var daysData = [
+  { /* DAY 1 */
+    center: [37.5760, 126.9770], zoom: 14,
+    pois: [
+      { n:'景福宫', la:37.5796, lo:126.9770, t:'attraction', c:'#3b82f6', d:'朝鲜王朝正宫' },
+      { n:'通仁市场', la:37.5784, lo:126.9693, t:'food', c:'#f97316', d:'铜钱便当体验' },
+      { n:'北村韩屋村', la:37.5824, lo:126.9847, t:'culture', c:'#8b5cf6', d:'传统韩屋聚集地' },
+      { n:'仁寺洞', la:37.5744, lo:126.9852, t:'culture', c:'#8b5cf6', d:'传统文化街' },
+      { n:'明洞夜市', la:37.5635, lo:126.9856, t:'night', c:'#14b8a6', d:'首尔最繁华夜市' },
+      { n:'明洞八色烤肉', la:37.5638, lo:126.9843, t:'food', c:'#f97316', d:'8种口味五花肉' }
+    ]
+  },
+  { /* DAY 2 */
+    center: [37.5740, 126.9920], zoom: 13,
+    pois: [
+      { n:'昌德宫秘苑', la:37.5794, lo:126.9910, t:'culture', c:'#8b5cf6', d:'世界遗产宫苑' },
+      { n:'广藏市场', la:37.5700, lo:127.0011, t:'food', c:'#f97316', d:'绿豆煎饼老市场' },
+      { n:'东大门设计广场', la:37.5665, lo:127.0094, t:'attraction', c:'#3b82f6', d:'DDP 未来建筑' },
+      { n:'梨泰院', la:37.5345, lo:126.9944, t:'culture', c:'#8b5cf6', d:'多元文化街区' },
+      { n:'汉江公园', la:37.5283, lo:126.9910, t:'night', c:'#14b8a6', d:'炸鸡啤酒夜游' }
+    ]
+  },
+  { /* DAY 3 */
+    center: [37.5400, 127.0400], zoom: 11,
+    pois: [
+      { n:'北汉山国立公园', la:37.6594, lo:126.9784, t:'attraction', c:'#3b82f6', d:'花岗岩山脉徒步' },
+      { n:'道峰山部队锅', la:37.6623, lo:127.0463, t:'food', c:'#f97316', d:'登山后补给美食' },
+      { n:'水原华城', la:37.2888, lo:127.0139, t:'culture', c:'#8b5cf6', d:'世界遗产城郭' },
+      { n:'益善洞韩屋咖啡街', la:37.5742, lo:126.9984, t:'culture', c:'#8b5cf6', d:'老韩屋改造网红街' },
+      { n:'钟路煎饼胡同', la:37.5688, lo:126.9907, t:'food', c:'#f97316', d:'老首尔夜食圣地' }
+    ]
+  },
+  { /* DAY 4 */
+    center: [37.5250, 127.0200], zoom: 13,
+    pois: [
+      { n:'COEX Mall 星空图书馆', la:37.5115, lo:127.0590, t:'shopping', c:'#ec4899', d:'亚洲最大地下商场' },
+      { n:'江南刀切面', la:37.4979, lo:127.0276, t:'food', c:'#f97316', d:'清淡鸡汤刀切面' },
+      { n:'狎鸥亭罗德奥', la:37.5271, lo:127.0412, t:'shopping', c:'#ec4899', d:'韩国顶级购物街' },
+      { n:'新沙洞林荫道', la:37.5206, lo:127.0197, t:'shopping', c:'#ec4899', d:'法国梧桐时尚街' },
+      { n:'新村铁板牛肉烧', la:37.5541, lo:126.9372, t:'food', c:'#f97316', d:'大学生烤肉区' },
+      { n:'弘大夜生活街', la:37.5576, lo:126.9249, t:'night', c:'#14b8a6', d:'首尔最强夜店区' }
+    ]
+  },
+  { /* DAY 5 */
+    center: [37.5400, 126.9830], zoom: 13,
+    pois: [
+      { n:'南山首尔塔', la:37.5512, lo:126.9882, t:'attraction', c:'#3b82f6', d:'480m塔尖俯瞰首尔' },
+      { n:'南山解忧汤饭', la:37.5508, lo:126.9875, t:'food', c:'#f97316', d:'参鸡汤告别美食' },
+      { n:'明洞免税店', la:37.5626, lo:126.9829, t:'shopping', c:'#ec4899', d:'乐天新世界免税' },
+      { n:'国立中央博物馆', la:37.5238, lo:126.9804, t:'culture', c:'#8b5cf6', d:'亚洲最大博物馆之一' },
+      { n:'仁川机场美食', la:37.4602, lo:126.4407, t:'food', c:'#f97316', d:'机场石锅拌饭收尾' }
+    ]
+  }
+];
+
+var currentDay = 0;
+var leafletMaps = {};  // store Leaflet map instances per day
+
+/* ==================== TAB SWITCHING ==================== */
+function goDay(idx) {
+  currentDay = idx;
+  // toggle panels
+  var panels = document.getElementsByClassName('day-panel');
+  for (var i = 0; i < panels.length; i++) {
+    panels[i].style.display = (i === idx) ? 'flex' : 'none';
+  }
+  // toggle tabs
+  var tabs = document.getElementsByClassName('tab-btn');
+  for (var j = 0; j < tabs.length; j++) {
+    tabs[j].classList.toggle('active', j === idx);
+  }
+  // hide floating info
+  var infobox = document.getElementById('map-info');
+  if (infobox) infobox.style.display = 'none';
+
+  // build / show map after DOM update
+  setTimeout(function() { ensureLeafletMap(idx); }, 100);
+}
+
+/* ==================== FLY TO A POI ==================== */
+function flyToPoi(dayIdx, poiIdx) {
+  var poi = daysData[dayIdx].pois[poiIdx];
+  // highlight card
+  var items = document.querySelectorAll('#timeline-' + dayIdx + ' .poi-item');
+  for (var k = 0; k < items.length; k++) {
+    items[k].classList.toggle('active-poi', k === poiIdx);
+  }
+  // show floating info box
+  var ib = document.getElementById('map-info');
+  if (ib) {
+    document.getElementById('info-name').textContent = poi.n;
+    document.getElementById('info-desc').textContent = poi.d;
+    ib.style.display = 'block';
+  }
+  // move map
+  var m = leafletMaps[dayIdx];
+  if (m) {
+    m.flyTo([poi.la, poi.lo], 15, { duration: 0.8 });
+  }
+}
+
+/* ==================== CREATE LEAFLET MAP ==================== */
+function ensureLeafletMap(dayIdx) {
+  if (leafletMaps[dayIdx]) {
+    leafletMaps[dayIdx].invalidateSize();  // fix size if container was hidden
+    return;
+  }
+
+  var container = document.getElementById('map-' + dayIdx);
+  if (!container) return;
+  var day = daysData[dayIdx];
+
+  // safety guard: make sure Leaflet is loaded
+  if (typeof L === 'undefined' || !L.map) {
+    console.error('Leaflet library not loaded yet!');
+    return;
+  }
+
+  var map = L.map(container, {
+    zoomControl: true,
+    attributionControl: true
+  }).setView(day.center, day.zoom);
+
+  // tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  // route polyline
+  var pts = [];
+  for (var pi = 0; pi < day.pois.length; pi++) {
+    pts.push([day.pois[pi].la, day.pois[pi].lo]);
+  }
+  L.polyline(pts, { color: '#6366f1', weight: 3, dashArray: '8 4', opacity: 0.75 }).addTo(map);
+
+  // numbered markers
+  for (var mi = 0; mi < day.pois.length; mi++) {
+    var p = day.pois[mi];
+    var num = mi + 1;
+    var divIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:30px;height:30px;background:' + p.c +
+            ';border-radius:50%;border:2.5px solid #fff;' +
+            'display:flex;align-items:center;justify-content:center;' +
+            'color:#fff;font-weight:700;font-size:12px;' +
+            'box-shadow:0 2px 10px rgba(0,0,0,0.25);cursor:pointer;">' + num + '</div>',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+
+    var marker = L.marker([p.la, p.lo], { icon: divIcon }).addTo(map);
+    marker.bindPopup('<b>' + p.n + '</b><br/><small style="color:#64748b">' + p.d + '</small>', {
+      closeButton: false,
+      offset: [0, -20]
+    });
+    (function(didx, pidx) {
+      marker.on('click', function() { flyToPoi(didx, pidx); });
+    })(dayIdx, mi);
+  }
+
+  leafletMaps[dayIdx] = map;
+}
+
+/* ==================== INIT ON LOAD ==================== */
+document.addEventListener('DOMContentLoaded', function() {
+  ensureLeafletMap(0);
+});
+</script>
+</body>
+</html>
