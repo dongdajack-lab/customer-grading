@@ -527,10 +527,16 @@
 </div>
 
 <script>
+// CORS代理列表，按优先级排列，自动尝试直到成功
+const PROXY_LIST = [
+  'https://corsproxy.io/?',
+  'https://api.allorigins.win/raw?url='
+];
 const DEEPSEEK_API = 'https://api.deepseek.com/chat/completions';
 let currentStep = 1;
 let painPoints = [];
 let selectedPainIndex = -1;
+let currentProxyIdx = 0;
 
 // Validate API key on load
 window.addEventListener('DOMContentLoaded', () => {
@@ -561,31 +567,89 @@ function getApiKey() {
   return document.getElementById('apiKey').value.trim();
 }
 
-async function callDeepSeek(messages, temperature = 0.7) {
+// 带自动重试的API调用函数
+async function callDeepSeek(messages, temperature = 0.7, retryFromProxy = 0) {
   const key = getApiKey();
   if (!key) throw new Error('请先填写DeepSeek API密钥');
 
-  const resp = await fetch(DEEPSEEK_API, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${key}`
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: messages,
-      temperature: temperature,
-      max_tokens: 2000
-    })
+  const proxyUrl = retryFromProxy < PROXY_LIST.length
+    ? PROXY_LIST[retryFromProxy]
+    : null;
+  // 如果所有代理都失败过，最后尝试直接调用（某些环境下可能可行）
+  const finalUrl = proxyUrl
+    ? proxyUrl + encodeURIComponent(DEEPSEEK_API)
+    : DEEPSEEK_API;
+
+  const requestBody = JSON.stringify({
+    model: 'deepseek-chat',
+    messages: messages,
+    temperature: temperature,
+    max_tokens: 2000
   });
 
+  let resp;
+  try {
+    resp = await fetch(finalUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${key}`
+      },
+      body: requestBody
+    });
+  } catch (fetchErr) {
+    // 网络错误或CORS被拦截 → 尝试下一个代理
+    if (retryFromProxy + 1 < PROXY_LIST.length) {
+      console.warn(`代理 ${PROXY_LIST[retryFromProxy]} 失败，尝试下一个...`);
+      return callDeepSeek(messages, temperature, retryFromProxy + 1);
+    }
+    throw new Error(
+      `网络请求失败。可能原因：\n` +
+      `① 当前网络无法访问代理服务器\n` +
+      `② 浏览器安全策略限制了跨域请求\n\n` +
+      `建议：在本地电脑直接打开本文件使用（双击HTML文件），或在浏览器中允许跨域。`
+    );
+  }
+
   if (!resp.ok) {
-    const err = await resp.text();
-    throw new Error(`API调用失败 (${resp.status}): ${err}`);
+    const errText = await resp.text().catch(() => '');
+    // 某些代理返回的错误格式不同
+    if (errText.includes('Access-Control') || errText.includes('blocked') || errText.includes('CORS')) {
+      if (retryFromProxy + 1 < PROXY_LIST.length) {
+        return callDeepSeek(messages, temperature, retryFromProxy + 1);
+      }
+    }
+
+    // 尝试从可能的包装结构中提取实际响应
+    let errBody = errText;
+    try { errBody = JSON.parse(errText); } catch(e) {}
+
+    const errMsg = typeof errBody === 'object'
+      ? (errBody.error?.message || errBody.message || JSON.stringify(errBody))
+      : errText;
+
+    if (resp.status === 401 || resp.status === 403) {
+      throw new Error(`API密钥无效或已过期（${resp.status}）。\n请检查密钥是否正确，或到 DeepSeek 控制台重新生成。`);
+    }
+    if (resp.status === 429) {
+      throw new Error(`API调用频率超限（429）。\n请稍等几秒后重试。`);
+    }
+    throw new Error(`API返回错误 (${resp.status})：${errMsg.substring(0, 200)}`);
   }
 
   const data = await resp.json();
-  return data.choices[0].message.content;
+
+  // 代理可能将整个响应包装了一层
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) {
+    // 可能是代理返回了原始字符串
+    if (typeof data === 'string') {
+      const innerData = JSON.parse(data);
+      return innerData.choices[0].message.content;
+    }
+    throw new Error('API返回数据格式异常：' + JSON.stringify(data).substring(0, 200));
+  }
+  return content;
 }
 
 function goToStep(step) {
@@ -653,9 +717,12 @@ ${extra ? `- 补充信息：${extra}` : ''}
   } catch (e) {
     document.getElementById('painPointsContainer').innerHTML = `
       <div class="empty-state">
-        <p style="color:#e74c3c;margin-bottom:12px;">❌ 分析失败</p>
-        <p style="font-size:13px;">${e.message}</p>
-        <button class="btn btn-secondary" style="margin-top:16px;" onclick="goToStep(1)">返回重新填写</button>
+        <p style="color:#e74c3c;margin-bottom:12px;font-size:16px;">❌ 分析失败</p>
+        <pre style="background:#fef5f5;border-radius:8px;padding:14px 18px;font-size:13px;color:#c0392b;text-align:left;white-space:pre-wrap;word-break:break-word;line-height:1.6;">${escHtml(e.message)}</pre>
+        <div style="margin-top:16px;">
+          <button class="btn btn-secondary" onclick="goToStep(1)">← 返回重新填写</button>
+          <button class="btn btn-primary" style="margin-left:8px;" onclick="analyzePainPoints()">🔄 重试一次</button>
+        </div>
       </div>`;
   }
 }
@@ -756,9 +823,12 @@ async function generateSPIN() {
   } catch (e) {
     document.getElementById('spinResult').innerHTML = `
       <div class="empty-state">
-        <p style="color:#e74c3c;margin-bottom:12px;">❌ 生成失败</p>
-        <p style="font-size:13px;">${e.message}</p>
-        <button class="btn btn-secondary" style="margin-top:16px;" onclick="goToStep(2)">返回重新选择</button>
+        <p style="color:#e74c3c;margin-bottom:12px;font-size:16px;">❌ 生成失败</p>
+        <pre style="background:#fef5f5;border-radius:8px;padding:14px 18px;font-size:13px;color:#c0392b;text-align:left;white-space:pre-wrap;word-break:break-word;line-height:1.6;">${escHtml(e.message)}</pre>
+        <div style="margin-top:16px;">
+          <button class="btn btn-secondary" onclick="goToStep(2)">← 返回重新选择</button>
+          <button class="btn btn-primary" style="margin-left:8px;" onclick="generateSPIN()">🔄 重试一次</button>
+        </div>
       </div>`;
   }
 }
