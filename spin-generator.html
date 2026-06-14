@@ -518,10 +518,10 @@
         <div class="collapse-inner">
           <div class="save-bar">
             <span id="saveStatus">💡 填写后点击"保存公司信息"，下次自动加载</span>
-            <button class="btn-sm btn-sm-outline" onclick="loadExampleCompany()" style="border-color:#27ae60;color:#27ae60;">📥 加载示例</button>
-            <button class="btn-sm btn-sm-primary" onclick="saveCompanyInfo()">💾 保存</button>
-            <button class="btn-sm btn-sm-outline" onclick="loadCompanyInfo()">📂 加载已保存</button>
-            <button class="btn-sm btn-sm-outline" onclick="clearCompanyInfo()" style="border-color:#e74c3c;color:#e74c3c;">🗑️ 清除</button>
+            <button type="button" class="btn-sm btn-sm-outline" onclick="loadExampleCompany()" style="border-color:#27ae60;color:#27ae60;">📥 加载示例</button>
+            <button type="button" class="btn-sm btn-sm-primary" onclick="saveCompanyInfo()">💾 保存</button>
+            <button type="button" class="btn-sm btn-sm-outline" onclick="loadCompanyInfo()">📂 加载已保存</button>
+            <button type="button" class="btn-sm btn-sm-outline" onclick="clearCompanyInfo()" style="border-color:#e74c3c;color:#e74c3c;">🗑️ 清除</button>
           </div>
           <div class="form-group">
             <label>我方公司名称 <span class="hint">（选填）</span></label>
@@ -564,8 +564,8 @@
 
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
         <span style="font-size:13px;color:#7f8c8d;">快速填入示例数据：</span>
-        <button class="btn-sm btn-sm-outline" onclick="loadExampleCustomer()" style="border-color:#27ae60;color:#27ae60;">📥 加载示例客户</button>
-        <button class="btn-sm btn-sm-outline" onclick="fillAllExample()" style="border-color:#8e44ad;color:#8e44ad;">📦 一键填入全部示例</button>
+        <button type="button" class="btn-sm btn-sm-outline" onclick="loadExampleCustomer()" style="border-color:#27ae60;color:#27ae60;">📥 加载示例客户</button>
+        <button type="button" class="btn-sm btn-sm-outline" onclick="fillAllExample()" style="border-color:#8e44ad;color:#8e44ad;">📦 一键填入全部示例</button>
       </div>
 
       <div class="api-key-section">
@@ -577,7 +577,7 @@
       <div class="btn-group">
         <div></div>
         <div class="btn-group-right">
-          <button class="btn btn-primary" onclick="analyzePainPoints()">
+          <button type="button" class="btn btn-primary" onclick="analyzePainPoints()">
             🔍 分析痛点
           </button>
         </div>
@@ -599,8 +599,8 @@
         </div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-secondary" onclick="goToStep(1)">← 返回修改</button>
-        <button class="btn btn-primary" id="confirmPainBtn" onclick="generateSPIN()" disabled>
+        <button type="button" class="btn btn-secondary" onclick="goToStep(1)">← 返回修改</button>
+        <button type="button" class="btn btn-primary" id="confirmPainBtn" onclick="generateSPIN()" disabled>
           确认并生成SPIN话术 →
         </button>
       </div>
@@ -633,10 +633,10 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-secondary" onclick="goToStep(2)">← 重新选择痛点</button>
+        <button type="button" class="btn btn-secondary" onclick="goToStep(2)">← 重新选择痛点</button>
         <div class="btn-group-right">
-          <button class="btn btn-outline" onclick="restart()">🔄 重新开始</button>
-          <button class="btn btn-primary" onclick="copySPIN()">📋 复制话术</button>
+          <button type="button" class="btn btn-outline" onclick="restart()">🔄 重新开始</button>
+          <button type="button" class="btn btn-primary" onclick="copySPIN()">📋 复制话术</button>
         </div>
       </div>
     </div>
@@ -735,6 +735,14 @@ function clearCompanyInfo() {
   document.getElementById('myCompanyIntro').value = '';
   document.getElementById('myProductHighlights').value = '';
   document.getElementById('saveStatus').innerHTML = '💡 填写后点击"保存公司信息"，下次自动加载';
+  // 同步展开折叠面板，便于用户看到清除后的空状态
+  const body = document.getElementById('collapseBody');
+  const arrow = document.getElementById('collapseArrow');
+  if (!body.classList.contains('open')) {
+    body.classList.add('open');
+    arrow.classList.add('open');
+  }
+  alert('✅ 已清除：清空输入框 + 清除浏览器本地保存');
 }
 
 function restoreCompanyInfo() {
@@ -947,8 +955,8 @@ ${extra ? `- 补充信息：${extra}` : ''}${companyCtx ? `\n注意：我方公�
         <p style="color:#e74c3c;margin-bottom:12px;font-size:16px;">❌ 分析失败</p>
         <pre style="background:#fef5f5;border-radius:8px;padding:14px 18px;font-size:13px;color:#c0392b;text-align:left;white-space:pre-wrap;word-break:break-word;line-height:1.6;">${escHtml(e.message)}</pre>
         <div style="margin-top:16px;">
-          <button class="btn btn-secondary" onclick="goToStep(1)">← 返回重新填写</button>
-          <button class="btn btn-primary" style="margin-left:8px;" onclick="analyzePainPoints()">🔄 重试一次</button>
+          <button type="button" class="btn btn-secondary" onclick="goToStep(1)">← 返回重新填写</button>
+          <button type="button" class="btn btn-primary" style="margin-left:8px;" onclick="analyzePainPoints()">🔄 重试一次</button>
         </div>
       </div>`;
   }
@@ -1060,8 +1068,8 @@ async function generateSPIN() {
         <p style="color:#e74c3c;margin-bottom:12px;font-size:16px;">❌ 生成失败</p>
         <pre style="background:#fef5f5;border-radius:8px;padding:14px 18px;font-size:13px;color:#c0392b;text-align:left;white-space:pre-wrap;word-break:break-word;line-height:1.6;">${escHtml(e.message)}</pre>
         <div style="margin-top:16px;">
-          <button class="btn btn-secondary" onclick="goToStep(2)">← 返回重新选择</button>
-          <button class="btn btn-primary" style="margin-left:8px;" onclick="generateSPIN()">🔄 重试一次</button>
+          <button type="button" class="btn btn-secondary" onclick="goToStep(2)">← 返回重新选择</button>
+          <button type="button" class="btn btn-primary" style="margin-left:8px;" onclick="generateSPIN()">🔄 重试一次</button>
         </div>
       </div>`;
   }
