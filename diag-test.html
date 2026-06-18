@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>诊断测试</title>
+<style>
+body{font-family:sans-serif;padding:40px;background:#f5f5f5}
+.box{background:white;padding:20px;border-radius:12px;margin:20px 0;border:2px solid #ddd}
+.red{color:red;font-weight:bold}
+.green{color:green;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>🔬 渲染诊断测试</h1>
+<div id="log"></div>
+<div class="box" id="testCard">等待渲染...</div>
+<div id="test2" class="box">innerHTML 测试区</div>
+
+<script>
+var log = document.getElementById('log');
+function logMsg(msg) {
+  log.innerHTML += '<p class="red">▶ ' + msg + '</p>';
+  console.log(msg);
+}
+
+logMsg('Script 开始执行');
+
+// 测试1: 基础 DOM 操作
+try {
+  var card = document.getElementById('testCard');
+  logMsg('找到 testCard 元素: ' + !!card);
+  
+  card.innerHTML = '';
+  logMsg('card.innerHTML 已清空');
+  
+  var d1 = document.createElement('div');
+  d1.textContent = '✅ createElement 成功 - 第1题';
+  d1.style.cssText = 'font-size:18px;font-weight:bold;color:blue;margin:10px 0;';
+  card.appendChild(d1);
+  logMsg('appendChild 第1个元素成功');
+  
+  var d2 = document.createElement('div');
+  d2.innerHTML = '<span style="color:green;">✅ innerHTML 在 createElement 元素中正常</span>';
+  d2.style.padding = '10px;';
+  card.appendChild(d2);
+  logMsg('appendChild 第2个元素成功（含innerHTML）');
+  
+  var d3 = document.createElement('div');
+  d3.style.cssText = 'padding:15px;background:#eee;border-radius:8px;margin-top:10px;';
+  var btn = document.createElement('button');
+  btn.textContent = '点击测试 addEventListener';
+  btn.style.cssText = 'padding:10px 20px;font-size:16px;cursor:pointer;';
+  btn.addEventListener('click', function() {
+    alert('✅ addEventListener 工作正常！');
+  });
+  d3.appendChild(btn);
+  card.appendChild(d3);
+  logMsg('按钮创建并绑定事件成功');
+
+} catch(e) {
+  logMsg('❌ 测试1报错: ' + e.message + ' (行号:' + e.lineNumber + ')');
+}
+
+// 测试2: 模拟完整题目结构
+try {
+  var t2 = document.getElementById('test2');
+  var html = '';
+  html += '<div style="background:#8E44AD;color:white;display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;margin-bottom:12px;">第 1 题</div>';
+  html += '<div style="background:#f8f9fa;border-left:4px solid #8E44AD;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;"><span style="font-weight:600;color:#8E44AD;">【场景】</span>你是江苏明珠的暖通销售顾问...</div>';
+  html += '<div style="font-weight:600;margin:16px 0 8px;color:#333;">下面哪句话是 <strong>S - 现状问题</strong>？</div>';
+  
+  // 用 data-index 代替 onclick
+  var opts = ['选项A内容', '选项B内容', '选项C内容', '选项D内容'];
+  for (var i = 0; i < opts.length; i++) {
+    html += '<div class="opt" data-idx="' + i + '" style="display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;margin-bottom:12px;">';
+    html += '<div style="min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;"></div>';
+    html += '<div>[' + ['A','B','C','D'][i] + '] ' + opts[i] + '</div></div>';
+  }
+  
+  t2.innerHTML = html;
+  logMsg('✅ innerHTML 方式渲染完整题目结构成功');
+  
+  // 用 querySelectorAll 绑定事件
+  t2.querySelectorAll('.opt').forEach(function(el) {
+    el.addEventListener('click', function() {
+      t2.querySelectorAll('.opt').forEach(function(e) { e.style.borderColor = '#e0e0e0'; e.style.background = ''; });
+      this.style.borderColor = '#8E44AD';
+      this.style.background = '#F4ECF7';
+      logMsg('✅ 你点击了选项 ' + this.getAttribute('data-idx'));
+    });
+  });
+  logMsg('✅ querySelectorAll + addEventListener 绑定成功');
+
+} catch(e) {
+  logMsg('❌ 测试2报错: ' + e.message);
+}
+
+logMsg('<span class="green">🎉 所有诊断测试完成！如果上面全是绿色，说明浏览器DOM操作完全正常。</span>');
+</script>
+</body>
+</html>
