@@ -314,45 +314,26 @@ function renderQuestionL() {
 
   var labels = ['A','B','C','D'];
   var cardL = document.getElementById('questionCardL');
-  cardL.innerHTML = '';
 
-  var badgeL = document.createElement('div');
-  badgeL.className = 'question-badge';
-  badgeL.textContent = '第 ' + (currentL+1) + ' 题 · ' + q.step;
-  cardL.appendChild(badgeL);
-
-  var sceneL = document.createElement('div');
-  sceneL.className = 'scenario';
-  sceneL.innerHTML = q.scenario;
-  cardL.appendChild(sceneL);
-
-  var qTextL = document.createElement('div');
-  qTextL.style.cssText = 'font-weight:600;margin:14px 0 10px;color:#333;';
-  qTextL.innerHTML = q.question;
-  cardL.appendChild(qTextL);
-
-  var optWrapL = document.createElement('div');
-  optWrapL.className = 'options';
+  var html = '<div class="question-badge">第 ' + (currentL+1) + ' 题 · ' + q.step + '</div>';
+  html += '<div class="scenario">' + q.scenario + '</div>';
+  html += '<div style="font-weight:600;margin:14px 0 10px;color:#333;">' + q.question + '</div>';
+  html += '<div class="options">';
   q.options.forEach(function(o, idx) {
-    var div = document.createElement('div');
-    div.className = 'option';
-    div.id = 'optL' + idx;
-    div.innerHTML = '<div class="radio"></div><div class="text"><span class="opt-label">[' + labels[idx] + ']</span> ' + o.text + '</div>';
-    div.addEventListener('click', function() { selectOptionL(idx); });
-    optWrapL.appendChild(div);
+    html += '<div class="option" id="optL' + idx + '" data-idx="' + idx + '">';
+    html += '<div class="radio"></div>';
+    html += '<div class="text"><span class="opt-label">[' + labels[idx] + ']</span> ' + o.text + '</div>';
+    html += '</div>';
   });
-  cardL.appendChild(optWrapL);
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswerL"></div>';
+  html += '<div class="explanation" id="explanationL"><h4>📝 解析</h4><p>' + q.explain + '</p></div>';
+  cardL.innerHTML = html;
 
-  var caL = document.createElement('div');
-  caL.className = 'correct-answer';
-  caL.id = 'correctAnswerL';
-  cardL.appendChild(caL);
-
-  var expL = document.createElement('div');
-  expL.className = 'explanation';
-  expL.id = 'explanationL';
-  expL.innerHTML = '<h4>📝 解析</h4><p>' + q.explain + '</p>';
-  cardL.appendChild(expL);
+  // 绑定事件
+  cardL.querySelectorAll('.option').forEach(function(el, idx) {
+    el.addEventListener('click', function() { selectOptionL(idx); });
+  });
 }
 
 function selectOptionL(idx) {
@@ -402,45 +383,26 @@ function renderQuestionC() {
 
   var labels = ['A', 'B', 'C', 'D'];
   var cardC = document.getElementById('questionCardC');
-  cardC.innerHTML = '';
 
-  var badgeC = document.createElement('div');
-  badgeC.className = 'question-badge';
-  badgeC.textContent = '第 ' + (currentC+1) + ' 题 · 成交技巧';
-  cardC.appendChild(badgeC);
-
-  var sceneC = document.createElement('div');
-  sceneC.className = 'scenario';
-  sceneC.innerHTML = q.scenario;
-  cardC.appendChild(sceneC);
-
-  var qTextC = document.createElement('div');
-  qTextC.style.cssText = 'font-weight:600;margin:14px 0 10px;color:#333;';
-  qTextC.innerHTML = q.question;
-  cardC.appendChild(qTextC);
-
-  var optWrapC = document.createElement('div');
-  optWrapC.className = 'options';
+  var html = '<div class="question-badge">第 ' + (currentC+1) + ' 题 · 成交技巧</div>';
+  html += '<div class="scenario">' + q.scenario + '</div>';
+  html += '<div style="font-weight:600;margin:14px 0 10px;color:#333;">' + q.question + '</div>';
+  html += '<div class="options">';
   q.options.forEach(function(o, idx) {
-    var div = document.createElement('div');
-    div.className = 'option';
-    div.id = 'optC' + idx;
-    div.innerHTML = '<div class="radio"></div><div class="text"><span class="opt-label">[' + labels[idx] + ']</span> ' + o.text + '</div>';
-    div.addEventListener('click', function() { selectOptionC(idx); });
-    optWrapC.appendChild(div);
+    html += '<div class="option" id="optC' + idx + '" data-idx="' + idx + '">';
+    html += '<div class="radio"></div>';
+    html += '<div class="text"><span class="opt-label">[' + labels[idx] + ']</span> ' + o.text + '</div>';
+    html += '</div>';
   });
-  cardC.appendChild(optWrapC);
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswerC"></div>';
+  html += '<div class="explanation" id="explanationC"><h4>📝 解析</h4><p>' + q.explain + '</p></div>';
+  cardC.innerHTML = html;
 
-  var caC = document.createElement('div');
-  caC.className = 'correct-answer';
-  caC.id = 'correctAnswerC';
-  cardC.appendChild(caC);
-
-  var expC = document.createElement('div');
-  expC.className = 'explanation';
-  expC.id = 'explanationC';
-  expC.innerHTML = '<h4>📝 解析</h4><p>' + q.explain + '</p>';
-  cardC.appendChild(expC);
+  // 绑定事件
+  cardC.querySelectorAll('.option').forEach(function(el, idx) {
+    el.addEventListener('click', function() { selectOptionC(idx); });
+  });
 }
 
 function selectOptionC(idx) {
