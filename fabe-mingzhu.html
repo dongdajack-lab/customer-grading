@@ -321,7 +321,12 @@ function restart() {
   renderQuestion();
 }
 
-renderQuestion();
+try {
+  renderQuestion();
+} catch(e) {
+  document.getElementById("questionCard").innerHTML = '<div style="color:red;font-size:18px;padding:20px;">❌ JavaScript 报错：<br><br><b>' + e.message + '</b><br><br>第 ' + e.lineNumber + ' 行<br><pre style="background:#f5f5f5;padding:12px;margin-top:8px;overflow:auto;">' + e.stack + '</pre></div>';
+  console.error('renderQuestion error:', e);
+}
 </script>
 </body>
 </html>
