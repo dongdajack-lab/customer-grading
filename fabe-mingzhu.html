@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>大董老师 · 介绍练习 - 明珠公司定制版</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -28,6 +25,7 @@
   .tag-A { background:#FEF0E7; color:#E67E22; }
   .tag-B { background:#FDEBD0; color:#CA6F1E; }
   .tag-E { background:#FAD7A0; color:#A04000; }
+  .q-title { font-weight:600; margin:16px 0 8px; color:#333; font-size:15px; line-height:1.7; }
   .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
   .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
   .option:hover { border-color:#E67E22; background:#FEF9E7; }
@@ -70,6 +68,7 @@
   .restart-btn { margin-top:24px; padding:14px 48px; background:#E67E22; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
   .tip-box { background:#FEF9E7; border:1px solid #F0AD4E; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#7D6608; line-height:1.7; }
   .tip-box strong { color:#D35400; }
+  .q-block { display:none; }
 </style>
 </head>
 <body>
@@ -94,10 +93,132 @@
       <span class="fabe-tag tag-B">B 利益</span>
       <span class="fabe-tag tag-E">E 证明</span>
     </div>
-    <div class="card" id="questionCard"></div>
+    <div class="card">
+
+      <!-- ====== 第1题 ====== -->
+      <div class="q-block" id="q0" style="display:block;">
+        <div class="question-badge">第 1 题</div>
+        <div class="scenario"><span class="label">【场景】</span>你是江苏明珠的销售顾问，正在向某新建办公楼的项目负责人介绍大金VRV X7系列多联机中央空调系统。你想先建立产品认知。</div>
+        <div class="q-title">下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/参数）？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 相比传统中央空调，VRV X7部分负荷效率提升30%，在这个级别的多联机中能效比领先行业。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 苏州XX产业园去年装了同款系统，全年电费比原来省了42%，我们有他们的电费单对比。</div></div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 大金VRV X7系列采用全直流变频压缩机，单系统最大连接64台室内机，综合能效比IPLV(C)达9.2，支持-25℃制热运行。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 装了这套系统，您办公楼全年空调电费能降低35-40%，按2万平米算，一年省电费约25-30万元。</div></div>
+        </div>
+        <div class="correct-answer" id="ca0"><div class="label">✅ 正确答案：C — 大金VRV X7系列采用全直流变频压缩机，单系统最大连接64台室内机，综合能效比IPLV(C)达9.2，支持-25℃制热运行。</div></div>
+        <div class="explanation" id="ex0"><h4>解析</h4><p><strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的参数、技术、规格——「全直流变频、64台连接、IPLV 9.2、-25℃制热」都是典型的F。<br>A是与竞品比较；B是给客户带来的利益；E是第三方佐证。</p></div>
+      </div>
+
+      <!-- ====== 第2题 ====== -->
+      <div class="q-block" id="q1">
+        <div class="question-badge">第 2 题</div>
+        <div class="scenario"><span class="label">【场景】</span>接上题。客户听完参数介绍后说：听起来参数是不错，但我之前也看过格力和美的的方案，参数也差不多，价格还更便宜。</div>
+        <div class="q-title">接下来应该说 <strong>A - 优势</strong>（与竞品相比的差异化），下列哪句话最合适？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 大金VRV X7综合能效比IPLV达9.2，而国产品牌同级别产品IPLV普遍在7.5-8.2之间，能效领先15%以上。而且大金的压缩机设计寿命15年，行业平均是10-12年，长期运行衰减率远低于国产品牌。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 大金是日本品牌，品质有保障。</div></div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 用了大金的系统，电费一年能省30万。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 上海静安XX大厦装了大金，运行5年零故障。</div></div>
+        </div>
+        <div class="correct-answer" id="ca1"><div class="label">✅ 正确答案：A — 大金VRV X7综合能效比IPLV达9.2，而国产品牌同级别产品IPLV普遍在7.5-8.2之间，能效领先15%以上。而且大金的压缩机设计寿命15年，行业平均是10-12年，长期运行衰减率远低于国产品牌。</div></div>
+        <div class="explanation" id="ex1"><h4>解析</h4><p><strong>✅ A - 优势</strong><br><br>优势必须有「比较维度」——IPLV 9.2 vs 7.5-8.2、寿命15年 vs 10-12年。不带比较的描述只是F，不是A。<br>客户说"参数差不多"，就要用具体的数字对比来打破这个认知。</p></div>
+      </div>
+
+      <!-- ====== 第3题 ====== -->
+      <div class="q-block" id="q2">
+        <div class="question-badge">第 3 题</div>
+        <div class="scenario"><span class="label">【场景】</span>客户对大金的能效优势有了兴趣，但开始算账：能效高是好事，但设备贵了20%，我多久能回本？</div>
+        <div class="q-title">接下来应该说 <strong>B - 利益</strong>（给客户带来的具体好处），下列哪句话最合适？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 大金IPLV达9.2，比国产品牌高15%以上。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 上海XX大厦用了我们系统，运行5年零故障。</div></div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 我们压缩机设计寿命15年，行业平均10年。</div></div>
+          <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 虽然设备贵了20%，但按您办公楼2万平米计算，每年电费节省25-30万，3年就能收回设备差价。设备寿命15年，后12年省下的电费都是纯收益，总共为您节省300万以上。</div></div>
+        </div>
+        <div class="correct-answer" id="ca2"><div class="label">✅ 正确答案：D — 虽然设备贵了20%，但按您办公楼2万平米计算，每年电费节省25-30万，3年就能收回设备差价。设备寿命15年，后12年省下的电费都是纯收益，总共为您节省300万以上。</div></div>
+        <div class="explanation" id="ex2"><h4>解析</h4><p><strong>✅ B - 利益</strong><br><br>B必须用客户能听懂的语言算账。把"贵了20%"转化为"3年回本、12年纯赚"，让客户看到的是投资回报而不是成本。<br>暖通工程客户最有效的B：算综合拥有成本。</p></div>
+      </div>
+
+      <!-- ====== 第4题 ====== -->
+      <div class="q-block" id="q3">
+        <div class="question-badge">第 4 题</div>
+        <div class="scenario"><span class="label">【场景】</span>客户：听起来不错，但大品牌是不是售后很贵？我听说有的品牌配件贵、维修周期长。</div>
+        <div class="q-title">接下来应该说 <strong>E - 证明</strong>（用案例/数据佐证），下列哪句话最合适？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 大金IPLV达9.2，能效行业领先。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 用了大金，您每年电费能省30万。</div></div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 这是我们在昆山服务的XX产业园，装了大金VRV系统已运营3年零8个月，维保记录显示平均每年维保费用仅1.2万元（含两次巡检+一次深度清洗），从未发生重大故障。我们有完整的维保台账，您可以联系他们的物业经理核实。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 我们比国产品牌能效高15%以上，长期运行衰减更低。</div></div>
+        </div>
+        <div class="correct-answer" id="ca3"><div class="label">✅ 正确答案：C — 这是我们在昆山服务的XX产业园，装了大金VRV系统已运营3年零8个月，维保记录显示平均每年维保费用仅1.2万元（含两次巡检+一次深度清洗），从未发生重大故障。我们有完整的维保台账，您可以联系他们的物业经理核实。</div></div>
+        <div class="explanation" id="ex3"><h4>解析</h4><p><strong>✅ E - 证明</strong><br><br>E是第三方说话——维保台账、物业经理联系方式，都是可验证的证据。最好的E是：同类客户+具体数字+可核实。<br>"我们售后便宜"是口号，"维保台账显示年均1.2万"是证明。</p></div>
+      </div>
+
+      <!-- ====== 第5题 ====== -->
+      <div class="q-block" id="q4">
+        <div class="question-badge">第 5 题</div>
+        <div class="scenario"><span class="label">【场景】</span>你是明珠公司的销售，正在向一位别墅业主介绍阿里斯顿冷凝壁挂炉。业主以前用的是普通壁挂炉，觉得冬天燃气费太高。你想先建立产品认知。</div>
+        <div class="q-title">应该先说 <strong>F - 特征</strong>，下列哪句话最合适？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 用阿里斯顿冷凝炉，您家一年燃气费能从6000降到3500左右，每年省2500元以上。</div></div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 阿里斯顿冷凝壁挂炉采用全预混燃烧技术，热效率高达108%（低位热值），支持1:10宽幅变频调节，功率范围3-30kW自适应。</div></div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 比普通壁挂炉效率高15-20%，德国技术品质保障。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 昆山XX别墅区去年装了43台同款，业主反馈冬季采暖费用比原来少了38%。</div></div>
+        </div>
+        <div class="correct-answer" id="ca4"><div class="label">✅ 正确答案：B — 阿里斯顿冷凝壁挂炉采用全预混燃烧技术，热效率高达108%（低位热值），支持1:10宽幅变频调节，功率范围3-30kW自适应。</div></div>
+        <div class="explanation" id="ex4"><h4>解析</h4><p><strong>✅ F - 特征</strong><br><br>先说F，建立产品认知。暖通产品的F通常包含核心技术、热效率参数、变频范围等硬指标。<br>108%热效率是冷凝炉的核心卖点（利用烟气潜热），这个参数本身就能吸引客户。</p></div>
+      </div>
+
+      <!-- ====== 第6题 ====== -->
+      <div class="q-block" id="q5">
+        <div class="question-badge">第 6 题</div>
+        <div class="scenario"><span class="label">【场景】</span>接上题。别墅业主：效率高我知道，但冷凝炉比普通炉贵一倍，值不值啊？</div>
+        <div class="q-title">你应该用 <strong>A - 优势</strong> 来区分，下列哪个回答最合适？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 阿里斯顿冷凝炉热效率108%，普通炉只有88-92%，每年省燃气费2500元，用4年省下来的燃气费就超过设备差价了，后面每年都在赚钱。而且冷凝炉寿命12-15年，普通炉8-10年，相当于一台顶两台。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 阿里斯顿是意大利品牌，品质好。</div></div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 昆山XX别墅区装了43台，反馈很好。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 比普通炉省燃气费，每年省2500元。</div></div>
+        </div>
+        <div class="correct-answer" id="ca5"><div class="label">✅ 正确答案：A — 阿里斯顿冷凝炉热效率108%，普通炉只有88-92%，每年省燃气费2500元，用4年省下来的燃气费就超过设备差价了，后面每年都在赚钱。而且冷凝炉寿命12-15年，普通炉8-10年，相当于一台顶两台。</div></div>
+        <div class="explanation" id="ex5"><h4>解析</h4><p><strong>✅ A - 优势</strong><br><br>A要有比较维度：效率108% vs 88-92%、每年省2500、寿命12-15年 vs 8-10年、一台顶两台。<br>客户说"贵一倍"，A要回答"为什么值"——用数据证明总成本更低。</p></div>
+      </div>
+
+      <!-- ====== 第7题 ====== -->
+      <div class="q-block" id="q6">
+        <div class="question-badge">第 7 题</div>
+        <div class="scenario"><span class="label">【场景】</span>你是明珠公司的销售，正在向一位精装修楼盘的项目经理介绍松下全热交换新风系统。对方说：新风系统不都一样吗？就是把外面空气抽进来而已。</div>
+        <div class="q-title">下面四句话，按照FABE顺序应该最先说的是哪句（<strong>F - 特征</strong>）？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 装了松下新风，业主开窗次数减少80%，室内PM2.5常年控制在15μg/m³以内，楼盘可以打出"恒氧恒净"的卖点，溢价空间更大。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 松下新风系统在长三角精装楼盘覆盖率超过60%，万科、绿城、融创都是长期合作伙伴。</div></div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 松下全热交换新风系统采用双DC马达+高效全热交换芯，热回收效率达82%，PM2.5过滤效率99%，噪音低至21dB，24小时运行每天电费不到1块钱。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 相比普通单向流新风，松下双向全热交换系统能回收排风中82%的热量/冷量，冬天进风是温的、夏天进风是凉的，空调负荷降低20%，不是'把空气抽进来而已'。</div></div>
+        </div>
+        <div class="correct-answer" id="ca6"><div class="label">✅ 正确答案：C — 松下全热交换新风系统采用双DC马达+高效全热交换芯，热回收效率达82%，PM2.5过滤效率99%，噪音低至21dB，24小时运行每天电费不到1块钱。</div></div>
+        <div class="explanation" id="ex6"><h4>解析</h4><p><strong>✅ F - 特征</strong><br><br>面对"新风都差不多"的客户，先用F打破认知——热回收82%、过滤99%、噪音21dB、日电费不到1块。<br>用一组技术参数让对方意识到"原来新风之间差别这么大"。</p></div>
+      </div>
+
+      <!-- ====== 第8题 ====== -->
+      <div class="q-block" id="q7">
+        <div class="question-badge">第 8 题</div>
+        <div class="scenario"><span class="label">【场景】</span>你是一位明珠公司的销售经理，正在向一家连锁酒店集团推荐暖通设备整体解决方案（含大金空调+阿里斯顿锅炉+松下新风+安装售后）。对方采购总监说：你们价格比我们现有供应商高了15%，我现在供应商用了5年了也没什么大问题。</div>
+        <div class="q-title">你准备用完整的FABE结构回应。以下哪个描述是 <strong>B - 利益</strong>（对客户最直接的好处）？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text"><span class="opt-label">[A]</span> 我们方案涵盖大金VRV多联机+阿里斯顿冷凝锅炉+松下全热新风，所有设备明珠公司提供统一安装和5年售后。</div></div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text"><span class="opt-label">[B]</span> 不同于单品牌采购需自己协调安装，我们一站式总包：方案设计→设备供货→安装施工→5年维保，出了问题只找明珠一家，不存在多头推诿。</div></div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)"><div class="radio"></div><div class="text"><span class="opt-label">[C]</span> 按贵酒店15家门店的年能耗数据，我们方案能帮每家门店每年节省能源费用8-12万元、维保成本降低40%以上、客房投诉率因温控/新风问题下降60%，15家门店一年综合节省150万以上。</div></div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text"><span class="opt-label">[D]</span> 我们在长三角已服务27家连锁酒店，包括XX酒店集团的9家门店，综合节能效果平均达32%，最高的门店一年电费省了16万。</div></div>
+        </div>
+        <div class="correct-answer" id="ca7"><div class="label">✅ 正确答案：C — 按贵酒店15家门店的年能耗数据，我们方案能帮每家门店每年节省能源费用8-12万元、维保成本降低40%以上、客房投诉率因温控/新风问题下降60%，15家门店一年综合节省150万以上。</div></div>
+        <div class="explanation" id="ex7"><h4>解析</h4><p><strong>✅ B - 利益</strong><br><br>面对"价格高15%"的采购总监，B要回答的核心问题是："多花的15%能给我带来什么？"<br>把B量化到具体金额（一年省150万），让客户看到的是投资回报，而不是成本增加。</p></div>
+      </div>
+
+    </div><!-- /card -->
     <div class="btn-row">
-      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
-      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
     </div>
   </div>
 
@@ -117,184 +238,108 @@
 </div>
 
 <script>
-const questions = [
-  {
-    scenario: "你是江苏明珠的销售顾问，正在向某新建办公楼的项目负责人介绍大金VRV X7系列多联机中央空调系统。你想先建立产品认知。",
-    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/参数）？",
-    options: [
-      { text:"相比传统中央空调，VRV X7部分负荷效率提升30%，在这个级别的多联机中能效比领先行业。", type:"A", correct:false },
-      { text:"苏州XX产业园去年装了同款系统，全年电费比原来省了42%，我们有他们的电费单对比。", type:"E", correct:false },
-      { text:"大金VRV X7系列采用全直流变频压缩机，单系统最大连接64台室内机，综合能效比IPLV(C)达9.2，支持-25℃制热运行。", type:"F", correct:true },
-      { text:"装了这套系统，您办公楼全年空调电费能降低35-40%，按2万平米算，一年省电费约25-30万元。", type:"B", correct:false }
-    ],
-    explain:"<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的参数、技术、规格——「全直流变频、64台连接、IPLV 9.2、-25℃制热」都是典型的F。<br>A是与竞品比较；B是给客户带来的利益；E是第三方佐证。"
-  },
-  {
-    scenario: "接上题。客户听完参数介绍后说：听起来参数是不错，但我之前也看过格力和美的的方案，参数也差不多，价格还更便宜。",
-    question: "接下来应该说 <strong>A - 优势</strong>（与竞品相比的差异化），下列哪句话最合适？",
-    options: [
-      { text:"大金VRV X7综合能效比IPLV达9.2，而国产品牌同级别产品IPLV普遍在7.5-8.2之间，能效领先15%以上。而且大金的压缩机设计寿命15年，行业平均是10-12年，长期运行衰减率远低于国产品牌。", type:"A", correct:true },
-      { text:"大金是日本品牌，品质有保障。", type:"F", correct:false },
-      { text:"用了我们的系统，电费一年能省30万。", type:"B", correct:false },
-      { text:"上海静安XX大厦装了大金，运行5年零故障。", type:"E", correct:false }
-    ],
-    explain:"<strong>✅ A - 优势</strong><br><br>优势必须有「比较维度」——IPLV 9.2 vs 7.5-8.2、寿命15年 vs 10-12年。不带比较的描述只是F，不是A。<br>客户说"参数差不多"，就要用具体的数字对比来打破这个认知。"
-  },
-  {
-    scenario: "客户对大金的能效优势有了兴趣，但开始算账：能效高是好事，但设备贵了20%，我多久能回本？",
-    question: "接下来应该说 <strong>B - 利益</strong>（给客户带来的具体好处），下列哪句话最合适？",
-    options: [
-      { text:"大金IPLV达9.2，比国产品牌高15%以上。", type:"A", correct:false },
-      { text:"上海XX大厦用了我们系统，运行5年零故障。", type:"E", correct:false },
-      { text:"我们压缩机设计寿命15年，行业平均10年。", type:"F", correct:false },
-      { text:"虽然设备贵了20%，但按您办公楼2万平米计算，每年电费节省25-30万，3年就能收回设备差价。设备寿命15年，后12年省下的电费都是纯收益，总共为您节省300万以上。", type:"B", correct:true }
-    ],
-    explain:"<strong>✅ B - 利益</strong><br><br>B必须用客户能听懂的语言算账。把"贵了20%"转化为"3年回本、12年纯赚"，让客户看到的是投资回报而不是成本。<br>暖通工程客户最有效的B：算综合拥有成本。"
-  },
-  {
-    scenario: "客户：听起来不错，但大品牌是不是售后很贵？我听说有的品牌配件贵、维修周期长。",
-    question: "接下来应该说 <strong>E - 证明</strong>（用案例/数据佐证），下列哪句话最合适？",
-    options: [
-      { text:"大金IPLV达9.2，能效行业领先。", type:"F", correct:false },
-      { text:"用了大金，您每年电费能省30万。", type:"B", correct:false },
-      { text:"这是我们在昆山服务的XX产业园，装了大金VRV系统已运营3年零8个月，维保记录显示平均每年维保费用仅1.2万元（含两次巡检+一次深度清洗），从未发生重大故障。我们有完整的维保台账，您可以联系他们的物业经理核实。", type:"E", correct:true },
-      { text:"我们比国产品牌能效高15%以上，长期运行衰减更低。", type:"A", correct:false }
-    ],
-    explain:"<strong>✅ E - 证明</strong><br><br>E是第三方说话——维保台账、物业经理联系方式，都是可验证的证据。最好的E是：同类客户+具体数字+可核实。<br>"我们售后便宜"是口号，"维保台账显示年均1.2万"是证明。"
-  },
-  {
-    scenario: "你是明珠公司的销售，正在向一位别墅业主介绍阿里斯顿冷凝壁挂炉。业主以前用的是普通壁挂炉，觉得冬天燃气费太高。你想先建立产品认知。",
-    question: "应该先说 <strong>F - 特征</strong>，下列哪句话最合适？",
-    options: [
-      { text:"用阿里斯顿冷凝炉，您家一年燃气费能从6000降到3500左右，每年省2500元以上。", type:"B", correct:false },
-      { text:"阿里斯顿冷凝壁挂炉采用全预混燃烧技术，热效率高达108%（低位热值），支持1:10宽幅变频调节，功率范围3-30kW自适应。", type:"F", correct:true },
-      { text:"比普通壁挂炉效率高15-20%，德国技术品质保障。", type:"A", correct:false },
-      { text:"昆山XX别墅区去年装了43台同款，业主反馈冬季采暖费用比原来少了38%。", type:"E", correct:false }
-    ],
-    explain:"<strong>✅ F - 特征</strong><br><br>先说F，建立产品认知。暖通产品的F通常包含核心技术、热效率参数、变频范围等硬指标。<br>108%热效率是冷凝炉的核心卖点（利用烟气潜热），这个参数本身就能吸引客户。"
-  },
-  {
-    scenario: "接上题。别墅业主：效率高我知道，但冷凝炉比普通炉贵一倍，值不值啊？",
-    question: "你应该用 <strong>A - 优势</strong> 来区分，下列哪个回答最合适？",
-    options: [
-      { text:"阿里斯顿冷凝炉热效率108%，普通炉只有88-92%，每年省燃气费2500元，用4年省下来的燃气费就超过设备差价了，后面每年都在赚钱。而且冷凝炉寿命12-15年，普通炉8-10年，相当于一台顶两台。", type:"A", correct:true },
-      { text:"阿里斯顿是意大利品牌，品质好。", type:"F", correct:false },
-      { text:"昆山XX别墅区装了43台，反馈很好。", type:"E", correct:false },
-      { text:"比普通炉省燃气费，每年省2500元。", type:"B", correct:false }
-    ],
-    explain:"<strong>✅ A - 优势</strong><br><br>A要有比较维度：效率108% vs 88-92%、每年省2500、寿命12-15年 vs 8-10年、一台顶两台。<br>客户说"贵一倍"，A要回答"为什么值"——用数据证明总成本更低。"
-  },
-  {
-    scenario: "你是明珠公司的销售，正在向一位精装修楼盘的项目经理介绍松下全热交换新风系统。对方说：新风系统不都一样吗？就是把外面空气抽进来而已。",
-    question: "下面四句话，按照FABE顺序应该最先说的是哪句（<strong>F - 特征</strong>）？",
-    options: [
-      { text:"装了松下新风，业主开窗次数减少80%，室内PM2.5常年控制在15μg/m³以内，楼盘可以打出"恒氧恒净"的卖点，溢价空间更大。", type:"B", correct:false },
-      { text:"松下新风系统在长三角精装楼盘覆盖率超过60%，万科、绿城、融创都是长期合作伙伴。", type:"E", correct:false },
-      { text:"松下全热交换新风系统采用双DC马达+高效全热交换芯，热回收效率达82%，PM2.5过滤效率99%，噪音低至21dB，24小时运行每天电费不到1块钱。", type:"F", correct:true },
-      { text:"相比普通单向流新风，松下双向全热交换系统能回收排风中82%的热量/冷量，冬天进风是温的、夏天进风是凉的，空调负荷降低20%，不是'把空气抽进来而已'。", type:"A", correct:false }
-    ],
-    explain:"<strong>✅ F - 特征</strong><br><br>面对"新风都差不多"的客户，先用F打破认知——热回收82%、过滤99%、噪音21dB、日电费不到1块。<br>用一组技术参数让对方意识到"原来新风之间差别这么大"。"
-  },
-  {
-    scenario: "你是一位明珠公司的销售经理，正在向一家连锁酒店集团推荐暖通设备整体解决方案（含大金空调+阿里斯顿锅炉+松下新风+安装售后）。对方采购总监说：你们价格比我们现有供应商高了15%，我现在供应商用了5年了也没什么大问题。",
-    question: "你准备用完整的FABE结构回应。以下哪个描述是 <strong>B - 利益</strong>（对客户最直接的好处）？",
-    options: [
-      { text:"我们方案涵盖大金VRV多联机+阿里斯顿冷凝锅炉+松下全热新风，所有设备明珠公司提供统一安装和5年售后。", type:"F", correct:false },
-      { text:"不同于单品牌采购需自己协调安装，我们一站式总包：方案设计→设备供货→安装施工→5年维保，出了问题只找明珠一家，不存在多头推诿。", type:"A", correct:false },
-      { text:"按贵酒店15家门店的年能耗数据，我们方案能帮每家门店每年节省能源费用8-12万元、维保成本降低40%以上、客房投诉率因温控/新风问题下降60%，15家门店一年综合节省150万以上。", type:"B", correct:true },
-      { text:"我们在长三角已服务27家连锁酒店，包括XX酒店集团的9家门店，综合节能效果平均达32%，最高的门店一年电费省了16万。", type:"E", correct:false }
-    ],
-    explain:"<strong>✅ B - 利益</strong><br><br>面对"价格高15%"的采购总监，B要回答的核心问题是："多花的15%能给我带来什么？"<br>把B量化到具体金额（一年省150万），让客户看到的是投资回报，而不是成本增加。"
-  }
-];
+var current = 0;
+var selected = null;
+var answered = false;
+var results = [];
+var totalQuestions = 8;
 
-let current = 0, selected = null, answered = false, results = [];
-
-function renderQuestion() {
-  selected = null;
-  answered = false;
-  var q = questions[current];
-
-  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
-  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
-
-  document.getElementById("btnNext").textContent = "确认答案";
-  document.getElementById("btnNext").disabled = true;
-  document.getElementById("btnNext").onclick = nextQ;
-  document.getElementById("btnPrev").disabled = (current === 0);
-
-  var card = document.getElementById("questionCard");
-  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
-  html += '<div class="scenario"><span class="label">【场景】</span>' + q.scenario + '</div>';
-  html += '<div style="font-weight:600; margin:16px 0 8px; color:#333;">' + q.question + '</div>';
-  html += '<div class="options">';
-  var labels = ['A', 'B', 'C', 'D'];
-  for (var i = 0; i < q.options.length; i++) {
-    var o = q.options[i];
-    html += '<div class="option" id="opt' + i + '" data-idx="' + i + '">';
-    html += '  <div class="radio"></div>';
-    html += '  <div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
-    html += '</div>';
-  }
-  html += '</div>';
-  html += '<div class="correct-answer" id="correctAnswer"></div>';
-  html += '<div class="explanation" id="explanation">';
-  html += '  <h4>解析</h4>';
-  html += '  <p>' + q.explain + '</p>';
-  html += '</div>';
-  card.innerHTML = html;
-
-  // 用 data-idx + querySelectorAll 绑定事件
-  var opts = card.querySelectorAll('.option');
-  for (var j = 0; j < opts.length; j++) {
-    (function(idx) {
-      opts[idx].addEventListener('click', function() { selectOption(idx); });
-    })(j);
-  }
+function init() {
+  updateProgress();
+  showQuestion(0);
 }
 
-function selectOption(idx) {
+function updateProgress() {
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + totalQuestions + " 题";
+  document.getElementById("progressFill").style.width = (current / totalQuestions * 100) + "%";
+}
+
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) {
+    var el = document.getElementById('q' + i);
+    if (el) el.style.display = 'none';
+  }
+  var curr = document.getElementById('q' + idx);
+  if (curr) curr.style.display = 'block';
+
+  selected = null;
+  answered = false;
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = confirmAnswer;
+  document.getElementById("btnPrev").disabled = (idx === 0);
+}
+
+function selectOpt(idx) {
   if (answered) return;
   selected = idx;
-  document.querySelectorAll(".option").forEach(function(el,i) { el.classList.toggle("selected", i === idx); });
+  var container = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < container.length; i++) {
+    if (i === idx) {
+      container[i].classList.add('selected');
+    } else {
+      container[i].classList.remove('selected');
+    }
+  }
   document.getElementById("btnNext").disabled = false;
 }
 
-function nextQ() {
+function confirmAnswer() {
   if (selected === null) return;
-  var q = questions[current];
-  var isCorrect = q.options[selected].correct;
+
+  var qBlock = document.getElementById('q' + current);
+  var options = qBlock.querySelectorAll('.option');
+  var isCorrect = false;
+
+  for (var i = 0; i < options.length; i++) {
+    var optCorrect = options[i].getAttribute('data-correct') === 'true';
+    if (optCorrect) options[i].classList.add('correct');
+    if (i === selected && !optCorrect) options[i].classList.add('wrong');
+    if (i === selected && optCorrect) isCorrect = true;
+  }
+
   answered = true;
-  document.querySelectorAll(".option").forEach(function(el,i) {
-    if (q.options[i].correct) el.classList.add("correct");
-    if (i === selected && !isCorrect) el.classList.add("wrong");
-    el.onclick = null;
-  });
   results[current] = isCorrect;
-  var labels = ['A', 'B', 'C', 'D'];
-  var correctIdx = q.options.findIndex(function(o) { return o.correct === true; });
-  document.getElementById('correctAnswer').innerHTML = '<div class="label">✅ 正确答案：' + labels[correctIdx] + ' — ' + q.options[correctIdx].text + '</div>';
-  document.getElementById('correctAnswer').classList.add('show');
-  document.getElementById("explanation").classList.add("show");
-  if (current < questions.length - 1) {
+
+  var ca = document.getElementById('ca' + current);
+  var ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show');
+  if (ex) ex.classList.add('show');
+
+  document.getElementById("btnNext").disabled = false;
+  if (current < totalQuestions - 1) {
     document.getElementById("btnNext").textContent = "下一题 →";
-    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+    document.getElementById("btnNext").onclick = goNext;
   } else {
     document.getElementById("btnNext").textContent = "查看结果";
     document.getElementById("btnNext").onclick = showResult;
   }
-  document.getElementById("btnNext").disabled = false;
 }
 
-function prevQ() { if (current > 0) { current--; renderQuestion(); } }
+function goNext() {
+  current++;
+  updateProgress();
+  showQuestion(current);
+}
+
+document.getElementById("btnPrev").onclick = function() {
+  if (current > 0) {
+    current--;
+    updateProgress();
+    showQuestion(current);
+  }
+};
 
 function showResult() {
   document.getElementById("quizPage").style.display = "none";
   document.getElementById("resultPage").classList.add("show");
   var score = 0;
-  for (var i = 0; i < results.length; i++) { if (results[i]) score++; }
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
   document.getElementById("scoreNum").textContent = score;
   document.getElementById("percentNum").textContent = Math.round(score / results.length * 100);
+
   var detail = "<h3>答题详情</h3>";
   for (var i = 0; i < results.length; i++) {
     detail += '<div class="result-item"><span class="status">' + (results[i] ? '✅' : '❌') + '</span><span>第 ' + (i+1) + ' 题：' + (results[i] ? '正确' : '错误') + '</span></div>';
@@ -303,17 +348,19 @@ function showResult() {
 }
 
 function restart() {
-  current = 0; selected = null; answered = false; results = [];
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
   document.getElementById("quizPage").style.display = "block";
   document.getElementById("resultPage").classList.remove("show");
-  renderQuestion();
+  init();
 }
 
-try {
-  renderQuestion();
-} catch(e) {
-  document.getElementById("questionCard").innerHTML = '<div style="color:red;font-size:18px;padding:20px;">❌ JavaScript 报错：<br><br><b>' + e.message + '</b><br><br>第 ' + e.lineNumber + ' 行<br><pre style="background:#f5f5f5;padding:12px;margin-top:8px;overflow:auto;">' + e.stack + '</pre></div>';
-  console.error('renderQuestion error:', e);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
 }
 </script>
 </body>
