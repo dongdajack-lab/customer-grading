@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>你的时间花对客户了吗？· 大董老师</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --grade-a: #D43D2E;
+    --grade-b: #D98C2E;
+    --grade-c: #5A8F6B;
+    --grade-d: #7A8B99;
+    --primary: #1B3A5C;
+    --primary-light: #2C5AA0;
+    --bg: #F5F3EE;
+    --card-bg: #FFFFFF;
+    --text: #2C2C2A;
+    --text-light: #6E6D6A;
+    --border: rgba(0,0,0,0.08);
+    --radius: 14px;
+    --radius-sm: 10px;
+  }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  #app { max-width: 520px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  /* HEADER */
+  .hdr {
+    background: linear-gradient(135deg, #1B3A5C 0%, #2C5AA0 40%, #1B3A5C 100%);
+    color: #fff;
+    padding: 28px 20px 24px;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 1.25rem;
+  }
+  .hdr .eyebrow {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 0.5px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 3px 14px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .hdr h1 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+  .hdr .sub {
+    font-size: 13px;
+    opacity: 0.78;
+    line-height: 1.5;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.25rem 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  }
+  .card-tip {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 1.1rem;
+    padding: 10px 14px;
+    background: #FDF8F0;
+    border-radius: 8px;
+    border-left: 3px solid #D98C2E;
+    line-height: 1.5;
+  }
+
+  /* CUSTOMER NAME */
+  .cust-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text);
+    background: #FAFAF8;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .cust-input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(44,90,160,0.08);
+  }
+  .cust-input::placeholder { color: #C0BFBD; }
+
+  /* DIMENSION ROW */
+  .dim-row {
+    padding: 14px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .dim-row:last-of-type {
+    border-bottom: none;
+  }
+  .dim-label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .dim-label .num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #EBE9E4;
+    color: var(--text-light);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* RADIO GROUP */
+  .radio-group {
+    display: flex;
+    gap: 6px;
+  }
+  .radio-opt {
+    flex: 1;
+    text-align: center;
+  }
+  .radio-opt input { display: none; }
+  .radio-opt label {
+    display: block;
+    padding: 9px 4px;
+    font-size: 12px;
+    border: 1px solid #E0DED9;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--text-light);
+    background: #FCFBF8;
+    user-select: none;
+  }
+  .radio-opt input:checked + label {
+    background: #E6EEF8;
+    border-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  /* BUTTON */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #D43D2E, #C0392B);
+    color: #fff;
+    font-size: 17px;
+    letter-spacing: 1px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(212,61,46,0.3);
+  }
+  .btn-primary:disabled {
+    background: #C0BFBD;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    letter-spacing: 0;
+  }
+
+  /* RESULT CARD */
+  #resultWrap { display: none; }
+
+  .grade-badge {
+    text-align: center;
+    padding: 20px 0 10px;
+  }
+  .grade-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+    animation: popIn .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .grade-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  /* SCORE BAR */
+  .score-summary {
+    text-align: center;
+    padding: 8px 0 16px;
+  }
+  .score-big {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .score-max {
+    font-size: 14px;
+    color: var(--text-light);
+  }
+  .score-bar-wrap {
+    height: 6px;
+    background: #EBE9E4;
+    border-radius: 3px;
+    margin: 12px auto;
+    max-width: 280px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 6px;
+    border-radius: 3px;
+    transition: width .8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* INSIGHT BOX */
+  .insight {
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .insight .big-line {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .insight .sub-line {
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  /* DIMENSION BREAKDOWN */
+  .breakdown { margin-top: 8px; }
+  .breakdown-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .bd-row {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+    gap: 8px;
+  }
+  .bd-name { flex: 0 0 90px; color: var(--text); }
+  .bd-bar-wrap { flex: 1; height: 5px; background: #EBE9E4; border-radius: 2.5px; overflow: hidden; }
+  .bd-bar { height: 5px; border-radius: 2.5px; transition: width 1s ease; }
+  .bd-pts { flex: 0 0 32px; text-align: right; font-weight: 600; font-size: 12px; color: var(--text-light); }
+
+  /* CTA */
+  .cta-text {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-light);
+    padding: 12px 0 0;
+    line-height: 1.6;
+    border-top: 0.5px solid var(--border);
+    margin-top: 12px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 400px) {
+    .hdr h1 { font-size: 19px; }
+    .radio-opt label { font-size: 11px; padding: 8px 2px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="eyebrow">大董老师 · 客户分级工具</div>
+    <h1>你的时间花对<br>客户了吗？</h1>
+    <div class="sub">选一个你过去一个月投入时间最多的客户<br>测一测，他值不值得</div>
+  </div>
+
+  <!-- INPUT CARD -->
+  <div class="card" id="inputCard">
+    <div class="card-tip">
+      ⚠️ 请实事求是地填 —— 这个测试只有你自己能看到，骗自己没意义。
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <input class="cust-input" id="custName" placeholder="客户公司名称（选填，如：XX科技）" maxlength="30">
+    </div>
+
+    <div id="dimsWrap">
+      <!-- Generated by JS -->
+    </div>
+
+    <button class="btn btn-primary" id="submitBtn" disabled onclick="calcGrade()">
+      立即看结果
+    </button>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div class="card" id="resultWrap">
+    <div class="grade-badge">
+      <div class="grade-circle" id="gradeCircle"></div>
+      <div class="grade-label" id="gradeLabel"></div>
+    </div>
+
+    <div class="score-summary">
+      <div class="score-big" id="scoreBig"></div>
+      <div class="score-max" id="scoreMax"></div>
+    </div>
+
+    <div class="score-bar-wrap">
+      <div class="score-bar-fill" id="scoreBar"></div>
+    </div>
+
+    <div class="insight" id="insightBox"></div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">各维度得分</div>
+      <div id="bdList"></div>
+    </div>
+
+    <div class="cta-text" id="ctaText"></div>
+
+    <button class="btn" style="margin-top:16px;background:#F5F3EE;color:var(--text);border:0.5px solid var(--border);" onclick="resetForm()">
+      🔄 再测一个客户
+    </button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 维度定义
+// ============================================================
+var dims = [
+  {
+    id: 'd1',
+    q: '这个客户占你总收入的比例？',
+    opts: [
+      { label: '核心（≥20%）', pts: 20 },
+      { label: '重要（5~20%）', pts: 14 },
+      { label: '一般（<5%）', pts: 8 }
+    ]
+  },
+  {
+    id: 'd2',
+    q: '跟你的其他客户比，这个客户的利润？',
+    opts: [
+      { label: '偏高', pts: 20 },
+      { label: '中等', pts: 14 },
+      { label: '偏低', pts: 8 }
+    ]
+  },
+  {
+    id: 'd3',
+    q: '这个客户的回款情况？',
+    opts: [
+      { label: '基本准时', pts: 20 },
+      { label: '偶尔拖延', pts: 14 },
+      { label: '经常拖欠', pts: 8 }
+    ]
+  },
+  {
+    id: 'd4',
+    q: '这个客户离开你，换供应商的难度？',
+    opts: [
+      { label: '很难换掉', pts: 20 },
+      { label: '有一定门槛', pts: 14 },
+      { label: '随时能换', pts: 8 }
+    ]
+  },
+  {
+    id: 'd5',
+    q: '他给你介绍过新客户吗？',
+    opts: [
+      { label: '已经介绍过', pts: 20 },
+      { label: '有可能介绍', pts: 14 },
+      { label: '不太可能', pts: 8 }
+    ]
+  },
+  {
+    id: 'd6',
+    q: '未来一年，他还会继续跟你合作吗？',
+    opts: [
+      { label: '肯定继续', pts: 20 },
+      { label: '不确定', pts: 14 },
+      { label: '可能会丢', pts: 8 }
+    ]
+  }
+];
+
+// ============================================================
+// 渲染维度
+// ============================================================
+function renderDims() {
+  var html = '';
+  dims.forEach(function(dim, idx) {
+    html += '<div class="dim-row">';
+    html += '<div class="dim-label"><span class="num">' + (idx + 1) + '</span>' + dim.q + '</div>';
+    html += '<div class="radio-group">';
+    dim.opts.forEach(function(opt, oi) {
+      html += '<div class="radio-opt">';
+      html += '<input type="radio" name="' + dim.id + '" id="' + dim.id + '_' + oi + '" value="' + opt.pts + '" onchange="onDimChange()">';
+      html += '<label for="' + dim.id + '_' + oi + '">' + opt.label + '</label>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+  document.getElementById('dimsWrap').innerHTML = html;
+}
+
+// ============================================================
+// 检查是否所有维度都已选择
+// ============================================================
+function onDimChange() {
+  var allChecked = dims.every(function(dim) {
+    return document.querySelector('input[name="' + dim.id + '"]:checked') !== null;
+  });
+  document.getElementById('submitBtn').disabled = !allChecked;
+}
+
+// ============================================================
+// 计算等级
+// ============================================================
+function calcGrade() {
+  var total = 0;
+  var scores = [];
+  dims.forEach(function(dim) {
+    var checked = document.querySelector('input[name="' + dim.id + '"]:checked');
+    if (checked) {
+      var pts = parseInt(checked.value);
+      total += pts;
+      scores.push({ name: dim.q, pts: pts });
+    }
+  });
+
+  if (total === 0) return;
+
+  // 等级判定
+  var grade, gradeColor, insightHTML, ctaText;
+  if (total >= 100) {
+    grade = 'A';
+    gradeColor = 'var(--grade-a)';
+    insightHTML = '<div class="big-line" style="color:var(--grade-a)">🎯 这是你的核心优质客户</div><div class="sub-line">你的时间花对了。继续保持深度服务，他是你生意的压舱石。</div>';
+    ctaText = '但这只是运气 —— 你有几个这样的客户？没有体系的老板，好客户全靠碰。';
+  } else if (total >= 85) {
+    grade = 'B';
+    gradeColor = 'var(--grade-b)';
+    insightHTML = '<div class="big-line" style="color:var(--grade-b)">⚖️ 有价值，但不够健康</div><div class="sub-line">这个客户值得维护，但某些维度在消耗你。看看下面哪些维度得分偏低，那是你的优化方向。</div>';
+    ctaText = 'B级客户占你时间的比例多少？如果你80%的时间都在B级客户上，你永远腾不出手去找A级客户。';
+  } else if (total >= 70) {
+    grade = 'C';
+    gradeColor = 'var(--grade-c)';
+    insightHTML = '<div class="big-line" style="color:var(--grade-c)">🫤 鸡肋客户 —— 食之无味，弃之可惜</div><div class="sub-line">这个客户在消耗你的资源和精力，但给你的回报有限。你投入最多时间的，竟然是个C级——这不是能力问题，是没标准。</div>';
+    ctaText = '如果你手下有10个销售，每人都在这样的客户身上花时间，一年下来你要亏多少钱？';
+  } else {
+    grade = 'D';
+    gradeColor = 'var(--grade-d)';
+    insightHTML = '<div class="big-line" style="color:var(--grade-d)">⚠️ 坦白说，这是个负资产客户</div><div class="sub-line">回款差、利润低、随时可能丢 —— 你花的时间越多，亏得越多。问题不是你不够努力，是你没给客户做分级。</div>';
+    ctaText = '一个D级客户不可怕。可怕的是你从来不知道他是D级，还在拼命往里砸时间。';
+  }
+
+  var custName = document.getElementById('custName').value.trim() || '这位客户';
+
+  // 显示结果
+  document.getElementById('inputCard').style.display = 'none';
+  var resultWrap = document.getElementById('resultWrap');
+  resultWrap.style.display = 'block';
+
+  // 等级圆
+  var gc = document.getElementById('gradeCircle');
+  gc.textContent = grade;
+  gc.style.background = gradeColor;
+
+  // 等级标签
+  document.getElementById('gradeLabel').textContent = custName + ' · ' + {A:'优质客户',B:'价值客户',C:'鸡肋客户',D:'劣质客户'}[grade];
+
+  // 分数
+  var scoreBig = document.getElementById('scoreBig');
+  scoreBig.textContent = total;
+  scoreBig.style.color = gradeColor;
+  document.getElementById('scoreMax').textContent = '满分 120 分';
+
+  // 分数条
+  var sb = document.getElementById('scoreBar');
+  setTimeout(function() {
+    sb.style.width = (total / 120 * 100) + '%';
+    sb.style.background = gradeColor;
+  }, 100);
+
+  // 洞察分析
+  document.getElementById('insightBox').innerHTML = insightHTML;
+  switch(grade) {
+    case 'A': document.getElementById('insightBox').style.background = '#FDF2F0'; break;
+    case 'B': document.getElementById('insightBox').style.background = '#FDF8F0'; break;
+    case 'C': document.getElementById('insightBox').style.background = '#F0F6F0'; break;
+    case 'D': document.getElementById('insightBox').style.background = '#F5F4F2'; break;
+  }
+
+  // 各维度得分
+  var bdHTML = '';
+  var barColors = {
+    20: 'var(--grade-a)',
+    14: 'var(--grade-b)',
+    8:  'var(--grade-d)'
+  };
+  scores.forEach(function(s) {
+    bdHTML += '<div class="bd-row">';
+    bdHTML += '<div class="bd-name">' + s.name.substring(0, 8) + (s.name.length > 8 ? '…' : '') + '</div>';
+    bdHTML += '<div class="bd-bar-wrap"><div class="bd-bar" style="width:' + (s.pts / 20 * 100) + '%;background:' + barColors[s.pts] + '"></div></div>';
+    bdHTML += '<div class="bd-pts">' + s.pts + '分</div>';
+    bdHTML += '</div>';
+  });
+  document.getElementById('bdList').innerHTML = bdHTML;
+
+  // CTA
+  document.getElementById('ctaText').textContent = ctaText;
+
+  // 滚动到结果
+  resultWrap.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ============================================================
+// 重置
+// ============================================================
+function resetForm() {
+  document.getElementById('inputCard').style.display = '';
+  document.getElementById('resultWrap').style.display = 'none';
+  document.querySelectorAll('input[type="radio"]').forEach(function(r) { r.checked = false; });
+  document.getElementById('custName').value = '';
+  document.getElementById('submitBtn').disabled = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// 初始化
+// ============================================================
+renderDims();
+</script>
+
+</body>
+</html>
