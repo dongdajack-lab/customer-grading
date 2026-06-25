@@ -287,10 +287,10 @@ body {
 .stage-sign { background: #e8f5ee; color: var(--success); }
 .stage-deliver { background: #f0f0f0; color: var(--text-light); }
 .health-badge { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-.health-s { background: #e8f5ee; color: var(--success); }
-.health-a { background: #e8f0fa; color: var(--sky); }
-.health-b { background: #fff5eb; color: var(--accent); }
-.health-c { background: #fdf5f4; color: var(--danger); }
+.health-extreme { background: #e8f5ee; color: var(--success); }
+.health-high { background: #e8f0fa; color: var(--sky); }
+.health-mid { background: #fff5eb; color: var(--accent); }
+.health-low { background: #fdf5f4; color: var(--danger); }
 .weighted-value { font-weight: 600; color: var(--accent); }
 .zombie-flag { color: var(--danger); font-size: 12px; }
 
@@ -528,7 +528,7 @@ body {
         <div class="subtitle-cn">运筹帷幄 · 过程管控</div>
         <div class="module-list">
           <div class="module-item"><strong>Step 3 · 六阶段漏斗预测</strong><span>线索→需求→方案→竞争→签约→交付回款</span></div>
-          <div class="module-item"><strong>Step 3 · 商机赢率评分</strong><span>9维度量化打分，S/A/B/C赢率等级</span></div>
+          <div class="module-item"><strong>Step 3 · 商机赢率评分</strong><span>9维度量化打分，极高/高/中/低赢率等级</span></div>
           <div class="module-item"><strong>Step 3 · 加权管道预测</strong><span>金额×赢率系数，阶段只决定时间</span></div>
         </div>
       </div>
@@ -600,62 +600,62 @@ body {
       <div class="line-row">
         <div class="line-name">历史线<span class="desc">去年×(1+增长率)</span></div>
         <div class="line-input">
-          <input type="number" id="hist_base" value="1000" placeholder="去年销售额(万)">
+          <input type="number" id="hist_base" value="10000" placeholder="去年销售额(万)">
           <span class="unit">×</span>
           <input type="number" id="hist_growth" value="10" placeholder="增长率%" style="width:70px">
           <span class="unit">%</span>
         </div>
         <div class="line-weight"><input type="range" min="0" max="40" value="20" oninput="updateFiveLines()"><span class="w-val" id="hist_w_val">20%</span></div>
-        <div class="w-val" id="hist_raw">1100</div>
-        <div class="line-result" id="hist_weighted">220</div>
+        <div class="w-val" id="hist_raw">11000</div>
+        <div class="line-result" id="hist_weighted">2200</div>
       </div>
       <div class="line-row">
         <div class="line-name">未来线<span class="desc">3年目标÷(1+r)²</span></div>
         <div class="line-input">
-          <input type="number" id="fut_target" value="2000" placeholder="3年目标(万)">
+          <input type="number" id="fut_target" value="20000" placeholder="3年目标(万)">
           <span class="unit">÷</span>
           <input type="number" id="fut_growth" value="26" placeholder="年均增长率%" style="width:70px">
           <span class="unit">%²</span>
         </div>
         <div class="line-weight"><input type="range" min="0" max="40" value="20" oninput="updateFiveLines()"><span class="w-val" id="fut_w_val">20%</span></div>
-        <div class="w-val" id="fut_raw">1250</div>
-        <div class="line-result" id="fut_weighted">250</div>
+        <div class="w-val" id="fut_raw">12500</div>
+        <div class="line-result" id="fut_weighted">2500</div>
       </div>
       <div class="line-row">
         <div class="line-name">市场线<span class="desc">市场容量×份额</span></div>
         <div class="line-input">
-          <input type="number" id="mkt_total" value="50000" placeholder="市场总容量(万)">
+          <input type="number" id="mkt_total" value="500000" placeholder="市场总容量(万)">
           <span class="unit">×</span>
           <input type="number" id="mkt_share" value="3" placeholder="目标份额%" style="width:70px">
           <span class="unit">%</span>
         </div>
         <div class="line-weight"><input type="range" min="0" max="40" value="25" oninput="updateFiveLines()"><span class="w-val" id="mkt_w_val">25%</span></div>
-        <div class="w-val" id="mkt_raw">1500</div>
-        <div class="line-result" id="mkt_weighted">375</div>
+        <div class="w-val" id="mkt_raw">15000</div>
+        <div class="line-result" id="mkt_weighted">3750</div>
       </div>
       <div class="line-row">
         <div class="line-name">订单线<span class="desc">Σ(订单×赢单概率)</span></div>
         <div class="line-input">
-          <input type="number" id="ord_total" value="1800" placeholder="跟进订单总额(万)">
+          <input type="number" id="ord_total" value="18000" placeholder="跟进订单总额(万)">
           <span class="unit">×</span>
           <input type="number" id="ord_prob" value="50" placeholder="平均赢单率%" style="width:70px">
           <span class="unit">%</span>
         </div>
         <div class="line-weight"><input type="range" min="0" max="40" value="25" oninput="updateFiveLines()"><span class="w-val" id="ord_w_val">25%</span></div>
-        <div class="w-val" id="ord_raw">900</div>
-        <div class="line-result" id="ord_weighted">225</div>
+        <div class="w-val" id="ord_raw">9000</div>
+        <div class="line-result" id="ord_weighted">2250</div>
       </div>
       <div class="line-row">
         <div class="line-name">客户线<span class="desc">重点客户预算×份额</span></div>
         <div class="line-input">
-          <input type="number" id="cust_budget" value="2000" placeholder="S/A客户总预算(万)">
+          <input type="number" id="cust_budget" value="20000" placeholder="S/A客户总预算(万)">
           <span class="unit">×</span>
           <input type="number" id="cust_share" value="40" placeholder="目标份额%" style="width:70px">
           <span class="unit">%</span>
         </div>
         <div class="line-weight"><input type="range" min="0" max="30" value="10" oninput="updateFiveLines()"><span class="w-val" id="cust_w_val">10%</span></div>
-        <div class="w-val" id="cust_raw">800</div>
-        <div class="line-result" id="cust_weighted">80</div>
+        <div class="w-val" id="cust_raw">8000</div>
+        <div class="line-result" id="cust_weighted">800</div>
       </div>
     </div>
 
@@ -664,7 +664,7 @@ body {
         <div class="label">综合目标（加权合计）</div>
         <div class="note">权重总和：<span id="weight_total">100%</span>。建议权重总和=100%，当前<span id="weight_status">正常</span></div>
       </div>
-      <div class="value" id="final_target">1,150<span style="font-size:16px;font-weight:400;"> 万</span></div>
+      <div class="value" id="final_target">11,500<span style="font-size:16px;font-weight:400;"> 万</span></div>
     </div>
   </div>
 
@@ -678,7 +678,7 @@ body {
     <div class="flow-output-icon">📤</div>
     <div class="flow-output-content">
       <div class="flow-output-title">本步输出</div>
-      <div class="flow-output-desc">年度综合目标 <strong id="flow_out_target">1,150 万</strong></div>
+      <div class="flow-output-desc">年度综合目标 <strong id="flow_out_target">11,500 万</strong></div>
       <div class="flow-output-dest">→ 传递至 Step 5「出预测」进行目标达成差距分析</div>
     </div>
   </div>
@@ -790,11 +790,11 @@ body {
 
     <!-- 概念区分 -->
     <div style="padding:14px;background:#faf9f7;border-radius:8px;margin-bottom:12px;">
-      <strong style="font-size:13px;">⚠️ 别混淆两套"S/A/B/C"</strong>
+      <strong style="font-size:13px;">⚠️ 客户评级 vs 赢率等级 — 两套不同的体系</strong>
       <table style="width:100%;margin-top:8px;font-size:12px;border-collapse:collapse;">
-        <tr><td style="padding:5px 10px;width:120px;font-weight:600;background:#e8f0fa;">Step 2 这里定义的</td><td style="padding:5px 10px;"><strong>客户评级</strong> — 按客户的采购规模、复购能力、战略价值来分。是客户本身的属性。<br><span style="color:var(--text-light);">用途：决定资源怎么分配（销售跑动频率、服务级别）</span></td></tr>
-        <tr><td style="padding:5px 10px;font-weight:600;background:#fff5eb;">Step 3 要用的</td><td style="padding:5px 10px;"><strong>商机赢率等级</strong> — 按9维度对单个订单的赢单概率打分。是商机层面的属性。<br><span style="color:var(--text-light);">用途：决定管道期望值计算的系数（S=1.0, C=0.3）</span></td></tr>
-        <tr><td colspan="2" style="padding:6px 10px;color:var(--text-light);background:#f5f5f5;font-size:11px;">💡 举例：某S级战略客户（大客户）上的一个早期线索商机，可能只有C级赢率（刚接触、需求不明）；同一个客户上的签约阶段商机可能是A级赢率。两者独立。</td></tr>
+        <tr><td style="padding:5px 10px;width:120px;font-weight:600;background:#e8f0fa;">Step 2 这里定义的</td><td style="padding:5px 10px;"><strong>客户评级（S/A/B/C）</strong> — 按客户的采购规模、复购能力、战略价值来分。是客户本身的属性。<br><span style="color:var(--text-light);">用途：决定资源怎么分配（销售跑动频率、服务级别）</span></td></tr>
+        <tr><td style="padding:5px 10px;font-weight:600;background:#fff5eb;">Step 3 要用的</td><td style="padding:5px 10px;"><strong>商机赢率等级（极高/高/中/低）</strong> — 按9维度对单个订单的赢单概率打分。是商机层面的属性。<br><span style="color:var(--text-light);">用途：决定管道期望值计算的系数（极高=1.0, 低=0.3）</span></td></tr>
+        <tr><td colspan="2" style="padding:6px 10px;color:var(--text-light);background:#f5f5f5;font-size:11px;">💡 举例：某S级战略客户（大客户）上的一个早期线索商机，可能只有"低"赢率（刚接触、需求不明）；同一个客户上的签约阶段商机可能是"高"赢率。两者独立。</td></tr>
       </table>
     </div>
 
@@ -851,7 +851,7 @@ body {
     <strong>👔 老板为什么关心：</strong>每个月问销售"下个月能做多少"，回答永远是"大概……应该……差不多……"。<br>
     为什么？因为<strong>没有管道数据支撑</strong>。盘管道就是把每个商机摆在桌面上：<br>
     • 在哪个阶段？（决定什么时候可能成单）<br>
-    • 商机赢率如何？（9维度评分 → S/A/B/C → 赢率系数）<br>
+    • 商机赢率如何？（9维度评分 → 极高/高/中/低 → 赢率系数）<br>
     • 停留多久了？（超时 = 有问题）<br>
     <strong>赢率纯由9维度评分决定，阶段不自动提升赢率。</strong>金额×赢率系数=<strong>期望值</strong>，本月能成交多少，数字自己就出来了。<br>
     <strong>💡 一句话：</strong>管道透明，预测才能准确；预测准确，你才能放心。
@@ -930,7 +930,7 @@ body {
   <!-- 3C: 管道商机清单 -->
   <div class="card">
     <div class="card-title"><span class="icon">📑</span> 管道商机清单（示例数据）</div>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>期望值 = 金额 × 赢率系数</strong>（S=1.0/A=0.8/B=0.6/C=0.3）。赢率纯由9维度评分决定，<strong>阶段推进不自动提升赢率</strong>——每个阶段需重新评估9维度。<strong style="color:var(--success);">交付回款阶段=已赢单，全额计入。</strong><span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span></p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>期望值 = 金额 × 赢率系数</strong>（极高=1.0/高=0.8/中=0.6/低=0.3）。赢率纯由9维度评分决定，<strong>阶段推进不自动提升赢率</strong>——每个阶段需重新评估9维度。<strong style="color:var(--success);">交付回款阶段=已赢单，全额计入。</strong><span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span></p>
     <table class="pipeline-table" id="pipeline_table">
       <thead>
         <tr>
@@ -955,13 +955,13 @@ body {
       <strong style="color:var(--sky);font-size:14px;">📌 先搞清两个概念（重要）</strong>
       <table style="width:100%;margin-top:10px;font-size:13px;border-collapse:collapse;">
         <tr><td style="padding:6px 10px;background:#e8f0fa;font-weight:600;width:120px;">客户评级</td><td style="padding:6px 10px;">Step 2 已定义。按客户的<strong>货币价值</strong>（采购规模、复购潜力）和<strong>战略价值</strong>（行业标杆、转介绍能力）分为S/A/B/C四级。决定<strong>资源配置策略</strong>——谁配最好的销售、老板该亲自见谁。</td></tr>
-        <tr><td style="padding:6px 10px;background:#fff5eb;font-weight:600;">商机赢率评分</td><td style="padding:6px 10px;"><strong>→ 就是这个评分卡</strong>。对<strong>单个商机/订单</strong>的赢单概率做9维度评估，输出S/A/B/C赢率等级。<strong>赢率纯由此评分决定，阶段不自动提升赢率</strong>——S级系数1.0，C级系数0.3。<strong>每进入新阶段需重新评估</strong>。</td></tr>
-        <tr><td colspan="2" style="padding:8px 10px;color:var(--text-light);font-size:12px;">💡 一个S级客户（大客户）上的一个早期线索商机，可能只有C级赢率；一个B级客户上的签约阶段商机，可能是A级赢率。两者是独立的评估维度。</td></tr>
+        <tr><td style="padding:6px 10px;background:#fff5eb;font-weight:600;">商机赢率评分</td><td style="padding:6px 10px;"><strong>→ 就是这个评分卡</strong>。对<strong>单个商机/订单</strong>的赢单概率做9维度评估，输出极高/高/中/低赢率等级。<strong>赢率纯由此评分决定，阶段不自动提升赢率</strong>——极高级系数1.0，低级系数0.3。<strong>每进入新阶段需重新评估</strong>。</td></tr>
+        <tr><td colspan="2" style="padding:8px 10px;color:var(--text-light);font-size:12px;">💡 一个S级客户（大客户）上的一个早期线索商机，可能只有"低"赢率；一个B级客户上的签约阶段商机，可能是"高"赢率。两者是独立的评估维度。</td></tr>
       </table>
     </div>
 
     <p style="font-size:13px;color:var(--text-light);margin-bottom:8px;"><strong>9维度量化打分</strong>（每项0-10分），总分90分。<strong>赢率纯由此评分决定，阶段推进不自动提升赢率。</strong>其中"竞争态势"和"决策链覆盖"维度的评分依据来自 Step 2 的3C竞争分析和决策链分析。</p>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:8px;">S级≥72分（系数1.0）、A级56-71分（系数0.8）、B级40-55分（系数0.6）、C级&lt;40分（系数0.3）。</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:8px;">极高级≥72分（系数1.0）、高级56-71分（系数0.8）、中级40-55分（系数0.6）、低级&lt;40分（系数0.3）。</p>
     <div style="padding:10px 14px;background:#fff5eb;border-radius:8px;border-left:3px solid var(--accent);margin-bottom:16px;font-size:12px;color:var(--text);">
       🔄 <strong>每个阶段进入时需重新评估9维度。</strong>阶段变了，各维度得分会自然变化——比如线索阶段"决策链覆盖"可能只有2分，到了竞争阶段可能7分。<strong>赢率随评分变化，不随阶段自动提升。</strong>招投标的单子到了竞争阶段如果只是备选，评分自然低，赢率不会因为"阶段靠后"就变高。
     </div>
@@ -977,7 +977,7 @@ body {
             <thead><tr><th>维度</th><th>1-2分（差）</th><th>3-4分（及格）</th><th>5-6分（一般）</th><th>7-8分（良好）</th><th>9-10分（优秀）</th></tr></thead>
             <tbody>
               <tr><td><strong>①需求明确度</strong><br><small>(SPIN完成度)</small></td><td>客户说不清痛点，需求模糊</td><td>能说一个大概需求，但痛感不强</td><td>有明确痛点，知道要解决什么</td><td>痛点清晰且有量化指标（如：每年损失XX万）</td><td>客户主动描述痛点，且与我们的方案高度契合</td></tr>
-              <tr><td><strong>②预算确认</strong><br><small>(BANT-Budget)</small></td><td>不知道有没有预算，金额未知</td><td>提到有预算但不确定金额范围</td><td>有大致预算范围（如50-80万）</td><td>预算基本确认（如"今年有60万IT预算"）</td><td>预算已立项审批，金额明确到万</td></tr>
+              <tr><td><strong>②预算确认</strong><br><small>(BANT-Budget)</small></td><td>不知道有没有预算，金额未知</td><td>提到有预算但不确定金额范围</td><td>有大致预算范围（如500-800万）</td><td>预算基本确认（如"今年有600万IT预算"）</td><td>预算已立项审批，金额明确到万</td></tr>
               <tr><td><strong>③决策链覆盖</strong><br><small>(← Step2决策链)</small></td><td>只接触到一个普通员工</td><td>找到使用者/部门负责人</td><td>识别了决策者和关键人</td><td>与决策者直接对话过，了解决策流程</td><td>决策链全覆盖，已发展内部支持者(Coach)</td></tr>
               <tr><td><strong>④竞争态势</strong><br><small>(← Step2 竞争7维度)</small></td><td>不清楚对手是谁</td><td>知道有竞争对手但不了解详情</td><td>做过3C分析，知道主要对手优劣势</td><td>7维度逐一对比过我方vs竞对</td><td>我方在多数维度占优，有差异化优势</td></tr>
               <tr><td><strong>⑤时间进度</strong><br><small>(BANT-Time)</small></td><td>客户没有时间表，"看情况"</td><td>"今年内考虑"，很模糊</td><td>有大致时间窗口（如Q3）</td><td>有明确时间节点（如"9月底前定标"）</td><td>时间紧迫且有内部deadline驱动</td></tr>
@@ -993,7 +993,7 @@ body {
     </div>
 
     <div class="health-result">
-      <div class="grade" id="health_grade">B</div>
+      <div class="grade" id="health_grade">中</div>
       <div class="grade-label">赢率等级</div>
       <div class="grade-score" id="health_score">0 分 / 90 分</div>
       <div class="grade-desc" id="health_desc"></div>
@@ -1131,9 +1131,9 @@ body {
       <!-- 乐观场景 -->
       <div style="padding:24px;border-radius:12px;background:#f0f7f2;border:2px solid var(--success);text-align:center;">
         <div style="font-size:12px;color:var(--success);margin-bottom:4px;font-weight:600;">乐观场景</div>
-        <div style="font-size:11px;color:var(--text-light);margin-bottom:10px;">S级+A级的全部成交</div>
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:10px;">极高+高级的全部成交</div>
         <div style="font-size:36px;font-weight:800;color:var(--success);" id="month_optimistic">—</div>
-        <div style="font-size:12px;color:var(--text-light);margin-top:6px;">假设S/A级客户全赢</div>
+        <div style="font-size:12px;color:var(--text-light);margin-top:6px;">假设极高/高级商机全赢</div>
         <div style="margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(52,168,82,0.1);display:inline-block;color:var(--success);">⚠️ 偏激进，需团队状态很好</div>
       </div>
       <!-- 保守场景（加权期望值） -->
@@ -1311,18 +1311,18 @@ const stageConfig = [
 ];
 
 const pipelineData = [
-  { customer: '纳米电信', stage: 'comp', amount: 500, health: 'S', healthCoef: 1.0, days: 12, next: '高层互访+付款计划确认' },
-  { customer: '纳米电力', stage: 'sign', amount: 300, health: 'A', healthCoef: 0.8, days: 8, next: '合同审批跟进' },
-  { customer: '纳米联通', stage: 'plan', amount: 200, health: 'A', healthCoef: 0.8, days: 18, next: '方案评审会' },
-  { customer: '纳米移动', stage: 'comp', amount: 800, health: 'B', healthCoef: 0.6, days: 35, next: '需重新评估竞争策略', zombie: true },
-  { customer: '纳米港口', stage: 'need', amount: 150, health: 'B', healthCoef: 0.6, days: 22, next: 'SPIN深度挖掘' },
-  { customer: '跨国通讯', stage: 'lead', amount: 400, health: 'C', healthCoef: 0.3, days: 18, next: '需确认预算和立项', zombie: true },
-  { customer: '纳米铁塔', stage: 'plan', amount: 250, health: 'A', healthCoef: 0.8, days: 15, next: '邀请客户考察' },
-  { customer: '纳米宽带', stage: 'deliver', amount: 180, health: 'A', healthCoef: 0.8, days: 25, next: '验收跟进+收款' },
-  { customer: '大型中资A', stage: 'need', amount: 120, health: 'B', healthCoef: 0.6, days: 10, next: '痛点分析+引导方案' },
-  { customer: '首都商场B', stage: 'lead', amount: 80, health: 'C', healthCoef: 0.3, days: 5, next: '初步拜访+需求判断' },
-  { customer: '通讯专营店', stage: 'sign', amount: 60, health: 'B', healthCoef: 0.6, days: 15, next: '条款谈判收尾' },
-  { customer: 'ICT公司C', stage: 'comp', amount: 100, health: 'B', healthCoef: 0.6, days: 28, next: '竞争分析+埋雷策略' }
+  { customer: '纳米电信', stage: 'comp', amount: 5000, health: '极高', healthCoef: 1.0, days: 12, next: '高层互访+付款计划确认' },
+  { customer: '纳米电力', stage: 'sign', amount: 3000, health: '高', healthCoef: 0.8, days: 8, next: '合同审批跟进' },
+  { customer: '纳米联通', stage: 'plan', amount: 2000, health: '高', healthCoef: 0.8, days: 18, next: '方案评审会' },
+  { customer: '纳米移动', stage: 'comp', amount: 8000, health: '中', healthCoef: 0.6, days: 35, next: '需重新评估竞争策略', zombie: true },
+  { customer: '纳米港口', stage: 'need', amount: 1500, health: '中', healthCoef: 0.6, days: 22, next: 'SPIN深度挖掘' },
+  { customer: '跨国通讯', stage: 'lead', amount: 4000, health: '低', healthCoef: 0.3, days: 18, next: '需确认预算和立项', zombie: true },
+  { customer: '纳米铁塔', stage: 'plan', amount: 2500, health: '高', healthCoef: 0.8, days: 15, next: '邀请客户考察' },
+  { customer: '纳米宽带', stage: 'deliver', amount: 1800, health: '高', healthCoef: 0.8, days: 25, next: '验收跟进+收款' },
+  { customer: '大型中资A', stage: 'need', amount: 1200, health: '中', healthCoef: 0.6, days: 10, next: '痛点分析+引导方案' },
+  { customer: '首都商场B', stage: 'lead', amount: 800, health: '低', healthCoef: 0.3, days: 5, next: '初步拜访+需求判断' },
+  { customer: '通讯专营店', stage: 'sign', amount: 600, health: '中', healthCoef: 0.6, days: 15, next: '条款谈判收尾' },
+  { customer: 'ICT公司C', stage: 'comp', amount: 1000, health: '中', healthCoef: 0.6, days: 28, next: '竞争分析+埋雷策略' }
 ];
 
 // 期望值 = 金额 × 赢率系数（纯由9维度评分决定，阶段不影响赢率）
@@ -1384,7 +1384,7 @@ function renderFunnel() {
   // 管道表格
   const stageClassMap = { lead: 'stage-lead', need: 'stage-need', plan: 'stage-plan', comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
   const stageNameMap = { lead: '线索', need: '需求确认', plan: '方案商谈', comp: '竞争', sign: '签约', deliver: '交付回款' };
-  const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
+  const healthClassMap = { '极高': 'health-extreme', '高': 'health-high', '中': 'health-mid', '低': 'health-low' };
 
   const tbody = document.getElementById('pipeline_body');
   tbody.innerHTML = pipelineData.map(d => {
@@ -1396,7 +1396,7 @@ function renderFunnel() {
       <td><strong>${d.customer}</strong></td>
       <td><span class="stage-tag ${stageClassMap[d.stage]}">${stageNameMap[d.stage]}</span></td>
       <td>${d.amount}</td>
-      <td>${isWon ? '<span style="color:var(--success);font-weight:600;">✅ 已赢单</span>' : `<span class="health-badge ${healthClassMap[d.health]}">${d.health}级</span>`}</td>
+      <td>${isWon ? '<span style="color:var(--success);font-weight:600;">✅ 已赢单</span>' : `<span class="health-badge ${healthClassMap[d.health]}">${d.health}</span>`}</td>
       <td>${isZombie ? `<span class="zombie-flag">⚠️ ${d.days}天</span>` : d.days + '天'}</td>
       <td style="font-size:12px;">${d.next}</td>
       <td class="weighted-value">${isWon ? `<strong style="color:var(--success);">${weighted}</strong>` : weighted}</td>
@@ -1440,10 +1440,10 @@ function updateHealth() {
   });
 
   let grade, desc;
-  if (total >= 72) { grade = 'S'; desc = '高赢率商机，赢单概率大。期望值=金额×1.0。'; }
-  else if (total >= 56) { grade = 'A'; desc = '良好商机，正常推进，需补齐短板。期望值=金额×0.8。'; }
-  else if (total >= 40) { grade = 'B'; desc = '一般商机，需评估是否值得继续投入。期望值=金额×0.6。'; }
-  else { grade = 'C'; desc = '低赢率商机，建议降级或放弃，除非有明确改善路径。期望值=金额×0.3。'; }
+  if (total >= 72) { grade = '极高'; desc = '高赢率商机，赢单概率大。期望值=金额×1.0。'; }
+  else if (total >= 56) { grade = '高'; desc = '良好商机，正常推进，需补齐短板。期望值=金额×0.8。'; }
+  else if (total >= 40) { grade = '中'; desc = '一般商机，需评估是否值得继续投入。期望值=金额×0.6。'; }
+  else { grade = '低'; desc = '低赢率商机，建议降级或放弃，除非有明确改善路径。期望值=金额×0.3。'; }
 
   document.getElementById('health_grade').textContent = grade;
   document.getElementById('health_score').textContent = `${total} 分 / 90 分`;
@@ -1452,7 +1452,7 @@ function updateHealth() {
 
 // ===== 团队战力 =====
 const teamData = [
-  { name: '桃子', leads: 8, validRate: 75, leadConv: 50, dealConv: 60, winRate: 40, avgDeal: 350, zombies: 1,
+  { name: '桃子', leads: 8, validRate: 75, leadConv: 50, dealConv: 60, winRate: 40, avgDeal: 3500, zombies: 1,
     // 预测准确率：上月预测vs实际
     forecastAccuracy: 92,    // 预测准确率%（100=完全准确）
     forecastBias: '略乐观', // 偏差方向：偏乐观 / 偏保守 / 准确
@@ -1460,24 +1460,24 @@ const teamData = [
     avgDwellDays: { lead: 5, need: 12, plan: 18, comp: 22, sign: 9, deliver: 28 }, // 各阶段平均停留天数
     dwellStatus: '掌控良好'  // 停留时长总体评价
   },
-  { name: '大军', leads: 12, validRate: 60, leadConv: 33, dealConv: 50, winRate: 25, avgDeal: 200, zombies: 2,
+  { name: '大军', leads: 12, validRate: 60, leadConv: 33, dealConv: 50, winRate: 25, avgDeal: 2000, zombies: 2,
     forecastAccuracy: 78,
     forecastBias: '偏乐观',
     biasReason: '签约阶段多次延期回款，对付款流程预判不足；需求挖掘不够深导致方案反复修改',
     avgDwellDays: { lead: 6, need: 18, plan: 25, comp: 28, sign: 18, deliver: 35 },
     dwellStatus: '部分失控'
   },
-  { name: '陈君', leads: 20, validRate: 45, leadConv: 25, dealConv: 30, winRate: 15, avgDeal: 100, zombies: 4,
+  { name: '陈君', leads: 20, validRate: 45, leadConv: 25, dealConv: 30, winRate: 15, avgDeal: 1000, zombies: 4,
     forecastAccuracy: 65,
     forecastBias: '明显乐观',
     biasReason: '线索→商机转化虚高（把意向不明确的也当有效商机）；竞争分析不足导致高估赢单概率',
     avgDwellDays: { lead: 12, need: 28, plan: 32, comp: 38, sign: 15, deliver: 45 },
     dwellStatus: '严重超时'
   },
-  { name: '小刘', leads: 30, validRate: 30, leadConv: 15, dealConv: 20, winRate: 8, avgDeal: 50, zombies: 6,
+  { name: '小刘', leads: 30, validRate: 30, leadConv: 15, dealConv: 20, winRate: 8, avgDeal: 500, zombies: 6,
     forecastAccuracy: 88,
     forecastBias: '偏保守',
-    biasReason: '过于谨慎，赢率评分普遍偏低；其实部分B级商机有潜力但没跟进到位',
+    biasReason: '过于谨慎，赢率评分普遍偏低；其实部分中级商机有潜力但没跟进到位',
     avgDwellDays: { lead: 8, need: 20, plan: 22, comp: 25, sign: 12, deliver: 32 },
     dwellStatus: '推进缓慢'
   }
@@ -1784,7 +1784,7 @@ function getRootCause(bias, accuracy, t) {
     return '根本原因：整体偏乐观，可能存在系统性评分偏高倾向';
   } else if (bias.includes('保守')) {
     if (t.leadConv < teamAvgLeadConv)
-      return '根本原因：对早期商机信心不足，实际上部分B级商机有潜力 → 预测偏低导致资源分配不足';
+      return '根本原因：对早期商机信心不足，实际上部分中级商机有潜力 → 预测偏低导致资源分配不足';
     return '根本原因：过度谨慎，赢率评分普遍偏低 → 可能错失投入机会';
   }
   return '预测与实际基本吻合，判断力较好';
@@ -1814,7 +1814,7 @@ function renderForecast() {
   const monthDeals = pipelineData.filter(d => monthStages.includes(d.stage));
 
   let conservativeTotal = 0; // 保守：加权期望值
-  let optimisticTotal = 0;   // 乐观：S级+A级全部当100%算
+  let optimisticTotal = 0;   // 乐观：极高+高级全部当100%算
   let pessimisticTotal = 0;  // 悲观：只算签约+交付阶段
 
   let monthDetails = [];
@@ -1826,26 +1826,26 @@ function renderForecast() {
     const weighted = isWon ? d.amount : d.amount * winCoef(d);
     conservativeTotal += weighted;
 
-    // 乐观：已赢单全额 + S/A级客户当全赢
+    // 乐观：已赢单全额 + 极高/高级商机当全赢
     if (isWon) {
       optimisticTotal += d.amount;
-    } else if (d.health === 'S' || d.health === 'A') {
+    } else if (d.health === '极高' || d.health === '高') {
       optimisticTotal += d.amount;
     } else {
-      optimisticTotal += weighted; // B/C级还是用期望值
+      optimisticTotal += weighted; // 中/低级还是用期望值
     }
 
-    // 悲观：只算已赢单(全额) + 签约阶段S/A级(全额)
+    // 悲观：只算已赢单(全额) + 签约阶段极高/高级(全额)
     if (isWon) {
       pessimisticTotal += d.amount;
-    } else if (d.stage === 'sign' && (d.health === 'S' || d.health === 'A')) {
+    } else if (d.stage === 'sign' && (d.health === '极高' || d.health === '高')) {
       pessimisticTotal += d.amount;
     }
     // 竞争阶段不算入悲观（太不确定）
 
     const stageNameMap = { comp: '竞争', sign: '签约', deliver: '交付回款' };
     const stageClassMap = { comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
-    const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
+    const healthClassMap = { '极高': 'health-extreme', '高': 'health-high', '中': 'health-mid', '低': 'health-low' };
 
     // 赢率：交付=已赢单(100%)，其他=赢率系数对应百分比
     const winRatePct = isWon ? 100 : Math.round(winCoef(d) * 100);
@@ -1888,7 +1888,7 @@ function renderForecast() {
       <td><strong>${d.customer}</strong></td>
       <td style="font-weight:600;">${d.amount}</td>
       <td><span class="stage-tag ${d.stageClass}">${d.stageName}</span></td>
-      <td>${isWon ? '<span style="color:var(--success);font-weight:600;">✅ 已赢单</span>' : `<span class="health-badge ${d.healthClass}">${d.health}级</span>`}</td>
+      <td>${isWon ? '<span style="color:var(--success);font-weight:600;">✅ 已赢单</span>' : `<span class="health-badge ${d.healthClass}">${d.health}</span>`}</td>
       <td style="color:${rateColor};font-weight:600;">${isWon ? '✅ 已赢单' : d.winRate + '%'}</td>
       <td style="${isWon ? 'color:var(--success);font-weight:600;' : 'color:var(--text-light);font-size:12px;'}">${isWon ? d.weighted : '≈' + d.weighted + '<span style="font-size:10px;">（期望）</span>'}</td>
     </tr>`;
@@ -1983,15 +1983,15 @@ function renderForecast() {
   // ===== 差距与行动（老板视角） =====
   const gapEl = document.getElementById('gap_action_analysis');
   // 假设月度目标为150万（实际使用时输入）
-  const monthlyTarget = 150;
+  const monthlyTarget = 1500;
   const gap = monthlyTarget - conVal;
   const gapPct = monthlyTarget > 0 ? Math.round(conVal / monthlyTarget * 100) : 0;
 
   let gapStatus, gapColor, gapAdvice;
   if (gapPct >= 95) { gapStatus = '达标无忧'; gapColor = 'var(--success)';
-    gapAdvice = '本月预测覆盖目标，重点确保竞争→签约→回款各环节不掉链子。关注赢率等级B/C级的商机是否有改善路径。'; }
+    gapAdvice = '本月预测覆盖目标，重点确保竞争→签约→回款各环节不掉链子。关注赢率等级中/低的商机是否有改善路径。'; }
   else if (gapPct >= 75) { gapStatus = '基本可控'; gapColor = 'var(--warning)';
-    gapAdvice = `距离目标还差 ${gap} 万。建议：①推动纳米移动(800万·竞争阶段)尽快突破 ②加速纳米联通(200万·方案)进入竞争 ③补充2-3个新有效线索。`; }
+    gapAdvice = `距离目标还差 ${gap} 万。建议：①推动纳米移动(8000万·竞争阶段)尽快突破 ②加速纳米联通(2000万·方案)进入竞争 ③补充2-3个新有效线索。`; }
   else { gapStatus = '缺口较大'; gapColor = 'var(--danger)';
     gapAdvice = `缺口 ${gap} 万，需要立即行动：①清理僵尸商机释放精力 ②安排S级客户高层拜访 ③评估是否调整本月目标预期 ④启动促销/特价策略加速决策。`; }
 
@@ -2012,7 +2012,7 @@ function renderForecast() {
         <div style="font-size:13px;color:var(--text-light);margin-bottom:10px;">📌 关键数字一览</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
           <div>管道商机总数：<strong id="gap_deal_count" style="color:var(--primary);"></strong> 个</div>
-          <div>S/A级客户商机：<strong id="gap_sa_cnt" style="color:var(--success);"></strong> 个</div>
+          <div>极高/高级商机：<strong id="gap_sa_cnt" style="color:var(--success);"></strong> 个</div>
           <div>僵尸商机数：<strong id="gap_zombie_cnt" style="color:var(--danger);"></strong> 个</div>
           <div>三场景差距：<strong id="gap_scatter" style="color:var(--warning);"></strong></div>
         </div>
@@ -2030,7 +2030,7 @@ function renderForecast() {
       <div style="padding:16px;border-radius:8px;background:#fdf5f4;border-left:4px solid var(--danger);">
         <strong style="color:var(--danger);">⚠️ 本周你该亲自关注的事</strong>
         <ol style="font-size:13px;margin-top:8px;padding-left:18px;line-height:2.2;">
-          <li><strong>最大风险单</strong> — 纳米移动(800万)在<strong>竞争阶段</strong>且赢率等级只有<strong>B级</strong>，金额大但赢面不稳。这单你需不需要亲自出面见客户决策人？</li>
+          <li><strong>最大风险单</strong> — 纳米移动(8000万)在<strong>竞争阶段</strong>且赢率等级只有<strong>中</strong>，金额大但赢面不稳。这单你需不需要亲自出面见客户决策人？</li>
           <li><strong>僵尸商机</strong> — 当前管道中有 <strong>${pipelineData.filter(d => { const s = stageConfig.find(x => x.key === d.stage); return d.days > s.maxDays; }).length}个</strong> 商机停留超时。让销售负责人逐个过一遍，该推的推、该砍的砍。</li>
           <li><strong>团队能力短板</strong> — ${teamData.filter(t=>t.winRate<20).length>0 ? teamData.filter(t=>t.winRate<20).map(t=>t.name).join('、')+'赢单率明显偏低' : '团队整体健康但需持续关注'}，这个月是不是该安排一次专项辅导？</li>
         </ol>
@@ -2074,7 +2074,7 @@ function renderForecast() {
     const s = stageConfig.find(x => x.key === d.stage);
     return d.days > s.maxDays;
   }).length;
-  const saCnt = pipelineData.filter(d => (d.health === 'S' || d.health === 'A') && monthStages.includes(d.stage)).length;
+  const saCnt = pipelineData.filter(d => (d.health === '极高' || d.health === '高') && monthStages.includes(d.stage)).length;
   document.getElementById('gap_sa_cnt').textContent = saCnt;
   document.getElementById('gap_scatter').textContent = `${pesVal} ~ ${optVal} 万（相差${optVal - pesVal}万）`;
 
