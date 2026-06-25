@@ -1543,11 +1543,7 @@ function renderTeam() {
 // ===== 自动短板诊断（重构版：三维度诊断） =====
 // 诊断逻辑：转化率看能力 | 停留时长看掌控度 | 预测准确率看判断力
 function renderAutoDiagnosis() {
-  // 计算团队平均转化率作为基准
-  const teamAvgValid = Math.round(teamData.reduce((s, t) => s + t.validRate, 0) / teamData.length);
-  const teamAvgLeadConv = Math.round(teamData.reduce((s, t) => s + t.leadConv, 0) / teamData.length);
-  const teamAvgDealConv = Math.round(teamData.reduce((s, t) => s + t.dealConv, 0) / teamData.length);
-  const teamAvgWinRate = Math.round(teamData.reduce((s, t) => s + t.winRate, 0) / teamData.length);
+  // 使用全局常量 teamAvgValid / teamAvgLeadConv / teamAvgDealConv / teamAvgWinRate
 
   const container = document.getElementById('auto_diagnosis_container');
 
@@ -1794,8 +1790,11 @@ function getSuggestion(bias, accuracy, t) {
   return '保持当前水准，持续关注变化趋势。';
 }
 
-// 计算团队平均值辅助函数
+// 计算团队平均值辅助函数（全局常量，供 renderAutoDiagnosis 和 getRootCause 共用）
+const teamAvgValid = Math.round(teamData.reduce((s, t) => s + t.validRate, 0) / teamData.length);
 const teamAvgLeadConv = Math.round(teamData.reduce((s, t) => s + t.leadConv, 0) / teamData.length);
+const teamAvgDealConv = Math.round(teamData.reduce((s, t) => s + t.dealConv, 0) / teamData.length);
+const teamAvgWinRate = Math.round(teamData.reduce((s, t) => s + t.winRate, 0) / teamData.length);
 
 // ===== 预测总览（重构为月度预测+三场景） =====
 function renderForecast() {
