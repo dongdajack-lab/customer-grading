@@ -1712,7 +1712,7 @@ function renderAutoDiagnosis() {
         <tbody>
           ${dwellIssues.map(d => `<tr style="${d.severity==='严重超时'?'background:#fdf5f4;':''}">
             <td><strong>${d.stage}</strong></td>
-            <td style="color:${d.severity==='严重超时'?'var(--danger)':'var(--warning)';font-weight:600;}">${d.days}天</td>
+            <td style="color:${d.severity==='严重超时'?'var(--danger)':'var(--warning)'};font-weight:600;">${d.days}天</td>
             <td>≤${d.standard}天</td>
             <td style="color:var(--danger);">+${d.overBy}天</td>
             <td style="font-size:11px;color:var(--text-light);">${d.reason}</td>
