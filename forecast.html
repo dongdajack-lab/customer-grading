@@ -898,7 +898,7 @@ body {
   <!-- 3B: 漏斗可视化 -->
   <div class="card">
     <div class="card-title"><span class="icon">🌪️</span> 六阶段销售漏斗预测</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">漏斗各阶段的金额 × 阶段系数 × 赢率系数 = <strong>期望值（EV）</strong>。<strong style="color:var(--accent);">注意：</strong>ToB订单要么成(100%)要么败(0%)，不存在"成交一半"。期望值是一组商机的统计预期——单看不准，一组才有意义。下方表格中每个商机的<strong>赢率等级</strong>来自9维度评分卡（S=1.0/A=0.8/B=0.6/C=0.3）。</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">漏斗各阶段的金额 × 阶段系数 × 赢率系数 = <strong>期望值（EV）</strong>。<strong style="color:var(--success);">交付回款阶段已赢单，按全额计入，不再乘赢率系数。</strong><strong style="color:var(--accent);">注意：</strong>ToB订单要么成(100%)要么败(0%)，不存在"成交一半"。期望值是一组商机的统计预期——单看不准，一组才有意义。下方表格中每个商机的<strong>赢率等级</strong>来自9维度评分卡（S=1.0/A=0.8/B=0.6/C=0.3），仅适用于签约前阶段。</p>
 
     <div class="funnel-container">
       <div class="funnel-visual" id="funnel_visual"></div>
@@ -930,7 +930,7 @@ body {
   <!-- 3C: 管道商机清单 -->
   <div class="card">
     <div class="card-title"><span class="icon">📑</span> 管道商机清单（示例数据）</div>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>ToB特点：</strong>每个订单要么成要么不成。期望值=金额×阶段系数×赢率系数，是一组商机的统计预期，不是单个订单的"部分成交"。<span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span> 赢率等级来自下方的<strong>商机赢率评分卡</strong>（S/A/B/C）。</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>ToB特点：</strong>每个订单要么成要么不成。期望值=金额×阶段系数×赢率系数，是一组商机的统计预期，不是单个订单的"部分成交"。<strong style="color:var(--success);">交付回款阶段=已赢单，全额计入。</strong><span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span> 赢率等级来自下方的<strong>商机赢率评分卡</strong>（S/A/B/C），仅适用于签约前阶段。</p>
     <table class="pipeline-table" id="pipeline_table">
       <thead>
         <tr>
@@ -1321,11 +1321,16 @@ const pipelineData = [
   { customer: 'ICT公司C', stage: 'comp', amount: 100, health: 'B', healthCoef: 0.6, days: 28, next: '竞争分析+埋雷策略' }
 ];
 
+// 交付回款阶段 = 已赢单，不再乘赢率系数，全额计入
+function effHealthCoef(deal, stage) {
+  return stage.key === 'deliver' ? 1.0 : deal.healthCoef;
+}
+
 function renderFunnel() {
   const stageStats = stageConfig.map(s => {
     const deals = pipelineData.filter(d => d.stage === s.key);
     const totalAmount = deals.reduce((sum, d) => sum + d.amount, 0);
-    const weightedAmount = deals.reduce((sum, d) => sum + d.amount * s.coef * d.healthCoef, 0);
+    const weightedAmount = deals.reduce((sum, d) => sum + d.amount * s.coef * effHealthCoef(d, s), 0);
     const zombieCount = deals.filter(d => d.days > s.maxDays).length;
     return { ...s, count: deals.length, totalAmount, weightedAmount, zombieCount, deals };
   });
@@ -1379,16 +1384,17 @@ function renderFunnel() {
   const tbody = document.getElementById('pipeline_body');
   tbody.innerHTML = pipelineData.map(d => {
     const stage = stageConfig.find(s => s.key === d.stage);
-    const weighted = Math.round(d.amount * stage.coef * d.healthCoef);
+    const weighted = Math.round(d.amount * stage.coef * effHealthCoef(d, stage));
     const isZombie = d.days > stage.maxDays;
+    const isWon = d.stage === 'deliver';
     return `<tr>
       <td><strong>${d.customer}</strong></td>
       <td><span class="stage-tag ${stageClassMap[d.stage]}">${stageNameMap[d.stage]}</span></td>
       <td>${d.amount}</td>
-      <td><span class="health-badge ${healthClassMap[d.health]}">${d.health}级</span></td>
+      <td>${isWon ? '<span style="color:var(--success);font-weight:600;">✅ 已赢单</span>' : `<span class="health-badge ${healthClassMap[d.health]}">${d.health}级</span>`}</td>
       <td>${isZombie ? `<span class="zombie-flag">⚠️ ${d.days}天</span>` : d.days + '天'}</td>
       <td style="font-size:12px;">${d.next}</td>
-      <td class="weighted-value">${weighted}</td>
+      <td class="weighted-value">${isWon ? `<strong style="color:var(--success);">${weighted}</strong>` : weighted}</td>
     </tr>`;
   }).join('');
 }
@@ -1810,21 +1816,24 @@ function renderForecast() {
 
   monthDeals.forEach(d => {
     const stage = stageConfig.find(s => s.key === d.stage);
-    const weighted = d.amount * stage.coef * d.healthCoef;
+    const isWon = d.stage === 'deliver';
+    const weighted = isWon ? d.amount : d.amount * stage.coef * d.healthCoef;
     conservativeTotal += weighted;
 
-    // 乐观：S/A级客户当全赢
-    if (d.health === 'S' || d.health === 'A') {
+    // 乐观：已赢单全额 + S/A级客户当全赢
+    if (isWon) {
+      optimisticTotal += d.amount;
+    } else if (d.health === 'S' || d.health === 'A') {
       optimisticTotal += d.amount;
     } else {
       optimisticTotal += weighted; // B/C级还是用加权
     }
 
-    // 悲观：只算签约(×85%)和交付(×100%)，且只用A级以上
+    // 悲观：只算签约(×85%)和交付(全额)，且签约只用A级以上
     if (d.stage === 'sign' && (d.health === 'S' || d.health === 'A')) {
       pessimisticTotal += d.amount * 0.85;
-    } else if (d.stage === 'deliver') {
-      pessimisticTotal += d.amount * 1.0;
+    } else if (isWon) {
+      pessimisticTotal += d.amount;
     }
     // 竞争阶段不算入悲观（太不确定）
 
@@ -1832,12 +1841,13 @@ function renderForecast() {
     const stageClassMap = { comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
     const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
 
-    // 赢率估算 = 阶段系数 × 赢率系数，转百分比
-    const winRatePct = Math.round(stage.coef * d.healthCoef * 100);
+    // 赢率估算：交付阶段=已赢单(100%)，其他=阶段系数×赢率系数
+    const winRatePct = isWon ? 100 : Math.round(stage.coef * d.healthCoef * 100);
 
     monthDetails.push({
       customer: d.customer,
       amount: d.amount,
+      stageKey: d.stage,
       stageName: stageNameMap[d.stage],
       stageClass: stageClassMap[d.stage],
       health: d.health,
@@ -1865,15 +1875,16 @@ function renderForecast() {
   // 填充商机明细表（增加赢率列）
   const monthBody = document.getElementById('month_deals_body');
   monthBody.innerHTML = monthDetails.map(d => {
-    let rateColor = d.winRate >= 70 ? 'var(--success)' : d.winRate >= 40 ? 'var(--warning)' : 'var(--danger)';
+    const isWon = d.stageKey === 'deliver';
+    let rateColor = isWon ? 'var(--success)' : (d.winRate >= 70 ? 'var(--success)' : d.winRate >= 40 ? 'var(--warning)' : 'var(--danger)');
     return `
     <tr>
       <td><strong>${d.customer}</strong></td>
       <td style="font-weight:600;">${d.amount}</td>
       <td><span class="stage-tag ${d.stageClass}">${d.stageName}</span></td>
-      <td><span class="health-badge ${d.healthClass}">${d.health}级</span></td>
-      <td style="color:${rateColor};font-weight:600;">${d.winRate}%</td>
-      <td style="color:var(--text-light);font-size:12px;">≈${d.weighted}<span style="font-size:10px;">（期望）</span></td>
+      <td>${isWon ? '<span style="color:var(--success);font-weight:600;">✅ 已赢单</span>' : `<span class="health-badge ${d.healthClass}">${d.health}级</span>`}</td>
+      <td style="color:${rateColor};font-weight:600;">${isWon ? '✅ 已赢单' : d.winRate + '%'}</td>
+      <td style="${isWon ? 'color:var(--success);font-weight:600;' : 'color:var(--text-light);font-size:12px;'}">${isWon ? d.weighted : '≈' + d.weighted + '<span style="font-size:10px;">（期望）</span>'}</td>
     </tr>`;
   }).join('');
 
