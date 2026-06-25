@@ -482,7 +482,7 @@ body {
         <div class="rs-num">3</div>
         <div class="rs-tag">地字篇</div>
         <div class="rs-name">盘管道</div>
-        <div class="rs-desc">漏斗+客户级别评分</div>
+        <div class="rs-desc">商机赢率评分+加权管道预测</div>
         <div class="rs-output">📤 管道预测值</div>
       </div>
       <div class="roadmap-arrow">→</div>
@@ -528,8 +528,8 @@ body {
         <div class="subtitle-cn">运筹帷幄 · 过程管控</div>
         <div class="module-list">
           <div class="module-item"><strong>Step 3 · 六阶段漏斗预测</strong><span>线索→需求→方案→竞争→签约→交付回款</span></div>
-          <div class="module-item"><strong>Step 3 · 客户级别评分</strong><span>9维度量化打分，S/A/B/C分级</span></div>
-          <div class="module-item"><strong>Step 3 · 加权管道预测</strong><span>金额×阶段系数×客户级别系数</span></div>
+          <div class="module-item"><strong>Step 3 · 商机赢率评分</strong><span>9维度量化打分，S/A/B/C赢率等级</span></div>
+          <div class="module-item"><strong>Step 3 · 加权管道预测</strong><span>金额×阶段系数×赢率系数</span></div>
         </div>
       </div>
       <div class="arch-col human">
@@ -550,7 +550,7 @@ body {
       <div class="engine-layers">
         <div class="engine-layer">
           <h4>短期预测（本月/本季）</h4>
-          <div class="formula">Σ(商机金额 × 阶段系数 × 客户级别系数)</div>
+          <div class="formula">Σ(商机金额 × 阶段系数 × 赢率系数)</div>
           <p>数据来源：Step 3 管道加权。精度最高，用于月度/季度业绩commit。</p>
         </div>
         <div class="engine-layer">
@@ -759,12 +759,79 @@ body {
     </table>
   </div>
 
+  <!-- Step 2 老板结论卡片 -->
+  <div class="card" style="border:2px solid var(--sky);background:linear-gradient(135deg,#f0f6fc 0%,#fff 100%);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <span style="font-size:24px;">👔</span>
+      <div>
+        <strong style="font-size:18px;color:var(--sky);">老板你从这个步骤拿走什么</strong>
+        <div style="font-size:12px;color:var(--text-light);">Step 2「看客户」不是让你自己去分析每个客户，而是给你一套标准——让销售团队按这个标准去评估客户</div>
+      </div>
+    </div>
+
+    <!-- 核心输出 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+      <div style="padding:14px;background:#fff;border-radius:10px;text-align:center;border:1px solid var(--border);">
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:4px;">输出①</div>
+        <div style="font-size:15px;font-weight:700;color:var(--primary);">客户分级策略</div>
+        <div style="font-size:12px;color:var(--text-light);margin-top:4px;">你的客户池中<br>S/A/B/C各多少家</div>
+      </div>
+      <div style="padding:14px;background:#fff;border-radius:10px;text-align:center;border:1px solid var(--border);">
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:4px;">输出②</div>
+        <div style="font-size:15px;font-weight:700;color:var(--primary);">资源配置决策</div>
+        <div style="font-size:12px;color:var(--text-light);margin-top:4px;">谁配最好的销售？<br>谁值得你亲自出面？</div>
+      </div>
+      <div style="padding:14px;background:#fff;border-radius:10px;text-align:center;border:1px solid var(--border);">
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:4px;">输出③（→ 给Step 3用）</div>
+        <div style="font-size:15px;font-weight:700;color:var(--accent);">竞争+决策链数据</div>
+        <div style="font-size:12px;color:var(--text-light);margin-top:4px;">作为Step 3评分卡中<br>"竞争态势"和"决策链覆盖"<br>两个维度的打分依据</div>
+      </div>
+    </div>
+
+    <!-- 概念区分 -->
+    <div style="padding:14px;background:#faf9f7;border-radius:8px;margin-bottom:12px;">
+      <strong style="font-size:13px;">⚠️ 别混淆两套"S/A/B/C"</strong>
+      <table style="width:100%;margin-top:8px;font-size:12px;border-collapse:collapse;">
+        <tr><td style="padding:5px 10px;width:120px;font-weight:600;background:#e8f0fa;">Step 2 这里定义的</td><td style="padding:5px 10px;"><strong>客户评级</strong> — 按客户的采购规模、复购能力、战略价值来分。是客户本身的属性。<br><span style="color:var(--text-light);">用途：决定资源怎么分配（销售跑动频率、服务级别）</span></td></tr>
+        <tr><td style="padding:5px 10px;font-weight:600;background:#fff5eb;">Step 3 要用的</td><td style="padding:5px 10px;"><strong>商机赢率等级</strong> — 按9维度对单个订单的赢单概率打分。是商机层面的属性。<br><span style="color:var(--text-light);">用途：决定管道期望值计算的系数（S=1.0, C=0.3）</span></td></tr>
+        <tr><td colspan="2" style="padding:6px 10px;color:var(--text-light);background:#f5f5f5;font-size:11px;">💡 举例：某S级战略客户（大客户）上的一个早期线索商机，可能只有C级赢率（刚接触、需求不明）；同一个客户上的签约阶段商机可能是A级赢率。两者独立。</td></tr>
+      </table>
+    </div>
+
+    <!-- 示例结论 -->
+    <div style="padding:14px;background:#f0f7f2;border-radius:8px;border-left:4px solid var(--success);">
+      <strong style="font-size:13px;color:var(--success);">📌 示例：如果你公司当前客户池的情况是这样……</strong>
+      <div style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:150px;padding:10px;background:#fff;border-radius:6px;">
+          <div style="font-size:20px;font-weight:800;color:var(--success);">3家</div>
+          <div style="font-size:12px;color:var(--text-light);">S级战略客户</div>
+          <div style="font-size:11px;color:var(--success);margin-top:4px;">✅ 配置顾问型销售 + 季度拜访</div>
+        </div>
+        <div style="flex:1;min-width:150px;padding:10px;background:#fff;border-radius:6px;">
+          <div style="font-size:20px;font-weight:800;color:var(--sky);">8家</div>
+          <div style="font-size:12px;color:var(--text-light);">A级重要客户</div>
+          <div style="font-size:11px;color:var(--sky);margin-top:4px;">✅ 核心管道来源，重点跟进</div>
+        </div>
+        <div style="flex:1;min-width:150px;padding:10px;background:#fff;border-radius:6px;">
+          <div style="font-size:20px;font-weight:800;color:var(--accent);">15家</div>
+          <div style="font-size:12px;color:var(--text-light);">B级普通客户</div>
+          <div style="font-size:11px;color:var(--warning);margin-top:4px;">⚠️ 标准化服务，控制投入</div>
+        </div>
+        <div style="flex:1;min-width:150px;padding:10px;background:#fff;border-radius:6px;">
+          <div style="font-size:20px;font-weight:800;color:var(--danger);">6家</div>
+          <div style="font-size:12px;color:var(--text-light);">C级风险客户</div>
+          <div style="font-size:11px;color:var(--danger);margin-top:4px;">❗ 收缩或放弃，止损优先</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="flow-output">
     <div class="flow-output-icon">📤</div>
     <div class="flow-output-content">
-      <div class="flow-output-title">本步输出</div>
-      <div class="flow-output-desc">客户S/A/B/C分级策略 + 3C竞争态势 + 决策链覆盖度</div>
-      <div class="flow-output-dest">→ 为 Step 3「盘管道」的客户级别评分提供"竞争态势"和"决策链覆盖"两个维度的评分依据</div>
+      <div class="flow-output-title">本步输出 → 传递给谁</div>
+      <div class="flow-output-desc"><strong>① 客户分级策略：</strong>直接指导资源配置 → 销售团队执行 | <strong>② 竞争+决策链分析结果：</strong>传给Step 3，成为商机赢率评分卡中"竞争态势"和"决策链覆盖"两个维度的打分依据</div>
+      <div class="flow-output-dest">→ Step 2 不产生数字预测，它的价值是<strong>定标准和做分类</strong>。真正的金额预测从 Step 3 开始。</div>
     </div>
   </div>
 </div>
@@ -784,7 +851,7 @@ body {
     <strong>👔 老板为什么关心：</strong>每个月问销售"下个月能做多少"，回答永远是"大概……应该……差不多……"。<br>
     为什么？因为<strong>没有管道数据支撑</strong>。盘管道就是把每个商机摆在桌面上：<br>
     • 在哪个阶段？（竞争/签约/交付 → 阶段系数不同）<br>
-    • 客户级别如何？（S/A/B/C → 级别系数不同）<br>
+    • 商机赢率如何？（S/A/B/C → 赢率系数不同）<br>
     • 停留多久了？（超时 = 有问题）<br>
     三者一乘，<strong>本月能成交多少，数字自己就出来了</strong>。<br>
     <strong>💡 一句话：</strong>管道透明，预测才能准确；预测准确，你才能放心。
@@ -831,7 +898,7 @@ body {
   <!-- 3B: 漏斗可视化 -->
   <div class="card">
     <div class="card-title"><span class="icon">🌪️</span> 六阶段销售漏斗预测</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">漏斗各阶段的金额 × 阶段系数 × 客户级别系数 = <strong>期望值（EV）</strong>。<strong style="color:var(--accent);">注意：</strong>ToB订单要么成(100%)要么败(0%)，不存在"成交一半"。期望值是一组商机的统计预期——单看不准，一组才有意义。下方表格中每个商机的客户等级对应一个系数（S=1.0/A=0.8/B=0.6/C=0.3）。</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">漏斗各阶段的金额 × 阶段系数 × 赢率系数 = <strong>期望值（EV）</strong>。<strong style="color:var(--accent);">注意：</strong>ToB订单要么成(100%)要么败(0%)，不存在"成交一半"。期望值是一组商机的统计预期——单看不准，一组才有意义。下方表格中每个商机的<strong>赢率等级</strong>来自9维度评分卡（S=1.0/A=0.8/B=0.6/C=0.3）。</p>
 
     <div class="funnel-container">
       <div class="funnel-visual" id="funnel_visual"></div>
@@ -839,12 +906,12 @@ body {
         <div class="stat-box">
           <div class="stat-label">管道期望值总额（EV）</div>
           <div class="stat-value" id="pipe_weighted">— 万</div>
-          <div class="stat-desc">Σ(商机金额 × 阶段系数 × 客户级别系数)</div>
+          <div class="stat-desc">Σ(商机金额 × 阶段系数 × 赢率系数)</div>
         </div>
         <div class="stat-box">
           <div class="stat-label">本月保守预测（EV）</div>
           <div class="stat-value" id="month_forecast">— 万</div>
-          <div class="stat-desc">竞争+签约+交付阶段 × 客户级别加权</div>
+          <div class="stat-desc">竞争+签约+交付阶段 × 赢率加权</div>
         </div>
         <div class="stat-box success">
           <div class="stat-label">整体转化率（线索→回款）</div>
@@ -863,32 +930,67 @@ body {
   <!-- 3C: 管道商机清单 -->
   <div class="card">
     <div class="card-title"><span class="icon">📑</span> 管道商机清单（示例数据）</div>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>ToB特点：</strong>每个订单要么成要么不成。期望值=金额×阶段系数×客户级别系数，是一组商机的统计预期，不是单个订单的"部分成交"。<span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span> 客户级别来自 Step 2（S/A/B/C）。</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>ToB特点：</strong>每个订单要么成要么不成。期望值=金额×阶段系数×赢率系数，是一组商机的统计预期，不是单个订单的"部分成交"。<span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span> 赢率等级来自下方的<strong>商机赢率评分卡</strong>（S/A/B/C）。</p>
     <table class="pipeline-table" id="pipeline_table">
       <thead>
         <tr>
-          <th>客户</th><th>阶段</th><th>金额(万)</th><th>客户级别</th><th>停留天数</th><th>下一步动作</th><th>期望值(万)</th>
+          <th>客户</th><th>阶段</th><th>金额(万)</th><th>赢率等级</th><th>停留天数</th><th>下一步动作</th><th>期望值(万)</th>
         </tr>
       </thead>
       <tbody id="pipeline_body"></tbody>
     </table>
   </div>
 
-  <!-- 3D: 客户级别评分卡 -->
-  <div class="section-divider"><span>⬇️ 以下为客户级别评分工具 —— 对单个客户打分，得到客户级别系数后代入上方管道加权计算</span></div>
+  <!-- 3D: 商机赢率评分卡 -->
+  <div class="section-divider"><span>⬇️ 以下为商机赢率评分工具 —— 对单个商机打分，得到赢率等级后代入上方管道加权计算</span></div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🏥</span> 客户级别评分卡
+    <div class="card-title"><span class="icon">🎯</span> 商机赢率评分卡
       <span class="tag tag-earth">地字篇</span>
     </div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:8px;">9维度量化打分（每项0-10分），总分90分。<strong>其中"竞争态势"和"决策链覆盖"维度的评分依据来自 Step 2 的3C竞争分析和决策链分析</strong>。</p>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:20px;">S级≥72分（系数1.0）、A级56-71分（系数0.8）、B级40-55分（系数0.6）、C级<40分（系数0.3）。</p>
+
+    <!-- 概念区分说明 -->
+    <div style="padding:14px;background:linear-gradient(135deg,#f0f6fc 0%,#fff 100%);border-radius:10px;border-left:4px solid var(--sky);margin-bottom:16px;">
+      <strong style="color:var(--sky);font-size:14px;">📌 先搞清两个概念（重要）</strong>
+      <table style="width:100%;margin-top:10px;font-size:13px;border-collapse:collapse;">
+        <tr><td style="padding:6px 10px;background:#e8f0fa;font-weight:600;width:120px;">客户评级</td><td style="padding:6px 10px;">Step 2 已定义。按客户的<strong>货币价值</strong>（采购规模、复购潜力）和<strong>战略价值</strong>（行业标杆、转介绍能力）分为S/A/B/C四级。决定<strong>资源配置策略</strong>——谁配最好的销售、老板该亲自见谁。</td></tr>
+        <tr><td style="padding:6px 10px;background:#fff5eb;font-weight:600;">商机赢率评分</td><td style="padding:6px 10px;"><strong>→ 就是这个评分卡</strong>。对<strong>单个商机/订单</strong>的赢单概率做9维度评估，输出S/A/B/C赢率等级。决定<strong>期望值计算的系数</strong>——S级系数1.0，C级系数0.3。</td></tr>
+        <tr><td colspan="2" style="padding:8px 10px;color:var(--text-light);font-size:12px;">💡 一个S级客户（大客户）上的一个早期线索商机，可能只有C级赢率；一个B级客户上的签约阶段商机，可能是A级赢率。两者是独立的评估维度。</td></tr>
+      </table>
+    </div>
+
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:8px;"><strong>9维度量化打分</strong>（每项0-10分），总分90分。<strong>其中"竞争态势"和"决策链覆盖"维度的评分依据来自 Step 2 的3C竞争分析和决策链分析</strong>。</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">S级≥72分（系数1.0）、A级56-71分（系数0.8）、B级40-55分（系数0.6）、C级&lt;40分（系数0.3）。</p>
 
     <div class="health-grid" id="health_grid"></div>
 
+    <!-- 评分标准参考（可折叠） -->
+    <div style="margin-top:20px;">
+      <details open>
+        <summary style="cursor:pointer;font-size:14px;font-weight:700;color:var(--primary);padding:10px 14px;background:#faf9f7;border-radius:8px;user-select:none;">📋 各维度评分标准参考（点击展开/收起）</summary>
+        <div style="margin-top:12px;font-size:12px;">
+          <table class="pipeline-table" style="margin-top:8px;">
+            <thead><tr><th>维度</th><th>1-2分（差）</th><th>3-4分（及格）</th><th>5-6分（一般）</th><th>7-8分（良好）</th><th>9-10分（优秀）</th></tr></thead>
+            <tbody>
+              <tr><td><strong>①需求明确度</strong><br><small>(SPIN完成度)</small></td><td>客户说不清痛点，需求模糊</td><td>能说一个大概需求，但痛感不强</td><td>有明确痛点，知道要解决什么</td><td>痛点清晰且有量化指标（如：每年损失XX万）</td><td>客户主动描述痛点，且与我们的方案高度契合</td></tr>
+              <tr><td><strong>②预算确认</strong><br><small>(BANT-Budget)</small></td><td>不知道有没有预算，金额未知</td><td>提到有预算但不确定金额范围</td><td>有大致预算范围（如50-80万）</td><td>预算基本确认（如"今年有60万IT预算"）</td><td>预算已立项审批，金额明确到万</td></tr>
+              <tr><td><strong>③决策链覆盖</strong><br><small>(← Step2决策链)</small></td><td>只接触到一个普通员工</td><td>找到使用者/部门负责人</td><td>识别了决策者和关键人</td><td>与决策者直接对话过，了解决策流程</td><td>决策链全覆盖，已发展内部支持者(Coach)</td></tr>
+              <tr><td><strong>④竞争态势</strong><br><small>(← Step2 竞争7维度)</small></td><td>不清楚对手是谁</td><td>知道有竞争对手但不了解详情</td><td>做过3C分析，知道主要对手优劣势</td><td>7维度逐一对比过我方vs竞对</td><td>我方在多数维度占优，有差异化优势</td></tr>
+              <tr><td><strong>⑤时间进度</strong><br><small>(BANT-Time)</small></td><td>客户没有时间表，"看情况"</td><td>"今年内考虑"，很模糊</td><td>有大致时间窗口（如Q3）</td><td>有明确时间节点（如"9月底前定标"）</td><td>时间紧迫且有内部deadline驱动</td></tr>
+              <tr><td><strong>⑥方案匹配</strong><br><small>(FABE验证)</small></td><td>还没给客户看过方案</td><td>给了方案但客户反馈一般</td><td>客户认可方案方向，细节待确认</td><td>方案经过多轮讨论，客户明确表示认可</td><td>方案成为客户的首选，甚至参与起草需求规格</td></tr>
+              <tr><td><strong>⑦下一步明确</strong><td><td>没有明确的下一步计划</td><td>"下次再聊"，无具体约定</td><td>有下一步动作但时间未确定</td><td>双方已约定具体时间和事项（如下周二方案评审会）</td><td>下一步由客户主动驱动（客户催我们）</td></tr>
+              <tr><td><strong>⑧风险可控</strong><br><small>(风险清单)</small></td><td>没想过有什么风险</td><td>意识到可能有风险但没梳理</td><td>列出了风险点但没有应对方案</td><td>每个已知风险都有应对策略</td><td>风险全面识别+预案充分，甚至做了预演</td></tr>
+              <tr><td><strong>⑨客情深度</strong><br><small>(圈层融入度)</small></td><td>仅一面之缘，纯商务关系</td><td>有过几次拜访，关系尚浅</td><td>建立了一定信任，愿意分享信息</td><td>关系良好，能约到关键人深度交流</td><td>建立了个人层面的信任关系，能获得非公开信息</td></tr>
+            </tbody>
+          </table>
+          <p style="color:var(--text-light);margin-top:8px;padding:8px;background:#faf9f7;border-radius:6px;">💡 打分建议：由销售主管或销售本人根据实际跟进情况客观打分。<strong>宁可不乐观也不要虚高</strong>——虚高的分数会让预测偏差变大，最终吃亏的是销售自己。</p>
+        </div>
+      </details>
+    </div>
+
     <div class="health-result">
       <div class="grade" id="health_grade">B</div>
-      <div class="grade-label">商机等级</div>
+      <div class="grade-label">赢率等级</div>
       <div class="grade-score" id="health_score">0 分 / 90 分</div>
       <div class="grade-desc" id="health_desc"></div>
     </div>
@@ -933,40 +1035,42 @@ body {
 
   <div class="info-banner">
     <strong>👔 老板为什么关心：</strong>同样10个线索，有人能成交3单，有人1单都成不了。<br>
-    差距在哪？不是"运气不好"，而是<strong>具体某个环节的能力短板</strong>——<br>
-    • 线索质量差？→ 获客渠道或筛选标准有问题<br>
-    • 需求挖掘弱？→ SPIN话术不会用，找不到痛点<br>
-    • 方案/竞争弱？→ FABE不熟练，竞争策略不清晰<br>
-    • 成交能力弱？→ LSCPA抗拒处理不过关<br>
-    <strong>💡 一句话：</strong>不知道短板在哪的培训都是浪费钱。先诊断、后培训、再考核。
+    差距在哪？不是"运气不好"，而是<strong>三个维度的具体短板</strong>——<br>
+    • <strong>能力不够</strong>？→ 转化率低于团队平均 → 哪个阶段弱就练哪个<br>
+    • <strong>掌控不住</strong>？→ 商机停留超时 → 推进力度不足或遇到卡点<br>
+    • <strong>判断不准</strong>？→ 预测偏差大 → 太乐观或太保守，原因各不同<br>
+    <strong>💡 一句话：</strong>三个维度分别对应培训（练能力）、管理（盯过程）、复盘（校判断），缺什么补什么。
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">👥</span> 团队战力：谁的漏斗健康、谁掉链子</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">每个销售的漏斗数据一目了然。老板你只需要看两列：<strong>赢单率</strong>（最终结果）和<strong>短板诊断</strong>（问题在哪）。</p>
+    <div class="card-title"><span class="icon">👥</span> 团队战力：三维度看每个人的战斗力</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">老板你只需要关注三列：<strong>赢单率</strong>（结果好不好）、<strong>预测准确率</strong>（判断准不准）、<strong>掌控度</strong>（过程管没管）。新增的预测准确率和停留时长列，帮你从数据倒推每个人的真实问题。</p>
     <table class="team-compare" id="team_table">
       <thead>
-        <tr><th>销售</th><th>线索数</th><th>有效线索率</th><th>线索→商机转化</th><th>商机→成交转化</th><th>赢单率</th><th>平均客单价(万)</th><th>僵尸商机数</th><th>短板诊断</th></tr>
+        <tr><th>销售</th><th>线索数</th><th>有效线索率</th><th>线索→商机</th><th>商机→成交</th><th>赢单率</th><th>客单价</th><th>僵尸</th><th>预测准确率</th><th>掌控度</th><th>短板诊断</th></tr>
       </thead>
       <tbody id="team_body"></tbody>
     </table>
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🎯</span> 能力短板自动诊断
-      <span style="font-size:12px;font-weight:400;color:var(--text-light);margin-left:8px;">基于上方团队漏斗数据自动分析每个人的短板维度</span>
+    <div class="card-title"><span class="icon">🎯</span> 三维度能力诊断
+      <span style="font-size:12px;font-weight:400;color:var(--text-light);margin-left:8px;">转化率看能力 · 停留时长看掌控度 · 预测准确率看判断力</span>
     </div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">系统根据每位销售的<strong>漏斗转化率数据</strong>自动诊断短板，并匹配对应的培训工具。这就是你回去之后实际使用的方式——把团队真实数据填进去，系统自动告诉你谁弱在哪里、该练什么。</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">系统从<strong>三个独立维度</strong>自动诊断每位销售的问题根因——不是笼统地说"不行"，而是精确到<strong>哪个环节、什么原因、该怎么做</strong>。预测准确率是新增维度：如果一个人连续两月预测偏差超过20%，说明他的判断力有问题，需要单独辅导。</p>
     <div id="auto_diagnosis_container"></div>
 
     <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,#f0f6fc 0%,#fff 100%);border-radius:10px;border:1px solid var(--sky);">
       <strong style="color:var(--sky);font-size:14px;">📌 如何在你公司使用这个诊断？</strong>
       <ol style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2.2;color:var(--text);">
         <li><strong>每月初从CRM导出</strong>每个销售的：线索数、有效商机数、各阶段商机数、成交单数、成交金额</li>
-        <li><strong>填入上表</strong>（或接入CRM自动取数），系统自动计算各阶段转化率</li>
-        <li><strong>看诊断结果</strong>：谁的哪个阶段转化率低于团队平均 → 就是短板</li>
-        <li><strong>按推荐工具训练</strong>：短板对应什么工具，安排对应练习</li>
-        <li><strong>下月再测</strong>：转化率提升了吗？没有就换方法或加大强度</li>
+        <li><strong>记录上月预测值vs实际完成值</strong>，计算预测准确率（实际/预测×100%）——这是新增的关键数据</li>
+        <li><strong>填入上表</strong>（或接入CRM自动取数），系统自动计算各阶段转化率和停留时长</li>
+        <li><strong>看三维度诊断结果</strong>：
+          <br>→ 转化率低 → 能力问题 → 安排对应培训工具
+          <br>→ 停留超时 → 掌控度问题 → 管理者逐单跟进
+          <br>→ 预测偏差大 → 判断力问题 → 复盘评分标准和方法论</li>
+        <li><strong>下月再测</strong>：三个维度是否都有改善？没有就换方法或加大强度</li>
       </ol>
     </div>
   </div>
@@ -1054,7 +1158,7 @@ body {
     <div style="margin-top:20px;">
       <div style="font-size:14px;font-weight:600;margin-bottom:12px;">📋 本月关键商机一览（老板你重点看这些）</div>
       <table class="pipeline-table" id="month_deals_table">
-        <thead><tr><th>客户</th><th>金额(万)</th><th>阶段</th><th>客户级别</th><th>赢率估算</th><th>期望值(万)</th></tr></thead>
+        <thead><tr><th>客户</th><th>金额(万)</th><th>阶段</th><th>赢率等级</th><th>赢率估算</th><th>期望值(万)</th></tr></thead>
         <tbody id="month_deals_body"></tbody>
       </table>
       <div style="margin-top:12px;padding:10px;background:#f0f7f2;border-radius:6px;font-size:12px;" id="month_confidence_note"></div>
@@ -1289,7 +1393,7 @@ function renderFunnel() {
   }).join('');
 }
 
-// ===== 客户级别评分 =====
+// ===== 商机赢率评分 =====
 const healthDims = [
   { name: '需求明确度', desc: '客户有明确痛点，知道自己为什么要买（SPIN完成度）' },
   { name: '预算确认', desc: '客户有预算或预算可能，金额明确（BANT-Budget）' },
@@ -1325,10 +1429,10 @@ function updateHealth() {
   });
 
   let grade, desc;
-  if (total >= 72) { grade = 'S'; desc = '优质客户，重点投入资源，高概率成交。客户级别系数×1.0。'; }
-  else if (total >= 56) { grade = 'A'; desc = '良好客户，正常推进，需补齐短板。客户级别系数×0.8。'; }
-  else if (total >= 40) { grade = 'B'; desc = '一般客户，需评估是否值得继续投入，重点提升短板维度。客户级别系数×0.6。'; }
-  else { grade = 'C'; desc = '高风险客户，建议降级或放弃，除非有明确改善路径。客户级别系数×0.3。'; }
+  if (total >= 72) { grade = 'S'; desc = '高赢率商机，赢单概率大。赢率系数×1.0。'; }
+  else if (total >= 56) { grade = 'A'; desc = '良好商机，正常推进，需补齐短板。赢率系数×0.8。'; }
+  else if (total >= 40) { grade = 'B'; desc = '一般商机，需评估是否值得继续投入。赢率系数×0.6。'; }
+  else { grade = 'C'; desc = '低赢率商机，建议降级或放弃，除非有明确改善路径。赢率系数×0.3。'; }
 
   document.getElementById('health_grade').textContent = grade;
   document.getElementById('health_score').textContent = `${total} 分 / 90 分`;
@@ -1337,15 +1441,65 @@ function updateHealth() {
 
 // ===== 团队战力 =====
 const teamData = [
-  { name: '桃子（S级客户）', leads: 8, validRate: 75, leadConv: 50, dealConv: 60, winRate: 40, avgDeal: 350, zombies: 1 },
-  { name: '大军（A级客户）', leads: 12, validRate: 60, leadConv: 33, dealConv: 50, winRate: 25, avgDeal: 200, zombies: 2 },
-  { name: '陈君（B级客户）', leads: 20, validRate: 45, leadConv: 25, dealConv: 30, winRate: 15, avgDeal: 100, zombies: 4 },
-  { name: '小刘（C级客户）', leads: 30, validRate: 30, leadConv: 15, dealConv: 20, winRate: 8, avgDeal: 50, zombies: 6 }
+  { name: '桃子', leads: 8, validRate: 75, leadConv: 50, dealConv: 60, winRate: 40, avgDeal: 350, zombies: 1,
+    // 预测准确率：上月预测vs实际
+    forecastAccuracy: 92,    // 预测准确率%（100=完全准确）
+    forecastBias: '略乐观', // 偏差方向：偏乐观 / 偏保守 / 准确
+    biasReason: '竞争阶段商机赢率评分偏高，实际丢单1个大单',
+    avgDwellDays: { lead: 5, need: 12, plan: 18, comp: 22, sign: 9, deliver: 28 }, // 各阶段平均停留天数
+    dwellStatus: '掌控良好'  // 停留时长总体评价
+  },
+  { name: '大军', leads: 12, validRate: 60, leadConv: 33, dealConv: 50, winRate: 25, avgDeal: 200, zombies: 2,
+    forecastAccuracy: 78,
+    forecastBias: '偏乐观',
+    biasReason: '签约阶段多次延期回款，对付款流程预判不足；需求挖掘不够深导致方案反复修改',
+    avgDwellDays: { lead: 6, need: 18, plan: 25, comp: 28, sign: 18, deliver: 35 },
+    dwellStatus: '部分失控'
+  },
+  { name: '陈君', leads: 20, validRate: 45, leadConv: 25, dealConv: 30, winRate: 15, avgDeal: 100, zombies: 4,
+    forecastAccuracy: 65,
+    forecastBias: '明显乐观',
+    biasReason: '线索→商机转化虚高（把意向不明确的也当有效商机）；竞争分析不足导致高估赢单概率',
+    avgDwellDays: { lead: 12, need: 28, plan: 32, comp: 38, sign: 15, deliver: 45 },
+    dwellStatus: '严重超时'
+  },
+  { name: '小刘', leads: 30, validRate: 30, leadConv: 15, dealConv: 20, winRate: 8, avgDeal: 50, zombies: 6,
+    forecastAccuracy: 88,
+    forecastBias: '偏保守',
+    biasReason: '过于谨慎，赢率评分普遍偏低；其实部分B级商机有潜力但没跟进到位',
+    avgDwellDays: { lead: 8, need: 20, plan: 22, comp: 25, sign: 12, deliver: 32 },
+    dwellStatus: '推进缓慢'
+  }
 ];
+
+// 停留时间标准（与3E预警表一致）
+const dwellStandard = {
+  lead: { normal: 7, warning: 15, zombie: 16 },
+  need: { normal: 15, warning: 30, zombie: 31 },
+  plan: { normal: 20, warning: 30, zombie: 31 },
+  comp: { normal: 20, warning: 30, zombie: 31 },
+  sign: { normal: 10, warning: 20, zombie: 21 },
+  deliver: { normal: 30, warning: 60, zombie: 61 }
+};
 
 function renderTeam() {
   const tbody = document.getElementById('team_body');
-  tbody.innerHTML = teamData.map(t => {
+
+  // 计算每个销售的停留时长状态
+  const dwellAnalysis = teamData.map(t => {
+    let normalCount = 0, warningCount = 0, zombieCount = 0;
+    for (let stage in t.avgDwellDays) {
+      const days = t.avgDwellDays[stage];
+      const std = dwellStandard[stage];
+      if (days <= std.normal) normalCount++;
+      else if (days <= std.warning) warningCount++;
+      else zombieCount++;
+    }
+    return { ...t, normalCount, warningCount, zombieCount };
+  });
+
+  tbody.innerHTML = dwellAnalysis.map(t => {
+    // 简单短板判断
     let diagnosis = '';
     if (t.validRate < 50) diagnosis = '线索质量差';
     else if (t.leadConv < 30) diagnosis = '需求挖掘弱';
@@ -1354,6 +1508,13 @@ function renderTeam() {
     else diagnosis = '表现优秀';
 
     const diagColor = diagnosis === '表现优秀' ? 'var(--success)' : 'var(--danger)';
+
+    // 预测准确率颜色
+    const accColor = t.forecastAccuracy >= 85 ? 'var(--success)' : t.forecastAccuracy >= 70 ? 'var(--warning)' : 'var(--danger)';
+    const biasColor = t.forecastBias === '准确' || t.forecastBias === '略乐观' ? 'var(--success)' : t.forecastBias === '偏保守' ? 'var(--warning)' : 'var(--danger)';
+
+    // 停留时长颜色
+    const dwellColor = t.dwellStatus === '掌控良好' ? 'var(--success)' : t.dwellStatus === '推进缓慢' ? 'var(--warning)' : 'var(--danger)';
 
     return `<tr>
       <td class="person">${t.name}</td>
@@ -1369,6 +1530,8 @@ function renderTeam() {
       <td><strong>${t.winRate}%</strong></td>
       <td>${t.avgDeal}</td>
       <td style="color:${t.zombies>=3?'var(--danger)':'var(--text)'}">${t.zombies >= 3 ? '⚠️ ' : ''}${t.zombies}</td>
+      <td style="color:${accColor};font-weight:600;">${t.forecastAccuracy}%<br><small style="font-weight:400;color:${biasColor};">${t.forecastBias}</small></td>
+      <td style="color:${dwellColor};font-weight:500;font-size:12px;">${t.dwellStatus}<br><small style="color:var(--text-light);">超时${t.zombieCount}阶段</small></td>
       <td style="color:${diagColor};font-weight:600;">${diagnosis}</td>
     </tr>`;
   }).join('');
@@ -1377,7 +1540,8 @@ function renderTeam() {
   renderAutoDiagnosis();
 }
 
-// ===== 自动短板诊断 =====
+// ===== 自动短板诊断（重构版：三维度诊断） =====
+// 诊断逻辑：转化率看能力 | 停留时长看掌控度 | 预测准确率看判断力
 function renderAutoDiagnosis() {
   // 计算团队平均转化率作为基准
   const teamAvgValid = Math.round(teamData.reduce((s, t) => s + t.validRate, 0) / teamData.length);
@@ -1386,84 +1550,150 @@ function renderAutoDiagnosis() {
   const teamAvgWinRate = Math.round(teamData.reduce((s, t) => s + t.winRate, 0) / teamData.length);
 
   const container = document.getElementById('auto_diagnosis_container');
-  container.innerHTML = teamData.map(t => {
-    // 找出低于团队平均的维度
+
+  container.innerHTML = `
+    <div style="margin-bottom:16px;padding:14px;background:linear-gradient(135deg,#f0f6fc 0%,#fff 100%);border-radius:10px;border:1px solid var(--sky);">
+      <strong style="color:var(--sky);font-size:14px;">🔍 三维度诊断法</strong>
+      <p style="font-size:12px;color:var(--text-light);margin-top:6px;">系统从三个独立维度诊断每位销售的问题根因——不是笼统地说"能力不行"，而是精确到<strong>哪个环节、什么原因</strong>。</p>
+      <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+        <span style="font-size:11px;padding:4px 10px;border-radius:12px;background:#e8f0fa;color:var(--sky);">① 转化率 → 能力够不够</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:12px;background:#fff5eb;color:var(--accent);">② 停留时长 → 掌控住没</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:12px;background:#f5e8ee;color:var(--human);">③ 预测准确率 → 判断准不准</span>
+      </div>
+    </div>
+  ` + teamData.map(t => {
+    // ===== 维度1：转化率短板（能力） =====
     const weaknesses = [];
-    const gaps = [];
-
-    if (t.validRate < teamAvgValid) {
-      weaknesses.push({ dim: '有效线索率', value: t.validRate, avg: teamAvgValid, gap: teamAvgValid - t.validRate,
+    if (t.validRate < teamAvgValid)
+      weaknesses.push({ dim: '有效线索率', value: t.validRate, avg: teamAvgValid,
         action: '优化获客渠道和线索筛选标准', tool: '线索收集十八招', color: 'var(--danger)', icon: '🔍' });
-    }
-    if (t.leadConv < teamAvgLeadConv) {
-      weaknesses.push({ dim: '线索→商机转化率', value: t.leadConv, avg: teamAvgLeadConv, gap: teamAvgLeadConv - t.leadConv,
+    if (t.leadConv < teamAvgLeadConv)
+      weaknesses.push({ dim: '线索→商机转化率', value: t.leadConv, avg: teamAvgLeadConv,
         action: '训练需求挖掘能力（SPIN痛点挖掘）', tool: 'SPIN提问训练 + 痛点挖掘四维模型', color: '#d4763a', icon: '💉' });
-    }
-    if (t.dealConv < teamAvgDealConv) {
-      weaknesses.push({ dim: '商机→方案/竞争转化率', value: t.dealConv, avg: teamAvgDealConv, gap: teamAvgDealConv - t.dealConv,
+    if (t.dealConv < teamAvgDealConv)
+      weaknesses.push({ dim: '商机→方案/竞争转化率', value: t.dealConv, avg: teamAvgDealConv,
         action: '复盘FABE话术和竞争策略（3C分析）', tool: 'FABE产品介绍练习 + 3C&8维客户策略分析', color: '#8b4d6e', icon: '⚔️' });
-    }
-    if (t.winRate < teamAvgWinRate) {
-      weaknesses.push({ dim: '最终赢单率', value: t.winRate, avg: teamAvgWinRate, gap: teamAvgWinRate - t.winRate,
+    if (t.winRate < teamAvgWinRate)
+      weaknesses.push({ dim: '最终赢单率', value: t.winRate, avg: teamAvgWinRate,
         action: '加强谈判技巧和抗拒处理', tool: 'LSCPA抗拒处理 + 谈判四步法', color: '#c45a4a', icon: '✍️' });
+
+    // ===== 维度2：停留时长分析（掌控度） =====
+    const dwellIssues = [];
+    const stageNameMap2 = { lead: '线索→需求', need: '需求→方案', plan: '方案→竞争', comp: '竞争→签约', sign: '签约→交付', deliver: '交付→回款' };
+    for (let stage in t.avgDwellDays) {
+      const days = t.avgDwellDays[stage];
+      const std = dwellStandard[stage];
+      if (days > std.zombie) {
+        dwellIssues.push({
+          stage: stageNameMap2[stage],
+          days: days,
+          standard: std.normal,
+          overBy: days - std.normal,
+          severity: '严重超时',
+          reason: getDwellReason(stage, t.name),
+          action: getDwellAction(stage)
+        });
+      } else if (days > std.warning) {
+        dwellIssues.push({
+          stage: stageNameMap2[stage],
+          days: days,
+          standard: std.normal,
+          overBy: days - std.normal,
+          severity: '偏慢',
+          reason: getDwellReason(stage, t.name),
+          action: getDwellAction(stage)
+        });
+      }
     }
 
-    if (weaknesses.length === 0) {
+    // ===== 维度3：预测准确率分析（判断力） =====
+    const forecastAnalysis = {
+      accuracy: t.forecastAccuracy,
+      bias: t.forecastBias,
+      reason: t.biasReason,
+      rootCause: getRootCause(t.forecastBias, t.forecastAccuracy, t),
+      suggestion: getSuggestion(t.forecastBias, t.forecastAccuracy, t)
+    };
+
+    // ===== 综合判定 =====
+    const hasWeaknesses = weaknesses.length > 0;
+    const hasDwellIssues = dwellIssues.some(d => d.severity === '严重超时');
+    const hasForecastIssue = t.forecastAccuracy < 80;
+
+    // 如果全部正常
+    if (!hasWeaknesses && !hasDwellIssues && !hasForecastIssue) {
       return `<div style="padding:18px;border-radius:10px;background:#f0f7f2;border-left:4px solid var(--success);margin-bottom:12px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
           <span style="font-size:24px;">🏆</span>
-          <div><strong style="color:var(--success);font-size:16px;">${t.name} —— 各项指标均达标</strong></div>
+          <div><strong style="color:var(--success);font-size:16px;">${t.name} —— 三项指标均达标</strong></div>
         </div>
-        <div style="font-size:13px;color:var(--text-light);">
-          有效线索率 ${t.validRate}%（平均${teamAvgValid}%）| 线索→商机 ${t.leadConv}%（平均${teamAvgLeadConv}%）|
-          商机→成交 ${t.dealConv}%（平均${teamAvgDealConv}%）| 赢单率 ${t.winRate}%（平均${teamAvgWinRate}%）
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px;">
+          <div style="text-align:center;padding:10px;background:#fff;border-radius:6px;">
+            <div style="color:var(--text-light);">能力（转化率）</div>
+            <div style="font-size:18px;font-weight:700;color:var(--success);">✅ 达标</div>
+            <div style="color:var(--text-light);">赢单率 ${t.winRate}%</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#fff;border-radius:6px;">
+            <div style="color:var(--text-light);">掌控度（停留时长）</div>
+            <div style="font-size:18px;font-weight:700;color:var(--success);">${t.dwellStatus}</div>
+            <div style="color:var(--text-light);">无阶段超时</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#fff;border-radius:6px;">
+            <div style="color:var(--text-light);">判断力（预测准度）</div>
+            <div style="font-size:18px;font-weight:700;color:var(--success);">${t.forecastAccuracy}%</div>
+            <div style="color:var(--text-light);">${t.forecastBias}</div>
+          </div>
         </div>
         <div style="margin-top:10px;font-size:12px;color:var(--success);">💡 建议：可作为团队标杆，分享成功经验给其他同事</div>
       </div>`;
     }
 
-    return `<div style="padding:18px;border-radius:10px;background:#fff;border-left:4px solid ${weaknesses[0].color};margin-bottom:12px;border:1px solid var(--border);">
+    // 有问题的诊断卡片
+    const primaryColor = hasForecastIssue ? 'var(--human)' : hasDwellIssues ? 'var(--accent)' : 'var(--danger)';
+
+    return `<div style="padding:18px;border-radius:10px;background:#fff;border-left:4px solid ${primaryColor};margin-bottom:12px;border:1px solid var(--border);">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:12px;">
           <span style="font-size:24px;">⚠️</span>
-          <div><strong style="font-size:16px;color:${weaknesses[0].color};">${t.name} —— 发现 ${weaknesses.length} 项短板</strong></div>
+          <div>
+            <strong style="font-size:16px;color:${primaryColor};">${t.name} — 发现 ${weaknesses.length + (hasDwellIssues?1:0) + (hasForecastIssue?1:0)} 项问题</strong>
+          </div>
         </div>
-        <div style="font-size:12px;padding:4px 10px;border-radius:12px;background:#fdf5f4;color:var(--danger);">需重点辅导</div>
+        <div style="font-size:12px;padding:4px 10px;border-radius:12px;background:#fdf5f4;color:var(--danger);">${hasForecastIssue?'需重点关注':'需辅导'}</div>
       </div>
 
-      <!-- 转化率雷达对比 -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
-        <div style="text-align:center;padding:10px;background:${t.validRate >= teamAvgValid ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
-          <div style="font-size:11px;color:var(--text-light);">有效线索率</div>
-          <div style="font-size:20px;font-weight:700;color:${t.validRate >= teamAvgValid ? 'var(--success)' : 'var(--danger)'};">${t.validRate}%</div>
-          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgValid}%</div>
+      <!-- 三维度总览 -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+        <!-- 维度1：转化率 -->
+        <div style="padding:12px;background:${!hasWeaknesses ? '#f0f7f2' : '#fff5f0'};border-radius:8px;text-align:center;border:1px solid ${!hasWeaknesses ? 'var(--success)' : 'var(--accent)'}20;">
+          <div style="font-size:11px;color:var(--text-light);">① 能力（转化率）</div>
+          <div style="font-size:22px;font-weight:700;color:${!hasWeaknesses ? 'var(--success)' : 'var(--accent)'};">${!hasWeaknesses ? '✅' : `⚠️${weaknesses.length}项`}</div>
+          <div style="font-size:11px;color:var(--text-light);">赢单率 ${t.winRate}% vs 团队平均 ${teamAvgWinRate}%</div>
         </div>
-        <div style="text-align:center;padding:10px;background:${t.leadConv >= teamAvgLeadConv ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
-          <div style="font-size:11px;color:var(--text-light);">线索→商机</div>
-          <div style="font-size:20px;font-weight:700;color:${t.leadConv >= teamAvgLeadConv ? 'var(--success)' : 'var(--danger)'};">${t.leadConv}%</div>
-          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgLeadConv}%</div>
+        <!-- 维度2：停留时长 -->
+        <div style="padding:12px;background:${!hasDwellIssues ? '#f0f7f2' : '#fff5f0'};border-radius:8px;text-align:center;border:1px solid ${!hasDwellIssues ? 'var(--success)' : 'var(--accent)'}20;">
+          <div style="font-size:11px;color:var(--text-light);">② 掌控度（停留时长）</div>
+          <div style="font-size:22px;font-weight:700;color:${t.dwellStatus === '掌控良好' ? 'var(--success)' : 'var(--accent)'};">${t.dwellStatus === '掌控良好' ? '✅' : '⚠️'}</div>
+          <div style="font-size:11px;color:var(--text-light);">${dwellIssues.filter(d=>d.severity==='严重超时').length}个阶段严重超时</div>
         </div>
-        <div style="text-align:center;padding:10px;background:${t.dealConv >= teamAvgDealConv ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
-          <div style="font-size:11px;color:var(--text-light);">商机→成交</div>
-          <div style="font-size:20px;font-weight:700;color:${t.dealConv >= teamAvgDealConv ? 'var(--success)' : 'var(--danger)'};">${t.dealConv}%</div>
-          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgDealConv}%</div>
-        </div>
-        <div style="text-align:center;padding:10px;background:${t.winRate >= teamAvgWinRate ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
-          <div style="font-size:11px;color:var(--text-light);">最终赢单率</div>
-          <div style="font-size:20px;font-weight:700;color:${t.winRate >= teamAvgWinRate ? 'var(--success)' : 'var(--danger)'};">${t.winRate}%</div>
-          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgWinRate}%</div>
+        <!-- 维度3：预测准确率 -->
+        <div style="padding:12px;background:${t.forecastAccuracy >= 80 ? '#f0f7f2' : '#f5e8ee'};border-radius:8px;text-align:center;border:1px solid ${t.forecastAccuracy >= 80 ? 'var(--success)' : 'var(--human)'}20;">
+          <div style="font-size:11px;color:var(--text-light);">③ 判断力（预测准度）</div>
+          <div style="font-size:22px;font-weight:700;color:${t.forecastAccuracy >= 85 ? 'var(--success)' : t.forecastAccuracy >= 70 ? 'var(--warning)' : 'var(--danger)'};">${t.forecastAccuracy}%</div>
+          <div style="font-size:11px;color:var(--text-light);">${t.forecastBias}</div>
         </div>
       </div>
 
-      <!-- 短板详情 -->
-      <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📋 短板明细与改进计划：</div>
+      <!-- 详细短板分析 -->
+      ${weaknesses.length > 0 ? `
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📋 【能力短板】转化率低于团队平均：</div>
       ${weaknesses.map(w => `
         <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:${w.color}15;border-radius:8px;margin-bottom:8px;">
           <span style="font-size:20px;flex-shrink:0;">${w.icon}</span>
           <div style="flex:1;">
             <div style="font-weight:600;">${w.dim}
               <span style="font-weight:400;color:var(--text-light);font-size:12px;">
-                个人 <strong style="color:${w.color};">${w.value}%</strong> vs 团队平均 <strong>${w.avg}%</strong>（差 ${w.gap} 个百分点）
+                个人 <strong style="color:${w.color};">${w.value}%</strong> vs 团队平均 <strong>${w.avg}%</strong>（差 ${w.avg-w.value} 个百分点）
               </span>
             </div>
             <div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap;">
@@ -1472,10 +1702,100 @@ function renderAutoDiagnosis() {
             </div>
           </div>
         </div>
-      `).join('')}
+      `).join('')}` : ''}
+
+      <!-- 停留时长详细分析 -->
+      ${dwellIssues.length > 0 ? `
+      <div style="font-size:13px;font-weight:600;margin:14px 0 8px;">⏱️ 【掌控度】商机停留时长异常（说明销售对订单的推进力度不足或遇到卡点）：</div>
+      <table class="pipeline-table" style="font-size:12px;">
+        <thead><tr><th>阶段</th><th>实际停留</th><th>正常标准</th><th>超出天数</th><th>可能原因</th><th>建议动作</th></tr></thead>
+        <tbody>
+          ${dwellIssues.map(d => `<tr style="${d.severity==='严重超时'?'background:#fdf5f4;':''}">
+            <td><strong>${d.stage}</strong></td>
+            <td style="color:${d.severity==='严重超时'?'var(--danger)':'var(--warning)';font-weight:600;}">${d.days}天</td>
+            <td>≤${d.standard}天</td>
+            <td style="color:var(--danger);">+${d.overBy}天</td>
+            <td style="font-size:11px;color:var(--text-light);">${d.reason}</td>
+            <td style="font-size:11px;">${d.action}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>` : ''}
+
+      <!-- 预测准确率详细分析 -->
+      ${hasForecastIssue || true ? `
+      <div style="font-size:13px;font-weight:600;margin:14px 0 8px;">🎯 【判断力】预测准确率分析：</div>
+      <div style="padding:14px;background:linear-gradient(135deg,#f5e8ee 0%,#fff 100%);border-radius:8px;border-left:3px solid var(--human);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div>
+            <strong style="font-size:15px;color:var(--human);">上月预测准确率：<span style="font-size:22px;">${t.forecastAccuracy}%</span></strong>
+            <span style="margin-left:10px;padding:3px 10px;border-radius:12px;font-size:12px;background:${t.forecastAccuracy>=85?'#e8f5ee':t.forecastAccuracy>=70?'#fff5eb':'#fdf5f4'};color:${t.forecastAccuracy>=85?'var(--success)':t.forecastAccuracy>=70?'var(--warning)':'var(--danger)'};">${t.forecastBias}</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:8px;"><strong>偏差原因：</strong>${forecastAnalysis.reason}</div>
+        <div style="font-size:12px;color:var(--text);margin-bottom:8px;"><strong style="color:var(--human);">根因分析：</strong>${forecastAnalysis.rootCause}</div>
+        <div style="font-size:12px;padding:8px;background:#faf9f7;border-radius:6px;"><strong>改进建议：</strong>${forecastAnalysis.suggestion}</div>
+      </div>` : ''}
     </div>`;
   }).join('');
 }
+
+// 停留时长异常的原因推测
+function getDwellReason(stage, name) {
+  const reasons = {
+    lead: '线索跟进不及时，可能积压过多未处理',
+    need: '痛点挖掘不深，客户不愿进入方案讨论',
+    plan: '方案反复修改，客户决策人参与度低',
+    comp: '竞争态势不明朗，丢单风险高导致犹豫',
+    sign: '合同条款谈判僵持，或内部审批流程卡住',
+    deliver: '交付延期或验收流程不畅'
+  };
+  return reasons[stage] || '需具体分析';
+}
+
+// 停留时长异常的建议动作
+function getDwellAction(stage) {
+  const actions = {
+    lead: '清理积压线索，设定48小时首访规则',
+    need: '安排SPIN专项训练，做一次角色扮演',
+    plan: '拉通客户关键人开方案评审会',
+    comp: '重新做3C竞争分析，制定拿单策略',
+    sign: '老板出面协调条款或审批',
+    deliver: '启动交付SOP，追踪验收节点'
+  };
+  return actions[stage] || '逐单复盘';
+}
+
+// 预测偏差的根因分析
+function getRootCause(bias, accuracy, t) {
+  if (bias.includes('乐观')) {
+    if (t.leadConv < teamAvgLeadConv && t.validRate < teamAvgValid)
+      return '根本原因：把"意向客户"当成"有效商机"，线索筛选标准太松 → 管道里注水 → 预测虚高';
+    if (t.winRate < teamAvgWinRate)
+      return '根本原因：赢单率偏低但对赢率过于自信 → 商机评分虚高 → 期望值被高估';
+    if (t.dwellStatus !== '掌控良好')
+      return '根本原因：商机推进缓慢但预期时间不变 → "下个月能签"一拖再拖 → 滚动到未来月份';
+    return '根本原因：整体偏乐观，可能存在系统性评分偏高倾向';
+  } else if (bias.includes('保守')) {
+    if (t.leadConv < teamAvgLeadConv)
+      return '根本原因：对早期商机信心不足，实际上部分B级商机有潜力 → 预测偏低导致资源分配不足';
+    return '根本原因：过度谨慎，赢率评分普遍偏低 → 可能错失投入机会';
+  }
+  return '预测与实际基本吻合，判断力较好';
+}
+
+// 改进建议
+function getSuggestion(bias, accuracy, t) {
+  if (accuracy < 70 && bias.includes('乐观'))
+    return `【紧急】本月强制要求${t.name}按保守标准重新评估所有商机赢率；连续两月低于75%需重新培训评分标准。`;
+  if (accuracy < 80 && bias.includes('乐观'))
+    return `${t.name}需要重点复盘上月的偏差来源——是哪几个商机评高了？为什么？把案例拿出来团队一起分析。`;
+  if (bias.includes('保守'))
+    return `${t.name}可以适度提高对中期商机的赢率评分，同时加大早期商机的推进力度。`;
+  return '保持当前水准，持续关注变化趋势。';
+}
+
+// 计算团队平均值辅助函数
+const teamAvgLeadConv = Math.round(teamData.reduce((s, t) => s + t.leadConv, 0) / teamData.length);
 
 // ===== 预测总览（重构为月度预测+三场景） =====
 function renderForecast() {
@@ -1513,7 +1833,7 @@ function renderForecast() {
     const stageClassMap = { comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
     const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
 
-    // 赢率估算 = 阶段系数 × 客户级别系数，转百分比
+    // 赢率估算 = 阶段系数 × 赢率系数，转百分比
     const winRatePct = Math.round(stage.coef * d.healthCoef * 100);
 
     monthDetails.push({
@@ -1578,7 +1898,7 @@ function renderForecast() {
   // 第1个月（下月）：方案商谈阶段 → 考虑35%系数衰减到下月成交
   // 第2个月（第三月）：需求确认阶段 → 更远期，更大折扣
   // 方案：
-  //   - 下月预测 = 方案商谈阶段 × 35% × 客户级别系数 + 需求确认 × 15% × 客户级别系数(部分推进)
+  //   - 下月预测 = 方案商谈阶段 × 35% × 赢率系数 + 需求确认 × 15% × 赢率系数(部分推进)
   //   - 第三月预测 = 需求确认剩余 × 历史转化率 + 新线索预估
 
   const planDeals = pipelineData.filter(d => d.stage === 'plan');
@@ -1659,7 +1979,7 @@ function renderForecast() {
 
   let gapStatus, gapColor, gapAdvice;
   if (gapPct >= 95) { gapStatus = '达标无忧'; gapColor = 'var(--success)';
-    gapAdvice = '本月预测覆盖目标，重点确保竞争→签约→回款各环节不掉链子。关注客户级别B/C级的商机是否有改善路径。'; }
+    gapAdvice = '本月预测覆盖目标，重点确保竞争→签约→回款各环节不掉链子。关注赢率等级B/C级的商机是否有改善路径。'; }
   else if (gapPct >= 75) { gapStatus = '基本可控'; gapColor = 'var(--warning)';
     gapAdvice = `距离目标还差 ${gap} 万。建议：①推动纳米移动(800万·竞争阶段)尽快突破 ②加速纳米联通(200万·方案)进入竞争 ③补充2-3个新有效线索。`; }
   else { gapStatus = '缺口较大'; gapColor = 'var(--danger)';
@@ -1700,7 +2020,7 @@ function renderForecast() {
       <div style="padding:16px;border-radius:8px;background:#fdf5f4;border-left:4px solid var(--danger);">
         <strong style="color:var(--danger);">⚠️ 本周你该亲自关注的事</strong>
         <ol style="font-size:13px;margin-top:8px;padding-left:18px;line-height:2.2;">
-          <li><strong>最大风险单</strong> — 纳米移动(800万)在<strong>竞争阶段</strong>且客户级别只有<strong>B级</strong>，金额大但赢面不稳。这单你需不需要亲自出面见客户决策人？</li>
+          <li><strong>最大风险单</strong> — 纳米移动(800万)在<strong>竞争阶段</strong>且赢率等级只有<strong>B级</strong>，金额大但赢面不稳。这单你需不需要亲自出面见客户决策人？</li>
           <li><strong>僵尸商机</strong> — 当前管道中有 <strong>${pipelineData.filter(d => { const s = stageConfig.find(x => x.key === d.stage); return d.days > s.maxDays; }).length}个</strong> 商机停留超时。让销售负责人逐个过一遍，该推的推、该砍的砍。</li>
           <li><strong>团队能力短板</strong> — ${teamData.filter(t=>t.winRate<20).length>0 ? teamData.filter(t=>t.winRate<20).map(t=>t.name).join('、')+'赢单率明显偏低' : '团队整体健康但需持续关注'}，这个月是不是该安排一次专项辅导？</li>
         </ol>
