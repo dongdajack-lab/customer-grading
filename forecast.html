@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天地人·ToB销售预测系统 | 大董销售体系</title>
+<style>
+:root {
+  --primary: #1a3a5c;
+  --primary-light: #2c5f8a;
+  --accent: #d4763a;
+  --accent-light: #e8a06b;
+  --sky: #3b6fa8;
+  --earth: #5c7a3c;
+  --human: #8b4d6e;
+  --bg: #f5f3f0;
+  --card: #ffffff;
+  --text: #2a2a2a;
+  --text-light: #666;
+  --border: #e0ddd8;
+  --success: #4a8b5c;
+  --warning: #d4a23a;
+  --danger: #c45a4a;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--sky) 100%);
+  color: #fff; padding: 28px 40px; position: relative; overflow: hidden;
+}
+.header::after {
+  content: ''; position: absolute; right: -50px; top: -50px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.header h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+.header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+.header .brand { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+/* Nav */
+.nav {
+  display: flex; gap: 0; background: var(--card); border-bottom: 2px solid var(--border);
+  padding: 0 40px; overflow-x: auto; position: sticky; top: 0; z-index: 100;
+}
+.nav-item {
+  padding: 14px 22px; cursor: pointer; font-size: 14px; font-weight: 500;
+  color: var(--text-light); border-bottom: 3px solid transparent; white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-item:hover { color: var(--primary); }
+.nav-item.active { color: var(--primary); border-bottom-color: var(--accent); }
+/* Container */
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 40px; }
+.section { display: none; }
+.section.active { display: block; }
+/* Card */
+.card {
+  background: var(--card); border-radius: 12px; padding: 28px;
+  box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border);
+}
+.card-title {
+  font-size: 18px; font-weight: 700; color: var(--primary);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+}
+.card-title .icon { font-size: 22px; }
+.card-title .tag {
+  font-size: 11px; padding: 3px 10px; border-radius: 10px; font-weight: 400;
+  margin-left: auto;
+}
+.tag-sky { background: #e8f0fa; color: var(--sky); }
+.tag-earth { background: #eef5e8; color: var(--earth); }
+.tag-human { background: #f5e8ee; color: var(--human); }
+/* Architecture Diagram */
+.arch-diagram { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 20px 0; }
+.arch-col {
+  border-radius: 12px; padding: 24px; text-align: center; position: relative;
+  border: 2px solid;
+}
+.arch-col.sky { border-color: var(--sky); background: linear-gradient(180deg, #f0f6fc 0%, #fff 100%); }
+.arch-col.earth { border-color: var(--earth); background: linear-gradient(180deg, #f3f8ee 0%, #fff 100%); }
+.arch-col.human { border-color: var(--human); background: linear-gradient(180deg, #f8eef2 0%, #fff 100%); }
+.arch-col h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.arch-col.sky h3 { color: var(--sky); }
+.arch-col.earth h3 { color: var(--earth); }
+.arch-col.human h3 { color: var(--human); }
+.arch-col .subtitle-cn { font-size: 13px; color: var(--text-light); margin-bottom: 16px; }
+.arch-col .module-list { text-align: left; }
+.arch-col .module-item {
+  padding: 10px 14px; margin: 8px 0; background: rgba(255,255,255,0.7); border-radius: 8px;
+  font-size: 13px; border-left: 3px solid;
+}
+.arch-col.sky .module-item { border-left-color: var(--sky); }
+.arch-col.earth .module-item { border-left-color: var(--earth); }
+.arch-col.human .module-item { border-left-color: var(--human); }
+.arch-col .module-item strong { display: block; margin-bottom: 3px; color: var(--text); }
+.arch-col .module-item span { color: var(--text-light); font-size: 12px; }
+/* Predict Engine */
+.engine-box {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 12px; padding: 28px; color: #fff; margin: 24px 0;
+}
+.engine-box h3 { font-size: 18px; margin-bottom: 16px; }
+.engine-layers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.engine-layer {
+  background: rgba(255,255,255,0.1); border-radius: 10px; padding: 18px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.engine-layer h4 { font-size: 15px; margin-bottom: 8px; }
+.engine-layer .formula { font-size: 12px; opacity: 0.8; font-family: monospace; margin: 8px 0; }
+.engine-layer p { font-size: 12px; opacity: 0.85; }
+/* Five Lines */
+.five-lines { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.line-row {
+  display: grid; grid-template-columns: 140px 1fr 120px 80px 100px; gap: 12px; align-items: center;
+  padding: 14px 16px; background: #faf9f7; border-radius: 8px; border: 1px solid var(--border);
+}
+.line-row.header-row { background: var(--primary); color: #fff; font-weight: 600; font-size: 13px; }
+.line-name { font-weight: 600; font-size: 14px; }
+.line-name .desc { font-weight: 400; font-size: 11px; color: var(--text-light); display: block; }
+.line-input { display: flex; gap: 6px; align-items: center; }
+.line-input input {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 14px; outline: none; transition: border-color 0.2s;
+}
+.line-input input:focus { border-color: var(--accent); }
+.line-input .unit { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+.line-weight { display: flex; align-items: center; gap: 8px; }
+.line-weight input[type="range"] { width: 60px; }
+.line-weight .w-val { font-size: 13px; font-weight: 600; min-width: 36px; }
+.line-result { font-size: 16px; font-weight: 700; color: var(--accent); text-align: right; }
+.five-lines-summary {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 24px; background: linear-gradient(135deg, #fff5eb 0%, #fff 100%);
+  border: 2px solid var(--accent); border-radius: 10px; margin-top: 16px;
+}
+.five-lines-summary .label { font-size: 15px; font-weight: 600; }
+.five-lines-summary .value { font-size: 28px; font-weight: 800; color: var(--accent); }
+.five-lines-summary .note { font-size: 12px; color: var(--text-light); max-width: 300px; }
+/* Funnel */
+.funnel-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.funnel-visual { position: relative; }
+.funnel-stage {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; margin: 0 auto 4px; color: #fff; font-weight: 600;
+  border-radius: 4px; transition: all 0.3s; cursor: pointer; position: relative;
+}
+.funnel-stage:hover { transform: translateX(4px); }
+.funnel-stage .stage-name { font-size: 14px; }
+.funnel-stage .stage-value { font-size: 16px; }
+.funnel-stage .stage-count { font-size: 12px; opacity: 0.8; }
+.funnel-stage .stage-bar {
+  position: absolute; left: 0; bottom: -4px; height: 3px; background: rgba(255,255,255,0.4);
+}
+.funnel-arrow {
+  text-align: center; font-size: 12px; color: var(--text-light); padding: 4px 0;
+}
+.funnel-arrow .conv-rate { font-weight: 600; color: var(--accent); }
+.funnel-arrow .dwell-time { margin-left: 12px; }
+.funnel-arrow .dwell-time.warn { color: var(--danger); }
+.funnel-stats { display: flex; flex-direction: column; gap: 12px; }
+.stat-box {
+  padding: 16px; border-radius: 8px; border: 1px solid var(--border); background: #faf9f7;
+}
+.stat-box .stat-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+.stat-box .stat-value { font-size: 22px; font-weight: 700; color: var(--primary); }
+.stat-box .stat-desc { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+.stat-box.alert { border-color: var(--danger); background: #fdf5f4; }
+.stat-box.alert .stat-value { color: var(--danger); }
+.stat-box.success { border-color: var(--success); background: #f0f7f2; }
+.stat-box.success .stat-value { color: var(--success); }
+/* Pipeline Table */
+.pipeline-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.pipeline-table th {
+  background: var(--primary); color: #fff; padding: 10px 12px; text-align: left;
+  font-weight: 600; white-space: nowrap;
+}
+.pipeline-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.pipeline-table tr:hover { background: #faf9f7; }
+.pipeline-table .stage-tag {
+  padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; white-space: nowrap;
+}
+.stage-lead { background: #e8f0fa; color: var(--sky); }
+.stage-need { background: #eef5e8; color: var(--earth); }
+.stage-plan { background: #fff5eb; color: var(--accent); }
+.stage-comp { background: #f5e8ee; color: var(--human); }
+.stage-sign { background: #e8f5ee; color: var(--success); }
+.stage-deliver { background: #f0f0f0; color: var(--text-light); }
+.health-badge { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.health-s { background: #e8f5ee; color: var(--success); }
+.health-a { background: #e8f0fa; color: var(--sky); }
+.health-b { background: #fff5eb; color: var(--accent); }
+.health-c { background: #fdf5f4; color: var(--danger); }
+.weighted-value { font-weight: 600; color: var(--accent); }
+.zombie-flag { color: var(--danger); font-size: 12px; }
+/* Health Score */
+.health-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.health-dim {
+  padding: 16px; border-radius: 8px; border: 1px solid var(--border); background: #faf9f7;
+}
+.health-dim .dim-name { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.health-dim .dim-score { display: flex; align-items: center; gap: 8px; }
+.health-dim .dim-score input[type="range"] { flex: 1; }
+.health-dim .dim-val { font-size: 18px; font-weight: 700; min-width: 30px; text-align: right; }
+.health-dim .dim-desc { font-size: 11px; color: var(--text-light); margin-top: 6px; }
+.health-result {
+  margin-top: 20px; padding: 24px; border-radius: 10px; text-align: center;
+  border: 2px solid var(--accent); background: linear-gradient(135deg, #fff5eb 0%, #fff 100%);
+}
+.health-result .grade { font-size: 48px; font-weight: 800; color: var(--accent); }
+.health-result .grade-label { font-size: 14px; color: var(--text-light); }
+.health-result .grade-score { font-size: 20px; font-weight: 600; color: var(--primary); margin-top: 8px; }
+.health-result .grade-desc { font-size: 12px; color: var(--text-light); margin-top: 8px; max-width: 500px; margin-left: auto; margin-right: auto; }
+/* Customer Strategy */
+.customer-matrix { width: 100%; border-collapse: collapse; font-size: 13px; }
+.customer-matrix th { background: var(--primary); color: #fff; padding: 10px; text-align: center; }
+.customer-matrix td { padding: 12px; border: 1px solid var(--border); text-align: center; }
+.customer-matrix .level-s { background: #e8f5ee; font-weight: 700; color: var(--success); }
+.customer-matrix .level-a { background: #e8f0fa; font-weight: 700; color: var(--sky); }
+.customer-matrix .level-b { background: #fff5eb; font-weight: 700; color: var(--accent); }
+.customer-matrix .level-c { background: #fdf5f4; font-weight: 700; color: var(--danger); }
+/* Forecast Summary */
+.forecast-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 20px 0; }
+.forecast-card {
+  padding: 24px; border-radius: 12px; text-align: center; border: 2px solid;
+}
+.forecast-card.short { border-color: var(--accent); background: linear-gradient(180deg, #fff5eb 0%, #fff 100%); }
+.forecast-card.mid { border-color: var(--sky); background: linear-gradient(180deg, #f0f6fc 0%, #fff 100%); }
+.forecast-card.long { border-color: var(--earth); background: linear-gradient(180deg, #f3f8ee 0%, #fff 100%); }
+.forecast-card .fc-label { font-size: 13px; color: var(--text-light); margin-bottom: 8px; }
+.forecast-card .fc-value { font-size: 32px; font-weight: 800; }
+.forecast-card.short .fc-value { color: var(--accent); }
+.forecast-card.mid .fc-value { color: var(--sky); }
+.forecast-card.long .fc-value { color: var(--earth); }
+.forecast-card .fc-range { font-size: 12px; color: var(--text-light); margin-top: 6px; }
+.forecast-card .fc-formula { font-size: 11px; color: var(--text-light); margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 6px; }
+/* Chart bars */
+.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding: 12px 0; }
+.bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.bar-fill {
+  width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.5s;
+  position: relative;
+}
+.bar-fill .bar-label { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; white-space: nowrap; }
+.bar-item .bar-name { font-size: 11px; color: var(--text-light); text-align: center; }
+/* Team */
+.team-compare { width: 100%; border-collapse: collapse; font-size: 13px; }
+.team-compare th { background: var(--primary); color: #fff; padding: 10px; text-align: center; }
+.team-compare td { padding: 10px; border: 1px solid var(--border); text-align: center; }
+.team-compare .person { font-weight: 600; text-align: left; }
+.progress-bar { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+/* Stage definitions */
+.stage-def-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.stage-def {
+  display: grid; grid-template-columns: 120px 1fr 1fr; gap: 16px; padding: 14px 16px;
+  border-radius: 8px; border: 1px solid var(--border); align-items: start;
+}
+.stage-def .sd-name { font-weight: 700; font-size: 14px; color: var(--primary); }
+.stage-def .sd-enter { font-size: 12px; }
+.stage-def .sd-enter strong, .stage-def .sd-exit strong { display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-light); }
+.stage-def .sd-exit { font-size: 12px; }
+.stage-def .sd-coef { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 4px; }
+/* Info banner */
+.info-banner {
+  padding: 16px 20px; border-radius: 8px; background: #e8f0fa; border-left: 4px solid var(--sky);
+  font-size: 13px; color: var(--primary); margin-bottom: 20px;
+}
+.info-banner strong { font-weight: 700; }
+/* Responsive */
+@media (max-width: 900px) {
+  .arch-diagram, .funnel-container, .health-grid, .forecast-summary, .engine-layers { grid-template-columns: 1fr; }
+  .line-row { grid-template-columns: 1fr; gap: 8px; }
+  .stage-def { grid-template-columns: 1fr; }
+}
+/* Print */
+@media print { .nav { display: none; } .section { display: block !important; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>天地人 · ToB销售预测系统</h1>
+  <div class="subtitle">从"感觉汇报"到"数据判断" —— 基于大董天地人销售体系 + 漏斗分析模型</div>
+  <div class="brand">博商·懂生意·学完就落地 | 大董销售体系</div>
+</div>
+
+<div class="nav">
+  <div class="nav-item active" onclick="showSection('overview')">系统总览</div>
+  <div class="nav-item" onclick="showSection('sky')">天·目标预测</div>
+  <div class="nav-item" onclick="showSection('funnel')">地·漏斗预测</div>
+  <div class="nav-item" onclick="showSection('health')">地·商机健康度</div>
+  <div class="nav-item" onclick="showSection('customer')">天·客户战略</div>
+  <div class="nav-item" onclick="showSection('team')">人·团队战力</div>
+  <div class="nav-item" onclick="showSection('forecast')">预测总览</div>
+</div>
+
+<div class="container">
+
+<!-- ====== 系统总览 ====== -->
+<div class="section active" id="overview">
+  <div class="info-banner">
+    <strong>设计理念：</strong>本系统融合大董老师"天地人销售管理体系"（天=排兵布阵方向聚焦、地=销售过程管控、人=铁军打造激励）与销售漏斗分析方法论，将销售预测从"感觉汇报"升级为"数据判断"，实现业绩的可预见、可管控、可复盘。
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏛️</span> 系统架构：天地人三层预测模型
+      <span class="tag tag-sky">天字篇</span><span class="tag tag-earth">地字篇</span><span class="tag tag-human">人字篇</span>
+    </div>
+    <p style="font-size:14px;color:var(--text-light);margin-bottom:16px;">业绩 = 价值客户数 × 平均客单价 × 赢单率。预测的本质是对这三个变量的提前研判。</p>
+
+    <div class="arch-diagram">
+      <div class="arch-col sky">
+        <h3>天</h3>
+        <div class="subtitle-cn">排兵布阵 · 方向聚焦</div>
+        <div class="module-list">
+          <div class="module-item"><strong>五线合一目标预测</strong><span>历史线/未来线/市场线/订单线/客户线加权</span></div>
+          <div class="module-item"><strong>客户分级战略</strong><span>S/A/B/C分级，货币价值+战略价值双维</span></div>
+          <div class="module-item"><strong>3C竞争分析</strong><span>客户/对手/自身三维态势研判</span></div>
+        </div>
+      </div>
+      <div class="arch-col earth">
+        <h3>地</h3>
+        <div class="subtitle-cn">运筹帷幄 · 过程管控</div>
+        <div class="module-list">
+          <div class="module-item"><strong>六阶段漏斗预测</strong><span>线索→需求→方案→竞争→签约→交付回款</span></div>
+          <div class="module-item"><strong>阶段转化率监控</strong><span>每阶段进入/退出条件标准化</span></div>
+          <div class="module-item"><strong>停留时间预警</strong><span>僵尸商机自动识别与清理</span></div>
+          <div class="module-item"><strong>商机健康度评分</strong><span>9维度量化打分，S/A/B/C分级</span></div>
+          <div class="module-item"><strong>加权管道预测</strong><span>金额×阶段系数×健康度系数</span></div>
+        </div>
+      </div>
+      <div class="arch-col human">
+        <h3>人</h3>
+        <div class="subtitle-cn">铁军打造 · 战力激励</div>
+        <div class="module-list">
+          <div class="module-item"><strong>个人漏斗对比</strong><span>转化率/赢单率/客单价横向比较</span></div>
+          <div class="module-item"><strong>过程指标监控</strong><span>拜访量/有效推进率/停滞商机数</span></div>
+          <div class="module-item"><strong>能力短板识别</strong><span>哪个阶段流失最多→精准培训</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔮</span> 三层预测引擎</div>
+    <div class="engine-box">
+      <h3>短期 · 中期 · 长期 三层预测模型</h3>
+      <div class="engine-layers">
+        <div class="engine-layer">
+          <h4>短期预测（本月/本季）</h4>
+          <div class="formula">Σ(商机金额 × 阶段系数 × 健康度系数)</div>
+          <p>基于当前管道中每个商机的阶段位置和健康度，加权计算最可能成交的金额。精度最高，用于月度/季度业绩commit。</p>
+        </div>
+        <div class="engine-layer">
+          <h4>中期预测（半年）</h4>
+          <div class="formula">当前管道存量 × 历史转化率 + 新增线索预估</div>
+          <p>基于漏斗各阶段存量和历史转化率，推算半年内可成交金额。结合线索补充速度，判断pipeline是否健康。</p>
+        </div>
+        <div class="engine-layer">
+          <h4>长期预测（年度）</h4>
+          <div class="formula">五线合一加权综合目标</div>
+          <p>融合历史趋势、战略目标、市场容量、订单管道、客户规划五个维度，设定年度目标并评估达成概率。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span> 六阶段漏斗标准定义（大董体系）</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">每个阶段有明确的<strong>进入条件</strong>和<strong>退出条件</strong>，杜绝"感觉汇报"。阶段系数用于加权管道预测。</p>
+    <div class="stage-def-grid">
+      <div class="stage-def">
+        <div><div class="sd-name">① 线索</div><div class="sd-coef">阶段系数: 5%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>有公司画像+来源+意向需求（相关性）</div>
+        <div class="sd-exit"><strong>退出条件</strong>确定需求（买什么）+采购预算（花多少）+项目立项（什么时候买）→升级为商机</div>
+      </div>
+      <div class="stage-def">
+        <div><div class="sd-name">② 需求确认</div><div class="sd-coef">阶段系数: 15%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>客户有明确痛点，知道自己为什么要买；SPIN完成痛点挖掘</div>
+        <div class="sd-exit"><strong>退出条件</strong>对话从"你的产品多好"转向"我的问题怎么用你的产品解决"（概念共识→方案共识）</div>
+      </div>
+      <div class="stage-def">
+        <div><div class="sd-name">③ 方案商谈</div><div class="sd-coef">阶段系数: 35%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>客户成为内部"向导"，帮助扩大接触面（单人认可→多方链接）</div>
+        <div class="sd-exit"><strong>退出条件</strong>对话中出现时间、预算、流程等具体约束条件；客户接受方案并进入竞争/采购流程</div>
+      </div>
+      <div class="stage-def">
+        <div><div class="sd-name">④ 竞争阶段</div><div class="sd-coef">阶段系数: 60%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>客户在你身上投入了宝贵的时间和信息资源（被动回应→主动投入）</div>
+        <div class="sd-exit"><strong>退出条件</strong>中标/确认采用我方方案，进入合同谈判</div>
+      </div>
+      <div class="stage-def">
+        <div><div class="sd-name">⑤ 签约</div><div class="sd-coef">阶段系数: 85%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>合同谈判完成，敲定条款</div>
+        <div class="sd-exit"><strong>退出条件</strong>合同签订 + 收预付款</div>
+      </div>
+      <div class="stage-def">
+        <div><div class="sd-name">⑥ 交付回款</div><div class="sd-coef">阶段系数: 95%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>排产/启动服务</div>
+        <div class="sd-exit"><strong>退出条件</strong>交付验收 + 收款完成</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 天·目标预测 ====== -->
+<div class="section" id="sky">
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> 五线合一目标预测器
+      <span class="tag tag-sky">天字篇</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">五种方法各自推演，加权综合，避免单一方法的偏差。权重总和需等于100%。</p>
+
+    <div class="five-lines">
+      <div class="line-row header-row">
+        <div>预测线</div>
+        <div>计算参数</div>
+        <div>权重</div>
+        <div>权重值</div>
+        <div>加权值</div>
+      </div>
+      <div class="line-row">
+        <div class="line-name">历史线<span class="desc">去年×(1+增长率)</span></div>
+        <div class="line-input">
+          <input type="number" id="hist_base" value="1000" placeholder="去年销售额(万)">
+          <span class="unit">×</span>
+          <input type="number" id="hist_growth" value="10" placeholder="增长率%" style="width:70px">
+          <span class="unit">%</span>
+        </div>
+        <div class="line-weight"><input type="range" min="0" max="40" value="20" oninput="updateFiveLines()"><span class="w-val" id="hist_w_val">20%</span></div>
+        <div class="w-val" id="hist_raw">1100</div>
+        <div class="line-result" id="hist_weighted">220</div>
+      </div>
+      <div class="line-row">
+        <div class="line-name">未来线<span class="desc">3年目标÷(1+r)²</span></div>
+        <div class="line-input">
+          <input type="number" id="fut_target" value="2000" placeholder="3年目标(万)">
+          <span class="unit">÷</span>
+          <input type="number" id="fut_growth" value="26" placeholder="年均增长率%" style="width:70px">
+          <span class="unit">%²</span>
+        </div>
+        <div class="line-weight"><input type="range" min="0" max="40" value="20" oninput="updateFiveLines()"><span class="w-val" id="fut_w_val">20%</span></div>
+        <div class="w-val" id="fut_raw">1250</div>
+        <div class="line-result" id="fut_weighted">250</div>
+      </div>
+      <div class="line-row">
+        <div class="line-name">市场线<span class="desc">市场容量×份额</span></div>
+        <div class="line-input">
+          <input type="number" id="mkt_total" value="50000" placeholder="市场总容量(万)">
+          <span class="unit">×</span>
+          <input type="number" id="mkt_share" value="3" placeholder="目标份额%" style="width:70px">
+          <span class="unit">%</span>
+        </div>
+        <div class="line-weight"><input type="range" min="0" max="40" value="25" oninput="updateFiveLines()"><span class="w-val" id="mkt_w_val">25%</span></div>
+        <div class="w-val" id="mkt_raw">1500</div>
+        <div class="line-result" id="mkt_weighted">375</div>
+      </div>
+      <div class="line-row">
+        <div class="line-name">订单线<span class="desc">Σ(订单×赢单概率)</span></div>
+        <div class="line-input">
+          <input type="number" id="ord_total" value="1800" placeholder="跟进订单总额(万)">
+          <span class="unit">×</span>
+          <input type="number" id="ord_prob" value="50" placeholder="平均赢单率%" style="width:70px">
+          <span class="unit">%</span>
+        </div>
+        <div class="line-weight"><input type="range" min="0" max="40" value="25" oninput="updateFiveLines()"><span class="w-val" id="ord_w_val">25%</span></div>
+        <div class="w-val" id="ord_raw">900</div>
+        <div class="line-result" id="ord_weighted">225</div>
+      </div>
+      <div class="line-row">
+        <div class="line-name">客户线<span class="desc">重点客户预算×份额</span></div>
+        <div class="line-input">
+          <input type="number" id="cust_budget" value="2000" placeholder="S/A客户总预算(万)">
+          <span class="unit">×</span>
+          <input type="number" id="cust_share" value="40" placeholder="目标份额%" style="width:70px">
+          <span class="unit">%</span>
+        </div>
+        <div class="line-weight"><input type="range" min="0" max="30" value="10" oninput="updateFiveLines()"><span class="w-val" id="cust_w_val">10%</span></div>
+        <div class="w-val" id="cust_raw">800</div>
+        <div class="line-result" id="cust_weighted">80</div>
+      </div>
+    </div>
+
+    <div class="five-lines-summary">
+      <div>
+        <div class="label">综合目标（加权合计）</div>
+        <div class="note">权重总和：<span id="weight_total">100%</span>。建议权重总和=100%，当前<span id="weight_status">正常</span></div>
+      </div>
+      <div class="value" id="final_target">1,150<span style="font-size:16px;font-weight:400;"> 万</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> 五线对比分析</div>
+    <div class="bar-chart" id="five_lines_chart"></div>
+    <p style="font-size:12px;color:var(--text-light);margin-top:12px;">💡 五线差距越大，说明目标不确定性越高。当订单线远低于市场线和未来线时，说明当前管道不足以支撑目标，需加速线索补充。</p>
+  </div>
+</div>
+
+<!-- ====== 地·漏斗预测 ====== -->
+<div class="section" id="funnel">
+  <div class="card">
+    <div class="card-title"><span class="icon">🌪️</span> 六阶段销售漏斗预测
+      <span class="tag tag-earth">地字篇</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">总业绩是结果，<strong>转化率才是过程</strong>。漏斗要健康，每个阶段都要有真实流动。</p>
+
+    <div class="funnel-container">
+      <div class="funnel-visual" id="funnel_visual"></div>
+      <div class="funnel-stats">
+        <div class="stat-box">
+          <div class="stat-label">管道总额（加权预测）</div>
+          <div class="stat-value" id="pipe_weighted">— 万</div>
+          <div class="stat-desc">Σ(商机金额 × 阶段系数 × 健康度系数)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">本月可成交预测</div>
+          <div class="stat-value" id="month_forecast">— 万</div>
+          <div class="stat-desc">竞争+签约+交付阶段 × 健康度加权</div>
+        </div>
+        <div class="stat-box success">
+          <div class="stat-label">整体转化率（线索→回款）</div>
+          <div class="stat-value" id="overall_conv">— %</div>
+          <div class="stat-desc">线索数 → 实际回款数</div>
+        </div>
+        <div class="stat-box alert" id="zombie_box">
+          <div class="stat-label">⚠️ 僵尸商机数</div>
+          <div class="stat-value" id="zombie_count">— 个</div>
+          <div class="stat-desc">停留超时、无有效推进动作的商机</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">有效线索率</div>
+          <div class="stat-value" id="valid_lead_rate">— %</div>
+          <div class="stat-desc">有效线索数 ÷ 总线索数</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📑</span> 管道商机清单（示例数据）</div>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">点击表头可排序。阶段系数和健康度系数共同决定加权预测值。⚠️ 标记为停留超时的僵尸商机。</p>
+    <table class="pipeline-table" id="pipeline_table">
+      <thead>
+        <tr>
+          <th>客户</th><th>阶段</th><th>金额(万)</th><th>健康度</th><th>停留天数</th><th>下一步动作</th><th>加权值(万)</th>
+        </tr>
+      </thead>
+      <tbody id="pipeline_body"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⏰</span> 停留时间预警标准</div>
+    <table class="pipeline-table">
+      <thead><tr><th>阶段</th><th>正常停留</th><th>黄色预警</th><th>红色预警（僵尸）</th><th>管理动作</th></tr></thead>
+      <tbody>
+        <tr><td><span class="stage-tag stage-lead">线索</span></td><td>≤7天</td><td>8-15天</td><td>>15天</td><td>提醒销售更新状态或降级</td></tr>
+        <tr><td><span class="stage-tag stage-need">需求确认</span></td><td>≤15天</td><td>16-30天</td><td>>30天</td><td>判断是否继续投入</td></tr>
+        <tr><td><span class="stage-tag stage-plan">方案商谈</span></td><td>≤20天</td><td>21-30天</td><td>>30天</td><td>分析竞争/决策链问题</td></tr>
+        <tr><td><span class="stage-tag stage-comp">竞争</span></td><td>≤20天</td><td>21-30天</td><td>>30天</td><td>拿单策略复盘</td></tr>
+        <tr><td><span class="stage-tag stage-sign">签约</span></td><td>≤10天</td><td>11-20天</td><td>>20天</td><td>条款/审批问题排查</td></tr>
+        <tr><td><span class="stage-tag stage-deliver">交付回款</span></td><td>≤30天</td><td>31-60天</td><td>>60天</td><td>验收/付款流程追踪</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 地·商机健康度 ====== -->
+<div class="section" id="health">
+  <div class="card">
+    <div class="card-title"><span class="icon">🏥</span> 商机健康度评分卡
+      <span class="tag tag-earth">地字篇</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">9维度量化打分（每项0-10分），总分90分。S级≥72分、A级56-71分、B级40-55分、C级<40分。健康度系数：S=1.0/A=0.8/B=0.6/C=0.3。</p>
+
+    <div class="health-grid" id="health_grid"></div>
+
+    <div class="health-result">
+      <div class="grade" id="health_grade">B</div>
+      <div class="grade-label">商机等级</div>
+      <div class="grade-score" id="health_score">0 分 / 90 分</div>
+      <div class="grade-desc" id="health_desc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 天·客户战略 ====== -->
+<div class="section" id="customer">
+  <div class="card">
+    <div class="card-title"><span class="icon">👑</span> 客户分级管理矩阵
+      <span class="tag tag-sky">天字篇</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">客户分级分类的本质：<strong>聚焦产出，聚焦资源</strong>。不同级别客户匹配不同销售方式和投入策略。</p>
+    <table class="customer-matrix">
+      <thead>
+        <tr><th>等级</th><th>特征</th><th>投入策略</th><th>销售方式</th><th>跑动频率</th><th>预测权重</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="level-s">S级·战略客户</td>
+          <td>大额采购、高频复购、能转介绍</td>
+          <td>高层定期拜访、专属服务通道、年度战略会</td>
+          <td>顾问型销售</td>
+          <td>高频覆盖（每周3次+）</td>
+          <td>重点保障线</td>
+        </tr>
+        <tr>
+          <td class="level-a">A级·重要客户</td>
+          <td>稳定采购、满意度高</td>
+          <td>季度回访、优先响应、新品优先体验</td>
+          <td>顾问型销售</td>
+          <td>中频覆盖（每周1-2次）</td>
+          <td>核心管道</td>
+        </tr>
+        <tr>
+          <td class="level-b">B级·普通客户</td>
+          <td>偶尔采购、关系一般</td>
+          <td>标准化服务、定期触达</td>
+          <td>区域型销售</td>
+          <td>定期保持（每月1次）</td>
+          <td>补充管道</td>
+        </tr>
+        <tr>
+          <td class="level-c">C级·风险客户</td>
+          <td>投诉多、付款差、利润低</td>
+          <td>收缩资源、控制风险、必要时放弃</td>
+          <td>电话/渠道销售</td>
+          <td>虚拟覆盖</td>
+          <td>止损或转化</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚔️</span> 3C竞争分析 × 决策链分析</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">竞争分析7维度 + 客户决策链5维度，共同决定赢单概率。</p>
+    <table class="pipeline-table">
+      <thead><tr><th>分析维度</th><th>客户关心的问题</th><th>评估方式</th></tr></thead>
+      <tbody>
+        <tr><td><strong>竞争7维度</strong></td><td colspan="2" style="text-align:left;padding:8px 12px;color:var(--text-light);">产品/方案 · 价格/成本 · 商务条款 · 品牌/案例 · 服务/交付 · 客情关系 · 组织实力</td></tr>
+        <tr><td><strong>决策链5维度</strong></td><td colspan="2" style="text-align:left;padding:8px 12px;color:var(--text-light);">角色定位（决策者/使用者/把关者）· 利益诉求（组织利+个人利）· 态度立场（+2到-2）· 决策命门 · 行动策略</td></tr>
+        <tr><td>综合研判</td><td>"这个方案能解决我的问题吗？值不值？可靠吗？"</td><td>7维度评分对比 + 决策链态度分布 → 输出赢单概率</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 人·团队战力 ====== -->
+<div class="section" id="team">
+  <div class="card">
+    <div class="card-title"><span class="icon">👥</span> 团队战力对比
+      <span class="tag tag-human">人字篇</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">对比个人漏斗数据，识别谁在哪个阶段有问题，精准辅导。<strong>赢不知道赢在哪，输不知道输在哪</strong>——这是管理最大的失败。</p>
+    <table class="team-compare" id="team_table">
+      <thead>
+        <tr><th>销售</th><th>线索数</th><th>有效线索率</th><th>线索→商机转化</th><th>商机→成交转化</th><th>赢单率</th><th>平均客单价(万)</th><th>僵尸商机数</th><th>短板诊断</th></tr>
+      </thead>
+      <tbody id="team_body"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> 能力短板诊断与培训建议</div>
+    <table class="pipeline-table">
+      <thead><tr><th>发现的问题</th><th>对应管理动作</th><th>培训工具</th></tr></thead>
+      <tbody>
+        <tr><td>线索质量差 / 有效线索率低</td><td>优化获客渠道和线索筛选标准</td><td>线索收集十八招</td></tr>
+        <tr><td>线索→商机转化低</td><td>训练需求挖掘能力</td><td>SPIN提问训练 + 痛点挖掘四维模型</td></tr>
+        <tr><td>商机→方案转化低</td><td>复盘方案匹配度和FABE话术</td><td>FABE产品介绍练习</td></tr>
+        <tr><td>方案→竞争转化低</td><td>复盘竞争策略和决策链管理</td><td>3C&8维客户策略分析</td></tr>
+        <tr><td>报价→成交转化低</td><td>复盘价格策略和谈判技巧</td><td>LSCPA抗拒处理 + 谈判四步法</td></tr>
+        <tr><td>商机停留时间长</td><td>清理僵尸商机，推动关键客户进入下一步</td><td>KISS复盘工作台</td></tr>
+        <tr><td>大单预测偏差大</td><td>加强关键人识别和决策链管理</td><td>决策链5维度分析</td></tr>
+        <tr><td>丢单集中在某一类原因</td><td>专项解决</td><td>丢单分析专项复盘会</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 预测总览 ====== -->
+<div class="section" id="forecast">
+  <div class="card">
+    <div class="card-title"><span class="icon">🔮</span> 三层预测总览</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">综合天（目标）、地（管道）、人（战力）三层模型，输出短中长期业绩预测。</p>
+    <div class="forecast-summary">
+      <div class="forecast-card short">
+        <div class="fc-label">短期预测（本月/本季）</div>
+        <div class="fc-value" id="fc_short">—</div>
+        <div class="fc-range">预测区间：<span id="fc_short_range">— ~ —</span> 万</div>
+        <div class="fc-formula">管道加权 = Σ(金额 × 阶段系数 × 健康度系数)<br>置信度：★★★★☆</div>
+      </div>
+      <div class="forecast-card mid">
+        <div class="fc-label">中期预测（半年）</div>
+        <div class="fc-value" id="fc_mid">—</div>
+        <div class="fc-range">预测区间：<span id="fc_mid_range">— ~ —</span> 万</div>
+        <div class="fc-formula">当前管道 × 历史转化率 + 新增线索预估<br>置信度：★★★☆☆</div>
+      </div>
+      <div class="forecast-card long">
+        <div class="fc-label">长期预测（年度）</div>
+        <div class="fc-value" id="fc_long">—</div>
+        <div class="fc-range">预测区间：<span id="fc_long_range">— ~ —</span> 万</div>
+        <div class="fc-formula">五线合一加权综合目标<br>置信度：★★☆☆☆</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📈</span> 预测 vs 目标 达成分析</div>
+    <div id="gap_analysis"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💡</span> 管理决策建议</div>
+    <div id="management_advice"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== 导航切换 =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  // 切换时重新计算
+  if (id === 'sky') updateFiveLines();
+  if (id === 'funnel') renderFunnel();
+  if (id === 'health') updateHealth();
+  if (id === 'team') renderTeam();
+  if (id === 'forecast') renderForecast();
+}
+
+// ===== 五线合一 =====
+function updateFiveLines() {
+  const lines = [
+    { id: 'hist', raw: () => {
+      const base = +document.getElementById('hist_base').value || 0;
+      const growth = +document.getElementById('hist_growth').value || 0;
+      return Math.round(base * (1 + growth / 100));
+    }},
+    { id: 'fut', raw: () => {
+      const target = +document.getElementById('fut_target').value || 0;
+      const growth = +document.getElementById('fut_growth').value || 1;
+      return Math.round(target / Math.pow(1 + growth / 100, 2));
+    }},
+    { id: 'mkt', raw: () => {
+      const total = +document.getElementById('mkt_total').value || 0;
+      const share = +document.getElementById('mkt_share').value || 0;
+      return Math.round(total * share / 100);
+    }},
+    { id: 'ord', raw: () => {
+      const total = +document.getElementById('ord_total').value || 0;
+      const prob = +document.getElementById('ord_prob').value || 0;
+      return Math.round(total * prob / 100);
+    }},
+    { id: 'cust', raw: () => {
+      const budget = +document.getElementById('cust_budget').value || 0;
+      const share = +document.getElementById('cust_share').value || 0;
+      return Math.round(budget * share / 100);
+    }}
+  ];
+
+  let totalWeight = 0;
+  let finalTarget = 0;
+  const chartData = [];
+
+  lines.forEach(line => {
+    const slider = document.querySelector(`#${line.id}_w_val`).parentElement.querySelector('input[type="range"]');
+    const weight = +slider.value;
+    const raw = line.raw();
+    const weighted = Math.round(raw * weight / 100);
+    totalWeight += weight;
+    finalTarget += weighted;
+    chartData.push({ name: line.id, raw, weighted, weight });
+
+    document.getElementById(`${line.id}_raw`).textContent = raw.toLocaleString();
+    document.getElementById(`${line.id}_weighted`).textContent = weighted.toLocaleString();
+    document.getElementById(`${line.id}_w_val`).textContent = weight + '%';
+  });
+
+  document.getElementById('weight_total').textContent = totalWeight + '%';
+  const statusEl = document.getElementById('weight_status');
+  if (totalWeight === 100) { statusEl.textContent = '正常'; statusEl.style.color = 'var(--success)'; }
+  else if (totalWeight > 100) { statusEl.textContent = '超出' + (totalWeight - 100) + '%，请调低'; statusEl.style.color = 'var(--danger)'; }
+  else { statusEl.textContent = '不足，差' + (100 - totalWeight) + '%'; statusEl.style.color = 'var(--warning)'; }
+
+  document.getElementById('final_target').innerHTML = finalTarget.toLocaleString() + '<span style="font-size:16px;font-weight:400;"> 万</span>';
+
+  // 柱状图
+  const colors = ['#3b6fa8', '#8b4d6e', '#5c7a3c', '#d4763a', '#2c5f8a'];
+  const chart = document.getElementById('five_lines_chart');
+  const maxVal = Math.max(...chartData.map(d => d.raw), 1);
+  chart.innerHTML = chartData.map((d, i) => {
+    const heightPct = (d.raw / maxVal * 100);
+    const names = { hist: '历史线', fut: '未来线', mkt: '市场线', ord: '订单线', cust: '客户线' };
+    return `<div class="bar-item">
+      <div class="bar-fill" style="height:${heightPct}%;background:${colors[i]};">
+        <div class="bar-label">${d.raw}万</div>
+      </div>
+      <div class="bar-name">${names[d.name]}<br>(${d.weight}%)</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== 漏斗数据 =====
+const stageConfig = [
+  { name: '线索', key: 'lead', coef: 0.05, color: '#3b6fa8', maxDays: 15 },
+  { name: '需求确认', key: 'need', coef: 0.15, color: '#5c7a3c', maxDays: 30 },
+  { name: '方案商谈', key: 'plan', coef: 0.35, color: '#d4763a', maxDays: 30 },
+  { name: '竞争', key: 'comp', coef: 0.60, color: '#8b4d6e', maxDays: 30 },
+  { name: '签约', key: 'sign', coef: 0.85, color: '#4a8b5c', maxDays: 20 },
+  { name: '交付回款', key: 'deliver', coef: 0.95, color: '#999999', maxDays: 60 }
+];
+
+const pipelineData = [
+  { customer: '纳米电信', stage: 'comp', amount: 500, health: 'S', healthCoef: 1.0, days: 12, next: '高层互访+付款计划确认' },
+  { customer: '纳米电力', stage: 'sign', amount: 300, health: 'A', healthCoef: 0.8, days: 8, next: '合同审批跟进' },
+  { customer: '纳米联通', stage: 'plan', amount: 200, health: 'A', healthCoef: 0.8, days: 18, next: '方案评审会' },
+  { customer: '纳米移动', stage: 'comp', amount: 800, health: 'B', healthCoef: 0.6, days: 35, next: '需重新评估竞争策略', zombie: true },
+  { customer: '纳米港口', stage: 'need', amount: 150, health: 'B', healthCoef: 0.6, days: 22, next: 'SPIN深度挖掘' },
+  { customer: '跨国通讯', stage: 'lead', amount: 400, health: 'C', healthCoef: 0.3, days: 18, next: '需确认预算和立项', zombie: true },
+  { customer: '纳米铁塔', stage: 'plan', amount: 250, health: 'A', healthCoef: 0.8, days: 15, next: '邀请客户考察' },
+  { customer: '纳米宽带', stage: 'deliver', amount: 180, health: 'A', healthCoef: 0.8, days: 25, next: '验收跟进+收款' },
+  { customer: '大型中资A', stage: 'need', amount: 120, health: 'B', healthCoef: 0.6, days: 10, next: '痛点分析+引导方案' },
+  { customer: '首都商场B', stage: 'lead', amount: 80, health: 'C', healthCoef: 0.3, days: 5, next: '初步拜访+需求判断' },
+  { customer: '通讯专营店', stage: 'sign', amount: 60, health: 'B', healthCoef: 0.6, days: 15, next: '条款谈判收尾' },
+  { customer: 'ICT公司C', stage: 'comp', amount: 100, health: 'B', healthCoef: 0.6, days: 28, next: '竞争分析+埋雷策略' }
+];
+
+function renderFunnel() {
+  // 计算各阶段汇总
+  const stageStats = stageConfig.map(s => {
+    const deals = pipelineData.filter(d => d.stage === s.key);
+    const totalAmount = deals.reduce((sum, d) => sum + d.amount, 0);
+    const weightedAmount = deals.reduce((sum, d) => sum + d.amount * s.coef * d.healthCoef, 0);
+    const zombieCount = deals.filter(d => d.days > s.maxDays).length;
+    return { ...s, count: deals.length, totalAmount, weightedAmount, zombieCount, deals };
+  });
+
+  // 计算转化率
+  const conversions = [];
+  for (let i = 0; i < stageStats.length - 1; i++) {
+    const curr = stageStats[i].count;
+    const next = stageStats[i + 1].count;
+    const rate = curr > 0 ? Math.round(next / curr * 100) : 0;
+    conversions.push(rate);
+  }
+
+  // 渲染漏斗
+  const maxAmount = Math.max(...stageStats.map(s => s.totalAmount), 1);
+  const funnelEl = document.getElementById('funnel_visual');
+  let html = '';
+  stageStats.forEach((s, i) => {
+    const widthPct = Math.max((s.totalAmount / maxAmount * 100), 30);
+    const margin = (100 - widthPct) / 2;
+    html += `<div class="funnel-stage" style="width:${widthPct}%;margin:0 auto ${i < stageStats.length-1 ? '0' : '0'};background:${s.color};">
+      <span class="stage-name">${s.name}</span>
+      <span class="stage-value">${s.totalAmount}万</span>
+      <span class="stage-count">${s.count}个商机</span>
+    </div>`;
+    if (i < stageStats.length - 1) {
+      const conv = conversions[i];
+      const convColor = conv >= 50 ? 'var(--success)' : conv >= 30 ? 'var(--warning)' : 'var(--danger)';
+      html += `<div class="funnel-arrow">
+        <span class="conv-rate" style="color:${convColor}">↓ 转化率 ${conv}%</span>
+        <span class="dwell-time">平均停留 ${Math.round(s.deals.reduce((sum,d)=>sum+d.days,0)/(s.count||1))}天</span>
+      </div>`;
+    }
+  });
+  funnelEl.innerHTML = html;
+
+  // 统计数据
+  const pipeWeighted = stageStats.reduce((sum, s) => sum + s.weightedAmount, 0);
+  const monthForecast = stageStats.filter(s => ['comp', 'sign', 'deliver'].includes(s.key))
+    .reduce((sum, s) => sum + s.weightedAmount, 0);
+  const zombieTotal = stageStats.reduce((sum, s) => sum + s.zombieCount, 0);
+  const overallConv = stageStats[0].count > 0 ?
+    Math.round(stageStats[5].count / stageStats[0].count * 100) : 0;
+  const validLeads = pipelineData.filter(d => d.stage !== 'lead' || d.health !== 'C').length;
+  const validRate = Math.round(validLeads / pipelineData.length * 100);
+
+  document.getElementById('pipe_weighted').textContent = Math.round(pipeWeighted) + ' 万';
+  document.getElementById('month_forecast').textContent = Math.round(monthForecast) + ' 万';
+  document.getElementById('overall_conv').textContent = overallConv + ' %';
+  document.getElementById('zombie_count').textContent = zombieTotal + ' 个';
+  document.getElementById('valid_lead_rate').textContent = validRate + ' %';
+
+  // 管道表格
+  const stageClassMap = { lead: 'stage-lead', need: 'stage-need', plan: 'stage-plan', comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
+  const stageNameMap = { lead: '线索', need: '需求确认', plan: '方案商谈', comp: '竞争', sign: '签约', deliver: '交付回款' };
+  const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
+
+  const tbody = document.getElementById('pipeline_body');
+  tbody.innerHTML = pipelineData.map(d => {
+    const stage = stageConfig.find(s => s.key === d.stage);
+    const weighted = Math.round(d.amount * stage.coef * d.healthCoef);
+    const isZombie = d.days > stage.maxDays;
+    return `<tr>
+      <td><strong>${d.customer}</strong></td>
+      <td><span class="stage-tag ${stageClassMap[d.stage]}">${stageNameMap[d.stage]}</span></td>
+      <td>${d.amount}</td>
+      <td><span class="health-badge ${healthClassMap[d.health]}">${d.health}级</span></td>
+      <td>${isZombie ? `<span class="zombie-flag">⚠️ ${d.days}天</span>` : d.days + '天'}</td>
+      <td style="font-size:12px;">${d.next}</td>
+      <td class="weighted-value">${weighted}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ===== 商机健康度 =====
+const healthDims = [
+  { name: '需求明确度', desc: '客户有明确痛点，知道自己为什么要买', placeholder: 'SPIN完成度' },
+  { name: '预算确认', desc: '客户有预算或预算可能，金额明确', placeholder: 'BANT-Budget' },
+  { name: '决策链覆盖', desc: '已识别关键人和决策链，发展了支持者', placeholder: '决策链5维度' },
+  { name: '竞争态势', desc: '3C分析完成，我方位置清晰', placeholder: '7维度评分' },
+  { name: '时间进度', desc: '客户有大致采购时间，进度明确', placeholder: 'BANT-Time' },
+  { name: '方案匹配', desc: '客户需求和产品方案匹配度高', placeholder: 'FABE验证' },
+  { name: '下一步明确', desc: '下一步推进动作明确且已约定', placeholder: '有效推进标志' },
+  { name: '风险可控', desc: '风险点已识别，有应对方案', placeholder: '风险清单' },
+  { name: '客情深度', desc: '与关键人信任关系深度', placeholder: '圈层融入度' }
+];
+
+function initHealthGrid() {
+  const grid = document.getElementById('health_grid');
+  grid.innerHTML = healthDims.map((d, i) => `
+    <div class="health-dim">
+      <div class="dim-name">${i+1}. ${d.name}</div>
+      <div class="dim-score">
+        <input type="range" min="0" max="10" value="5" oninput="updateHealth()">
+        <span class="dim-val" id="dim_${i}">5</span>
+      </div>
+      <div class="dim-desc">${d.desc}</div>
+    </div>
+  `).join('');
+}
+
+function updateHealth() {
+  let total = 0;
+  healthDims.forEach((d, i) => {
+    const val = +document.getElementById(`dim_${i}`).previousElementSibling.value;
+    document.getElementById(`dim_${i}`).textContent = val;
+    total += val;
+  });
+
+  let grade, desc, coef;
+  if (total >= 72) { grade = 'S'; desc = '优质商机，重点投入资源，高概率成交。阶段系数×1.0。'; coef = '1.0'; }
+  else if (total >= 56) { grade = 'A'; desc = '良好商机，正常推进，需补齐短板。阶段系数×0.8。'; coef = '0.8'; }
+  else if (total >= 40) { grade = 'B'; desc = '一般商机，需评估是否值得继续投入，重点提升短板维度。阶段系数×0.6。'; coef = '0.6'; }
+  else { grade = 'C'; desc = '高风险商机，建议降级或放弃，除非有明确改善路径。阶段系数×0.3。'; coef = '0.3'; }
+
+  document.getElementById('health_grade').textContent = grade;
+  document.getElementById('health_score').textContent = `${total} 分 / 90 分`;
+  document.getElementById('health_desc').textContent = desc;
+}
+
+// ===== 团队战力 =====
+const teamData = [
+  { name: '桃子（S级客户）', leads: 8, validRate: 75, leadConv: 50, dealConv: 60, winRate: 40, avgDeal: 350, zombies: 1 },
+  { name: '陈君（A级客户）', leads: 12, validRate: 60, leadConv: 33, dealConv: 50, winRate: 25, avgDeal: 200, zombies: 2 },
+  { name: '阿木（B级客户）', leads: 20, validRate: 45, leadConv: 25, dealConv: 30, winRate: 15, avgDeal: 100, zombies: 4 },
+  { name: '柳柳（C级客户）', leads: 30, validRate: 30, leadConv: 15, dealConv: 20, winRate: 8, avgDeal: 50, zombies: 6 }
+];
+
+function renderTeam() {
+  const tbody = document.getElementById('team_body');
+  tbody.innerHTML = teamData.map(t => {
+    let diagnosis = '';
+    if (t.validRate < 50) diagnosis = '线索质量差';
+    else if (t.leadConv < 30) diagnosis = '需求挖掘弱';
+    else if (t.dealConv < 40) diagnosis = '方案/竞争弱';
+    else if (t.winRate < 20) diagnosis = '成交能力弱';
+    else diagnosis = '表现优秀';
+
+    const diagColor = diagnosis === '表现优秀' ? 'var(--success)' : 'var(--danger)';
+
+    return `<tr>
+      <td class="person">${t.name}</td>
+      <td>${t.leads}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:${t.validRate}%;background:${t.validRate>=60?'var(--success)':t.validRate>=40?'var(--warning)':'var(--danger)'}"></div></div>
+          <span>${t.validRate}%</span>
+        </div>
+      </td>
+      <td>${t.leadConv}%</td>
+      <td>${t.dealConv}%</td>
+      <td><strong>${t.winRate}%</strong></td>
+      <td>${t.avgDeal}</td>
+      <td style="color:${t.zombies>=3?'var(--danger)':'var(--text)'}">${t.zombies >= 3 ? '⚠️ ' : ''}${t.zombies}</td>
+      <td style="color:${diagColor};font-weight:600;">${diagnosis}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ===== 预测总览 =====
+function renderForecast() {
+  // 短期：管道加权
+  const pipeWeighted = pipelineData.reduce((sum, d) => {
+    const stage = stageConfig.find(s => s.key === d.stage);
+    return sum + d.amount * stage.coef * d.healthCoef;
+  }, 0);
+  const shortVal = Math.round(pipeWeighted);
+  const shortLow = Math.round(shortVal * 0.85);
+  const shortHigh = Math.round(shortVal * 1.15);
+
+  // 中期：管道×转化率 + 新线索
+  const midVal = Math.round(shortVal * 1.8);
+  const midLow = Math.round(midVal * 0.7);
+  const midHigh = Math.round(midVal * 1.3);
+
+  // 长期：五线合一
+  const longVal = 1150; // 默认值，如果已计算则取计算值
+  const longEl = document.getElementById('final_target');
+  const longText = longEl ? longEl.textContent.replace(/[^\d]/g, '') : '1150';
+  const longValFinal = parseInt(longText) || 1150;
+  const longLow = Math.round(longValFinal * 0.8);
+  const longHigh = Math.round(longValFinal * 1.2);
+
+  document.getElementById('fc_short').textContent = shortVal + ' 万';
+  document.getElementById('fc_short_range').textContent = `${shortLow} ~ ${shortHigh}`;
+  document.getElementById('fc_mid').textContent = midVal + ' 万';
+  document.getElementById('fc_mid_range').textContent = `${midLow} ~ ${midHigh}`;
+  document.getElementById('fc_long').textContent = longValFinal + ' 万';
+  document.getElementById('fc_long_range').textContent = `${longLow} ~ ${longHigh}`;
+
+  // 达成分析
+  const gap = longValFinal - midVal;
+  const gapPct = Math.round((midVal / longValFinal) * 100);
+  const gapEl = document.getElementById('gap_analysis');
+  let gapStatus, gapColor, gapAdvice;
+  if (gapPct >= 90) { gapStatus = '管道充足'; gapColor = 'var(--success)'; gapAdvice = '当前管道可覆盖年度目标，重点确保竞争→签约→回款的转化率。'; }
+  else if (gapPct >= 70) { gapStatus = '管道有缺口'; gapColor = 'var(--warning)'; gapAdvice = '需补充线索，建议加大线索收集力度，同时清理僵尸商机释放销售精力。'; }
+  else { gapStatus = '管道严重不足'; gapColor = 'var(--danger)'; gapAdvice = '当前管道无法支撑年度目标，需立即行动：①加速线索获取 ②提升各阶段转化率 ③调整目标预期。'; }
+
+  gapEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div class="stat-box"><div class="stat-label">年度目标</div><div class="stat-value">${longValFinal} 万</div></div>
+      <div class="stat-box"><div class="stat-label">半年管道预测</div><div class="stat-value">${midVal} 万</div></div>
+      <div class="stat-box" style="border-color:${gapColor};"><div class="stat-label">管道覆盖率</div><div class="stat-value" style="color:${gapColor}">${gapPct}%</div></div>
+    </div>
+    <div style="padding:16px;border-radius:8px;background:${gapPct>=90?'#f0f7f2':gapPct>=70?'#fff8e8':'#fdf5f4'};border-left:4px solid ${gapColor};">
+      <strong style="color:${gapColor};">状态：${gapStatus}</strong>
+      <p style="font-size:13px;margin-top:8px;color:var(--text);">${gapAdvice}</p>
+    </div>
+  `;
+
+  // 管理建议
+  const adviceEl = document.getElementById('management_advice');
+  const zombieCount = pipelineData.filter(d => {
+    const stage = stageConfig.find(s => s.key === d.stage);
+    return d.days > stage.maxDays;
+  }).length;
+  const lowConvStages = [];
+  // 模拟分析
+  adviceEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="padding:16px;border-radius:8px;background:#fdf5f4;border-left:4px solid var(--danger);">
+        <strong style="color:var(--danger);">⚠️ 立即处理</strong>
+        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
+          <li>清理 <strong>${zombieCount}个</strong> 僵尸商机，释放销售精力</li>
+          <li>纳米移动（800万·竞争阶段35天）需重新评估竞争策略</li>
+          <li>跨国通讯（400万·线索阶段18天）需确认预算和立项，否则降级</li>
+        </ul>
+      </div>
+      <div style="padding:16px;border-radius:8px;background:#fff8e8;border-left:4px solid var(--warning);">
+        <strong style="color:var(--warning);">📊 本周重点</strong>
+        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
+          <li>线索→商机转化率偏低，安排SPIN话术专项训练</li>
+          <li>阿木/柳柳有效线索率低于50%，优化线索筛选标准</li>
+          <li>S级客户（纳米电信）进入竞争关键期，高层需介入</li>
+        </ul>
+      </div>
+      <div style="padding:16px;border-radius:8px;background:#f0f6fc;border-left:4px solid var(--sky);">
+        <strong style="color:var(--sky);">🎯 本月目标</strong>
+        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
+          <li>短期预测可成交：<strong>${shortVal}万</strong>，区间${shortLow}~${shortHigh}万</li>
+          <li>重点推进竞争+签约阶段商机（${pipelineData.filter(d=>['comp','sign'].includes(d.stage)).length}个）</li>
+          <li>补充有效线索至少${Math.ceil(pipelineData.length*0.3)}个，维持漏斗健康</li>
+        </ul>
+      </div>
+      <div style="padding:16px;border-radius:8px;background:#f0f7f2;border-left:4px solid var(--success);">
+        <strong style="color:var(--success);">✅ 持续优化</strong>
+        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
+          <li>每周一对单会，逐个过商机健康度和停留时间</li>
+          <li>每月一次丢单分析会，找出集中性问题专项解决</li>
+          <li>每季度复盘漏斗转化率，校准阶段系数和预警标准</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+// ===== 初始化 =====
+initHealthGrid();
+updateFiveLines();
+updateHealth();
+</script>
+
+</body>
+</html>
