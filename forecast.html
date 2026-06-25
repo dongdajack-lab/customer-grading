@@ -497,8 +497,8 @@ body {
         <div class="rs-num">5</div>
         <div class="rs-tag">综合</div>
         <div class="rs-name">出预测</div>
-        <div class="rs-desc">三层预测+差距分析</div>
-        <div class="rs-output">📤 预测+行动建议</div>
+        <div class="rs-desc">本月+未来3个月预测</div>
+        <div class="rs-output">📤 月度预测+行动建议</div>
       </div>
     </div>
 
@@ -797,8 +797,8 @@ body {
         <div class="sd-exit"><strong>退出条件</strong>合同签订 + 收预付款</div>
       </div>
       <div class="stage-def">
-        <div><div class="sd-name">⑥ 交付回款</div><div class="sd-coef">阶段系数: 95%</div></div>
-        <div class="sd-enter"><strong>进入条件</strong>排产/启动服务</div>
+        <div><div class="sd-name">⑥ 交付回款</div><div class="sd-coef">阶段系数: 100%</div></div>
+        <div class="sd-enter"><strong>进入条件</strong>排产/启动服务（合同已签、预付款已收）</div>
         <div class="sd-exit"><strong>退出条件</strong>交付验收 + 收款完成</div>
       </div>
     </div>
@@ -919,21 +919,22 @@ body {
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🎯</span> 能力短板诊断与培训建议</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">团队短板直接影响预测置信度——转化率低的阶段，该阶段后续的预测值需要打折。</p>
-    <table class="pipeline-table">
-      <thead><tr><th>发现的问题</th><th>对应管理动作</th><th>培训工具</th></tr></thead>
-      <tbody>
-        <tr><td>线索质量差 / 有效线索率低</td><td>优化获客渠道和线索筛选标准</td><td>线索收集十八招</td></tr>
-        <tr><td>线索→商机转化低</td><td>训练需求挖掘能力</td><td>SPIN提问训练 + 痛点挖掘四维模型</td></tr>
-        <tr><td>商机→方案转化低</td><td>复盘方案匹配度和FABE话术</td><td>FABE产品介绍练习</td></tr>
-        <tr><td>方案→竞争转化低</td><td>复盘竞争策略和决策链管理</td><td>3C&8维客户策略分析</td></tr>
-        <tr><td>报价→成交转化低</td><td>复盘价格策略和谈判技巧</td><td>LSCPA抗拒处理 + 谈判四步法</td></tr>
-        <tr><td>商机停留时间长</td><td>清理僵尸商机，推动关键客户进入下一步</td><td>KISS复盘工作台</td></tr>
-        <tr><td>大单预测偏差大</td><td>加强关键人识别和决策链管理</td><td>决策链5维度分析</td></tr>
-        <tr><td>丢单集中在某一类原因</td><td>专项解决</td><td>丢单分析专项复盘会</td></tr>
-      </tbody>
-    </table>
+    <div class="card-title"><span class="icon">🎯</span> 能力短板自动诊断
+      <span style="font-size:12px;font-weight:400;color:var(--text-light);margin-left:8px;">基于上方团队漏斗数据自动分析每个人的短板维度</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">系统根据每位销售的<strong>漏斗转化率数据</strong>自动诊断短板，并匹配对应的培训工具。这就是你回去之后实际使用的方式——把团队真实数据填进去，系统自动告诉你谁弱在哪里、该练什么。</p>
+    <div id="auto_diagnosis_container"></div>
+
+    <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,#f0f6fc 0%,#fff 100%);border-radius:10px;border:1px solid var(--sky);">
+      <strong style="color:var(--sky);font-size:14px;">📌 如何在你公司使用这个诊断？</strong>
+      <ol style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2.2;color:var(--text);">
+        <li><strong>每月初从CRM导出</strong>每个销售的：线索数、有效商机数、各阶段商机数、成交单数、成交金额</li>
+        <li><strong>填入上表</strong>（或接入CRM自动取数），系统自动计算各阶段转化率</li>
+        <li><strong>看诊断结果</strong>：谁的哪个阶段转化率低于团队平均 → 就是短板</li>
+        <li><strong>按推荐工具训练</strong>：短板对应什么工具，安排对应练习</li>
+        <li><strong>下月再测</strong>：转化率提升了吗？没有就换方法或加大强度</li>
+      </ol>
+    </div>
   </div>
 
   <div class="flow-output">
@@ -951,95 +952,76 @@ body {
   <div class="step-banner combo">
     <div class="step-big-num">5</div>
     <div class="step-info">
-      <h2>出预测 · 三层预测与差距分析</h2>
-      <div class="step-sub">综合 · 数据汇总 | 汇集前四步所有输出，生成短/中/长三层预测，并做目标达成差距分析</div>
+      <h2>出预测 · 月度业绩预测</h2>
+      <div class="step-sub">综合 · 数据汇总 | 每月初更新：本月能成交多少？下两个月能成交多少？数据说话，不拍脑袋</div>
     </div>
     <span class="step-tag" style="background:#fff5eb;color:var(--accent);">综合</span>
   </div>
 
-  <!-- 5A: 数据溯源 -->
+  <div class="info-banner">
+    <strong>使用场景：</strong>这是你<strong>每个月初都要用一次</strong>的核心工具。<br>
+    长期目标（五线合一）在年初已经定好了，不需要每月重复做。<br>
+    每月要回答老板的两个问题：<strong>"本月预计完成多少？" "接下来三个月怎么看？"</strong><br>
+    答案全部来自你的管道数据和团队战力，不是感觉。
+  </div>
+
+  <!-- 5A: 本月预测（核心） -->
   <div class="card">
-    <div class="card-title"><span class="icon">🔗</span> 预测数据溯源图</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">以下展示每个预测值的数据来源——从哪一步的什么输出计算而来。</p>
-    <div class="traceability-box">
-      <div class="trace-row">
-        <div class="trace-source">Step 1 · 五线合一<span class="trace-tag tag-sky">天</span></div>
-        <div class="trace-arrow">→</div>
-        <div class="trace-target"><strong>长期预测（年度目标）</strong>：五线加权综合目标值，直接作为年度预测基准</div>
+    <div class="card-title"><span class="icon">📅</span> 本月业绩预测
+      <span style="font-size:12px;font-weight:400;color:var(--text-light);margin-left:8px;">本月能成交的金额 = 管道中竞争/签约/交付阶段的商机加权汇总</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:20px;">
+      <!-- 左：本月预测值 -->
+      <div style="padding:28px;border-radius:12px;background:linear-gradient(135deg,#fff5eb 0%,#fff 100%);border:2px solid var(--accent);text-align:center;">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:8px;">本月预测成交额</div>
+        <div style="font-size:48px;font-weight:800;color:var(--accent);" id="month_predict">—</div>
+        <div style="font-size:14px;color:var(--text-light);margin-top:4px;">预测区间：<span id="month_range">— ~ —</span> 万</div>
+        <div style="margin-top:16px;padding:10px;background:rgba(0,0,0,0.03);border-radius:6px;font-size:12px;text-align:left;line-height:1.8;" id="month_formula_detail">
+          计算逻辑：<br>
+          Σ(竞争阶段商机 × 60% × 健康度系数)<br>
+          + Σ(签约阶段商机 × 85% × 健康度系数)<br>
+          + Σ(交付回款阶段商机 × 100% × 健康度系数)
+        </div>
       </div>
-      <div class="trace-row">
-        <div class="trace-source">Step 3 · 管道加权<span class="trace-tag tag-earth">地</span></div>
-        <div class="trace-arrow">→</div>
-        <div class="trace-target"><strong>短期预测（本月/本季）</strong>：Σ(商机金额 × 阶段系数 × 健康度系数)，精度最高</div>
+
+      <!-- 右：本月商机明细 -->
+      <div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;">📋 本月可成交商机清单</div>
+        <table class="pipeline-table" id="month_deals_table">
+          <thead><tr><th>客户</th><th>阶段</th><th>金额(万)</th><th>健康度</th><th>加权值(万)</th></tr></thead>
+          <tbody id="month_deals_body"></tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px;background:#f0f7f2;border-radius:6px;font-size:12px;" id="month_confidence_note"></div>
       </div>
-      <div class="trace-row">
-        <div class="trace-source">Step 3 · 管道存量<span class="trace-tag tag-earth">地</span></div>
-        <div class="trace-arrow">→</div>
-        <div class="trace-target"><strong>中期预测（半年）</strong>：各阶段存量 × 历史转化率 + 新增线索预估</div>
-      </div>
-      <div class="trace-row">
-        <div class="trace-source">Step 4 · 团队战力<span class="trace-tag tag-human">人</span></div>
-        <div class="trace-arrow">→</div>
-        <div class="trace-target"><strong>置信度修正</strong>：团队短板多的阶段，对应预测值置信度降级</div>
-      </div>
-      <div class="trace-row">
-        <div class="trace-source">Step 1 vs Step 3<span class="trace-tag tag-sky">天</span><span class="trace-tag tag-earth" style="margin-left:2px;">地</span></div>
-        <div class="trace-arrow">→</div>
-        <div class="trace-target"><strong>差距分析</strong>：年度目标 vs 半年管道预测 → 管道覆盖率 → 管理决策建议</div>
-      </div>
-      <div class="trace-row" style="border-color:var(--accent);background:#fff8f0;">
-        <div class="trace-source" style="color:var(--accent);">↩️ 差距分析结果</div>
-        <div class="trace-arrow">↩</div>
-        <div class="trace-target"><strong>反馈循环</strong>：管道覆盖率不足 → 回到 Step 1 调整目标，或加速线索获取/提升转化率</div>
-      </div>
+    </div>
+
+    <!-- 团队置信度修正 -->
+    <div style="padding:16px;background:#e8f0fa;border-radius:8px;border-left:4px solid var(--sky);">
+      <strong style="color:var(--sky);">⚖️ 团队置信度修正（来自 Step 4）</strong>
+      <p style="font-size:13px;margin-top:8px;" id="team_confidence_text">基于团队成员转化率短板情况，对预测值进行置信度修正。</p>
     </div>
   </div>
 
-  <!-- 5B: 三层预测 -->
+  <!-- 5B: 未来3个月滚动预测 -->
   <div class="card">
-    <div class="card-title"><span class="icon">🔮</span> 三层预测总览</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">综合天（目标）、地（管道）、人（战力）三层模型，输出短中长期业绩预测。</p>
-    <div class="forecast-summary">
-      <div class="forecast-card short">
-        <div class="fc-label">短期预测（本月/本季）</div>
-        <div class="fc-value" id="fc_short">—</div>
-        <div class="fc-range">预测区间：<span id="fc_short_range">— ~ —</span> 万</div>
-        <div class="fc-formula">管道加权 = Σ(金额 × 阶段系数 × 健康度系数)<br>置信度：★★★★☆</div>
-        <div class="fc-source">← 数据来源：Step 3 管道加权</div>
-      </div>
-      <div class="forecast-card mid">
-        <div class="fc-label">中期预测（半年）</div>
-        <div class="fc-value" id="fc_mid">—</div>
-        <div class="fc-range">预测区间：<span id="fc_mid_range">— ~ —</span> 万</div>
-        <div class="fc-formula">当前管道 × 历史转化率 + 新增线索预估<br>置信度：★★★☆☆</div>
-        <div class="fc-source">← 数据来源：Step 3 管道存量 + 历史转化率</div>
-      </div>
-      <div class="forecast-card long">
-        <div class="fc-label">长期预测（年度）</div>
-        <div class="fc-value" id="fc_long">—</div>
-        <div class="fc-range">预测区间：<span id="fc_long_range">— ~ —</span> 万</div>
-        <div class="fc-formula">五线合一加权综合目标<br>置信度：★★☆☆☆</div>
-        <div class="fc-source">← 数据来源：Step 1 五线合一目标</div>
-      </div>
+    <div class="card-title"><span class="icon">📊</span> 未来三个月滚动预测
+      <span style="font-size:12px;font-weight:400;color:var(--text-light);margin-left:8px;">方案商谈及以后阶段的商机，按阶段转化率衰减推算到各月</span>
     </div>
+
+    <div id="rolling_forecast_container"></div>
   </div>
 
-  <!-- 5C: 达成分析 -->
+  <!-- 5C: 差距与行动 -->
   <div class="card">
-    <div class="card-title"><span class="icon">📈</span> 预测 vs 目标 达成分析</div>
-    <div id="gap_analysis"></div>
-  </div>
-
-  <!-- 5D: 管理建议 -->
-  <div class="card">
-    <div class="card-title"><span class="icon">💡</span> 管理决策建议</div>
-    <div id="management_advice"></div>
+    <div class="card-title"><span class="icon">💡</span> 差距分析与管理行动</div>
+    <div id="gap_action_analysis"></div>
   </div>
 
   <div class="feedback-loop">
-    <strong>↩️ 反馈循环：</strong>差距分析结果显示管道覆盖率 <span id="loop_coverage">—</span>%。
-    若覆盖率 < 70%，建议回到 <strong>Step 1</strong> 调整年度目标，或在 <strong>Step 3</strong> 加速线索获取、提升转化率、清理僵尸商机。
-    若团队短板明显（<strong>Step 4</strong>），应优先安排专项培训，提升关键阶段转化能力。
+    <strong>↩️ 反馈循环：</strong>如果本月预测 <span id="loop_month_gap">—</span> 月度目标差距较大，
+    回到 <strong>Step 3</strong> 清理僵尸商机、推动关键客户进入下一阶段，
+    或回到 <strong>Step 4</strong> 安排专项培训提升短板。
   </div>
 </div>
 
@@ -1153,7 +1135,7 @@ const stageConfig = [
   { name: '方案商谈', key: 'plan', coef: 0.35, color: '#d4763a', maxDays: 30 },
   { name: '竞争', key: 'comp', coef: 0.60, color: '#8b4d6e', maxDays: 30 },
   { name: '签约', key: 'sign', coef: 0.85, color: '#4a8b5c', maxDays: 20 },
-  { name: '交付回款', key: 'deliver', coef: 0.95, color: '#999999', maxDays: 60 }
+  { name: '交付回款', key: 'deliver', coef: 1.00, color: '#999999', maxDays: 60 }
 ];
 
 const pipelineData = [
@@ -1326,105 +1308,337 @@ function renderTeam() {
       <td style="color:${diagColor};font-weight:600;">${diagnosis}</td>
     </tr>`;
   }).join('');
+
+  // 触发自动诊断
+  renderAutoDiagnosis();
 }
 
-// ===== 预测总览 =====
+// ===== 自动短板诊断 =====
+function renderAutoDiagnosis() {
+  // 计算团队平均转化率作为基准
+  const teamAvgValid = Math.round(teamData.reduce((s, t) => s + t.validRate, 0) / teamData.length);
+  const teamAvgLeadConv = Math.round(teamData.reduce((s, t) => s + t.leadConv, 0) / teamData.length);
+  const teamAvgDealConv = Math.round(teamData.reduce((s, t) => s + t.dealConv, 0) / teamData.length);
+  const teamAvgWinRate = Math.round(teamData.reduce((s, t) => s + t.winRate, 0) / teamData.length);
+
+  const container = document.getElementById('auto_diagnosis_container');
+  container.innerHTML = teamData.map(t => {
+    // 找出低于团队平均的维度
+    const weaknesses = [];
+    const gaps = [];
+
+    if (t.validRate < teamAvgValid) {
+      weaknesses.push({ dim: '有效线索率', value: t.validRate, avg: teamAvgValid, gap: teamAvgValid - t.validRate,
+        action: '优化获客渠道和线索筛选标准', tool: '线索收集十八招', color: 'var(--danger)', icon: '🔍' });
+    }
+    if (t.leadConv < teamAvgLeadConv) {
+      weaknesses.push({ dim: '线索→商机转化率', value: t.leadConv, avg: teamAvgLeadConv, gap: teamAvgLeadConv - t.leadConv,
+        action: '训练需求挖掘能力（SPIN痛点挖掘）', tool: 'SPIN提问训练 + 痛点挖掘四维模型', color: '#d4763a', icon: '💉' });
+    }
+    if (t.dealConv < teamAvgDealConv) {
+      weaknesses.push({ dim: '商机→方案/竞争转化率', value: t.dealConv, avg: teamAvgDealConv, gap: teamAvgDealConv - t.dealConv,
+        action: '复盘FABE话术和竞争策略（3C分析）', tool: 'FABE产品介绍练习 + 3C&8维客户策略分析', color: '#8b4d6e', icon: '⚔️' });
+    }
+    if (t.winRate < teamAvgWinRate) {
+      weaknesses.push({ dim: '最终赢单率', value: t.winRate, avg: teamAvgWinRate, gap: teamAvgWinRate - t.winRate,
+        action: '加强谈判技巧和抗拒处理', tool: 'LSCPA抗拒处理 + 谈判四步法', color: '#c45a4a', icon: '✍️' });
+    }
+
+    if (weaknesses.length === 0) {
+      return `<div style="padding:18px;border-radius:10px;background:#f0f7f2;border-left:4px solid var(--success);margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <span style="font-size:24px;">🏆</span>
+          <div><strong style="color:var(--success);font-size:16px;">${t.name} —— 各项指标均达标</strong></div>
+        </div>
+        <div style="font-size:13px;color:var(--text-light);">
+          有效线索率 ${t.validRate}%（平均${teamAvgValid}%）| 线索→商机 ${t.leadConv}%（平均${teamAvgLeadConv}%）|
+          商机→成交 ${t.dealConv}%（平均${teamAvgDealConv}%）| 赢单率 ${t.winRate}%（平均${teamAvgWinRate}%）
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--success);">💡 建议：可作为团队标杆，分享成功经验给其他同事</div>
+      </div>`;
+    }
+
+    return `<div style="padding:18px;border-radius:10px;background:#fff;border-left:4px solid ${weaknesses[0].color};margin-bottom:12px;border:1px solid var(--border);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:24px;">⚠️</span>
+          <div><strong style="font-size:16px;color:${weaknesses[0].color};">${t.name} —— 发现 ${weaknesses.length} 项短板</strong></div>
+        </div>
+        <div style="font-size:12px;padding:4px 10px;border-radius:12px;background:#fdf5f4;color:var(--danger);">需重点辅导</div>
+      </div>
+
+      <!-- 转化率雷达对比 -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
+        <div style="text-align:center;padding:10px;background:${t.validRate >= teamAvgValid ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
+          <div style="font-size:11px;color:var(--text-light);">有效线索率</div>
+          <div style="font-size:20px;font-weight:700;color:${t.validRate >= teamAvgValid ? 'var(--success)' : 'var(--danger)'};">${t.validRate}%</div>
+          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgValid}%</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:${t.leadConv >= teamAvgLeadConv ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
+          <div style="font-size:11px;color:var(--text-light);">线索→商机</div>
+          <div style="font-size:20px;font-weight:700;color:${t.leadConv >= teamAvgLeadConv ? 'var(--success)' : 'var(--danger)'};">${t.leadConv}%</div>
+          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgLeadConv}%</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:${t.dealConv >= teamAvgDealConv ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
+          <div style="font-size:11px;color:var(--text-light);">商机→成交</div>
+          <div style="font-size:20px;font-weight:700;color:${t.dealConv >= teamAvgDealConv ? 'var(--success)' : 'var(--danger)'};">${t.dealConv}%</div>
+          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgDealConv}%</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:${t.winRate >= teamAvgWinRate ? '#f0f7f2' : '#fdf5f4'};border-radius:6px;">
+          <div style="font-size:11px;color:var(--text-light);">最终赢单率</div>
+          <div style="font-size:20px;font-weight:700;color:${t.winRate >= teamAvgWinRate ? 'var(--success)' : 'var(--danger)'};">${t.winRate}%</div>
+          <div style="font-size:10px;color:var(--text-light);">团队平均 ${teamAvgWinRate}%</div>
+        </div>
+      </div>
+
+      <!-- 短板详情 -->
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📋 短板明细与改进计划：</div>
+      ${weaknesses.map(w => `
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:${w.color}15;border-radius:8px;margin-bottom:8px;">
+          <span style="font-size:20px;flex-shrink:0;">${w.icon}</span>
+          <div style="flex:1;">
+            <div style="font-weight:600;">${w.dim}
+              <span style="font-weight:400;color:var(--text-light);font-size:12px;">
+                个人 <strong style="color:${w.color};">${w.value}%</strong> vs 团队平均 <strong>${w.avg}%</strong>（差 ${w.gap} 个百分点）
+              </span>
+            </div>
+            <div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap;">
+              <span style="font-size:12px;">📌 <strong>管理动作：</strong>${w.action}</span>
+              <span style="font-size:12px;">🛠️ <strong>培训工具：</strong><strong style="color:var(--sky);">${w.tool}</strong></span>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }).join('');
+}
+
+// ===== 预测总览（重构为月度预测） =====
 function renderForecast() {
-  // 短期：管道加权
-  const pipeWeighted = pipelineData.reduce((sum, d) => {
+  // ===== 本月预测：竞争+签约+交付阶段加权汇总 =====
+  const monthStages = ['comp', 'sign', 'deliver'];
+  const monthDeals = pipelineData.filter(d => monthStages.includes(d.stage));
+
+  let monthTotal = 0;
+  let monthDetails = [];
+
+  monthDeals.forEach(d => {
+    const stage = stageConfig.find(s => s.key === d.stage);
+    const weighted = d.amount * stage.coef * d.healthCoef;
+    monthTotal += weighted;
+
+    const stageNameMap = { comp: '竞争', sign: '签约', deliver: '交付回款' };
+    const stageClassMap = { comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
+    const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
+
+    monthDetails.push({
+      customer: d.customer,
+      stageName: stageNameMap[d.stage],
+      stageClass: stageClassMap[d.stage],
+      amount: d.amount,
+      health: d.health,
+      healthClass: healthClassMap[d.health],
+      weighted: Math.round(weighted)
+    });
+  });
+
+  // 排序：按加权值从大到小
+  monthDetails.sort((a, b) => b.weighted - a.weighted);
+
+  const monthVal = Math.round(monthTotal);
+  const monthLow = Math.round(monthVal * 0.85);
+  const monthHigh = Math.round(monthVal * 1.15);
+
+  // 填充本月预测值
+  document.getElementById('month_predict').textContent = monthVal + ' 万';
+  document.getElementById('month_range').textContent = `${monthLow} ~ ${monthHigh}`;
+
+  // 填充本月商机明细表
+  const monthBody = document.getElementById('month_deals_body');
+  monthBody.innerHTML = monthDetails.map(d => `
+    <tr>
+      <td><strong>${d.customer}</strong></td>
+      <td><span class="stage-tag ${d.stageClass}">${d.stageName}</span></td>
+      <td>${d.amount}</td>
+      <td><span class="health-badge ${d.healthClass}">${d.health}级</span></td>
+      <td class="weighted-value"><strong>${d.weighted}</strong></td>
+    </tr>
+  `).join('');
+
+  // 置信度说明（来自Step4团队短板）
+  const weakCount = teamData.filter(t =>
+    t.validRate < 50 || t.leadConv < 30 || t.dealConf < 40 || t.winRate < 20
+  ).length;
+  let confidenceLevel, confidenceDesc;
+  if (weakCount === 0) { confidenceLevel = '高'; confidenceColor = 'var(--success)';
+    confidenceDesc = '团队成员各项转化率均达标，预测值可信度高。建议直接基于此数据向老板汇报本月业绩预期。'; }
+  else if (weakCount <= 1) { confidenceLevel = '中高'; confidenceColor = 'var(--warning)';
+    confidenceDesc = `${weakCount}名成员存在短板，对竞争/签约阶段的转化有轻微影响。建议预测值取保守区间下限（${monthLow}万）汇报。`; }
+  else { confidenceLevel = '中低'; confidenceColor = 'var(--danger)';
+    confidenceDesc = `${weakCount}名成员存在明显短板，可能影响本月成交。建议：①预测值打折后汇报 ②安排专项培训 ③对关键商机安排协同跟进。`; }
+
+  document.getElementById('team_confidence_text').innerHTML =
+    `<strong style="color:${confidenceColor};">置信度等级：${confidenceLevel}</strong> —— ${confidenceDesc}`;
+
+  // ===== 未来3个月滚动预测 =====
+  // 第1个月（下月）：方案商谈阶段 → 考虑35%系数衰减到下月成交
+  // 第2个月（第三月）：需求确认阶段 → 更远期，更大折扣
+  // 方案：
+  //   - 下月预测 = 方案商谈阶段 × 35% × 健康度 + 需求确认 × 15% × 健康度(部分推进)
+  //   - 第三月预测 = 需求确认剩余 × 历史转化率 + 新线索预估
+
+  const planDeals = pipelineData.filter(d => d.stage === 'plan');
+  const needDeals = pipelineData.filter(d => d.stage === 'need');
+  const leadDeals = pipelineData.filter(d => d.stage === 'lead');
+
+  const nextMonth1 = planDeals.reduce((s, d) => s + d.amount * 0.35 * d.healthCoef, 0)
+                  + needDeals.reduce((s, d) => s + d.amount * 0.20 * d.healthCoef, 0); // 需求阶段部分可推入方案
+  const nextMonth2 = needDeals.reduce((s, d) => s + d.amount * 0.25 * d.healthCoef, 0)
+                  + leadDeals.reduce((s, d) => s + d.amount * 0.08 * d.healthCoef, 0)
+                  + planDeals.reduce((s, d) => s + d.amount * 0.25 * d.healthCoef, 0); // 方案阶段剩余
+  const nextMonth3 = leadDeals.reduce((s, d) => s + d.amount * 0.12 * d.healthCoef, 0)
+                  + needDeals.reduce((s, d) => s + d.amount * 0.18 * d.healthCoef, 0)
+                  + planDeals.reduce((s, d) => s + d.amount * 0.15 * d.healthCoef, 0);
+
+  const m1 = Math.round(nextMonth1), m2 = Math.round(nextMonth2), m3 = Math.round(nextMonth3);
+  const total3m = m1 + m2 + m3;
+
+  const rollingEl = document.getElementById('rolling_forecast_container');
+  rollingEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+      <div style="text-align:center;padding:24px;border-radius:12px;background:#fff5eb;border:2px solid var(--accent);">
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;">本月</div>
+        <div style="font-size:28px;font-weight:800;color:var(--accent);">${monthVal}<span style="font-size:14px;"> 万</span></div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;">${monthLow}~${monthHigh}万</div>
+        <div style="margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(212,118,58,0.1);display:inline-block;">竞争+签约+交付</div>
+      </div>
+      <div style="text-align:center;padding:24px;border-radius:12px;background:#f0f6fc;border:2px solid var(--sky);">
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;">下月（第2月）</div>
+        <div style="font-size:28px;font-weight:800;color:var(--sky);">${m1}<span style="font-size:14px;"> 万</span></div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;">~${Math.round(m1*1.2)}万</div>
+        <div style="margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(59,111,168,0.1);display:inline-block;">方案→竞争推进</div>
+      </div>
+      <div style="text-align:center;padding:24px;border-radius:12px;background:#f3f8ee;border:2px solid var(--earth);">
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;">第3月</div>
+        <div style="font-size:28px;font-weight:800;color:var(--earth);">${m2}<span style="font-size:14px;"> 万</span></div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;">~${Math.round(m2*1.3)}万</div>
+        <div style="margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(92,122,60,0.1);display:inline-block;">需求→方案推进</div>
+      </div>
+      <div style="text-align:center;padding:24px;border-radius:12px;background:#f5e8ee;border:2px solid var(--human);">
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;">第4月</div>
+        <div style="font-size:28px;font-weight:800;color:var(--human);">${m3}<span style="font-size:14px;"> 万</span></div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;">~${Math.round(m3*1.4)}万</div>
+        <div style="margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(139,77,110,0.1);display:inline-block;">线索孵化中</div>
+      </div>
+    </div>
+
+    <!-- 三月累计 -->
+    <div style="padding:18px;border-radius:10px;background:linear-gradient(135deg,#e8f0fa 0%,#fff 100%);border-left:4px solid var(--primary);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:13px;color:var(--text-light);">未来三个月累计预测</div>
+        <div style="font-size:32px;font-weight:800;color:var(--primary);margin-top:4px;">${total3m}<span style="font-size:16px;"> 万</span></div>
+      </div>
+      <div style="text-align:right;font-size:13px;color:var(--text-light);">
+        <div>本月(${monthVal}) + 下月(${m1}) + 第3月(${m2}) + 第4月(${m3})</div>
+        <div style="margin-top:4px;">💡 注意：越远的月份不确定性越大，需每月滚动更新</div>
+      </div>
+    </div>
+
+    <!-- 各月贡献来源 -->
+    <div style="margin-top:16px;font-size:13px;">
+      <strong>各月预测来源拆解：</strong>
+      <ul style="margin-top:8px;padding-left:20px;line-height:2;color:var(--text-light);">
+        <li><strong>本月</strong>：当前在竞争(×60%)、签约(×85%)、交付回款(×100%)阶段的商机加权汇总</li>
+        <li><strong>下月</strong>：方案商谈阶段商机(×35%) + 部分需求确认阶段商机(×20%)，假设正常推进可进入竞争/签约</li>
+        <li><strong>第3月</strong>：需求确认(×25%) + 方案剩余(×25%) + 线索孵化(×8%)，考虑更长周期和转化损耗</li>
+        <li><strong>第4月</strong>：线索(×12%) + 需求(×18%) + 方案(×15%)，远期预测仅供参考方向</li>
+      </ul>
+    </div>
+  `;
+
+  // ===== 差距分析与行动 =====
+  const gapEl = document.getElementById('gap_action_analysis');
+  // 假设月度目标为150万（实际使用时输入）
+  const monthlyTarget = 150;
+  const gap = monthlyTarget - monthVal;
+  const gapPct = monthlyTarget > 0 ? Math.round(monthVal / monthlyTarget * 100) : 0;
+
+  let gapStatus, gapColor, gapAdvice;
+  if (gapPct >= 95) { gapStatus = '达标无忧'; gapColor = 'var(--success)';
+    gapAdvice = '本月预测覆盖目标，重点确保竞争→签约→回款各环节不掉链子。关注健康度B/C级的商机是否有改善路径。'; }
+  else if (gapPct >= 75) { gapStatus = '基本可控'; gapColor = 'var(--warning)';
+    gapAdvice = `距离目标还差 ${gap} 万。建议：①推动纳米移动(800万·竞争阶段)尽快突破 ②加速纳米联通(200万·方案)进入竞争 ③补充2-3个新有效线索。`; }
+  else { gapStatus = '缺口较大'; gapColor = 'var(--danger)';
+    gapAdvice = `缺口 ${gap} 万，需要立即行动：①清理僵尸商机释放精力 ②安排S级客户高层拜访 ③评估是否调整本月目标预期 ④启动促销/特价策略加速决策。`; }
+
+  gapEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+      <div style="padding:20px;border-radius:10px;text-align:center;background:${gapPct>=95?'#f0f7f2':gapPct>=75?'#fff8e8':'#fdf5f4'};border:2px solid ${gapColor};">
+        <div style="font-size:13px;color:var(--text-light);">本月预测 vs 月度目标</div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:12px;margin-top:10px;">
+          <span style="font-size:36px;font-weight:800;color:var(--accent);">${monthVal}</span>
+          <span style="font-size:16px;color:var(--text-light);">/ ${monthlyTarget} 万</span>
+          <span style="font-size:18px;font-weight:700;color:${gapColor};">(${gapPct}%)</span>
+        </div>
+        <div style="margin-top:8px;font-size:14px;font-weight:600;color:${gapColor};">${gapStatus}${gap < 0 ? '（超目标' + Math.abs(gap) + '万）' : ''}</div>
+      </div>
+
+      <div style="padding:20px;border-radius:10px;background:#faf9f7;border:1px solid var(--border);">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:10px;">📌 关键数字一览</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+          <div>管道加权总额：<strong id="gap_pipe_total" style="color:var(--primary);"></strong></div>
+          <div>本月可成交商机：<strong id="gap_deal_count" style="color:var(--primary);"></strong> 个</div>
+          <div>僵尸商机数：<strong id="gap_zombie_cnt" style="color:var(--danger);"></strong> 个</div>
+          <div>S/A级健康度占比：<strong id="gap_healthy_pct" style="color:var(--success);"></strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:18px;border-radius:8px;background:${gapPct>=95?'#f0f7f2':gapPct>=75?'#fff8e8':'#fdf5f4'};border-left:4px solid ${gapColor};">
+      <strong style="color:${gapColor};">📊 差距分析结论：${gapStatus}</strong>
+      <p style="font-size:13px;margin-top:8px;line-height:1.8;">${gapAdvice}</p>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="padding:16px;border-radius:8px;background:#fdf5f4;border-left:4px solid var(--danger);">
+        <strong style="color:var(--danger);">⚠️ 本周必须做的3件事</strong>
+        <ol style="font-size:13px;margin-top:8px;padding-left:18px;line-height:2;">
+          <li><strong>清理僵尸商机</strong> — 当前管道中有 ${pipelineData.filter(d => { const s = stageConfig.find(x => x.key === d.stage); return d.days > s.maxDays; }).length} 个商机停留超时，占用销售精力</li>
+          <li><strong>推动关键商机</strong> — 纳米电信(500万·竞争S级)和纳米电力(300万·签约A级)是本月最大两单，确保不丢</li>
+          <li><strong>补齐短板</strong> — 团队中${teamData.filter(t=>t.winRate<20).length>0?teamData.filter(t=>t.winRate<20).map(t=>t.name).join('、')+'赢单率偏低':'整体'}，安排针对性训练</li>
+        </ol>
+      </div>
+      <div style="padding:16px;border-radius:8px;background:#f0f7f2;border-left:4px solid var(--success);">
+        <strong style="color:var(--success);">✅ 向老板汇报时这样说</strong>
+        <div style="font-size:13px;margin-top:10px;padding:12px;background:#fff;border-radius:6px;line-height:1.9;color:var(--text);">
+          "老板，根据我们本月的管道数据分析：<br>
+          • 本月<strong>确定能成交的</strong>大约 <strong>${monthLow}-${monthHigh}万</strong>（基于${monthDeals.length}个商机，加权计算得出）<br>
+          • 其中<strong>确定性最高的是：</strong>${monthDetails.slice(0,3).map(d=>d.customer+'('+d.weighted+'万)').join('、')}<br>
+          • <strong>风险点在于：</strong>${pipelineData.filter(d=>{const s=stageConfig.find(x=>x.key===d.stage);return d.days>s.maxDays}).map(d=>d.customer).slice(0,2).join('、')||'无'}<br>
+          • 未来三个月累计预计 <strong>${total3m}万左右</strong>，需要持续补充有效线索<br>
+          • 团队方面，<strong>${weakCount===0?'各项指标健康':weakCount+'位同事需要加强辅导'}</strong>"
+        </div>
+      </div>
+    </div>
+  `;
+
+  // 填充关键数字
+  const allWeighted = pipelineData.reduce((sum, d) => {
     const stage = stageConfig.find(s => s.key === d.stage);
     return sum + d.amount * stage.coef * d.healthCoef;
   }, 0);
-  const shortVal = Math.round(pipeWeighted);
-  const shortLow = Math.round(shortVal * 0.85);
-  const shortHigh = Math.round(shortVal * 1.15);
-
-  // 中期：管道×转化率 + 新线索
-  const midVal = Math.round(shortVal * 1.8);
-  const midLow = Math.round(midVal * 0.7);
-  const midHigh = Math.round(midVal * 1.3);
-
-  // 长期：五线合一
-  const longEl = document.getElementById('final_target');
-  const longText = longEl ? longEl.textContent.replace(/[^\d]/g, '') : '1150';
-  const longValFinal = parseInt(longText) || 1150;
-  const longLow = Math.round(longValFinal * 0.8);
-  const longHigh = Math.round(longValFinal * 1.2);
-
-  document.getElementById('fc_short').textContent = shortVal + ' 万';
-  document.getElementById('fc_short_range').textContent = `${shortLow} ~ ${shortHigh}`;
-  document.getElementById('fc_mid').textContent = midVal + ' 万';
-  document.getElementById('fc_mid_range').textContent = `${midLow} ~ ${midHigh}`;
-  document.getElementById('fc_long').textContent = longValFinal + ' 万';
-  document.getElementById('fc_long_range').textContent = `${longLow} ~ ${longHigh}`;
-
-  // 达成分析
-  const gap = longValFinal - midVal;
-  const gapPct = Math.round((midVal / longValFinal) * 100);
-  const gapEl = document.getElementById('gap_analysis');
-  let gapStatus, gapColor, gapAdvice;
-  if (gapPct >= 90) { gapStatus = '管道充足'; gapColor = 'var(--success)'; gapAdvice = '当前管道可覆盖年度目标，重点确保竞争→签约→回款的转化率。'; }
-  else if (gapPct >= 70) { gapStatus = '管道有缺口'; gapColor = 'var(--warning)'; gapAdvice = '需补充线索，建议加大线索收集力度，同时清理僵尸商机释放销售精力。'; }
-  else { gapStatus = '管道严重不足'; gapColor = 'var(--danger)'; gapAdvice = '当前管道无法支撑年度目标，需立即行动：①加速线索获取 ②提升各阶段转化率 ③调整目标预期。'; }
-
-  gapEl.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
-      <div class="stat-box"><div class="stat-label">年度目标（Step 1）</div><div class="stat-value">${longValFinal} 万</div></div>
-      <div class="stat-box"><div class="stat-label">半年管道预测（Step 3）</div><div class="stat-value">${midVal} 万</div></div>
-      <div class="stat-box" style="border-color:${gapColor};"><div class="stat-label">管道覆盖率</div><div class="stat-value" style="color:${gapColor}">${gapPct}%</div></div>
-    </div>
-    <div style="padding:16px;border-radius:8px;background:${gapPct>=90?'#f0f7f2':gapPct>=70?'#fff8e8':'#fdf5f4'};border-left:4px solid ${gapColor};">
-      <strong style="color:${gapColor};">状态：${gapStatus}</strong>
-      <p style="font-size:13px;margin-top:8px;color:var(--text);">${gapAdvice}</p>
-    </div>
-  `;
-
-  // 更新反馈循环覆盖率
-  const loopEl = document.getElementById('loop_coverage');
-  if (loopEl) loopEl.textContent = gapPct;
-
-  // 管理建议
-  const adviceEl = document.getElementById('management_advice');
-  const zombieCount = pipelineData.filter(d => {
-    const stage = stageConfig.find(s => s.key === d.stage);
-    return d.days > stage.maxDays;
+  document.getElementById('gap_pipe_total').textContent = Math.round(allWeighted) + ' 万';
+  document.getElementById('gap_deal_count').textContent = monthDeals.length;
+  document.getElementById('gap_zombie_cnt').textContent = pipelineData.filter(d => {
+    const s = stageConfig.find(x => x.key === d.stage);
+    return d.days > s.maxDays;
   }).length;
-  adviceEl.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div style="padding:16px;border-radius:8px;background:#fdf5f4;border-left:4px solid var(--danger);">
-        <strong style="color:var(--danger);">⚠️ 立即处理</strong>
-        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
-          <li>清理 <strong>${zombieCount}个</strong> 僵尸商机，释放销售精力</li>
-          <li>纳米移动（800万·竞争阶段35天）需重新评估竞争策略</li>
-          <li>跨国通讯（400万·线索阶段18天）需确认预算和立项，否则降级</li>
-        </ul>
-      </div>
-      <div style="padding:16px;border-radius:8px;background:#fff8e8;border-left:4px solid var(--warning);">
-        <strong style="color:var(--warning);">📊 本周重点</strong>
-        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
-          <li>线索→商机转化率偏低，安排SPIN话术专项训练</li>
-          <li>阿木/柳柳有效线索率低于50%，优化线索筛选标准</li>
-          <li>S级客户（纳米电信）进入竞争关键期，高层需介入</li>
-        </ul>
-      </div>
-      <div style="padding:16px;border-radius:8px;background:#f0f6fc;border-left:4px solid var(--sky);">
-        <strong style="color:var(--sky);">🎯 本月目标</strong>
-        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
-          <li>短期预测可成交：<strong>${shortVal}万</strong>，区间${shortLow}~${shortHigh}万</li>
-          <li>重点推进竞争+签约阶段商机（${pipelineData.filter(d=>['comp','sign'].includes(d.stage)).length}个）</li>
-          <li>补充有效线索至少${Math.ceil(pipelineData.length*0.3)}个，维持漏斗健康</li>
-        </ul>
-      </div>
-      <div style="padding:16px;border-radius:8px;background:#f0f7f2;border-left:4px solid var(--success);">
-        <strong style="color:var(--success);">✅ 持续优化</strong>
-        <ul style="font-size:13px;margin-top:8px;padding-left:20px;line-height:2;">
-          <li>每周一对单会，逐个过商机健康度和停留时间</li>
-          <li>每月一次丢单分析会，找出集中性问题专项解决</li>
-          <li>每季度复盘漏斗转化率，校准阶段系数和预警标准</li>
-        </ul>
-      </div>
-    </div>
-  `;
+  const healthyCnt = pipelineData.filter(d => d.health === 'S' || d.health === 'A').length;
+  document.getElementById('gap_healthy_pct').textContent = Math.round(healthyCnt / pipelineData.length * 100) + '%';
+
+  // 反馈循环
+  const loopEl = document.getElementById('loop_month_gap');
+  if (loopEl) loopEl.textContent = gap >= 0 ? `差 ${gap} 万` : `超目标 ${Math.abs(gap)} 万`;
 }
 
 // ===== 初始化 =====
