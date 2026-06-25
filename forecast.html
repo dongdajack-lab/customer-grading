@@ -529,7 +529,7 @@ body {
         <div class="module-list">
           <div class="module-item"><strong>Step 3 · 六阶段漏斗预测</strong><span>线索→需求→方案→竞争→签约→交付回款</span></div>
           <div class="module-item"><strong>Step 3 · 商机赢率评分</strong><span>9维度量化打分，S/A/B/C赢率等级</span></div>
-          <div class="module-item"><strong>Step 3 · 加权管道预测</strong><span>金额×阶段系数×赢率系数</span></div>
+          <div class="module-item"><strong>Step 3 · 加权管道预测</strong><span>金额×赢率系数，阶段只决定时间</span></div>
         </div>
       </div>
       <div class="arch-col human">
@@ -550,7 +550,7 @@ body {
       <div class="engine-layers">
         <div class="engine-layer">
           <h4>短期预测（本月/本季）</h4>
-          <div class="formula">Σ(商机金额 × 阶段系数 × 赢率系数)</div>
+          <div class="formula">Σ(商机金额 × 赢率系数)</div>
           <p>数据来源：Step 3 管道加权。精度最高，用于月度/季度业绩commit。</p>
         </div>
         <div class="engine-layer">
@@ -850,45 +850,45 @@ body {
   <div class="info-banner">
     <strong>👔 老板为什么关心：</strong>每个月问销售"下个月能做多少"，回答永远是"大概……应该……差不多……"。<br>
     为什么？因为<strong>没有管道数据支撑</strong>。盘管道就是把每个商机摆在桌面上：<br>
-    • 在哪个阶段？（竞争/签约/交付 → 阶段系数不同）<br>
-    • 商机赢率如何？（S/A/B/C → 赢率系数不同）<br>
+    • 在哪个阶段？（决定什么时候可能成单）<br>
+    • 商机赢率如何？（9维度评分 → S/A/B/C → 赢率系数）<br>
     • 停留多久了？（超时 = 有问题）<br>
-    三者一乘，<strong>本月能成交多少，数字自己就出来了</strong>。<br>
+    <strong>赢率纯由9维度评分决定，阶段不自动提升赢率。</strong>金额×赢率系数=<strong>期望值</strong>，本月能成交多少，数字自己就出来了。<br>
     <strong>💡 一句话：</strong>管道透明，预测才能准确；预测准确，你才能放心。
   </div>
 
   <!-- 3A: 漏斗定义 -->
   <div class="card">
     <div class="card-title"><span class="icon">📋</span> 六阶段漏斗：从线索到回款的完整路径</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">每个阶段有明确的<strong>进入条件</strong>和<strong>退出条件</strong>，杜绝"感觉汇报"。阶段系数越往后越大——越接近成交，期望值越高。老板你只需要看一件事：<strong>你的商机在哪个阶段、有多少金额</strong>。</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">每个阶段有明确的<strong>进入条件</strong>和<strong>退出条件</strong>，杜绝"感觉汇报"。<strong style="color:var(--accent);">阶段只决定"什么时候可能成单"，不影响赢率</strong>——赢率纯由9维度评分决定。老板你只需要看两件事：<strong>你的商机在哪个阶段（时间）、赢率评分多少（概率）</strong>。</p>
     <div class="stage-def-grid">
       <div class="stage-def">
-        <div><div class="sd-name">① 线索</div><div class="sd-coef">阶段系数: 5%</div></div>
+        <div><div class="sd-name">① 线索</div><div class="sd-coef">远期（第4月+）</div></div>
         <div class="sd-enter"><strong>进入条件</strong>有公司画像+来源+意向需求（相关性）</div>
         <div class="sd-exit"><strong>退出条件</strong>确定需求（买什么）+采购预算（花多少）+项目立项（什么时候买）→升级为商机</div>
       </div>
       <div class="stage-def">
-        <div><div class="sd-name">② 需求确认</div><div class="sd-coef">阶段系数: 15%</div></div>
+        <div><div class="sd-name">② 需求确认</div><div class="sd-coef">中期（第3月）</div></div>
         <div class="sd-enter"><strong>进入条件</strong>客户有明确痛点，知道自己为什么要买；SPIN完成痛点挖掘</div>
         <div class="sd-exit"><strong>退出条件</strong>对话从"你的产品多好"转向"我的问题怎么用你的产品解决"（概念共识→方案共识）</div>
       </div>
       <div class="stage-def">
-        <div><div class="sd-name">③ 方案商谈</div><div class="sd-coef">阶段系数: 35%</div></div>
+        <div><div class="sd-name">③ 方案商谈</div><div class="sd-coef">近中期（第2月）</div></div>
         <div class="sd-enter"><strong>进入条件</strong>客户成为内部"向导"，帮助扩大接触面（单人认可→多方链接）</div>
         <div class="sd-exit"><strong>退出条件</strong>对话中出现时间、预算、流程等具体约束条件；客户接受方案并进入竞争/采购流程</div>
       </div>
       <div class="stage-def">
-        <div><div class="sd-name">④ 竞争阶段</div><div class="sd-coef">阶段系数: 60%</div></div>
+        <div><div class="sd-name">④ 竞争阶段</div><div class="sd-coef">本月</div></div>
         <div class="sd-enter"><strong>进入条件</strong>客户在你身上投入了宝贵的时间和信息资源（被动回应→主动投入）</div>
         <div class="sd-exit"><strong>退出条件</strong>中标/确认采用我方方案，进入合同谈判</div>
       </div>
       <div class="stage-def">
-        <div><div class="sd-name">⑤ 签约</div><div class="sd-coef">阶段系数: 85%</div></div>
+        <div><div class="sd-name">⑤ 签约</div><div class="sd-coef">本月</div></div>
         <div class="sd-enter"><strong>进入条件</strong>合同谈判完成，敲定条款</div>
         <div class="sd-exit"><strong>退出条件</strong>合同签订 + 收预付款</div>
       </div>
       <div class="stage-def">
-        <div><div class="sd-name">⑥ 交付回款</div><div class="sd-coef">阶段系数: 100%</div></div>
+        <div><div class="sd-name">⑥ 交付回款</div><div class="sd-coef">已赢单 ✅</div></div>
         <div class="sd-enter"><strong>进入条件</strong>排产/启动服务（合同已签、预付款已收）</div>
         <div class="sd-exit"><strong>退出条件</strong>交付验收 + 收款完成</div>
       </div>
@@ -898,7 +898,7 @@ body {
   <!-- 3B: 漏斗可视化 -->
   <div class="card">
     <div class="card-title"><span class="icon">🌪️</span> 六阶段销售漏斗预测</div>
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">漏斗各阶段的金额 × 阶段系数 × 赢率系数 = <strong>期望值（EV）</strong>。<strong style="color:var(--success);">交付回款阶段已赢单，按全额计入，不再乘赢率系数。</strong><strong style="color:var(--accent);">注意：</strong>ToB订单要么成(100%)要么败(0%)，不存在"成交一半"。期望值是一组商机的统计预期——单看不准，一组才有意义。下方表格中每个商机的<strong>赢率等级</strong>来自9维度评分卡（S=1.0/A=0.8/B=0.6/C=0.3），仅适用于签约前阶段。</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;"><strong>期望值（EV）= 金额 × 赢率系数</strong>（赢率系数纯由9维度评分决定：S=1.0/A=0.8/B=0.6/C=0.3）。<strong style="color:var(--accent);">阶段不自动提升赢率</strong>——招投标的单子到了竞争阶段也可能只是备选。每个阶段进入时需<strong>重新评估9维度</strong>，因为阶段变化会影响各维度得分。<strong style="color:var(--success);">交付回款阶段=已赢单，全额计入。</strong></p>
 
     <div class="funnel-container">
       <div class="funnel-visual" id="funnel_visual"></div>
@@ -906,12 +906,12 @@ body {
         <div class="stat-box">
           <div class="stat-label">管道期望值总额（EV）</div>
           <div class="stat-value" id="pipe_weighted">— 万</div>
-          <div class="stat-desc">Σ(商机金额 × 阶段系数 × 赢率系数)</div>
+          <div class="stat-desc">Σ(商机金额 × 赢率系数)</div>
         </div>
         <div class="stat-box">
           <div class="stat-label">本月保守预测（EV）</div>
           <div class="stat-value" id="month_forecast">— 万</div>
-          <div class="stat-desc">竞争+签约+交付阶段 × 赢率加权</div>
+          <div class="stat-desc">竞争+签约+交付阶段的期望值汇总</div>
         </div>
         <div class="stat-box success">
           <div class="stat-label">整体转化率（线索→回款）</div>
@@ -930,7 +930,7 @@ body {
   <!-- 3C: 管道商机清单 -->
   <div class="card">
     <div class="card-title"><span class="icon">📑</span> 管道商机清单（示例数据）</div>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>ToB特点：</strong>每个订单要么成要么不成。期望值=金额×阶段系数×赢率系数，是一组商机的统计预期，不是单个订单的"部分成交"。<strong style="color:var(--success);">交付回款阶段=已赢单，全额计入。</strong><span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span> 赢率等级来自下方的<strong>商机赢率评分卡</strong>（S/A/B/C），仅适用于签约前阶段。</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">⚠️ <strong>期望值 = 金额 × 赢率系数</strong>（S=1.0/A=0.8/B=0.6/C=0.3）。赢率纯由9维度评分决定，<strong>阶段推进不自动提升赢率</strong>——每个阶段需重新评估9维度。<strong style="color:var(--success);">交付回款阶段=已赢单，全额计入。</strong><span style="color:var(--text-light);">⚠️ 标红为停留超时的僵尸商机。</span></p>
     <table class="pipeline-table" id="pipeline_table">
       <thead>
         <tr>
@@ -939,10 +939,11 @@ body {
       </thead>
       <tbody id="pipeline_body"></tbody>
     </table>
+    <p style="font-size:11px;color:var(--text-light);margin-top:8px;">💡 <strong>每进入新阶段需重新评估9维度</strong>——阶段变化会影响各维度得分（如线索阶段"决策链覆盖"可能只有2分，到竞争阶段可能7分）。赢率随评分变化，不随阶段自动提升。</p>
   </div>
 
   <!-- 3D: 商机赢率评分卡 -->
-  <div class="section-divider"><span>⬇️ 以下为商机赢率评分工具 —— 对单个商机打分，得到赢率等级后代入上方管道加权计算</span></div>
+  <div class="section-divider"><span>⬇️ 以下为商机赢率评分工具 —— 对单个商机9维度打分，得到赢率等级后代入上方期望值计算</span></div>
 
   <div class="card">
     <div class="card-title"><span class="icon">🎯</span> 商机赢率评分卡
@@ -954,13 +955,16 @@ body {
       <strong style="color:var(--sky);font-size:14px;">📌 先搞清两个概念（重要）</strong>
       <table style="width:100%;margin-top:10px;font-size:13px;border-collapse:collapse;">
         <tr><td style="padding:6px 10px;background:#e8f0fa;font-weight:600;width:120px;">客户评级</td><td style="padding:6px 10px;">Step 2 已定义。按客户的<strong>货币价值</strong>（采购规模、复购潜力）和<strong>战略价值</strong>（行业标杆、转介绍能力）分为S/A/B/C四级。决定<strong>资源配置策略</strong>——谁配最好的销售、老板该亲自见谁。</td></tr>
-        <tr><td style="padding:6px 10px;background:#fff5eb;font-weight:600;">商机赢率评分</td><td style="padding:6px 10px;"><strong>→ 就是这个评分卡</strong>。对<strong>单个商机/订单</strong>的赢单概率做9维度评估，输出S/A/B/C赢率等级。决定<strong>期望值计算的系数</strong>——S级系数1.0，C级系数0.3。</td></tr>
+        <tr><td style="padding:6px 10px;background:#fff5eb;font-weight:600;">商机赢率评分</td><td style="padding:6px 10px;"><strong>→ 就是这个评分卡</strong>。对<strong>单个商机/订单</strong>的赢单概率做9维度评估，输出S/A/B/C赢率等级。<strong>赢率纯由此评分决定，阶段不自动提升赢率</strong>——S级系数1.0，C级系数0.3。<strong>每进入新阶段需重新评估</strong>。</td></tr>
         <tr><td colspan="2" style="padding:8px 10px;color:var(--text-light);font-size:12px;">💡 一个S级客户（大客户）上的一个早期线索商机，可能只有C级赢率；一个B级客户上的签约阶段商机，可能是A级赢率。两者是独立的评估维度。</td></tr>
       </table>
     </div>
 
-    <p style="font-size:13px;color:var(--text-light);margin-bottom:8px;"><strong>9维度量化打分</strong>（每项0-10分），总分90分。<strong>其中"竞争态势"和"决策链覆盖"维度的评分依据来自 Step 2 的3C竞争分析和决策链分析</strong>。</p>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">S级≥72分（系数1.0）、A级56-71分（系数0.8）、B级40-55分（系数0.6）、C级&lt;40分（系数0.3）。</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:8px;"><strong>9维度量化打分</strong>（每项0-10分），总分90分。<strong>赢率纯由此评分决定，阶段推进不自动提升赢率。</strong>其中"竞争态势"和"决策链覆盖"维度的评分依据来自 Step 2 的3C竞争分析和决策链分析。</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:8px;">S级≥72分（系数1.0）、A级56-71分（系数0.8）、B级40-55分（系数0.6）、C级&lt;40分（系数0.3）。</p>
+    <div style="padding:10px 14px;background:#fff5eb;border-radius:8px;border-left:3px solid var(--accent);margin-bottom:16px;font-size:12px;color:var(--text);">
+      🔄 <strong>每个阶段进入时需重新评估9维度。</strong>阶段变了，各维度得分会自然变化——比如线索阶段"决策链覆盖"可能只有2分，到了竞争阶段可能7分。<strong>赢率随评分变化，不随阶段自动提升。</strong>招投标的单子到了竞争阶段如果只是备选，评分自然低，赢率不会因为"阶段靠后"就变高。
+    </div>
 
     <div class="health-grid" id="health_grid"></div>
 
@@ -1135,7 +1139,7 @@ body {
       <!-- 保守场景（加权期望值） -->
       <div style="padding:24px;border-radius:12px;background:linear-gradient(135deg,#fff5eb 0%,#fff 100%);border:2px solid var(--accent);text-align:center;">
         <div style="font-size:12px;color:var(--accent);margin-bottom:4px;font-weight:600;">保守场景（推荐）</div>
-        <div style="font-size:11px;color:var(--text-light);margin-bottom:10px;">按阶段系数×客户级别系数加权</div>
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:10px;">金额 × 赢率系数（9维度评分决定）</div>
         <div style="font-size:40px;font-weight:800;color:var(--accent);" id="month_conservative">—</div>
         <div style="font-size:12px;color:var(--text-light);margin-top:6px;">预测区间 <span id="month_range_con">— ~ —</span> 万</div>
         <div style="margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(212,118,58,0.1);display:inline-block;color:var(--accent);">✅ 最常用，统计期望值</div>
@@ -1321,16 +1325,17 @@ const pipelineData = [
   { customer: 'ICT公司C', stage: 'comp', amount: 100, health: 'B', healthCoef: 0.6, days: 28, next: '竞争分析+埋雷策略' }
 ];
 
-// 交付回款阶段 = 已赢单，不再乘赢率系数，全额计入
-function effHealthCoef(deal, stage) {
-  return stage.key === 'deliver' ? 1.0 : deal.healthCoef;
+// 期望值 = 金额 × 赢率系数（纯由9维度评分决定，阶段不影响赢率）
+// 交付回款阶段 = 已赢单，赢率系数=1.0
+function winCoef(deal) {
+  return deal.stage === 'deliver' ? 1.0 : deal.healthCoef;
 }
 
 function renderFunnel() {
   const stageStats = stageConfig.map(s => {
     const deals = pipelineData.filter(d => d.stage === s.key);
     const totalAmount = deals.reduce((sum, d) => sum + d.amount, 0);
-    const weightedAmount = deals.reduce((sum, d) => sum + d.amount * s.coef * effHealthCoef(d, s), 0);
+    const weightedAmount = deals.reduce((sum, d) => sum + d.amount * winCoef(d), 0);
     const zombieCount = deals.filter(d => d.days > s.maxDays).length;
     return { ...s, count: deals.length, totalAmount, weightedAmount, zombieCount, deals };
   });
@@ -1384,7 +1389,7 @@ function renderFunnel() {
   const tbody = document.getElementById('pipeline_body');
   tbody.innerHTML = pipelineData.map(d => {
     const stage = stageConfig.find(s => s.key === d.stage);
-    const weighted = Math.round(d.amount * stage.coef * effHealthCoef(d, stage));
+    const weighted = Math.round(d.amount * winCoef(d));
     const isZombie = d.days > stage.maxDays;
     const isWon = d.stage === 'deliver';
     return `<tr>
@@ -1435,10 +1440,10 @@ function updateHealth() {
   });
 
   let grade, desc;
-  if (total >= 72) { grade = 'S'; desc = '高赢率商机，赢单概率大。赢率系数×1.0。'; }
-  else if (total >= 56) { grade = 'A'; desc = '良好商机，正常推进，需补齐短板。赢率系数×0.8。'; }
-  else if (total >= 40) { grade = 'B'; desc = '一般商机，需评估是否值得继续投入。赢率系数×0.6。'; }
-  else { grade = 'C'; desc = '低赢率商机，建议降级或放弃，除非有明确改善路径。赢率系数×0.3。'; }
+  if (total >= 72) { grade = 'S'; desc = '高赢率商机，赢单概率大。期望值=金额×1.0。'; }
+  else if (total >= 56) { grade = 'A'; desc = '良好商机，正常推进，需补齐短板。期望值=金额×0.8。'; }
+  else if (total >= 40) { grade = 'B'; desc = '一般商机，需评估是否值得继续投入。期望值=金额×0.6。'; }
+  else { grade = 'C'; desc = '低赢率商机，建议降级或放弃，除非有明确改善路径。期望值=金额×0.3。'; }
 
   document.getElementById('health_grade').textContent = grade;
   document.getElementById('health_score').textContent = `${total} 分 / 90 分`;
@@ -1817,7 +1822,8 @@ function renderForecast() {
   monthDeals.forEach(d => {
     const stage = stageConfig.find(s => s.key === d.stage);
     const isWon = d.stage === 'deliver';
-    const weighted = isWon ? d.amount : d.amount * stage.coef * d.healthCoef;
+    // 期望值 = 金额 × 赢率系数（纯由9维度评分决定）
+    const weighted = isWon ? d.amount : d.amount * winCoef(d);
     conservativeTotal += weighted;
 
     // 乐观：已赢单全额 + S/A级客户当全赢
@@ -1826,13 +1832,13 @@ function renderForecast() {
     } else if (d.health === 'S' || d.health === 'A') {
       optimisticTotal += d.amount;
     } else {
-      optimisticTotal += weighted; // B/C级还是用加权
+      optimisticTotal += weighted; // B/C级还是用期望值
     }
 
-    // 悲观：只算签约(×85%)和交付(全额)，且签约只用A级以上
-    if (d.stage === 'sign' && (d.health === 'S' || d.health === 'A')) {
-      pessimisticTotal += d.amount * 0.85;
-    } else if (isWon) {
+    // 悲观：只算已赢单(全额) + 签约阶段S/A级(全额)
+    if (isWon) {
+      pessimisticTotal += d.amount;
+    } else if (d.stage === 'sign' && (d.health === 'S' || d.health === 'A')) {
       pessimisticTotal += d.amount;
     }
     // 竞争阶段不算入悲观（太不确定）
@@ -1841,8 +1847,8 @@ function renderForecast() {
     const stageClassMap = { comp: 'stage-comp', sign: 'stage-sign', deliver: 'stage-deliver' };
     const healthClassMap = { S: 'health-s', A: 'health-a', B: 'health-b', C: 'health-c' };
 
-    // 赢率估算：交付阶段=已赢单(100%)，其他=阶段系数×赢率系数
-    const winRatePct = isWon ? 100 : Math.round(stage.coef * d.healthCoef * 100);
+    // 赢率：交付=已赢单(100%)，其他=赢率系数对应百分比
+    const winRatePct = isWon ? 100 : Math.round(winCoef(d) * 100);
 
     monthDetails.push({
       customer: d.customer,
@@ -1905,24 +1911,18 @@ function renderForecast() {
     `<strong style="color:${confidenceColor};">可信度：${confidenceLevel}</strong> —— ${confidenceDesc}`;
 
   // ===== 未来3个月滚动预测 =====
-  // 第1个月（下月）：方案商谈阶段 → 考虑35%系数衰减到下月成交
-  // 第2个月（第三月）：需求确认阶段 → 更远期，更大折扣
-  // 方案：
-  //   - 下月预测 = 方案商谈阶段 × 35% × 赢率系数 + 需求确认 × 15% × 赢率系数(部分推进)
-  //   - 第三月预测 = 需求确认剩余 × 历史转化率 + 新线索预估
-
+  // 阶段只决定"什么时候可能成单"（时间预测），不影响赢率
+  // 赢率纯由9维度评分决定，期望值 = 金额 × 赢率系数
   const planDeals = pipelineData.filter(d => d.stage === 'plan');
   const needDeals = pipelineData.filter(d => d.stage === 'need');
   const leadDeals = pipelineData.filter(d => d.stage === 'lead');
 
-  const nextMonth1 = planDeals.reduce((s, d) => s + d.amount * 0.35 * d.healthCoef, 0)
-                  + needDeals.reduce((s, d) => s + d.amount * 0.20 * d.healthCoef, 0); // 需求阶段部分可推入方案
-  const nextMonth2 = needDeals.reduce((s, d) => s + d.amount * 0.25 * d.healthCoef, 0)
-                  + leadDeals.reduce((s, d) => s + d.amount * 0.08 * d.healthCoef, 0)
-                  + planDeals.reduce((s, d) => s + d.amount * 0.25 * d.healthCoef, 0); // 方案阶段剩余
-  const nextMonth3 = leadDeals.reduce((s, d) => s + d.amount * 0.12 * d.healthCoef, 0)
-                  + needDeals.reduce((s, d) => s + d.amount * 0.18 * d.healthCoef, 0)
-                  + planDeals.reduce((s, d) => s + d.amount * 0.15 * d.healthCoef, 0);
+  // 下月：方案阶段商机最可能推进到竞争→签约
+  const nextMonth1 = planDeals.reduce((s, d) => s + d.amount * winCoef(d), 0);
+  // 第三月：需求阶段商机
+  const nextMonth2 = needDeals.reduce((s, d) => s + d.amount * winCoef(d), 0);
+  // 第四月：线索阶段商机
+  const nextMonth3 = leadDeals.reduce((s, d) => s + d.amount * winCoef(d), 0);
 
   const m1 = Math.round(nextMonth1), m2 = Math.round(nextMonth2), m3 = Math.round(nextMonth3);
   const total3m = m1 + m2 + m3;
@@ -1972,10 +1972,10 @@ function renderForecast() {
     <div style="margin-top:16px;font-size:13px;">
       <strong>各月预测来源拆解：</strong>
       <ul style="margin-top:8px;padding-left:20px;line-height:2;color:var(--text-light);">
-        <li><strong>本月</strong>：当前在竞争(×60%)、签约(×85%)、交付回款(×100%)阶段的商机加权汇总</li>
-        <li><strong>下月</strong>：方案商谈阶段商机(×35%) + 部分需求确认阶段商机(×20%)，假设正常推进可进入竞争/签约</li>
-        <li><strong>第3月</strong>：需求确认(×25%) + 方案剩余(×25%) + 线索孵化(×8%)，考虑更长周期和转化损耗</li>
-        <li><strong>第4月</strong>：线索(×12%) + 需求(×18%) + 方案(×15%)，远期预测仅供参考方向</li>
+        <li><strong>本月</strong>：竞争、签约、交付回款阶段的商机期望值汇总（金额×赢率系数）</li>
+        <li><strong>下月</strong>：方案商谈阶段商机的期望值，假设正常推进可进入竞争/签约</li>
+        <li><strong>第3月</strong>：需求确认阶段商机的期望值</li>
+        <li><strong>第4月</strong>：线索阶段商机的期望值，远期预测仅供参考方向</li>
       </ul>
     </div>
   `;
