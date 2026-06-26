@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BATNA谈判准备清单 - 利兴纺织定制版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #B85042;
+    --primary-light: #E8A87C;
+    --gold: #F9E795;
+    --navy: #2F3C7E;
+    --coral: #F96167;
+    --bg: #FFF8F0;
+    --card-bg: #FFFFFF;
+    --text: #2D2D2D;
+    --text-light: #6B6B6B;
+    --success: #4CAF50;
+    --warning: #FF9800;
+    --border: #E0E0E0;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  .header { background: linear-gradient(135deg, var(--navy) 0%, var(--primary) 100%); color: white; padding: 16px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .header .back { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+  .header .back:hover { background: rgba(255,255,255,0.3); }
+  .header h1 { font-size: 18px; font-weight: 600; flex: 1; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+  .intro-card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid var(--primary); }
+  .intro-card h2 { font-size: 16px; color: var(--primary); margin-bottom: 10px; }
+  .intro-card p { font-size: 14px; color: var(--text-light); margin-bottom: 8px; }
+  .intro-card .highlight { background: linear-gradient(transparent 60%, var(--gold) 60%); padding: 2px 4px; font-weight: 600; }
+
+  .step-card { background: var(--card-bg); border-radius: 12px; padding: 0; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+  .step-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 14px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .step-header:hover { opacity: 0.95; }
+  .step-num { background: rgba(255,255,255,0.25); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+  .step-title { font-size: 16px; font-weight: 600; flex: 1; }
+  .step-toggle { font-size: 18px; transition: transform 0.3s; }
+  .step-toggle.open { transform: rotate(180deg); }
+
+  .step-body { padding: 20px; display: none; }
+  .step-body.open { display: block; }
+
+  .concept-box { background: #FFF8F0; border-radius: 8px; padding: 14px; margin-bottom: 16px; font-size: 14px; color: var(--text-light); line-height: 1.8; }
+  .concept-box strong { color: var(--primary); }
+
+  .input-group { margin-bottom: 16px; }
+  .input-group label { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .input-group .hint { font-size: 12px; color: var(--text-light); margin-bottom: 8px; font-style: italic; }
+  .input-group textarea { width: 100%; min-height: 80px; padding: 10px 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; transition: border-color 0.3s; }
+  .input-group textarea:focus { outline: none; border-color: var(--primary); }
+  .input-group input[type="text"] { width: 100%; padding: 10px 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+  .input-group input[type="text"]:focus { outline: none; border-color: var(--primary); }
+
+  .checklist { margin-bottom: 16px; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; background: #FAFAFA; cursor: pointer; transition: background 0.2s; }
+  .checklist-item:hover { background: #F5F5F5; }
+  .checklist-item.checked { background: #F0FFF0; }
+  .checklist-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; cursor: pointer; accent-color: var(--primary); flex-shrink: 0; }
+  .checklist-item label { font-size: 14px; cursor: pointer; flex: 1; line-height: 1.5; }
+  .checklist-item.checked label { color: var(--success); }
+
+  .example-box { background: #F8F9FF; border-left: 3px solid var(--navy); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 12px; font-size: 13px; color: var(--text-light); }
+  .example-box .tag { display: inline-block; background: var(--navy); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-bottom: 8px; }
+
+  .calc-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  .calc-table th { background: var(--primary); color: white; padding: 8px 12px; text-align: left; font-weight: 600; }
+  .calc-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .calc-table tr:hover td { background: #FFF8F0; }
+  .calc-table input { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
+
+  .result-box { background: linear-gradient(135deg, #F0FFF0 0%, #FFF8F0 100%); border: 2px solid var(--success); border-radius: 10px; padding: 16px; margin-top: 16px; }
+  .result-box h3 { font-size: 15px; color: var(--success); margin-bottom: 10px; }
+  .result-box p { font-size: 14px; color: var(--text-light); line-height: 1.8; }
+
+  .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: #A0453A; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,80,66,0.3); }
+  .btn-secondary { background: var(--navy); color: white; }
+  .btn-secondary:hover { background: #252F66; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn-outline:hover { background: #FFF8F0; }
+
+  .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 20px; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); display: flex; gap: 10px; justify-content: center; z-index: 100; }
+  .action-bar .btn { flex: 1; max-width: 200px; }
+
+  .scenario-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .scenario-card { background: white; border: 2px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.3s; text-align: center; }
+  .scenario-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .scenario-card.selected { border-color: var(--primary); background: #FFF8F0; }
+  .scenario-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .scenario-card .name { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  .summary-section { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .summary-section h2 { font-size: 16px; color: var(--navy); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+  .summary-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border); }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-label { font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+  .summary-value { font-size: 14px; color: var(--text); font-weight: 500; line-height: 1.6; }
+
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px; }
+    .header h1 { font-size: 16px; }
+    .scenario-selector { grid-template-columns: repeat(2, 1fr); }
+    .action-bar { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="javascript:history.back()">← 返回</a>
+  <h1>🔒 BATNA谈判准备清单</h1>
+</div>
+
+<div class="container" style="padding-bottom: 80px;">
+
+  <!-- 介绍卡片 -->
+  <div class="intro-card">
+    <h2>🔑 什么是BATNA？</h2>
+    <p>BATNA = <span class="highlight">Best Alternative to a Negotiated Agreement</span></p>
+    <p><strong>中文：最佳替代方案</strong></p>
+    <p>如果你的谈判失败，你有什么备选方案？这个备选方案的价值，就是你的<span class="highlight">谈判底线</span>。</p>
+    <p style="margin-top: 10px; font-size: 13px; color: var(--primary);">💡 利兴销售常见错误：没有BATNA就上谈判桌，被动接受客户压价。</p>
+  </div>
+
+  <!-- 场景选择 -->
+  <div class="intro-card">
+    <h2>📋 选择你的谈判场景</h2>
+    <p style="margin-bottom: 14px;">选择最接近你当前谈判的场景，系统会为你预填部分内容：</p>
+    <div class="scenario-selector">
+      <div class="scenario-card" onclick="selectScenario(0)" id="scenario-0">
+        <div class="icon">🏭</div>
+        <div class="name">新客户首单谈判</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(1)" id="scenario-1">
+        <div class="icon">💰</div>
+        <div class="name">年度框架协议</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(2)" id="scenario-2">
+        <div class="icon">⚠️</div>
+        <div class="name">客户投诉谈判</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(3)" id="scenario-3">
+        <div class="icon">🔄</div>
+        <div class="name">续约谈判</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: 定义你的BATNA -->
+  <div class="step-card">
+    <div class="step-header" onclick="toggleStep(1)">
+      <div class="step-num">1</div>
+      <div class="step-title">定义你的BATNA（最佳替代方案）</div>
+      <div class="step-toggle" id="toggle-1">▼</div>
+    </div>
+    <div class="step-body" id="step-1">
+      <div class="concept-box">
+        <strong>核心问题：</strong>如果这次谈判失败，你有什么备选方案？<br>
+        <strong>为什么要定义：</strong>谈判底气来自"可以随时走开"的能力。没有BATNA，你就只能接受对方的条件。
+      </div>
+
+      <div class="input-group">
+        <label>当前谈判目标（你希望达成什么？）</label>
+        <div class="hint">例如：与安踏签订年度500万模杯布供货协议</div>
+        <textarea id="input-goal" placeholder="输入你的谈判目标..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>你的最佳替代方案（BATNA）是什么？</label>
+        <div class="hint">如果安踏不签，你能做什么？其他潜在客户？现有客户增量？</div>
+        <textarea id="input-batna" placeholder="输入你的最佳替代方案..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>BATNA的价值估算（ monetary value ）</label>
+        <div class="hint">你的替代方案能带来多少收入/利润？</div>
+        <input type="text" id="input-batna-value" placeholder="例如：与其他2家客户签约，预计300万">
+      </div>
+
+      <div class="checklist">
+        <div class="checklist-item" onclick="toggleCheck(this, 's1-c1')">
+          <input type="checkbox" id="s1-c1">
+          <label for="s1-c1">我已经明确了当前谈判的具体目标（金额、条件、时间）</label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 's1-c2')">
+          <input type="checkbox" id="s1-c2">
+          <label for="s1-c2">我至少有一个可行的替代方案（不是"不知道怎么办"）</label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 's1-c3')">
+          <input type="checkbox" id="s1-c3">
+          <label for="s1-c3">我已经估算了替代方案的价值（收入/利润）</label>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <div class="tag">利兴示例</div>
+        <strong>谈判目标：</strong>与维密签订年度300万模杯布供货协议<br>
+        <strong>BATNA：</strong>转向拓展3家国内新内衣品牌（都市丽人、红豆、爱慕），预计总订单400万<br>
+        <strong>BATNA价值：</strong>400万（比维密订单更高！）<br>
+        <strong>结论：</strong>利兴销售在谈判中处于优势，可以坚持价格底线。
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: 计算你的Walk-away Point -->
+  <div class="step-card">
+    <div class="step-header" onclick="toggleStep(2)">
+      <div class="step-num">2</div>
+      <div class="step-title">计算你的Walk-away Point（走开点）</div>
+      <div class="step-toggle" id="toggle-2">▼</div>
+    </div>
+    <div class="step-body" id="step-2">
+      <div class="concept-box">
+        <strong>Walk-away Point = 最差条件</strong><br>
+        低于这个条件，你就直接走开，使用BATNA。<br>
+        这是你的<span class="highlight">谈判底线</span>，必须提前算清楚，不能现场拍脑袋。
+      </div>
+
+      <table class="calc-table">
+        <tr>
+          <th>项目</th>
+          <th>数值</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td>BATNA价值（替代方案收入）</td>
+          <td><input type="text" id="calc-batna" placeholder="万" style="width:80px"> 万</td>
+          <td>步骤1中估算的BATNA价值</td>
+        </tr>
+        <tr>
+          <td>谈判成本（时间、差旅、样品）</td>
+          <td><input type="text" id="calc-cost" placeholder="万" style="width:80px"> 万</td>
+          <td>继续谈判的额外成本</td>
+        </tr>
+        <tr>
+          <td>机会成本（放弃其他客户的时间）</td>
+          <td><input type="text" id="calc-opp" placeholder="万" style="width:80px"> 万</td>
+          <td>把时间花在这个客户上的代价</td>
+        </tr>
+        <tr style="background:#FFF8F0;">
+          <td><strong>Walk-away Point（走开点）</strong></td>
+          <td><strong id="walkaway-result" style="color:var(--primary);">待计算</strong></td>
+          <td>低于这个金额就走开</td>
+        </tr>
+      </table>
+      <button class="btn btn-secondary" onclick="calcWalkaway()" style="margin-top: 10px;">📊 计算Walk-away Point</button>
+
+      <div class="input-group" style="margin-top: 20px;">
+        <label>你的底线条件（逐项列出）</label>
+        <div class="hint">例如：最低单价不低于XXX元/米；付款周期不超过60天；最小订单量不低于XXX米</div>
+        <textarea id="input-bottomline" placeholder="输入你的底线条件..."></textarea>
+      </div>
+
+      <div class="example-box">
+        <div class="tag">利兴示例</div>
+        <strong>Walk-away Point计算：</strong><br>
+        BATNA价值：400万（其他3家客户）<br>
+        谈判成本：5万（差旅+样品+时间）<br>
+        机会成本：20万（2个月时间可开发2个新客户）<br>
+        <strong>Walk-away Point = 400 + 5 + 20 = 425万</strong><br>
+        结论：如果维密给的条件低于425万等价价值，就走开，执行BATNA。
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: 估算对方的BATNA -->
+  <div class="step-card">
+    <div class="step-header" onclick="toggleStep(3)">
+      <div class="step-num">3</div>
+      <div class="step-title">估算对方的BATNA（客户的替代方案）</div>
+      <div class="step-toggle" id="toggle-3">▼</div>
+    </div>
+    <div class="step-body" id="step-3">
+      <div class="concept-box">
+        <strong>核心问题：</strong>如果客户不与利兴合作，他们有什么备选方案？<br>
+        <strong>为什么要估算：</strong>如果你知道客户的BATNA很弱（没有其他好供应商），你就有了<span class="highlight">杠杆</span>。
+      </div>
+
+      <div class="input-group">
+        <label>客户的可能替代方案（其他供应商）</label>
+        <div class="hint">客户可以不选利兴，他们还能找谁？</div>
+        <textarea id="input-client-batna" placeholder="输入客户的可能替代方案..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>客户BATNA的弱点（为什么他们的替代方案不好？）</label>
+        <div class="hint">例如：其他供应商交期长、质量不稳定、价格更高、没有越南产能...</div>
+        <textarea id="input-client-weakness" placeholder="输入客户替代方案的弱点..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>客户的Walk-away Point（估算）</label>
+        <div class="hint">客户的最低要求是什么？低于这个他们也会走开。</div>
+        <input type="text" id="input-client-walkaway" placeholder="例如：单价必须低于XX元，或交期必须少于XX天">
+      </div>
+
+      <div class="checklist">
+        <div class="checklist-item" onclick="toggleCheck(this, 's3-c1')">
+          <input type="checkbox" id="s3-c1">
+          <label for="s3-c1">我已经调研了客户可能的替代供应商</label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 's3-c2')">
+          <input type="checkbox" id="s3-c2">
+          <label for="s3-c2">我清楚了客户替代方案的弱点（可以用于谈判）</label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 's3-c3')">
+          <input type="checkbox" id="s3-c3">
+          <label for="s3-c3">我估算了客户的最低要求（Walk-away Point）</label>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <div class="tag">利兴示例</div>
+        <strong>客户（维密）的BATNA：</strong><br>
+        替代方案1：申洲国际（交期45天，比利兴慢15天；价格高8%）<br>
+        替代方案2：浙江某中型工厂（质量不稳定，退货率3% vs 利兴0.5%）<br>
+        <strong>客户BATNA的弱点：</strong>交期慢、价格高、质量风险<br>
+        <strong>谈判杠杆：</strong>利兴可以强调"快速响应+质量稳定"，这是申洲和浙江工厂做不到的。
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: 找到ZOPA（谈判区间） -->
+  <div class="step-card">
+    <div class="step-header" onclick="toggleStep(4)">
+      <div class="step-num">4</div>
+      <div class="step-title">找到ZOPA（可达成协议区间）</div>
+      <div class="step-toggle" id="toggle-4">▼</div>
+    </div>
+    <div class="step-body" id="step-4">
+      <div class="concept-box">
+        <strong>ZOPA = Zone of Possible Agreement</strong><br>
+        ZOPA存在的条件：<span class="highlight">你的Walk-away Point < 客户的Walk-away Point</span><br>
+        如果这两个条件没有重叠，就没有谈判空间，应该直接走开。
+      </div>
+
+      <table class="calc-table">
+        <tr>
+          <th>项目</th>
+          <th>你的立场</th>
+          <th>客户立场</th>
+          <th>ZOPA（重叠区间）</th>
+        </tr>
+        <tr>
+          <td>单价（元/米）</td>
+          <td><input type="text" id="zopa-price-you" placeholder="最低" style="width:60px"> 以上</td>
+          <td><input type="text" id="zopa-price-client" placeholder="最高" style="width:60px"> 以下</td>
+          <td id="zopa-price-result" style="color:var(--primary);font-weight:600;">待计算</td>
+        </tr>
+        <tr>
+          <td>付款周期（天）</td>
+          <td><input type="text" id="zopa-payment-you" placeholder="最短" style="width:60px"> 以内</td>
+          <td><input type="text" id="zopa-payment-client" placeholder="最长" style="width:60px"> 以上</td>
+          <td id="zopa-payment-result" style="color:var(--primary);font-weight:600;">待计算</td>
+        </tr>
+        <tr>
+          <td>最小订单量（米）</td>
+          <td><input type="text" id="zopa-moq-you" placeholder="最低" style="width:60px"> 以上</td>
+          <td><input type="text" id="zopa-moq-client" placeholder="最高" style="width:60px"> 以下</td>
+          <td id="zopa-moq-result" style="color:var(--primary);font-weight:600;">待计算</td>
+        </tr>
+      </table>
+      <button class="btn btn-secondary" onclick="calcZOPA()" style="margin-top: 10px;">📊 计算ZOPA</button>
+
+      <div class="result-box" id="zopa-result-box" style="display:none;">
+        <h3>📊 ZOPA分析结果</h3>
+        <p id="zopa-analysis"></p>
+      </div>
+
+      <div class="example-box">
+        <div class="tag">利兴示例</div>
+        <strong>ZOPA分析（维密案例）：</strong><br>
+        单价：利兴最低18元/米 < ZOPA < 维密最高20元/米 → <strong>有谈判空间</strong><br>
+        付款周期：利兴要求≤60天，维密愿意≥30天 → <strong>ZOPA = 30-60天</strong><br>
+        最小订单量：利兴要求≥5000米，维密预计3000米 → <strong>无ZOPA！</strong><br>
+        <strong>结论：</strong>单价和付款有谈判空间，但订单量可能无法达成一致。策略：用单价让步换取订单量提升。
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: 准备谈判策略 -->
+  <div class="step-card">
+    <div class="step-header" onclick="toggleStep(5)">
+      <div class="step-num">5</div>
+      <div class="step-title">准备谈判策略和话术</div>
+      <div class="step-toggle" id="toggle-5">▼</div>
+    </div>
+    <div class="step-body" id="step-5">
+      <div class="concept-box">
+        <strong>基于BATNA的谈判策略：</strong><br>
+        • 如果你的BATNA强 → 坚持底线，不下浮价格<br>
+        • 如果客户BATNA弱 → 强调你的独特价值，不接受过分要求<br>
+        • 如果ZOPA很窄 → 准备多个议题打包谈判（价格换交期、订单量换付款）
+      </div>
+
+      <div class="input-group">
+        <label>你的谈判策略（基于以上分析）</label>
+        <div class="hint">例如：强调利兴越南工厂的快速响应能力，这是申洲做不到的；用价格坚持换取订单量提升</div>
+        <textarea id="input-strategy" placeholder="输入你的谈判策略..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>准备的关键话术（3-5条）</label>
+        <div class="hint">基于你的BATNA优势，准备可以用来"亮底牌"的话术</div>
+        <textarea id="input-talking-points" placeholder="输入关键话术..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>如果谈判失败，你的行动计划（执行BATNA）</label>
+        <div class="hint">谈判失败后，你第一时间要做什么？</div>
+        <textarea id="input-action-plan" placeholder="输入行动计划..."></textarea>
+      </div>
+
+      <div class="checklist">
+        <div class="checklist-item" onclick="toggleCheck(this, 's5-c1')">
+          <input type="checkbox" id="s5-c1">
+          <label for="s5-c1">我已经明确了谈判策略（基于BATNA分析）</label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 's5-c2')">
+          <input type="checkbox" id="s5-c2">
+          <label for="s5-c2">我准备了3-5条关键话术（包括"亮底牌"的话术）</label>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this, 's5-c3')">
+          <input type="checkbox" id="s5-c3">
+          <label for="s5-c3">我清楚了谈判失败后的行动计划（执行BATNA）</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 准备完成 -->
+  <div class="step-card">
+    <div class="step-header" onclick="toggleStep(6)">
+      <div class="step-num">✓</div>
+      <div class="step-title">准备完成 — 生成谈判准备摘要</div>
+      <div class="step-toggle" id="toggle-6">▼</div>
+    </div>
+    <div class="step-body" id="step-6">
+      <p style="margin-bottom: 16px; font-size: 14px; color: var(--text-light);">完成以上5个步骤后，点击下方按钮生成你的谈判准备摘要。你可以保存或打印这个摘要，作为谈判前的参考。</p>
+      <button class="btn btn-primary" onclick="generateSummary()" style="width: 100%; padding: 14px; font-size: 16px;">📄 生成谈判准备摘要</button>
+
+      <div class="summary-section" id="summary-section" style="display:none; margin-top: 20px;">
+        <h2>📋 BATNA谈判准备摘要</h2>
+        <div id="summary-content"></div>
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+          <button class="btn btn-secondary" onclick="saveSummary()">💾 保存到本地</button>
+          <button class="btn btn-outline" onclick="printSummary()">🖨️ 打印摘要</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 底部操作栏 -->
+<div class="action-bar">
+  <button class="btn btn-outline" onclick="saveProgress()">💾 保存进度</button>
+  <button class="btn btn-primary" onclick="generateSummary()">📄 生成摘要</button>
+</div>
+
+<script>
+  // 场景预设数据
+  const scenarios = [
+    {
+      name: '新客户首单谈判',
+      goal: '与[客户名称]签订首单[金额]万[产品]供货协议',
+      batna: '转向拓展[数量]家同类型新客户，预计总订单[金额]万',
+      batnaValue: '',
+      bottomline: '最低单价不低于[XX]元/米；付款周期不超过[XX]天；最小订单量不低于[XX]米',
+      clientBATNA: '[竞争对手1]（交期长/价格高）；[竞争对手2]（质量不稳定）',
+      clientWeakness: '交期慢、价格高、质量风险、没有越南产能',
+      strategy: '强调利兴的快速响应能力和质量稳定性，这是竞争对手做不到的'
+    },
+    {
+      name: '年度框架协议',
+      goal: '与[客户名称]签订年度[金额]万框架协议（价格/交期/付款统一约定）',
+      batna: '与[数量]家现有客户签订增量协议，预计总增量[金额]万',
+      batnaValue: '',
+      bottomline: '年度总价不低于[XX]万；价格年度锁定（不接受季度降价）；付款账期≤[XX]天',
+      clientBATNA: '[竞争对手]（但客户担心切换供应商的交期风险）',
+      clientWeakness: '客户现有供应商交期不稳定，需要利兴作为backup',
+      strategy: '用"backup供应商"定位切入，逐步扩大份额'
+    },
+    {
+      name: '客户投诉谈判',
+      goal: '以最小补偿成本解决客户投诉，维护长期合作关系',
+      batna: '拒绝客户不合理要求，承担失去这个客户的风险（如果客户占比小）',
+      batnaValue: '失去这个客户的影响=[年订单XX万]',
+      bottomline: '补偿金额不超过[XX]万；客户必须签署质量谅解备忘录；后续订单必须恢复',
+      clientBATNA: '客户投诉到[高层/公开渠道]，或转向竞争对手',
+      clientWeakness: '客户也怕关系破裂（切换成本高），只是借投诉压价',
+      strategy: '先倾听共情，再拿出数据（退货率行业对比），最后给出"合理补偿+未来预防"方案'
+    },
+    {
+      name: '续约谈判',
+      goal: '以更好的条件续签[客户名称]的[产品]供货协议',
+      batna: '开发[数量]家新客户替代，预计[时间]内完成替代',
+      batnaValue: '',
+      bottomline: '单价上调[XX]%（原材料涨价）；付款周期缩短至[XX]天；最小订单量提升[XX]%',
+      clientBATNA: '客户已接触[竞争对手]，可能用"其他供应商报价更低"压价',
+      clientWeakness: '客户切换供应商需要重新验厂、打样、试产，时间成本至少3个月',
+      strategy: '强调"合作XX年零重大事故"的信任价值，用数据证明利兴的综合成本更低'
+    }
+  ];
+
+  let currentScenario = -1;
+
+  // 选择场景
+  function selectScenario(index) {
+    document.querySelectorAll('.scenario-card').forEach(card => card.classList.remove('selected'));
+    document.getElementById('scenario-' + index).classList.add('selected');
+    currentScenario = index;
+
+    const s = scenarios[index];
+    document.getElementById('input-goal').value = s.goal;
+    document.getElementById('input-batna').value = s.batna;
+    document.getElementById('input-bottomline').value = s.bottomline;
+    document.getElementById('input-client-batna').value = s.clientBATNA;
+    document.getElementById('input-client-weakness').value = s.clientWeakness;
+    document.getElementById('input-strategy').value = s.strategy;
+
+    saveProgress();
+  }
+
+  // 展开/收起步骤
+  function toggleStep(step) {
+    const body = document.getElementById('step-' + step);
+    const toggle = document.getElementById('toggle-' + step);
+    body.classList.toggle('open');
+    toggle.classList.toggle('open');
+  }
+
+  // 默认展开前3个步骤
+  window.onload = function() {
+    toggleStep(1);
+    toggleStep(2);
+    toggleStep(3);
+    loadProgress();
+  };
+
+  // 复选框切换
+  function toggleCheck(el, id) {
+    const checkbox = document.getElementById(id);
+    checkbox.checked = !checkbox.checked;
+    if (checkbox.checked) {
+      el.classList.add('checked');
+    } else {
+      el.classList.remove('checked');
+    }
+    saveProgress();
+  }
+
+  // 计算Walk-away Point
+  function calcWalkaway() {
+    const batna = parseFloat(document.getElementById('calc-batna').value) || 0;
+    const cost = parseFloat(document.getElementById('calc-cost').value) || 0;
+    const opp = parseFloat(document.getElementById('calc-opp').value) || 0;
+    const result = batna + cost + opp;
+    document.getElementById('walkaway-result').textContent = result + '万';
+    saveProgress();
+  }
+
+  // 计算ZOPA
+  function calcZOPA() {
+    const results = [];
+
+    // 单价
+    const priceYou = document.getElementById('zopa-price-you').value;
+    const priceClient = document.getElementById('zopa-price-client').value;
+    if (priceYou && priceClient) {
+      const you = parseFloat(priceYou);
+      const client = parseFloat(priceClient);
+      if (you <= client) {
+        results.push('单价：' + you + '-' + client + '元/米 ✅ 有空间');
+        document.getElementById('zopa-price-result').textContent = you + '-' + client + '元/米';
+        document.getElementById('zopa-price-result').style.color = 'var(--success)';
+      } else {
+        results.push('单价：无ZOPA ❌ 你的底线高于客户上限');
+        document.getElementById('zopa-price-result').textContent = '无ZOPA ❌';
+        document.getElementById('zopa-price-result').style.color = 'var(--coral)';
+      }
+    }
+
+    // 付款周期
+    const paymentYou = document.getElementById('zopa-payment-you').value;
+    const paymentClient = document.getElementById('zopa-payment-client').value;
+    if (paymentYou && paymentClient) {
+      const you = parseFloat(paymentYou);
+      const client = parseFloat(paymentClient);
+      if (you <= client) {
+        results.push('付款周期：' + you + '-' + client + '天 ✅ 有空间');
+        document.getElementById('zopa-payment-result').textContent = you + '-' + client + '天';
+        document.getElementById('zopa-payment-result').style.color = 'var(--success)';
+      } else {
+        results.push('付款周期：无ZOPA ❌ 你的要求短于客户愿意的');
+        document.getElementById('zopa-payment-result').textContent = '无ZOPA ❌';
+        document.getElementById('zopa-payment-result').style.color = 'var(--coral)';
+      }
+    }
+
+    // 最小订单量
+    const moqYou = document.getElementById('zopa-moq-you').value;
+    const moqClient = document.getElementById('zopa-moq-client').value;
+    if (moqYou && moqClient) {
+      const you = parseFloat(moqYou);
+      const client = parseFloat(moqClient);
+      if (you <= client) {
+        results.push('最小订单量：' + you + '-' + client + '米 ✅ 有空间');
+        document.getElementById('zopa-moq-result').textContent = you + '-' + client + '米';
+        document.getElementById('zopa-moq-result').style.color = 'var(--success)';
+      } else {
+        results.push('最小订单量：无ZOPA ❌ 你的最低要求高于客户预计');
+        document.getElementById('zopa-moq-result').textContent = '无ZOPA ❌';
+        document.getElementById('zopa-moq-result').style.color = 'var(--coral)';
+      }
+    }
+
+    // 显示分析结果
+    const resultBox = document.getElementById('zopa-result-box');
+    const analysis = document.getElementById('zopa-analysis');
+    if (results.length > 0) {
+      resultBox.style.display = 'block';
+      analysis.innerHTML = results.join('<br><br>');
+    }
+
+    saveProgress();
+  }
+
+  // 生成谈判准备摘要
+  function generateSummary() {
+    const goal = document.getElementById('input-goal').value;
+    const batna = document.getElementById('input-batna').value;
+    const batnaValue = document.getElementById('input-batna-value').value;
+    const bottomline = document.getElementById('input-bottomline').value;
+    const clientBATNA = document.getElementById('input-client-batna').value;
+    const clientWeakness = document.getElementById('input-client-weakness').value;
+    const clientWalkaway = document.getElementById('input-client-walkaway').value;
+    const strategy = document.getElementById('input-strategy').value;
+    const talkingPoints = document.getElementById('input-talking-points').value;
+    const actionPlan = document.getElementById('input-action-plan').value;
+
+    let html = '';
+
+    html += '<div class="summary-item"><div class="summary-label">谈判目标</div><div class="summary-value">' + (goal || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">我方BATNA（最佳替代方案）</div><div class="summary-value">' + (batna || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">BATNA价值</div><div class="summary-value">' + (batnaValue || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">我方底线（Walk-away Point）</div><div class="summary-value">' + (bottomline || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">客户的可能替代方案</div><div class="summary-value">' + (clientBATNA || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">客户替代方案的弱点</div><div class="summary-value">' + (clientWeakness || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">客户的最低要求（估算）</div><div class="summary-value">' + (clientWalkaway || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">谈判策略</div><div class="summary-value">' + (strategy || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">关键话术</div><div class="summary-value">' + (talkingPoints || '未填写') + '</div></div>';
+    html += '<div class="summary-item"><div class="summary-label">谈判失败后的行动计划</div><div class="summary-value">' + (actionPlan || '未填写') + '</div></div>';
+
+    // 检查清单完成情况
+    let checkedCount = 0;
+    let totalCount = 9;
+    for (let i = 1; i <= 5; i++) {
+      for (let j = 1; j <= 3; j++) {
+        const cb = document.getElementById('s' + i + '-c' + j);
+        if (cb && cb.checked) checkedCount++;
+      }
+    }
+
+    html += '<div class="summary-item" style="background:#F8F9FF;padding:12px;border-radius:8px;"><div class="summary-label">准备完成度</div><div class="summary-value">✅ ' + checkedCount + '/' + totalCount + ' 项已完成</div></div>';
+
+    document.getElementById('summary-content').innerHTML = html;
+    document.getElementById('summary-section').style.display = 'block';
+
+    // 滚动到摘要区域
+    document.getElementById('summary-section').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // 保存进度到localStorage
+  function saveProgress() {
+    const data = {
+      scenario: currentScenario,
+      goal: document.getElementById('input-goal').value,
+      batna: document.getElementById('input-batna').value,
+      batnaValue: document.getElementById('input-batna-value').value,
+      bottomline: document.getElementById('input-bottomline').value,
+      clientBATNA: document.getElementById('input-client-batna').value,
+      clientWeakness: document.getElementById('input-client-weakness').value,
+      clientWalkaway: document.getElementById('input-client-walkaway').value,
+      strategy: document.getElementById('input-strategy').value,
+      talkingPoints: document.getElementById('input-talking-points').value,
+      actionPlan: document.getElementById('input-action-plan').value,
+      calcBatna: document.getElementById('calc-batna').value,
+      calcCost: document.getElementById('calc-cost').value,
+      calcOpp: document.getElementById('calc-opp').value,
+      zopaPriceYou: document.getElementById('zopa-price-you').value,
+      zopaPriceClient: document.getElementById('zopa-price-client').value,
+      zopaPaymentYou: document.getElementById('zopa-payment-you').value,
+      zopaPaymentClient: document.getElementById('zopa-payment-client').value,
+      zopaMoqYou: document.getElementById('zopa-moq-you').value,
+      zopaMoqClient: document.getElementById('zopa-moq-client').value,
+      checkboxes: {}
+    };
+
+    // 保存复选框状态
+    for (let i = 1; i <= 5; i++) {
+      for (let j = 1; j <= 3; j++) {
+        const cb = document.getElementById('s' + i + '-c' + j);
+        if (cb) data.checkboxes['s' + i + '-c' + j] = cb.checked;
+      }
+    }
+
+    localStorage.setItem('batna-lixing-progress', JSON.stringify(data));
+  }
+
+  // 从localStorage加载进度
+  function loadProgress() {
+    const saved = localStorage.getItem('batna-lixing-progress');
+    if (!saved) return;
+
+    try {
+      const data = JSON.parse(saved);
+
+      if (data.scenario >= 0) selectScenario(data.scenario);
+
+      const fields = ['goal', 'batna', 'batnaValue', 'bottomline', 'clientBATNA', 'clientWeakness', 'clientWalkaway', 'strategy', 'talkingPoints', 'actionPlan', 'calcBatna', 'calcCost', 'calcOpp', 'zopaPriceYou', 'zopaPriceClient', 'zopaPaymentYou', 'zopaPaymentClient', 'zopaMoqYou', 'zopaMoqClient'];
+      fields.forEach(field => {
+        const el = document.getElementById('input-' + field.charAt(0).toUpperCase() + field.slice(1));
+        if (el && data[field]) el.value = data[field];
+      });
+
+      // 恢复复选框状态
+      if (data.checkboxes) {
+        Object.keys(data.checkboxes).forEach(id => {
+          const cb = document.getElementById(id);
+          if (cb) {
+            cb.checked = data.checkboxes[id];
+            if (cb.checked) cb.parentElement.classList.add('checked');
+          }
+        });
+      }
+
+      // 重新计算
+      if (data.calcBatna || data.calcCost || data.calcOpp) calcWalkaway();
+    } catch(e) {
+      console.error('Failed to load progress:', e);
+    }
+  }
+
+  // 保存摘要为文本文件
+  function saveSummary() {
+    const content = document.getElementById('summary-content').innerText;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'BATNA谈判准备摘要-' + new Date().toISOString().slice(0,10) + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // 打印摘要
+  function printSummary() {
+    window.print();
+  }
+</script>
+
+</body>
+</html>
