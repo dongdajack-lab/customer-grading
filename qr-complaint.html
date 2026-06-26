@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>投诉处理练习工具 - 二维码</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #B85042 0%, #2F3C7E 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2F3C7E;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .qr-wrapper {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 2px dashed #B85042;
+        }
+        img {
+            width: 300px;
+            height: 300px;
+            display: block;
+        }
+        .url {
+            background: #f0f0f0;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        .tip {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #B85042;
+            font-weight: 500;
+        }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #B85042;
+            color: white;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">⚔️</div>
+        <h1>投诉处理练习工具</h1>
+        <p class="subtitle">利兴纺织 · 零成本化解客户冲突</p>
+        
+        <div class="qr-wrapper">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://dongdajack-lab.github.io/customer-grading/complaint.html" alt="二维码" />
+        </div>
+        
+        <div class="url">https://dongdajack-lab.github.io/customer-grading/complaint.html</div>
+        <p class="tip">📱 手机扫码即可开始练习</p>
+        
+        <div class="actions">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ 打印二维码</button>
+            <button class="btn btn-secondary" onclick="window.location.href='https://dongdajack-lab.github.io/customer-grading/complaint.html'">🔗 打开工具</button>
+        </div>
+    </div>
+</body>
+</html>
