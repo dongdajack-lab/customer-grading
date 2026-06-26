@@ -598,10 +598,8 @@ function switchScene(idx) {
 function renderScene() {
   const s = scenes[currentScene];
   const saved = JSON.parse(localStorage.getItem('complaint_scene'+currentScene)||'{}');
-  document.getElementById('sceneContent').innerHTML = `
-    <div class="scenario">${s.scenario}</div>
-    ${s.steps.map((step,i)=>`
-      <div class="step-input-area">
+  let stepsHTML = s.steps.map((step,i)=>{
+    return `<div class="step-input-area">
         <div class="step-header">
           <div class="step-num">${i+1}</div>
           <div class="step-name">${step.name}</div>
@@ -610,9 +608,9 @@ function renderScene() {
         <textarea class="step-textarea" id="sceneInput${i}" placeholder="在这里写下你的话术...">${saved[i]||''}</textarea>
         <div class="ref-toggle" onclick="toggleRef(${i})">📖 查看参考话术</div>
         <div class="ref-answer" id="refAnswer${i}">${step.ref}</div>
-      </div>
-    `).join('');
-  // restore save handlers
+      </div>`;
+  }).join('');
+  document.getElementById('sceneContent').innerHTML = `<div class="scenario">${s.scenario}</div>` + stepsHTML;
   s.steps.forEach((_,i)=>{
     document.getElementById('sceneInput'+i).addEventListener('input',e=>{
       const obj = JSON.parse(localStorage.getItem('complaint_scene'+currentScene)||'{}');
