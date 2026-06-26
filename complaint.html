@@ -179,57 +179,23 @@
 
 <header>
   <h1>🎯 大董老师 · 投诉处理</h1>
-  <p>零成本化解客户冲突 · 朱喆式沟通训练</p>
+  <p>零成本化解客户冲突 · 利兴纺织实战训练</p>
 </header>
 
 <div class="container">
 
 <!-- Tab Navigation -->
 <div class="tab-row" id="tabRow">
-  <div class="tab active" onclick="switchSec(0)"><span class="tab-icon">📺</span>朱喆拆解</div>
-  <div class="tab" onclick="switchSec(1)"><span class="tab-icon">❓</span>灵魂三问</div>
-  <div class="tab" onclick="switchSec(2)"><span class="tab-icon">🗣️</span>四步演练</div>
-  <div class="tab" onclick="switchSec(3)"><span class="tab-icon">🛠️</span>六大技巧</div>
-  <div class="tab" onclick="switchSec(4)"><span class="tab-icon">⚔️</span>红蓝对抗</div>
+  <div class="tab active" onclick="switchSec(0)"><span class="tab-icon">❓</span>灵魂三问</div>
+  <div class="tab" onclick="switchSec(1)"><span class="tab-icon">🗣️</span>四步演练</div>
+  <div class="tab" onclick="switchSec(2)"><span class="tab-icon">🛠️</span>六大技巧</div>
+  <div class="tab" onclick="switchSec(3)"><span class="tab-icon">⚔️</span>红蓝对抗</div>
 </div>
 
-<!-- ============ SECTION 1: 朱喆案例拆解 ============ -->
+<!-- ============ SECTION 1: 灵魂三问自测 ============ -->
 <div id="sec0" class="section">
   <div class="card">
-    <span class="section-title">模块一 · 朱喆案例拆解</span>
-
-    <div class="scenario">
-      <span class="label">📺 案例背景（欢乐颂3 第1集）：</span><br>
-      保洁阿姨用客房毛巾擦拭洗手台水渍，客人崔先生撞见后勃然大怒，冲到前台投诉。<br>
-      酒店经理<strong>朱喆</strong>出面处理——她既让客人满意离店，又没有免一分钱房费，还妥善安抚了工作量超负荷的保洁员工。<br><br>
-      <strong style="color:#B85042;">请将朱喆的处理步骤按正确顺序排列（点击选中两个步骤可交换位置）：</strong>
-    </div>
-
-    <div class="timeline-container" id="timelineContainer"></div>
-
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="resetTimeline()">重置顺序</button>
-      <button class="btn btn-primary" onclick="checkTimeline()">验证答案</button>
-    </div>
-
-    <!-- 三个没有 解析 -->
-    <div class="insight-box" id="insightBox">
-      <h3>✨ 朱喆的「三个没有」</h3>
-      <div class="three-no">
-        <div class="no-item"><span class="no-icon">❌</span> <strong>没有给客人免房费</strong> —— 用换毛巾+清洁+果盘代替真金白银赔偿</div>
-        <div class="no-item"><span class="no-icon">❌</span> <strong>没有当着客人面处罚员工</strong> —— 维护员工尊严，私下合理处置</div>
-        <div class="no-item"><span class="no-icon">❌</span> <strong>没有推卸责任</strong> —— 主动承担，不甩锅给保洁或制度</div>
-      </div>
-      <div class="core-msg">核心思想：解决问题 ≠ 赔钱</div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ============ SECTION 2: 灵魂三问自测 ============ -->
-<div id="sec1" class="section hidden">
-  <div class="card">
-    <span class="section-title">模块二 · 灵魂三问自测</span>
+    <span class="section-title">模块一 · 灵魂三问自测</span>
 
     <div class="scenario">
       <span class="label">📞 场景模拟：</span><br>
@@ -255,10 +221,10 @@
 </div>
 
 
-<!-- ============ SECTION 3: 先跟后带四步法演练 ============ -->
-<div id="sec2" class="section hidden">
+<!-- ============ SECTION 2: 先跟后带四步法演练 ============ -->
+<div id="sec1" class="section hidden">
   <div class="card">
-    <span class="section-title">模块三 · 先跟后带四步法演练</span>
+    <span class="section-title">模块二 · 先跟后带四步法演练</span>
     <p style="font-size:13px;color:#888;margin-bottom:14px;">选择场景 → 在每一步填入你的话术 → 展开查看参考答案对比</p>
 
     <div class="scene-tabs" id="sceneTabs">
@@ -276,10 +242,10 @@
 </div>
 
 
-<!-- ============ SECTION 4: 六大技巧场景匹配 ============ -->
-<div id="sec3" class="section hidden">
+<!-- ============ SECTION 3: 六大技巧场景匹配 ============ -->
+<div id="sec2" class="section hidden">
   <div class="card">
-    <span class="section-title">模块四 · 六大零成本技巧</span>
+    <span class="section-title">模块三 · 六大零成本技巧</span>
     <p style="font-size:13px;color:#888;margin-bottom:14px;">阅读案例 → 选择最适合的技巧 → 掌握口诀</p>
 
     <div class="progress-text" id="techProgress">技巧 1 / 6</div>
@@ -304,10 +270,10 @@
 </div>
 
 
-<!-- ============ SECTION 5: 红蓝对抗角色扮演 ============ -->
-<div id="sec4" class="section hidden">
+<!-- ============ SECTION 4: 红蓝对抗角色扮演 ============ -->
+<div id="sec3" class="section hidden">
   <div class="card">
-    <span class="section-title">模块五 · 红蓝对抗角色扮演</span>
+    <span class="section-title">模块四 · 红蓝对抗角色扮演</span>
     <p style="font-size:13px;color:#888;margin-bottom:14px;">系统扮演愤怒客户 · 你扮演销售经理 · 连续3轮 · 目标：<strong style="color:#B85042;">不赔真金白银</strong></p>
 
     <div class="difficulty-row" id="diffRow">
@@ -751,7 +717,7 @@ function showTechResult(){
   document.getElementById('techArea').className='hidden';
   document.getElementById('techBtnRow').className='hidden';
   document.getElementById('techProgress').className='hidden';
-  document.querySelector('#sec3 .progress-bar').className='hidden';
+  document.querySelector('#sec2 .progress-bar').className='hidden';
   document.getElementById('techResultPage').className='result-page show';
   drawRadar();
   let rights = techniques.map((t,i)=>techAnswers[i]===t.cases[0].answer).filter(Boolean).length;
@@ -803,100 +769,105 @@ function resetTech(){
   document.getElementById('techArea').className='';
   document.getElementById('techBtnRow').className='btn-row';
   document.getElementById('techProgress').className='progress-text';
-  document.querySelector('#sec3 .progress-bar').id='temp';document.querySelector('#sec3 .progress-bar').id='';// keep visible
-  document.querySelector('#sec3 .progress-bar').style.display='';
+  document.querySelector('#sec2 .progress-bar').id='temp';document.querySelector('#sec2 .progress-bar').id='';// keep visible
+  document.querySelector('#sec2 .progress-bar').style.display='';
   document.getElementById('techResultPage').className='result-page';
   renderTech();
 }
 
 
 // ===================== SECTION 5: RED-BLUE ROLE PLAY =====================
+// 设计原则：
+//   ⭐简单  = 错误选项明显不当（但长度与正确答案接近）
+//   ⭐⭐中等 = 错误选项听起来礼貌合理，但暗藏赔钱或推诿陷阱
+//   ⭐⭐⭐困难 = 所有选项都专业得体，需仔细辨析哪个真正"零成本"
 const rpScenarios = [
+  // ====== ⭐ 简单难度：色差投诉 ======
+  // 特点：错误选项明显不当（直接认赔/推卸责任/敷衍），但写成完整句子
   {
     rounds:[
       {
         clientMsg:'「你们这批货的色差也太离谱了吧！我拿着布对着灯光一看，两边颜色都不一样！你们是怎么做品质管控的？！我要求这批货打七折！」',
         options:[
-          { text:'好的，打七折就打七折，您消消气。', satChange:-5, cost:3500, feedback:'❌ 直接认赔！这是最低效的做法。', best:false },
-          { text:'张经理我理解您的着急。色差问题我们马上处理——我让人把所有布卷的编号列出来，24小时给您逐卷分析报告。在结果出来之前，我们先看看能不能挑出问题卷单独处理，不影响整批使用。', satChange:+15, cost:0, feedback:'✅ 很好！共情+给确定性+转移焦点，没有提到赔钱。', best:true },
-          { text:'这不是我们的问题，你们的灯光有问题。', satChange:-20, cost:0, feedback:'❌ 辩解只会激化矛盾！', best:false },
-          { text:'打折的事我做不了主，得请示老板。', satChange:-10, cost:0, feedback:'❌ "请示老板"显得你没决策权。', best:false },
+          { text:'打七折没问题，我这边马上走折扣审批流程，您稍等。', satChange:+5, cost:3500, feedback:'❌ 直接答应打折就是认赔！客户会觉得"原来发火就有折扣"。', best:false },
+          { text:'张经理，色差问题我马上安排处理。我让品控部把所有布卷编号列出来，24小时内给您逐卷检测报告。有问题的卷我们单独退换，没问题的卷您先用着，不耽误生产。', satChange:+15, cost:0, feedback:'✅ 共情+给行动方案+拆分处理。零成本化解，关键是把"整批打折"拆成"问题卷退换"。', best:true },
+          { text:'张经理，这个色差其实在国标允差范围内的，不同光源下看会有差别。', satChange:-20, cost:0, feedback:'❌ 客户在发火时讲道理=火上浇油。先处理情绪，再谈事实。', best:false },
         ]
       },
       {
         clientMsg:'我不想听什么报告！我现在就要一个明确的答复！我的生产线等着用料呢！你们耽误我一天就是几十万的损失！',
         options:[
-          { text:'那我赔您停工损失费。', satChange:+10, cost:50000, feedback:'❌ 天价赔偿！绝对不行。', best:false },
-          { text:'我完全明白时间的紧迫性。这样——我立刻从惠州仓库调拨1000米同类面料，今天下午货车送到您工厂，费用我们出。您先恢复生产，这批货的问题我们并行处理。', satChange:+20, cost:200, feedback:'✅ 完美！用低成本应急方案替代高额赔偿。', best:true },
-          { text:'物流延误是不可抗力，我们也控制不了。', satChange:-15, cost:0, feedback:'❌ 找借口是最差的选择。', best:false },
-          { text:'要不这样，我给您下个订单打个九折补偿一下？', satChange:+5, cost:2000, feedback:'⚠️ 有进步但还是花钱。可以做得更好。', best:false },
+          { text:'停工损失这块我向公司申请给您适当补偿，您看行吗？', satChange:+10, cost:50000, feedback:'❌ 一开口就谈赔偿，方向就错了！先解决生产问题才是当务之急。', best:false },
+          { text:'张经理，生产线停着我完全理解您的焦虑。我马上从惠州仓库调1000米同类面料，今天下午货车送到您工厂，运费我们出。您先恢复生产，这批色差的事我们并行处理，绝不让您等。', satChange:+20, cost:200, feedback:'✅ 用应急方案解决紧迫问题，把"赔多少"的话题成功转移到"怎么先恢复生产"。', best:true },
+          { text:'这个延误主要是物流那边出了点状况，我们已经催过好几次了。', satChange:-15, cost:0, feedback:'❌ 解释原因≠解决问题。客户只关心"我怎么恢复正常"，不关心"为什么延误"。', best:false },
         ]
       },
       {
         clientMsg:'……算了算了，你们先送应急面料过来吧。但我丑话说在前头，如果这批货还是有问题，我可不会就这么算了！',
         options:[
-          { text:'好的好的，您放心吧。', satChange:0, cost:0, feedback:'😐 过于被动。', best:false },
-          { text:'一定不会让您失望！这批应急货到了之后我亲自到场验收。后续正货我也全程跟踪，每天向您汇报进度。对了张经理，下次您有什么新需求也可以优先告诉我，我给您安排插单。', satChange:+15, cost:0, feedback:'✅ 加固关系！把投诉转化为更深度的合作关系。', best:true },
-          { text:'那行，有事再联系。', satChange:0, cost:0, feedback:'😐 浪费了一个加固关系的好机会。', best:false },
-          { text:'以后我们会注意的，不好意思啊。', satChange:+3, cost:0, feedback:'⚠️ 太弱了。', best:false },
+          { text:'好的，您放心，有问题随时找我，我一定处理好。', satChange:+2, cost:0, feedback:'😐 态度没错，但太笼统了。浪费了一个加深合作的好机会。', best:false },
+          { text:'一定不会让您再操心！应急货到了之后我亲自去工厂验收，后续每批出货前我会先拍照发您确认再发货。另外张经理，以后有任何新需求您可以第一时间告诉我，老客户我这边都排优先级。', satChange:+15, cost:0, feedback:'✅ 趁热打铁！用具体的服务升级措施巩固关系，把一次投诉转化为更深度的信任。', best:true },
+          { text:'那行，有问题您随时联系我，我24小时在线。', satChange:0, cost:0, feedback:'😐 口号式的承诺，缺乏具体行动，客户听完不会有感觉。', best:false },
         ]
       }
     ]
   },
+  // ====== ⭐⭐ 中等难度：交期延误+扣款威胁 ======
+  // 特点：错误选项听起来很"专业"，但要么涉及赔钱，要么是变相认怂
   {
     rounds:[
       {
         clientMsg:'「大董！你们越南工厂的货怎么说上个月底到的？现在都10号了！你知道我这边裁剪车间停了多久吗？我告诉你，今天不给我一个满意的说法，我就把尾款扣了不付了！',
         options:[
-          { text:'好好好，尾款您可以先扣一部分。', satChange:+5, cost:15000, feedback:'❌ 承认扣款等于默认你有重大过失！', best:false },
-          { text:'陈总，尾款的事我们稍后再谈。当务之急是让您尽快恢复生产——我刚确认了，货已经在清关，预计后天到达。今天下午我安排惠州仓库送500米同类面料应急，运费我们来出。', satChange:+12, cost:150, feedback:'✅ 好！先解决生产问题，避开尾款争论。', best:true },
-          { text:'清关 delays 我们也控制不了啊。', satChange:-18, cost:0, feedback:'❌ 客户不在乎原因，只在乎结果。', best:false },
-          { text:'合同上写了不可抗力条款的。', satChange:-15, cost:0, feedback:'❌ 搬合同压客户是关系杀手。', best:false },
+          { text:'陈总，尾款扣留的事我们能不能先放一放？我刚确认了货已经在清关，后天能到。今天下午我先从惠州仓库调500米同类面料送过去应急，运费我来出。您先恢复生产，尾款的事等货到了我们当面沟通。', satChange:+12, cost:150, feedback:'✅ 先解决生产痛点（停工），避开钱的话题（尾款），用行动代替争论。', best:true },
+          { text:'陈总，这样吧，尾款您先扣10%作为保证金，剩下的请您正常支付。等我亲自把货送到您工厂验收合格后，那10%我马上申请退还给您。', satChange:+8, cost:0, feedback:'❌ 表面没赔钱，但实际上你接受了"扣款"的前提，等于承认自己有过失在先。', best:false },
+          { text:'陈总，越南那边的清关确实比预期慢了一些，主要是当地海关最近查验率提高了。我已经在跟货代交涉加急处理。', satChange:-18, cost:0, feedback:'❌ 讲原因不等于给方案。客户车间在停工，他需要的是"什么时候能用上布"，不是"为什么慢"。', best:false },
         ]
       },
       {
         clientMsg:'后天？后天黄花菜都凉了！我跟你讲，这次的停工损失你们必须赔！少说也要两万美金！',
         options:[
-          { text:'两万...能不能商量一下一万五？', satChange:+5, cost:15000, feedback:'❌ 还是在砍价赔钱！方向错了。', best:false },
-          { text:'陈总，两万美金的损失我理解。但在确定责任之前，我想先做一件事——我人后天到港后第一时间送货上门，同时带上完整的物流时间链证明。如果确实是我方延误导致的，合理的损失我们不会推脱；但如果中间有第三方因素，我们也需要公平对待。最重要的是，先让您的车间动起来。', satChange:+10, cost:0, feedback:'✅ 不拒绝承担责任，但不盲目接受天价索赔。', best:true },
-          { text:'不可能的，两万美金太多了。', satChange:-10, cost:0, feedback:'❌ 直接拒绝太生硬。', best:false },
-          { text:'我向公司申请一下看看。', satChange:-5, cost:0, feedback:'⚠️ 又是"请示"...', best:false },
+          { text:'陈总，两万美金的损失我记下了。但我建议我们先做两件事：第一，我后天到港后第一时间送货上门；第二，带上完整的物流时间链和清关记录，咱们一起看看责任到底在哪一方。如果是我们的问题，合理的损失我们绝不推脱。', satChange:+10, cost:0, feedback:'✅ 不拒绝讨论损失，但不盲目接受天价数字。用"一起核实"替代"直接掏钱"。', best:true },
+          { text:'陈总，两万美金确实不少。我跟公司申请一下，看能不能给您争取到一个特别折扣或者补偿额度，我尽量帮您争取。', satChange:+5, cost:15000, feedback:'❌ "帮您争取补偿"听起来很贴心，但你已经在往赔钱的路上走了。而且一旦开口就很难收回。', best:false },
+          { text:'陈总，合同里写了不可抗力条款的，这种清关延误属于不可抗力范围。', satChange:-15, cost:0, feedback:'❌ 搬合同条款压客户是关系杀手。合作多年的客户跟你讲情义，不是讲法务。', best:false },
         ]
       },
       {
         clientMsg:'行了行了，你人来就行了。但这事儿没完啊！',
         options:[
-          { text:'嗯嗯，好的。', satChange:-2, cost:0, feedback:'😐 太敷衍。', best:false },
-          { text:'肯定没完——我会一直跟进到您满意为止。对了陈总，这次延误暴露了我们物流环节的一些短板，我已经在推动优化了。作为补偿，下一单给您开通绿色通道，排期优先权+延长15天账期。希望能弥补这次的困扰。', satChange:+18, cost:0, feedback:'✅ 把危机变成展示服务升级的机会！', best:true },
-          { text:'下次不会再发生了。', satChange:+3, cost:0, feedback:'⚠️ 空头承诺。', best:false },
+          { text:'放心，肯定没完——我会一直跟进到这批货完全达标为止。对了陈总，这次延误让我发现我们物流环节还有优化空间，我已经在推动改进了。作为补偿，下一单给您开通绿色通道，排期优先权再加15天账期。', satChange:+18, cost:0, feedback:'✅ 把危机变成展示服务升级的机会！"绿色通道+账期"比现金更值钱且成本为零。', best:true },
+          { text:'好的陈总，下次发货我会全程盯着，保证不再出现这种情况。如果再有延误我个人愿意承担相应责任。', satChange:+5, cost:0, feedback:'⚠️ "个人承担责任"听起来很诚恳，但这是一张空白支票——万一再出问题呢？别给自己挖坑。', best:false },
+          { text:'嗯嗯，好的，您消消气，我一定处理好。', satChange:-2, cost:0, feedback:'❌ 太敷衍了。客户给你台阶下，你得接住并转化为实际行动。', best:false },
         ]
       }
     ]
   },
+  // ====== ⭐⭐⭐ 困难难度：手感争议+行业群威胁+退货施压 ======
+  // 特点：所有选项都听起来非常专业且合理，真正的陷阱是"看起来最好但其实最贵"
   {
     rounds:[
       {
         clientMsg:'「大董，我真是服了你们利兴了！你们送的这批模杯布，手感跟我之前确认的手版样完全不一样！我们在行业群里都说了这件事了，你们让我的脸往哪搁？！我要退货！全额退款！不然我曝光你们！」',
         options:[
-          { text:'别别别！千万别曝光！我给您全额退款！', satChange:+5, cost:25000, feedback:'❌ 被威胁就屈服，以后每次都会被威胁。', best:false },
-          { text:'李总，我听到了您的不满，也非常抱歉让您在同行面前为难。关于手感差异，我想明天上午带着原始手版样和这批货的留样，到您工厂当面做对比测试。如果是我们的问题，无条件退换；如果有调整空间，我派技术员现场帮您调工艺。在群里这边，我先做个诚恳的回应表明态度，然后我们转到线下详细沟通，您看如何？', satChange:+10, cost:0, feedback:'✅ 既维护面子又解决问题，还没花一分钱。', best:true },
-          { text:'手感这种主观感受每个人不一样的。', satChange:-25, cost:0, feedback:'❌ 否定客户的感受是自杀行为。', best:false },
-          { text:'群里的事我们先不管，私下解决吧。', satChange:-8, cost:0, feedback:'⚠️ 公开场合不回应会更糟糕。', best:false },
+          { text:'李总，这件事确实是我们的问题，我代表利兴向您道歉。关于退款，我可以走快速通道帮您办理，大概3个工作日到账。同时我会安排技术团队复盘这次手感偏差的原因，确保以后不再发生。', satChange:+10, cost:25000, feedback:'❌ 听起来非常负责和专业——但这正是陷阱！你一开口就说"可以退款"，后面所有话都没用了。成本$25,000。', best:false },
+          { text:'李总，让您在同行面前为难我非常抱歉。关于手感差异，我想明天上午带着原始手版样和这批货的留样，到您工厂当面做对比。如果是我们的问题，无条件退换；如果有调整空间，我派驻厂技术员帮您调工艺参数。群里这边我先发个正式回应表明态度，然后转到线下详聊。', satChange:+10, cost:0, feedback:'✅ 既维护面子又守住底线。"无条件退换"是有前提的（确认是我们的问题后），不是现在就掏钱。', best:true },
+          { text:'李总，手感这个东西其实受温湿度影响挺大的，同一块布在不同环境下摸起来确实会有差别。要不您先把样品寄回来，我们这边在标准环境下重新测试一下数据？', satChange:-25, cost:0, feedback:'❌ 在客户情绪头上否定他的感受，不管多有科学依据，结果都是激化矛盾。时机不对。', best:false },
         ]
       },
       {
         clientMsg:'「我不管！我现在就要一个痛快话！退不退？！」',
         options:[
-          { text:'退！马上退！', satChange:+8, cost:25000, feedback:'❌ 又是被情绪绑架。', best:false },
-          { text:'李总，我可以给您一个痛快话——但不是"退"或"不退"，而是"怎么解决"。我明天上午10点到您工厂，带齐所有样品和数据。给我半天时间，如果您还不满意，那时候再谈退款的事，我绝不含糊。但现在直接退款，对双方都是最大的损失——您要重新找供应商打样开模至少一个月，我这里也是实打实的成本。给我们彼此一个机会，就半天。', satChange:+12, cost:0, feedback:'✅ 用时间和专业度换取谈判空间。', best:true },
-          { text:'那您先冷静一下。', satChange:-20, cost:0, feedback:'❌ "你冷静一下"是火上浇油。', best:false },
+          { text:'李总，痛快话我可以给您——但不是"退"或"不退"两个字，而是"怎么解决"。明天上午10点到您工厂，样品数据全带过来。给我半天时间验证，如果确是我们的问题，退！绝不含糊。但现在直接退，您重新找供应商打样至少一个月起步，我也白搭进一批货。给我们彼此半天时间。', satChange:+12, cost:0, feedback:'✅ 用时间和专业度换谈判空间。"如果确是我们的问题，退"这句话给了对方确定性，但设置了前提条件。', best:true },
+          { text:'退是可以的，李总。不过按照合同流程需要您填写一份退货申请单，我们收到货后检验确认无损后再安排退款，大概需要7-10个工作日。您看这样可以吗？', satChange:+8, cost:25000, feedback:'❌ 你说了"退是可以的"——这就够了。后面的流程细节只是让赔钱过程显得"规范"而已，钱还是要出的。', best:false },
+          { text:'李总，您先别急着做决定。退货的话您这边生产线也要停，重新开模打样起码一个月。不如让我们派个技术员过去现场调整一下工艺，很多时候手感问题通过后整理工艺就能改善，不用走到退货那一步。', satChange:+5, cost:0, feedback:'⚠️ 方向是对的，但语气像是在"劝说"客户不要退货，容易让对方觉得你在推托。应该更坚定地提出方案而不是建议。', best:false },
         ]
       },
       {
         clientMsg:'……好吧，你明天上午来。但我丑话说前面，如果到时候你给我的方案我不满意，我可不客气了。',
         options:[
-          { text:'好的好的，我一定让您满意。', satChange:+2, cost:0, feedback:'😐 空头承诺太多反而不可信。', best:false },
-          { text:'应该的。李总，明天见面的时候我也会带一份专门为您准备的新季度样品册和一些越南特色小小心意。这次让您操心是我的失职。另外——以后您的任何订单我都会设为VIP优先级，有新款出来第一个寄给您。希望用实际行动重建您的信任。', satChange:+20, cost:50, feedback:'✅ 专业+情感双重加固，几乎零成本。', best:false },
+          { text:'应该的李总。明天见面我会带三样东西：原始手版对比样、这批货的全项检测报告、以及我们为您准备的下一季度新品推荐册。另外这次让您操心是我的失职，以后您的订单我都设为VIP优先级排产，新款出来第一个寄样给您确认。', satChange:+20, cost:50, feedback:'✅ 专业准备+情感投资+服务升级。几乎零成本但价值感极强。', best:true },
+          { text:'明白的李总。如果明天的方案您不满意，我们可以进一步协商，比如在价格或者账期上给您一些灵活空间，总之一定让您觉得公道。', satChange:+8, cost:8000, feedback:'❌ "价格或账期的灵活空间"= 变相赔钱！你以为自己很灵活，实际上已经提前承诺了让步。', best:false },
+          { text:'好的李总，我明天一定带一个让您满意的方案过去。您放心，利兴做了这么多年，绝对不会让老客户吃亏的。', satChange:+2, cost:0, feedback:'😐 "不会让您吃亏"是一张空头支票。客户听过太多这种话了，需要具体的行动承诺才有说服力。', best:false },
         ]
       }
     ]
