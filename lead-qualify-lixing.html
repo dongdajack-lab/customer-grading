@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>利兴纺织 · 线索判断练习 - 大董老师</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#B85042,#E8A87C); color:white; padding:20px 24px; text-align:center; }
+  header h1 { font-size:22px; font-weight:700; }
+  header p { font-size:13px; opacity:0.9; margin-top:4px; }
+  .brand-tag { font-size:11px; background:rgba(255,255,255,0.25); display:inline-block; padding:2px 10px; border-radius:10px; margin-top:6px; }
+  .container { max-width:780px; margin:0 auto; padding:24px 16px; }
+  .progress-bar { height:5px; background:#e0d6d0; border-radius:3px; margin-bottom:16px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#B85042,#E8A87C); border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:12px; color:#999; margin-bottom:3px; }
+  .card { background:white; border-radius:14px; padding:24px 20px; box-shadow:0 2px 12px rgba(184,80,66,0.08); }
+  .question-badge { display:inline-block; background:linear-gradient(135deg,#B85042,#D4786A); color:white; border-radius:16px; padding:3px 12px; font-size:12px; margin-bottom:12px; }
+  .scenario { background:#FFF8F5; border-left:4px solid #B85042; padding:14px 16px; border-radius:0 10px 10px 0; margin:12px 0; font-size:14px; line-height:1.8; color:#444; }
+  .scenario .label { font-weight:700; color:#B85042; }
+  .options { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #ece6e2; border-radius:10px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.6; }
+  .option:hover { border-color:#B85042; background:#FFF8F5; }
+  .option.selected { border-color:#B85042; background:#FFF0EC; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:20px; height:20px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#B85042; background:#B85042; }
+  .option.selected .radio::after { content:''; width:7px; height:7px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:16px; padding:14px 16px; background:#E8F8F5; border-radius:10px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:14px; margin-bottom:6px; }
+  .explanation p { font-size:13px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:16px; padding:12px 16px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:10px; display:none; font-size:13px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#B85042; margin-bottom:4px; }
+  .opt-label { font-weight:700; color:#B85042; margin-right:4px; }
+  .btn-row { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:12px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:linear-gradient(135deg,#B85042,#D4786A); color:white; }
+  .btn-primary:hover { background:linear-gradient(135deg,#A04030,#C06858); }
+  .btn-primary:disabled { background:#ddd; cursor:not-allowed; }
+  .btn-secondary { background:#f0ebe8; color:#666; }
+  .btn-secondary:hover { background:#e6dfda; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:140px; height:140px; border-radius:50%; background:linear-gradient(135deg,#B85042,#E8A87C); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .score-circle .num { font-size:42px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:13px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .percent-circle .num { font-size:32px; font-weight:700; color:#B85042; line-height:1; }
+  .percent-circle .unit { font-size:18px; font-weight:700; color:#B85042; }
+  .percent-circle .sub-label { font-size:12px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:14px; padding:20px; margin-top:16px; text-align:left; box-shadow:0 2px 12px rgba(184,80,66,0.08); }
+  .result-detail h3 { font-size:15px; margin-bottom:10px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f5f0ed; font-size:13px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:16px; }
+  .restart-btn { margin-top:20px; padding:12px 40px; background:linear-gradient(135deg,#B85042,#D4786A); color:white; border:none; border-radius:10px; font-size:15px; cursor:pointer; }
+  .tip-box { background:#FFF8F5; border:1px solid #F5D6CF; border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:12px; color:#8A3020; line-height:1.7; }
+  .tip-box strong { color:#B85042; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; margin-right:4px; }
+  .tag-lead { background:#E8F5F8; color:#1A6E8C; }
+  .tag-opp { background:#FFF0EC; color:#B85042; }
+  .tag-fake { background:#FDEDEC; color:#E74C3C; }
+  .tag-nurture { background:#FFF3CD; color:#F39C12; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>利兴纺织 · 线索判断练习</h1>
+  <p>线索 vs 机会判断训练 · 共8题</p>
+  <span class="brand-tag">大董老师 · 天地人销售管理体系</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>🔑 核心概念（利兴销售必记）：</strong><br>
+      <span class="tag tag-lead">线索</span>只是「可能有需求的信息」，还没验证，不能算机会。<br>
+      <span class="tag tag-opp">机会</span>是「已验证有真实需求+预算+决策权+时间线」的潜在订单。<br>
+      <span class="tag tag-fake">假线索</span>是「永远不会有订单的虚假信息」，要果断放弃。<br>
+      <span class="tag tag-nurture">培育线索</span>是「有需求但时机未到」，要定期跟进，不能放弃。<br>
+      <strong style="color:#B85042;">判断标准：有没有验证过需求、预算、决策权和时间线？</strong>
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // 第1题：线索 vs 机会的基本定义（利兴场景）
+  {
+    scenario: "利兴销售员小刘在广交会上收集了<strong>32张客户名片</strong>，回国后逐一打电话跟进。以下是对其中一位客户（安踏采购员小陈）的第一次电话沟通记录：<br><br>『陈先生，您好！我在广交会上拿过您的名片，想了解一下安踏今年有没有新的面料采购计划？』<br>『哦，我是新来的，不太清楚，你可以发份资料给我们采购部邮箱。』",
+    question: "这个小陈，目前是利兴的<strong>线索</strong>还是<strong>机会</strong>？",
+    options: [
+      { text:"是机会。因为小陈确认了安踏有采购计划，只是不清楚具体情况，只要发资料就有机会。", type:"错误判断", correct:false },
+      { text:"是线索。目前只是拿到了一个联系人方式和一句模糊回应，没有验证需求、预算、决策权和时间线，不能算机会。", type:"正确判断", correct:true },
+      { text:"是假线索。小陈是新来的，不了解情况，跟进他浪费时间。", type:"错误判断", correct:false },
+      { text:"是培育线索。安踏是大品牌，虽然现在不清楚情况，但长期肯定有需求，应该持续跟进。", type:"错误判断", correct:false }
+    ],
+    explain:"<strong>✅ 正确：是线索，不是机会</strong><br><br>线索的特征：<br>① 有联系方式，但<strong>没验证需求</strong>（小陈说不清楚有没有采购计划）<br>② <strong>没验证预算</strong>（没聊到预算）<br>③ <strong>没验证决策权</strong>（小陈是新来的采购员，不是决策人）<br>④ <strong>没验证时间线</strong>（没聊到什么时候采购）<br><br><strong>正确做法</strong>：把小陈列为线索，发资料到采购部邮箱，同时想办法联系采购部决策人（采购总监或经理），验证以上四个要素后，再决定是否转为机会。"
+  },
+
+  // 第2题：什么条件下可以把线索转为机会（利兴向内衣品牌销售）
+  {
+    scenario: "利兴销售主管老张正在跟进<strong>都市丽人</strong>。以下是他对这个客户的跟进记录：<br><br>① 3月5日：在行业展会上拿到都市丽人采购总监李总的名片。<br>② 3月12日：电话联系李总，李总说『今年我们确实在找新的模杯布供应商，因为现有供应商的回弹率不达标，导致退货率高』。<br>③ 3月15日：给李总发了利兴的模杯布测试报告。<br>④ 3月20日：李总回复『报告看了，数据不错。我们今年模杯布采购预算是800-1000万元，我是决策人之一，但还要和供应链副总一起定。4月中旬我们会开供应商评审会。』<br>⑤ 3月25日：李总同意4月2日带样品去都市丽人办公室做面对面交流。",
+    question: "根据以上信息，都市丽人在<strong>什么时候</strong>可以从「线索」转为「机会」？",
+    options: [
+      { text:"3月5日，拿到李总名片的时候。因为已经有了联系人，可以开始跟进。", type:"过早", correct:false },
+      { text:"3月12日，李总确认有需求的时候。因为客户亲口说出了痛点（退货率高），说明有真实需求。", type:" Partial验证", correct:false },
+      { text:"3月20日，李总确认了需求、预算、决策权限和评审时间线的时候。四个要素都验证了，可以转为机会，开始正式跟进。", type:"正确时机", correct:true },
+      { text:"3月25日，李总同意面对面交流的时候。因为客户愿意见面，说明意向很强，可以转为机会。", type:"过晚", correct:false }
+    ],
+    explain:"<strong>✅ 正确：3月20日，四要素验证齐全时转为机会</strong><br><br>机会的四个验证要素（利兴销售必查）：<br>① <strong>需求</strong>：李总亲口说「现有供应商回弹率不达标，导致退货率高」——痛点清晰<br>② <strong>预算</strong>：李总说「今年模杯布采购预算800-1000万元」——有预算范围<br>③ <strong>决策权</strong>：李总说「我是决策人之一，但还要和供应链副总一起定」——有决策参与权，知道决策流程<br>④ <strong>时间线</strong>：李总说「4月中旬开供应商评审会」——有明确时间节点<br><br><strong>3月20日之后</strong>，这个客户应该从CRM的「线索池」移到「机会池」，开始正式的销售跟进动作（送样、方案、报价等）。"
+  },
+
+  // 第3题：假线索识别（利兴常见陷阱）
+  {
+    scenario: "利兴销售员小王收到一封邮件：『我们是越南新成立的服装工厂，年产能500万件，正在寻找长期面料供应商。请报价：你们最便宜的涤纶面料多少钱一米？我们希望能拿到中国市场最低价。』小王很兴奋，觉得是个大客户，花了一整天准备报价方案和公司介绍。",
+    question: "这个越南客户，最可能是以下哪种情况？",
+    options: [
+      { text:"是机会。年产能500万件是大工厂，肯定有真实需求，值得认真跟进。", type:"误判", correct:false },
+      { text:"是假线索。『要最便宜的面料』和『希望拿到中国市场最低价』说明他只关心价格，不会成为利兴的目标客户（利兴定位是中高端面料，不是低价竞争）。", type:"假线索", correct:true },
+      { text:"是培育线索。越南新工厂确实有需求，只是现在还在价格对比阶段，应该持续跟进，等他预算够了再合作。", type:"误判", correct:false },
+      { text:"无法判断。需要实地拜访之后才能确定是不是机会。", type:"过于谨慎", correct:false }
+    ],
+    explain:"<strong>✅ 正确：是假线索</strong><br><br>假线索的特征（利兴销售要警惕）：<br>① <strong>只关心价格，不关心品质</strong>：「最便宜」「市场最低价」——利兴的定位是<strong>中高端功能性面料</strong>，不是低价供应商。这个客户和利兴的目标客户画像不匹配。<br>② <strong>没有具体需求描述</strong>：「最便宜的涤纶面料」——连具体用途、性能要求都没说，说明他只是在<strong>广撒网询价</strong>，不是有针对性的采购。<br>③ <strong>正确做法</strong>：回复一句「感谢询价，利兴专注中高端功能性面料，最低价不是我们的定位，如果您对冲孔、透气、抗菌等功能有需求，我们可以进一步交流」，然后<strong>不再主动跟进</strong>。如果对方有真实高端需求，会主动回复；如果只是比价，就不会再联系了。"
+  },
+
+  // 第4题：培育线索识别（有需求但时机未到）
+  {
+    scenario: "利兴销售员小陈去拜访<strong>越南海防市一家新成立的运动服工厂</strong>。工厂去年刚动工建设，目前厂房还在装修，预计<strong>明年3月</strong>才能正式投产。厂长张总很热情地接待了小陈，说：『我们的运动服定位是中高端，对面料的透气性、抗菌性要求很高。你们的样品我很满意，但我们现在还没开始采购，等明年投产后，我会第一个联系你们。』",
+    question: "这个越南工厂，应该归类为？",
+    options: [
+      { text:"是假线索。因为明年3月才投产，今年不会有任何订单，跟进他是浪费时间。", type:"误判", correct:false },
+      { text:"是机会。张总对利兴的样品很满意，而且有明确的需求（透气性、抗菌性），应该现在就开始送样、报价，争取明年一投产就下单。", type:"过于乐观", correct:false },
+      { text:"是培育线索。有真实需求和对利兴产品的认可，但采购时间线在明年3月，现在不能算机会（因为今年不会有订单），但也不能放弃，应该定期跟进（每季度发一次新品信息，明年1月再次拜访）。", type:"正确判断", correct:true },
+      { text:"无法判断。要等明年工厂投产之后再联系，现在联系太早了。", type:"过于消极", correct:false }
+    ],
+    explain:"<strong>✅ 正确：是培育线索</strong><br><br>培育线索的特征：<br>① <strong>有真实需求</strong>：张总明确说了透气性、抗菌性要求，而且对面料品质有要求（中高端定位）<br>② <strong>对利兴产品认可</strong>：张总说「你们的样品我很满意」<br>③ <strong>但采购时间线未到</strong>：明年3月才投产，今年不会有订单<br><br><strong>培育线索的正确做法</strong>：<br>• 记入CRM「培育线索池」，设置<strong>定期跟进提醒</strong>（每季度发一次利兴新品信息）<br>• <strong>明年1月</strong>（投产前2个月）再次拜访，带最新样品和正式报价<br>• 不要每个月都联系（会打扰客户），但也不能不联系（会被竞争对手抢先）"
+  },
+
+  // 第5题：多线索优先级排序（利兴销售时间管理）
+  {
+    scenario: "利兴销售员小刘今天早上打开CRM，发现有<strong>4个待跟进的线索</strong>，但他今天只有时间深度跟进其中1个。以下是4个线索的情况：<br><br>【甲】安踏：采购总监王总，已确认今年有运动面料采购计划，预算约500万元，4月中旬开评审会，已经收到利兴的测试报告，回复「数据不错」。<br><br>【乙】李宁：采购员小赵，在展会上拿过利兴的资料，说「会有采购需求，但不确定时间」，还没验证预算和决策权。<br><br>【丙】都市丽人：采购总监李总，已确认模杯布需求，预算800-1000万元，4月中旬评审会，已同意4月2日带样品去面对面交流。<br><br>【丁】越南某新工厂：厂长张总，厂房还在装修，明年3月才投产，今年不会有采购。",
+    question: "如果今天只能深度跟进1个，应该优先选哪个？",
+    options: [
+      { text:"优先选甲（安踏）。因为安踏是大品牌，订单量大，先跟进大品牌。", type:"仅凭品牌大小", correct:false },
+      { text:"优先选乙（李宁）。因为李宁的采购员小赵是展会拿的资料，说明主动性强，应该优先跟进。", type:"错误标准", correct:false },
+      { text:"优先选丙（都市丽人）。因为丙已经同意面对面交流（4月2日），而且评审会在4月中旬，时间最紧迫，成交概率最高。", type:"正确优先级", correct:true },
+      { text:"优先选丁（越南新工厂）。因为越南是未来增长点，应该优先布局越南市场。", type:"战略优先但时机不对", correct:false }
+    ],
+    explain:"<strong>✅ 正确：优先选丙（都市丽人）</strong><br><br>优先级判断标准（利兴销售必会）：<br>① <strong>时间紧迫度</strong>：丙的评审会在4月中旬，面对面交流在4月2日——<strong>时间最紧</strong>，今天不跟进，后面准备不及。<br>② <strong>成交概率</strong>：丙已经同意面对面交流+带样品——成交概率远高于甲（只回复了「数据不错」）。<br>③ <strong>预算规模</strong>：丙的预算800-1000万 > 甲的500万。<br><br><strong>正确排序</strong>：丙（都市丽人）> 甲（安踏）> 乙（李宁）> 丁（越南新工厂）。<br>今天深度跟进丙，明天深度跟进甲，乙作为培育线索每月跟进一次，丁每季度跟进一次。"
+  },
+
+  // 第6题：线索来源的quality判断（利兴销售资源分配）
+  {
+    scenario: "利兴纺织的销售团队有<strong>4个获取线索的渠道</strong>，但团队时间有限，只能重点维护其中2个。以下是过去12个月的数据：<br><br>【渠道A】广交会/行业展会：每年参加3次展会，收集约150张名片，其中约20%能打通电话，最终成交3-5单，平均每单金额约80万元。<br><br>【渠道B】老客户转介绍：每年收到约15个转介绍线索，其中约60%能转为机会，最终成交6-8单，平均每单金额约120万元。<br><br>【渠道C】冷电话/陌生拜访：销售员每月打200个冷电话，约5%能加到微信，最终成交1-2单/年，平均每单金额约30万元。<br><br>【渠道D】阿里巴巴国际站：每年收到约200条询盘，其中约10%是真实需求，最终成交5-8单，平均每单金额约50万元。",
+    question: "如果只能重点维护2个渠道，应该选哪两个？（按照ROI和成交质量排序）",
+    options: [
+      { text:"选A（展会）和C（冷电话）。因为展会收集名片多，冷电话覆盖面广，两个渠道加起来线索量最大。", type:"只看数量", correct:false },
+      { text:"选B（老客户转介绍）和A（展会）。B的转化率最高（60%转机会）、平均单金额最高（120万），ROI最高；A虽然转化率低但品牌曝光价值高，而且成交单数稳定。", type:"正确选择", correct:true },
+      { text:"选C（冷电话）和D（阿里国际站）。因为这两个渠道成本最低（不需要参展差旅费），性价比最高。", type:"只看成本", correct:false },
+      { text:"四个渠道都重要，不应该只选2个，应该平均分配时间。", type:"错误策略", correct:false }
+    ],
+    explain:"<strong>✅ 正确：B（转介绍）+ A（展会）是优先级最高的两个渠道</strong><br><br>各渠道ROI分析：<br>① <strong>渠道B（转介绍）</strong>：转化率60%、平均单金额120万、信任度高（老客户背书）、成交周期短——<strong>ROI最高，必须重点维护</strong>。<br>② <strong>渠道A（展会）</strong>：虽然转化率只有20%，但<strong>品牌曝光价值高</strong>（客户能看到利兴的实物样品和面对面交流），而且成交单数稳定（3-5单/年）。<br>③ <strong>渠道D（阿里国际站）</strong>：询盘量大但质量低（10%真实需求），平均单金额偏低（50万），适合作为补充渠道。<br>④ <strong>渠道C（冷电话）</strong>：转化率极低、平均单金额最低（30万）、时间成本高——<strong>ROI最低，应该最后分配时间</strong>。<br><br><strong>利兴销售的时间分配建议</strong>：40%转介绍跟进 + 30%展会线索跟进 + 20%阿里国际站 + 10%冷电话。"
+  },
+
+  // 第7题：机会阶段的判断（利兴销售流程管理）
+  {
+    scenario: "利兴销售主管老张在周会上问团队成员：『都市丽人现在到了哪个阶段？』以下是团队成员小刘的回答：<br><br>『3月20日和李总确认了需求、预算和评审时间；4月2日带样品去都市丽人做了面对面交流，李总对模杯布的回弹测试数据很满意；4月10日我们提交了正式报价方案；现在在等他们内部评审结果，预计4月20日出结果。』",
+    question: "根据利兴的销售阶段划分，都市丽人目前处于哪个阶段？",
+    options: [
+      { text:"阶段1：线索收集。因为我们还在等评审结果，还没签合同，所以还在线索阶段。", type:"阶段误判", correct:false },
+      { text:"阶段2：需求验证。因为4月10日才提交报价方案，说明需求还在确认中。", type:"阶段误判", correct:false },
+      { text:"阶段4：方案报价。因为我们已经提交了正式报价方案，正在等客户决策，这是「报价后等待决策」阶段，成交概率约70%。", type:"正确判断", correct:true },
+      { text:"阶段5：合同谈判。因为客户已经在内部评审了，很快就会进入合同谈判。", type:"过于乐观", correct:false }
+    ],
+    explain:"<strong>✅ 正确：阶段4（方案报价）</strong><br><br>利兴销售阶段划分（参考天地人体系）：<br>① <strong>阶段1：线索收集</strong>——拿到联系人，还没验证需求<br>② <strong>阶段2：需求验证</strong>——确认需求、预算、决策权、时间线（3月20日完成）<br>③ <strong>阶段3：样品测试/技术交流</strong>——带样品面对面交流，客户认可技术指标（4月2日完成）<br>④ <strong>阶段4：方案报价</strong>——提交正式报价方案，等待客户决策（4月10日至今）<br>⑤ <strong>阶段5：合同谈判</strong>——客户已确认合作意向，在谈合同条款和细节<br>⑥ <strong>阶段6：签约成交</strong>——合同签署，订单下达<br><br>都市丽人目前<strong>阶段4→阶段5之间</strong>，预计4月20日评审结果出来后，如果通过就进入阶段5。"
+  },
+
+  // 第8题：综合演练（给出完整场景，让学员判断每个接触对象是线索/机会/假线索/培育线索）
+  {
+    scenario: "你是利兴纺织的新入职销售员，今天第一次整理客户跟进表。以下是你从展会和老客户那里收集到的<strong>4个联系人</strong>，请你逐一判断他们的分类：<br><br>【甲】安踏采购总监王总：已确认今年有500万运动面料预算，4月中旬评审，已收到测试报告，回复「数据不错」。<br><br>【乙】某低价贸易商：发邮件问「你们最便宜的涤纶布多少钱？我们要大量采购」，但没有说具体用途、性能要求，也没说采购量。<br><br>【丙】越南海防某新工厂厂长：工厂明年3月投产，对面料品质要求高（中高端），对利兴样品满意，但今年不会采购。<br><br>【丁】都市丽人采购总监李总：已确认模杯布需求，预算800-1000万，4月中旬评审，已同意4月2日带样品面对面交流。",
+    question: "请将甲、乙、丙、丁四人正确分类（线索/机会/假线索/培育线索）：",
+    options: [
+      { text:"甲=机会；乙=假线索；丙=培育线索；丁=机会。乙只关心价格不关心品质，是假线索；丙有需求但时机未到，是培育线索；甲和丁都验证了四要素，是机会。", type:"正确分类", correct:true },
+      { text:"甲=线索；乙=线索；丙=线索；丁=机会。因为甲和乙都还没签合同，所以都还是线索。", type:"全部判为线索", correct:false },
+      { text:"甲=机会；乙=机会；丙=机会；丁=机会。四个都是机会，因为都有采购需求。", type:"全部判为机会", correct:false },
+      { text:"甲=机会；乙=培育线索；丙=假线索；丁=机会。乙虽然只关心价格，但大量采购说明有需求，应该培育；丙的工厂还没投产，可能不会采购，是假线索。", type:"错误分类", correct:false }
+    ],
+    explain:"<strong>✅ 正确分类：甲=机会；乙=假线索；丙=培育线索；丁=机会</strong><br><br>【甲】安踏王总：<strong>机会</strong>——已验证需求（运动面料）、预算（500万）、决策参与权（采购总监）、时间线（4月中旬评审）。<br><br>【乙】低价贸易商：<strong>假线索</strong>——只关心价格（「最便宜」），没有具体需求描述，和利兴中高端定位不匹配。正确做法：礼貌回复后不再主动跟进。<br><br>【丙】越南新工厂：<strong>培育线索</strong>——有真实需求（中高端定位、对面料性能有要求）、对利兴产品认可，但采购时间线在明年3月。正确做法：记入培育线索池，每季度跟进一次。<br><br>【丁】都市丽人李总：<strong>机会</strong>——已验证四要素，而且已经同意面对面交流，成交概率高。<br><br><strong>课堂练习建议</strong>：让学员把自己正在跟进的客户填入以上四类，现场讨论分类是否正确，强化判断标准。"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answered = false;
+let results = [];
+
+function renderQuestion() {
+  selected = null;
+  answered = false;
+  var q = questions[current];
+
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+
+  var card = document.getElementById("questionCard");
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【利兴业务场景】</span><br>' + q.scenario + '</div>';
+  html += '<div style="font-weight:600; margin:14px 0 8px; color:#333; font-size:15px;">' + q.question + '</div>';
+  html += '<div class="options">';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '  <div class="radio"></div>';
+    html += '  <div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswer"></div>';
+  html += '<div class="explanation" id="explanation">';
+  html += '  <h4>📚 解析</h4>';
+  html += '  <p>' + q.explain + '</p>';
+  html += '</div>';
+  card.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.toggle("selected", i === idx);
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].correct;
+  answered = true;
+
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    if (q.options[i].correct) opts[i].classList.add("correct");
+    if (i === selected && !isCorrect) opts[i].classList.add("wrong");
+    opts[i].onclick = null;
+  }
+
+  results[current] = isCorrect;
+
+  var labels = ['A', 'B', 'C', 'D'];
+  var correctIdx = q.options.findIndex(function(o) { return o.correct === true; });
+  var correctLabel = labels[correctIdx];
+  var correctText = q.options[correctIdx].text;
+  document.getElementById('correctAnswer').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabel + '</div>' +
+    '<div style="margin-top:6px; color:#333;">' + correctText + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+
+  document.getElementById("explanation").classList.add("show");
+
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  var percent = Math.round(score / results.length * 100);
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = percent;
+
+  var detailHTML = "<h3>📊 答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    var icon = results[i] ? "✅" : "❌";
+    var text = results[i] ? "正确" : "错误";
+    detailHTML += '<div class="result-item"><span class="status">' + icon + '</span><span>第 ' + (i+1) + ' 题：' + text + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detailHTML;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
