@@ -333,76 +333,7 @@ function switchSec(i) {
   currentSec = i;
 }
 
-
-// ===================== SECTION 1: TIMELINE SORT =====================
-const timelineData = [
-  { id:0, text:'接到投诉，立即赶到现场' },
-  { id:1, text:'先安抚客人情绪（递水、道歉、"我理解您"）' },
-  { id:2, text:'完整倾听客人的描述，不打断、不辩解' },
-  { id:3, text:'查实情况（核实保洁操作），确认事实' },
-  { id:4, text:'给出解决方案（换新毛巾+重新清洁+送果盘）' },
-  { id:5, text:'私下处理员工 + 送客人回房 + 后续跟进' },
-];
-const correctOrder = [0,1,2,3,4,5];
-let currentOrder = [0,1,2,3,4,5];
-let selectedIdx = -1;
-
-function renderTimeline() {
-  const c = document.getElementById('timelineContainer');
-  c.innerHTML = currentOrder.map((di,i)=>{
-    const d = timelineData[di];
-    return `<div class="timeline-item" data-idx="${i}" onclick="selectTLItem(${i})">
-      <div class="order-num">${i+1}</div>
-      <div class="step-text">${d.text}</div>
-    </div>`;
-  }).join('');
-}
-
-function selectTLItem(idx) {
-  if(selectedIdx === -1) {
-    selectedIdx = idx;
-    document.querySelectorAll('.timeline-item')[idx].style.borderColor='#B85042';
-    document.querySelectorAll('.timeline-item')[idx].style.background='#FDF5E7';
-  } else if(selectedIdx === idx) {
-    selectedIdx = -1;
-    renderTimeline();
-  } else {
-    // swap
-    const tmp = currentOrder[selectedIdx];
-    currentOrder[selectedIdx] = currentOrder[idx];
-    currentOrder[idx] = tmp;
-    selectedIdx = -1;
-    renderTimeline();
-  }
-}
-
-function resetTimeline() {
-  currentOrder = [0,1,2,3,4,5];
-  selectedIdx = -1;
-  document.getElementById('insightBox').classList.remove('show');
-  renderTimeline();
-}
-
-function checkTimeline() {
-  const items = document.querySelectorAll('.timeline-item');
-  let allCorrect = true;
-  items.forEach((item,i)=>{
-    if(currentOrder[i] === correctOrder[i]) {
-      item.className = 'timeline-item correct-flash';
-    } else {
-      item.className = 'timeline-item wrong-flash';
-      allCorrect = false;
-    }
-  });
-  if(allCorrect) {
-    setTimeout(()=>document.getElementById('insightBox').classList.add('show'),600);
-  }
-}
-
-renderTimeline();
-
-
-// ===================== SECTION 2: QUIZ =====================
+// ===================== SECTION 1: QUIZ (灵魂三问自测) =====================
 const quizQuestions = [
   {
     q: '灵魂第一问：面对张经理的愤怒电话，你的第一反应是什么？',
