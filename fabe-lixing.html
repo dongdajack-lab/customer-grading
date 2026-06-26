@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - 利兴纺织定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#B85042,#E07060); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header p { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#B85042; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#B85042; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #B85042; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#B85042; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#FEF9E7; color:#D35400; }
+  .tag-A { background:#FEF0E7; color:#E67E22; }
+  .tag-B { background:#FDEBD0; color:#CA6F1E; }
+  .tag-E { background:#FAD7A0; color:#A04000; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#B85042; background:#FDF5F0; }
+  .option.selected { border-color:#B85042; background:#FDF5F0; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#B85042; background:#B85042; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#B85042; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#B85042; color:white; }
+  .btn-primary:hover { background:#9a3d32; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#B85042,#E07060); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#B85042; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#B85042; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#B85042; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#FDF5F0; border:1px solid #F0AD4E; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#7D6608; line-height:1.7; }
+  .tip-box strong { color:#B85042; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共8题</p>
+  <span class="company-tag">🧵 利兴纺织定制版</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    scenario: "你是利兴纺织的销售，准备向一家内衣品牌推荐你们的新型模杯布。这种面料采用了特殊的纤维混纺技术和后整理工艺。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的模杯布已经供应给维珍妮和维多利亚的秘密，每年采购量超过5000万。", type:"E", correct:false },
+      { text:"用了我们的模杯布，成品内衣的回弹率能保持在95%以上，洗涤50次不变形，客户退货率降低60%。", type:"B", correct:false },
+      { text:"我们的新型模杯布采用60%尼龙+40%氨纶的黄金混纺比例，配合独特的热定型后整理工艺，布面克重控制在180-220g/㎡，回弹率可达98%。", type:"F", correct:true },
+      { text:"相比同类产品，我们的模杯布回弹率高30%，手感更柔软，色牢度高出1.5级。", type:"A", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的参数、规格、构造——「60%尼龙+40%氨纶、热定型工艺、180-220g/㎡克重、98%回弹率」就是典型的F。<br><br>A是与竞品比较；B是给客户带来的利益；E是第三方佐证。"
+  },
+  {
+    scenario: "接上题。品牌采购总监听完特征介绍后，还在犹豫，说市面上类似的模杯布很多，价格比你们低15%。",
+    question: "接下来应该说 <strong>A - 优势</strong>（与竞品相比的差异化），下列哪句话最合适？",
+    options: [
+      { text:"我们的回弹率是98%，而行业平均水平是85%，高出13个百分点；并且我们是唯一通过OEKO-TEX Standard 100 Class I认证的模杯布供应商，可以直接接触婴儿皮肤的安全级别。", type:"A", correct:true },
+      { text:"我们的模杯布采用60%尼龙+40%氨纶黄金混纺比例。", type:"F", correct:false },
+      { text:"用了我们的模杯布，成品退货率能降低60%，每年节省售后成本近200万。", type:"B", correct:false },
+      { text:"维珍妮已经用了我们模杯布3年，每年采购量增长30%，说明她们对我们的品质很满意。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>优势是「对比出来的」——必须有比较对象（竞品、行业均值）才叫优势。关键词：领先、唯一、对比、比…高/低/快/慢。<br><br>面对「价格高15%」的异议，用「回弹率高出13个百分点 + 唯一认证」来回应，让客户觉得贵得有道理。"
+  },
+  {
+    scenario: "采购总监对你们的技术优势有点兴趣，但开始问：这对我有什么好处？我们品牌最怕的是消费者洗了几次就变形，然后来退货。",
+    question: "接下来应该说 <strong>B - 利益</strong>（给客户带来的具体好处），下列哪句话最合适？",
+    options: [
+      { text:"对您来说，成品退货率从现在的8%降到3%以内，按您品牌每年销售500万件内衣计算，每年减少25万件退货，节省售后成本约1500万；同时消费者满意度提升，复购率增加，有助于品牌口碑和市场份额增长。", type:"B", correct:true },
+      { text:"我们的回弹率是98%，行业平均85%，领先13个百分点。", type:"A", correct:false },
+      { text:"我们的模杯布采用60%尼龙+40%氨纶黄金混纺比例。", type:"F", correct:false },
+      { text:"维珍妮用了3年，每年采购量增长30%。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>B是「跟客户说你的收益」，必须用客户听得懂的语言：省钱（退货减少1500万）、赚钱（复购率增加）、降风险（消费者满意度提升）。<br><br>针对采购总监的痛点（最怕退货），直接给出量化利益，让他看到ROI。"
+  },
+  {
+    scenario: "采购总监说：听起来不错，但你们毕竟不是最大的面料商，我们品牌第一次用你们的面料，我需要一些证据证明你们真的能做到。",
+    question: "接下来应该说 <strong>E - 证明</strong>（用案例/数据/荣誉/证书佐证），下列哪句话最合适？",
+    options: [
+      { text:"我们的回弹率是98%，比行业平均高。", type:"A", correct:false },
+      { text:"维珍妮从2021年开始采购我们的模杯布，3年累计采购1.2亿，退货率从8%降到2.8%，她们的质检总监专门给我们写了推荐信，我可以发给您参考。另外我们有SGS出具的50次洗涤测试报告，回弹率保持在96.5%，这些数据都可以提供给您。", type:"E", correct:true },
+      { text:"我们对面料品质要求很高，每批都严格检测。", type:"F", correct:false },
+      { text:"用我们的面料，退货率能降60%。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>E是「让别人替你说话」——客户案例（维珍妮3年1.2亿）、第三方数据（SGS测试报告）、客户推荐信（质检总监认可）。<br><br>面对「你们不是最大面料商」的疑虑，用真实的大客户案例和权威检测报告来建立信任，比自己说一百遍「我们品质好」都管用。"
+  },
+  {
+    scenario: "你向一家运动品牌推荐你们的功能性运动面料（速干、透气、抗菌）。你准备介绍这款面料。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的运动面料采用Coolmax®认证纤维+银离子抗菌技术，克重140g/㎡，UPF50+防晒指数，吸湿速干时间小于3分钟。", type:"F", correct:true },
+      { text:"相比同类运动面料，我们的速干速度快40%，抗菌效果持久洗50次仍有效，UPF防晒指数高出20。", type:"A", correct:false },
+      { text:"用了我们的运动面料，运动员穿着更舒适，运动表现更好，你们品牌的专业形象也会提升。", type:"B", correct:false },
+      { text:"安踏的跑步服系列用了我们的面料，在专业跑者群体中好评率92%。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>特征是客观参数——Coolmax®认证、银离子抗菌、140g/㎡克重、UPF50+、速干<3分钟。这些都是可以测量、可以验证的指标，不依赖比较或想象。"
+  },
+  {
+    scenario: "接上题。运动品牌的产品经理说：市面上速干面料很多，你们这个有什么不一样？",
+    question: "接下来应该说 <strong>A - 优势</strong>，下列哪句话最合适？",
+    options: [
+      { text:"我们的面料采用Coolmax®认证纤维+银离子抗菌，克重140g/㎡。", type:"F", correct:false },
+      { text:"我们的面料速干速度比行业平均快40%（竞品8-10分钟 vs 我们3-5分钟），而且我们是唯一能做到银离子抗菌洗50次仍有效的供应商，竞品普遍在20-30次后抗菌效果衰减。这让你们的运动服在「功能性」上真正领先竞品。", type:"A", correct:true },
+      { text:"用我们的面料，消费者穿着更舒适，复购率更高。", type:"B", correct:false },
+      { text:"李宁的跑步服系列也用了类似技术。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>优势必须有「比较」——速干速度比行业平均快40%、唯一能做到洗50次仍有效。这两个差异化点直接回答了「有什么不一样」。<br><br>注意：不要只说「我们很好」，要说「我们比别人好在哪里」。"
+  },
+  {
+    scenario: "产品经理对技术优势感兴趣，但说：我们品牌现在最头疼的是电商差评，很多消费者买了运动服洗了几次就说不速干了，然后给差评。",
+    question: "接下来应该说 <strong>B - 利益</strong>，下列哪句话最合适？",
+    options: [
+      { text:"我们的速干速度比行业平均快40%。", type:"A", correct:false },
+      { text:"对您来说，用我们的面料，电商差评率能从现在的12%降到5%以内，按您每年电商销售200万件计算，减少14万条差评，直接提升店铺评分和搜索排名，估计每年新增电商销售额3000-5000万。同时，「洗了还速干」成为你们品牌的口碑亮点，有利于内容营销和社交媒体传播。", type:"B", correct:true },
+      { text:"我们的面料有SGS检测报告，速干时间<3分钟。", type:"E", correct:false },
+      { text:"我们的面料采用Coolmax®认证纤维。", type:"F", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>针对产品经理的痛点（电商差评），直接给出量化利益：差评率从12%→5%、减少14万条差评、新增销售额3000-5000万。<br><br>B的真谛是「把产品优势翻译成客户的商业价值」——不是「速干快40%」，而是「差评减少、销量增加、口碑提升」。"
+  },
+  {
+    scenario: "产品经理说：这些利益听起来很吸引人，但我需要一些证据证明你们的面料真的能做到洗50次还速干。我们之前也被供应商忽悠过。",
+    question: "接下来应该说 <strong>E - 证明</strong>，下列哪句话最合适？",
+    options: [
+      { text:"我们对面料品质要求很高，每批都检测。", type:"F", correct:false },
+      { text:"洗50次还速干，这对你们很重要吗？", type:"N", correct:false },
+      { text:"我们理解您的顾虑，之前确实有供应商夸大宣传。我们可以提供三样东西：① SGS出具的50次洗涤测试报告（原件可查）② 安踏跑步服系列连续3年的消费者评价数据，差评率从11%降到4% ③ 我们可以免费提供10米样布，您自己送去检测或者做水洗测试，用数据说话。", type:"E", correct:true },
+      { text:"我们的面料采用Coolmax®认证纤维，这是国际认证。", type:"F", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>面对「被供应商忽悠过」的顾虑，最好的证明是「让客户自己验证」——提供SGS报告（可查原件）、提供客户数据（安踏3年差评率变化）、提供免费样布（客户自己测试）。<br><br>E的最高境界是「敢让客户自己验证」，这比任何第三方证书都更有说服力。"
+  }
+];
+
+var currentQ = 0;
+var answers = [];
+var answered = false;
+
+function renderQ() {
+  var q = questions[currentQ];
+  document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+  
+  var fabeType = q.options.find(function(o){return o.type;}) ? q.options.find(function(o){return o.type;}).type : 'F';
+  var typeName = {'F':'F 特征','A':'A 优势','B':'B 利益','E':'E 证明'}[fabeType];
+  
+  var card = document.getElementById('questionCard');
+  card.innerHTML = '<div class="question-badge">' + typeName + ' 训练</div>' +
+    '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+    '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+    '<div class="options">' +
+    q.options.map(function(opt,i){
+      return '<div class="option" onclick="selectOpt(' + i + ')">' +
+        '<div class="radio"></div>' +
+        '<div class="text">' + opt.text + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="explanation" id="explanation">' +
+      '<h4>✅ 解析</h4>' +
+      '<p>' + q.explain + '</p>' +
+    '</div>';
+  
+  answered = false;
+  document.getElementById('btnNext').textContent = '确认答案';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultPage').classList.remove('show');
+  document.getElementById('quizPage').style.display = '';
+}
+
+window.selectOpt = function(idx) {
+  if (answered) return;
+  var opts = document.querySelectorAll('.option');
+  opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+  window.selectedIdx = idx;
+  document.getElementById('btnNext').disabled = false;
+};
+
+window.nextQ = function() {
+  if (window.selectedIdx === undefined) return;
+  if (!answered) {
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+  } else {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      window.selectedIdx = undefined;
+      renderQ();
+    } else {
+      showResult();
+    }
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    window.selectedIdx = undefined;
+    renderQ();
+    if (answers[currentQ] !== undefined) {
+      answered = true;
+      var q = questions[currentQ];
+      var opts = document.querySelectorAll('.option');
+      opts.forEach(function(opt,i){
+        if (q.options[i].correct) opt.classList.add('correct');
+        if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+      });
+      document.getElementById('explanation').classList.add('show');
+      document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    }
+  }
+};
+
+function showResult() {
+  document.getElementById('quizPage').style.display = 'none';
+  var score = answers.filter(function(a){return a;}).length;
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('percentNum').textContent = percent;
+  
+  var detail = '<h3>📊 答题详情</h3>';
+  questions.forEach(function(q,i){
+    var icon = answers[i] ? '✅' : '❌';
+    var title = q.scenario.substring(0, 40) + '...';
+    detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+  });
+  document.getElementById('resultDetail').innerHTML = detail;
+  document.getElementById('resultPage').classList.add('show');
+}
+
+window.restart = function() {
+  currentQ = 0;
+  answers = [];
+  window.selectedIdx = undefined;
+  answered = false;
+  renderQ();
+};
+
+renderQ();
+</script>
+</body>
+</html>

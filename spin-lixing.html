@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - 利兴纺织定制版</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;min-height:100vh}
+  header{background:linear-gradient(135deg,#B85042,#E07060);color:white;padding:24px 32px;text-align:center}
+  header h1{font-size:26px}
+  header .subtitle{font-size:14px;opacity:.85;margin-top:6px}
+  header .company-tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px}
+  .container{max-width:800px;margin:0 auto;padding:32px 20px}
+  .progress-bar{height:6px;background:#ddd;border-radius:3px;margin-bottom:24px;overflow:hidden}
+  .progress-fill{height:100%;background:#B85042;border-radius:3px;transition:width .4s}
+  .progress-text{text-align:right;font-size:13px;color:#888;margin-bottom:4px}
+  .spin-hint{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .spin-tag{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .tag-S{background:#EBF5FB;color:#2980B9}
+  .tag-P{background:#FDEDEC;color:#E67E22}
+  .tag-I{background:#FADBD8;color:#C0392B}
+  .tag-N{background:#E8F8F5;color:#27AE60}
+  .card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+  .question-badge{display:inline-block;background:#B85042;color:white;border-radius:20px;padding:4px 14px;font-size:13px;margin-bottom:16px}
+  .scenario{background:#f8f9fa;border-left:4px solid #B85042;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;line-height:1.8;color:#333}
+  .scenario .label{font-weight:600;color:#B85042}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1.6}
+  .option:hover{border-color:#B85042;background:#FDF5F0}
+  .option.selected{border-color:#B85042;background:#FDF5F0}
+  .option.correct{border-color:#27AE60;background:#E8F8F5}
+  .option.wrong{border-color:#E74C3C;background:#FDEDEC}
+  .option .radio{min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+  .option.selected .radio{border-color:#B85042;background:#B85042}
+  .option.selected .radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%;display:block}
+  .option .text{flex:1}
+  .explanation{margin-top:20px;padding:16px 20px;background:#E8F8F5;border-radius:12px;display:none}
+  .explanation.show{display:block}
+  .explanation h4{color:#27AE60;font-size:15px;margin-bottom:8px}
+  .explanation p{font-size:14px;color:#333;line-height:1.7}
+  .correct-answer{margin-top:20px;padding:14px 18px;background:#FFF3CD;border:2px solid #F0AD4E;border-radius:12px;display:none;font-size:14px;line-height:1.6}
+  .correct-answer.show{display:block}
+  .correct-answer .clabel{font-weight:700;color:#E67E22;margin-bottom:6px}
+  .opt-label{font-weight:700;color:#B85042;margin-right:6px}
+  .btn-row{display:flex;gap:12px;margin-top:24px}
+  .btn{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+  .btn-primary{background:#B85042;color:white}
+  .btn-primary:hover{background:#9a3d32}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed}
+  .btn-secondary{background:#f0f0f0;color:#333}
+  .btn-secondary:hover{background:#e0e0e0}
+  .result-page{display:none}
+  .result-page.show{display:block;text-align:center}
+  .score-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#B85042,#E07060);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .num{font-size:48px;font-weight:700;line-height:1}
+  .score-circle .slabel{font-size:14px;margin-top:4px;opacity:.85}
+  .percent-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .percent-circle .num{font-size:36px;font-weight:700;color:#B85042;line-height:1}
+  .percent-circle .unit{font-size:20px;font-weight:700;color:#B85042}
+  .percent-circle .sub-label{font-size:13px;color:#999;margin-top:2px}
+  .result-detail{background:white;border-radius:16px;padding:24px;margin-top:20px;text-align:left}
+  .result-detail h3{font-size:17px;margin-bottom:12px;color:#333}
+  .result-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+  .result-item:last-child{border-bottom:none}
+  .restart-btn{margin-top:24px;padding:14px 48px;background:#B85042;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 挖痛练习</h1>
+  <p class="subtitle">SPIN四层提问法训练 · 共8题</p>
+  <span class="company-tag">🧵 利兴纺织定制版</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="slabel">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" id="restartBtn">再来一次</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var questions = [
+    {
+      scenario: "你初次拜访某内衣品牌采购总监，她说：我们现在面料供应商有几家，整体合作还行，就是有时候交期和品质不太稳定。",
+      question: "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解她的现状？",
+      options: [
+        {text:"您目前几家供应商各占大概多少比例？主要采购哪些品类（模杯布/拉架布/经编布）？年采购量大概多少？", correct:true},
+        {text:"交期不稳定大概多久出一次？每次影响大吗？", correct:false},
+        {text:"品质不稳定对你们生产有影响吗？", correct:false},
+        {text:"如果交期和品质都稳定了，对你们帮助大吗？", correct:false}
+      ],
+      explain:"S - 现状问题：第一步先摸清楚现状——供应商格局、品类结构、采购规模。在不了解现状的情况下直接问痛点，容易问偏，也让客户觉得你不专业。利兴的客户通常是大品牌，采购结构复杂，必须先摸清家底。"
+    },
+    {
+      scenario: "采购总监说：我们60%的面料从利兴采购，主要是模杯布和拉架布，年采购量大概在8000万左右。交期不准时平均每个月出2-3次，品质方面偶尔有色差和手感偏差。",
+      question: "采购总监说出了痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
+      options: [
+        {text:"交期不准时和品质问题，大概每个月给你们造成多少损失？", correct:false},
+        {text:"如果有一家供应商能把交期准时率提升到98%以上，您愿意了解一下吗？", correct:false},
+        {text:"交期不准时主要是哪几个环节出问题（排产/染色/后整理/物流）？色差和手感偏差是在哪些批次出现的，跟原料批次有关吗？除了你们工厂受影响，下游成衣厂有没有投诉过？", correct:true},
+        {text:"您现在几家供应商谁的交期和品质更稳定？", correct:false}
+      ],
+      explain:"P - 难点问题：把痛点问具体——交期问题在哪个环节（排产/染色/后整理/物流），品质问题跟什么有关（原料批次/工艺参数/环境影响）。问得越具体，后面提方案的针对性就越强。利兴是功能性面料专家，必须用专业语言问专业问题。"
+    },
+    {
+      scenario: "采购总监说：主要是染色和后整理这两个环节，有时候排产比较急就抢工期，色差就出来了。手感偏差跟原料批次有关，不同批次的纤维手感确实有差异。下游成衣厂投诉过好几次了，说面料手感不一致影响品牌形象。",
+      question: "采购总监说出了多个痛点，接下来哪句话是 <strong>I - 影响问题</strong>，能放大问题的严重性？",
+      options: [
+        {text:"如果我们能解决这些问题，对您帮助大吗？", correct:false},
+        {text:"您的质检标准是什么？", correct:false},
+        {text:"下游成衣厂投诉手感不一致，大概每个月有多少批次被退回或要求补偿？这些投诉有没有影响到您跟成衣厂的长期合作？更严重的是，如果手感问题被消费者发现，对品牌口碑的损害有多大？您作为采购总监，这方面有没有被老板问责过？", correct:true},
+        {text:"有没有因为这个被成衣厂投诉过领导？", correct:false}
+      ],
+      explain:"I - 影响问题：三个维度放大影响——① 直接经济损失（退货/补偿）② 合作关系风险（丢失成衣厂客户）③ 品牌声誉风险（消费者感知）+ 个人职场风险（被老板问责）。让采购总监意识到这不只是「偶尔小问题」，而是系统性隐患。"
+    },
+    {
+      scenario: "采购总监沉吟片刻：你这样一算……上个月因为手感问题被优衣库退了三批货，补偿了120万。今年已经丢了两家成衣厂客户，据说在行业内说了我们面料不稳定的话。老板上个月开会点名批评了采购部，我压力很大。",
+      question: "采购总监已经感受到问题严重，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导她说出了解决的价值？",
+      options: [
+        {text:"上个月赔了120万，今年又丢了两家客户，那一年损失岂不是上千万？您是不是必须解决这个问题了？", correct:false},
+        {text:"如果有一家面料供应商，能把染色和后整理的稳定性提升到行业顶尖水平，原料批次间手感差异控制在5%以内，每批出货前提供手感对标报告——这让您的成衣厂客户对您的信心，以及您老板对采购部的评价，会有什么改变？", correct:true},
+        {text:"您想换供应商吗？", correct:false},
+        {text:"这个问题确实很严重，不过我们利兴可以给您一些补偿。", correct:false}
+      ],
+      explain:"N - 需求回报问题：引导客户自己说出「解决了这个问题有什么好处」，而不是你告诉他好处。让他想象——成衣厂重新信任你、老板在会上表扬采购部、不用再为品质问题焦虑……客户自己说出来的价值，比你说十遍都有说服力。"
+    },
+    {
+      scenario: "你拜访一家运动品牌的材料开发经理，他说：我们现在用的面料供应商有两家，一家在国内，一家在东南亚。国内这家交期比较快，但价格高；东南亚那家便宜，但交期很长，而且有时候沟通不太顺畅。",
+      question: "下面哪句话是 <strong>S - 现状问题</strong>，能让您最全面地了解现状，为后续挖痛打基础？",
+      options: [
+        {text:"您为什么选择一家国内一家东南亚？这样的布局有什么考虑？两家各占多少比例？主要采购什么品类？", correct:true},
+        {text:"东南亚那家交期多长？沟通哪里不顺畅？", correct:false},
+        {text:"国内这家价格高多少？值得吗？", correct:false},
+        {text:"如果有一家既能做到国内交期、又能做到东南亚价格的供应商，您有兴趣吗？", correct:false}
+      ],
+      explain:"S - 现状问题：了解客户的供应商布局策略（国内+东南亚组合），以及两家的分工和占比。这是大品牌常见的采购策略——用国内供应商保交期，用东南亚供应商压成本。理解了策略，才能找到切入点。"
+    },
+    {
+      scenario: "材料开发经理说：国内这家占70%，主要做快反订单（7-10天交货）；东南亚占30%，做大货订单（45-60天）。选择这样的布局是为了平衡交期和成本。但问题是，国内这家有时候品质不稳定，东南亚那家沟通成本高，经常要来回确认好几次。",
+      question: "材料开发经理说出了两个痛点（品质不稳定/沟通成本高），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+      options: [
+        {text:"品质不稳定主要是哪些指标（色牢度/缩水率/起球）？沟通成本高主要体现在哪些环节（打样确认/大货跟单/异常处理）？这些问题对你们开发新款的速度有影响吗？", correct:true},
+        {text:"品质不稳定和沟通成本高，每个月给您添多少麻烦？", correct:false},
+        {text:"如果有一家供应商能同时做到品质稳定和沟通顺畅，您会考虑换掉现有供应商吗？", correct:false},
+        {text:"国内这家品质不稳定，您有没有考虑过换掉？", correct:false}
+      ],
+      explain:"P - 难点问题：把两个痛点分别问具体——品质不稳定是哪些指标（色牢度/缩水率/起球），沟通成本高在哪些环节（打样/大货/异常）。还要问对开发速度的影响——这是材料开发经理的核心KPI，问到这一步，他就知道你懂行。"
+    },
+    {
+      scenario: "材料开发经理说：品质不稳定主要是色牢度和起球，有时候洗一次就掉色或者起球，消费者会投诉。沟通成本高在打样确认环节，东南亚时差问题经常要等到第二天才能收到回复，一个新款打样要来回3-4次，开发周期被拖长。今年因为开发速度慢，已经有两个新款被竞品抢先上市了。",
+      question: "材料开发经理说出了严重影响（被竞品抢先上市），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+      options: [
+        {text:"被竞品抢先上市，对你们这款的销量影响有多大？除了销量，对你们品牌在消费者心中的「创新性」形象有没有影响？再说开发速度慢，是不是意味着您每年能推出的新款数量比竞品少，长期下来会不会被拉开差距？", correct:true},
+        {text:"那确实挺严重的，你们应该怎么解决？", correct:false},
+        {text:"如果开发速度快起来，对你们帮助大吗？", correct:false},
+        {text:"色牢度和起球问题，消费者投诉多吗？", correct:false}
+      ],
+      explain:"I - 影响问题：三个维度——① 销量影响（被竞品抢先）② 品牌影响（创新性形象受损）③ 长期竞争影响（新款数量落后）。让材料开发经理意识到，面料供应商的选择不只是成本/品质问题，而是直接影响品牌竞争力和他个人的业绩。"
+    },
+    {
+      scenario: "材料开发经理说：被竞品抢先那两款，预估少卖了3000万。老板在季度复盘会上点了我的名，说开发速度必须提升。我现在压力很大，如果接下来两个季度还这样，我估计位置不保。",
+      question: "材料开发经理已经感受到严重到「位置不保」，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的美好画面？",
+      options: [
+        {text:"如果有一家供应商能做到国内交期（7-10天）+ 东南亚价格 + 品质稳定 + 时差零时差沟通——这让您的开发速度、新款上市节奏、以及老板对您的评价，会变成什么样？您能不能想象一下，明年这个时候您已经连续三个季度被评为优秀员工？", correct:true},
+        {text:"那确实很严重，要不要考虑换供应商？", correct:false},
+        {text:"我们利兴在越南也有工厂，交期10天，价格比国内低15%，品质稳定，您要不要试试？", correct:false},
+        {text:"您位置不保的话，会怎么样？", correct:false}
+      ],
+      explain:"N - 需求回报问题：引导客户想象「问题解决后的美好画面」——开发速度追上竞品、新款按时上市、老板表扬、被评为优秀员工……当客户自己描绘出这个画面，他就会千方百计去找预算、去推动决策。这才是N的最高境界。"
+    }
+  ];
+
+  var currentQ = 0;
+  var answers = [];
+  var answered = false;
+
+  function renderQ() {
+    var q = questions[currentQ];
+    document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+    document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+    
+    var badge = q.scenario.indexOf('S -')>=0 ? 'S 现状问题' : q.scenario.indexOf('P -')>=0 ? 'P 难点问题' : q.scenario.indexOf('I -')>=0 ? 'I 影响问题' : 'N 需求回报';
+    var card = document.getElementById('questionCard');
+    card.innerHTML = '<div class="question-badge">' + badge + '</div>' +
+      '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+      '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+      '<div class="options">' +
+      q.options.map(function(opt,i){
+        return '<div class="option" onclick="selectOpt(' + i + ')">' +
+          '<div class="radio"></div>' +
+          '<div class="text">' + opt.text + '</div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+      '<div class="explanation" id="explanation">' +
+        '<h4>✅ 解析</h4>' +
+        '<p>' + q.explain + '</p>' +
+      '</div>' +
+      '<div class="correct-answer" id="correctAnswer">' +
+        '<div class="clabel">💡 正确答案解析：</div>' +
+        '<div>' + q.explain + '</div>' +
+      '</div>';
+    
+    answered = false;
+    document.getElementById('btnNext').textContent = '确认答案';
+    document.getElementById('btnNext').disabled = true;
+    document.getElementById('btnNext').onclick = checkAnswer;
+    document.getElementById('btnPrev').disabled = currentQ === 0;
+    document.getElementById('resultPage').classList.remove('show');
+    document.getElementById('quizPage').style.display = '';
+  }
+
+  window.selectOpt = function(idx) {
+    if (answered) return;
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+    window.selectedIdx = idx;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.checkAnswer = function() {
+    if (window.selectedIdx === undefined) return;
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('correctAnswer').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    document.getElementById('btnNext').onclick = nextQ;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.nextQ = function() {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      renderQ();
+    } else {
+      showResult();
+    }
+  };
+
+  window.prevQ = function() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQ();
+      if (answers[currentQ] !== undefined) {
+        answered = true;
+        var q = questions[currentQ];
+        var opts = document.querySelectorAll('.option');
+        opts.forEach(function(opt,i){
+          if (q.options[i].correct) opt.classList.add('correct');
+          if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+        });
+        document.getElementById('explanation').classList.add('show');
+        document.getElementById('correctAnswer').classList.add('show');
+        document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+        document.getElementById('btnNext').onclick = nextQ;
+      }
+    }
+  };
+
+  function showResult() {
+    document.getElementById('quizPage').style.display = 'none';
+    var score = answers.filter(function(a){return a;}).length;
+    var percent = Math.round(score / questions.length * 100);
+    document.getElementById('scoreNum').textContent = score;
+    document.getElementById('percentNum').textContent = percent;
+    
+    var detail = '<h3>📊 答题详情</h3>';
+    questions.forEach(function(q,i){
+      var icon = answers[i] ? '✅' : '❌';
+      var title = q.scenario.substring(0, 40) + '...';
+      detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+    });
+    document.getElementById('resultDetail').innerHTML = detail;
+    document.getElementById('resultPage').classList.add('show');
+  }
+
+  document.getElementById('restartBtn').onclick = function() {
+    currentQ = 0;
+    answers = [];
+    window.selectedIdx = undefined;
+    answered = false;
+    renderQ();
+  };
+
+  document.getElementById('btnPrev').onclick = prevQ;
+
+  renderQ();
+})();
+</script>
+</body>
+</html>
