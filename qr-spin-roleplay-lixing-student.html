@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN演练-学员版 · 二维码</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #2F3C7E 0%, #B85042 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .icon { font-size: 60px; margin-bottom: 20px; }
+        h1 {
+            color: #2F3C7E;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .qr-wrapper {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 2px dashed #2F3C7E;
+        }
+        img {
+            width: 300px;
+            height: 300px;
+            display: block;
+        }
+        .url {
+            background: #f0f0f0;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        .tip {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #2F3C7E;
+            font-weight: 500;
+        }
+        .print-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: #2F3C7E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .print-btn:hover { background: #1F2C5E; }
+        .features {
+            margin-top: 25px;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .features h3 {
+            color: #B85042;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .features li {
+            margin: 8px 0;
+            font-size: 13px;
+            color: #444;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+            .print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📱</div>
+        <h1>SPIN演练工具 · 学员版</h1>
+        <p class="subtitle">利兴纺织 · 手机友好 · 随时查阅</p>
+        
+        <div class="qr-wrapper">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://dongdajack-lab.github.io/customer-grading/spin-roleplay-lixing-student.html" alt="SPIN演练学员版二维码" />
+        </div>
+        
+        <div class="url">https://dongdajack-lab.github.io/customer-grading/spin-roleplay-lixing-student.html</div>
+        
+        <div class="features">
+            <h3>📱 学员版功能</h3>
+            <ul>
+                <li>✅ <strong>手机友好</strong> - 4屏滑动浏览</li>
+                <li>✅ <strong>场景+任务</strong> - 维珍妮场景背景+3个任务目标</li>
+                <li>✅ <strong>SPIN快速参考</strong> - S/P/I/N各阶段示例问句</li>
+                <li>✅ <strong>客户内幕</strong> - 李总隐藏想法+常见回应</li>
+                <li>✅ <strong>自测清单</strong> - 8项自查+演练后反思3问</li>
+                <li>✅ <strong>底栏导航</strong> - 随时切换查看</li>
+            </ul>
+        </div>
+        
+        <button class="print-btn" onclick="window.print()">🖨️ 打印二维码</button>
+        <p class="tip">📱 学员扫码后在手机上随时参考</p>
+    </div>
+</body>
+</html>
