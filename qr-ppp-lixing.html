@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPP开场白练习 - 利兴纺织 · 二维码</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:linear-gradient(135deg,#B85042 0%,#E8A87C 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .card { background:white; border-radius:20px; padding:32px 24px; max-width:380px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.15); text-align:center; }
+  .brand { font-size:12px; color:#999; margin-bottom:4px; }
+  .title { font-size:20px; font-weight:700; color:#B85042; margin-bottom:6px; }
+  .subtitle { font-size:13px; color:#666; margin-bottom:20px; }
+  .qr-wrapper { background:#f8f8f8; border-radius:16px; padding:20px; display:inline-block; margin-bottom:16px; }
+  #qrcode { display:inline-block; }
+  .url { font-size:11px; color:#999; word-break:break-all; background:#f5f5f5; padding:8px 12px; border-radius:8px; margin-bottom:16px; line-height:1.5; }
+  .btn-row { display:flex; gap:8px; }
+  .btn { flex:1; padding:10px; border:none; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block; text-align:center; }
+  .btn-primary { background:#B85042; color:white; }
+  .btn-secondary { background:#f0ebe8; color:#666; }
+  .divider { height:1px; background:#f0ebe8; margin:16px 0; }
+  .tip { font-size:11px; color:#999; line-height:1.6; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="card">
+  <div class="brand">利兴纺织 · 大董老师</div>
+  <div class="title">PPP开场白练习</div>
+  <div class="subtitle">PPP开场结构训练（Purpose / Process / Payoff）· 共8题</div>
+  
+  <div class="divider"></div>
+  
+  <div class="qr-wrapper">
+    <div id="qrcode"></div>
+  </div>
+  
+  <div class="url" id="pageUrl">https://dongdajack-lab.github.io/customer-grading/ppp-lixing.html</div>
+  
+  <div class="btn-row">
+    <a class="btn btn-primary" href="https://dongdajack-lab.github.io/customer-grading/ppp-lixing.html" target="_blank">打开工具</a>
+    <a class="btn btn-secondary" href="index.html">返回首页</a>
+  </div>
+  
+  <div class="divider"></div>
+  <div class="tip">📱 手机扫码直接练习<br>适合课堂互动 · 利兴纺织定制版</div>
+</div>
+
+<script>
+var url = "https://dongdajack-lab.github.io/customer-grading/ppp-lixing.html";
+new QRCode(document.getElementById("qrcode"), {
+  text: url,
+  width: 200,
+  height: 200,
+  colorDark: "#B85042",
+  colorLight: "#ffffff",
+  correctLevel: QRCode.CorrectLevel.M
+});
+</script>
+</body>
+</html>
