@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>利兴纺织 · SPIN演练-学员版</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+        
+        /* 顶部 */
+        .top-bar {
+            background: linear-gradient(135deg, #B85042 0%, #2F3C7E 100%);
+            color: white;
+            padding: 20px 15px 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .top-bar h1 { font-size: 18px; margin-bottom: 4px; }
+        .top-bar p { font-size: 12px; opacity: 0.85; }
+        
+        /* 进度 */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        .dot.active { background: #F9E795; transform: scale(1.3); }
+        
+        /* 主内容 */
+        .main { padding: 15px; }
+        
+        /* 场景卡 */
+        .scene-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .scene-card .label {
+            font-size: 11px;
+            color: #B85042;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .scene-card h2 {
+            font-size: 17px;
+            color: #2F3C7E;
+            margin-bottom: 12px;
+        }
+        .scene-card p { font-size: 14px; margin-bottom: 8px; }
+        .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .tag {
+            background: #FFF3E6;
+            color: #B85042;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* 你的信息卡 */
+        .info-card {
+            background: linear-gradient(135deg, #2F3C7E 0%, #4A5887 100%);
+            color: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .info-card h3 { font-size: 15px; margin-bottom: 12px; color: #F9E795; }
+        .info-card p { font-size: 13px; margin-bottom: 6px; opacity: 0.95; }
+        .info-card .highlight {
+            background: rgba(249, 231, 149, 0.2);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        
+        /* SPIN快速参考 */
+        .spin-section { margin-bottom: 15px; }
+        .spin-header {
+            background: #2F3C7E;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px 12px 0 0;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .spin-body {
+            background: white;
+            padding: 15px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .spin-body .aim {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+        .example-box {
+            background: #FFF9F0;
+            border-left: 3px solid #B85042;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 0 6px 6px 0;
+        }
+        .example-box .title { font-size: 12px; color: #B85042; font-weight: 600; margin-bottom: 4px; }
+        .example-box .text { font-size: 13px; color: #333; }
+        
+        /* 客户可能说的话 */
+        .customer-card {
+            background: #FFF9F0;
+            border: 1px solid #F9E795;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .customer-card h3 { font-size: 14px; color: #B85042; margin-bottom: 10px; }
+        .customer-say {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 3px solid #F9E795;
+        }
+        .customer-say .reaction {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        /* 自测清单 */
+        .checklist {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .checklist h3 { font-size: 15px; color: #2F3C7E; margin-bottom: 15px; }
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .check-item:last-child { border-bottom: none; }
+        .check-box {
+            width: 22px; height: 22px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            flex-shrink: 0;
+            margin-top: 1px;
+            transition: all 0.2s;
+        }
+        .check-item.checked .check-box {
+            background: #B85042;
+            border-color: #B85042;
+        }
+        .check-item.checked .check-box:after {
+            content: "✓";
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .check-text { font-size: 13px; flex: 1; }
+        
+        /* 底栏 */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            padding: 12px 15px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        .bottom-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .bottom-btn.primary { background: #B85042; color: white; }
+        .bottom-btn.secondary { background: #2F3C7E; color: white; }
+        .bottom-btn:hover { opacity: 0.9; }
+        
+        /* 折叠 */
+        .collapse-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 12px 0;
+        }
+        .collapse-header h3 { font-size: 15px; color: #2F3C7E; }
+        .collapse-header .arrow { transition: transform 0.3s; font-size: 12px; color: #999; }
+        .collapse-header .arrow.open { transform: rotate(180deg); }
+        .collapse-body { display: none; }
+        .collapse-body.open { display: block; }
+        
+        /* 提醒 */
+        .tip-box {
+            background: #FFF3CD;
+            border-left: 4px solid #FF9800;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        .tip-box strong { color: #FF9800; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>🎯 SPIN演练 · 学员版</h1>
+        <p>利兴纺织 · 维珍妮场景 · 手机随时查阅</p>
+        <div class="progress-dots">
+            <div class="dot active" id="dot0"></div>
+            <div class="dot" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+        </div>
+    </div>
+    
+    <div class="main">
+        <!-- 第1屏：场景 + 你的任务 -->
+        <div class="screen" id="screen0">
+            <div class="scene-card">
+                <div class="label">📋 演练场景</div>
+                <h2>维珍妮采购会议</h2>
+                <p><strong>⏰ 时间：</strong>周二上午 10:00</p>
+                <p><strong>📍 地点：</strong>维珍妮会议室</p>
+                <p><strong>👥 角色：</strong>你（利兴销售）+ 李总（采购总监）</p>
+                <div class="tag-row">
+                    <span class="tag">老客户</span>
+                    <span class="tag">年采购500万米</span>
+                    <span class="tag">有竞品压力</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>🎯 你的任务</h3>
+                <p>1. 通过提问了解维珍妮为什么尝试越南供应商</p>
+                <p>2. 让李总<strong>自己说出</strong>利兴的价值</p>
+                <p>3. 获得承诺：下一季度增加20%订单</p>
+                <div class="highlight">💡 关键：不是你说利兴好，是让李总说！</div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>⚠️ 记住：</strong>李总不是不满意利兴，但他也不会主动说利兴有多好。你的工作就是用SPIN让他自己说出"还是利兴靠谱"。
+            </div>
+        </div>
+        
+        <!-- 第2屏：SPIN快速参考 -->
+        <div class="screen" id="screen1" style="display:none;">
+            <div class="spin-section">
+                <div class="spin-header">🔍 S = 情景问题（Situation）</div>
+                <div class="spin-body">
+                    <div class="aim">🎯 目的：建立信任，了解背景。问2-3个就够了，别太多。</div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"李总，上次聊的那个系列推进得怎么样了？"</div>
+                    </div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"听说你们越南工厂在扩产能，那边用料需求是不是也增加了？"</div>
+                    </div>
+                    <div class="aim" style="margin-top:10px; background:#FFF3CD; border-left:3px solid #FF9800;">⚠️ 避免：审问式提问（"你们有几个供应商？各自多少量？"）→ 客户会防备</div>
+                </div>
+            </div>
+            
+            <div class="spin-section">
+                <div class="spin-header">❓ P = 难点问题（Problem）</div>
+                <div class="spin-body">
+                    <div class="aim">🎯 目的：让客户<strong>自己说出不满</strong>。用"会不会...""有没有...""我感觉..."来问。</div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"李总，同时用几家供应商，品控那边会不会有时候...要多花些精力协调？"</div>
+                    </div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"我听说有些客户用越南供应商遇到过手感批次不一致的情况，您这边有遇到吗？"</div>
+                    </div>
+                    <div class="aim" style="margin-top:10px; background:#FFF3CD; border-left:3px solid #FF9800;">⚠️ 避免：直接说"你们肯定有品控问题吧"→ 客户会防御性地说"没有啊"</div>
+                </div>
+            </div>
+            
+            <div class="spin-section">
+                <div class="spin-header">💥 I = 暗示问题（Implication）</div>
+                <div class="spin-body">
+                    <div class="aim">🎯 目的：把"小问题"放大成"大问题"。让客户意识到不解决会很痛。</div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"如果手感真的有批次差异，品控要每批抽检，这个人力成本其实也不低吧？"</div>
+                    </div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"如果因为面料问题被VS退货，这个...对您跟VS的长期合作会不会有影响？"</div>
+                    </div>
+                    <div class="aim" style="margin-top:10px; background:#FFF3CD; border-left:3px solid #FF9800;">💡 技巧：连接到李总最怕的事 = 被老板骂 + 被VS退货</div>
+                </div>
+            </div>
+            
+            <div class="spin-section">
+                <div class="spin-header">🎯 N = 需求效益（Need-payoff）</div>
+                <div class="spin-body">
+                    <div class="aim">🎯 目的：让客户<strong>自己说出解决方案</strong>。然后你再说"我们正好有这个"。</div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"如果有一家供应商能保证每批手感完全一致，有数字档案，这对您品控来说意味着什么？"</div>
+                    </div>
+                    <div class="example-box">
+                        <div class="title">✅ 好的问法</div>
+                        <div class="text">"要是我们能在香港设个保税仓，您随用随取，这样还需要越南那边赶交期吗？"</div>
+                    </div>
+                    <div class="aim" style="margin-top:10px; background:#D4EDDA; border-left:3px solid #28A745;">✅ 黄金标准：客户说"要是我能...就好了"→ 你接"我们可以帮您实现"</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第3屏：客户内幕 + 你可能听到的回应 -->
+        <div class="screen" id="screen2" style="display:none;">
+            <div class="customer-card">
+                <h3>🤫 李总的"隐藏想法"（你要想办法让他自己说出来）</h3>
+                <div class="customer-say">
+                    <strong>想法1：</strong>越南供应商单价便宜8%，交期快7-10天，老板很满意
+                    <div class="reaction">💡 你要挖的痛点：便宜8%但手感不一致，品控成本其实更高</div>
+                </div>
+                <div class="customer-say">
+                    <strong>想法2：</strong>去年因为面料问题被VS退货一次，损失80万，老板至今还提
+                    <div class="reaction">💡 这是最痛的点！用I问题连接到"如果再次发生..."</div>
+                </div>
+                <div class="customer-say">
+                    <strong>想法3：</strong>其实不想换掉利兴，但老板要求"供应商多元化"
+                    <div class="reaction">💡 让李总自己说出"利兴还是更可靠"，他就有理由跟老板汇报</div>
+                </div>
+            </div>
+            
+            <div class="scene-card">
+                <div class="label">💬 李总可能说的话（你要这样回应）</div>
+                <h2>常见回应 + 你的SPIN应对</h2>
+                
+                <div class="collapse-header" onclick="toggleCollapse('c1')">
+                    <h3>"还好还好，都挺顺利的"</h3>
+                    <span class="arrow" id="arrow-c1">▼</span>
+                </div>
+                <div class="collapse-body" id="body-c1">
+                    <p style="font-size:13px;color:#666;margin-bottom:10px;">→ 李总在回避，你要用更具体的P问题追问：</p>
+                    <p style="font-size:13px;background:#FFF9F0;padding:10px;border-radius:6px;"><strong>P问题：</strong>"李总，我很好奇——你们现在同时从两三个供应商拿货，品控那边会不会有时候要额外花精力协调？"</p>
+                </div>
+                
+                <div class="collapse-header" onclick="toggleCollapse('c2')">
+                    <h3>"老板对成本压力挺大的，要求多看一些方案"</h3>
+                    <span class="arrow" id="arrow-c2">▼</span>
+                </div>
+                <div class="collapse-body" id="body-c2">
+                    <p style="font-size:13px;color:#666;margin-bottom:10px;">→ 老板关心成本，但你要让李总看到"总成本"：</p>
+                    <p style="font-size:13px;background:#FFF9F0;padding:10px;border-radius:6px;"><strong>I问题：</strong>"如果面料品质不稳定导致返工或退货，这个成本算下来，其实比单价便宜8%要高得多，您算过这笔账吗？"</p>
+                </div>
+                
+                <div class="collapse-header" onclick="toggleCollapse('c3')">
+                    <h3>"你们交期如果能再压缩一点就更好了"</h3>
+                    <span class="arrow" id="arrow-c3">▼</span>
+                </div>
+                <div class="collapse-body" id="body-c3">
+                    <p style="font-size:13px;color:#666;margin-bottom:10px;">→ 交期是真实痛点，用N问题引导到解决方案：</p>
+                    <p style="font-size:13px;background:#FFF9F0;padding:10px;border-radius:6px;"><strong>N问题：</strong>"如果我们在香港设个保税仓，您这边随用随取，交期问题就彻底解决了，这对您来说有多大帮助？"</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第4屏：自测清单 -->
+        <div class="screen" id="screen3" style="display:none;">
+            <div class="checklist">
+                <h3>✅ 演练前自查清单</h3>
+                <p style="font-size:13px;color:#666;margin-bottom:15px;">开始演练前，先确认这些——</p>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我知道李总最怕的事是"被老板骂"和"被VS退货"</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我准备了2-3个S问题（背景），不会问太多</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我的P问题是用"会不会...""有没有..."开头的（不是直接问）</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我有I问题能连接到"品控成本"和"被VS退货"</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我的N问题是让李总自己说"要"，不是我直接推销</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我打算先听李总说，再决定下一个问题（不是背SPIN步骤）</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">如果李总说"还好"，我知道怎么追问，不会放弃</div>
+                </div>
+                
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div>
+                    <div class="check-text">我的目标是让李总说"还是利兴更可靠"，不是我说</div>
+                </div>
+            </div>
+            
+            <div class="scene-card">
+                <div class="label">📊 演练后反思</div>
+                <h2>问自己3个问题</h2>
+                <p style="font-size:14px;margin-bottom:12px;">1. 客户说得<strong>多</strong>还是我说得<strong>多</strong>？</p>
+                <p style="font-size:14px;margin-bottom:12px;">2. 客户有没有自己说出<strong>一个痛点</strong>？如果没有，是哪一步卡住了？</p>
+                <p style="font-size:14px;margin-bottom:12px;">3. 客户有没有自己说<strong>"要是能...就好了"</strong>？如果没有，N问题需要再加强。</p>
+                <div style="background:#D4EDDA;padding:12px 15px;border-radius:8px;font-size:13px;color:#155724;margin-top:10px;">
+                    ✅ <strong>理想状态：</strong>客户说的话是你的2倍。你问，客户说；你再问，客户说更多。
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底栏导航 -->
+    <div class="bottom-bar">
+        <button class="bottom-btn secondary" onclick="prevScreen()">← 上一页</button>
+        <button class="bottom-btn primary" onclick="nextScreen()">下一页 →</button>
+    </div>
+    
+    <script>
+        let currentScreen = 0;
+        const totalScreens = 4;
+        const screenNames = ['场景', 'SPIN参考', '客户内幕', '自测清单'];
+        
+        function showScreen(idx) {
+            if (idx < 0 || idx >= totalScreens) return;
+            currentScreen = idx;
+            for (let i = 0; i < totalScreens; i++) {
+                const s = document.getElementById('screen' + i);
+                if (s) s.style.display = i === idx ? 'block' : 'none';
+                const d = document.getElementById('dot' + i);
+                if (d) d.classList.toggle('active', i === idx);
+            }
+            // update button text
+            const nextBtn = document.querySelector('.bottom-btn.primary');
+            if (nextBtn) nextBtn.textContent = idx === totalScreens - 1 ? '✅ 完成' : '下一页 →';
+            window.scrollTo(0, 0);
+        }
+        
+        function nextScreen() {
+            if (currentScreen < totalScreens - 1) {
+                showScreen(currentScreen + 1);
+            } else {
+                alert('✅ 自查完成！\n\n现在开始演练吧！\n\n记住：让客户说，不是你说。');
+            }
+        }
+        
+        function prevScreen() {
+            if (currentScreen > 0) showScreen(currentScreen - 1);
+        }
+        
+        function toggleCollapse(id) {
+            const body = document.getElementById('body-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            if (body) body.classList.toggle('open');
+            if (arrow) arrow.classList.toggle('open');
+        }
+        
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+            // save state
+            const checks = document.querySelectorAll('.check-item.checked').length;
+            const total = document.querySelectorAll('.check-item').length;
+            if (checks === total) {
+                setTimeout(() => alert('🎉 全部确认完毕！准备好开始演练了！'), 200);
+            }
+        }
+        
+        // Initialize
+        showScreen(0);
+    </script>
+</body>
+</html>
