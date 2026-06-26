@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>利兴纺织 · PPP开场白练习 - 大董老师</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#B85042,#E8A87C); color:white; padding:20px 24px; text-align:center; }
+  header h1 { font-size:22px; font-weight:700; }
+  header p { font-size:13px; opacity:0.9; margin-top:4px; }
+  .brand-tag { font-size:11px; background:rgba(255,255,255,0.25); display:inline-block; padding:2px 10px; border-radius:10px; margin-top:6px; }
+  .container { max-width:780px; margin:0 auto; padding:24px 16px; }
+  .progress-bar { height:5px; background:#e0d6d0; border-radius:3px; margin-bottom:16px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#B85042,#E8A87C); border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:12px; color:#999; margin-bottom:3px; }
+  .card { background:white; border-radius:14px; padding:24px 20px; box-shadow:0 2px 12px rgba(184,80,66,0.08); }
+  .question-badge { display:inline-block; background:linear-gradient(135deg,#B85042,#D4786A); color:white; border-radius:16px; padding:3px 12px; font-size:12px; margin-bottom:12px; }
+  .scenario { background:#FFF8F5; border-left:4px solid #B85042; padding:14px 16px; border-radius:0 10px 10px 0; margin:12px 0; font-size:14px; line-height:1.8; color:#444; }
+  .scenario .label { font-weight:700; color:#B85042; }
+  .ppp-hint { display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; }
+  .ppp-tag { padding:5px 12px; border-radius:16px; font-size:12px; font-weight:700; }
+  .tag-P1 { background:#FFF0EC; color:#B85042; }
+  .tag-P2 { background:#FFE8E0; color:#A04030; }
+  .tag-P3 { background:#F5D6CF; color:#8A3020; }
+  .options { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #ece6e2; border-radius:10px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.6; }
+  .option:hover { border-color:#B85042; background:#FFF8F5; }
+  .option.selected { border-color:#B85042; background:#FFF0EC; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:20px; height:20px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#B85042; background:#B85042; }
+  .option.selected .radio::after { content:''; width:7px; height:7px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:16px; padding:14px 16px; background:#E8F8F5; border-radius:10px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:14px; margin-bottom:6px; }
+  .explanation p { font-size:13px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:16px; padding:12px 16px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:10px; display:none; font-size:13px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#B85042; margin-bottom:4px; }
+  .opt-label { font-weight:700; color:#B85042; margin-right:4px; }
+  .btn-row { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:12px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:linear-gradient(135deg,#B85042,#D4786A); color:white; }
+  .btn-primary:hover { background:linear-gradient(135deg,#A04030,#C06858); }
+  .btn-primary:disabled { background:#ddd; cursor:not-allowed; }
+  .btn-secondary { background:#f0ebe8; color:#666; }
+  .btn-secondary:hover { background:#e6dfda; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:140px; height:140px; border-radius:50%; background:linear-gradient(135deg,#B85042,#E8A87C); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .score-circle .num { font-size:42px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:13px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .percent-circle .num { font-size:32px; font-weight:700; color:#B85042; line-height:1; }
+  .percent-circle .unit { font-size:18px; font-weight:700; color:#B85042; }
+  .percent-circle .sub-label { font-size:12px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:14px; padding:20px; margin-top:16px; text-align:left; box-shadow:0 2px 12px rgba(184,80,66,0.08); }
+  .result-detail h3 { font-size:15px; margin-bottom:10px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f5f0ed; font-size:13px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:16px; }
+  .restart-btn { margin-top:20px; padding:12px 40px; background:linear-gradient(135deg,#B85042,#D4786A); color:white; border:none; border-radius:10px; font-size:15px; cursor:pointer; }
+  .tip-box { background:#FFF8F5; border:1px solid #F5D6CF; border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:12px; color:#8A3020; line-height:1.7; }
+  .tip-box strong { color:#B85042; }
+  .lixing-feature { display:inline-block; background:#B85042; color:white; border-radius:12px; padding:2px 8px; font-size:11px; margin-right:4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>利兴纺织 · PPP开场白练习</h1>
+  <p>PPP开场结构训练（Purpose / Process / Payoff）· 共8题</p>
+  <span class="brand-tag">大董老师 · 天地人销售管理体系</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>PPP 公式（利兴销售必备）：</strong><br>
+      <span class="lixing-feature">Purpose 目的</span>说清楚今天为什么来、要聊什么<br>
+      <span class="lixing-feature">Process 过程</span>说明今天怎么进行、大概多长时间<br>
+      <span class="lixing-feature">Payoff 收益</span>说明客户参与之后能得到什么价值<br>
+      <strong style="color:#B85042;">PPP顺序不能乱：目的 → 过程 → 收益</strong>
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="ppp-hint">
+      <span class="ppp-tag tag-P1">Purpose 目的</span>
+      <span class="ppp-tag tag-P2">Process 过程</span>
+      <span class="ppp-tag tag-P3">Payoff 收益</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // 第1题：识别 Purpose（利兴销售拜访运动品牌）
+  {
+    scenario: "你是利兴纺织的销售员小刘，今天要去拜访<strong>安踏</strong>的采购总监王总。利兴最近开发了一款新的<strong>高弹透气运动面料</strong>，你认为非常适合安踏即将上市的新款训练鞋。约好了30分钟面谈，刚进会议室落座。",
+    question: "下面哪句话是合格的 <strong>Purpose（目的）</strong>，能清楚说明今天见面是为了什么？",
+    options: [
+      { text:"王总，今天大概30分钟，我先花10分钟了解一下安踏新款训练鞋对面料的具体需求，再用15分钟给您介绍我们的高弹透气面料方案，最后5分钟讨论下一步试样安排。", type:"Process", correct:false },
+      { text:"王总，今天来的目的，是想和您聊聊安踏新款训练鞋的面料需求，看看我们刚研发的这款高弹透气运动面料能不能帮您解决透气性和回弹寿命的痛点。", type:"Purpose", correct:true },
+      { text:"王总，今天交流完之后，您会拿到一份针对安踏新款训练鞋的面料方案，包括透气性测试数据和成本对比分析，可以直接用于您的供应商评估。", type:"Payoff", correct:false },
+      { text:"王总，您好！利兴纺织专注运动面料研发20年，服务过很多国内运动品牌。", type:"Purpose", correct:false }
+    ],
+    explain:"<strong>✅ Purpose（目的）</strong><br><br>Purpose要回答：我为什么来、今天要聊什么。<br><br>「聊聊面料需求，看看我们的新面料能不能帮您解决痛点」——主题清晰，问题导向。<br><br>注意：介绍公司资历≠说明目的； Process是说明流程；Payoff是说明客户收益。"
+  },
+
+  // 第2题：识别 Process（利兴向内衣品牌做方案汇报）
+  {
+    scenario: "接上题。王总说：好的，你说说看。小刘已经说明了今天的目的（介绍新高弹透气面料），接下来要做 <strong>Process（过程）</strong>说明，让王总对接下来的30分钟有预期。",
+    question: "下面哪句话是有效的 <strong>Process（过程）</strong>说明？",
+    options: [
+      { text:"王总，今天来的目的是和您聊聊新款训练鞋的面料需求，看看我们的新面料能不能帮上忙。", type:"Purpose", correct:false },
+      { text:"王总，如果今天交流顺利，您能拿到一份完整的面料方案，包括测试数据和成本对比，可以直接用于供应商评估。", type:"Payoff", correct:false },
+      { text:"王总，我们今天大概30分钟：前10分钟我会详细了解安踏对面料的具体技术参数要求，接下来15分钟给您展示我们新面料的透气性测试报告和耐磨对比数据，最后5分钟讨论试样安排。如果您中间有任何问题，随时打断我。", type:"Process", correct:true },
+      { text:"王总，我们的高弹透气面料在回弹寿命上比行业平均水平高出30%，已经通过了国际SGS认证。", type:"Purpose", correct:false }
+    ],
+    explain:"<strong>✅ Process（过程）</strong><br><br>Process要回答：今天怎么进行、多长时间、分几个环节。<br><br>好的Process有三要素：<br>① 时间预期（30分钟）<br>② 环节拆解（了解需求→展示数据→讨论试样）<br>③ 降低压迫感（随时打断）<br><br>让客户知道「不会被无限拖延」，他才愿意放松听下去。"
+  },
+
+  // 第3题：识别 Payoff（利兴向模杯布客户说明收益）
+  {
+    scenario: "你是利兴纺织的大客户销售，今天要去见<strong>维密</strong>的供应链总监李总。利兴的模杯布可以帮助维密解决<strong>杯型变形率高</strong>的问题。你已经说明了今天的目的和过程，接下来要完成 <strong>Payoff（收益）</strong>——告诉李总参与之后能得到什么。",
+    question: "下面哪句话是有效的 <strong>Payoff（收益）</strong>，能激发李总参与动力？",
+    options: [
+      { text:"李总，我们今天大概45分钟：先用15分钟了解维密模杯目前的质量投诉情况，再用20分钟展示我们的模杯布解决方案，最后10分钟讨论试样计划。", type:"Process", correct:false },
+      { text:"李总，今天交流下来，您会拿到三样东西：第一，一份针对维密模杯变形问题的根因分析；第二，我们的模杯布试样方案和时间表；第三，如果试样通过，预计能帮您把杯型变形率从目前的8%降到3%以内，每年减少质量投诉成本约120万元。", type:"Payoff", correct:true },
+      { text:"李总，今天来是想和您聊聊模杯布的质量问题，看看我们的模杯布能不能帮上忙。", type:"Purpose", correct:false },
+      { text:"李总，利兴的模杯布在国内市场份额排名第一，很多一线内衣品牌都在用。", type:"Purpose", correct:false }
+    ],
+    explain:"<strong>✅ Payoff（收益）</strong><br><br>Payoff要回答：客户花这45分钟，能带走什么？<br><br>好的Payoff有三个层次：<br>① 认知收益：「根因分析」<br>② 方案收益：「试样方案和时间表」<br>③ 量化收益：「变形率从8%降到3%，年省120万」<br><br>有量化数据的Payoff最有说服力，客户才会认真听下去。"
+  },
+
+  // 第4题：PPP顺序（利兴销售容易犯的错误）
+  {
+    scenario: "利兴销售员小陈第一次去拜访<strong>越南工厂</strong>的客户。他很紧张，一见面就说了一大通：『今天我会用40分钟来介绍我们的面料产品，分三个部分……如果您合作的话，价格可以享受越南工厂专享价……我们今天的核心是向您展示利兴的产品优势……』客户听得一头雾水，不知道今天到底要干嘛。",
+    question: "小陈的问题出在哪里？正确的PPP顺序应该是？",
+    options: [
+      { text:"小陈把Process放在最前面是对的，客户最关心时间。正确顺序：Process → Purpose → Payoff。", type:"顺序题", correct:false },
+      { text:"小陈的内容全是对的，只是说得太快。PPP顺序不重要，客户能听懂就行。", type:"顺序题", correct:false },
+      { text:"小陈一上来就说Process（40分钟介绍产品），但客户还不知道今天见面的目的是什么，所以听得一头雾水。正确顺序应该是：Purpose（今天来干嘛）→ Process（怎么进行）→ Payoff（能得到什么）。", type:"顺序题", correct:true },
+      { text:"小陈应该先说Payoff（专享价），客户最关心价格，一上来就说优惠最能抓住注意力。正确顺序：Payoff → Purpose → Process。", type:"顺序题", correct:false }
+    ],
+    explain:"<strong>✅ PPP有标准顺序，不能乱</strong><br><br>小陈的错误：一上来就说Process（40分钟介绍产品），但客户还不知道<strong>今天见面的目的是什么</strong>，所以听得一头雾水。<br><br><strong>正确顺序</strong>：<br>① Purpose：先让对方知道「我们今天讨论什么」<br>② Process：再告诉对方「我们怎么讨论」<br>③ Payoff：最后激励对方「你能得到什么」<br><br>如果先说Process，对方还不知道主题，就谈不上有兴趣听。如果先说Payoff，对方不知道你要做什么，收益也是空中楼阁。"
+  },
+
+  // 第5题：综合识别（完整PPP段落，找出各要素）
+  {
+    scenario: "利兴销售主管老张去拜访<strong>李宁</strong>的采购副总。以下是他开场白的完整内容：<br><br>『赵总，今天来的目的，是想和您聊聊李宁新一季运动服对面料的功能性需求，看看我们的<strong>吸湿快干+抗菌双效面料</strong>能不能帮您提升产品竞争力。<br><br>今天大概用35分钟：前15分钟了解李宁对面料的具体功能指标，接下来15分钟给您展示我们的双效面料测试数据对比，最后5分钟讨论合作模式和试样安排。<br><br>今天交流完之后，您会拿到一份针对李宁新一季面料的<strong>完整解决方案建议书</strong>，包括功能性测试数据、成本对比和试样时间表，可以直接用于您的季度供应商评估。』",
+    question: "老张这段开场白涵盖了PPP三个要素，以下哪个选项对各要素的识别是<strong>完全正确</strong>的？",
+    options: [
+      { text:"第一段= Purpose（今天来的目的）；第二段= Process（35分钟流程）；第三段= Payoff（能拿到解决方案建议书）。顺序正确：Purpose → Process → Payoff。", type:"识别题", correct:true },
+      { text:"第一段= Process（聊需求）；第二段= Purpose（35分钟）；第三段= Payoff（建议书）。顺序：Process → Purpose → Payoff。", type:"识别题", correct:false },
+      { text:"第一段= Payoff（提升竞争力）；第二段= Purpose（35分钟）；第三段= Process（建议书）。顺序：Payoff → Purpose → Process。", type:"识别题", correct:false },
+      { text:"整段话没有清晰的PPP结构，三个要素混在一起说了。", type:"识别题", correct:false }
+    ],
+    explain:"<strong>✅ 老张的开场白是PPP标准示范</strong><br><br>① <strong>Purpose</strong>：「今天来的目的，是想和您聊聊……看看我们的双效面料能不能帮您……」——清晰说明主题和价值方向<br>② <strong>Process</strong>：「今天大概用35分钟：前15分钟……接下来15分钟……最后5分钟……」——时间+环节，让客户有预期<br>③ <strong>Payoff</strong>：「今天交流完之后，您会拿到一份……可以直接用于您的季度供应商评估」——有形收益+使用场景<br><br>这是利兴销售应该学习的PPP标准开场模板。"
+  },
+
+  // 第6题：Purpose的常见错误（说了一大通但没说清楚目的）
+  {
+    scenario: "利兴销售员小周去拜访<strong>国内某大型内衣品牌</strong>的采购经理。他一见面就说：『陈经理，您好！我是利兴纺织的小周。我们利兴做模杯布和运动面料已经20多年了，客户有维密、安莉芳、都市丽人……我们的模杯布回弹率行业领先……今天想给您介绍几款我们的新产品……』说了5分钟，陈经理打断说：『你今天到底来干嘛的？』",
+    question: "小周的开场白最大的问题是什么？如何改进？",
+    options: [
+      { text:"小周的介绍太短了，应该多说一些公司资历来增加信任感。问题是信息量不够。", type:"错误诊断", correct:false },
+      { text:"小周没有清晰的Purpose（目的）。改进：开场第一句话就应该说清楚「今天来的目的」，而不是先花5分钟做公司介绍。正确的Purpose应该聚焦在客户的问题或需求上。", type:"错误诊断", correct:true },
+      { text:"小周应该先说Payoff（收益），告诉客户今天能带走什么，客户才愿意听。问题是没说收益。", type:"错误诊断", correct:false },
+      { text:"小周的问题是他没有带样品，所以客户不知道他来干嘛。问题是缺少实物展示。", type:"错误诊断", correct:false }
+    ],
+    explain:"<strong>✅ 没有Purpose是开场大忌</strong><br><br>小周花了5分钟说公司资历和产品优势，但<strong>没有一句话说清楚「今天来的目的」</strong>。<br><br>客户心里想的是：<br>❌ 你是谁？（知道了，利兴的）<br>❌ 你今天来干嘛？（还不知道！）<br>❌ 我为什么要花时间听你说？（还不知道！）<br><br><strong>改进版Purpose</strong>：『陈经理，今天来的目的，是想了解一下贵司目前模杯布在回弹寿命上是否遇到挑战，看看我们的新一代高回弹模杯布能不能帮您把退货率降下来。』——一句话，目的清晰。"
+  },
+
+  // 第7题：Payoff的量化（利兴销售容易说空话）
+  {
+    scenario: "你是利兴纺织的销售总监，要去向<strong>申洲国际</strong>（大型代工厂）的业务总监做PPT汇报。你在准备PPP开场白的Payoff部分。以下有两版Payoff，你觉得哪一版更有效？",
+    question: "以下两版Payoff，哪版更符合利兴客户的决策习惯（有量化数据、有具体产出）？",
+    options: [
+      { text:"A版：『今天汇报完之后，您会对我们的面料产品有一个全面的了解，对我们的实力和服务质量有信心，为双方未来的合作打下良好的基础。』", type:"Payoff对比", correct:false },
+      { text:"B版：『今天汇报完之后，您会拿到三份文档：第一，针对申洲越南工厂的面料供应保障方案（含交货周期承诺）；第二，我们的质量管控SOP和投诉响应SLA（标准服务等级协议）；第三，如果本月签框架协议，可以享受越南专线物流补贴，预计每年为您节省物流成本80-100万元。』", type:"Payoff对比", correct:true },
+      { text:"A版和B版效果一样，客户只关心价格，说不说量化数据没区别。", type:"Payoff对比", correct:false },
+      { text:"应该先说价格优惠，再说别的。Payoff里最重要的是价格。", type:"Payoff对比", correct:false }
+    ],
+    explain:"<strong>✅ 好的Payoff必须有量化数据和具体产出</strong><br><br>A版的问题：全是空话，「全面了解」「有信心」「打下良好基础」——客户听了不知道能带走什么具体东西。<br><br>B版优秀之处：<br>① <strong>有具体产出</strong>：「三份文档」——保障方案、SOP、成本测算<br>② <strong>有量化数据</strong>：「节省80-100万元」——钱是最直观的收益<br>③ <strong>有条件触发</strong>：「如果本月签框架协议」——制造紧迫感<br><br>利兴的客户（大型代工厂、品牌商）都是理性决策者，Payoff必须用<strong>数据和文档</strong>说话。"
+  },
+
+  // 第8题：综合演练（给出场景，让学员自己排序PPP）
+  {
+    scenario: "你是利兴纺织的销售员，今天要去拜访<strong>优衣库</strong>的供应链经理。你准备了以下三句话作为PPP开场白，但顺序被打乱了：<br><br>【甲】今天交流完之后，您会拿到一份针对优衣库AIRism系列的面料升级方案，包<strong>括透气性提升数据和成本对比分析，可以直接用于您下季度的面料招标评估</strong>。<br><br>【乙】今天大概用30分钟：前10分钟了解优衣库AIRism目前的市场反馈和对面料的新要求，接下来15分钟给您展示我们的新面料测试数据，最后5分钟讨论试样安排。<br><br>【丙】今天来的目的，是想和您聊聊优衣库AIRism系列对面料透气性和快干性的新要求，看看我们的<strong>纳米级透气膜复合面料</strong>能不能帮您把产品竞争力再提升一个台阶。",
+    question: "请将甲、乙、丙三句话按正确的PPP顺序排列：",
+    options: [
+      { text:"正确顺序：丙（Purpose）→ 乙（Process）→ 甲（Payoff）。先说目的，再说流程，最后说收益。", type:"排序题", correct:true },
+      { text:"正确顺序：乙（Process）→ 丙（Purpose）→ 甲（Payoff）。先说时间，客户最有预期。", type:"排序题", correct:false },
+      { text:"正确顺序：甲（Payoff）→ 丙（Purpose）→ 乙（Process）。先说收益，抓住客户注意力。", type:"排序题", correct:false },
+      { text:"三句话顺序无所谓，客户能听懂就行。", type:"排序题", correct:false }
+    ],
+    explain:"<strong>✅ 正确顺序：丙 → 乙 → 甲（Purpose → Process → Payoff）</strong><br><br>【丙】= <strong>Purpose</strong>：「今天来的目的，是想和您聊聊……看看我们的……能不能帮您……」<br>【乙】= <strong>Process</strong>：「今天大概用30分钟：前10分钟……接下来15分钟……最后5分钟……」<br>【甲】= <strong>Payoff</strong>：「今天交流完之后，您会拿到一份……可以直接用于……」<br><br><strong>课堂练习建议</strong>：让学员用自己正在跟的客户，现场写一段PPP开场白，按这个顺序。写完后两两配对，互相点评Purpose是否清晰、Process是否有时间预期、Payoff是否有量化数据。"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answered = false;
+let results = [];
+
+function renderQuestion() {
+  selected = null;
+  answered = false;
+  var q = questions[current];
+
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+
+  var card = document.getElementById("questionCard");
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【利兴业务场景】</span><br>' + q.scenario + '</div>';
+  html += '<div style="font-weight:600; margin:14px 0 8px; color:#333; font-size:15px;">' + q.question + '</div>';
+  html += '<div class="options">';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '  <div class="radio"></div>';
+    html += '  <div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswer"></div>';
+  html += '<div class="explanation" id="explanation">';
+  html += '  <h4>📚 解析</h4>';
+  html += '  <p>' + q.explain + '</p>';
+  html += '</div>';
+  card.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.toggle("selected", i === idx);
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].correct;
+  answered = true;
+
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    if (q.options[i].correct) opts[i].classList.add("correct");
+    if (i === selected && !isCorrect) opts[i].classList.add("wrong");
+    opts[i].onclick = null;
+  }
+
+  results[current] = isCorrect;
+
+  var labels = ['A', 'B', 'C', 'D'];
+  var correctIdx = q.options.findIndex(function(o) { return o.correct === true; });
+  var correctLabel = labels[correctIdx];
+  var correctText = q.options[correctIdx].text;
+  document.getElementById('correctAnswer').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabel + '</div>' +
+    '<div style="margin-top:6px; color:#333;">' + correctText + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+
+  document.getElementById("explanation").classList.add("show");
+
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  var percent = Math.round(score / results.length * 100);
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = percent;
+
+  var detailHTML = "<h3>📊 答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    var icon = results[i] ? "✅" : "❌";
+    var text = results[i] ? "正确" : "错误";
+    detailHTML += '<div class="result-item"><span class="status">' + icon + '</span><span>第 ' + (i+1) + ' 题：' + text + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detailHTML;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
