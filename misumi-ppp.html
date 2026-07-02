@@ -161,7 +161,7 @@
         · 底层逻辑判断
       </p>
       <div class="covers">
-        适用场景：<span>内勤电话</span><span>外勤电话</span><span>微信开场</span><span>邮件主题</span>
+        适用场景：<span>内勤电话</span><span>微信开场</span><span>邮件主题</span>
       </div>
       <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="startQuiz()">开始练习 →</button>
     </div>
@@ -258,7 +258,7 @@ const questions = [
   },
   {
     type: "话术判断",
-    text: "张丽（外勤）需要给客户发微信好友申请。以下哪条申请消息最符合PPP原则？",
+    text: "张丽需要给客户发微信好友申请。以下哪条申请消息最符合PPP原则？",
     options: [
       "您好，我是米思米销售小张，请问可以加个好友吗？",
       "您好，米思米XX组张丽，最近导轨价格有调整，方便通过一下吗？",
@@ -283,7 +283,7 @@ const questions = [
   },
   {
     type: "缺P识别",
-    scenario: { role: "外勤 · 企微消息", text: "张丽给一位潜在客户发了一条微信消息：「您好，我是米思米小张，最近天气炎热，注意防暑降温！」然后客户再也没回复。" },
+    scenario: { role: "内勤 · 企微消息", text: "张丽给一位潜在客户发了一条微信消息：「您好，我是米思米小张，最近天气炎热，注意防暑降温！」然后客户再也没回复。" },
     text: "从PPP模型来看，这条消息最大的问题是什么？",
     options: [
       "寒暄太泛泛，没有体现专业性",
