@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3F确认练习 - 米思米电话沟通实战</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f0fdfa; min-height:100vh; }
+
+  header { background:linear-gradient(135deg,#0F766E,#14B8A6); color:white; padding:22px 28px; text-align:center; }
+  header .logo { font-size:13px; letter-spacing:2px; opacity:0.7; margin-bottom:4px; }
+  header h1 { font-size:24px; letter-spacing:1px; }
+  header p { font-size:13px; opacity:0.75; margin-top:5px; }
+
+  .container { max-width:780px; margin:0 auto; padding:24px 16px 40px; }
+
+  .progress-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .progress-label { font-size:12px; color:#888; }
+  .progress-bar { height:5px; background:#ccfbf1; border-radius:3px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#0F766E,#14B8A6); border-radius:3px; transition:width 0.5s ease; }
+
+  .card { background:white; border-radius:16px; padding:26px 22px; box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:16px; }
+
+  .q-badge { display:inline-block; background:#0F766E; color:white; border-radius:20px; padding:3px 12px; font-size:12px; margin-bottom:14px; font-weight:600; }
+  .q-type { display:inline-block; background:#ccfbf1; color:#0F766E; border-radius:20px; padding:3px 10px; font-size:11px; margin-left:8px; }
+  .q-text { font-size:15px; line-height:1.75; color:#222; margin-bottom:14px; }
+
+  .scenario { background:#f0fdfa; border-left:4px solid #14B8A6; padding:12px 16px; border-radius:0 10px 10px 0; margin-bottom:16px; font-size:14px; line-height:1.7; color:#334155; }
+  .scenario .role-tag { display:inline-block; background:#0F766E; color:white; border-radius:12px; padding:2px 10px; font-size:11px; font-weight:600; margin-bottom:6px; }
+
+  .model-box { background:#f0fdfa; border-radius:12px; padding:14px 16px; margin-bottom:16px; }
+  .model-box h4 { font-size:14px; color:#0F766E; margin-bottom:10px; }
+  .f-item { display:flex; gap:10px; margin-bottom:8px; font-size:13px; line-height:1.6; }
+  .f-letter { min-width:24px; height:24px; border-radius:50%; background:#14B8A6; color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+  .f-text { color:#334155; }
+  .f-text strong { color:#0F766E; }
+
+  .options { display:flex; flex-direction:column; gap:10px; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #e5e7eb; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.65; color:#374151; }
+  .option:hover { border-color:#14B8A6; background:#f0fdfa; }
+  .option.selected { border-color:#14B8A6; background:#ccfbf1; }
+  .option.correct { border-color:#22C55E; background:#F0FDF4; }
+  .option.wrong { border-color:#EF4444; background:#FEF2F2; }
+  .opt-letter { min-width:24px; height:24px; border-radius:50%; border:2px solid #d1d5db; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#9ca3af; flex-shrink:0; margin-top:1px; transition:all 0.2s; }
+  .option.selected .opt-letter { border-color:#0F766E; background:#0F766E; color:white; }
+  .option.correct .opt-letter { border-color:#22C55E; background:#22C55E; color:white; }
+  .option.wrong .opt-letter { border-color:#EF4444; background:#EF4444; color:white; }
+  .option .opt-text { flex:1; }
+
+  .explanation { margin-top:16px; padding:14px 16px; border-radius:12px; display:none; font-size:14px; line-height:1.7; }
+  .explanation.show { display:block; }
+  .exp-correct { background:#F0FDF4; border-left:4px solid #22C55E; }
+  .exp-correct .exp-title { color:#22C55E; font-weight:700; margin-bottom:6px; }
+  .exp-wrong { background:#FFFBEB; border-left:4px solid #F59E0B; }
+  .exp-wrong .exp-title { color:#D97706; font-weight:700; margin-bottom:6px; }
+  .explanation p { color:#334155; }
+
+  .compare-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+  .compare-box { border-radius:10px; padding:12px; font-size:13px; line-height:1.6; }
+  .compare-bad { background:#FEF2F2; border-left:3px solid #EF4444; }
+  .compare-good { background:#F0FDF4; border-left:3px solid #22C55E; }
+  .compare-label { font-size:11px; font-weight:700; margin-bottom:4px; }
+  .compare-bad .compare-label { color:#EF4444; }
+  .compare-good .compare-label { color:#22C55E; }
+
+  .btn-row { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#0F766E; color:white; }
+  .btn-primary:hover { background:#0D9488; }
+  .btn-primary:disabled { background:#99f6e4; cursor:not-allowed; }
+  .btn-outline { background:white; color:#0F766E; border:2px solid #0F766E; }
+  .btn-outline:hover { background:#f0fdfa; }
+
+  .result-screen { display:none; text-align:center; padding:20px 10px; }
+  .result-screen.show { display:block; }
+  .score-ring { background:conic-gradient(var(--color,#22C55E) var(--pct,0%), #e5e7eb 0%); border-radius:50%; width:120px; height:120px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .score-inner { width:96px; height:96px; background:white; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .score-num { font-size:32px; font-weight:800; color:#0F766E; line-height:1; }
+  .score-total { font-size:14px; color:#9ca3af; }
+  .result-title { font-size:22px; font-weight:700; color:#0F766E; margin-bottom:8px; }
+  .result-sub { font-size:14px; color:#6b7280; margin-bottom:24px; line-height:1.6; }
+
+  .stats-row { display:flex; gap:12px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-card { background:white; border-radius:12px; padding:14px 20px; text-align:center; min-width:80px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  .stat-num { font-size:24px; font-weight:800; }
+  .stat-label { font-size:12px; color:#9ca3af; margin-top:2px; }
+  .stat-card.green .stat-num { color:#22C55E; }
+  .stat-card.red .stat-num { color:#EF4444; }
+  .stat-card.teal .stat-num { color:#0F766E; }
+
+  .review-title { text-align:left; font-size:16px; font-weight:700; color:#0F766E; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #ccfbf1; }
+  .review-item { background:white; border-radius:12px; padding:16px; margin-bottom:12px; text-align:left; border-left:4px solid #e5e7eb; }
+  .review-item.right { border-left-color:#22C55E; }
+  .review-item.wrong { border-left-color:#EF4444; }
+  .review-q { font-size:13px; font-weight:600; color:#6b7280; margin-bottom:6px; }
+  .review-answer { font-size:13px; color:#0F766E; margin-bottom:4px; }
+  .review-exp { font-size:12px; color:#6b7280; line-height:1.6; margin-top:6px; background:#fafaf9; padding:8px 10px; border-radius:8px; }
+
+  .intro-card { background:white; border-radius:16px; padding:28px 24px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:16px; }
+  .intro-card h2 { font-size:20px; color:#0F766E; margin-bottom:10px; }
+  .intro-card p { font-size:14px; color:#6b7280; line-height:1.7; margin-bottom:12px; }
+  .type-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:16px 0; }
+  .type-card { border-radius:12px; padding:12px; text-align:left; }
+  .type-card.f1 { background:#F0F9FF; border-left:3px solid #0EA5E9; }
+  .type-card.f2 { background:#FDF4FF; border-left:3px solid #C026D3; }
+  .type-card.f3 { background:#F0FDF4; border-left:3px solid #22C55E; }
+  .type-name { font-size:13px; font-weight:700; margin-bottom:4px; }
+  .type-card.f1 .type-name { color:#0369A1; }
+  .type-card.f2 .type-name { color:#A21CAF; }
+  .type-card.f3 .type-name { color:#15803D; }
+  .type-desc { font-size:12px; color:#6b7280; }
+  .covers { font-size:12px; color:#9ca3af; margin-top:12px; }
+  .covers span { background:#f3f4f6; padding:2px 8px; border-radius:8px; margin:2px; display:inline-block; }
+
+  .start-screen.hidden { display:none; }
+  .quiz-content { display:none; }
+  .quiz-content.active { display:block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MISUMI · 中心营业培训</div>
+  <h1>3F确认练习</h1>
+  <p>先听懂，再提问</p>
+</header>
+
+<div class="container">
+
+  <div class="start-screen" id="startScreen">
+    <div class="intro-card">
+      <h2>🎧 3F确认 — 先听懂，再提问</h2>
+      <p>很多销售在客户说完痛点后直接给方案 → 客户感觉「你没听懂我」<br>3F确认：复述事实 → 确认情绪 → 总结意图，让客户感到被理解</p>
+      <div class="type-grid">
+        <div><div class="type-card f1"><div class="type-name">F1 · Fact</div><div class="type-desc">复述事实<br>「您刚才说的是……对吗？」</div></div></div>
+        <div><div class="type-card f2"><div class="type-name">F2 · Feeling</div><div class="type-desc">确认情绪<br>「听起来您很着急/担心」</div></div></div>
+        <div><div class="type-card f3"><div class="type-name">F3 · Focus</div><div class="type-desc">总结意图<br>「所以您希望的是……对吗？」</div></div></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-box compare-bad">
+          <div class="compare-label">❌ 无3F</div>
+          <div>客户：「你们价格太贵。」<br>销售：「和谁比贵？」<br>→ 客户启动防御模式</div>
+        </div>
+        <div class="compare-box compare-good">
+          <div class="compare-label">✅ 有3F</div>
+          <div>「我听到了，您觉得价格比预期高（F1），担心买贵了影响成本控制（F2），希望找到更具性价比的方案（F3），对吗？」</div>
+        </div>
+      </div>
+      <div class="covers">
+        适用场景：<span>客户给痛点后</span><span>SPIN提问前</span><span>电话/企微/邮件</span>
+      </div>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="startQuiz()">开始练习 →</button>
+    </div>
+  </div>
+
+  <div class="quiz-content" id="quizContent">
+    <div class="progress-top">
+      <span class="progress-label" id="progressLabel">第 1 / 10 题</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+
+    <div class="card" id="questionCard">
+      <span class="q-badge" id="qBadge">第 1 题</span>
+      <span class="q-type" id="qType" style="display:none"></span>
+      <div class="q-text" id="qText"></div>
+      <div class="scenario" id="scenarioBox" style="display:none">
+        <div class="role-tag" id="roleTag"></div>
+        <div id="scenarioText"></div>
+      </div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="submitBtn" disabled onclick="submitAnswer()">确认答案</button>
+        <button class="btn btn-outline" id="nextBtn" style="display:none" onclick="nextQuestion()">下一题 →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="score-ring" id="scoreRing" style="--pct:0%; --color:#22C55E">
+      <div class="score-inner">
+        <div class="score-num" id="scoreNum">0</div>
+        <div class="score-total">/ 10</div>
+      </div>
+    </div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-sub" id="resultSub"></div>
+
+    <div class="stats-row">
+      <div class="stat-card green"><div class="stat-num" id="statRight">0</div><div class="stat-label">答对</div></div>
+      <div class="stat-card red"><div class="stat-num" id="statWrong">0</div><div class="stat-label">答错</div></div>
+      <div class="stat-card teal"><div class="stat-num" id="statScore">0%</div><div class="stat-label">正确率</div></div>
+    </div>
+
+    <div class="review-title" id="reviewTitle">📋 答题回顾</div>
+    <div id="reviewList"></div>
+
+    <button class="btn btn-primary" style="margin-top:20px; width:100%;" onclick="restartQuiz()">🔄 再练一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    type: "F1识别",
+    text: "客户说：「最近导轨采购价上涨了，交期也不太稳定。」<br>销售回应：「您说最近导轨采购价上涨了，交期也不太稳定，是吗？」<br>这属于3F中的哪一步？",
+    options: [
+      "F1 · 复述事实（Fact）",
+      "F2 · 确认情绪（Feeling）",
+      "F3 · 总结意图（Focus）",
+      "不属于3F"
+    ],
+    correct: 0,
+    explanation: "这是典型的<strong>F1 · 复述事实</strong>：<br>✅ 重复客户提到的关键信息（涨价、交期不稳定）<br>✅ 用「是吗？」确认理解是否准确<br><br>F1的核心作用：让客户知道「你听到了」，并且「你没听错」。"
+  },
+  {
+    type: "F2识别",
+    scenario: { role: "内勤 · 电话沟通", text: "客户抱怨：「每次急单都耽误生产，上次差点停产。」" },
+    text: "销售回应：「听起来这个问题对您的生产排期影响不小，您挺担心的。」<br>这属于3F中的哪一步？",
+    options: [
+      "F1 · 复述事实",
+      "F2 · 确认情绪",
+      "F3 · 总结意图",
+      "SPIN中的I（暗示）"
+    ],
+    correct: 1,
+    explanation: "这是<strong>F2 · 确认情绪</strong>：<br>✅ 识别客户的情绪状态（担心、着急、不满）<br>✅ 用「听起来……」表达共情，而不是评价<br><br>F2最容易被忽略，但它是让客户从「防御」转为「愿意继续聊」的关键一步。"
+  },
+  {
+    type: "F3识别",
+    scenario: { role: "内勤 · 需求确认", text: "客户聊了几分钟后说：「主要是想找一个交期稳定、价格又有竞争力的方案。」" },
+    text: "销售回应：「所以您希望找到交期稳定、价格更有竞争力的替代方案，对吗？」<br>这属于3F中的哪一步？",
+    options: [
+      "F1 · 复述事实",
+      "F2 · 确认情绪",
+      "F3 · 总结意图",
+      "FABE中的E（证据）"
+    ],
+    correct: 2,
+    explanation: "这是<strong>F3 · 总结意图</strong>：<br>✅ 把客户零散表达总结成一个清晰的目标<br>✅ 用「所以您希望的是……对吗？」确认双方理解一致<br><br>F3的作用：把对话从「抱怨」推进到「解决方向」，为后续给方案做铺垫。"
+  },
+  {
+    type: "无3F识别",
+    text: "客户说：「你们价格太贵了。」<br>以下哪句回应是典型的「无3F」？",
+    options: [
+      "我听到了，您觉得价格比预期高，担心影响成本控制，希望找到更具性价比的方案，对吗？",
+      "您说的贵，是和哪个品牌对比的呢？",
+      "您说最近采购压力大，所以想找降本方案，是吗？",
+      "听起来您对现在的价格不太满意，希望能再谈谈，对吗？"
+    ],
+    correct: 1,
+    explanation: "选项B是典型的<strong>无3F</strong>回应：<br>❌ 没有复述客户的具体顾虑（F1）<br>❌ 没有确认情绪（F2）<br>❌ 直接反问「和谁比」——让客户感觉被质疑、被挑战<br><br>3F的做法：先复述事实（价格比预期高）、确认情绪（担心影响成本）、总结意图（希望找到性价比方案），然后再进入SPIN或给方案。"
+  },
+  {
+    type: "3F补全",
+    scenario: { role: "内勤 · 电话沟通", text: "客户说：「你们交期太不稳定了，上次急单差点让我们停产。」" },
+    text: "以下哪句回应最完整地运用了3F确认？",
+    options: [
+      "您说交期不稳定，上次急单差点停产（F1），听起来这件事对您的生产影响挺大，您挺着急的（F2），所以您希望我们能提供一个交期更稳定的供应方案，对吗（F3）？",
+      "您放心，我们以后一定会改进交期。",
+      "急单本身就很难保证，您要提前下单才行。",
+      "那您希望交期控制在几天以内呢？"
+    ],
+    correct: 0,
+    explanation: "选项A完整走完3F：<br>✅ F1复述事实：「交期不稳定，急单差点停产」<br>✅ F2确认情绪：「对生产影响挺大，您挺着急的」<br>✅ F3总结意图：「希望提供交期更稳定的供应方案」<br><br>选项B是承诺，没有确认；选项C是辩解；选项D是审问式提问，没有先听懂。"
+  },
+  {
+    type: "3F顺序",
+    text: "3F确认的正确顺序是什么？",
+    options: [
+      "F2 → F1 → F3",
+      "F1 → F2 → F3",
+      "F3 → F2 → F1",
+      "F2 → F3 → F1"
+    ],
+    correct: 1,
+    explanation: "正确顺序是 <strong>F1 → F2 → F3</strong>：<br>1. <strong>F1复述事实</strong>：先让客户知道「你听懂了」<br>2. <strong>F2确认情绪</strong>：再让客户感到「你理解我的感受」<br>3. <strong>F3总结意图</strong>：最后确认「我们接下来往哪个方向走」<br><br>这个顺序符合客户心理：先确认内容，再确认情绪，最后确认目标。"
+  },
+  {
+    type: "3F+SPIN桥接",
+    text: "根据课程设计，客户给出一个痛点后，销售应该怎么做？",
+    options: [
+      "直接给方案，因为客户已经表达需求了",
+      "先用3F确认，让客户感到被理解，再进入SPIN提问",
+      "先用SPIN提问，把问题挖深，再3F确认",
+      "先沉默，让客户自己继续往下说"
+    ],
+    correct: 1,
+    explanation: "正确流程是：<strong>客户痛点 → 3F确认 → SPIN提问</strong>。<br><br>原因：客户说完痛点后，如果直接进入SPIN或给方案，客户会觉得「你只关心成交，不关心我」。3F先让客户感到被理解，后续的SPIN提问才更容易被接受。<br><br>记住口诀：<strong>「先听懂，再提问；先确认，再深挖。」</strong>"
+  },
+  {
+    type: "F2情绪识别",
+    scenario: { role: "内勤 · 电话沟通", text: "客户说：「上次那个急单，差点让我们停产，被老板骂了一顿。」" },
+    text: "以下哪句回应最能体现F2（确认情绪）？",
+    options: [
+      "您说上次急单差点停产，被老板骂了，是吗？",
+      "那您现在是不是希望避免再发生这种情况？",
+      "听起来那次急单让您压力很大，不仅担心生产，还担心被老板问责。",
+      "停产确实会造成损失，那您的损失大概有多大？"
+    ],
+    correct: 2,
+    explanation: "选项C是F2确认情绪：<br>✅ 识别到客户的多层情绪：「压力大」「担心生产」「担心被老板问责」<br>✅ 没有评价、没有追问，只是先共情<br><br>选项A是F1复述事实；选项B是F3总结意图；选项D是SPIN中的I（暗示）——在情绪还没被确认前就开始挖掘损失，容易让客户感觉被利用。"
+  },
+  {
+    type: "错误识别",
+    text: "以下哪句<strong>不是</strong>好的3F确认？",
+    options: [
+      "您刚才说导轨交期不稳定，影响了生产进度，是吗？",
+      "我理解您的意思，您是觉得我们价格比别人贵，对吧？",
+      "您说希望找到替代方案，其实我们的替代型号性价比更高，我给您介绍一下。",
+      "听起来您对这个事情挺着急的，希望尽快解决，对吗？"
+    ],
+    correct: 2,
+    explanation: "选项C不是3F确认，而是<strong>直接给方案</strong>：<br>❌ 没有复述事实（只是简单提到「替代方案」）<br>❌ 没有确认情绪<br>❌ 直接推销产品：「我给您介绍一下」——客户会感觉被推销<br><br>3F阶段的目标不是「给方案」，而是「确认理解」。方案要在3F确认之后、在SPIN深挖之后给出。"
+  },
+  {
+    type: "综合应用",
+    scenario: { role: "内勤 · 电话沟通", text: "客户说：「你们导轨价格比别的品牌高，我们一直在考虑要不要换供应商。」" },
+    text: "以下哪句回应最符合3F确认原则？",
+    options: [
+      "您说导轨价格比别人高，所以在考虑换供应商（F1），听起来您对现在的成本压力挺大的，担心影响整体预算控制（F2），所以您希望找到一个价格更有竞争力、同时质量也能达标的供应商，对吗（F3）？",
+      "那您现在用的品牌是哪个？他们价格多少呢？",
+      "其实我们的价格虽然高一点，但质量和服务更好，综合算下来更划算。",
+      "您主要是觉得贵，还是担心质量不稳定？"
+    ],
+    correct: 0,
+    explanation: "选项A完整运用3F：<br>✅ F1：复述客户考虑换供应商的原因（价格高）<br>✅ F2：确认成本压力、预算控制的担忧<br>✅ F3：总结意图——要价格有竞争力且质量达标<br><br>这样回应后，客户会感到被理解，后续再用SPIN深挖「价格高的具体影响」「不换供应商的隐性成本」等才会有效。"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answers = [];
+
+function startQuiz() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizContent').classList.add('active');
+  current = 0;
+  answers = [];
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  selected = null;
+  document.getElementById('qBadge').textContent = '第 ' + (current+1) + ' 题';
+  document.getElementById('progressLabel').textContent = '第 ' + (current+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((current+1)/questions.length*100) + '%';
+  document.getElementById('qType').textContent = q.type;
+  document.getElementById('qType').style.display = 'inline-block';
+  document.getElementById('qText').innerHTML = q.text;
+
+  if (q.scenario) {
+    document.getElementById('scenarioBox').style.display = 'block';
+    document.getElementById('roleTag').textContent = q.scenario.role;
+    document.getElementById('scenarioText').textContent = q.scenario.text;
+  } else {
+    document.getElementById('scenarioBox').style.display = 'none';
+  }
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = '<div class="opt-letter">' + letters[i] + '</div><div class="opt-text">' + opt + '</div>';
+    div.onclick = () => selectOption(i);
+    container.appendChild(div);
+  });
+
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('explanation').innerHTML = '';
+  document.getElementById('submitBtn').style.display = '';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectOption(i) {
+  document.querySelectorAll('.option').forEach((o, idx) => {
+    o.classList.remove('selected');
+    if (idx === i) o.classList.add('selected');
+  });
+  selected = i;
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function submitAnswer() {
+  if (selected === null) return;
+  const q = questions[current];
+  const isCorrect = selected === q.correct;
+  answers.push({ q, selected, isCorrect });
+
+  document.querySelectorAll('.option').forEach((o, i) => {
+    o.onclick = null;
+    if (i === q.correct) o.classList.add('correct');
+    else if (i === selected && !isCorrect) o.classList.add('wrong');
+  });
+
+  const expDiv = document.getElementById('explanation');
+  const expType = isCorrect ? 'exp-correct' : 'exp-wrong';
+  expDiv.className = 'explanation show ' + expType;
+  expDiv.innerHTML = '<div class="exp-title">' + (isCorrect ? '✅ 正确！' : '⚠️ 错误，正确答案是 ' + ['A','B','C','D'][q.correct]) + '</div><p>' + q.explanation + '</p>';
+
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+  document.getElementById('nextBtn').textContent = current === questions.length - 1 ? '查看结果 →' : '下一题 →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) showResults();
+  else renderQuestion();
+}
+
+function showResults() {
+  document.getElementById('quizContent').classList.remove('active');
+  document.getElementById('resultScreen').classList.add('show');
+  const right = answers.filter(a => a.isCorrect).length;
+  const pct = Math.round(right / answers.length * 100);
+  document.getElementById('scoreNum').textContent = right;
+  document.getElementById('statRight').textContent = right;
+  document.getElementById('statWrong').textContent = answers.length - right;
+  document.getElementById('statScore').textContent = pct + '%';
+  document.getElementById('scoreRing').style.setProperty('--pct', pct + '%');
+  let title = '', sub = '';
+  if (pct === 100) { title = '🎉 满分！3F确认已融会贯通'; sub = '「先听懂，再提问」你已完全掌握，可以帮客户从防御模式进入合作模式。'; }
+  else if (pct >= 80) { title = '👍 优秀！3F确认已熟练'; sub = '核心原则已掌握，建议继续强化F2（确认情绪）——这是最容易被忽略的一步。'; }
+  else if (pct >= 60) { title = '💪 不错！还需要多练习'; sub = '建议重温模块2-2，重点练习：F1复述事实 → F2确认情绪 → F3总结意图。'; }
+  else { title = '📚 3F确认需要强化学习'; sub = '建议先理解核心心法：客户说完痛点后，不要直接给方案，先用3F确认让客户感到被理解。'; }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSub').textContent = sub;
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '';
+  answers.forEach((a, i) => {
+    const item = document.createElement('div');
+    item.className = 'review-item ' + (a.isCorrect ? 'right' : 'wrong');
+    item.innerHTML = '<div class="review-q">第' + (i+1) + '题 · ' + a.q.type + '</div>' +
+      '<div class="review-answer">' + (a.isCorrect ? '✅ 正确' : '❌ 你的答案：' + ['A','B','C','D'][a.selected] + '｜正确答案：' + ['A','B','C','D'][a.q.correct]) + '</div>' +
+      '<div class="review-exp">' + a.q.explanation.replace(/<br>/g, ' ') + '</div>';
+    reviewList.appendChild(item);
+  });
+}
+
+function restartQuiz() {
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('startScreen').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
