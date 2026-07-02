@@ -234,15 +234,15 @@ const questions = [
   },
   {
     type: "缺P识别",
-    text: "以下是卢樱莹团队一名内勤的原始话术：<br><em>「您好，我看到您浏览了我们的网站，我们是米思米的。」</em><br>这句话缺少了PPP中的哪些要素？",
+    text: "以下是某内勤的开场话术：<br><em>「您好，我看到您浏览了我们的网站，我们是米思米的。」</em><br>这句话缺少了PPP中的哪些要素？",
     options: [
       "缺少Purpose（目的）和Process（过程）",
       "缺少Process（过程）和Payoff（收益）",
       "缺少Purpose（目的）和Payoff（收益）",
-      "三个P都有，问题在于语气不对"
+      "三个P都缺少：Purpose、Process、Payoff都不明显"
     ],
-    correct: 2,
-    explanation: "这句话只告知了身份（我们是米思米的），但：<br>❌ <strong>没有说明目的</strong>（为什么要联系对方）<br>❌ <strong>没有说明对客户的好处</strong>（凭什么让对方听下去）<br><br>改进方案：「张经理您好，我是米思米的，<strong>想分享近期导轨降价信息</strong>（Purpose），<strong>只需2分钟</strong>（Process），<strong>听完您判断是否值得参考</strong>（Payoff）。」"
+    correct: 3,
+    explanation: "这句话只告知了身份（我们是米思米的），但：<br>❌ <strong>Purpose（目的）缺失</strong>：没有说明为什么要联系对方<br>❌ <strong>Process（过程）缺失</strong>：没有说明要占用对方多少时间、下一步是什么<br>❌ <strong>Payoff（收益）缺失</strong>：没有说明对客户有什么好处、凭什么听下去<br><br>改进方案：「张经理您好，我是米思米的，<strong>想分享近期导轨降价信息</strong>（Purpose），<strong>只需2分钟</strong>（Process），<strong>听完您判断是否值得参考</strong>（Payoff）。」"
   },
   {
     type: "底层逻辑",
@@ -258,12 +258,12 @@ const questions = [
   },
   {
     type: "话术判断",
-    text: "张婷婷（外勤）需要给客户发微信好友申请。以下哪条申请消息最符合PPP原则？",
+    text: "张丽（外勤）需要给客户发微信好友申请。以下哪条申请消息最符合PPP原则？",
     options: [
       "您好，我是米思米销售小张，请问可以加个好友吗？",
-      "您好，米思米XX组张婷婷，最近导轨价格有调整，方便通过一下吗？",
+      "您好，米思米XX组张丽，最近导轨价格有调整，方便通过一下吗？",
       "您好，我是米思米的，有款性价比很高的产品想推荐给您，方便加个微信聊聊吗？",
-      "张总您好，我是米思米张婷婷，近期导轨/丝杠/模组三个品类价格下调15%-25%，想分享一份整理好的降价清单给您，方便通过好友申请吗？"
+      "张总您好，我是米思米张丽，近期导轨/丝杠/模组三个品类价格下调15%-25%，想分享一份整理好的降价清单给您，方便通过好友申请吗？"
     ],
     correct: 3,
     explanation: "选项D最完整：<br>✅ <strong>Purpose（目的）</strong>：分享一份整理好的降价清单<br>✅ <strong>Process（过程）</strong>：加微信（极低门槛）<br>✅ <strong>Payoff（收益）</strong>：具体品类降价15%-25%，数字清晰<br><br>选项A缺少三个P；选项B缺少具体价值描述；选项C过于泛泛（「性价比很高」没有具体数字）。"
@@ -283,7 +283,7 @@ const questions = [
   },
   {
     type: "缺P识别",
-    scenario: { role: "外勤 · 企微消息", text: "张婷婷给一位潜在客户发了一条微信消息：「您好，我是米思米小张，最近天气炎热，注意防暑降温！」然后客户再也没回复。" },
+    scenario: { role: "外勤 · 企微消息", text: "张丽给一位潜在客户发了一条微信消息：「您好，我是米思米小张，最近天气炎热，注意防暑降温！」然后客户再也没回复。" },
     text: "从PPP模型来看，这条消息最大的问题是什么？",
     options: [
       "寒暄太泛泛，没有体现专业性",
@@ -292,7 +292,7 @@ const questions = [
       "消息太短，客户感受不到诚意"
     ],
     correct: 1,
-    explanation: "这条消息<strong>有寒暄，无实质内容</strong>——三个P全部缺失：<br>❌ <strong>Purpose</strong>：没有说明联系原因<br>❌ <strong>Process</strong>：没有时间承诺<br>❌ <strong>Payoff</strong>：没有说明对客户的好处<br><br>寒暄可以，但要<strong>在PPP说完之后自然带出</strong>：<br>「张总您好，我是米思米张婷婷，近期导轨价格下调15%（Purpose），只需2分钟跟您同步下（Process），听完您判断是否值得参考（Payoff）。对了，最近高温天气注意防暑！」"
+    explanation: "这条消息<strong>有寒暄，无实质内容</strong>——三个P全部缺失：<br>❌ <strong>Purpose</strong>：没有说明联系原因<br>❌ <strong>Process</strong>：没有时间承诺<br>❌ <strong>Payoff</strong>：没有说明对客户的好处<br><br>寒暄可以，但要<strong>在PPP说完之后自然带出</strong>：<br>「张总您好，我是米思米张丽，近期导轨价格下调15%（Purpose），只需2分钟跟您同步下（Process），听完您判断是否值得参考（Payoff）。对了，最近高温天气注意防暑！」"
   },
   {
     type: "话术判断",
