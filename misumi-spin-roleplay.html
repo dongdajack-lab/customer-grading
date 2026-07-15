@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN实战演练 · 角色卡（精选两场景）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  background: #f0f2f5; color: #1a1a2e; line-height: 1.75; padding: 24px 16px;
+}
+.container { max-width: 820px; margin: 0 auto; }
+
+/* Scenario divider */
+.scenario-title {
+  text-align: center; margin: 40px 0 24px; padding: 20px;
+  border-radius: 10px; color: #fff;
+}
+.scenario-title h2 { font-size: 20px; margin-bottom: 4px; }
+.scenario-title .meta { font-size: 13px; opacity: 0.85; }
+.s1-bg { background: linear-gradient(135deg, #2E6B9E, #1B2A4A); }
+.s2-bg { background: linear-gradient(135deg, #7C2D12, #DC2626); }
+
+/* Card */
+.card {
+  background: #fff; border-radius: 10px; overflow: hidden;
+  margin-bottom: 28px; box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  page-break-inside: avoid;
+}
+.card-top {
+  padding: 14px 24px; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-top .role-tag { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+.card-top .privacy { font-size: 11px; opacity: 0.8; }
+.card-body { padding: 24px 28px; }
+
+/* Role colors */
+.role-sales .card-top { background: #1a56c4; }
+.role-customer .card-top { background: #92400e; }
+.role-observer .card-top { background: #065f46; }
+
+/* Section */
+.sec { margin-bottom: 16px; }
+.sec-title {
+  font-size: 12px; font-weight: 700; color: #999;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sec-title::before { content: ""; width: 3px; height: 14px; border-radius: 2px; }
+.role-sales .sec-title::before { background: #1a56c4; }
+.role-customer .sec-title::before { background: #92400e; }
+.role-observer .sec-title::before { background: #065f46; }
+
+.sec p { font-size: 14px; color: #333; }
+.sec ul { list-style: none; padding: 0; }
+.sec li { font-size: 14px; color: #333; padding: 3px 0 3px 18px; position: relative; }
+.sec li::before { content: "·"; position: absolute; left: 6px; font-weight: 700; color: #aaa; }
+
+/* Hidden pain box */
+.pain-box {
+  background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px;
+  padding: 14px 18px; margin-top: 8px;
+}
+.pain-box .sec-title { color: #92400e; }
+.pain-box .sec-title::before { background: #E67E22; }
+.pain-box li { color: #92400e; }
+.pain-box li::before { color: #E67E22; }
+
+/* SPIN route */
+.spin-route {
+  background: #f0f7ff; border-radius: 8px; padding: 14px 18px; margin-top: 8px;
+}
+.spin-route .sec-title { color: #1a56c4; }
+.spin-route .sec-title::before { background: #1a56c4; }
+.spin-item { display: flex; gap: 10px; padding: 4px 0; font-size: 14px; }
+.spin-letter {
+  font-weight: 700; font-size: 16px; min-width: 20px;
+}
+.spin-s { color: #2E6B9E; }
+.spin-p { color: #E67E22; }
+.spin-i { color: #DC2626; }
+.spin-n { color: #059669; }
+
+/* Observer full picture */
+.observer-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 16px;
+}
+.observer-col { padding: 14px 18px; }
+.observer-col:first-child { border-right: 1px solid #eee; }
+.observer-col .col-title {
+  font-size: 13px; font-weight: 700; margin-bottom: 8px; padding-bottom: 6px;
+  border-bottom: 2px solid;
+}
+.observer-col.sales-col .col-title { color: #1a56c4; border-color: #1a56c4; }
+.observer-col.customer-col .col-title { color: #92400e; border-color: #92400e; }
+.observer-col li { font-size: 13px; padding: 2px 0 2px 16px; }
+.observer-col li::before { left: 4px; }
+
+/* Scoring table */
+.score-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.score-table th {
+  background: #f5f7fa; padding: 8px 10px; text-align: left;
+  font-weight: 600; color: #1B2A4A; border-bottom: 2px solid #e0e0e0;
+}
+.score-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+.score-table .blank { height: 28px; }
+.score-table .letter { font-weight: 700; font-size: 15px; text-align: center; }
+
+/* Tips */
+.tip-box {
+  background: #fefce8; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 12px 16px; margin-top: 12px; font-size: 13px; color: #92400e;
+}
+.tip-box strong { color: #1B2A4A; }
+
+/* Bottom line */
+.bottom-line {
+  background: #fef2f2; border-left: 4px solid #DC2626; border-radius: 4px;
+  padding: 12px 16px; margin-top: 8px;
+}
+.bottom-line .sec-title { color: #DC2626; }
+.bottom-line .sec-title::before { background: #DC2626; }
+
+/* Watch points */
+.watch-points { margin-top: 12px; }
+.watch-item {
+  background: #ecfdf5; border-radius: 6px; padding: 10px 14px; margin-bottom: 6px;
+  font-size: 13px; color: #065f46;
+}
+.watch-item strong { color: #064e3b; }
+
+/* Page break */
+.page-break { page-break-after: always; }
+
+/* Header */
+.main-header {
+  text-align: center; margin-bottom: 32px; padding: 24px;
+  background: linear-gradient(135deg, #1B2A4A 0%, #2E6B9E 100%);
+  border-radius: 12px; color: #fff;
+}
+.main-header h1 { font-size: 22px; margin-bottom: 4px; }
+.main-header .sub { font-size: 13px; opacity: 0.8; }
+
+/* Instructions */
+.instructions {
+  background: #fff; border-radius: 8px; padding: 20px 24px;
+  margin-bottom: 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  font-size: 14px; color: #444;
+}
+.instructions h3 { font-size: 15px; color: #1B2A4A; margin-bottom: 8px; }
+.instructions ol { padding-left: 20px; }
+.instructions li { margin-bottom: 4px; }
+
+@media print {
+  body { padding: 0; background: #fff; }
+  .card { page-break-inside: avoid; margin-bottom: 16px; }
+  .scenario-title { page-break-before: always; }
+  .scenario-title:first-of-type { page-break-before: avoid; }
+  .card-top, .scenario-title, .main-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pain-box, .spin-route, .tip-box, .bottom-line, .watch-item, .score-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="main-header">
+    <h1>SPIN提问实战演练 · 角色卡</h1>
+    <div class="sub">米思米全渠道高效沟通实战 | 讲师：董仁杰 | 2个场景 × 3个角色 = 6张卡</div>
+  </div>
+
+  <div class="instructions">
+    <h3>使用说明</h3>
+    <ol>
+      <li>每组3人：销售1人、客户1人、观察员1人，每轮结束后轮换角色</li>
+      <li>每轮流程：3分钟读卡 → 8分钟演练 → 3分钟观察员反馈，共约14分钟</li>
+      <li><strong>销售卡</strong>只有销售看，<strong>客户卡</strong>只有客户看，<strong>观察员卡</strong>包含双方全部信息（含隐藏痛点的"答案"）</li>
+      <li>打印后沿卡片裁剪，分别发给对应角色即可</li>
+      <li>建议先做场景一（中等难度）热身，再做场景二（高难度）挑战</li>
+    </ol>
+  </div>
+
+  <!-- ========== 场景一 ========== -->
+  <div class="scenario-title s1-bg">
+    <h2>场景一：交期困局</h2>
+    <div class="meta">中等难度 | 汽车零部件厂采购经理 | 标准S→P→I→N递进训练</div>
+  </div>
+
+  <!-- Sales Card -->
+  <div class="card role-sales">
+    <div class="card-top">
+      <span class="role-tag">销售卡</span>
+      <span class="privacy">仅销售本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p>米思米中心营业。你已跟客户李明通过一次电话，约了这次拜访。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的目标</div>
+        <ul>
+          <li>通过SPIN提问，帮客户发现分散采购的隐性成本</li>
+          <li>引出米思米一站式方案（一个平台、一份对账、交期保障）</li>
+          <li>争取一个试单机会</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的武器</div>
+        <ul>
+          <li>米思米标准件30万+SKU，一站式覆盖</li>
+          <li>在线下单系统，对账一键导出</li>
+          <li>交期承诺：标准件次日发货</li>
+        </ul>
+      </div>
+
+      <div class="spin-route">
+        <div class="sec-title">SPIN提问路线（建议，非剧本）</div>
+        <div class="spin-item"><span class="spin-letter spin-s">S</span><span>现在用几家供应商？采购流程是怎样的？每月大概多少种件？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-p">P</span><span>交期延迟频率高吗？对账流程复杂吗？有没有重复下单的情况？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-i">I</span><span>上次延迟造成了什么影响？停工损失大概多少？每月对账花多少人天？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-n">N</span><span>如果一家就能搞定所有标准件，交期稳定、对账简化，对您意味着什么？</span></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>关键提醒：</strong>不要急着推产品！先用I类问题让客户自己感受到痛，再用N类问题让客户自己说出价值。如果客户说"都差不多"，说明你还在S层，需要往P和I推进。
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Card -->
+  <div class="card role-customer">
+    <div class="card-top">
+      <span class="role-tag">客户卡</span>
+      <span class="privacy">仅客户本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p><strong>李明</strong>，某汽车零部件厂采购经理。工厂每月需要200+种标准件，目前分散在3家供应商采购。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的态度</div>
+        <ul>
+          <li>对新供应商有戒心，觉得"切换成本高，都差不多"</li>
+          <li>跟米思米销售通过一次电话，还没正式合作</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你愿意主动说的（销售问到就说）</div>
+        <ul>
+          <li>"偶尔会有交期延迟，但哪家都一样"</li>
+          <li>"目前用3家供应商，价格还行"</li>
+        </ul>
+      </div>
+
+      <div class="pain-box">
+        <div class="sec-title">隐藏痛点（只有被深入问到才说）</div>
+        <ul>
+          <li>3家供应商3套系统3份对账单，每月光对账就要多花<strong>2个人天</strong></li>
+          <li>上个月一个关键件延迟到货，产线停工4小时，损失约<strong>8万元</strong></li>
+          <li>有时候搞混供应商，重复下了单，库存积压</li>
+        </ul>
+      </div>
+
+      <div class="bottom-line">
+        <div class="sec-title">你的底线（决定演练结果）</div>
+        <ul>
+          <li>如果销售只谈价格或产品功能 → 礼貌结束，"我再考虑考虑"</li>
+          <li>如果销售帮你算清了隐性成本 → 愿意试一单</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Observer Card -->
+  <div class="card role-observer">
+    <div class="card-top">
+      <span class="role-tag">观察员卡</span>
+      <span class="privacy">上帝视角 · 包含双方全部信息</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的职责</div>
+        <p>你是"上帝视角裁判"。你提前知道客户的隐藏痛点和销售的目标，负责评判销售是否问对了问题、是否挖出了隐藏痛点。演练结束后给销售3分钟反馈。</p>
+      </div>
+
+      <div class="observer-grid">
+        <div class="observer-col sales-col">
+          <div class="col-title">销售的目标</div>
+          <ul>
+            <li>帮客户发现分散采购的隐性成本</li>
+            <li>引出米思米一站式方案</li>
+            <li>争取试单机会</li>
+          </ul>
+          <div style="margin-top:8px;font-size:12px;color:#888">武器：30万SKU、在线对账、次日发货</div>
+        </div>
+        <div class="observer-col customer-col">
+          <div class="col-title">客户的隐藏痛点（答案）</div>
+          <ul>
+            <li>3家供应商3套系统，对账多花2人天/月</li>
+            <li>上月关键件延迟→停工4小时→损失8万</li>
+            <li>重复下单导致库存积压</li>
+          </ul>
+          <div style="margin-top:8px;font-size:12px;color:#888">底线：算清隐性成本才给试单</div>
+        </div>
+      </div>
+
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th style="width:36px">类型</th>
+            <th style="width:35%">评判标准</th>
+            <th>销售实际问了什么（记录原话）</th>
+            <th style="width:48px">得分<br>1-5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="letter spin-s">S</td>
+            <td>问了几个Situation问题？超过3个 = 太多，说明在"查户口"</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter spin-p">P</td>
+            <td>是否挖到了交期之外的问题（对账/重复下单）？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter spin-i">I</td>
+            <td>是否让客户说出了"停工8万""对账2人天"的具体损失？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter spin-n">N</td>
+            <td>是否让客户自己说出"如果能一家搞定就好了"？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-weight:700">整体节奏</td>
+            <td>S→P→I→N是否递进？有没有跳过P/I直接推产品？</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-weight:700">最终结果</td>
+            <td>客户是否愿意试单？（底线：算清隐性成本）</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="watch-points">
+        <div class="watch-item"><strong>重点观察：</strong>销售是否在S层停留太久？很多销售问了一堆背景问题就急着推销，根本没挖到对账和重复下单的痛点。</div>
+        <div class="watch-item"><strong>反馈话术示例：</strong>"你问了交期延迟，但没追问'除了交期，采购流程本身有没有麻烦？'——客户其实有对账2人天和重复下单的痛点，但你没挖到。"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 场景二 ========== -->
+  <div class="scenario-title s2-bg">
+    <h2>场景二：价格壁垒</h2>
+    <div class="meta">高难度 | 电子厂技术主管 | 面对价格异议如何用SPIN破局</div>
+  </div>
+
+  <!-- Sales Card -->
+  <div class="card role-sales">
+    <div class="card-top">
+      <span class="role-tag">销售卡</span>
+      <span class="privacy">仅销售本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p>米思米中心营业。客户王芳一直以"价格高"为由拒绝你，这是你第四次联系她。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的目标</div>
+        <ul>
+          <li>帮客户从"单价思维"转向"总成本思维"</li>
+          <li>让客户自己算出返工+罚金的隐性成本远超5-8%的单价差异</li>
+          <li>争取一个小批量试用订单</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的武器</div>
+        <ul>
+          <li>米思米公差控制：±0.01mm（行业平均±0.03mm）</li>
+          <li>TCO总成本对比工具：可帮客户算清隐性成本</li>
+          <li>小批量试用方案：先试50件，不满意不收费</li>
+        </ul>
+      </div>
+
+      <div class="spin-route">
+        <div class="sec-title">SPIN提问路线（建议，非剧本）</div>
+        <div class="spin-item"><span class="spin-letter spin-s">S</span><span>现在用哪个品牌？每月用量大概多少？主要用在哪类产品上？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-p">P</span><span>装配过程中有没有遇到尺寸不一致的情况？返工率高吗？品控有没有反馈过？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-i">I</span><span>返工一件成本多少？有没有因为返工导致交货延迟？被客户罚过款吗？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-n">N</span><span>如果返工率能降到0.1%，一年能省多少？这笔账值不值得重新评估供应商？</span></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>最大挑战：</strong>客户一上来就堵你"价格高"。不要反驳价格！不要说"我们质量好"！用P类问题转移话题到质量和返工，用I类问题放大痛感，让客户自己算账。
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Card -->
+  <div class="card role-customer">
+    <div class="card-top">
+      <span class="role-tag">客户卡</span>
+      <span class="privacy">仅客户本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p><strong>王芳</strong>，某电子厂技术主管。目前用竞品牌标准件，价格比米思米便宜5-8%。米思米销售已经联系你四次了，你一直以"价格高"推脱。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的态度</div>
+        <ul>
+          <li>觉得标准件都差不多，看价格就行</li>
+          <li>对米思米销售有点烦了，"又来了"</li>
+          <li>但如果对方问到点子上，你还是愿意聊的</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你愿意主动说的（销售问到就说）</div>
+        <ul>
+          <li>"你们比人家贵5-8%，没什么好谈的"</li>
+          <li>"质量都差不多，我们用了很多年了"</li>
+        </ul>
+      </div>
+
+      <div class="pain-box">
+        <div class="sec-title">隐藏痛点（只有被深入问到才说）</div>
+        <ul>
+          <li>竞品偶尔尺寸公差不一致，装配返工率<strong>0.3%</strong>（行业平均0.1%）</li>
+          <li>每月返工约50件，每件返工成本200元，月损失约<strong>1万元</strong></li>
+          <li>上季度一批出口订单因返工延迟交货，被客户扣了<strong>2万罚金</strong></li>
+        </ul>
+      </div>
+
+      <div class="bottom-line">
+        <div class="sec-title">你的底线（决定演练结果）</div>
+        <ul>
+          <li>如果销售只说"我们质量好" → 不信，"谁都说自己质量好"</li>
+          <li>如果销售帮你算清了返工+罚金的总成本 → 愿意拿小批量试试</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Observer Card -->
+  <div class="card role-observer">
+    <div class="card-top">
+      <span class="role-tag">观察员卡</span>
+      <span class="privacy">上帝视角 · 包含双方全部信息</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的职责</div>
+        <p>你是"上帝视角裁判"。你提前知道客户的隐藏痛点和销售的目标，负责评判销售是否问对了问题、是否挖出了隐藏痛点。演练结束后给销售3分钟反馈。</p>
+      </div>
+
+      <div class="observer-grid">
+        <div class="observer-col sales-col">
+          <div class="col-title">销售的目标</div>
+          <ul>
+            <li>从"单价思维"转到"总成本思维"</li>
+            <li>让客户自己算出隐性成本</li>
+            <li>争取小批量试用</li>
+          </ul>
+          <div style="margin-top:8px;font-size:12px;color:#888">武器：±0.01mm公差、TCO工具、试用50件方案</div>
+        </div>
+        <div class="observer-col customer-col">
+          <div class="col-title">客户的隐藏痛点（答案）</div>
+          <ul>
+            <li>返工率0.3%（行业0.1%），月返工50件</li>
+            <li>月返工损失1万（50件×200元）</li>
+            <li>上季度出口订单被罚2万</li>
+          </ul>
+          <div style="margin-top:8px;font-size:12px;color:#888">底线：算清总成本才给试用</div>
+        </div>
+      </div>
+
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th style="width:36px">类型</th>
+            <th style="width:35%">评判标准</th>
+            <th>销售实际问了什么（记录原话）</th>
+            <th style="width:48px">得分<br>1-5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="letter spin-s">S</td>
+            <td>S问题是否精简？有没有被客户带进价格争论？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter spin-p">P</td>
+            <td>是否成功从价格话题转到质量/返工话题？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter spin-i">I</td>
+            <td>是否让客户自己说出了"返工50件/月""被罚2万"？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter spin-n">N</td>
+            <td>是否让客户自己说出"如果返工率能降下来，确实值得重新评估"？</td>
+            <td class="blank"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-weight:700">整体节奏</td>
+            <td>面对"价格高"的异议时，是否保持了SPIN节奏，没有急于辩解？</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="font-weight:700">最终结果</td>
+            <td>客户是否愿意试用小批量？（底线：算清总成本）</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="watch-points">
+        <div class="watch-item"><strong>重点观察：</strong>客户开场就会说"你们贵5-8%"——这是干扰项。看销售是被带进价格辩论，还是能巧妙用P类问题转移到"装配质量"话题。</div>
+        <div class="watch-item"><strong>反馈话术示例：</strong>"客户说价格高时你马上解释了公差数据，这变成了推销。更好的做法是问'除了价格，装配过程中有没有遇到过什么问题？'把话题从价格转到痛点。"</div>
+        <div class="watch-item"><strong>高光时刻：</strong>如果销售能让客户自己算出"月损1万+被罚2万"，然后自己说"这比5-8%的差价多多了"——这就是SPIN的完美收尾。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
