@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - SPIN提问训练（润蓝水处理定制版）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#eef4f8; min-height:100vh; }
+  /* === 统一品牌头部 === */
+  header { background: linear-gradient(135deg, #0a3d5c 0%, #14709e 50%, #0a3d5c 100%); color: #fff; padding: 36px 24px 32px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: rgba(255,255,255,0.04); border-radius: 50%; }
+  header::after { content: ''; position: absolute; bottom: -30%; left: -5%; width: 300px; height: 300px; background: rgba(255,255,255,0.03); border-radius: 50%; }
+  .header-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 16px; font-size: 12px; letter-spacing: 2px; margin-bottom: 12px; position: relative; z-index: 1; }
+  header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 1; }
+  header p { font-size: 14px; opacity: 0.85; max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
+  .company-tag { display:inline-block; margin-top:10px; padding:4px 14px; background:rgba(20,160,200,0.25); border:1px solid rgba(100,200,230,0.4); border-radius:16px; font-size:12px; color:#7fdbff; position:relative; z-index:1; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#cfdde6; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#14709e; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#6a8a9a; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,40,80,0.1); }
+  .question-badge { display:inline-block; background:#14709e; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#eef7fb; border-left:4px solid #14709e; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#14709e; }
+  .spin-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .spin-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-S { background:#EBF5FB; color:#2980B9; }
+  .tag-P { background:#FDEDEC; color:#E67E22; }
+  .tag-I { background:#FADBD8; color:#C0392B; }
+  .tag-N { background:#E8F8F5; color:#27AE60; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #d0dde5; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#14709e; background:#eef7fb; }
+  .option.selected { border-color:#14709e; background:#e0f0f8; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #b0c0cc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#14709e; background:#14709e; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#14709e; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#14709e; color:white; }
+  .btn-primary:hover { background:#0e5a7e; }
+  .btn-primary:disabled { background:#b0c0cc; cursor:not-allowed; }
+  .btn-secondary { background:#e8eef2; color:#333; }
+  .btn-secondary:hover { background:#d0dde5; }
+  .btn-secondary:disabled { background:#e8eef2; color:#aaa; cursor:not-allowed; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#27AE60,#2ECC71); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .label { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#14709e; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#14709e; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #e8eef2; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#14709e; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .restart-btn:hover { background:#0e5a7e; }
+  footer { text-align:center; padding:20px; font-size:12px; color:#8aa0ac; }
+  footer a { color:#14709e; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">大董老师天地人销售管理体系</div>
+  <h1>挖痛练习 · SPIN提问训练</h1>
+  <p>工业废水处理场景模拟 · 练出老板级提问直觉</p>
+  <div class="company-tag">威海润蓝水处理设备有限公司 · 定制版</div>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="label">正确 / 8 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<footer>
+  大董老师天地人销售管理体系 · 润蓝水处理定制版 |
+  <a href="https://dongdajack-lab.github.io/customer-grading/index.html">返回首页</a>
+</footer>
+
+<script>
+const questions = [
+  {
+    scenario: "你是润蓝的销售工程师，第一次拜访一家电镀工厂。工厂张总接待了你，闲聊中提到：最近环保查得严，日子不好过啊。",
+    question: "第一步，您应该先问 <strong>S - 现状问题</strong>，了解客户基本情况。下面哪句话最合适？",
+    options: [
+      { text:"您目前电镀废水是怎么处理的？每天废水量大概多少吨？有没有自己的污水处理站？", type:"S", correct:true },
+      { text:"环保查得严对您生产影响大吗？被罚过款吗？", type:"I", correct:false },
+      { text:"您在废水处理上最大的困扰是什么？", type:"P", correct:false },
+      { text:"如果有一套设备能帮您实现废水零排放，再也不用担心环保检查，您感兴趣吗？", type:"N", correct:false }
+    ],
+    explain:"<strong>✅ S - 现状问题</strong><br><br>第一次拜访，先了解客户的废水处理现状（处理方式、水量、是否有污水站），才能建立对话基础，找到切入方向。<br><br>不要一上来就问P（难点）或I（影响），客户还没有信任感，会本能防备。先聊现状，再逐步深入。"
+  },
+  {
+    scenario: "张总说：我们有污水处理站，每天大概50吨废水，用的传统化学沉淀法。但这两年环保要求越来越高，出水经常不达标，上个月还被环保局警告了。",
+    question: "客户已经说出痛点（出水不达标、被警告），接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
+    options: [
+      { text:"不达标对您生产有多大影响？被警告后有什么后果？", type:"I", correct:false },
+      { text:"如果有一套设备能确保稳定达标，您愿意了解吗？", type:"N", correct:false },
+      { text:"具体是哪些指标不达标？是重金属、COD还是其他？每次不达标时，环保那边是怎么处理的？整改通知要求多长时间？", type:"P", correct:true },
+      { text:"您现在的污水处理站是哪一年建的？用了几年了？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ P - 难点问题</strong><br><br>客户说了\"经常不达标\"和\"被警告\"，P型问题要继续挖深：哪些指标不达标？环保怎么处理？整改给多长时间？<br><br>目的是让对方把痛点说透，为后面I型（放大影响）做准备。注意：不要急着跳到I型问损失，先把问题的细节挖清楚。"
+  },
+  {
+    scenario: "张总叹了口气：主要是重金属和COD不达标。上次环保局给了30天限期整改，要求出水重金属降到表3标准。如果整改期内还不达标，就要停产整顿。这段时间我们加了很多药剂，成本翻了一倍，还是不稳定。",
+    question: "客户已经说出了详细痛点，接下来哪句话是 <strong>I - 影响问题</strong>，能放大问题的严重性？",
+    options: [
+      { text:"如果有一套设备能帮您稳定达标，对您帮助大吗？", type:"N", correct:false },
+      { text:"您目前的污水处理成本是多少？", type:"S", correct:false },
+      { text:"如果30天后整改还不达标，停产一天损失多少？药剂成本翻倍持续下去，一年要多花多少？如果真的停产整顿，对您工厂的客户订单和口碑有什么影响？", type:"I", correct:true },
+      { text:"除了重金属和COD，还有别的指标不达标吗？", type:"P", correct:false }
+    ],
+    explain:"<strong>✅ I - 影响问题</strong><br><br>I型问题是把痛点放大，让客户感受到紧迫性：停产一天损失多少？药剂成本持续翻倍一年多花多少？停产对客户订单和口碑的影响？<br><br>关键技巧：用具体数字和时间维度放大影响——\"一天损失多少\"\"一年多花多少\"\"持续下去会怎样\"。让客户自己算出这笔账。"
+  },
+  {
+    scenario: "张总沉默了一会儿，眉头紧锁：停产一天至少损失20万……一年药剂成本多花差不多60万。要是真停产整顿，客户跑了就完了，这厂子可能就保不住了。",
+    question: "客户已经充分感受到问题的严重性，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导对方说出解决方案的价值？",
+    options: [
+      { text:"您之前被环保警告过几次了？", type:"I", correct:false },
+      { text:"您现在的处理工艺用了多少年了？", type:"S", correct:false },
+      { text:"您觉得现在最大的困难是什么？", type:"P", correct:false },
+      { text:"如果我们有一套低温蒸发设备，能帮您在厂内直接处理电镀废水，重金属和COD稳定达标，不用再加药剂，每年省下60万处理费，彻底告别环保停产风险——您觉得这套方案对您工厂意味着什么？值得投入多少预算？", type:"N", correct:true }
+    ],
+    explain:"<strong>✅ N - 需求回报问题</strong><br><br>N型问题是引导客户自己说出解决方案的价值。关键话术：\"如果有一套设备能……您觉得对您意味着什么？\"<br><br>注意区别：I型是让对方感到痛（停产损失、成本翻倍），N型是让对方看到希望（如果解决了会怎样）。这一步做完，客户已经准备好听您的方案介绍了。"
+  },
+  {
+    scenario: "场景切换。你拜访一家化工企业，生产李总监接待了你。李总监提到：我们厂生产过程中产生大量高盐废水，现在处理起来越来越头疼。",
+    question: "第一步，您应该先问 <strong>S - 现状问题</strong>，了解客户的基本情况。下面哪句话最合适？",
+    options: [
+      { text:"委外处理成本高对您有什么影响？", type:"I", correct:false },
+      { text:"您在高盐废水处理上最大的困扰是什么？", type:"P", correct:false },
+      { text:"如果有一套设备能降低50%处理成本，您感兴趣吗？", type:"N", correct:false },
+      { text:"您目前高盐废水是怎么处理的？每天废水量大概多少吨？盐分浓度有多高？是委外处理还是自己有处理设备？", type:"S", correct:true }
+    ],
+    explain:"<strong>✅ S - 现状问题</strong><br><br>同样是第一步先了解现状：处理方式（委外还是自处理）、废水量、盐分浓度。这些信息决定了后续推荐哪款设备、怎么报价。<br><br>注意：\"越来越头疼\"是客户主动抛出的线索，但不要急着接。先摸清现状，再针对性挖痛，避免问偏。"
+  },
+  {
+    scenario: "李总监说：现在每天大概30吨高盐废水，含盐量在8%左右。一直靠委外处理，一吨要2000多块，一个月下来将近200万，成本太高了。",
+    question: "客户已经说出痛点（成本高），接下来哪句话是 <strong>P - 难点问题</strong>，能挖出更多隐藏困难？",
+    options: [
+      { text:"一年下来委外处理要花多少钱？", type:"I", correct:false },
+      { text:"如果有一套设备能自己处理，您愿意了解吗？", type:"N", correct:false },
+      { text:"委外处理除了成本高，还有没有其他问题？比如运输存储有没有麻烦？找处理单位容不容易？有没有被退回过？", type:"P", correct:true },
+      { text:"您的废水主要含什么盐分？氯化钠还是硫酸钠？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ P - 难点问题</strong><br><br>客户只说了\"成本高\"，但痛点往往不止一个。P型问题要追问：还有别的困难吗？运输存储有没有麻烦？找处理单位难不难？被退回过吗？<br><br>关键技巧：\"还有别的吗？\"——这是P型问题的黄金句式。客户往往说了第一个痛点后，追问才会说出更深层的问题。"
+  },
+  {
+    scenario: "李总监越说越激动：别提了！运输也是大问题，有时候找不到危废运输车，废水只能存着，存满了就得停工。而且现在委外处理厂越来越少，很多厂不收高盐废水了，上个月还退回来一车，说是盐分太高处理不了。",
+    question: "客户说出了多个痛点，接下来哪句话是 <strong>I - 影响问题</strong>，能让客户感受到问题的紧迫性？",
+    options: [
+      { text:"如果有一套设备能在厂内直接处理，您觉得对您帮助大吗？", type:"N", correct:false },
+      { text:"您目前一天产生多少废水？", type:"S", correct:false },
+      { text:"找不到运输车导致停工，这种情况多久发生一次？每次停工损失多少？委外处理厂越来越少，如果半年后找不到接收方，您的废水怎么处理？对生产计划有什么影响？", type:"I", correct:true },
+      { text:"除了运输和被退回，还有别的困难吗？", type:"P", correct:false }
+    ],
+    explain:"<strong>✅ I - 影响问题</strong><br><br>客户已经说出了多个痛点（运输难、停工、被退回、处理厂越来越少），I型问题要把这些痛点量化放大：停工多久一次？损失多少？半年后找不到接收方怎么办？<br><br>核心技巧：用时间维度推向未来——\"如果半年后……怎么办？\"让客户意识到问题只会越来越严重，不是等一等就能解决的。"
+  },
+  {
+    scenario: "李总监算了一笔账，表情凝重：上个月停工3天，损失了差不多60万。被退回那车光运输费就白花了3万。如果半年后真找不到接收方……那生产线可能就得停了，这可不是开玩笑的。",
+    question: "客户已经充分感受到问题的严重性，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导对方说出解决方案的价值？",
+    options: [
+      { text:"如果有一套低温蒸发结晶设备，能帮您在厂内直接处理高盐废水，结晶物含水率低于10%，蒸馏水可以回用，再也不用依赖委外——每年省下2000多万处理费，消除停产风险——您觉得这套方案对您工厂意味着什么？值得投入多少预算来解决？", type:"N", correct:true },
+      { text:"您之前有了解过其他处理方案吗？", type:"P", correct:false },
+      { text:"您目前的委外处理成本是多少？", type:"I", correct:false },
+      { text:"您工厂现在有多少人？", type:"S", correct:false }
+    ],
+    explain:"<strong>✅ N - 需求回报问题</strong><br><br>N型问题把痛点和方案价值连起来：在厂内直接处理→省下2000万委外费→消除停产风险→您觉得意味着什么？<br><br>关键：N型问题不是推销，而是引导客户自己说出价值。当客户说\"那当然太好了\"\"这个值得投入\"，说明他已经准备好听方案了。此时再进入FABE产品介绍，水到渠成。"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answered = false;
+let results = [];
+
+function renderQuestion() {
+  selected = null;
+  answered = false;
+  var q = questions[current];
+
+  document.getElementById("progressText").textContent = "第 " + (current+1) + " 题 / 共 " + questions.length + " 题";
+  document.getElementById("progressFill").style.width = (current / questions.length * 100) + "%";
+
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = nextQ;
+  document.getElementById("btnPrev").disabled = (current === 0);
+
+  var card = document.getElementById("questionCard");
+  var html = '<div class="question-badge">第 ' + (current+1) + ' 题</div>';
+  html += '<div class="scenario"><span class="label">【场景】</span>' + q.scenario + '</div>';
+  html += '<div style="font-weight:600; margin:16px 0 8px; color:#333;">' + q.question + '</div>';
+  html += '<div class="options">';
+  var labels = ['A', 'B', 'C', 'D'];
+  for (var i = 0; i < q.options.length; i++) {
+    var o = q.options[i];
+    html += '<div class="option" id="opt' + i + '" onclick="selectOption(' + i + ')">';
+    html += '  <div class="radio"></div>';
+    html += '  <div class="text"><span class="opt-label">[' + labels[i] + ']</span> ' + o.text + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="correct-answer" id="correctAnswer"></div>';
+  html += '<div class="explanation" id="explanation">';
+  html += '  <h4>解析</h4>';
+  html += '  <p>' + q.explain + '</p>';
+  html += '</div>';
+  card.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selected = idx;
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].classList.toggle("selected", i === idx);
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function nextQ() {
+  if (selected === null) return;
+  var q = questions[current];
+  var isCorrect = q.options[selected].correct;
+  answered = true;
+
+  var opts = document.querySelectorAll(".option");
+  for (var i = 0; i < opts.length; i++) {
+    if (q.options[i].correct) opts[i].classList.add("correct");
+    if (i === selected && !isCorrect) opts[i].classList.add("wrong");
+    opts[i].onclick = null;
+  }
+
+  results[current] = isCorrect;
+
+  // 先显示正确答案
+  var labels = ['A', 'B', 'C', 'D'];
+  var correctIdx = q.options.findIndex(function(o) { return o.correct === true; });
+  var correctLabel = labels[correctIdx];
+  var correctText = q.options[correctIdx].text;
+  document.getElementById('correctAnswer').innerHTML =
+    '<div class="label">✅ 正确答案：' + correctLabel + ' — ' + correctText + '</div>';
+  document.getElementById('correctAnswer').classList.add('show');
+
+  document.getElementById("explanation").classList.add("show");
+
+  if (current < questions.length - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = function() { current++; renderQuestion(); };
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  var percent = Math.round(score / results.length * 100);
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = percent;
+
+  var detailHTML = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    var icon = results[i] ? "✅" : "❌";
+    var text = results[i] ? "正确" : "错误";
+    detailHTML += '<div class="result-item"><span class="status">' + icon + '</span><span>第 ' + (i+1) + ' 题：' + text + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detailHTML;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
