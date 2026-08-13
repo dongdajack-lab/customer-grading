@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN实战演练 · 销售卡（手机端）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  background: #f0f2f5; color: #1a1a2e; line-height: 1.75; padding: 16px 12px;
+}
+.container { max-width: 600px; margin: 0 auto; }
+
+.scenario-title {
+  text-align: center; margin: 28px 0 20px; padding: 16px;
+  border-radius: 10px; color: #fff;
+}
+.scenario-title h2 { font-size: 18px; margin-bottom: 4px; }
+.scenario-title .meta { font-size: 12px; opacity: 0.85; }
+.s1-bg { background: linear-gradient(135deg, #2E6B9E, #1B2A4A); }
+.s2-bg { background: linear-gradient(135deg, #7C2D12, #DC2626); }
+
+.card {
+  background: #fff; border-radius: 10px; overflow: hidden;
+  margin-bottom: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+}
+.card-top {
+  padding: 12px 20px; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-top .role-tag { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+.card-top .privacy { font-size: 11px; opacity: 0.8; }
+.card-body { padding: 20px 22px; }
+
+.role-sales .card-top { background: #1a56c4; }
+
+.sec { margin-bottom: 14px; }
+.sec-title {
+  font-size: 12px; font-weight: 700; color: #999;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sec-title::before { content: ""; width: 3px; height: 14px; border-radius: 2px; }
+.role-sales .sec-title::before { background: #1a56c4; }
+
+.sec p { font-size: 14px; color: #333; }
+.sec ul { list-style: none; padding: 0; }
+.sec li { font-size: 14px; color: #333; padding: 3px 0 3px 18px; position: relative; }
+.sec li::before { content: "·"; position: absolute; left: 6px; font-weight: 700; color: #aaa; }
+
+.spin-route {
+  background: #f0f7ff; border-radius: 8px; padding: 14px 18px; margin-top: 8px;
+}
+.spin-route .sec-title { color: #1a56c4; }
+.spin-route .sec-title::before { background: #1a56c4; }
+.spin-item { display: flex; gap: 10px; padding: 4px 0; font-size: 14px; }
+.spin-letter { font-weight: 700; font-size: 16px; min-width: 20px; }
+.spin-s { color: #2E6B9E; }
+.spin-p { color: #E67E22; }
+.spin-i { color: #DC2626; }
+.spin-n { color: #059669; }
+
+.tip-box {
+  background: #fefce8; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 12px 16px; margin-top: 12px; font-size: 13px; color: #92400e;
+}
+.tip-box strong { color: #1B2A4A; }
+
+.main-header {
+  text-align: center; margin-bottom: 24px; padding: 20px;
+  background: linear-gradient(135deg, #1B2A4A 0%, #2E6B9E 100%);
+  border-radius: 12px; color: #fff;
+}
+.main-header h1 { font-size: 20px; margin-bottom: 4px; }
+.main-header .sub { font-size: 12px; opacity: 0.8; }
+
+.info-box {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 14px 18px; margin-top: 8px;
+}
+.info-box .sec-title { color: #1a56c4; }
+.info-box .sec-title::before { background: #1a56c4; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="main-header">
+    <h1>SPIN实战演练 · 销售卡</h1>
+    <div class="sub">米思米全渠道高效沟通实战 | 仅销售本人可见</div>
+  </div>
+
+  <!-- ========== 场景一 ========== -->
+  <div class="scenario-title s1-bg">
+    <h2>场景一：交期困局</h2>
+    <div class="meta">中等难度 | 汽车零部件厂采购经理</div>
+  </div>
+
+  <div class="card role-sales">
+    <div class="card-top">
+      <span class="role-tag">销售卡</span>
+      <span class="privacy">仅销售本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p>米思米中心营业。你已跟客户李明通过一次电话，约了这次拜访。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的目标</div>
+        <ul>
+          <li>通过SPIN提问，帮客户发现分散采购的隐性成本</li>
+          <li>引出米思米一站式方案（一个平台、一份对账、交期保障）</li>
+          <li>争取一个试单机会</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的武器</div>
+        <ul>
+          <li>米思米标准件30万+SKU，一站式覆盖</li>
+          <li>在线下单系统，对账一键导出</li>
+          <li>交期承诺：标准件次日发货</li>
+        </ul>
+      </div>
+
+      <div class="spin-route">
+        <div class="sec-title">SPIN提问路线（建议，非剧本）</div>
+        <div class="spin-item"><span class="spin-letter spin-s">S</span><span>现在用几家供应商？采购流程是怎样的？每月大概多少种件？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-p">P</span><span>交期延迟频率高吗？对账流程复杂吗？有没有重复下单的情况？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-i">I</span><span>上次延迟造成了什么影响？停工损失大概多少？每月对账花多少人天？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-n">N</span><span>如果一家就能搞定所有标准件，交期稳定、对账简化，对您意味着什么？</span></div>
+      </div>
+
+      <div class="info-box">
+        <div class="sec-title">你需要挖出的信息方向（客户不会主动说）</div>
+        <ul>
+          <li>对账效率：多家供应商→多套系统→多份对账单，每月多花多少人天？</li>
+          <li>交期损失：延迟到货有没有造成停工？损失大概多少？</li>
+          <li>重复下单：有没有搞混供应商、重复下单、库存积压？</li>
+        </ul>
+      </div>
+
+      <div class="tip-box">
+        <strong>关键提醒：</strong>不要急着推产品！先用I类问题让客户自己感受到痛，再用N类问题让客户自己说出价值。如果客户说"都差不多"，说明你还在S层，需要往P和I推进。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 场景二 ========== -->
+  <div class="scenario-title s2-bg">
+    <h2>场景二：价格壁垒</h2>
+    <div class="meta">高难度 | 电子厂技术主管 | 面对价格异议如何用SPIN破局</div>
+  </div>
+
+  <div class="card role-sales">
+    <div class="card-top">
+      <span class="role-tag">销售卡</span>
+      <span class="privacy">仅销售本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p>米思米中心营业。客户王芳一直以"价格高"为由拒绝你，这是你第四次联系她。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的目标</div>
+        <ul>
+          <li>帮客户从"单价思维"转向"总成本思维"</li>
+          <li>让客户自己算出返工+罚金的隐性成本远超5-8%的单价差异</li>
+          <li>争取一个小批量试用订单</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的武器</div>
+        <ul>
+          <li>米思米公差控制：±0.01mm（行业平均±0.03mm）</li>
+          <li>TCO总成本对比工具：可帮客户算清隐性成本</li>
+          <li>小批量试用方案：先试50件，不满意不收费</li>
+        </ul>
+      </div>
+
+      <div class="spin-route">
+        <div class="sec-title">SPIN提问路线（建议，非剧本）</div>
+        <div class="spin-item"><span class="spin-letter spin-s">S</span><span>现在用哪个品牌？每月用量大概多少？主要用在哪类产品上？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-p">P</span><span>装配过程中有没有遇到尺寸不一致的情况？返工率高吗？品控有没有反馈过？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-i">I</span><span>返工一件成本多少？有没有因为返工导致交货延迟？被客户罚过款吗？</span></div>
+        <div class="spin-item"><span class="spin-letter spin-n">N</span><span>如果返工率能降到0.1%，一年能省多少？这笔账值不值得重新评估供应商？</span></div>
+      </div>
+
+      <div class="info-box">
+        <div class="sec-title">你需要挖出的信息方向（客户不会主动说）</div>
+        <ul>
+          <li>装配质量：有没有遇到尺寸不一致、装配返工的情况？返工率多少？</li>
+          <li>返工成本：每月返工多少件？每件成本多少？月损失多少？</li>
+          <li>连带损失：返工有没有导致交货延迟？有没有被客户罚款？</li>
+        </ul>
+      </div>
+
+      <div class="tip-box">
+        <strong>最大挑战：</strong>客户一上来就堵你"价格高"。不要反驳价格！不要说"我们质量好"！用P类问题转移话题到质量和返工，用I类问题放大痛感，让客户自己算账。
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

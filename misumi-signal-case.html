@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研讨案例：有数据不会用的小林 | 米思米中心营业</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    line-height: 1.7;
+  }
+  .header {
+    background: linear-gradient(135deg, #1B2A4A 0%, #2E6B9E 100%);
+    color: #fff;
+    padding: 30px 20px 24px;
+    text-align: center;
+  }
+  .header .tag {
+    display: inline-block;
+    background: rgba(230, 126, 34, 0.9);
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .section-num {
+    background: #E67E22;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 17px;
+    color: #1B2A4A;
+    font-weight: 700;
+  }
+  .bg-text {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 12px;
+    text-indent: 2em;
+  }
+  .signal-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f7f9fb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-left: 3px solid #2E6B9E;
+  }
+  .signal-card .sig-tag {
+    background: #2E6B9E;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .signal-card .sig-text {
+    font-size: 13.5px;
+    color: #333;
+  }
+  .signal-card .sig-text strong {
+    color: #1B2A4A;
+  }
+  .worry-box {
+    background: #fff8e7;
+    border: 1px solid #ffe0a3;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 12px 0 4px;
+    font-size: 13.5px;
+    color: #8B6914;
+    line-height: 1.8;
+  }
+  .worry-box .label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #E67E22;
+    margin-bottom: 4px;
+  }
+  /* Three customer cards */
+  .role-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .role-card {
+    border: 1px solid #e0e6ed;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .role-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .role-header.r1 { background: #2E6B9E; }
+  .role-header.r2 { background: #3d8b5e; }
+  .role-header.r3 { background: #8B4513; }
+  .role-body {
+    padding: 12px 14px;
+  }
+  .signal-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .signal-desc {
+    font-size: 13px;
+    color: #555;
+    background: #f0f4f8;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .dialog-block {
+    margin-bottom: 10px;
+  }
+  .dialog-block .who {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 3px;
+  }
+  .dialog-block .what {
+    font-size: 13.5px;
+    color: #333;
+    background: #f7f9fb;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border-left: 3px solid #ccc;
+  }
+  .dialog-block.sales .what { border-left-color: #2E6B9E; }
+  .dialog-block.client .what { border-left-color: #E67E22; }
+  .outcome {
+    font-size: 13px;
+    color: #c0392b;
+    background: #fdf2f2;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  /* Discussion */
+  .discuss-intro {
+    background: #fff5eb;
+    border: 1px solid #fde2c3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #8B4513;
+    margin-bottom: 14px;
+  }
+  .question-list {
+    counter-reset: q;
+    list-style: none;
+  }
+  .question-item {
+    position: relative;
+    padding: 12px 14px 12px 48px;
+    margin-bottom: 10px;
+    background: #f7f9fb;
+    border-radius: 8px;
+    border-left: 3px solid #2E6B9E;
+  }
+  .question-item::before {
+    counter-increment: q;
+    content: "Q" counter(q);
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    background: #1B2A4A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .question-item .q-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.7;
+  }
+  .question-item .q-hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #999;
+  }
+  .footer .line {
+    width: 40px;
+    height: 3px;
+    background: #E67E22;
+    margin: 0 auto 10px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="tag">§03 信号转化与数据线索</span>
+  <h1>研讨案例：有数据不会用的小林</h1>
+  <div class="subtitle">米思米中心营业 · 全渠道沟通实战 | 讲师：董仁杰</div>
+</div>
+
+<div class="container">
+
+  <!-- Part 1: Background -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-num">1</div>
+      <h2>案例背景</h2>
+    </div>
+    <p class="bg-text">小林是米思米中心营业的销售，已经工作半年了。今天早上她打开后台系统，看到三个客户的动态：</p>
+
+    <div class="signal-card">
+      <div class="sig-tag">客户A</div>
+      <div class="sig-text">浏览了<strong>直线导轨</strong>的品类页，看了3分钟，没有加购。</div>
+    </div>
+    <div class="signal-card">
+      <div class="sig-tag">客户B</div>
+      <div class="sig-text">把一款<strong>滑轨导轨</strong>加入了购物车，但过了一天还没下单。</div>
+    </div>
+    <div class="signal-card">
+      <div class="sig-tag">客户C</div>
+      <div class="sig-text">上周提交了一份<strong>报价单请求</strong>，包含了5个型号，但收到报价后没有回复。</div>
+    </div>
+
+    <div class="worry-box">
+      <div class="label">小林的困惑</div>
+      小林看着这三条数据，有点发愁。她想起了Day1学过的PPP破冰模型，但她不确定：三个客户看到的东西不一样，PPP的Payoff该分别写什么？而且，她不确定该怎么提到客户的浏览行为——直接说"我看到您浏览了XX"好像不太好，但又不知道该怎么开口。
+    </div>
+  </div>
+
+  <!-- Part 2: Three Attempts -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-num">2</div>
+      <h2>小林的三次尝试</h2>
+    </div>
+    <p class="bg-text" style="text-indent:0;color:#888;font-size:13px;margin-bottom:10px;">三次尝试，三次碰壁。小林的话术有什么共同问题？</p>
+
+    <div class="role-cards">
+
+      <!-- Customer A -->
+      <div class="role-card">
+        <div class="role-header r1">
+          <span>客户A：浏览品类页</span>
+        </div>
+        <div class="role-body">
+          <div class="signal-label">信号含义</div>
+          <div class="signal-desc">有兴趣，但还没到购买阶段</div>
+          <div class="dialog-block sales">
+            <div class="who">小林的话术</div>
+            <div class="what">「您好，我看到您浏览了我们网站的导轨页面，请问您需要购买导轨吗？」</div>
+          </div>
+          <div class="dialog-block client">
+            <div class="who">客户反应</div>
+            <div class="what">「我就随便看看，暂时不需要。」</div>
+          </div>
+          <div class="outcome">对话直接结束</div>
+        </div>
+      </div>
+
+      <!-- Customer B -->
+      <div class="role-card">
+        <div class="role-header r2">
+          <span>客户B：加购未下单</span>
+        </div>
+        <div class="role-body">
+          <div class="signal-label">信号含义</div>
+          <div class="signal-desc">有明确购买意愿，正在评估对比</div>
+          <div class="dialog-block sales">
+            <div class="who">小林的话术</div>
+            <div class="what">「您好，您购物车里有一款滑轨导轨还没下单，请问是遇到什么问题了吗？」</div>
+          </div>
+          <div class="dialog-block client">
+            <div class="who">客户反应</div>
+            <div class="what">「哦，我再看看。」</div>
+          </div>
+          <div class="outcome">已读不回</div>
+        </div>
+      </div>
+
+      <!-- Customer C -->
+      <div class="role-card">
+        <div class="role-header r3">
+          <span>客户C：报价后未回复</span>
+        </div>
+        <div class="role-body">
+          <div class="signal-label">信号含义</div>
+          <div class="signal-desc">有具体需求，但对报价有顾虑</div>
+          <div class="dialog-block sales">
+            <div class="who">小林的话术</div>
+            <div class="what">「您好，上周给您报了5个型号的价格，您考虑得怎么样了？有需要的话我可以帮您安排。」</div>
+          </div>
+          <div class="dialog-block client">
+            <div class="who">客户反应</div>
+            <div class="what">「价格有点高，我再跟领导商量一下。」</div>
+          </div>
+          <div class="outcome">之后就没回复了</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Part 3: Discussion -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-num">3</div>
+      <h2>小组讨论（3分钟）</h2>
+    </div>
+    <div class="discuss-intro">
+      请各小组讨论以下问题，3分钟后每组派一人分享：
+    </div>
+    <div class="question-list">
+      <div class="question-item">
+        <div class="q-text">小林对三个客户用了不同的话术，但三次都失败了。三次失败有没有共同的原因？请找出小林话术中的共性问题。</div>
+      </div>
+      <div class="question-item">
+        <div class="q-text">三个客户的信号不一样——浏览品类、加购未下单、报价后未回复——说明他们处于不同的购买阶段。你认为这三个客户分别处于什么阶段？各自最需要什么？</div>
+      </div>
+      <div class="question-item">
+        <div class="q-text">小林直接说"我看到您浏览了""您购物车里还有"——这种说法有什么问题？如果让你来改，你会怎么表达，既让客户知道你了解他的情况，又不让他觉得被监控？</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="line"></div>
+  <div>米思米中心营业 · 全渠道沟通实战</div>
+  <div>§03 信号转化与数据线索 | 讲师：董仁杰</div>
+</div>
+
+</body>
+</html>
