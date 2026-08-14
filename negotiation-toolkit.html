@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>谈判工具箱 · 大董销售体系</title>
+<style>
+:root{
+  --main:#E8590C; --main-dark:#C74405; --main-light:#FFF4E6; --main-mid:#FFE3CC;
+  --ink:#212529; --ink2:#495057; --ink3:#868E96; --line:#E9ECEF; --bg:#FAF9F7;
+  --ok:#2B8A3E; --warn:#E8590C; --card:#FFFFFF;
+  --db:#1B3A5C; --bl:#2E86AB; --gn:#2B8A3E; --ar:#C0392B;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+
+header{background:linear-gradient(135deg,var(--db) 0%,#2E4A6B 55%,var(--bl) 100%);color:#fff;padding:34px 0 26px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.08)}
+header::before{content:"";position:absolute;right:40px;bottom:-90px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.h-tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:2px 14px;font-size:12px;letter-spacing:2px;margin-bottom:12px}
+h1{font-size:26px;font-weight:800;letter-spacing:1px}
+.h-sub{font-size:14px;opacity:.92;margin-top:8px}
+.h-usage{font-size:12px;opacity:.8;margin-top:10px}
+
+.tabs{position:sticky;top:0;z-index:50;background:var(--bg);padding:10px 0 6px;border-bottom:1px solid var(--line)}
+.tabbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbtn{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;color:var(--ink2);padding:8px 14px;border-radius:22px;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
+.tabbtn:hover{border-color:var(--main);color:var(--main)}
+.tabbtn.on{background:var(--main);border-color:var(--main);color:#fff;box-shadow:0 3px 10px rgba(232,89,12,.3)}
+.tab-num{display:inline-block;background:var(--main-light);color:var(--main);border-radius:10px;padding:0 7px;margin-right:6px;font-size:12px;font-weight:800}
+.tabbtn.on .tab-num{background:rgba(255,255,255,.25);color:#fff}
+
+section.tab{display:none;padding-top:22px}
+section.tab.on{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.card-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;margin-bottom:4px}
+.card-title .ico{width:26px;height:26px;border-radius:8px;background:var(--main);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto}
+.card-sub{font-size:13px;color:var(--ink3);margin-bottom:14px;line-height:1.5}
+.card-note{background:var(--main-light);border-left:4px solid var(--main);padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;color:var(--ink2);margin:10px 0}
+
+label{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12px 0 5px}
+label .req{color:var(--main)}
+input[type=text],input[type=number],input[type=date],textarea,select{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff;outline:none;transition:border .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--main);box-shadow:0 0 0 3px rgba(232,89,12,.1)}
+textarea{resize:vertical;min-height:64px;line-height:1.55}
+.ph{font-size:11px;color:var(--ink3);margin-top:4px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.row,.row3{grid-template-columns:1fr}}
+
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--main);color:#fff}
+.btn-primary:hover{background:var(--main-dark)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink2)}
+.btn-ghost:hover{border-color:var(--main);color:var(--main)}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:8px}
+.btn-danger{background:#fff;border:1.5px solid #FFA8A8;color:#C92A2A}
+.btn-ok{background:var(--ok);color:#fff}
+.btn-ok:hover{filter:brightness(.92)}
+.btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+.dyn-item{display:grid;grid-template-columns:1fr 1fr 34px;gap:8px;margin-bottom:8px;align-items:center}
+.dyn-item.col4{grid-template-columns:1fr 1fr 1fr 34px}
+.dyn-item.col5{grid-template-columns:1fr 1fr 1fr 1fr 34px}
+.dyn-item input,.dyn-item textarea,.dyn-item select{background:var(--bg)}
+.dyn-item .del{width:34px;height:36px;border:1.5px solid var(--line);background:#fff;border-radius:9px;color:#C92A2A;cursor:pointer;font-size:16px;font-weight:700;transition:all .15s}
+.dyn-item .del:hover{background:#FFF5F5;border-color:#FFA8A8}
+.addlink{display:inline-flex;align-items:center;gap:4px;color:var(--main);font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;border:none;background:none}
+.addlink:hover{text-decoration:underline}
+
+.result{background:linear-gradient(135deg,#FFF4E6,#FFF9F0);border:1.5px solid var(--main-mid);border-radius:14px;padding:18px;margin-top:14px}
+.result h4{color:var(--main-dark);font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+.paper-preview{background:#fff;border:1.5px solid var(--main-mid);border-radius:12px;padding:20px;margin-top:16px}
+.paper-preview .pp-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px double var(--main);padding-bottom:10px;margin-bottom:12px}
+.paper-preview .pp-title{font-size:18px;font-weight:800;color:var(--main-dark)}
+.paper-preview .pp-meta{font-size:11px;color:var(--ink3);text-align:right;line-height:1.5}
+.pp-block{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.pp-block .b-t{font-size:13px;font-weight:800;color:var(--main-dark);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.pp-block .b-c{font-size:13px;color:var(--ink2);white-space:pre-wrap;line-height:1.55}
+
+.role-row{display:grid;grid-template-columns:100px 1fr;gap:12px;margin-bottom:16px;align-items:start}
+.role-tag{font-size:13px;font-weight:800;color:#fff;border-radius:8px;padding:6px 10px;text-align:center;align-self:start}
+.role-tag.db{background:var(--db)} .role-tag.bl{background:var(--bl)} .role-tag.gn{background:var(--gn)} .role-tag.ao{background:var(--ar)}
+.role-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.role-fields{grid-template-columns:1fr}}
+
+.summary-box{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+.summary-box h4{font-size:15px;color:var(--main-dark);margin-bottom:10px}
+.summary-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.summary-item:last-child{border-bottom:none}
+
+.chip-cat{border:1.5px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.chip-head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--main-light);cursor:pointer;user-select:none}
+.chip-name{font-size:15px;font-weight:800;color:var(--main-dark)}
+.chip-desc{font-size:12px;color:var(--ink3);margin-left:auto}
+.chip-body{padding:12px 16px;display:none}
+.chip-cat.open .chip-body{display:block}
+.chip-cat.open .chip-arrow{transform:rotate(180deg)}
+.chip-arrow{margin-left:8px;color:var(--ink3);transition:transform .2s}
+
+.save-status{font-size:12px;color:var(--ink3);text-align:center;padding:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="h-tag">大董销售体系 · 天地人</span>
+    <h1>谈判工具箱</h1>
+    <p class="h-sub">谈判准备清单 · 筹码盘点表 · 决策链地图</p>
+    <p class="h-usage">下次谈判前30分钟，用这3张纸做一次「谈判预演」。数据自动保存在本地。</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <div class="tabbar">
+      <button class="tabbtn on" data-tab="prep"><span class="tab-num">01</span>谈判准备清单</button>
+      <button class="tabbtn" data-tab="chips"><span class="tab-num">02</span>筹码盘点表</button>
+      <button class="tabbtn" data-tab="map"><span class="tab-num">03</span>决策链地图</button>
+    </div>
+  </div>
+
+  <!-- Tab 1: 谈判准备清单 -->
+  <section class="tab on" id="tab-prep">
+    <div class="card">
+      <div class="card-title"><span class="ico">01</span>谈判准备清单</div>
+      <div class="card-sub">下次谈判前30分钟填写：看对手 / 定BATNA / 定目标 / 盘筹码 / 设预案</div>
+      <div class="row">
+        <div><label>客户名称</label><input type="text" id="p-client" placeholder="输入客户名称"></div>
+        <div><label>谈判日期</label><input type="date" id="p-date"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">1</span>看对手</div>
+      <label>对方BATNA（谈不拢，他还能找谁？）</label><textarea id="p-their-batna" placeholder="例如：继续用现有供应商、找XX竞品、内部自建"></textarea>
+      <label>对方压力点（时间/预算/业务痛点）</label><textarea id="p-their-pressure" placeholder="例如：Q3必须上线，现有供应商交付慢"></textarea>
+      <label>对方核心诉求排序</label><textarea id="p-their-needs" placeholder="例如：1.交付快 2.价格低 3.售后稳"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">2</span>定BATNA</div>
+      <label>我方BATNA（谈不拢，我们还有什么选择？）</label><textarea id="p-our-batna" placeholder="例如：转而攻另一家客户、走渠道分销"></textarea>
+      <label>我方优势筹码</label><textarea id="p-our-advantages" placeholder="例如：交付速度、行业案例、技术专利"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">3</span>定目标</div>
+      <div class="row3">
+        <div><label>理想目标</label><input type="text" id="p-target-best" placeholder="最想要"></div>
+        <div><label>授权底线</label><input type="text" id="p-target-auth" placeholder="可自主决定"></div>
+        <div><label>公司底线</label><input type="text" id="p-target-company" placeholder="不可突破"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">4</span>盘筹码</div>
+      <p class="card-sub">列出你本次谈判可以交换的资源（价格、账期、交付、服务、案例、关系等）</p>
+      <div id="p-chips-list"></div>
+      <button class="addlink" onclick="addPrepChip()">+ 添加筹码</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">5</span>设预案</div>
+      <label>对方最可能在哪儿卡我？</label><textarea id="p-block" placeholder="例如：价格、交付周期、付款方式"></textarea>
+      <label>我的应对话术 / 交换条件</label><textarea id="p-response" placeholder="例如：价格可以谈，但账期要从60天缩短到30天"></textarea>
+      <label>下一步行动（约谁、什么时间、谈什么）</label><textarea id="p-next" placeholder="例如：下周二约采购总监，确认最终报价"></textarea>
+    </div>
+
+    <div class="btnbar">
+      <button class="btn btn-primary" onclick="renderPrepSummary()">生成一页纸摘要</button>
+      <button class="btn btn-ghost" onclick="clearPrep()">清空</button>
+    </div>
+
+    <div class="paper-preview" id="prep-summary" style="display:none">
+      <div class="pp-head">
+        <div class="pp-title">谈判准备一页纸</div>
+        <div class="pp-meta" id="prep-meta"></div>
+      </div>
+      <div id="prep-body"></div>
+    </div>
+    <div class="save-status" id="prep-status"></div>
+  </section>
+
+  <!-- Tab 2: 筹码盘点表 -->
+  <section class="tab" id="tab-chips">
+    <div class="card">
+      <div class="card-title"><span class="ico">02</span>筹码盘点表</div>
+      <div class="card-sub">盘点你手上所有筹码：价格 / 条件 / 方案 / 服务 / 资源 / 关系，建立自己的筹码库</div>
+      <div class="row">
+        <div><label>客户名称</label><input type="text" id="c-client" placeholder="输入客户名称"></div>
+        <div><label>盘点日期</label><input type="date" id="c-date"></div>
+      </div>
+    </div>
+
+    <div id="chip-categories"></div>
+
+    <div class="btnbar">
+      <button class="btn btn-primary" onclick="renderChipSummary()">生成筹码总览</button>
+      <button class="btn btn-ghost" onclick="clearChips()">清空</button>
+    </div>
+
+    <div class="summary-box" id="chip-summary" style="display:none">
+      <h4>筹码总览</h4>
+      <div id="chip-summary-body"></div>
+    </div>
+    <div class="save-status" id="chips-status"></div>
+  </section>
+
+  <!-- Tab 3: 决策链地图 -->
+  <section class="tab" id="tab-map">
+    <div class="card">
+      <div class="card-title"><span class="ico">03</span>决策链地图</div>
+      <div class="card-sub">每个大客户画一张：决策者 / 使用者 / 把关者 / 教练，明确攻防对象</div>
+      <div class="row">
+        <div><label>客户名称</label><input type="text" id="m-client" placeholder="输入客户名称"></div>
+        <div><label>更新日期</label><input type="date" id="m-date"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">1</span>决策者</div>
+      <div class="role-fields">
+        <div><label>姓名/岗位</label><input type="text" id="m-dec-name" placeholder="例如：王总 / CEO"></div>
+        <div><label>关注点</label><input type="text" id="m-dec-focus" placeholder="例如：ROI、战略方向"></div>
+      </div>
+      <label>我方策略</label><textarea id="m-dec-strategy" placeholder="例如：用同行标杆案例打动他，强调战略协同"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">2</span>使用者</div>
+      <div class="role-fields">
+        <div><label>姓名/岗位</label><input type="text" id="m-user-name" placeholder="例如：李经理 / 生产部"></div>
+        <div><label>痛点/诉求</label><input type="text" id="m-user-pain" placeholder="例如：操作简便、不出故障"></div>
+      </div>
+      <label>我方策略</label><textarea id="m-user-strategy" placeholder="例如：安排试用，让他说好话"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">3</span>把关者</div>
+      <p class="card-sub">任何有否决权的部门或个人：技术、财务、法务、总办、总经理秘书等</p>
+      <div id="m-gatekeepers"></div>
+      <button class="addlink" onclick="addGatekeeper()">+ 添加把关者</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ico">4</span>教练</div>
+      <p class="card-sub">跨角色存在的内部支持者：决策者/使用者/把关者中，都有人可能成为教练</p>
+      <div id="m-coaches"></div>
+      <button class="addlink" onclick="addCoach()">+ 添加教练</button>
+    </div>
+
+    <div class="btnbar">
+      <button class="btn btn-primary" onclick="renderMapSummary()">生成决策链地图</button>
+      <button class="btn btn-ghost" onclick="clearMap()">清空</button>
+    </div>
+
+    <div class="paper-preview" id="map-summary" style="display:none">
+      <div class="pp-head">
+        <div class="pp-title">决策链地图</div>
+        <div class="pp-meta" id="map-meta"></div>
+      </div>
+      <div id="map-body"></div>
+    </div>
+    <div class="save-status" id="map-status"></div>
+  </section>
+</div>
+
+<script>
+// ===== Tabs =====
+document.querySelectorAll('.tabbtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('section.tab').forEach(s=>s.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('on');
+    loadAll();
+  });
+});
+
+// ===== Storage =====
+const KEY='negotiation_toolkit_v1';
+function saveAll(){
+  const data={
+    prep:{
+      client:g('p-client'),date:g('p-date'),
+      theirBatna:g('p-their-batna'),theirPressure:g('p-their-pressure'),theirNeeds:g('p-their-needs'),
+      ourBatna:g('p-our-batna'),ourAdvantages:g('p-our-advantages'),
+      best:g('target-best'),auth:g('target-auth'),company:g('target-company'),
+      block:g('p-block'),response:g('p-response'),next:g('p-next'),
+      chips:getPrepChips()
+    },
+    chips:{client:g('c-client'),date:g('c-date'),items:getChipItems()},
+    map:{
+      client:g('m-client'),date:g('m-date'),
+      dec:{name:g('m-dec-name'),focus:g('m-dec-focus'),strategy:g('m-dec-strategy')},
+      user:{name:g('m-user-name'),pain:g('m-user-pain'),strategy:g('m-user-strategy')},
+      gatekeepers:getGatekeepers(),coaches:getCoaches()
+    }
+  };
+  localStorage.setItem(KEY,JSON.stringify(data));
+}
+function g(id){return document.getElementById(id)?.value||'';}
+function s(id,v){const el=document.getElementById(id);if(el)el.value=v||'';}
+
+// ===== Tab 1: Prep =====
+function addPrepChip(val=''){
+  const div=document.createElement('div');div.className='dyn-item';
+  div.innerHTML=`<input type="text" placeholder="筹码名称（如：账期60天→30天）" class="p-chip-name" value="${val}"><input type="text" placeholder="可交换条件" class="p-chip-trade" value=""><button class="del" onclick="this.parentElement.remove();saveAll();">×</button>`;
+  document.getElementById('p-chips-list').appendChild(div);
+}
+function getPrepChips(){return Array.from(document.querySelectorAll('#p-chips-list .dyn-item')).map(r=>({name:r.querySelector('.p-chip-name').value,trade:r.querySelector('.p-chip-trade').value}));}
+function getPrepChipsFromData(data){if(data&&data.prep&&data.prep.chips){data.prep.chips.forEach(c=>addPrepChip(c.name));document.querySelectorAll('#p-chips-list .dyn-item').forEach((r,i)=>{if(data.prep.chips[i])r.querySelector('.p-chip-trade').value=data.prep.chips[i].trade;});}}
+
+function renderPrepSummary(){
+  const chips=getPrepChips().filter(c=>c.name).map(c=>`• ${c.name}${c.trade?' → 可交换：'+c.trade:''}`).join('\n')||'（暂未填写）';
+  document.getElementById('prep-meta').innerText=`客户：${g('p-client')||'-'}\n日期：${g('p-date')||'-'}`;
+  document.getElementById('prep-body').innerHTML=`
+    <div class="pp-block"><div class="b-t">看对手</div><div class="b-c">对方BATNA：${g('p-their-batna')||'-'}\n压力点：${g('p-their-pressure')||'-'}\n核心诉求：${g('p-their-needs')||'-'}</div></div>
+    <div class="pp-block"><div class="b-t">定BATNA</div><div class="b-c">我方BATNA：${g('p-our-batna')||'-'}\n优势筹码：${g('p-our-advantages')||'-'}</div></div>
+    <div class="pp-block"><div class="b-t">定目标</div><div class="b-c">理想目标：${g('p-target-best')||'-'}\n授权底线：${g('p-target-auth')||'-'}\n公司底线：${g('p-target-company')||'-'}</div></div>
+    <div class="pp-block"><div class="b-t">盘筹码</div><div class="b-c">${chips}</div></div>
+    <div class="pp-block"><div class="b-t">设预案</div><div class="b-c">卡点：${g('p-block')||'-'}\n应对：${g('p-response')||'-'}\n下一步：${g('p-next')||'-'}</div></div>`;
+  document.getElementById('prep-summary').style.display='block';
+  saveAll();
+  showStatus('prep-status','已生成摘要并保存');
+}
+function clearPrep(){if(confirm('确定清空当前清单？')){['p-client','p-date','p-their-batna','p-their-pressure','p-their-needs','p-our-batna','p-our-advantages','p-target-best','p-target-auth','p-target-company','p-block','p-response','p-next'].forEach(id=>s(id,''));document.getElementById('p-chips-list').innerHTML='';addPrepChip();document.getElementById('prep-summary').style.display='none';saveAll();}}
+
+// ===== Tab 2: Chips =====
+const CHIP_CATS=[
+  {key:'price',name:'价格筹码',desc:'折扣、返点、阶梯价、账期等',color:'#E8590C'},
+  {key:'condition',name:'条件筹码',desc:'付款方式、交付周期、验收标准、违约条款等',color:'#2E86AB'},
+  {key:'solution',name:'方案筹码',desc:'功能模块、服务范围、配置档次、交付范围等',color:'#2B8A3E'},
+  {key:'service',name:'服务筹码',desc:'培训、驻场、售后响应、增值服务、延保等',color:'#C0392B'},
+  {key:'resource',name:'资源筹码',desc:'高管时间、专家团队、稀缺产能、优先排期等',color:'#1B3A5C'},
+  {key:'relation',name:'关系筹码',desc:'人情往来、私人关系、背书推荐、情报支持等',color:'#F08C00'}
+];
+function initChipCats(){
+  const container=document.getElementById('chip-categories');
+  container.innerHTML='';
+  CHIP_CATS.forEach((cat,idx)=>{
+    const open=idx<3?'open':'';
+    container.innerHTML+=`
+    <div class="chip-cat ${open}" data-key="${cat.key}">
+      <div class="chip-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="chip-name">${cat.name}</span>
+        <span class="chip-arrow">▼</span>
+        <span class="chip-desc">${cat.desc}</span>
+      </div>
+      <div class="chip-body">
+        <div class="dyn-list" id="chip-list-${cat.key}"></div>
+        <button class="addlink" onclick="addChip('${cat.key}')">+ 添加${cat.name}</button>
+      </div>
+    </div>`;
+  });
+}
+function addChip(key,name='',space='',exchange=''){
+  const div=document.createElement('div');div.className='dyn-item col4';
+  div.innerHTML=`<input type="text" placeholder="筹码名称" class="c-name" value="${name}"><input type="text" placeholder="可让步空间" class="c-space" value="${space}"><input type="text" placeholder="交换条件" class="c-exchange" value="${exchange}"><button class="del" onclick="this.parentElement.remove();saveAll();">×</button>`;
+  document.getElementById('chip-list-'+key).appendChild(div);
+}
+function getChipItems(){
+  const items={};
+  CHIP_CATS.forEach(cat=>{
+    items[cat.key]=Array.from(document.querySelectorAll('#chip-list-'+cat.key+' .dyn-item')).map(r=>({
+      name:r.querySelector('.c-name').value,
+      space:r.querySelector('.c-space').value,
+      exchange:r.querySelector('.c-exchange').value
+    })).filter(x=>x.name);
+  });
+  return items;
+}
+function getChipItemsFromData(data){if(data&&data.chips&&data.chips.items){CHIP_CATS.forEach(cat=>{const list=data.chips.items[cat.key]||[];list.forEach(x=>addChip(cat.key,x.name,x.space,x.exchange));});}}
+function renderChipSummary(){
+  const items=getChipItems();
+  let html='';let total=0;
+  CHIP_CATS.forEach(cat=>{
+    const list=items[cat.key]||[];
+    total+=list.length;
+    html+=`<div class="summary-item"><span>${cat.name}</span><span>${list.length} 个</span></div>`;
+  });
+  html+=`<div class="summary-item" style="font-weight:800;color:var(--main-dark)"><span>筹码总数</span><span>${total} 个</span></div>`;
+  document.getElementById('chip-summary-body').innerHTML=html;
+  document.getElementById('chip-summary').style.display='block';
+  saveAll();
+  showStatus('chips-status','已生成筹码总览并保存');
+}
+function clearChips(){if(confirm('确定清空筹码盘点表？')){s('c-client','');s('c-date','');initChipCats();document.getElementById('chip-summary').style.display='none';saveAll();}}
+
+// ===== Tab 3: Map =====
+function addGatekeeper(name='',role='',veto='',strategy=''){
+  const div=document.createElement('div');div.className='dyn-item col5';
+  div.innerHTML=`<input type="text" placeholder="姓名/岗位" class="g-name" value="${name}"><input type="text" placeholder="所属角色" class="g-role" value="${role}"><input type="text" placeholder="否决点" class="g-veto" value="${veto}"><input type="text" placeholder="我方策略" class="g-strategy" value="${strategy}"><button class="del" onclick="this.parentElement.remove();saveAll();">×</button>`;
+  document.getElementById('m-gatekeepers').appendChild(div);
+}
+function getGatekeepers(){return Array.from(document.querySelectorAll('#m-gatekeepers .dyn-item')).map(r=>({name:r.querySelector('.g-name').value,role:r.querySelector('.g-role').value,veto:r.querySelector('.g-veto').value,strategy:r.querySelector('.g-strategy').value})).filter(x=>x.name);}
+function getGatekeepersFromData(data){if(data&&data.map&&data.map.gatekeepers){data.map.gatekeepers.forEach(x=>addGatekeeper(x.name,x.role,x.veto,x.strategy));}}
+
+function addCoach(name='',source='',info='',maintain=''){
+  const div=document.createElement('div');div.className='dyn-item col5';
+  div.innerHTML=`<input type="text" placeholder="姓名/岗位" class="co-name" value="${name}"><input type="text" placeholder="角色来源" class="co-source" value="${source}"><input type="text" placeholder="提供的信息" class="co-info" value="${info}"><input type="text" placeholder="维护方式" class="co-maintain" value="${maintain}"><button class="del" onclick="this.parentElement.remove();saveAll();">×</button>`;
+  document.getElementById('m-coaches').appendChild(div);
+}
+function getCoaches(){return Array.from(document.querySelectorAll('#m-coaches .dyn-item')).map(r=>({name:r.querySelector('.co-name').value,source:r.querySelector('.co-source').value,info:r.querySelector('.co-info').value,maintain:r.querySelector('.co-maintain').value})).filter(x=>x.name);}
+function getCoachesFromData(data){if(data&&data.map&&data.map.coaches){data.map.coaches.forEach(x=>addCoach(x.name,x.source,x.info,x.maintain));}}
+
+function renderMapSummary(){
+  const gks=getGatekeepers();const coaches=getCoaches();
+  document.getElementById('map-meta').innerText=`客户：${g('m-client')||'-'}\n日期：${g('m-date')||'-'}`;
+  document.getElementById('map-body').innerHTML=`
+    <div class="pp-block"><div class="b-t" style="color:var(--db)">决策者</div><div class="b-c">${g('m-dec-name')||'-'}\n关注点：${g('m-dec-focus')||'-'}\n策略：${g('m-dec-strategy')||'-'}</div></div>
+    <div class="pp-block"><div class="b-t" style="color:var(--bl)">使用者</div><div class="b-c">${g('m-user-name')||'-'}\n痛点/诉求：${g('m-user-pain')||'-'}\n策略：${g('m-user-strategy')||'-'}</div></div>
+    <div class="pp-block"><div class="b-t" style="color:var(--gn)">把关者（${gks.length}人）</div><div class="b-c">${gks.length?gks.map(x=>`• ${x.name}（${x.role}）| 否决点：${x.veto} | 策略：${x.strategy}`).join('\n'):'（暂未填写）'}</div></div>
+    <div class="pp-block"><div class="b-t" style="color:var(--ar)">教练（${coaches.length}人）</div><div class="b-c">${coaches.length?coaches.map(x=>`• ${x.name}（来自：${x.source}）| 信息：${x.info} | 维护：${x.maintain}`).join('\n'):'（暂未填写）'}</div></div>`;
+  document.getElementById('map-summary').style.display='block';
+  saveAll();
+  showStatus('map-status','已生成决策链地图并保存');
+}
+function clearMap(){if(confirm('确定清空决策链地图？')){s('m-client','');s('m-date','');['m-dec-name','m-dec-focus','m-dec-strategy','m-user-name','m-user-pain','m-user-strategy'].forEach(id=>s(id,''));document.getElementById('m-gatekeepers').innerHTML='';document.getElementById('m-coaches').innerHTML='';document.getElementById('map-summary').style.display='none';saveAll();}}
+
+// ===== Load / Save lifecycle =====
+function loadAll(){
+  const raw=localStorage.getItem(KEY);
+  if(!raw)return;
+  const data=JSON.parse(raw);
+  if(data.prep){
+    const p=data.prep;
+    s('p-client',p.client);s('p-date',p.date);s('p-their-batna',p.theirBatna);s('p-their-pressure',p.theirPressure);s('p-their-needs',p.theirNeeds);
+    s('p-our-batna',p.ourBatna);s('p-our-advantages',p.ourAdvantages);s('p-target-best',p.best);s('p-target-auth',p.auth);s('p-target-company',p.company);
+    s('p-block',p.block);s('p-response',p.response);s('p-next',p.next);
+    document.getElementById('p-chips-list').innerHTML='';getPrepChipsFromData(data);
+  }
+  if(data.chips){s('c-client',data.chips.client);s('c-date',data.chips.date);initChipCats();getChipItemsFromData(data);}
+  if(data.map){
+    const m=data.map;s('m-client',m.client);s('m-date',m.date);
+    if(m.dec){s('m-dec-name',m.dec.name);s('m-dec-focus',m.dec.focus);s('m-dec-strategy',m.dec.strategy);}
+    if(m.user){s('m-user-name',m.user.name);s('m-user-pain',m.user.pain);s('m-user-strategy',m.user.strategy);}
+    document.getElementById('m-gatekeepers').innerHTML='';getGatekeepersFromData(data);
+    document.getElementById('m-coaches').innerHTML='';getCoachesFromData(data);
+  }
+}
+function showStatus(id,msg){const el=document.getElementById(id);el.innerText=msg;setTimeout(()=>el.innerText='',2000);}
+
+// Auto-save on input
+document.addEventListener('input',()=>{saveAll();});
+
+// Init
+initChipCats();
+addPrepChip();
+addGatekeeper();
+addCoach();
+loadAll();
+</script>
+</body>
+</html>
