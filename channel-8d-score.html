@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8维渠道竞争力诊断打分表 · 睡密坊</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background:#f0f4f8; color:#1a2b3c; padding:16px; line-height:1.6;
+  }
+  .wrap { max-width:900px; margin:0 auto; }
+  .hero {
+    background:linear-gradient(135deg,#1e5799 0%,#2989d8 60%,#7db9e8 100%);
+    color:#fff; border-radius:16px; padding:26px 24px; margin-bottom:16px;
+  }
+  .hero h1 { font-size:24px; margin-bottom:6px; }
+  .hero p { font-size:14px; opacity:.92; }
+  .hero .tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:2px 12px; font-size:12px; margin-top:8px; margin-right:6px; }
+  .card {
+    background:#fff; border-radius:14px; padding:20px; margin-bottom:14px;
+    box-shadow:0 2px 8px rgba(30,87,153,.08);
+  }
+  .card h2 { font-size:17px; color:#1e5799; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .card h2 .num { background:#1e5799; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:13px; flex:none; }
+  .setup-row { display:flex; gap:12px; flex-wrap:wrap; }
+  .setup-row label { font-size:13px; color:#5a7a96; }
+  .setup-row input[type=text] {
+    border:1px solid #c5d6e8; border-radius:8px; padding:6px 10px; font-size:14px; width:200px;
+  }
+  .setup-row input:focus { outline:none; border-color:#2989d8; box-shadow:0 0 0 3px rgba(41,137,216,.15); }
+  .rule-box { background:#eef5fc; border-left:4px solid #2989d8; border-radius:8px; padding:12px 14px; font-size:13px; color:#3a5a78; margin-top:12px; }
+  .rule-box b { color:#1e5799; }
+
+  .dim-card {
+    background:#fff; border-radius:14px; padding:18px 20px; margin-bottom:12px;
+    box-shadow:0 2px 8px rgba(30,87,153,.08); border-top:3px solid transparent;
+  }
+  .dim-card.gap-warn { border-top-color:#e74c3c; background:#fffaf9; }
+  .dim-card.self-win { border-top-color:#27ae60; }
+  .dim-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px; }
+  .dim-name { font-size:16px; font-weight:700; color:#1a2b3c; }
+  .dim-badge { font-size:11px; border-radius:12px; padding:2px 10px; white-space:nowrap; }
+  .badge-warn { background:#fdecea; color:#c0392b; }
+  .badge-win { background:#e8f7ef; color:#1e8449; }
+  .badge-even { background:#eef2f6; color:#7f8c8d; }
+  .dim-meta { font-size:12.5px; color:#5a7a96; margin-bottom:12px; }
+  .dim-meta .ref { display:inline-block; background:#eef5fc; border-radius:6px; padding:1px 8px; margin-right:6px; color:#2989d8; font-weight:600; }
+
+  .score-row { display:flex; gap:18px; flex-wrap:wrap; }
+  .score-item { flex:1; min-width:220px; }
+  .score-label { font-size:13px; font-weight:600; display:flex; justify-content:space-between; margin-bottom:4px; }
+  .score-val { font-size:16px; font-weight:700; padding:0 8px; border-radius:6px; }
+  .v-self { color:#1e5799; background:#e8f1fa; }
+  .v-bench { color:#8e6d1f; background:#faf3e0; }
+  input[type=range] { width:100%; accent-color:#2989d8; }
+  .note-input {
+    width:100%; margin-top:10px; border:1px dashed #b8cee3; border-radius:8px;
+    padding:7px 10px; font-size:13px; color:#1a2b3c; background:#fbfdff;
+  }
+  .note-input:focus { outline:none; border-color:#2989d8; background:#fff; }
+  .note-input::placeholder { color:#a8bdd0; }
+
+  .result-grid { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+  .radar-box { flex:none; text-align:center; }
+  .summary-box { flex:1; min-width:260px; }
+  .big-stat { display:flex; gap:10px; margin-bottom:14px; }
+  .stat {
+    flex:1; border-radius:12px; padding:12px; text-align:center;
+  }
+  .stat .n { font-size:26px; font-weight:800; line-height:1.2; }
+  .stat .t { font-size:12px; opacity:.8; }
+  .stat-self { background:#e8f1fa; color:#1e5799; }
+  .stat-bench { background:#faf3e0; color:#8e6d1f; }
+  .stat-gap { background:#fdecea; color:#c0392b; }
+
+  .todo-item {
+    border:1px solid #f5d0cc; background:#fff8f7; border-radius:10px;
+    padding:12px 14px; margin-bottom:10px; font-size:13.5px;
+  }
+  .todo-item b { color:#c0392b; }
+  .todo-item .fix { display:block; margin-top:4px; color:#1e5799; }
+  .ok-item {
+    border:1px solid #cdebd8; background:#f4fbf6; border-radius:10px;
+    padding:10px 14px; margin-bottom:10px; font-size:13.5px; color:#1e8449;
+  }
+  .btn {
+    display:inline-block; background:linear-gradient(135deg,#1e5799,#2989d8); color:#fff;
+    border:none; border-radius:10px; padding:10px 26px; font-size:15px; font-weight:600;
+    cursor:pointer; margin-top:6px;
+  }
+  .btn:active { transform:scale(.98); }
+  .footer-note { text-align:center; font-size:12px; color:#8aa4bc; padding:14px 0 30px; }
+  @media print {
+    body { background:#fff; padding:0; }
+    .no-print { display:none !important; }
+    .card,.dim-card { box-shadow:none; border:1px solid #d8e4ef; page-break-inside:avoid; }
+    input[type=range] { display:none; }
+    .score-val { border:1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>8维渠道竞争力诊断打分表</h1>
+    <p>用8个维度给自己和对标品牌打分，找出差距，生成补短板行动清单</p>
+    <span class="tag">天地人销售体系</span><span class="tag">经销商渠道专项</span><span class="tag">现场互动版</span>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">1</span>打分说明</h2>
+    <div class="setup-row">
+      <div>
+        <label>我方品牌</label><br>
+        <input type="text" id="selfName" value="睡密坊">
+      </div>
+      <div>
+        <label>对标品牌</label><br>
+        <input type="text" id="benchName" value="慕思">
+      </div>
+    </div>
+    <div class="rule-box">
+      <b>打分标准（1-10分）：</b>
+      9-10 行业顶尖｜7-8 明显优势｜5-6 行业平均水平｜3-4 明显落后｜1-2 严重缺失<br>
+      <b>打分方式：</b>凭第一直觉打，不要纠结；每低分维度下方有备注栏，写下"为什么低"——这个备注比分数本身更值钱。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>逐维打分</h2>
+    <div id="dimList"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>诊断结果</h2>
+    <div class="result-grid">
+      <div class="radar-box">
+        <svg id="radar" width="300" height="300" viewBox="0 0 300 300"></svg>
+        <div style="font-size:12px;color:#5a7a96;">
+          <span style="color:#2989d8;">■</span> <span id="legendSelf">我方</span>
+          &nbsp;&nbsp;<span style="color:#d4a017;">■</span> <span id="legendBench">对标</span>
+        </div>
+      </div>
+      <div class="summary-box">
+        <div class="big-stat">
+          <div class="stat stat-self"><div class="n" id="sumSelf">0</div><div class="t">我方总分（80满分）</div></div>
+          <div class="stat stat-bench"><div class="n" id="sumBench">0</div><div class="t">对标总分</div></div>
+          <div class="stat stat-gap"><div class="n" id="sumGap">0</div><div class="t">总差距</div></div>
+        </div>
+        <div id="verdict" style="font-size:13.5px;color:#3a5a78;background:#eef5fc;border-radius:10px;padding:10px 14px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span>补短板清单（自动生成）</h2>
+    <div id="todoList"></div>
+  </div>
+
+  <div class="card no-print">
+    <h2><span class="num">5</span>操作</h2>
+    <button class="btn" onclick="window.print()">🖨️ 打印 / 存为PDF</button>
+    <p style="font-size:12px;color:#8aa4bc;margin-top:8px;">打分结果自动保存在本机，重新打开不丢失。打印后可直接作为辅导记录留档。</p>
+  </div>
+
+  <div class="footer-note">天地人销售管理体系 · 8维渠道竞争力诊断 · 大董老师入企辅导工具</div>
+</div>
+
+<script>
+const DIMS = [
+  { name:"产品/方案", ref:"喜临门→培训支持",
+    tip:"产品差异化能否通过培训传导到终端导购？草本床垫的卖点，导购会不会讲、讲得清不清楚？",
+    fix:"把草本差异写成一页《导购必背话术》，全员通关考核；经销商导购来厂集训。" },
+  { name:"价格/成本", ref:"喜临门→政策支持（多层级返利）",
+    tip:"给经销商的加价空间和返利层级清不清晰？经销商算不算得过来账？",
+    fix:"配套《经销商盈利模型一页纸》，招商时先算账后谈情。" },
+  { name:"商务条款", ref:"喜临门→政策支持（区域保护/退换货）",
+    tip:"区域保护、退换货、装修补贴、滞销调换——新品牌必须给比大牌更狠的条款安全感，给了吗？",
+    fix:"梳理一页《经销商合作保障条款》，把安全感白纸黑字写出来。" },
+  { name:"品牌/案例", ref:"喜临门→广告支持",
+    tip:"没有央视机场高铁的预算，华西背书、认证资质、希尔顿代工这些信任状，有没有变成消费者看得懂的证据链？",
+    fix:"把华西联合研发做成检测报告墙+研发故事+临床数据三件套，放进每一家店。" },
+  { name:"服务/交付", ref:"喜临门→服务支持+运营支持",
+    tip:"物流、售后、选址、装修、陈列、促销带教——这是新品牌最容易超预期的维度，做到24小时响应了吗？",
+    fix:"★优势维度候选：崇州工厂就近辐射西南，做'老板直连+24小时响应'，往死里做。" },
+  { name:"客情关系", ref:"大品牌无对应——只能靠人",
+    tip:"经销商老板的生日、家人、难处你记得吗？优质经销商身边围着五六个品牌业务员，同等条件下凭什么选你？",
+    fix:"建立优质经销商《情感账户》：生日问候、帮他培训导购、库存压力大时主动帮想办法。" },
+  { name:"组织实力", ref:"喜临门→团队支持（铁三角帮扶）",
+    tip:"灵魂拷问：OEM团队能抽几个人专职做品牌帮扶？抽不出来，就是组织实力没跟上。",
+    fix:"品牌招商与帮扶必须专职团队，不能OEM销售兼任——哪怕先抽2个人。" },
+  { name:"渠道/营销", ref:"喜临门→渠道支持+活动支持",
+    tip:"招商活动、终端促销、客流支持——新品牌最大短板，现有经销商有没有一套标准化的获客动作可以复制？",
+    fix:"先集中资源扶3-5家样板经销商跑通单店盈利模型，用标杆招商，不撒胡椒面。" }
+];
+
+const STORE_KEY = "dim8-score-v1";
+let state = load();
+
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (s && s.self && s.bench) return s;
+  } catch(e) {}
+  const init = { self:DIMS.map(()=>5), bench:DIMS.map(()=>8), notes:DIMS.map(()=>""), selfName:"睡密坊", benchName:"慕思" };
+  return init;
+}
+function save() {
+  state.selfName = document.getElementById("selfName").value;
+  state.benchName = document.getElementById("benchName").value;
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+
+function buildList() {
+  const list = document.getElementById("dimList");
+  list.innerHTML = DIMS.map((d,i)=>`
+    <div class="dim-card" id="dim-${i}">
+      <div class="dim-head">
+        <div class="dim-name">${i+1}. ${d.name}</div>
+        <div class="dim-badge badge-even" id="badge-${i}">—</div>
+      </div>
+      <div class="dim-meta">
+        <span class="ref">${d.ref}</span>${d.tip}
+      </div>
+      <div class="score-row">
+        <div class="score-item">
+          <div class="score-label"><span id="selfNameLabel">${state.selfName}</span>得分 <span class="score-val v-self" id="sv-${i}">5</span></div>
+          <input type="range" min="1" max="10" step="1" value="${state.self[i]}" oninput="setScore('self',${i},this.value)">
+        </div>
+        <div class="score-item">
+          <div class="score-label"><span id="benchNameLabel">${state.benchName}</span>得分 <span class="score-val v-bench" id="bv-${i}">8</span></div>
+          <input type="range" min="1" max="10" step="1" value="${state.bench[i]}" oninput="setScore('bench',${i},this.value)">
+        </div>
+      </div>
+      <input class="note-input" placeholder="备注：这个维度为什么是这个分数？差在哪？（选填但强烈建议写）" value="${state.notes[i]||""}" oninput="setNote(${i},this.value)">
+    </div>
+  `).join("");
+  document.getElementById("selfName").value = state.selfName;
+  document.getElementById("benchName").value = state.benchName;
+  document.getElementById("legendSelf").textContent = state.selfName;
+  document.getElementById("legendBench").textContent = state.benchName;
+}
+
+function setScore(who, i, v) {
+  state[who][i] = +v;
+  save(); render();
+}
+function setNote(i, v) {
+  state.notes[i] = v; save();
+}
+
+function render() {
+  const sName = document.getElementById("selfName").value || "我方";
+  const bName = document.getElementById("benchName").value || "对标";
+  document.getElementById("legendSelf").textContent = sName;
+  document.getElementById("legendBench").textContent = bName;
+  const labels = document.querySelectorAll("#dimList .score-label span:first-child");
+  labels.forEach((el,idx)=>{ if(idx%2===0) el.textContent=sName; else el.textContent=bName; });
+
+  let sumS=0,sumB=0;
+  DIMS.forEach((d,i)=>{
+    const s=state.self[i], b=state.bench[i];
+    sumS+=s; sumB+=b;
+    document.getElementById("sv-"+i).textContent=s;
+    document.getElementById("bv-"+i).textContent=b;
+    const card=document.getElementById("dim-"+i), badge=document.getElementById("badge-"+i);
+    card.classList.remove("gap-warn","self-win");
+    if (s<b) { card.classList.add("gap-warn"); badge.className="dim-badge badge-warn"; badge.textContent=`落后 ${b-s} 分`; }
+    else if (s>b) { card.classList.add("self-win"); badge.className="dim-badge badge-win"; badge.textContent=`领先 ${s-b} 分`; }
+    else { badge.className="dim-badge badge-even"; badge.textContent="持平"; }
+  });
+  document.getElementById("sumSelf").textContent=sumS;
+  document.getElementById("sumBench").textContent=sumB;
+  document.getElementById("sumGap").textContent=sumB-sumS;
+
+  const v=document.getElementById("verdict");
+  if (sumB-sumS>=16) v.innerHTML=`总差距 <b>${sumB-sumS}</b> 分：整体处于追赶期。<b>建议聚焦策略</b>——不要八维全面补，先集中资源打赢1-2个维度（优先"服务/交付"），用单点优势换生存空间。`;
+  else if (sumB-sumS>=8) v.innerHTML=`总差距 <b>${sumB-sumS}</b> 分：部分维度已有还手之力。<b>建议保优补短</b>——守住领先维度，把落后最多的2-3个维度列入90天改进计划。`;
+  else if (sumB-sumS>=1) v.innerHTML=`总差距 <b>${sumB-sumS}</b> 分：接近追平。<b>建议乘胜追击</b>——在客情关系等大品牌薄弱的维度持续加码，建立根据地优势。`;
+  else v.innerHTML=`总分已追平或反超：<b>建议转入进攻</b>——样板经销商已可复制，加快招商节奏，同时守住服务口碑。`;
+
+  // 补短板清单：落后维度按差距排序；领先维度单独列出
+  const gaps = DIMS.map((d,i)=>({...d, i, s:state.self[i], b:state.bench[i], gap:state.bench[i]-state.self[i]}));
+  const weak = gaps.filter(g=>g.gap>0).sort((a,b)=>b.gap-a.gap);
+  const strong = gaps.filter(g=>g.gap<0).sort((a,b)=>a.gap-b.gap);
+  let html="";
+  if (weak.length===0 && strong.length===0) {
+    html=`<div class="ok-item">暂无差距维度——完成打分后自动生成。</div>`;
+  } else {
+    if (weak.length) {
+      html += `<p style="font-size:13px;color:#c0392b;font-weight:700;margin-bottom:10px;">⚠️ 需补短板（按差距大小排序）</p>`;
+      weak.forEach(g=>{
+        html += `<div class="todo-item"><b>${g.name}</b>（${sName} ${g.s}分 vs ${bName} ${g.b}分，落后${g.gap}分）
+          ${state.notes[g.i]?`<div style="color:#7f8c8d;font-size:12.5px;margin-top:2px;">备注：${escapeHtml(state.notes[g.i])}</div>`:""}
+          <span class="fix">▶ 补短板动作：${g.fix}</span></div>`;
+      });
+    }
+    if (strong.length) {
+      html += `<p style="font-size:13px;color:#1e8449;font-weight:700;margin:14px 0 10px;">✅ 已领先维度（要守住并放大）</p>`;
+      strong.forEach(g=>{
+        html += `<div class="ok-item">${g.name}：领先${-g.gap}分——持续加码，把它写进招商话术的第一页。</div>`;
+      });
+    }
+  }
+  document.getElementById("todoList").innerHTML=html;
+  drawRadar(sName,bName);
+}
+
+function escapeHtml(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function drawRadar(sName,bName){
+  const svg=document.getElementById("radar");
+  const cx=150,cy=150,R=105,n=DIMS.length;
+  const pt=(i,val)=>{ const a=-Math.PI/2+i*2*Math.PI/n; const r=R*val/10; return [cx+r*Math.cos(a),cy+r*Math.sin(a)]; };
+  let g="";
+  for(let ring=2;ring<=10;ring+=2){
+    const pts=DIMS.map((_,i)=>pt(i,ring).join(",")).join(" ");
+    g+=`<polygon points="${pts}" fill="${ring===10?"#f4f8fc":"none"}" stroke="#d8e4ef" stroke-width="1"/>`;
+  }
+  DIMS.forEach((_,i)=>{ const [x,y]=pt(i,10); g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#d8e4ef" stroke-width="1"/>`; });
+  const poly=(vals,color,fill)=>{ const pts=vals.map((v,i)=>pt(i,v).join(",")).join(" ");
+    return `<polygon points="${pts}" fill="${fill}" stroke="${color}" stroke-width="2"/>`; };
+  g+=poly(state.bench,"#d4a017","rgba(212,160,23,.15)");
+  g+=poly(state.self,"#2989d8","rgba(41,137,216,.25)");
+  DIMS.forEach((d,i)=>{ const [x,y]=pt(i,12.3);
+    g+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" fill="#3a5a78">${d.name.length>4?d.name.slice(0,4):d.name}</text>`; });
+  svg.innerHTML=g;
+}
+
+document.getElementById("selfName").addEventListener("input",()=>{save();render();});
+document.getElementById("benchName").addEventListener("input",()=>{save();render();});
+buildList();
+render();
+</script>
+</body>
+</html>
