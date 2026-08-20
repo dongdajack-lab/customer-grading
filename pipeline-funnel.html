@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>销售管道漏斗图 - 大董老师</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+    body { font-family: 'Noto Sans SC', sans-serif; background:#f8fafc; }
+    .stage-card {
+      position: relative;
+      border-radius: 12px;
+      padding: 18px 24px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+      transition: all 0.3s ease;
+      min-height: 72px;
+    }
+    .stage-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.18); }
+    .stage-name { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; width: 90px; }
+    .stage-amount { font-size: 28px; font-weight: 700; }
+    .stage-unit { font-size: 16px; font-weight: 500; }
+    .stage-count { font-size: 16px; font-weight: 500; opacity: 0.95; }
+    .arrow-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px 0 10px 24px;
+      gap: 24px;
+      font-size: 14px;
+      color: #059669;
+      font-weight: 500;
+    }
+    .arrow-row.warning { color: #dc2626; }
+    .arrow-icon { font-size: 16px; }
+    .input-cell { 
+      width: 100%; 
+      border: 1px solid #e2e8f0; 
+      border-radius: 6px; 
+      padding: 6px 10px; 
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-cell:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.1); }
+    .editable { cursor: text; border-bottom: 1px dashed rgba(255,255,255,0.4); }
+    .anomaly-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid #fecaca;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-slate-800 mb-2">销售管道漏斗图</h1>
+      <p class="text-slate-600">看清每个阶段的项目数量与金额分布，快速定位管道堵塞点</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- 左侧：数据编辑面板 -->
+      <div class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-800">阶段数据</h2>
+          <button onclick="resetData()" class="text-sm px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">恢复示例数据</button>
+        </div>
+        <p class="text-xs text-slate-500 mb-4">点击表格中的数字可直接修改，图表会实时更新。异常阶段会自动标红提示。</p>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-slate-500 border-b border-slate-200">
+                <th class="text-left py-2 font-medium">阶段</th>
+                <th class="text-right py-2 font-medium">金额(万)</th>
+                <th class="text-right py-2 font-medium">商机数</th>
+                <th class="text-right py-2 font-medium">转化率%</th>
+                <th class="text-right py-2 font-medium">停留天</th>
+              </tr>
+            </thead>
+            <tbody id="dataTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+          <h3 class="font-bold text-amber-800 mb-2 text-sm">📌 课堂讲解要点</h3>
+          <ul class="text-xs text-amber-900 space-y-1.5">
+            <li>• 正常管道应呈"上宽下窄"的漏斗形态</li>
+            <li>• 若某阶段金额/商机数反而比上一阶段多，说明阶段划分或数据统计口径有问题</li>
+            <li>• 停留天数过长 = 该阶段存在卡点，需要配套打法或资源投入</li>
+            <li>• 转化率骤降 = 要么前端线索质量差，要么该阶段销售动作不到位</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 右侧：漏斗可视化 -->
+      <div class="lg:col-span-7">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 lg:p-8">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold text-slate-800">管道可视化</h2>
+            <div class="flex gap-4 text-xs text-slate-500">
+              <span><span class="legend-dot bg-blue-600"></span>线索获客</span>
+              <span><span class="legend-dot bg-emerald-600"></span>推进中</span>
+              <span><span class="legend-dot bg-orange-500"></span>方案/竞争</span>
+              <span><span class="legend-dot bg-purple-600"></span>签约交付</span>
+            </div>
+          </div>
+          
+          <div id="funnelContainer" class="space-y-0"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const defaultStages = [
+      { name: '线索', amount: 4800, count: 2, rate: 100, days: 12, color: '#3b82f6' },
+      { name: '需求确认', amount: 2700, count: 2, rate: 100, days: 16, color: '#22c55e' },
+      { name: '方案商谈', amount: 4500, count: 2, rate: 150, days: 17, color: '#f97316' },
+      { name: '竞争', amount: 14000, count: 3, rate: 67, days: 25, color: '#9333ea' },
+      { name: '签约', amount: 3600, count: 2, rate: 50, days: 12, color: '#16a34a' },
+      { name: '交付回款', amount: 1800, count: 1, rate: 50, days: 0, color: '#6b7280' }
+    ];
+
+    let stages = JSON.parse(JSON.stringify(defaultStages));
+
+    function formatAmount(n) {
+      return n.toLocaleString('zh-CN');
+    }
+
+    function detectAnomalies() {
+      const anomalies = stages.map(() => []);
+      for (let i = 0; i < stages.length - 1; i++) {
+        // 金额异常膨胀
+        if (stages[i+1].amount > stages[i].amount) {
+          anomalies[i+1].push('金额高于上阶段');
+        }
+        // 商机数异常膨胀
+        if (stages[i+1].count > stages[i].count) {
+          anomalies[i+1].push('商机数高于上阶段');
+        }
+        // 停留天数过长
+        if (stages[i].days > 20) {
+          anomalies[i].push('停留超20天');
+        }
+      }
+      return anomalies;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('dataTableBody');
+      tbody.innerHTML = '';
+      stages.forEach((stage, i) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-slate-100 hover:bg-slate-50';
+        tr.innerHTML = `
+          <td class="py-2">
+            <input class="input-cell" value="${stage.name}" onchange="updateField(${i}, 'name', this.value)" style="width:90px;">
+          </td>
+          <td class="py-2">
+            <input class="input-cell text-right" type="number" value="${stage.amount}" onchange="updateField(${i}, 'amount', parseFloat(this.value)||0)">
+          </td>
+          <td class="py-2">
+            <input class="input-cell text-right" type="number" value="${stage.count}" onchange="updateField(${i}, 'count', parseInt(this.value)||0)">
+          </td>
+          <td class="py-2">
+            <input class="input-cell text-right" type="number" value="${stage.rate}" onchange="updateField(${i}, 'rate', parseFloat(this.value)||0)">
+          </td>
+          <td class="py-2">
+            <input class="input-cell text-right" type="number" value="${stage.days}" onchange="updateField(${i}, 'days', parseInt(this.value)||0)">
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateField(index, field, value) {
+      stages[index][field] = value;
+      renderFunnel();
+    }
+
+    function renderFunnel() {
+      const container = document.getElementById('funnelContainer');
+      container.innerHTML = '';
+      const anomalies = detectAnomalies();
+      const maxAmount = Math.max(...stages.map(s => s.amount));
+
+      stages.forEach((stage, i) => {
+        // 阶段卡片
+        const widthPct = Math.max(35, (stage.amount / maxAmount) * 100);
+        const card = document.createElement('div');
+        card.className = 'mx-auto';
+        card.style.width = widthPct + '%';
+        card.style.minWidth = '220px';
+        
+        const hasAnomaly = anomalies[i].length > 0;
+        const anomalyHtml = hasAnomaly ? `<div class="anomaly-badge">⚠️ ${anomalies[i].join(' · ')}</div>` : '';
+        
+        card.innerHTML = `
+          <div class="stage-card" style="background:${stage.color}; ${hasAnomaly ? 'box-shadow:0 0 0 3px #ef4444, 0 4px 15px rgba(0,0,0,0.12);' : ''}">
+            ${anomalyHtml}
+            <div class="stage-name">${stage.name}</div>
+            <div class="text-center">
+              <span class="stage-amount">${formatAmount(stage.amount)}</span>
+              <span class="stage-unit">万</span>
+            </div>
+            <div class="stage-count text-right">${stage.count}个商机</div>
+          </div>
+        `;
+        container.appendChild(card);
+
+        // 转化率/停留天数箭头行（最后一个阶段之后不显示）
+        if (i < stages.length - 1) {
+          const nextHasAnomaly = anomalies[i+1].some(a => a.includes('高于上阶段'));
+          const arrow = document.createElement('div');
+          arrow.className = 'arrow-row' + (nextHasAnomaly ? ' warning' : '');
+          arrow.style.width = widthPct + '%';
+          arrow.style.marginLeft = 'auto';
+          arrow.style.marginRight = 'auto';
+          arrow.style.minWidth = '220px';
+          arrow.innerHTML = `
+            <span><span class="arrow-icon">↓</span> 转化率 ${stage.rate}%</span>
+            <span>平均停留 ${stage.days}天</span>
+            ${nextHasAnomaly ? '<span class="font-bold">🔍 此处管道异常，请关注</span>' : ''}
+          `;
+          container.appendChild(arrow);
+        }
+      });
+    }
+
+    function resetData() {
+      stages = JSON.parse(JSON.stringify(defaultStages));
+      renderTable();
+      renderFunnel();
+    }
+
+    // 初始化
+    renderTable();
+    renderFunnel();
+  </script>
+</body>
+</html>
