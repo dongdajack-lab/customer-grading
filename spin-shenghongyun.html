@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - 盛鸿运科技定制版</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;min-height:100vh}
+  header{background:linear-gradient(135deg,#1B4F72,#148F77);color:white;padding:24px 32px;text-align:center}
+  header h1{font-size:26px}
+  header .subtitle{font-size:14px;opacity:.85;margin-top:6px}
+  header .company-tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px}
+  header .custom-tag{display:inline-block;background:#F39C12;border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px;margin-left:8px;font-weight:700;color:#fff}
+  .container{max-width:800px;margin:0 auto;padding:32px 20px}
+  .progress-bar{height:6px;background:#ddd;border-radius:3px;margin-bottom:24px;overflow:hidden}
+  .progress-fill{height:100%;background:#148F77;border-radius:3px;transition:width .4s}
+  .progress-text{text-align:right;font-size:13px;color:#888;margin-bottom:4px}
+  .spin-hint{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .spin-tag{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .tag-S{background:#EBF5FB;color:#2980B9}
+  .tag-P{background:#FDEDEC;color:#E67E22}
+  .tag-I{background:#FADBD8;color:#C0392B}
+  .tag-N{background:#E8F8F5;color:#27AE60}
+  .card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+  .question-badge{display:inline-block;background:#148F77;color:white;border-radius:20px;padding:4px 14px;font-size:13px;margin-bottom:16px}
+  .scenario{background:#f8f9fa;border-left:4px solid #148F77;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;line-height:1.8;color:#333}
+  .scenario .label{font-weight:600;color:#1B4F72}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1.6}
+  .option:hover{border-color:#148F77;background:#E8F6F3}
+  .option.selected{border-color:#148F77;background:#E8F6F3}
+  .option.correct{border-color:#27AE60;background:#E8F8F5}
+  .option.wrong{border-color:#E74C3C;background:#FDEDEC}
+  .option .radio{min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+  .option.selected .radio{border-color:#148F77;background:#148F77}
+  .option.selected .radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%;display:block}
+  .option .text{flex:1}
+  .explanation{margin-top:20px;padding:16px 20px;background:#E8F8F5;border-radius:12px;display:none}
+  .explanation.show{display:block}
+  .explanation h4{color:#27AE60;font-size:15px;margin-bottom:8px}
+  .explanation p{font-size:14px;color:#333;line-height:1.7}
+  .correct-answer{margin-top:20px;padding:14px 18px;background:#FFF3CD;border:2px solid #F0AD4E;border-radius:12px;display:none;font-size:14px;line-height:1.6}
+  .correct-answer.show{display:block}
+  .correct-answer .clabel{font-weight:700;color:#E67E22;margin-bottom:6px}
+  .opt-label{font-weight:700;color:#1B4F72;margin-right:6px}
+  .btn-row{display:flex;gap:12px;margin-top:24px}
+  .btn{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+  .btn-primary{background:#148F77;color:white}
+  .btn-primary:hover{background:#0e6b5c}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed}
+  .btn-secondary{background:#f0f0f0;color:#333}
+  .btn-secondary:hover{background:#e0e0e0}
+  .result-page{display:none}
+  .result-page.show{display:block;text-align:center}
+  .score-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#148F77);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .num{font-size:48px;font-weight:700;line-height:1}
+  .score-circle .slabel{font-size:14px;margin-top:4px;opacity:.85}
+  .percent-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .percent-circle .num{font-size:36px;font-weight:700;color:#148F77;line-height:1}
+  .percent-circle .unit{font-size:20px;font-weight:700;color:#148F77}
+  .percent-circle .sub-label{font-size:13px;color:#999;margin-top:2px}
+  .result-detail{background:white;border-radius:16px;padding:24px;margin-top:20px;text-align:left}
+  .result-detail h3{font-size:17px;margin-bottom:12px;color:#333}
+  .result-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+  .result-item:last-child{border-bottom:none}
+  .restart-btn{margin-top:24px;padding:14px 48px;background:#148F77;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 挖痛练习</h1>
+  <p class="subtitle">SPIN四层提问法训练 · 共16题</p>
+  <span class="company-tag">⚙️ 盛鸿运科技 · 电子结构件</span>
+  <span class="custom-tag">★ 定制开发</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="slabel">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" id="restartBtn">再来一次</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var questions = [
+    // ============ 场景一：FPC厂采购经理（供应商格局） ============
+    {
+      scenario: "你初次拜访某FPC（柔性线路板）厂的采购经理张总，他说：我们现在补强片供应商有两三家，整体合作还行，就是交期有时候不太稳定，小批量的单子不太愿意接。",
+      question: "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的现状？",
+      options: [
+        {text:"您目前几家补强片供应商各占大概多少比例？主要采购哪些材料（钢片/镍片/铜片）？年采购金额大概多少？", correct:true},
+        {text:"交期不稳定大概多久出一次？每次影响大吗？", correct:false},
+        {text:"小批量的单子没人接，对你们影响大吗？", correct:false},
+        {text:"如果交期稳定了、小批量也有人接，对你们帮助大吗？", correct:false}
+      ],
+      explain:"S - 现状问题：第一步先摸清楚现状——供应商格局、材料结构、采购规模。在不了解现状的情况下直接问痛点，容易问偏，也让客户觉得你不专业。FPC厂的采购结构复杂（钢片/镍片/铜片比例不同、新老项目并行），必须先摸清家底。"
+    },
+    {
+      scenario: "采购经理说：我们60%的补强片从一家大厂采购，主要是钢片和镍片，年采购额大概2000万。小批量的打样件和新项目试产件经常被他们推三阻四，说量太小排不上产线。",
+      question: "采购经理说出了痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
+      options: [
+        {text:"小批量打样推三阻四，大概每个月有多少个新项目因为这个被延误？延误的主要是哪几个环节（排产/开模/材料备货）？除了打样，大货交期不稳的情况多吗？", correct:true},
+        {text:"如果有一家供应商愿意接小批量打样，您愿意了解一下吗？", correct:false},
+        {text:"小批量打样被延误，大概损失多少钱？", correct:false},
+        {text:"您现在的供应商为什么不愿意接小批量？", correct:false}
+      ],
+      explain:"P - 难点问题：把痛点问具体——小批量打样每个月影响几个新项目、卡在哪个环节（排产/开模/备料），交期不稳多频繁。问得越具体，后面提方案的针对性就越强。盛鸿运的核心卖点之一就是小批量快打样，必须用专业语言问专业问题。"
+    },
+    {
+      scenario: "采购经理说：主要是排产环节，大厂优先保大客户的量，我们这种中小单经常被往后排。上个月有两个新项目打样被拖了三周，客户那边催得急，一个项目差点被客户毙掉。大货交期的话，旺季的时候平均晚一周是常态。",
+      question: "采购经理说出了多个痛点，接下来哪句话是 <strong>I - 影响问题</strong>，能放大问题的严重性？",
+      options: [
+        {text:"如果有一家供应商能保证交期，对您帮助大吗？", correct:false},
+        {text:"您的打样周期标准是什么？", correct:false},
+        {text:"新项目打样被拖三周，除了差点丢项目，还意味着什么？——客户会不会因此把更多新项目分配给你们的竞争对手？打样延迟导致你们的项目开发节奏落后，是不是会影响明年拿新单？更严重的是，旺季大货晚一周，会不会导致你们的FPC交付延期、被下游客户扣款或投诉？", correct:true},
+        {text:"有没有因为这个被老板批评过？", correct:false}
+      ],
+      explain:"I - 影响问题：三个维度放大影响——① 直接项目损失（差点丢单）② 竞争地位风险（客户把新项目给对手）③ 下游连锁风险（FPC交付延期被扣款投诉）。让采购经理意识到这不只是「偶尔晚几天」，而是系统性风险。"
+    },
+    {
+      scenario: "采购经理沉吟片刻：你这样一算……上个月被客户投诉了三次，说我们打样太慢，有一个项目明确说要重新评估供应商。老板上周开会点名说采购部要解决供应商响应问题，我压力很大。",
+      question: "采购经理已经感受到问题严重，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决的价值？",
+      options: [
+        {text:"上个月被投诉三次，一年下来岂不是要丢好几个项目？您是不是必须解决这个问题了？", correct:false},
+        {text:"如果有一家补强片供应商，能做到打样3-5天出货、大货交期稳定在承诺期内，还能在打样阶段就帮你们做DFM（可制造性）评估提前规避问题——这让您的项目开发节奏、客户对采购部的评价、以及您个人的业绩，会有什么改变？", correct:true},
+        {text:"您想换供应商吗？", correct:false},
+        {text:"这个问题确实很严重，不过我们盛鸿运可以给您一些价格优惠。", correct:false}
+      ],
+      explain:"N - 需求回报问题：引导客户自己说出「解决了这个问题有什么好处」，而不是你告诉他好处。让他想象——新项目按期推进、客户不再投诉、老板在会议上表扬采购部……客户自己说出来的价值，比你说十遍都有说服力。"
+    },
+    // ============ 场景二：EMS厂工程经理（材料选型） ============
+    {
+      scenario: "你拜访一家EMS（电子制造服务）厂的工程部经理，他说：我们现在做手机主板项目，补强片主要用钢片，供应商就一家，整体用下来还行，就是有些批次翘曲率偏高，贴片的时候不良比较多。",
+      question: "下面哪句话是 <strong>S - 现状问题</strong>，能让您最全面地了解现状，为后续挖痛打基础？",
+      options: [
+        {text:"您现在主要用钢片还是镍片？厚度规格有哪些（0.1/0.15/0.2mm）？用在哪些项目（手机/平板/车载）？翘曲不良主要出现在哪些批次？", correct:true},
+        {text:"翘曲率偏高的话，会不会考虑换供应商？", correct:false},
+        {text:"贴片不良多，对产能影响大吗？", correct:false},
+        {text:"如果有一家供应商翘曲率更低，您有兴趣吗？", correct:false}
+      ],
+      explain:"S - 现状问题：了解材料路线（钢片/镍片）、厚度规格、应用项目，以及翘曲不良的出现规律。EMS厂工程部管的是「用得上、贴得好」，材料选型和技术参数是他们的语言。先摸清现状，才能找到切入点。"
+    },
+    {
+      scenario: "工程经理说：主力项目用0.15mm钢片，车载项目开始用镍片做方案。翘曲不良集中在夏天湿度大的月份，还有就是我们自己冲切的批次偶尔也有毛刺问题，贴片时对位不准。",
+      question: "工程经理说出了两个痛点（翘曲/毛刺），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+      options: [
+        {text:"翘曲不良主要集中在哪些环节（来料/存放/贴片回流焊后）？毛刺问题出现在哪些规格？翘曲率和毛刺不良率大概在什么水平？对贴片良率的影响有多大？", correct:true},
+        {text:"翘曲和毛刺问题，每个月给您添多少麻烦？", correct:false},
+        {text:"如果有一家供应商能解决翘曲和毛刺，您会换掉现有供应商吗？", correct:false},
+        {text:"你们为什么不换供应商？", correct:false}
+      ],
+      explain:"P - 难点问题：把两个痛点分别问具体——翘曲发生在哪个环节（来料/存放/回流焊后）、毛刺出现在哪些规格、不良率什么水平、对贴片良率影响多大。工程经理关心的是「参数和良率」，问到数据层面，他就知道你是行家。"
+    },
+    {
+      scenario: "工程经理说：翘曲主要是来料就有，夏天湿度大氧化也快，放一周表面就发暗。毛刺主要是0.1mm薄料冲切出来的，不良率大概3%。贴片这块，翘曲料上机后抛料多，一个月大概有2万块板子因此报废，成本损失不小。",
+      question: "工程经理说出了严重影响（每月2万块板报废），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+      options: [
+        {text:"每个月2万块板报废，一年就是24万块，按每块20元算就是近500万损失。除了直接成本，抛料多会不会影响贴片产线的整体效率、拖累交付？如果车载项目的镍片方案也有同样问题，一旦通过车规认证后批量出问题，后果是不是更严重？", correct:true},
+        {text:"那确实挺严重的，你们应该怎么解决？", correct:false},
+        {text:"如果翘曲率降下来，对你们帮助大吗？", correct:false},
+        {text:"毛刺问题，你们自己冲切的批次多吗？", correct:false}
+      ],
+      explain:"I - 影响问题：把数字算给他看——24万块板×20元=近500万/年，再加上产线效率损失和车规项目的高风险。让工程经理意识到，补强片品质问题不只是「不良率3%」的小数字，而是几百万的成本和车载项目的质量风险。"
+    },
+    {
+      scenario: "工程经理说：你这么一算，一年损失确实不小。而且我们车载项目明年要量产，客户审厂的时候特别看重来料品质稳定性，我们技术部现在对这个镍片方案心里没底。",
+      question: "工程经理已经意识到问题严重且影响未来项目，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+      options: [
+        {text:"如果有一家供应商，补强片出厂前全检翘曲度，来料即检即用；薄料采用精密蚀刻工艺替代冲切，毛刺率趋近于零；表面处理做到防氧化、可存放4周不变色——这让您的贴片良率、车规项目的审厂信心、以及技术部对供应商的信任，会变成什么样？", correct:true},
+        {text:"那确实很严重，要不要考虑换供应商？", correct:false},
+        {text:"我们盛鸿运可以做蚀刻，精度比冲切高，您要不要试试？", correct:false},
+        {text:"车载项目如果出问题，会怎么样？", correct:false}
+      ],
+      explain:"N - 需求回报问题：引导客户想象「问题解决后的画面」——来料即检即用、蚀刻工艺毛刺趋近于零、防氧化4周不变色，让贴片良率提升、车规审厂顺利通过。当客户自己描绘出这个画面，他就会推动决策。"
+    },
+    // ============ 场景三：FPC厂品质经理（品质管控） ============
+    {
+      scenario: "你拜访一家做FPC的厂品质部经理李工，他说：我们补强片来料主要抽检，检验项目是外观、尺寸和盐雾测试，供应商有两家，问题集中在盐雾测试不过和尺寸超差。",
+      question: "下面哪句话是 <strong>S - 现状问题</strong>，能最清楚地了解他的品质管控现状？",
+      options: [
+        {text:"盐雾测试多久做一次？主要哪些规格不过？尺寸超差主要超在哪些项目（长宽/孔位/厚度）？超差批次供应商是怎么处理的？", correct:true},
+        {text:"盐雾不过是不是很严重？", correct:false},
+        {text:"如果有一家品质更稳定的供应商，对你们有帮助吗？", correct:false},
+        {text:"你们有没有考虑过换供应商？", correct:false}
+      ],
+      explain:"S - 现状问题：品质经理关心的是「标准和数据」——盐雾测试频率、不过的规格、超差的项目、供应商的处理方式。这些信息决定了后续能否提供对症的解决方案（如更好的表面处理工艺、更严的出货检验）。"
+    },
+    {
+      scenario: "品质经理说：盐雾测试按批次做，每个月大概有3-4批不过，主要是钢片的表面处理不过关，放久了会氧化。尺寸超差主要是供应商冲切的0.1mm薄料，孔位偏移超出公差，我们只能退回去返工。",
+      question: "品质经理说出了两个痛点（氧化/孔位超差），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+      options: [
+        {text:"氧化问题主要出现在表面处理（镀镍/镀锡/镀金）的哪个环节？孔位偏移一般在什么范围？退回去返工一次大概要多久？返工后还有多少比例还是不行？这些来料问题占你们来料不良的比例有多少？", correct:true},
+        {text:"氧化和孔位问题，每个月给品质部添多少工作量？", correct:false},
+        {text:"如果供应商能解决氧化问题，对你们帮助大吗？", correct:false},
+        {text:"你们有没有罚过供应商的款？", correct:false}
+      ],
+      explain:"P - 难点问题：把痛点问具体——氧化出现在表面处理的哪个环节、孔位偏移范围、返工周期和返工后不良比例、来料不良占比。品质经理手里有数据，问得越细，你越专业，方案越有针对性。"
+    },
+    {
+      scenario: "品质经理说：氧化主要是镀镍层不够均匀，薄的地方放两周就变色。孔位偏移平均在0.05-0.08mm，超出公差，返工一批要5-7天。来料不良占我们总来料不良的40%左右。每个月因为这些事，我这边要写3-4份客诉报告，下游客户一投诉，我们还得赔款。",
+      question: "品质经理说出了严重影响（客诉+赔款），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+      options: [
+        {text:"每个月3-4份客诉报告、返工5-7天、来料不良占40%——这些数字背后，品质部一年要处理多少客诉？返工占用的人力成本是多少？下游客户赔款金额累计多少？更关键的是，如果FPC终端的品牌客户（手机/汽车厂商）因为品质问题把你们列入观察名单，明年的订单量会不会受影响？", correct:true},
+        {text:"那确实挺严重的，供应商应该赔偿。", correct:false},
+        {text:"如果来料不良率降下来，对你们帮助大吗？", correct:false},
+        {text:"氧化问题主要发生在哪些季节？", correct:false}
+      ],
+      explain:"I - 影响问题：放大四个维度——客诉量、返工人力成本、赔款金额、终端品牌客户的态度。让品质经理看到，来料不良不只是「供应商的事」，而是品质部全年工作量、公司赔付和客户关系的系统性负担。"
+    },
+    {
+      scenario: "品质经理说：这样一算，一年光处理这些问题的人力成本就不少，赔款也有几十万。而且终端客户去年就提醒过一次，说我们来料管控要加强，再出问题可能影响明年的招标资格。",
+      question: "品质经理已经意识到「影响招标资格」的严重性，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+      options: [
+        {text:"如果有一家供应商能做到：表面处理均匀性通过盐雾测试96小时、出厂前100%全检尺寸和外观、提供每批的检测报告——这让您的客诉数量、返工工作量、下游赔款，以及终端客户对你们品质管控的评价，会有什么改变？明年招标时，这些就是您的底气。", correct:true},
+        {text:"那确实很严重，要不要考虑换供应商？", correct:false},
+        {text:"我们盛鸿运可以做全检，每批出报告，您要不要试试？", correct:false},
+        {text:"如果失去招标资格，会怎么样？", correct:false}
+      ],
+      explain:"N - 需求回报问题：引导品质经理想象「品质无忧的画面」——盐雾96小时、100%全检、每批检测报告，客诉减少、返工减少、赔款减少、终端客户信任提升。他描绘的画面越具体，就越愿意推动供应商切换。"
+    },
+    // ============ 场景四：客户总经理（战略合作） ============
+    {
+      scenario: "你约到一家中型FPC厂的王总，他正准备了解新一年的供应商布局。他说：我们公司做FPC有8年了，年产值3个亿，补强片这块一直是外购，也在考虑要不要培养一两家深度合作的供应商。",
+      question: "面对总经理，下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的战略现状？",
+      options: [
+        {text:"王总，您目前补强片供应商整体格局是怎样的？是按项目分散采购还是集中采购？对供应商的评估主要看哪几个维度（品质/交期/价格/服务）？明年新项目的材料需求方向是什么？", correct:true},
+        {text:"您觉得现在的供应商怎么样？", correct:false},
+        {text:"您考虑培养深度合作的供应商，是遇到什么问题了吗？", correct:false},
+        {text:"如果我们盛鸿运能成为您的深度合作供应商，您有兴趣吗？", correct:false}
+      ],
+      explain:"S - 现状问题：和总经理对话要问「战略层面的现状」——供应商格局、评估维度、明年项目方向。老板不关心具体参数，关心格局和方向。先了解他的布局思路，才能把盛鸿运的位置讲对。"
+    },
+    {
+      scenario: "王总说：现在是按项目分散采购，谁便宜用谁。但问题也来了——供应商换得勤，品质不稳定，每个新项目都要重新磨合，打样周期长。我们明年想上两个大客户的新项目，对交期和品质要求都很高，现在心里没底。",
+      question: "王总说出了痛点（分散采购的代价），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+      options: [
+        {text:"按项目分散采购，平均一个项目要跟新供应商磨合多久？打样周期一般多长？新供应商磨合期的品质问题多不多？明年两个大客户的项目，对补强片的交期和品质具体是什么要求？", correct:true},
+        {text:"分散采购每个月多花多少钱？", correct:false},
+        {text:"如果有一家供应商能统一供应，对您帮助大吗？", correct:false},
+        {text:"您为什么一直按项目分散采购？", correct:false}
+      ],
+      explain:"P - 难点问题：把痛点问具体——磨合周期、打样周期、磨合期品质问题、明年项目的具体要求。让王总自己说出「分散采购」的真实代价（时间、品质、风险），比你直接讲集中采购的好处有说服力得多。"
+    },
+    {
+      scenario: "王总说：一个项目磨合下来大概要2-3个月，打样来回改，最快也要3-4周。磨合期品质问题特别多，前两年有个项目因为补强片出问题，返工了一个月，客户差点取消订单。明年那两个大客户，一个要求零缺陷交付，一个要求旺季产能响应，说实话我现在是既想接又怕接。",
+      question: "王总说出了核心顾虑（想接又怕接），接下来哪句话是 <strong>I - 影响问题</strong>，能放大严重性？",
+      options: [
+        {text:"如果明年这两个大客户因为补强片供应问题没接好，意味着什么？——丢的不仅是这两个项目，是不是还有客户背后的整条产品线机会？竞争对手如果接了，会不会顺势拿走你们其他项目？您为这两个项目投入的前期开发资源，是不是就打了水漂？", correct:true},
+        {text:"那确实挺严重的，王总您要慎重。", correct:false},
+        {text:"如果补强片供应商稳定了，对您帮助大吗？", correct:false},
+        {text:"前两年那个返工项目，最后赔了多少钱？", correct:false}
+      ],
+      explain:"I - 影响问题：上升到战略层面——丢项目、丢产品线机会、对手抢单、前期投入打水漂。老板最怕的不是一次损失，而是「机会成本」和「竞争位势」的丢失。让王总看到，补强片供应问题影响的不只是成本，是明年增长的机会。"
+    },
+    {
+      scenario: "王总说：你这么一说，这两个项目确实是我明年增长的关键，丢不起。我现在的痛点是——需要一个供应商能陪我们一起打新项目：打样快、品质稳、旺季能顶上。",
+      question: "王总已经说出需求，接下来哪句话是 <strong>N - 需求回报问题</strong>，能让他明确「选对供应商」的价值？",
+      options: [
+        {text:"如果有一家供应商能做到：项目立项即介入做DFM评估、打样3-5天交付、通过车规/大客户审厂、旺季产能优先保障——这让您明年两个大客户项目的把握度、您对供应商的省心程度、以及公司在客户心里的可靠形象，会变成什么样？", correct:true},
+        {text:"那您应该尽快换供应商了。", correct:false},
+        {text:"我们盛鸿运就是这样的供应商，您要不要试试？", correct:false},
+        {text:"王总，您预算大概多少？", correct:false}
+      ],
+      explain:"N - 需求回报问题：引导王总描绘「选对供应商后的画面」——项目把握度提升、省心、客户形象可靠。战略层面的N要落在「增长和竞争力」上，老板自己说出来的价值，就是成交的推动力。"
+    }
+  ];
+
+  var currentQ = 0;
+  var answers = [];
+  var answered = false;
+
+  function renderQ() {
+    var q = questions[currentQ];
+    document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+    document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+    var badge = q.scenario.indexOf('S -')>=0 ? 'S 现状问题' : q.scenario.indexOf('P -')>=0 ? 'P 难点问题' : q.scenario.indexOf('I -')>=0 ? 'I 影响问题' : 'N 需求回报';
+    var card = document.getElementById('questionCard');
+    card.innerHTML = '<div class="question-badge">' + badge + '</div>' +
+      '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+      '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+      '<div class="options">' +
+      q.options.map(function(opt,i){
+        return '<div class="option" onclick="selectOpt(' + i + ')">' +
+          '<div class="radio"></div>' +
+          '<div class="text">' + opt.text + '</div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+      '<div class="explanation" id="explanation">' +
+        '<h4>✅ 解析</h4>' +
+        '<p>' + q.explain + '</p>' +
+      '</div>' +
+      '<div class="correct-answer" id="correctAnswer">' +
+        '<div class="clabel">💡 正确答案解析：</div>' +
+        '<div>' + q.explain + '</div>' +
+      '</div>';
+
+    answered = false;
+    document.getElementById('btnNext').textContent = '确认答案';
+    document.getElementById('btnNext').disabled = true;
+    document.getElementById('btnNext').onclick = checkAnswer;
+    document.getElementById('btnPrev').disabled = currentQ === 0;
+    document.getElementById('resultPage').classList.remove('show');
+    document.getElementById('quizPage').style.display = '';
+  }
+
+  window.selectOpt = function(idx) {
+    if (answered) return;
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+    window.selectedIdx = idx;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.checkAnswer = function() {
+    if (window.selectedIdx === undefined) return;
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('correctAnswer').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    document.getElementById('btnNext').onclick = nextQ;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.nextQ = function() {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      renderQ();
+    } else {
+      showResult();
+    }
+  };
+
+  window.prevQ = function() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQ();
+      if (answers[currentQ] !== undefined) {
+        answered = true;
+        var q = questions[currentQ];
+        var opts = document.querySelectorAll('.option');
+        opts.forEach(function(opt,i){
+          if (q.options[i].correct) opt.classList.add('correct');
+          if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+        });
+        document.getElementById('explanation').classList.add('show');
+        document.getElementById('correctAnswer').classList.add('show');
+        document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+        document.getElementById('btnNext').onclick = nextQ;
+      }
+    }
+  };
+
+  function showResult() {
+    document.getElementById('quizPage').style.display = 'none';
+    var score = answers.filter(function(a){return a;}).length;
+    var percent = Math.round(score / questions.length * 100);
+    document.getElementById('scoreNum').textContent = score;
+    document.getElementById('percentNum').textContent = percent;
+
+    var detail = '<h3>📊 答题详情</h3>';
+    questions.forEach(function(q,i){
+      var icon = answers[i] ? '✅' : '❌';
+      var title = q.scenario.substring(0, 40) + '...';
+      detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+    });
+    document.getElementById('resultDetail').innerHTML = detail;
+    document.getElementById('resultPage').classList.add('show');
+  }
+
+  document.getElementById('restartBtn').onclick = function() {
+    currentQ = 0;
+    answers = [];
+    window.selectedIdx = undefined;
+    answered = false;
+    renderQ();
+  };
+
+  document.getElementById('btnPrev').onclick = prevQ;
+
+  renderQ();
+})();
+</script>
+</body>
+</html>

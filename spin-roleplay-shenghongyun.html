@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>盛鸿运科技 · SPIN课堂演练场景 ★定制开发</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, #1B4F72 0%, #148F77 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 { font-size: 26px; margin-bottom: 8px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        
+        /* 导航 */
+        .nav {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #eee;
+            overflow-x: auto;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .nav-btn.active { color: #148F77; border-bottom-color: #148F77; background: #E8F8F5; }
+        .nav-btn:hover { background: #f9f9f9; }
+        
+        /* 内容区 */
+        .content { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1B4F72;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #A3E4D7;
+        }
+        
+        /* 场景背景 */
+        .scenario-box {
+            background: linear-gradient(135deg, #E8F8F5 0%, #EAF9F5 100%);
+            border-left: 4px solid #148F77;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .scenario-box h3 {
+            color: #148F77;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .scenario-box p { margin-bottom: 8px; font-size: 14px; }
+        .tag {
+            display: inline-block;
+            background: #148F77;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        
+        /* 角色卡 */
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 600px) { .role-grid { grid-template-columns: 1fr; } }
+        
+        .role-card {
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid;
+        }
+        .role-card.sales {
+            border-color: #1B4F72;
+            background: #F0F6FF;
+        }
+        .role-card.customer {
+            border-color: #148F77;
+            background: #E8F8F5;
+        }
+        .role-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .role-card.sales h3 { color: #1B4F72; }
+        .role-card.customer h3 { color: #148F77; }
+        
+        .role-section {
+            margin-bottom: 15px;
+        }
+        .role-section h4 {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .role-section p, .role-section li {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .role-section ul { padding-left: 20px; }
+        .role-section li { margin-bottom: 5px; }
+        
+        /* SPIN提示卡 */
+        .spin-hint {
+            background: #F0F7FF;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px dashed #1B4F72;
+        }
+        .spin-hint h4 {
+            color: #1B4F72;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+        .spin-step {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+        .spin-step .step-badge {
+            background: #1B4F72;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            min-width: 60px;
+            text-align: center;
+        }
+        .spin-step p { font-size: 13px; flex: 1; }
+        .spin-step .example {
+            background: #E8F8F5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #148F77;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        /* 评分表 */
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .score-table th, .score-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .score-table th {
+            background: #1B4F72;
+            color: white;
+            font-weight: 600;
+        }
+        .score-table tr:nth-child(even) { background: #f9f9f9; }
+        .score-table tr:hover { background: #E8F8F5; }
+        
+        .score-input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        /* 按钮 */
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #148F77; color: white; }
+        .btn-primary:hover { background: #0E6655; }
+        .btn-secondary { background: #1B4F72; color: white; }
+        .btn-secondary:hover { background: #123B59; }
+        .btn-outline { background: white; color: #148F77; border: 2px solid #148F77; }
+        .btn-outline:hover { background: #E8F8F5; }
+        
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* 讲师话术 */
+        .teacher-box {
+            background: #E8F8F5;
+            border: 1px solid #A3E4D7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .teacher-box h4 {
+            color: #148F77;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        .teacher-box p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+        .teacher-box p:before {
+            content: "💬";
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 注意事项 */
+        .warning-box {
+            background: #FFF3CD;
+            border-left: 4px solid #FF9800;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .warning-box h4 { color: #FF9800; font-size: 15px; margin-bottom: 8px; }
+        .warning-box p { font-size: 14px; }
+        
+        /* 打印 */
+        @media print {
+            .header { background: #148F77 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .nav { display: none; }
+            .tab-content { display: block !important; }
+            .btn-row { display: none; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
+        }
+        
+        /* 客户信息卡 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .info-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .info-item .label { font-size: 12px; color: #999; margin-bottom: 5px; }
+        .info-item .value { font-size: 14px; font-weight: 600; color: #1B4F72; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 盛鸿运科技 · SPIN课堂演练场景</h1>
+        <p>为销售经理量身定制 · 真实业务场景 · 可打印角色卡 ★ 定制开发</p>
+    </div>
+    
+    <div class="nav">
+        <button class="nav-btn active" onclick="switchTab(0)">📋 场景总览</button>
+        <button class="nav-btn" onclick="switchTab(1)">👥 角色卡</button>
+        <button class="nav-btn" onclick="switchTab(2)">🎓 SPIN提示</button>
+        <button class="nav-btn" onclick="switchTab(3)">📊 评分表</button>
+        <button class="nav-btn" onclick="switchTab(4)">🗣️ 讲师话术</button>
+    </div>
+    
+    <div class="content">
+        <!-- Tab 0: 场景总览 -->
+        <div class="tab-content active" id="tab0">
+            <div class="card">
+                <div class="card-title">📋 演练场景：欣联电路补强片份额保卫战</div>
+                
+                <div class="scenario-box">
+                    <h3>🎬 场景背景</h3>
+                    <p><strong>时间：</strong>周四下午 14:30</p>
+                    <p><strong>地点：</strong>欣联电路（华南FPC上市公司，化名）会议室</p>
+                    <p><strong>人物：</strong></p>
+                    <p style="padding-left:20px;">• 盛鸿运销售经理（<strong>学员扮演</strong>）<br>
+                    • 欣联电路采购总监 陈总（<strong>学员/助教扮演</strong>）<br>
+                    • 欣联电路研发工程师 刘工（<strong>可选角色</strong>）</p>
+                    <p><strong>背景：</strong>欣联电路是盛鸿运合作3年的老客户，每年采购精密蚀刻补强片约800万件。但今年年初，采购部引入了一家新的蚀刻供应商，理由是"单价低12%，帮公司降本"。盛鸿运销售这次拜访的目标：通过SPIN提问，让陈总自己说出新供应商背后的隐忧（公差、打样、DFM），引导对方认识到"良率×交期"远比"单价"重要，最终保住主供地位。</p>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">客户类型</div>
+                        <div class="value">老客户 · 年采购补强片800万件</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">核心产品</div>
+                        <div class="value">精密蚀刻补强片 · 对位精度±0.03mm</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">当前挑战</div>
+                        <div class="value">低价新供应商抢单</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">演练目标</div>
+                        <div class="value">挖掘痛点 · 巩固主供</div>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>⚠️ 讲师注意事项</h4>
+                    <p>1. 这个场景设计目的是让学员练习<strong>在老客户关系中如何用SPIN应对价格竞争</strong>，而不是单纯"卖新工艺"<br>
+                    2. 客户角色要表现出"犹豫不决"——老板压降本，但工程/品质部门对新供应商有意见<br>
+                    3. 销售人员容易犯的错误：一开始就说"我们的精度有多好、我们是小巨人"，而没有先问问题</p>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ 打印本页</button>
+                    <button class="btn btn-secondary" onclick="switchTab(1)">👉 查看角色卡</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab 1: 角色卡 -->
+        <div class="tab-content" id="tab1">
+            <div class="role-grid">
+                <!-- 销售角色卡 -->
+                <div class="role-card sales">
+                    <h3>👔 销售经理（学员扮演）</h3>
+                    
+                    <div class="role-section">
+                        <h4>你的身份</h4>
+                        <p>盛鸿运科技销售经理（国家级专精特新小巨人，精密蚀刻补强片），负责欣联电路这个 account 3年，关系稳定但最近有危机感。</p>
+                    </div>
+                    
+                    <div class="role-section">
+                        <h4>你的目标</h4>
+                        <ul>
+                            <li>通过提问了解欣联为什么引入新供应商、老板的降本压力有多大</li>
+                            <li>挖掘新供应商在公差、打样、DFM三方面的痛点，让客户自己承认"省了单价、亏了隐形成本"</li>
+                            <li>引导客户认识到"良率×交期×开发效率"比"单价"更重要</li>
+                            <li>最终获得承诺：保持主供份额80%以上，新供应商只做补充</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="role-section">
+                        <h4>你掌握的信息</h4>
+                        <ul>
+                            <li>盛鸿运蚀刻补强片对位精度±0.03mm，行业一般水平±0.05mm</li>
+                            <li>盛鸿运小批量快打样3个工作日，新供应商打样要12个工作日</li>
+                            <li>盛鸿运免费提供DFM（制造可行性分析）服务，在设计阶段帮客户规避风险</li>
+                            <li>欣联去年Q3因补强片公差问题报废过一批FPC，直接损失约60万</li>
+                            <li>新供应商单价低12%，但良率口碑一般，SMT贴片常要反复调机</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="role-section">
+                        <h4>⚠️ 不要这样做</h4>
+                        <ul style="color:#148F77;">
+                            <li>❌ 一上来就报价、谈降价</li>
+                            <li>❌ 直接说"新供应商精度不行、靠不住"</li>
+                            <li>❌ 只谈价格和资历，不谈客户的具体业务</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 客户角色卡 -->
+                <div class="role-card customer">
+                    <h3>👤 采购总监 陈总（助教/学员扮演）</h3>
+                    
+                    <div class="role-section">
+                        <h4>你的身份</h4>
+                        <p>欣联电路采购总监，48岁，在行业18年，做事谨慎，但老板今年的降本指标压得很重。</p>
+                    </div>
+                    
+                    <div class="role-section">
+                        <h4>你的真实想法（不要直接说！）</h4>
+                        <ul>
+                            <li>新供应商单价低12%，老板在经营会上表扬了你，你心里有点得意</li>
+                            <li>但新供应商的板子<strong>公差大（±0.05mm）</strong>，SMT产线反馈对位要反复调，影响产能</li>
+                            <li>打样要12个工作日，研发部抱怨"新项目节奏全被拖"</li>
+                            <li>新供应商<strong>没有DFM服务</strong>，上次有个新设计到量产才发现孔位干涉</li>
+                            <li>你其实<strong>不想换掉盛鸿运</strong>，但老板要求"供应商多元化、降本5%"</li>
+                            <li>你希望盛鸿运能<strong>主动给出灵活方案</strong>（比如年度框架价、备货机制），帮你把账做平</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="role-section">
+                        <h4>🎭 表演指导</h4>
+                        <ul>
+                            <li>开场时表现得"客气但有些官腔"——"小X啊，好久不见，最近行情怎么样"</li>
+                            <li>当销售问到痛点时，先<strong>打太极</strong>——"还好还好，配合得可以"</li>
+                            <li>如果销售用SPIN深入提问（特别是I和N），逐步<strong>打开话匣子</strong></li>
+                            <li>当销售说到"良率""交期""DFM"时，<strong>明显感兴趣</strong>，甚至主动叹气</li>
+                            <li>最后要"犹豫着答应"——"份额我这边能保，但价格你得给我个说法"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="role-section">
+                        <h4>💬 常用回应（当不知道怎么答时）</h4>
+                        <ul>
+                            <li>"这个...我们也在看其他方案"</li>
+                            <li>"老板那边降本压力确实大"</li>
+                            <li>"不是对你们不满意，就是想多一个备选"</li>
+                            <li>"你们如果能有个年度价或者备货方案，我这边就好说话了"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">🎭 可选：研发工程师 刘工</div>
+                <p><strong>角色：</strong>欣联电路研发工程师，技术导向，最关心"公差一致性""打样速度"和"DFM支持"。</p>
+                <p><strong>表演要点：</strong>如果你是三人小组，这个人可以在会议中途加入，提出技术方面的问题，让销售同时应对"采购（要降本）"和"研发（要质量）"两个不同诉求的角色。</p>
+                <p><strong>关键台词：</strong>"陈总，那个新供应商的板子，SMT那边说对位要反复调，耽误产能啊。还有上次那个新设计，打样拖了两个礼拜，客户那边都催了。"</p>
+            </div>
+            
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ 打印角色卡</button>
+            </div>
+        </div>
+        
+        <!-- Tab 2: SPIN提示 -->
+        <div class="tab-content" id="tab2">
+            <div class="card">
+                <div class="card-title">🎓 销售经理的SPIN提问指南</div>
+                <p style="margin-bottom:15px;color:#666;font-size:14px;">在演练过程中，销售经理可以参考以下提示。目标是<strong>让客户自己说出痛点</strong>，而不是销售自己说。</p>
+                
+                <div class="spin-hint">
+                    <h4>🔍 S - 情景问题（Situation）</h4>
+                    <p style="font-size:13px;color:#666;margin-bottom:12px;">目的：建立信任，了解背景，<strong>但不要问太多</strong>（客户会烦）</p>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例1</span>
+                        <div>
+                            <p>"陈总，听说欣联今年订单不错，新项目都排到年底了？补强片这边需求是不是也上来了？"</p>
+                            <div class="example">✅ 好：展示你在关注客户业务，不是只关心自己的订单</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例2</span>
+                        <div>
+                            <p>"今年看你们引入了新的蚀刻供应商，是不是老板那边有降本指标，需要我们这边怎么配合？"</p>
+                            <div class="example">✅ 好：主动承接"降本"话题，显示不回避竞争</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">⚠️ 避免</span>
+                        <div>
+                            <p>"你们现在有几家供应商？""每家各拿多少量？""新供应商账期多少？"</p>
+                            <div class="example">❌ 不好：像审问，客户会防备，还会觉得你盯得太紧</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spin-hint">
+                    <h4>❓ P - 难点问题（Problem）</h4>
+                    <p style="font-size:13px;color:#666;margin-bottom:12px;">目的：让客户<strong>自己说出不满</strong>。关键是"让客户抱怨"。</p>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例1</span>
+                        <div>
+                            <p>"陈总，我很好奇——新供应商的板子，SMT产线那边用下来还顺手吗？有没有...嗯...需要多花点精力调试的情况？"</p>
+                            <div class="example">✅ 好：用"有没有...需要多花点精力"引导客户承认问题，而不是直接说"新供应商公差不行"</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例2</span>
+                        <div>
+                            <p>"打样速度上，研发那边有没有提过意见？我听说有些客户遇到过打样排期太长影响新项目进度的情况。"</p>
+                            <div class="example">✅ 好："我听说有些客户遇到过"——用第三方故事降低防备，把话题引到研发的抱怨上</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">⚠️ 避免</span>
+                        <div>
+                            <p>"你们是不是觉得新供应商精度不行？""他们打样是不是经常延期？"</p>
+                            <div class="example">❌ 不好：太直接，客户会防御性地说"没有啊，挺好用的"</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spin-hint">
+                    <h4>💥 I - 暗示问题（Implication）</h4>
+                    <p style="font-size:13px;color:#666;margin-bottom:12px;">目的：把"小问题"放大成"大问题"。让客户意识到<strong>不解决会很痛</strong>。</p>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例1</span>
+                        <div>
+                            <p>"如果公差确实偏大，SMT每片都要调机的话...那产线的有效产能是不是就打了折扣？一个月算下来，这个损失其实比省下的单价还多吧？"</p>
+                            <div class="example">✅ 好：从"公差"推导到"产能损失"，再点破"省下的单价"和"损失"的对比</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例2</span>
+                        <div>
+                            <p>"还有一点我想到...如果打样拖两周，新项目错过客户的窗口期，这个单子丢了的话...是补强片省下的那点钱能补回来的吗？"</p>
+                            <div class="example">✅ 好：把"打样慢"连接到客户最怕的事（丢订单、丢客户）</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">💡 技巧</span>
+                        <div>
+                            <p>"如果...的话，会不会...""这个问题再往下想，是不是意味着...""您有没有算过，这个其实...""去年那批报废的板子，账是怎么算的？"</p>
+                            <div class="example">用这些问题框架，引导客户自己推导后果，甚至主动回忆去年的损失</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spin-hint">
+                    <h4>🎯 N - 需求效益问题（Need-payoff）</h4>
+                    <p style="font-size:13px;color:#666;margin-bottom:12px;">目的：让客户<strong>自己说出解决方案</strong>。然后你再说"我们正好有这个"。</p>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例1</span>
+                        <div>
+                            <p>"陈总，如果有一家供应商，能保证每批公差一致，SMT不用调机就能直接贴——这对你们产线来说意味着什么？"</p>
+                            <div class="example">✅ 好：让客户自己说出"那我产能就稳了，也不用天天跟品质扯皮"</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">示例2</span>
+                        <div>
+                            <p>"要是新项目急着上，我们3个工作日就能出样，还能在设计阶段就帮你们做DFM把关——这样研发那边是不是就能松口气了？"</p>
+                            <div class="example">✅ 好：提出解决方案，但用问句让客户自己认可价值</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spin-step">
+                        <span class="step-badge">💡 黄金句</span>
+                        <div>
+                            <p>"如果...的话，对您来说有什么帮助？""您最理想的情况是怎样的？""如果这个问题解决了，您觉得最大的好处是什么？""年度框架价+备货机制，是不是能帮您在老板那边把账做平？"</p>
+                            <div class="example">让客户自己描述"理想状态"，然后你再说"我们能帮您实现"</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>💡 讲师点评要点</h4>
+                    <p>1. <strong>S不要太长</strong>——问2-3个背景问题就够了，然后赶紧进入P<br>
+                    2. <strong>P要具体</strong>——不要问"有什么问题吗"，要问"SMT那边用下来""打样速度上"这类具体维度<br>
+                    3. <strong>I要关联到客户最怕的事</strong>——对陈总来说，最怕的是"被老板骂"和"研发/品质天天来告状"<br>
+                    4. <strong>N要让客户自己说"要"</strong>——不是你推销，是客户"求着要"，包括让客户自己提出"年度价+备货"</p>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ 打印SPIN提示</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab 3: 评分表 -->
+        <div class="tab-content" id="tab3">
+            <div class="card">
+                <div class="card-title">📊 观察者评分表</div>
+                <p style="margin-bottom:15px;color:#666;font-size:14px;">每个小组演练时，指定一名<strong>观察者</strong>（可以是助教或其他学员）用此表评分。满分100分。</p>
+                
+                <table class="score-table">
+                    <thead>
+                        <tr>
+                            <th style="width:120px;">维度</th>
+                            <th>评分标准</th>
+                            <th style="width:80px;">分值</th>
+                            <th style="width:80px;">得分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>S-情景问题</strong></td>
+                            <td>
+                                <strong>优秀（18-20分）：</strong>问了2-3个相关问题，快速建立信任，自然过渡到P<br>
+                                <strong>良好（12-17分）：</strong>问了背景问题，但稍微有点多，客户有轻微不耐烦<br>
+                                <strong>需改进（0-11分）：</strong>问了太多背景问题，或者干脆跳过S直接推销
+                            </td>
+                            <td>20</td>
+                            <td><input type="number" class="score-input" min="0" max="20"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>P-难点问题</strong></td>
+                            <td>
+                                <strong>优秀（18-20分）：</strong>成功让客户承认了2个以上痛点（公差/打样/DFM），且没有引发防御<br>
+                                <strong>良好（12-17分）：</strong>挖掘出了一些痛点，但客户仍有保留<br>
+                                <strong>需改进（0-11分）：</strong>客户一直说"还好"，销售没有成功挖掘出痛点
+                            </td>
+                            <td>20</td>
+                            <td><input type="number" class="score-input" min="0" max="20"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>I-暗示问题</strong></td>
+                            <td>
+                                <strong>优秀（18-20分）：</strong>成功让客户意识到"省下的单价抵不过损失"，客户表情变得认真<br>
+                                <strong>良好（12-17分）：</strong>提出了暗示问题，但客户反应一般<br>
+                                <strong>需改进（0-11分）：</strong>没有问I问题，或者I问题没有连接到客户的核心利益（产能/订单/老板压力）
+                            </td>
+                            <td>20</td>
+                            <td><input type="number" class="score-input" min="0" max="20"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>N-需求效益</strong></td>
+                            <td>
+                                <strong>优秀（18-20分）：</strong>客户自己说出了"要是能保证公差一致就好了"，销售顺势提出方案（含年度价/备货）<br>
+                                <strong>良好（12-17分）：</strong>销售提出了方案，客户有兴趣但不够兴奋<br>
+                                <strong>需改进（0-11分）：</strong>销售直接推销，没有用N让客户自己"要"
+                            </td>
+                            <td>20</td>
+                            <td><input type="number" class="score-input" min="0" max="20"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>倾听与跟进</strong></td>
+                            <td>
+                                <strong>优秀（9-10分）：</strong>认真听客户回答，追问了客户说的话，没有打断<br>
+                                <strong>良好（6-8分）：</strong>基本在听，但偶尔会打断或者提前准备自己的下一句话<br>
+                                <strong>需改进（0-5分）：</strong>明显在"等客户说完"而不是"听客户说"
+                            </td>
+                            <td>10</td>
+                            <td><input type="number" class="score-input" min="0" max="10"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>整体自然度</strong></td>
+                            <td>
+                                <strong>优秀（9-10分）：</strong>对话流畅自然，不像"在用SPIN"，客户体验好<br>
+                                <strong>良好（6-8分）：</strong>有些地方略显生硬，但整体可控<br>
+                                <strong>需改进（0-5分）：</strong>明显在"背诵SPIN步骤"，客户感觉像在被套话
+                            </td>
+                            <td>10</td>
+                            <td><input type="number" class="score-input" min="0" max="10"></td>
+                        </tr>
+                        <tr style="background:#E8F8F5 !important; font-weight:700;">
+                            <td>总分</td>
+                            <td>≥80分=优秀 | 60-79分=良好 | &lt;60分=需加强练习</td>
+                            <td>100</td>
+                            <td><strong>自动计算</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top:20px;">
+                    <p style="font-size:14px;font-weight:600;margin-bottom:10px;">观察者笔记：</p>
+                    <textarea style="width:100%;height:100px;padding:15px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="记录销售的表现亮点和改进建议..."></textarea>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ 打印评分表</button>
+                    <button class="btn btn-secondary" onclick="calcScore()">📊 计算总分</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab 4: 讲师话术 -->
+        <div class="tab-content" id="tab4">
+            <div class="card">
+                <div class="card-title">🗣️ 讲师引导话术（逐字稿）</div>
+                <p style="margin-bottom:20px;color:#666;font-size:14px;">在课堂演练的不同阶段，讲师需要引导学员进入状态、控制节奏、点评反馈。以下是分阶段的<strong>逐字稿参考</strong>。</p>
+                
+                <div class="teacher-box">
+                    <h4>📣 开场白（演练开始前5分钟）</h4>
+                    <p>"各位，接下来我们做一个SPIN提问的实战演练。大家刚才在线上工具里练了16个场景，对吧？那个是'单人练习'，现在是'真人对抗'。"</p>
+                    <p>"我们今天的场景是：你是盛鸿运的销售经理，去拜访老客户欣联电路。他们今年为了降本，引入了一家单价低12%的新供应商，采购陈总给了你压力——'要不你也降点价，要不份额就得让一让'。你的任务不是降价，而是通过提问，让陈总自己说出'还是盛鸿运靠谱'。"</p>
+                    <p>"现在大家分成3人一组：一个人扮演销售，一个人扮演陈总，一个人当观察者给我打分。10分钟准备，然后每组派代表上来演练。"</p>
+                </div>
+                
+                <div class="teacher-box">
+                    <h4>📣 分组指导（准备阶段）</h4>
+                    <p>"扮演销售的学员，记住：你的目标是<strong>让客户自己说出痛点</strong>，不是你说痛点！如果你一直在说我们的精度多高、我们是小巨人，那你就是在推销，不是在用SPIN。"</p>
+                    <p>"扮演陈总的学员，不要一下子把所有不满都说出来。你要'挤牙膏'——销售问得好，你就多说一点；销售问得不好，你就'还好还好'。记住你老板压着降本指标，你对新供应商是'既得意又没底'。"</p>
+                    <p>"观察者的任务很重要——你不是在'看热闹'，你要认真打分，特别是看销售有没有'跳步骤'或者'跳过P直接推销'。"</p>
+                </div>
+                
+                <div class="teacher-box">
+                    <h4>📣 演练中（如果销售卡住了）</h4>
+                    <p>"等一下——刚才你问了一个S问题，客户回答了，然后你直接跳到介绍产品了。停！回到刚才那个回答，<strong>深挖一下</strong>——'陈总，您刚才说SMT那边有时候要对位反复调，这个一般是怎么处理的？'"</p>
+                    <p>"大家注意——销售刚才问了一句'打样速度上研发有没有意见'，陈总明显有顾虑但没说。销售你感觉到了吗？<strong>这时候应该追问，而不是换个话题</strong>。"</p>
+                </div>
+                
+                <div class="teacher-box">
+                    <h4>📣 点评反馈（演练结束后）</h4>
+                    <p>"好，先给这组鼓个掌。现在我来点评——"</p>
+                    <p>"<strong>亮点：</strong>销售在P阶段问了一句'SMT那边用下来还顺手吗，有没有需要多花点精力调试的情况'，这个问法很好——不是直接说'新供应商公差不行'，而是用'有没有'让客户自己承认。"</p>
+                    <p>"<strong>改进点：</strong>在I阶段，销售问了'如果公差偏大，产能是不是打折扣'，但只问了一句就跳到N了。其实这里可以再<strong>深挖两层</strong>——'这个产能损失一个月是多少钱？''如果去年那批报废的板子再发生一次，账怎么算？'把痛点彻底放大，客户才会真的有动力去跟老板争取。"</p>
+                    <p>"<strong>给所有人的建议：</strong>SPIN不是'四个步骤走一遍'，而是<strong>让客户从'没问题'走到'有问题而且很痛'走到'我想要解决方案'</strong>。这个过程，销售的话要<strong>越来越少</strong>，客户的话要<strong>越来越多</strong>。"</p>
+                </div>
+                
+                <div class="teacher-box">
+                    <h4>📣 总结升华（所有组演练完毕后）</h4>
+                    <p>"今天的演练，大家有没有发现一个问题——<strong>我们盛鸿运的销售经理，都很能说</strong>。这个在过去是优势，因为你要给别人讲清楚你的工艺有多好。"</p>
+                    <p>"但现在的客户，<strong>不缺信息，缺的是被理解</strong>。采购每天被老板压降本，你越能问出他心里的苦，他越觉得你懂他。你越急着证明自己便宜，他越觉得你心虚。"</p>
+                    <p>"SPIN不是技巧，是<strong>思维方式</strong>——从'我要卖什么'变成'客户需要什么'。今天这个场景，核心就一句话：<strong>让客户自己算清楚账</strong>——省下的单价，抵不抵得过损失的产能和交期。谁帮他把这笔账算明白，谁就是他的主供。"</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>💡 常见课堂意外处理</h4>
+                    <p><strong>1. 客户角色"太配合"</strong>——陈总一下子把所有痛点都说出来了。→ 叫停，告诉"客户"：你演得太"送分"了，要难搞一点，先打太极。<br>
+                    <strong>2. 销售"背SPIN步骤"</strong>——明显在背诵，对话不自然。→ 叫停，问大家：你们觉得刚才像什么？像"聊天"还是像"审问"？<br>
+                    <strong>3. 时间超时</strong>——一组演练超过15分钟。→ 设定计时器，10分钟一到就喊停，用"时间关系我们先到这里"保持节奏。</p>
+                </div>
+                
+                <div class="btn-row">
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ 打印讲师话术</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(idx) {
+            document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+            document.querySelectorAll('.tab-content').forEach((c,i) => c.classList.toggle('active', i===idx));
+        }
+        
+        function calcScore() {
+            const inputs = document.querySelectorAll('.score-input');
+            let total = 0;
+            inputs.forEach(inp => {
+                const v = parseFloat(inp.value) || 0;
+                total += v;
+            });
+            alert('当前总分：' + total + '分\n\n≥80分=优秀\n60-79分=良好\n<60分=需加强练习');
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 可以在这里加载之前保存的评分
+        });
+    </script>
+</body>
+</html>

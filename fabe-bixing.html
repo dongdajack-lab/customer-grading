@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - 碧兴物联定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#0E4D64,#2E86C1); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header p { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  header .custom-tag { display:inline-block; background:#F39C12; border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; margin-left:8px; font-weight:700; color:#fff; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#2E86C1; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#2E86C1; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #2E86C1; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#0E4D64; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#EBF5FB; color:#2980B9; }
+  .tag-A { background:#D5F5E3; color:#1E8449; }
+  .tag-B { background:#FEF9E7; color:#D35400; }
+  .tag-E { background:#F4ECF7; color:#7D3C98; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#2E86C1; background:#E8F6F3; }
+  .option.selected { border-color:#2E86C1; background:#E8F6F3; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#2E86C1; background:#2E86C1; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#0E4D64; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#2E86C1; color:white; }
+  .btn-primary:hover { background:#0e6b5c; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#0E4D64,#2E86C1); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#2E86C1; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#2E86C1; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#2E86C1; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#E8F6F3; border:1px solid #A9DFBF; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#0E4D5C; line-height:1.7; }
+  .tip-box strong { color:#0E4D64; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共16题</p>
+  <span class="company-tag">🌊 碧兴物联 · 智慧环境监测</span>
+  <span class="custom-tag">★ 定制开发</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    "scenario": "你是碧兴物联的销售，正在向某市生态环境局的监测科科长介绍你们固定式水质自动监测站。这类站点用于地表水断面水质在线监测。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    "options": [
+      {
+        "text": "我们的固定式水质自动监测站高度整合水样采集、预处理、自动分析、自动控制、数据采集传输、水质留样和自动质控七大模块，标准化模块化设计，可监测水温、pH、溶解氧、氨氮、总磷、总氮、COD等十余项参数，符合国家水质自动站规范化建设标准。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比传统人工采样送检，我们的监测站能做到24小时连续自动监测，监测频次从每周一次提升到每4小时一次，异常情况第一时间发现。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用了这套监测站，环保部门能实时掌握断面水质变化，一旦出现污染事件可提前预警处置，避免因监测缺失被上级通报，让监管工作从被动应付变成主动掌控。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "碧兴物联1999年进入自动监测行业，是国内最早从事环境自动监测领域开发的国家高新技术骨干企业之一，参与多项国家标准制定，拥有50余项知识产权。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的构成、参数、标准——「七大模块、十余项参数、符合国家规范化建设标准」就是典型的F。<br><br>A是与传统方式比较的优势；B是给客户带来的利益；E是企业资质与历史的佐证。"
+  },
+  {
+    "scenario": "监测科科长说：你们这套站听着挺标准，但市面上做水质自动站的厂家也不少，你们比别家强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与竞品相比的优势）？",
+    "options": [
+      {
+        "text": "我们的监测站采用智能化设计理念，全流程自动质控，设备故障自诊断、数据异常自报警，运维人员不用天天跑现场；相比同类产品，站房集成度更高、占地更小、建设周期缩短30%，且兼容HJ212-2025新规，数据直连省/部平台无需改造。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "我们的水质自动监测站整合七大模块，可监测水温、pH、溶解氧、氨氮、总磷、总氮、COD等十余项参数。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用我们的站，贵局能实时掌握断面水质，污染事件提前预警，避免被上级通报，监管从被动变主动。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们中标了国控水站首批数智化升级改造项目，是全国第一批吃螃蟹的厂商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比对手强在哪」——全流程自动质控、故障自诊断、集成度高、建设周期缩短30%、兼容新规数据直连。这些都是与同类竞品比较后得出的差异化优势。<br><br>F讲规格、B讲好处、E讲案例资质。"
+  },
+  {
+    "scenario": "科长问：技术上听起来确实有优势，但我要的不是参数，是这站到底能给我们局带来什么实在好处？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "用我们的监测站，贵局每天24小时实时掌握断面水质，污染事件提前预警、提前处置，考核断面数据完整不缺失，全年数据有效率稳定在95%以上，不再因为数据缺失被扣分、被通报，监测科的工作成果实实在在看得见。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "我们的监测站整合水样采集、预处理、自动分析、自动控制等七大模块，可监测十余项参数，符合国家规范化标准。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比人工采样送检，我们的站监测频次从每周一次提升到每4小时一次，全流程自动质控、故障自诊断。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "碧兴物联是国内最早从事环境自动监测的国家高新技术骨干企业，中标国控水站首批数智化升级改造项目。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么实在好处」——数据不缺失、不被扣分通报、工作成果可见。B要站在客户的考核和工作成果上说话，而不是讲产品多好。<br><br>F讲规格、A讲对比优势、E讲资质案例。"
+  },
+  {
+    "scenario": "科长有点动心了：听下来不错，但我们是政府部门，采购要讲依据，你们凭什么证明能达到说的效果？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "碧兴物联1999年进入自动监测行业，拥有50余项知识产权、4项国家重点环境保护技术，2026年6月中标国控水站首批数智化升级改造项目，并全面适配HJ212-2025新规；已在全国30多个省市区部署数千座自动监测站，广西等省份地表水监测网络建设就是我们承建的，有省级实际运行案例。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "我们的监测站整合七大模块，可监测十余项参数，符合国家水质自动站规范化建设标准。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比同类产品，我们建设周期缩短30%，数据直连省/部平台无需改造，兼容新规。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的站，贵局全年数据有效率95%以上，不再因数据缺失被扣分通报，监管从被动变主动。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用「事实」背书——50余项知识产权、国控水站首批改造中标、30多个省市的落地案例、广西省级网络建设的样板。政府部门采购最认案例和资质，E就是给客户一颗定心丸。<br><br>F/A/B分别是规格、优势、利益。"
+  },
+  {
+    "scenario": "你向某省生态环境厅信息中心的负责人介绍碧兴物联的水生态环境智慧监控及管理平台，该平台面向各级生态环境监测与管理部门，用于水质自动监测站的联网运行管理。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/功能）？",
+    "options": [
+      {
+        "text": "该平台涵盖人、机、料、法、环、测、审全流程质控，实现水质达标考核、水环境质量综合评价、水污染监测预警报警三大核心功能，兼容集成多家不同品牌的水质自动监测站，采用机理模型与人工智能相融合的分析引擎。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比市场上只能看数据的监测平台，我们的平台能自动判断水质异常、发现污染事件并预警预报，从「看得见」升级到「看得懂」。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用上这个平台，全省几百座水站数据统一管理，异常自动报警，考核评估一键生成，信息中心不用再天天做数据报表，工作效率大幅提升。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "该平台已在广西等多个省市级业务化运行，成熟度高、稳定性强，是经过实战检验的平台。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述平台的功能构成——全流程质控、三大核心功能、兼容多品牌、AI融合分析引擎。这些都是产品本身的属性。<br><br>A是相对传统方式的优势；B是给信息中心的利益；E是落地案例佐证。"
+  },
+  {
+    "scenario": "信息中心负责人说：我们现在也有一套监测数据平台，功能简单了点，你们平台比我们现有的强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有方案/竞品相比的优势）？",
+    "options": [
+      {
+        "text": "传统平台只能「看数据」，我们平台能「看懂数据」——机理模型与AI融合，基于历史监测数据自动分析水质波动、智能判断异常、发现污染事件及时预警；且兼容性极强，可集成多家不同品牌的水质自动监测站，客户已有的站不用推倒重来。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "平台涵盖人、机、料、法、环、测、审全流程质控，实现水质达标考核、综合评价、预警报警三大功能。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用上平台，全省水站数据统一管理，异常自动报警，考核评估一键生成，工作效率大幅提升。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "平台已在广西等多个省市级业务化运行，成熟度高、稳定性强。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比现有方案强在哪」——从看数据到看懂数据、AI自动研判、兼容多品牌不用推倒重来。这三点都是针对客户现有平台的短板设计的对比优势。<br><br>F讲功能、B讲好处、E讲案例。"
+  },
+  {
+    "scenario": "负责人说：AI自动研判确实吸引我，但我们信息中心最现实的问题是人手少、数据报表任务重，这个平台能帮我减负吗？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "用上平台后，全省几百座水站数据自动汇聚、自动质控，异常自动报警不用人盯屏，考核评估报表一键生成，原来要三个人加班一周做的月报，现在系统自动出，信息中心从「数据苦力」变成「决策参谋」，在领导面前的价值感完全不一样。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "平台涵盖全流程质控，实现达标考核、综合评价、预警报警三大功能，AI融合分析。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比传统平台，我们能自动判断异常、发现污染事件并预警，从看得见升级到看得懂。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "平台已在广西等多个省市级业务化运行，成熟度高、稳定性强，是经过实战检验的平台。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——报表减负、从数据苦力变决策参谋、工作价值感提升。B要站在客户的工作场景里讲好处，而不是讲平台功能。<br><br>F/A/E分别是功能、优势、案例。"
+  },
+  {
+    "scenario": "负责人追问：你们说平台成熟稳定，但平台一旦出问题，影响的是全省的数据，这个风险我们承担不起，怎么证明你们靠谱？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "该平台已在广西壮族自治区地表水环境监测网络建设等多个省市级项目中业务化运行，成熟度高、稳定性强；碧兴物联拥有50余项知识产权、4项国家重点环境保护技术，2026年与住建部工程技术中心签署战略合作，技术实力得到国家级机构认可。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "平台涵盖人机料法环测审全流程质控，实现达标考核、综合评价、预警报警三大功能。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比传统平台，我们AI自动研判、兼容多品牌监测站，已有站点不用推倒重来。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用上平台，数据统一管理、异常自动报警、考核评估一键生成，效率大幅提升。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——广西等省级项目业务化运行、50余项知识产权、4项国家重点环保技术、住建部工程技术中心战略合作。省级案例+国家级机构认可，正是信息中心最需要的信任背书。<br><br>F/A/B分别是功能、优势、利益。"
+  },
+  {
+    "scenario": "你向某市生态环境局执法大队的队长介绍碧兴物联的污染源水质在线监测系统和挥发性有机物（VOCs）在线监测系统，用于排污企业排放监控。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    "options": [
+      {
+        "text": "我们的VOCs在线监测系统采用全程高温抽取法对样气进行抽取，采用气相色谱-氢火焰离子化检测器（GC-FID）技术，可同时监测排口温度、压力、流速、含氧量、湿度等参数，完全满足HJ1013-2018标准要求；水质在线监测系统适用于城镇污水处理、医院和工业企业等排放场景，具有完整自主知识产权。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比市面上需要频繁校准的设备，我们的系统稳定性高、维护周期长，能在恶劣工况下保持可靠运行，运维成本更低。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用上这套系统，执法大队能实时掌握企业排放数据，超标自动报警，偷排第一时间发现，从「人海巡查」变成「数据执法」，执法效率和威慑力双提升。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们针对超低排放工况自主研发的ZE-CEM2000系统，采用外置式大比例稀释采样等先进技术，已在多个电厂和钢厂实际运行。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品技术规格——高温抽取法、GC-FID检测、HJ1013-2018标准、自主知识产权。这些都是产品本身的属性。<br><br>A是相对优势；B是执法队的利益；E是实际运行案例。"
+  },
+  {
+    "scenario": "执法队长说：我们队里就30个人，管着全市200多家重点排污企业，现有的监控设备三天两头出问题，数据还老对不上，你们比我们现有的强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有设备/竞品相比的优势）？",
+    "options": [
+      {
+        "text": "我们的系统采用模块化结构、升级方便，测量动态范围广、精度高、可靠性高、组网灵活、运行成本低；特别是超低排放烟气监测，采用外置式大比例稀释采样技术，解决超低排放「温度低、湿度大」导致传统设备测量不准的行业难题。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "我们的VOCs系统采用全程高温抽取法+GC-FID技术，可监测温度、压力、流速、含氧量、湿度等参数，满足HJ1013-2018标准。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用上这套系统，超标自动报警、偷排第一时间发现，执法从人海巡查变成数据执法，威慑力提升。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们的ZE-CEM2000系统已在多个电厂和钢厂实际运行，性能稳定。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比现有设备强在哪」——模块化升级方便、动态范围广、精度高、运行成本低，特别是解决超低排放「温低湿大」测量不准的行业难题。<br><br>F讲规格、B讲执法利益、E讲运行案例。"
+  },
+  {
+    "scenario": "队长说：技术上确实强，但我最关心的是——装了这个系统，我们执法队到底能轻松多少？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "装系统后，200多家企业的排放数据实时汇聚、超标自动报警到手机，偷排线索自动识别，执法队从「挨家巡查」变成「精准执法」，30个人管200家企业不再是神话；年底执法数据一拉，工作成果清晰可见，对上对下都好交代。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "系统采用全程高温抽取法+GC-FID技术，可同时监测温度、压力、流速、含氧量、湿度等参数。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比现有设备，我们模块化结构升级方便、精度高、可靠性高、运行成本低，解决温低湿大测量不准的难题。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "我们的系统已在多个电厂和钢厂实际运行，性能稳定可靠。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——从人海巡查到精准执法、工作量骤减、执法成果可视化。B要站在执法队的工作场景讲好处，让他们看到「少跑腿、多战果」。<br><br>F/A/E分别是规格、优势、案例。"
+  },
+  {
+    "scenario": "队长说：说得好听，但去年我们装了一批别家的设备，现在都成了摆设，我怎么信你们不是下一个？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "碧兴物联1999年进入自动监测行业，是国内最早从事环境自动监测开发的国家高新技术骨干企业之一，拥有4项国家重点环境保护技术、50余项知识产权；污染源在线监测系统具有完整自主知识产权，在城镇污水、医院、工业企业等场景有大量实际部署案例，全国30多个省市区都有我们的运维服务网络。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "系统采用全程高温抽取法+GC-FID技术，可同时监测温度、压力、流速、含氧量、湿度等参数。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比现有设备，我们模块化升级方便、精度高、运行成本低，解决超低排放测量不准的难题。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "装系统后，超标自动报警到手机，偷排线索自动识别，执法从挨家巡查变成精准执法。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实打消顾虑——27年行业深耕、4项国家重点环保技术、自主知识产权、30多个省市的部署和运维网络。客户被「摆设设备」伤过，就要用历史纵深和落地广度来重建信任。<br><br>F/A/B分别是规格、优势、利益。"
+  },
+  {
+    "scenario": "你向某地市生态环境局介绍碧兴物联的监测设备运营维护服务。碧兴物联建立了自上而下的三级运营服务体系，覆盖全国30多个省市自治区。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（服务本身的属性/构成）？",
+    "options": [
+      {
+        "text": "我们建立了三级运营服务体系：公司运营服务部-区域技术服务中心-地方项目运营中心，覆盖全国30多个省市自治区，配套一套行之有效的运营质量管理体系，保障各类环境在线监测仪表的可靠运行，提供长期稳定的运维服务。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比市场上「设备卖了就不管」的厂家，我们的三级服务体系和质量管理体系，能做到故障快速响应、设备长期稳定运行，客户不用养运维团队。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的运维服务，贵局的监测设备故障有人管、数据有效率有保障，不用再为设备坏了找厂家扯皮，监测工作省心省力，考核数据稳稳达标。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们服务的站点遍布全国30多个省市，其中多个省份的国控省控站点运行多年，数据有效率持续达标，多次通过国家质控考核。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述服务本身——三级服务体系架构、覆盖范围、质量管理体系、服务内容。这些都是服务产品的构成属性。<br><br>A是相对行业普遍模式的优势；B是客户的利益；E是服务成效案例。"
+  },
+  {
+    "scenario": "局长说：运维服务我们之前也外包过，换了好几家，响应慢、水平参差不齐，你们凭什么说自己行？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有服务商相比的优势）？",
+    "options": [
+      {
+        "text": "我们是设备制造商，最懂自己的设备，能实现「设备+运维」一体化服务，故障诊断快、备件供应足；三级服务体系让响应层级清晰——本地项目中心2小时响应、区域中心技术支持、总部质量监督，相比层层转包的外包公司，责任明确、质量可控。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "我们建立了公司运营服务部-区域技术服务中心-地方项目运营中心三级服务体系，覆盖30多个省市，配套质量管理体系。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用我们的服务，设备故障有人管、数据有效率有保障，不用再为设备坏了扯皮，考核稳稳达标。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们服务的站点遍布30多个省市，多个省份国控省控站点运行多年，多次通过国家质控考核。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比外包公司强在哪」——制造商身份最懂设备、设备+运维一体化、三级响应体系、责任明确质量可控。这几条精准针对外包公司「转包、不专业、扯皮」的痛点。<br><br>F讲体系、B讲利益、E讲成效。"
+  },
+  {
+    "scenario": "局长说：这些我懂，我就想知道，把运维交给你们，我们局到底省了什么心？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "把运维交给碧兴，贵局从「天天盯设备」里解放出来：故障本地2小时响应、备件随叫随到、数据有效率有专人兜底，国考省考数据稳稳达标，不用再为设备停机写检讨、为数据缺失被通报担惊受怕，监测科可以把精力放在业务管理上。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "我们建立三级服务体系：公司运营服务部-区域技术服务中心-地方项目运营中心，覆盖30多个省市，配套质量管理体系。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "我们是制造商，最懂设备，设备+运维一体化，响应层级清晰、责任明确、质量可控。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "我们服务的站点遍布30多个省市，多个省份站点运行多年，多次通过国家质控考核。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——从盯设备中解放、数据达标有兜底、不用写检讨担惊受怕、精力回归管理。B要击中局长「怕考核、怕担责」的真实需求。<br><br>F/A/E分别是体系、优势、成效。"
+  },
+  {
+    "scenario": "局长最后问：运维这东西，说了不算数，你们有没有拿得出手的服务业绩证明？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "碧兴物联的三级运维体系已覆盖全国30多个省市自治区，为数千座国控、省控、市控自动监测站提供长期运维服务，多个省份站点连续多年数据有效率达标、通过国家质控考核；2026年中标国控水站首批数智化升级改造项目，国控站点的运维能力已经国家层面检验。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "我们建立公司运营服务部-区域技术服务中心-地方项目运营中心三级体系，配套质量管理体系。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "我们是制造商，最懂设备，设备+运维一体化，本地2小时响应、备件充足。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "把运维交给我们，贵局从盯设备中解放，数据达标有兜底，精力回归管理。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——覆盖30多个省市、数千座站点长期运维、多次通过国家质控考核、国控水站改造中标。国控站点运维能力经国家检验，是局长最信服的证据。<br><br>F/A/B分别是体系、优势、利益。"
+  }
+];
+
+var currentQ = 0;
+var answers = [];
+var answered = false;
+
+function renderQ() {
+  var q = questions[currentQ];
+  document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+  var fabeType = q.options.find(function(o){return o.type;}) ? q.options.find(function(o){return o.type;}).type : 'F';
+  var typeName = {'F':'F 特征','A':'A 优势','B':'B 利益','E':'E 证明'}[fabeType];
+
+  var card = document.getElementById('questionCard');
+  card.innerHTML = '<div class="question-badge">' + typeName + ' 训练</div>' +
+    '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+    '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+    '<div class="options">' +
+    q.options.map(function(opt,i){
+      return '<div class="option" onclick="selectOpt(' + i + ')">' +
+        '<div class="radio"></div>' +
+        '<div class="text">' + opt.text + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="explanation" id="explanation">' +
+      '<h4>✅ 解析</h4>' +
+      '<p>' + q.explain + '</p>' +
+    '</div>';
+
+  answered = false;
+  document.getElementById('btnNext').textContent = '确认答案';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultPage').classList.remove('show');
+  document.getElementById('quizPage').style.display = '';
+}
+
+window.selectOpt = function(idx) {
+  if (answered) return;
+  var opts = document.querySelectorAll('.option');
+  opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+  window.selectedIdx = idx;
+  document.getElementById('btnNext').disabled = false;
+};
+
+window.nextQ = function() {
+  if (window.selectedIdx === undefined) return;
+  if (!answered) {
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+  } else {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      window.selectedIdx = undefined;
+      renderQ();
+    } else {
+      showResult();
+    }
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    window.selectedIdx = undefined;
+    renderQ();
+    if (answers[currentQ] !== undefined) {
+      answered = true;
+      var q = questions[currentQ];
+      var opts = document.querySelectorAll('.option');
+      opts.forEach(function(opt,i){
+        if (q.options[i].correct) opt.classList.add('correct');
+        if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+      });
+      document.getElementById('explanation').classList.add('show');
+      document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    }
+  }
+};
+
+function showResult() {
+  document.getElementById('quizPage').style.display = 'none';
+  var score = answers.filter(function(a){return a;}).length;
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('percentNum').textContent = percent;
+
+  var detail = '<h3>📊 答题详情</h3>';
+  questions.forEach(function(q,i){
+    var icon = answers[i] ? '✅' : '❌';
+    var title = q.scenario.substring(0, 40) + '...';
+    detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+  });
+  document.getElementById('resultDetail').innerHTML = detail;
+  document.getElementById('resultPage').classList.add('show');
+}
+
+window.restart = function() {
+  currentQ = 0;
+  answers = [];
+  window.selectedIdx = undefined;
+  answered = false;
+  renderQ();
+};
+
+renderQ();
+</script>
+</body>
+</html>

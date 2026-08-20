@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - 盛鸿运科技定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#1B4F72,#148F77); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header p { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  header .custom-tag { display:inline-block; background:#F39C12; border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; margin-left:8px; font-weight:700; color:#fff; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#148F77; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#148F77; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #148F77; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#1B4F72; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#EBF5FB; color:#2980B9; }
+  .tag-A { background:#D5F5E3; color:#1E8449; }
+  .tag-B { background:#FEF9E7; color:#D35400; }
+  .tag-E { background:#F4ECF7; color:#7D3C98; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#148F77; background:#E8F6F3; }
+  .option.selected { border-color:#148F77; background:#E8F6F3; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#148F77; background:#148F77; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#1B4F72; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#148F77; color:white; }
+  .btn-primary:hover { background:#0e6b5c; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#1B4F72,#148F77); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#148F77; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#148F77; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#148F77; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#E8F6F3; border:1px solid #A9DFBF; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#0E4D5C; line-height:1.7; }
+  .tip-box strong { color:#1B4F72; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共16题</p>
+  <span class="company-tag">⚙️ 盛鸿运科技 · 电子结构件</span>
+  <span class="custom-tag">★ 定制开发</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // ============ 产品一：钢片补强片 ============
+  {
+    scenario: "你是盛鸿运科技的销售，准备向一家FPC厂的采购经理推荐你们的钢片补强片。这种补强片采用精密蚀刻工艺，主要用于FPC板的局部加强。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的钢片补强片采用SUS304不锈钢精密蚀刻工艺，厚度0.05-0.2mm，尺寸公差±0.03mm，表面镀镍处理，盐雾测试可达96小时，翘曲度控制在0.02mm以内。", type:"F", correct:true },
+      { text:"相比冲压工艺的补强片，我们的蚀刻件无毛刺、无应力、尺寸精度高出一倍，翘曲率低60%。", type:"A", correct:false },
+      { text:"用了我们的补强片，客户贴片抛料率从3%降到0.5%以下，每月减少报废板2万块，一年节省成本近500万。", type:"B", correct:false },
+      { text:"我们已服务景旺、东山精密等头部FPC厂，2025年获评国家级专精特新小巨人，并参与国家标准起草。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的参数、规格、工艺——「SUS304、蚀刻工艺、0.05-0.2mm厚度、±0.03mm公差、镀镍、96小时盐雾、0.02mm翘曲度」就是典型的F。<br><br>A是与竞品比较；B是给客户带来的利益；E是资质与案例佐证。"
+  },
+  {
+    scenario: "接上题。FPC厂采购经理听完特征介绍后还在犹豫：市面上做补强片的不少，你们比冲压件贵一些，凭什么？",
+    question: "接下来应该说 <strong>A - 优势</strong>（与竞品相比的差异化），下列哪句话最合适？",
+    options: [
+      { text:"冲压工艺做薄料（0.1mm以下）会产生应力变形和毛刺，我们采用精密蚀刻工艺，无应力、无毛刺，尺寸公差±0.03mm比冲压±0.1mm高出一倍以上；而且我们是少有的能做到0.05mm超薄料且翘曲度稳定在0.02mm的供应商。", type:"A", correct:true },
+      { text:"我们的补强片采用SUS304不锈钢，厚度0.05-0.2mm。", type:"F", correct:false },
+      { text:"用了我们的补强片，每月报废板减少2万块，一年节省近500万。", type:"B", correct:false },
+      { text:"景旺、东山精密都在用我们的产品，品质有保障。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>优势是「对比出来的」——必须用蚀刻vs冲压的工艺差异来回答「凭什么贵」：无应力无毛刺、公差高出一倍、能做超薄料。让客户觉得贵得有道理。"
+  },
+  {
+    scenario: "采购经理对工艺优势有点兴趣，但开始问：这对我有什么好处？我们最怕的就是补强片翘曲导致贴片抛料、报废板多。",
+    question: "接下来应该说 <strong>B - 利益</strong>（给客户带来的具体好处），下列哪句话最合适？",
+    options: [
+      { text:"对您来说，翘曲度从0.06mm降到0.02mm以内，贴片抛料率能从3%降到0.5%以下，按您每月贴片200万块计算，每月减少约5万块抛料板，一年节省报废和返工成本约500万；同时来料即检即用，品质部月客诉从4份降到1份以内。", type:"B", correct:true },
+      { text:"我们的公差比冲压高出一倍，无毛刺无应力。", type:"A", correct:false },
+      { text:"我们的补强片采用SUS304不锈钢精密蚀刻工艺。", type:"F", correct:false },
+      { text:"景旺用了我们3年，品质稳定。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>B是「跟客户说你的收益」，必须用客户听得懂的语言：省钱（报废减少500万）、省事（客诉从4份降到1份）。针对采购经理的痛点（怕翘曲），直接给出量化利益，让他看到ROI。"
+  },
+  {
+    scenario: "采购经理说：听起来不错，但你们毕竟不是行业里规模最大的供应商，我需要一些证据证明你们真的能做到0.02mm的翘曲度。",
+    question: "接下来应该说 <strong>E - 证明</strong>（用案例/数据/荣誉/证书佐证），下列哪句话最合适？",
+    options: [
+      { text:"我们的翘曲度比行业平均低60%。", type:"A", correct:false },
+      { text:"国内某头部FPC厂从2021年起批量使用我们的钢片补强片，翘曲来料不良率从2.8%降到0.3%，贴片抛料率从3%降到0.4%，他们的品质总监给我们出具了书面评价报告；同时我们有SGS的盐雾96小时和翘曲度检测报告，每一批出货附带全检数据，全部可查。", type:"E", correct:true },
+      { text:"我们每批都严格检测，品质有保证。", type:"F", correct:false },
+      { text:"用我们的补强片，一年能省500万。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>E是「让别人替你说话」——客户案例（头部FPC厂3年数据）、第三方检测（SGS报告）、出货全检数据（可查证）。面对「你们不是最大的」的疑虑，用真实客户数据和权威报告建立信任，比说一百遍「我们品质好」都管用。"
+  },
+  // ============ 产品二：镍片补强片 ============
+  {
+    scenario: "你向一家车载电子EMS厂推荐你们的镍片补强片，用于车载FPC的加强。客户技术负责人正在评估供应商。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的镍片补强片采用纯镍带精密蚀刻，厚度0.1-0.3mm，耐蚀性能通过盐雾测试120小时，表面处理采用镀镍工艺，防氧化保存周期达4周，尺寸公差±0.03mm。", type:"F", correct:true },
+      { text:"相比钢片，镍片的磁导率更低、耐蚀性更强，更适合车载和医疗场景，通过车规认证的把握更大。", type:"A", correct:false },
+      { text:"用镍片方案，您的车载项目盐雾测试一次通过率从70%提升到95%以上，审厂环节的品质分直接拉满。", type:"B", correct:false },
+      { text:"我们已为多家车规级客户批量供货，镍片方案通过IATF16949体系审核。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>纯镍带、0.1-0.3mm、盐雾120小时、镀镍表面处理、4周防氧化、±0.03mm公差——这些都是可测量、可验证的参数。车载场景对「耐蚀、防氧化」的参数要求特别具体，F要讲到位。"
+  },
+  {
+    scenario: "技术负责人问：你们镍片和现在用的钢片有什么区别？钢片便宜，为什么车载项目要用镍片？",
+    question: "接下来应该说 <strong>A - 优势</strong>，下列哪句话最合适？",
+    options: [
+      { text:"钢片在盐雾测试下容易生锈，磁导率高会影响天线信号；镍片耐蚀性强（盐雾120小时 vs 钢片48-72小时）、磁导率低，尤其适合车载的天线模块和传感器部位。在车规严苛的耐候性要求下，镍片方案的长期可靠性优势是钢片替代不了的——这正是越来越多车规项目从钢片转镍片的根本原因。", type:"A", correct:true },
+      { text:"我们的镍片采用纯镍带，厚度0.1-0.3mm。", type:"F", correct:false },
+      { text:"用镍片，您的审厂品质分能拉满。", type:"B", correct:false },
+      { text:"我们通过了IATF16949体系审核。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>优势必须有「比较」——镍片vs钢片：盐雾120小时vs 48-72小时、磁导率更低、适合天线/传感器部位。讲清楚「为什么车规要用镍片」的材料逻辑，技术负责人才能做决策。"
+  },
+  {
+    scenario: "技术负责人说：车载项目今年要过审厂，客户特别看重来料品质稳定性和盐雾测试通过率，这是我们最担心的环节。",
+    question: "接下来应该说 <strong>B - 利益</strong>，下列哪句话最合适？",
+    options: [
+      { text:"对您来说，盐雾测试通过率从现在的70%提升到95%以上，意味着审厂时这个扣分项直接变成加分项；同时4周的防氧化保存周期，让您在仓储环节不用再赶着用、不用返工，库存损耗几乎为零；更关键的是，车载项目一旦量产，稳定的来料品质能让您的量产良率稳定在99%以上，客户审厂和量产的信心都足了。", type:"B", correct:true },
+      { text:"我们的镍片盐雾120小时，比钢片强一倍。", type:"A", correct:false },
+      { text:"我们的镍片采用纯镍带精密蚀刻。", type:"F", correct:false },
+      { text:"我们服务过车规级客户，通过了IATF16949。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>针对车载项目的核心诉求（过审厂、量产良率），给出量化利益：盐雾通过率70%→95%、仓储零损耗、量产良率99%以上。把产品参数翻译成「审厂加分、量产放心」，就是B的真谛。"
+  },
+  {
+    scenario: "技术负责人说：利益确实吸引人，但我们被供应商坑过，口头承诺和实际表现经常是两回事，我需要证据。",
+    question: "接下来应该说 <strong>E - 证明</strong>，下列哪句话最合适？",
+    options: [
+      { text:"我们理解您的顾虑。三样东西给您：① SGS出具的盐雾120小时检测报告（原件可查）② 国内某车载Tier1客户连续两年的量产数据，镍片来料不良率0.2%，量产良率99.3% ③ 免费提供样品，您自己送去做盐雾测试或车规老化测试，用数据说话。另外我们工厂通过了IATF16949体系审核，审厂记录可以给您看。", type:"E", correct:true },
+      { text:"我们通过了IATF16949体系审核，品质有保证。", type:"F", correct:false },
+      { text:"我们的镍片盐雾测试能过120小时。", type:"A", correct:false },
+      { text:"用我们的镍片，量产良率能到99%。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>面对「被坑过」的顾虑，最好的证明是「让客户自己验证」——SGS报告（可查原件）、车载客户量产数据、免费样布自行测试、IATF16949体系审核记录。敢让客户自己验证，比任何证书都更有说服力。"
+  },
+  // ============ 产品三：精密蚀刻五金件 ============
+  {
+    scenario: "你向一家消费电子品牌的结构件采购推荐盛鸿运的精密蚀刻五金件，这类产品用于手机/耳机的金属结构件和屏蔽罩。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的精密蚀刻可加工0.03mm超薄金属件，线宽精度±0.02mm，任意复杂形状（网格/阶梯/异形孔）一次成型，可加工不锈钢、镍、铜、钛等多种材料，表面处理可选镀金/镀镍/镀锡/黑化。", type:"F", correct:true },
+      { text:"相比冲压和CNC，蚀刻能做到无毛刺、无应力、无变形，超薄件良率高出30%。", type:"A", correct:false },
+      { text:"用蚀刻工艺，您的产品设计自由度更高，打样周期缩短一半，新品上市快1-2个月。", type:"B", correct:false },
+      { text:"我们参与起草了金属蚀刻件国家标准，拥有12项相关专利。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>0.03mm超薄、±0.02mm线宽、任意形状一次成型、多材料可选——这些是蚀刻工艺的客观能力参数，不依赖比较和想象。"
+  },
+  {
+    scenario: "采购工程师说：我们之前用的冲压件，薄料（0.05mm以下）毛刺多、还容易有应力变形，良率一直上不去，你们蚀刻能解决吗？",
+    question: "接下来应该说 <strong>A - 优势</strong>，下列哪句话最合适？",
+    options: [
+      { text:"冲压靠模具冲切，薄料必然有毛刺和应力残留；蚀刻是化学溶解成型，全程无机械应力，边缘光滑无毛刺，超薄件（0.03-0.05mm）变形量是冲压的1/10。您的良率问题，在工艺层面就能解决——这正是我们跟冲压厂最大的差异。", type:"A", correct:true },
+      { text:"我们的蚀刻能做到0.03mm超薄，线宽±0.02mm。", type:"F", correct:false },
+      { text:"用蚀刻工艺，您的良率能提升30%。", type:"B", correct:false },
+      { text:"我们参与起草了国家标准。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>用「工艺原理」对比回答：冲压是机械冲切（必然有毛刺和应力），蚀刻是化学溶解（无应力无毛刺）。讲原理比讲参数更有说服力，工程师一听就明白为什么良率能解决。"
+  },
+  {
+    scenario: "采购工程师说：我们现在因为薄料毛刺问题，每月有几千件报废，还因为这个被客户退过两次货。",
+    question: "接下来应该说 <strong>B - 利益</strong>，下列哪句话最合适？",
+    options: [
+      { text:"对您来说，用蚀刻件后毛刺问题从源头消失，每月报废件从几千件降到几乎为零，按每件5元、每月3000件算，一年直接节省18万成本；更重要的是，因为毛刺被客户退货的投诉彻底消失，客户对你们的品质评价和下次订单的把握都会提升。", type:"B", correct:true },
+      { text:"蚀刻无应力无毛刺，比冲压好。", type:"A", correct:false },
+      { text:"我们蚀刻能做到0.03mm超薄。", type:"F", correct:false },
+      { text:"我们有12项专利，参与国标起草。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>把参数翻译成钱和信任：报废节省18万/年、客户退货投诉消失、品质评价提升。采购工程师最怕的「被退货」，直接给到解决方案级别的利益承诺。"
+  },
+  {
+    scenario: "采购工程师说：听起来不错，但你们蚀刻厂也不少，凭什么信你们？",
+    question: "接下来应该说 <strong>E - 证明</strong>，下列哪句话最合适？",
+    options: [
+      { text:"三点证明：① 我们是国家级专精特新小巨人（2025年获评），参与起草金属蚀刻件国家标准——行业地位背书 ② 服务多家消费电子品牌供应链，某头部TWS耳机厂商的屏蔽罩项目连续3年零客诉 ③ 每批出货附全尺寸检测报告，关键尺寸100%全检，数据可追溯。您可以先做小批量试产验证。", type:"E", correct:true },
+      { text:"我们品质好，服务过很多大客户。", type:"F", correct:false },
+      { text:"蚀刻比冲压工艺先进。", type:"A", correct:false },
+      { text:"用蚀刻件，良率能提升30%。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>国家级专精特新小巨人+国标起草（行业地位）、头部客户3年零客诉（案例）、出货全检报告（数据可追溯）+小批量试产邀请（让客户自己验证）。三层证明，层层加码。"
+  },
+  // ============ 产品四：小批量快打样+DFM服务 ============
+  {
+    scenario: "你向一家中型FPC厂的研发负责人介绍盛鸿运的打样能力。对方抱怨：现在打样周期太长，新项目开发经常被材料卡脖子。",
+    question: "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    options: [
+      { text:"我们的打样服务标准是：常规补强片打样3-5天出货，加急24小时出样；免费提供DFM（可制造性设计）评估，新项目立项即可介入；打样数量不限起订量，1片也可以做；并提供材料选型建议（钢/镍/铜按应用推荐）。", type:"F", correct:true },
+      { text:"相比大厂排产要等2-3周，我们的打样速度快4-5倍，还能在打样前帮您规避设计问题。", type:"A", correct:false },
+      { text:"用我们的打样服务，新项目开发周期从2-3个月缩短到1个月内，新品上市快1-2个月，抢到市场窗口期。", type:"B", correct:false },
+      { text:"某客户用我们的打样服务后，新项目数量从一年5个增加到15个，翻了三倍。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ F - 特征</strong><br><br>打样服务的客观标准：3-5天出货、24小时加急、1片起做、DFM评估免费——这些都是可以验证的服务承诺，属于「服务产品」的特征描述。"
+  },
+  {
+    scenario: "研发负责人说：我们之前用的那家大厂，打样要等2-3周，小批量单子直接不接，新项目开发节奏被拖得很惨。",
+    question: "接下来应该说 <strong>A - 优势</strong>，下列哪句话最合适？",
+    options: [
+      { text:"大厂优先保大客户大订单，小批量打样排不上队是行业常态；我们就是做「小而快」定位的——3-5天出货 vs 大厂2-3周，1片起做 vs 大厂有最低起订量，还能免费做DFM评估帮您提前规避问题。速度和响应，就是我们对大厂的核心差异。", type:"A", correct:true },
+      { text:"我们的打样3-5天出货，24小时加急。", type:"F", correct:false },
+      { text:"用我们的服务，新项目开发周期缩短一半。", type:"B", correct:false },
+      { text:"某客户新项目数量翻了三倍。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ A - 优势</strong><br><br>明确对标大厂的「定位差异」：小而快 vs 大而慢。3-5天vs2-3周、1片起做vs有起订量、免费DFM vs 无工程支持。让客户清楚「选择我们不是妥协，是补上大厂的服务盲区」。"
+  },
+  {
+    scenario: "研发负责人说：我们现在新项目一年才做5个，大部分时间都耗在等材料、改样上，老板总说研发效率低。",
+    question: "接下来应该说 <strong>B - 利益</strong>，下列哪句话最合适？",
+    options: [
+      { text:"对您来说，打样从3周缩短到3-5天，新项目开发周期从2-3个月压缩到1个月内，一年能做的项目数量至少翻倍；DFM评估让设计问题在图纸阶段就解决，返工次数减少80%，研发团队的人力释放出来做更有价值的设计创新——老板看到的「研发效率低」问题，从根上解决了。", type:"B", correct:true },
+      { text:"我们打样比大厂快4-5倍。", type:"A", correct:false },
+      { text:"我们打样3-5天，1片起做。", type:"F", correct:false },
+      { text:"某客户新项目从5个增加到15个。", type:"E", correct:false }
+    ],
+    explain:"<strong>✅ B - 利益</strong><br><br>针对研发负责人的KPI（项目数量、开发周期、返工率）：项目数量翻倍、周期缩短一半、返工减少80%、人力释放。把「快打样」翻译成研发负责人的业绩，他才有动力推动。"
+  },
+  {
+    scenario: "研发负责人说：你们说的这么好，有实际案例吗？我们不敢拿新项目去试错。",
+    question: "接下来应该说 <strong>E - 证明</strong>，下列哪句话最合适？",
+    options: [
+      { text:"某中型FPC厂2023年与我们合作，当年新项目数量从5个增加到15个，打样周期从21天缩短到5天，项目开发失败率（因材料问题夭折）从30%降到8%；我们可以提供该客户的书面反馈和DFM评估报告样例，也可以先拿您一个不紧急的新项目试一次打样，3-5天出结果，用效果说话。", type:"E", correct:true },
+      { text:"我们服务过很多客户，经验丰富。", type:"F", correct:false },
+      { text:"我们打样快、服务好。", type:"A", correct:false },
+      { text:"用我们打样，新项目能翻倍。", type:"B", correct:false }
+    ],
+    explain:"<strong>✅ E - 证明</strong><br><br>用真实客户数据（5个→15个、21天→5天、30%→8%）+可提供的书面反馈和报告样例+「拿一个不紧急的项目试一次」的低风险承诺。E的最高境界是敢让客户先试，试了就有说服力。"
+  }
+];
+
+var currentQ = 0;
+var answers = [];
+var answered = false;
+
+function renderQ() {
+  var q = questions[currentQ];
+  document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+  var fabeType = q.options.find(function(o){return o.type;}) ? q.options.find(function(o){return o.type;}).type : 'F';
+  var typeName = {'F':'F 特征','A':'A 优势','B':'B 利益','E':'E 证明'}[fabeType];
+
+  var card = document.getElementById('questionCard');
+  card.innerHTML = '<div class="question-badge">' + typeName + ' 训练</div>' +
+    '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+    '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+    '<div class="options">' +
+    q.options.map(function(opt,i){
+      return '<div class="option" onclick="selectOpt(' + i + ')">' +
+        '<div class="radio"></div>' +
+        '<div class="text">' + opt.text + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="explanation" id="explanation">' +
+      '<h4>✅ 解析</h4>' +
+      '<p>' + q.explain + '</p>' +
+    '</div>';
+
+  answered = false;
+  document.getElementById('btnNext').textContent = '确认答案';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultPage').classList.remove('show');
+  document.getElementById('quizPage').style.display = '';
+}
+
+window.selectOpt = function(idx) {
+  if (answered) return;
+  var opts = document.querySelectorAll('.option');
+  opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+  window.selectedIdx = idx;
+  document.getElementById('btnNext').disabled = false;
+};
+
+window.nextQ = function() {
+  if (window.selectedIdx === undefined) return;
+  if (!answered) {
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+  } else {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      window.selectedIdx = undefined;
+      renderQ();
+    } else {
+      showResult();
+    }
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    window.selectedIdx = undefined;
+    renderQ();
+    if (answers[currentQ] !== undefined) {
+      answered = true;
+      var q = questions[currentQ];
+      var opts = document.querySelectorAll('.option');
+      opts.forEach(function(opt,i){
+        if (q.options[i].correct) opt.classList.add('correct');
+        if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+      });
+      document.getElementById('explanation').classList.add('show');
+      document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    }
+  }
+};
+
+function showResult() {
+  document.getElementById('quizPage').style.display = 'none';
+  var score = answers.filter(function(a){return a;}).length;
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('percentNum').textContent = percent;
+
+  var detail = '<h3>📊 答题详情</h3>';
+  questions.forEach(function(q,i){
+    var icon = answers[i] ? '✅' : '❌';
+    var title = q.scenario.substring(0, 40) + '...';
+    detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+  });
+  document.getElementById('resultDetail').innerHTML = detail;
+  document.getElementById('resultPage').classList.add('show');
+}
+
+window.restart = function() {
+  currentQ = 0;
+  answers = [];
+  window.selectedIdx = undefined;
+  answered = false;
+  renderQ();
+};
+
+renderQ();
+</script>
+</body>
+</html>
