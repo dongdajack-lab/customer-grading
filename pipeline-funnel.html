@@ -138,7 +138,8 @@
           <h3 class="font-bold text-amber-800 mb-2 text-sm">📌 课堂讲解要点</h3>
           <ul class="text-xs text-amber-900 space-y-1.5">
             <li>• 正常管道应呈"上宽下窄"的漏斗形态：宽度=金额，一眼看出是否符合漏斗形状</li>
-            <li>• <strong>覆盖率 vs 历史转化率</strong>：覆盖率明显偏低=该阶段转化流失；明显偏高=该阶段积压或前端供给不足</li>
+            <li>• <strong>商机覆盖率 vs 历史转化率</strong>：商机覆盖率明显偏低=该阶段转化流失；明显偏高=该阶段积压或前端供给不足</li>
+            <li>• <strong>金额变化率</strong>：正常应随阶段推进下降。若金额逆势＞100%，说明该阶段留下的都是大项目，小项目被筛掉了，或大单在该阶段长期堆积</li>
             <li>• 停留天数过长 = 该阶段存在卡点，需要配套打法或资源投入</li>
             <li>• 管道里商机总数要够多（百个量级），漏斗统计才有参考意义</li>
           </ul>
@@ -180,7 +181,7 @@
         ]
       },
       stock: {
-        desc: '场景A·需求确认积压：需求确认覆盖率78%（45→78）远高于历史基准42%，停留35天严重超时。商机大量堆在需求确认阶段推不进方案商谈——宽度几乎和线索一样宽。讲解点：覆盖率远高于历史值=积压，要么需求梳理动作缺失，要么销售能力卡壳。',
+        desc: '场景A·需求确认积压：线索→需求确认的商机覆盖率78%（100→78）远高于历史基准42%，停留35天严重超时。商机大量堆在需求确认阶段推不进方案商谈——宽度几乎和线索一样宽。讲解点：覆盖率远高于历史值=积压，要么需求梳理动作缺失，要么销售能力卡壳。'
         stages: [
           { name: '线索',       amount: 8000, count: 100, days: 12, histRate: 42, color: '#3b82f6' },
           { name: '需求确认',   amount: 7000, count: 78,  days: 35, histRate: 42, color: '#22c55e' },
@@ -202,7 +203,7 @@
         ]
       },
       competition: {
-        desc: '场景C·竞争阶段堆积：竞争阶段金额3200万竟比方案商谈2600万还高，宽度不缩反扩（红色异常），覆盖率82%（22→18）远超历史基准50%，停留45天。大量商机卡在竞争阶段赢不下来——讲解点：宽度逆势变宽+停留超时=竞争打法有硬伤，需要针对性复盘对手策略。',
+        desc: '场景C·竞争阶段堆积：竞争阶段金额3200万竟比方案商谈2600万还高，金额逆势123%（宽度不缩反扩），商机覆盖率82%（22→18）远超历史基准50%，停留45天。大量商机卡在竞争阶段赢不下来——讲解点：金额逆势变宽+停留超时=竞争打法有硬伤，需要针对性复盘对手策略。'
         stages: [
           { name: '线索',       amount: 8000, count: 100, days: 12, histRate: 42, color: '#3b82f6' },
           { name: '需求确认',   amount: 4400, count: 45,  days: 16, histRate: 55, color: '#22c55e' },
@@ -227,10 +228,18 @@
       return Math.round(stages[i+1].count / stages[i].count * 100);
     }
 
+    // 金额变化率 = 下一阶段金额 ÷ 当前阶段金额。正常漏斗应 ≤100%；若 >100% 则为金额逆势/倒灌
+    function calcAmountRatio(i) {
+      if (i >= stages.length - 1) return null;
+      if (!stages[i].amount) return 0;
+      return Math.round(stages[i+1].amount / stages[i].amount * 100);
+    }
+
     function detectAnomalies() {
       const anomalies = stages.map(() => []);
       for (let i = 0; i < stages.length - 1; i++) {
-        if (stages[i+1].amount > stages[i].amount) anomalies[i+1].push('金额高于上阶段');
+        const amountRatio = calcAmountRatio(i);
+        if (stages[i+1].amount > stages[i].amount) anomalies[i+1].push(`金额逆势${amountRatio}%`);
         if (stages[i+1].count > stages[i].count) anomalies[i+1].push('商机数高于上阶段');
         if (stages[i].days > 20) anomalies[i].push('停留超20天');
         // 入口覆盖率 vs 历史转化率 严重偏离 → 给下游阶段卡片打标
@@ -323,12 +332,17 @@
           } else {
             diffHtml = `<span class="diff-pill diff-low">▼ 低于历史${-diff}个百分点 · 转化流失</span>`;
           }
-          const nextHasAnomaly = anomalies[i+1].some(a => a.includes('高于上阶段'));
+          const nextHasAnomaly = anomalies[i+1].some(a => a.includes('逆势') || a.includes('高于上阶段'));
+          const amountRatio = calcAmountRatio(i);
+          const amountRatioHtml = amountRatio > 100
+            ? `<span style="color:#dc2626;font-weight:700;">金额逆势 <strong>${amountRatio}%</strong></span>`
+            : `<span>金额变化 <strong>${amountRatio}%</strong></span>`;
           const arrow = document.createElement('div');
           arrow.className = 'arrow-row';
           arrow.innerHTML = `
             <span style="color:#1e293b;background:#f1f5f9;border-radius:12px;padding:2px 10px;font-weight:700;">${stages[i].name} → ${stages[i+1].name}</span>
-            <span>↓ 当下覆盖率 <strong>${coverage}%</strong>（${stages[i].count} → ${stages[i+1].count}）</span>
+            <span>商机 ${stages[i].count} → ${stages[i+1].count} · 覆盖率 <strong>${coverage}%</strong></span>
+            <span>金额 ${formatAmount(stages[i].amount)}万 → ${formatAmount(stages[i+1].amount)}万 · ${amountRatioHtml}</span>
             <span>历史转化率 <strong>${hist}%</strong></span>
             ${diffHtml}
             <span>停留${stage.days}天${stage.days > 20 ? ' ⚠️' : ''}</span>
