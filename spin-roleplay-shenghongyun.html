@@ -235,31 +235,6 @@
             flex-wrap: wrap;
         }
         
-        /* 讲师话术 */
-        .teacher-box {
-            background: #E8F8F5;
-            border: 1px solid #A3E4D7;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-        .teacher-box h4 {
-            color: #148F77;
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-        .teacher-box p {
-            font-size: 14px;
-            margin-bottom: 8px;
-            padding-left: 15px;
-            position: relative;
-        }
-        .teacher-box p:before {
-            content: "💬";
-            position: absolute;
-            left: 0;
-        }
-        
         /* 注意事项 */
         .warning-box {
             background: #FFF3CD;
@@ -308,7 +283,6 @@
         <button class="nav-btn" onclick="switchTab(1)">👥 角色卡</button>
         <button class="nav-btn" onclick="switchTab(2)">🎓 SPIN提示</button>
         <button class="nav-btn" onclick="switchTab(3)">📊 评分表</button>
-        <button class="nav-btn" onclick="switchTab(4)">🗣️ 讲师话术</button>
     </div>
     
     <div class="content">
@@ -693,59 +667,6 @@
             </div>
         </div>
         
-        <!-- Tab 4: 讲师话术 -->
-        <div class="tab-content" id="tab4">
-            <div class="card">
-                <div class="card-title">🗣️ 讲师引导话术（逐字稿）</div>
-                <p style="margin-bottom:20px;color:#666;font-size:14px;">在课堂演练的不同阶段，讲师需要引导学员进入状态、控制节奏、点评反馈。以下是分阶段的<strong>逐字稿参考</strong>。</p>
-                
-                <div class="teacher-box">
-                    <h4>📣 开场白（演练开始前5分钟）</h4>
-                    <p>"各位，接下来我们做一个SPIN提问的实战演练。大家刚才在线上工具里练了16个场景，对吧？那个是'单人练习'，现在是'真人对抗'。"</p>
-                    <p>"我们今天的场景是：你是盛鸿运的销售经理，去拜访老客户欣联电路。他们今年为了降本，引入了一家单价低12%的新供应商，采购陈总给了你压力——'要不你也降点价，要不份额就得让一让'。你的任务不是降价，而是通过提问，让陈总自己说出'还是盛鸿运靠谱'。"</p>
-                    <p>"现在大家分成3人一组：一个人扮演销售，一个人扮演陈总，一个人当观察者给我打分。10分钟准备，然后每组派代表上来演练。"</p>
-                </div>
-                
-                <div class="teacher-box">
-                    <h4>📣 分组指导（准备阶段）</h4>
-                    <p>"扮演销售的学员，记住：你的目标是<strong>让客户自己说出痛点</strong>，不是你说痛点！如果你一直在说我们的精度多高、我们是小巨人，那你就是在推销，不是在用SPIN。"</p>
-                    <p>"扮演陈总的学员，不要一下子把所有不满都说出来。你要'挤牙膏'——销售问得好，你就多说一点；销售问得不好，你就'还好还好'。记住你老板压着降本指标，你对新供应商是'既得意又没底'。"</p>
-                    <p>"观察者的任务很重要——你不是在'看热闹'，你要认真打分，特别是看销售有没有'跳步骤'或者'跳过P直接推销'。"</p>
-                </div>
-                
-                <div class="teacher-box">
-                    <h4>📣 演练中（如果销售卡住了）</h4>
-                    <p>"等一下——刚才你问了一个S问题，客户回答了，然后你直接跳到介绍产品了。停！回到刚才那个回答，<strong>深挖一下</strong>——'陈总，您刚才说SMT那边有时候要对位反复调，这个一般是怎么处理的？'"</p>
-                    <p>"大家注意——销售刚才问了一句'打样速度上研发有没有意见'，陈总明显有顾虑但没说。销售你感觉到了吗？<strong>这时候应该追问，而不是换个话题</strong>。"</p>
-                </div>
-                
-                <div class="teacher-box">
-                    <h4>📣 点评反馈（演练结束后）</h4>
-                    <p>"好，先给这组鼓个掌。现在我来点评——"</p>
-                    <p>"<strong>亮点：</strong>销售在P阶段问了一句'SMT那边用下来还顺手吗，有没有需要多花点精力调试的情况'，这个问法很好——不是直接说'新供应商公差不行'，而是用'有没有'让客户自己承认。"</p>
-                    <p>"<strong>改进点：</strong>在I阶段，销售问了'如果公差偏大，产能是不是打折扣'，但只问了一句就跳到N了。其实这里可以再<strong>深挖两层</strong>——'这个产能损失一个月是多少钱？''如果去年那批报废的板子再发生一次，账怎么算？'把痛点彻底放大，客户才会真的有动力去跟老板争取。"</p>
-                    <p>"<strong>给所有人的建议：</strong>SPIN不是'四个步骤走一遍'，而是<strong>让客户从'没问题'走到'有问题而且很痛'走到'我想要解决方案'</strong>。这个过程，销售的话要<strong>越来越少</strong>，客户的话要<strong>越来越多</strong>。"</p>
-                </div>
-                
-                <div class="teacher-box">
-                    <h4>📣 总结升华（所有组演练完毕后）</h4>
-                    <p>"今天的演练，大家有没有发现一个问题——<strong>我们盛鸿运的销售经理，都很能说</strong>。这个在过去是优势，因为你要给别人讲清楚你的工艺有多好。"</p>
-                    <p>"但现在的客户，<strong>不缺信息，缺的是被理解</strong>。采购每天被老板压降本，你越能问出他心里的苦，他越觉得你懂他。你越急着证明自己便宜，他越觉得你心虚。"</p>
-                    <p>"SPIN不是技巧，是<strong>思维方式</strong>——从'我要卖什么'变成'客户需要什么'。今天这个场景，核心就一句话：<strong>让客户自己算清楚账</strong>——省下的单价，抵不抵得过损失的产能和交期。谁帮他把这笔账算明白，谁就是他的主供。"</p>
-                </div>
-                
-                <div class="warning-box">
-                    <h4>💡 常见课堂意外处理</h4>
-                    <p><strong>1. 客户角色"太配合"</strong>——陈总一下子把所有痛点都说出来了。→ 叫停，告诉"客户"：你演得太"送分"了，要难搞一点，先打太极。<br>
-                    <strong>2. 销售"背SPIN步骤"</strong>——明显在背诵，对话不自然。→ 叫停，问大家：你们觉得刚才像什么？像"聊天"还是像"审问"？<br>
-                    <strong>3. 时间超时</strong>——一组演练超过15分钟。→ 设定计时器，10分钟一到就喊停，用"时间关系我们先到这里"保持节奏。</p>
-                </div>
-                
-                <div class="btn-row">
-                    <button class="btn btn-primary" onclick="window.print()">🖨️ 打印讲师话术</button>
-                </div>
-            </div>
-        </div>
     </div>
     
     <script>
