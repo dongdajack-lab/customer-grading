@@ -10,26 +10,27 @@
     body { font-family: 'Noto Sans SC', sans-serif; background:#f8fafc; }
     .stage-card {
       position: relative;
-      border-radius: 12px;
-      padding: 18px 24px;
+      border-radius: 10px;
+      padding: 16px 20px;
       color: white;
       display: flex;
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 4px 15px rgba(0,0,0,0.12);
       transition: all 0.3s ease;
-      min-height: 72px;
+      min-height: 66px;
+      box-sizing: border-box;
     }
     .stage-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.18); }
-    .stage-name { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; width: 90px; }
-    .stage-amount { font-size: 28px; font-weight: 700; }
-    .stage-unit { font-size: 16px; font-weight: 500; }
-    .stage-count { font-size: 16px; font-weight: 500; opacity: 0.95; }
+    .stage-name { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; flex-shrink: 0; }
+    .stage-amount { font-size: 24px; font-weight: 700; white-space: nowrap; }
+    .stage-unit { font-size: 14px; font-weight: 500; }
+    .stage-count { font-size: 14px; font-weight: 500; opacity: 0.95; white-space: nowrap; flex-shrink: 0; }
     .arrow-row {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      padding: 10px 0 10px 24px;
+      justify-content: center;
+      padding: 8px 0;
       gap: 24px;
       font-size: 14px;
       color: #059669;
@@ -45,23 +46,31 @@
       font-size: 14px;
       outline: none;
       transition: border-color 0.2s;
+      box-sizing: border-box;
     }
     .input-cell:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.1); }
-    .editable { cursor: text; border-bottom: 1px dashed rgba(255,255,255,0.4); }
     .anomaly-badge {
       position: absolute;
-      top: -8px;
-      right: -8px;
+      top: -10px;
+      right: -6px;
       background: #fee2e2;
       color: #991b1b;
       font-size: 12px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 3px 10px;
       border-radius: 20px;
       border: 1px solid #fecaca;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      white-space: nowrap;
     }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .rate-pill {
+      display:inline-block;
+      background: rgba(255,255,255,0.25);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -79,7 +88,7 @@
           <h2 class="text-lg font-bold text-slate-800">阶段数据</h2>
           <button onclick="resetData()" class="text-sm px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">恢复示例数据</button>
         </div>
-        <p class="text-xs text-slate-500 mb-4">点击表格中的数字可直接修改，图表会实时更新。异常阶段会自动标红提示。</p>
+        <p class="text-xs text-slate-500 mb-4">点击表格中的数字可直接修改，图表实时更新。<strong>转化率由系统按相邻阶段商机数自动计算，永远不可能超过100%。</strong></p>
         
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
@@ -88,7 +97,6 @@
                 <th class="text-left py-2 font-medium">阶段</th>
                 <th class="text-right py-2 font-medium">金额(万)</th>
                 <th class="text-right py-2 font-medium">商机数</th>
-                <th class="text-right py-2 font-medium">转化率%</th>
                 <th class="text-right py-2 font-medium">停留天</th>
               </tr>
             </thead>
@@ -99,10 +107,11 @@
         <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
           <h3 class="font-bold text-amber-800 mb-2 text-sm">📌 课堂讲解要点</h3>
           <ul class="text-xs text-amber-900 space-y-1.5">
-            <li>• 正常管道应呈"上宽下窄"的漏斗形态</li>
-            <li>• 若某阶段金额/商机数反而比上一阶段多，说明阶段划分或数据统计口径有问题</li>
+            <li>• 正常管道应呈"上宽下窄"的漏斗形态：宽度=金额，一眼看出是否符合漏斗形状</li>
+            <li>• 若某阶段宽度反而比上一阶段宽，说明阶段划分或数据统计口径有问题</li>
             <li>• 停留天数过长 = 该阶段存在卡点，需要配套打法或资源投入</li>
             <li>• 转化率骤降 = 要么前端线索质量差，要么该阶段销售动作不到位</li>
+            <li>• 管道里商机总数要够多（百个量级），漏斗统计才有参考意义</li>
           </ul>
         </div>
       </div>
@@ -110,9 +119,9 @@
       <!-- 右侧：漏斗可视化 -->
       <div class="lg:col-span-7">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 lg:p-8">
-          <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
             <h2 class="text-lg font-bold text-slate-800">管道可视化</h2>
-            <div class="flex gap-4 text-xs text-slate-500">
+            <div class="flex gap-4 text-xs text-slate-500 flex-wrap">
               <span><span class="legend-dot bg-blue-600"></span>线索获客</span>
               <span><span class="legend-dot bg-emerald-600"></span>推进中</span>
               <span><span class="legend-dot bg-orange-500"></span>方案/竞争</span>
@@ -127,13 +136,14 @@
   </div>
 
   <script>
+    // 示例数据：商机总量约100个，转化率由商机数自动计算（恒≤100%）
     const defaultStages = [
-      { name: '线索', amount: 4800, count: 2, rate: 100, days: 12, color: '#3b82f6' },
-      { name: '需求确认', amount: 2700, count: 2, rate: 100, days: 16, color: '#22c55e' },
-      { name: '方案商谈', amount: 4500, count: 2, rate: 150, days: 17, color: '#f97316' },
-      { name: '竞争', amount: 14000, count: 3, rate: 67, days: 25, color: '#9333ea' },
-      { name: '签约', amount: 3600, count: 2, rate: 50, days: 12, color: '#16a34a' },
-      { name: '交付回款', amount: 1800, count: 1, rate: 50, days: 0, color: '#6b7280' }
+      { name: '线索',       amount: 8000, count: 100, days: 12, color: '#3b82f6' },
+      { name: '需求确认',   amount: 4400, count: 45,  days: 16, color: '#22c55e' },
+      { name: '方案商谈',   amount: 2600, count: 22,  days: 18, color: '#f97316' },
+      { name: '竞争',       amount: 1400, count: 11,  days: 25, color: '#9333ea' },
+      { name: '签约',       amount: 750,  count: 6,   days: 10, color: '#16a34a' },
+      { name: '交付回款',   amount: 600,  count: 5,   days: 15, color: '#6b7280' }
     ];
 
     let stages = JSON.parse(JSON.stringify(defaultStages));
@@ -142,10 +152,17 @@
       return n.toLocaleString('zh-CN');
     }
 
+    // 转化率 = 下一阶段商机数 ÷ 当前阶段商机数（自动计算，不会超过100%）
+    function calcRate(i) {
+      if (i >= stages.length - 1) return null;
+      if (!stages[i].count) return 0;
+      return Math.round(stages[i+1].count / stages[i].count * 100);
+    }
+
     function detectAnomalies() {
       const anomalies = stages.map(() => []);
       for (let i = 0; i < stages.length - 1; i++) {
-        // 金额异常膨胀
+        // 金额异常膨胀（漏斗形状被打破）
         if (stages[i+1].amount > stages[i].amount) {
           anomalies[i+1].push('金额高于上阶段');
         }
@@ -165,11 +182,12 @@
       const tbody = document.getElementById('dataTableBody');
       tbody.innerHTML = '';
       stages.forEach((stage, i) => {
+        const rate = calcRate(i);
         const tr = document.createElement('tr');
         tr.className = 'border-b border-slate-100 hover:bg-slate-50';
         tr.innerHTML = `
           <td class="py-2">
-            <input class="input-cell" value="${stage.name}" onchange="updateField(${i}, 'name', this.value)" style="width:90px;">
+            <input class="input-cell" value="${stage.name}" onchange="updateField(${i}, 'name', this.value)" style="width:88px;">
           </td>
           <td class="py-2">
             <input class="input-cell text-right" type="number" value="${stage.amount}" onchange="updateField(${i}, 'amount', parseFloat(this.value)||0)">
@@ -178,18 +196,30 @@
             <input class="input-cell text-right" type="number" value="${stage.count}" onchange="updateField(${i}, 'count', parseInt(this.value)||0)">
           </td>
           <td class="py-2">
-            <input class="input-cell text-right" type="number" value="${stage.rate}" onchange="updateField(${i}, 'rate', parseFloat(this.value)||0)">
-          </td>
-          <td class="py-2">
             <input class="input-cell text-right" type="number" value="${stage.days}" onchange="updateField(${i}, 'days', parseInt(this.value)||0)">
           </td>
         `;
         tbody.appendChild(tr);
       });
+
+      // 汇总行
+      const totalRow = document.createElement('tr');
+      totalRow.className = 'bg-slate-50 font-bold';
+      const totalAmount = stages.reduce((s, x) => Math.max(s, x.amount), 0);
+      const totalCount = stages[0].count;
+      const totalDays = stages.reduce((s, x) => s + x.days, 0);
+      totalRow.innerHTML = `
+        <td class="py-2 text-slate-700">全程汇总</td>
+        <td class="py-2 text-right text-slate-700"></td>
+        <td class="py-2 text-right text-slate-700">${totalCount}个起点</td>
+        <td class="py-2 text-right text-slate-700">${totalDays}天</td>
+      `;
+      tbody.appendChild(totalRow);
     }
 
     function updateField(index, field, value) {
       stages[index][field] = value;
+      renderTable();
       renderFunnel();
     }
 
@@ -200,15 +230,17 @@
       const maxAmount = Math.max(...stages.map(s => s.amount));
 
       stages.forEach((stage, i) => {
-        // 阶段卡片
-        const widthPct = Math.max(35, (stage.amount / maxAmount) * 100);
+        // 宽度严格按金额等比缩放（最大阶段=100%宽，最小限25%保证可读）
+        const widthPct = Math.max(25, Math.round(stage.amount / maxAmount * 100));
         const card = document.createElement('div');
-        card.className = 'mx-auto';
         card.style.width = widthPct + '%';
-        card.style.minWidth = '220px';
+        card.style.margin = '0 auto';
+        card.style.minWidth = '230px';
+        card.style.maxWidth = '100%';
         
         const hasAnomaly = anomalies[i].length > 0;
         const anomalyHtml = hasAnomaly ? `<div class="anomaly-badge">⚠️ ${anomalies[i].join(' · ')}</div>` : '';
+        const rate = calcRate(i);
         
         card.innerHTML = `
           <div class="stage-card" style="background:${stage.color}; ${hasAnomaly ? 'box-shadow:0 0 0 3px #ef4444, 0 4px 15px rgba(0,0,0,0.12);' : ''}">
@@ -224,16 +256,13 @@
         container.appendChild(card);
 
         // 转化率/停留天数箭头行（最后一个阶段之后不显示）
-        if (i < stages.length - 1) {
+        if (rate !== null) {
           const nextHasAnomaly = anomalies[i+1].some(a => a.includes('高于上阶段'));
           const arrow = document.createElement('div');
           arrow.className = 'arrow-row' + (nextHasAnomaly ? ' warning' : '');
-          arrow.style.width = widthPct + '%';
-          arrow.style.marginLeft = 'auto';
-          arrow.style.marginRight = 'auto';
-          arrow.style.minWidth = '220px';
+          arrow.style.width = '100%';
           arrow.innerHTML = `
-            <span><span class="arrow-icon">↓</span> 转化率 ${stage.rate}%</span>
+            <span><span class="arrow-icon">↓</span> 转化率 <strong>${rate}%</strong>（${stages[i].count} → ${stages[i+1].count}）</span>
             <span>平均停留 ${stage.days}天</span>
             ${nextHasAnomaly ? '<span class="font-bold">🔍 此处管道异常，请关注</span>' : ''}
           `;
