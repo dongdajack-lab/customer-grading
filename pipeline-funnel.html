@@ -26,6 +26,10 @@
     .stage-amount { font-size: 24px; font-weight: 700; white-space: nowrap; }
     .stage-unit { font-size: 14px; font-weight: 500; }
     .stage-count { font-size: 14px; font-weight: 500; opacity: 0.95; white-space: nowrap; flex-shrink: 0; }
+    .stage-card.compact { flex-wrap: wrap; padding: 12px 16px; row-gap: 2px; }
+    .stage-card.compact .stage-name { width: 100%; font-size: 15px; }
+    .stage-card.compact .stage-amount { font-size: 20px; }
+    .stage-card.compact .stage-count { font-size: 13px; }
     .arrow-row {
       display: flex;
       align-items: center;
@@ -170,7 +174,7 @@
           { name: '线索',       amount: 8000, count: 100, days: 12, histRate: 42, color: '#3b82f6' },
           { name: '需求确认',   amount: 4400, count: 45,  days: 16, histRate: 55, color: '#22c55e' },
           { name: '方案商谈',   amount: 2600, count: 22,  days: 18, histRate: 50, color: '#f97316' },
-          { name: '竞争',       amount: 1400, count: 11,  days: 25, histRate: 55, color: '#9333ea' },
+          { name: '竞争',       amount: 1400, count: 11,  days: 18, histRate: 55, color: '#9333ea' },
           { name: '签约',       amount: 750,  count: 6,   days: 10, histRate: 85, color: '#16a34a' },
           { name: '交付回款',   amount: 600,  count: 5,   days: 15, histRate: null, color: '#6b7280' }
         ]
@@ -187,14 +191,14 @@
         ]
       },
       narrow: {
-        desc: '场景B·方案商谈过窄：方案商谈覆盖率只有18%（45→8），远低于历史基准55%，宽度骤然缩成细条。前端线索和需求确认都正常，但商机推进不到方案商谈——讲解点：覆盖率远低于历史值=该阶段转化流失，要么需求确认质量虚高，要么方案能力/资源不足。',
+        desc: '场景B·方案商谈过窄：进入方案商谈的覆盖率只有18%（45→8），远低于历史基准55%，金额骤缩到只有线索的11%，宽度断崖式收窄，卡片本身标红「入口覆盖率仅18%」。前端线索和需求确认都正常，但商机推进不到方案商谈——讲解点：覆盖率远低于历史值=该阶段转化流失。注意末端商机数少，覆盖率天然波动大，重点看方案商谈的断崖。',
         stages: [
           { name: '线索',       amount: 8000, count: 100, days: 12, histRate: 42, color: '#3b82f6' },
           { name: '需求确认',   amount: 4400, count: 45,  days: 16, histRate: 55, color: '#22c55e' },
           { name: '方案商谈',   amount: 900,  count: 8,   days: 18, histRate: 55, color: '#f97316' },
-          { name: '竞争',       amount: 600,  count: 6,   days: 25, histRate: 50, color: '#9333ea' },
-          { name: '签约',       amount: 400,  count: 3,   days: 10, histRate: 55, color: '#16a34a' },
-          { name: '交付回款',   amount: 350,  count: 3,   days: 15, histRate: null, color: '#6b7280' }
+          { name: '竞争',       amount: 500,  count: 4,   days: 25, histRate: 50, color: '#9333ea' },
+          { name: '签约',       amount: 300,  count: 2,   days: 10, histRate: 50, color: '#16a34a' },
+          { name: '交付回款',   amount: 250,  count: 2,   days: 15, histRate: null, color: '#6b7280' }
         ]
       },
       competition: {
@@ -229,6 +233,14 @@
         if (stages[i+1].amount > stages[i].amount) anomalies[i+1].push('金额高于上阶段');
         if (stages[i+1].count > stages[i].count) anomalies[i+1].push('商机数高于上阶段');
         if (stages[i].days > 20) anomalies[i].push('停留超20天');
+        // 入口覆盖率 vs 历史转化率 严重偏离 → 给下游阶段卡片打标
+        const cov = calcCoverage(i);
+        const hist = stages[i].histRate;
+        if (cov !== null && hist !== null && hist !== undefined) {
+          const diff = cov - hist;
+          if (diff < -8) anomalies[i+1].push(`入口覆盖率仅${cov}%·转化流失`);
+          else if (diff > 8) anomalies[i+1].push(`入口堆积（覆盖率${cov}%）`);
+        }
       }
       return anomalies;
     }
@@ -273,19 +285,20 @@
       const maxAmount = Math.max(...stages.map(s => s.amount));
 
       stages.forEach((stage, i) => {
-        // 宽度严格按金额等比缩放（最大阶段=100%宽，最小限25%保证可读）
-        const widthPct = Math.max(25, Math.round(stage.amount / maxAmount * 100));
+        // 宽度严格按金额等比缩放（最大阶段=100%宽，最小限12%保证可读）
+        const widthPct = Math.max(12, Math.round(stage.amount / maxAmount * 100));
+        const isCompact = widthPct < 30;
         const card = document.createElement('div');
         card.style.width = widthPct + '%';
         card.style.margin = '0 auto';
-        card.style.minWidth = '235px';
+        card.style.minWidth = isCompact ? '150px' : '235px';
         card.style.maxWidth = '100%';
         
         const hasAnomaly = anomalies[i].length > 0;
         const anomalyHtml = hasAnomaly ? `<div class="anomaly-badge">⚠️ ${anomalies[i].join(' · ')}</div>` : '';
         
         card.innerHTML = `
-          <div class="stage-card" style="background:${stage.color}; ${hasAnomaly ? 'box-shadow:0 0 0 3px #ef4444, 0 4px 15px rgba(0,0,0,0.12);' : ''}">
+          <div class="stage-card${isCompact ? ' compact' : ''}" style="background:${stage.color}; ${hasAnomaly ? 'box-shadow:0 0 0 3px #ef4444, 0 4px 15px rgba(0,0,0,0.12);' : ''}">
             ${anomalyHtml}
             <div class="stage-name">${stage.name}</div>
             <div class="text-center">
@@ -297,7 +310,7 @@
         `;
         container.appendChild(card);
 
-        // 覆盖率 vs 历史转化率 对比行
+        // 覆盖率 vs 历史转化率 对比行（明确标注是哪两个阶段之间的数据）
         const coverage = calcCoverage(i);
         if (coverage !== null) {
           const hist = stage.histRate;
@@ -314,6 +327,7 @@
           const arrow = document.createElement('div');
           arrow.className = 'arrow-row';
           arrow.innerHTML = `
+            <span style="color:#1e293b;background:#f1f5f9;border-radius:12px;padding:2px 10px;font-weight:700;">${stages[i].name} → ${stages[i+1].name}</span>
             <span>↓ 当下覆盖率 <strong>${coverage}%</strong>（${stages[i].count} → ${stages[i+1].count}）</span>
             <span>历史转化率 <strong>${hist}%</strong></span>
             ${diffHtml}
