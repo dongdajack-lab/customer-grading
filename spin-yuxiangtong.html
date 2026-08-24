@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - 鱼翔通定制版</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;min-height:100vh}
+  header{background:linear-gradient(135deg,#0E4D64,#2E86C1);color:white;padding:24px 32px;text-align:center}
+  header h1{font-size:26px}
+  header .subtitle{font-size:14px;opacity:.85;margin-top:6px}
+  header .company-tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px}
+  header .custom-tag{display:inline-block;background:#F39C12;border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px;margin-left:8px;font-weight:700;color:#fff}
+  .container{max-width:800px;margin:0 auto;padding:32px 20px}
+  .progress-bar{height:6px;background:#ddd;border-radius:3px;margin-bottom:24px;overflow:hidden}
+  .progress-fill{height:100%;background:#2E86C1;border-radius:3px;transition:width .4s}
+  .progress-text{text-align:right;font-size:13px;color:#888;margin-bottom:4px}
+  .spin-hint{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .spin-tag{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .tag-S{background:#EBF5FB;color:#2980B9}
+  .tag-P{background:#FDEDEC;color:#E67E22}
+  .tag-I{background:#FADBD8;color:#C0392B}
+  .tag-N{background:#E8F8F5;color:#27AE60}
+  .card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+  .question-badge{display:inline-block;background:#2E86C1;color:white;border-radius:20px;padding:4px 14px;font-size:13px;margin-bottom:16px}
+  .scenario{background:#f8f9fa;border-left:4px solid #2E86C1;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;line-height:1.8;color:#333}
+  .scenario .label{font-weight:600;color:#0E4D64}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1.6}
+  .option:hover{border-color:#2E86C1;background:#E8F6F3}
+  .option.selected{border-color:#2E86C1;background:#E8F6F3}
+  .option.correct{border-color:#27AE60;background:#E8F8F5}
+  .option.wrong{border-color:#E74C3C;background:#FDEDEC}
+  .option .radio{min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+  .option.selected .radio{border-color:#2E86C1;background:#2E86C1}
+  .option.selected .radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%;display:block}
+  .option .text{flex:1}
+  .explanation{margin-top:20px;padding:16px 20px;background:#E8F8F5;border-radius:12px;display:none}
+  .explanation.show{display:block}
+  .explanation h4{color:#27AE60;font-size:15px;margin-bottom:8px}
+  .explanation p{font-size:14px;color:#333;line-height:1.7}
+  .correct-answer{margin-top:20px;padding:14px 18px;background:#FFF3CD;border:2px solid #F0AD4E;border-radius:12px;display:none;font-size:14px;line-height:1.6}
+  .correct-answer.show{display:block}
+  .correct-answer .clabel{font-weight:700;color:#E67E22;margin-bottom:6px}
+  .opt-label{font-weight:700;color:#0E4D64;margin-right:6px}
+  .btn-row{display:flex;gap:12px;margin-top:24px}
+  .btn{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+  .btn-primary{background:#2E86C1;color:white}
+  .btn-primary:hover{background:#0e6b5c}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed}
+  .btn-secondary{background:#f0f0f0;color:#333}
+  .btn-secondary:hover{background:#e0e0e0}
+  .result-page{display:none}
+  .result-page.show{display:block;text-align:center}
+  .score-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#0E4D64,#2E86C1);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .num{font-size:48px;font-weight:700;line-height:1}
+  .score-circle .slabel{font-size:14px;margin-top:4px;opacity:.85}
+  .percent-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .percent-circle .num{font-size:36px;font-weight:700;color:#2E86C1;line-height:1}
+  .percent-circle .unit{font-size:20px;font-weight:700;color:#2E86C1}
+  .percent-circle .sub-label{font-size:13px;color:#999;margin-top:2px}
+  .result-detail{background:white;border-radius:16px;padding:24px;margin-top:20px;text-align:left}
+  .result-detail h3{font-size:17px;margin-bottom:12px;color:#333}
+  .result-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+  .result-item:last-child{border-bottom:none}
+  .restart-btn{margin-top:24px;padding:14px 48px;background:#2E86C1;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 挖痛练习</h1>
+  <p class="subtitle">SPIN四层提问法训练 · 共16题</p>
+  <span class="company-tag">🏢 鱼翔通智能科技 · 智慧城市服务商</span>
+  <span class="custom-tag">★ 苏州826定制</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="slabel">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" id="restartBtn">再来一次</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var questions = [
+  {
+    "scenario": "你初次拜访苏州某五星级酒店王总，酒店刚装修完准备开业。王总说：我们酒店280间客房，定位高端商务，硬件都是进口的。智能化这块当初设计院也画了图，但说实话，现在各个系统各跑各的，客房控制、灯光、空调、门锁全是不同厂家，前台天天接到客人投诉。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的现状？",
+    "options": [
+      {
+        "text": "王总，目前酒店客房控制系统、灯光系统、空调系统分别用的是哪几家产品？当初设计院画的整体方案落地了多少？前台接到客人投诉主要是什么类型（空调不会调/灯光不会开关/门锁打不开）？日均投诉量大概多少？各系统之间的数据有没有打通？",
+        "correct": true
+      },
+      {
+        "text": "系统各跑各的，管理起来是不是很头疼？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套统一的智慧酒店方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通是专精特新企业，做过很多智慧酒店项目，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：第一步摸清家底——系统品牌、设计院方案落地程度、投诉类型与频次、数据打通情况。五星级酒店总经理最在意「客人体验」和「投诉率」，先了解投诉的具体构成，后面提方案才有针对性。"
+  },
+  {
+    "scenario": "王总说：设计院画的图基本没落地，现在就是各厂家各装各的，系统间完全没有联动。日均投诉能有十来条，最多的是空调——客人进房间不是太冷就是太热，前台远程也调不了。门锁也头疼，蓝牙钥匙经常连不上，高峰期客人堵在走廊等开门。最烦的是能耗，空调和灯光没人管，空房也开着，电费一个月多烧好几万。",
+    "question": "王总说出了多个痛点（投诉多+能耗高），接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
+    "options": [
+      {
+        "text": "日均十来条投诉里，空调和门锁各占多少？高峰期客人堵在走廊等开门，平均要等多久？空房空调和灯光一直开着，一个月多烧的电费大概多少钱？这些投诉有没有影响过OTA评分和客户复购？前台远程调不了空调，是技术做不到还是权限没给？",
+        "correct": true
+      },
+      {
+        "text": "如果有一套智能方案能统一控制，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "一个月多烧好几万电费，那一年就是几十万啊。",
+        "correct": false
+      },
+      {
+        "text": "设计院画的图为什么没落地？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——投诉构成、等待时长、电费量化、OTA评分影响。酒店总经理的痛点是「客人投诉+电费浪费+OTA降分」，问得越具体，后面提「一站式智慧酒店方案」的针对性就越强。鱼翔通的核心能力是设计-施工-集成-运维全链条，必须先摸清系统散落在哪几个厂家手里。"
+  },
+  {
+    "scenario": "王总说：空调和门锁的投诉各占一半，高峰期客人等开门最久等过5分钟，直接投诉到总经理了。电费一个月多烧3-4万，一年下来40多万。更头疼的是上个月有个客人因为房间太热给了差评，OTA评分从4.8掉到4.7，我们酒店靠口碑吃饭，掉0.1分意味着淡季少接20间夜。",
+    "question": "王总说出了严重影响（差评+电费40万+OTA降分），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "OTA掉0.1分，淡季少接20间夜，按您的房价500元算，一年淡季3个月少收入9万；加上多烧的40万电费，一年光这两个问题就损失近50万。客人等开门5分钟给差评，如果这个差评被更多潜在客人看到呢？竞品酒店如果上了智慧系统、体验更好、能耗更低，你们的价格优势和口碑优势还能撑多久？",
+        "correct": true
+      },
+      {
+        "text": "那确实挺严重的，应该尽快解决。",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智慧酒店方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "竞品酒店现在用的是什么系统？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：三个维度放大影响——① 直接经济损失（50万/年）② 口碑放大效应（差评被更多客人看到）③ 竞争劣势（对手上了智慧系统后体验和成本双双超越）。让王总意识到，这不是「装不装智能系统」的问题，而是「一年亏50万+口碑往下掉」的生存问题。"
+  },
+  {
+    "scenario": "王总沉默了一会儿：你这么一算，这笔账确实不能不算。我们集团旗下3家酒店都有这个问题，如果有一套方案能统一管起来，客人满意、电费降下来，我愿意认真看看。但方案商太多了，说得好听的也多，我怕花了钱又装一套摆设。",
+    "question": "王总已经说出需求（3家酒店统一管+怕选错），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套智慧酒店方案能做到：客人入住自动调温调光、手机一键开门零等待、空房自动节能降耗40%、3家酒店统一一个平台管理——这让您的客人满意度、OTA评分回升、3家酒店一年的电费节省、以及您在集团里推动数字化升级的政绩，会变成什么样？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快选一家靠谱的方案商。",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通有一级资质，做过很多酒店项目，您要不要试试？",
+        "correct": false
+      },
+      {
+        "text": "王总，3家酒店的预算大概有多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导王总自己描绘「方案落地后的画面」——客人满意、OTA回升、电费省40%、3家统一管理、集团政绩。客户自己说出的价值，比你说十遍都有说服力。3家酒店意味着3倍的市场，N要落在「集团层面政绩」上。"
+  },
+  {
+    "scenario": "你拜访苏州某产业园运营总监赵总，园区入驻企业60多家，厂房面积20万平米。赵总说：我们园区去年改了一次照明和安防，但说实话就是换个灯泡加个摄像头，没有真正的智慧化。物业20多人天天巡检还是忙不过来，企业老总投诉说园区服务跟不上。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最全面地了解园区现状？",
+    "options": [
+      {
+        "text": "赵总，目前园区的安防摄像头有多少路？覆盖了哪些区域（周界/道路/出入口/重点厂房）？照明系统是集中控制还是分区手动？物业20多人具体负责哪些巡检任务？企业投诉的主要是什么问题？园区有没有自己的管理平台，数据是怎么收集的？",
+        "correct": true
+      },
+      {
+        "text": "物业20多人还忙不过来，是不是人手不够？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智慧园区方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通在智慧园区建设方面经验丰富，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：了解安防覆盖、照明控制方式、物业分工、企业投诉构成、管理平台现状。园区运营总监的痛点是「人少事多+企业不满意」，先摸清巡检模式和投诉内容，才能找准「智慧化减负」的切入点。"
+  },
+  {
+    "scenario": "赵总说：摄像头120路，主要覆盖周界和出入口，厂区内部基本是盲区。照明是分区域手动开关，每天有人专门跑一圈开灯关灯。物业20多人，12个人在巡检安防和照明，剩下的人管保洁绿化。企业投诉最多的是安防——去年有家企业仓库被撬，监控拍不到，赔了8万。照明也投诉，说有的区域太暗、有的白天也亮着浪费电。",
+    "question": "赵总说出了安防盲区和照明浪费两个痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "厂区内部监控盲区大概占多少比例？去年仓库被撬后有没有加装监控？手动开关照明每天需要多少人工时？白天亮着的区域一个月浪费多少电费？企业被撬赔的8万是园区承担还是保险赔的？安防和照明目前有没有联动机制？",
+        "correct": true
+      },
+      {
+        "text": "如果有一套智能安防+照明方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "8万赔付，园区承担了多少？",
+        "correct": false
+      },
+      {
+        "text": "12个人巡检，一年人工费多少？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——盲区比例、人工时消耗、电费量化、赔付归属、安防照明联动机制。园区的痛点是「安防盲区+照明浪费+人工低效」，问到联动机制，就抓住了「智慧园区一体化管理」的核心价值。"
+  },
+  {
+    "scenario": "赵总说：厂区盲区至少40%，被撬之后也没补，因为预算没批。手动开关照明一天要3个人跑半天。白天亮着的区域一个月浪费电费2万左右。被撬的8万园区承担了一半。最头疼的是今年招商压力大，好几家企业来看了说园区'不够智能'，转身去了隔壁新建的智慧园区。",
+    "question": "赵总说出了严重影响（招商流失+电费浪费+安防隐患），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "招商压力下企业嫌'不够智能'转身就走——一家企业流失意味着多少年租金？加上白天白亮的2万/月电费、12个人的巡检人力成本、还有下一次仓库被撬园区再承担的赔付——这些加起来一年损失多少？隔壁智慧园区已经在抢你的客户了，差距只会越拉越大，这个趋势您怎么看？",
+        "correct": true
+      },
+      {
+        "text": "那确实挺严重的，应该想办法升级。",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智慧园区方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "隔壁智慧园区是哪家做的？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大三个维度——① 招商流失（年租金损失）② 运营浪费（电费+人力+赔付）③ 竞争劣势（隔壁智慧园区抢客户）。园区运营总监最怕的是「招商留不住」，让赵总看到，不升级不只是「浪费钱」，而是「客户被抢走、园区竞争力下降」的生存问题。"
+  },
+  {
+    "scenario": "赵总说：你这么一分析，确实不能再拖了。今年管委会给了专项预算做智慧化升级，但我缺的是一套能打动领导的方案——不能只讲技术，得讲清能省多少钱、能多招多少商。",
+    "question": "赵总已经说出需求（打动领导的方案），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套智慧园区方案能做到：安防全覆盖无盲区、照明智能联动省电50%、物业巡检减半、园区数据一图总览——这让您向管委会汇报时「拿得出手」的底气、招商时「智慧园区」的招牌、以及从被动救火到主动管理的角色转变，会带来什么改变？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快把方案报上去。",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通有乙级设计资质，方案一定让您满意。",
+        "correct": false
+      },
+      {
+        "text": "赵总，专项预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导赵总描绘「方案落地后的画面」——汇报有底气、招商有招牌、管理变主动。园区运营的N要落在「管委会认可+招商竞争力」上，他自己说出这些价值，就会主动帮你推动预算审批。"
+  },
+  {
+    "scenario": "你拜访苏州某制造企业张总，企业150人，年产值8000万，做精密零部件。张总说：我们车间这两年上了MES和WMS，但说实话用得不好，数据对不上，设备联网也没做，质检还是靠人眼。政府一直推智改数转，我也想搞，但不知道从哪下手。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最清楚地了解他的智改数转现状？",
+    "options": [
+      {
+        "text": "张总，目前车间有多少台设备？联网的设备占比多少？MES和WMS是哪家实施的，用了多久？数据对不上具体是哪些数据对不上（产量/工时/库存）？质检现在靠人眼，不良率大概多少？政府推的智改数转有没有申报过什么项目？",
+        "correct": true
+      },
+      {
+        "text": "MES用得不好，是不是系统有问题？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智改数转方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通联合中国电信做5G全连接工厂，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：摸清设备联网率、MES/WMS实施情况、数据对不上的具体类型、质检方式和不良率、政府项目申报情况。制造企业的智改数转不是从零开始，而是「补课+升级」，先了解已有什么、缺什么，才能设计切入路径。"
+  },
+  {
+    "scenario": "张总说：设备60多台，联网的不到10台，都是老设备没接口。MES是去年找了一家软件公司做的，用了8个月，产量数据天天对不上——MES记的产量和实际入库差5%-8%。质检靠3个老师傅人眼盯，不良率3%左右。政府的项目没报过，不知道报什么。",
+    "question": "张总说出了数据不准和设备没联网的痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "MES产量和入库差5%-8%，差的那部分是什么原因（报数不准/损耗/返工/废品没录入）？没联网的50台设备，如果要做设备联网，主要卡在什么（设备太老没接口/预算/没有方案）？不良率3%在行业内是什么水平？3个老师傅如果退休了，质检怎么办？政府的智改数转补贴您了解过吗？",
+        "correct": true
+      },
+      {
+        "text": "如果有一套方案能解决这些问题，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "差5%-8%，一个月损失多少钱？",
+        "correct": false
+      },
+      {
+        "text": "那家做MES的软件公司是不是不靠谱？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——数据差异原因、设备联网瓶颈、不良率水平、质检人员风险、政府补贴了解程度。制造业老板最怕「花钱没效果」，问到老师傅退休风险和政府补贴，就抓住了「人才断档」和「政策红利」两个抓手。"
+  },
+  {
+    "scenario": "张总说：差的5%-8%主要是报数不准和废品没录入，工人手动报数经常记错。设备联网卡在没接口，要加装传感器，不知道值不值。不良率3%在行业算中等。老师傅还有2年退休，确实头疼，年轻人不会质检。政府补贴听人说有，但不知道怎么报。",
+    "question": "张总说出了数据不准+设备没联网+人才断档三个痛点，接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "产量差5%-8%，按您8000万年产值算，一年就是400-640万的误差——这些数据不准，怎么定价？怎么控制成本？设备没联网，出故障了才知道，停机一小时损失多少？老师傅2年退休，不良率3%如果升到5%，一年多废多少件？政府补贴不报，别人报了，同样的投入你多花自己的钱——这些加起来，一年损失多少？",
+        "correct": true
+      },
+      {
+        "text": "那确实挺严重的，应该尽快搞。",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智改数转方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "老师傅退休后打算招几个人替代？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大四个维度——① 数据不准导致定价成本失控（400-640万误差）② 设备没联网停机损失 ③ 人才断档不良率上升 ④ 不报补贴多花自己钱。让张总看到，智改数转不是「锦上添花」，而是「一年亏几百万+越来越被动」的生存问题。"
+  },
+  {
+    "scenario": "张总说：你这么一算，不搞不行了。但我怕的是——花了钱上了系统，最后用不起来变成摆设。我们之前上MES就这个教训，花了40万，用了个寂寞。",
+    "question": "张总说出了被MES伤过的顾虑，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一家服务商能做到：先诊断后实施、设备分批联网不推倒重来、MES数据自动采集不用人工报数、AI视觉质检替代人眼、全程帮你申报政府补贴——这让您的车间数据准确率、设备停机预警能力、质检人力释放、以及拿到的政府补贴，会变成什么样？",
+        "correct": true
+      },
+      {
+        "text": "那您应该找一家靠谱的服务商。",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通联合中国电信，方案一定不会让您失望。",
+        "correct": false
+      },
+      {
+        "text": "张总，这次预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导张总描绘「方案落地后的画面」——数据准确、设备预警、质检替代、补贴到手。制造企业的N要落在「花钱看得见回报」上，尤其是「帮你报补贴」这条，直击老板「不想多花自己钱」的心理。前一次被MES伤过，N必须强调「不推倒重来」来打消顾虑。"
+  },
+  {
+    "scenario": "你拜访苏州某高校后勤管理处处长，学校在校生1.2万人，宿舍20栋。刘处长说：我们宿舍管理靠人工，20栋楼每栋一个宿管阿姨，查寝靠跑腿，安防靠校门口的几个摄像头，食堂排队靠学生自觉。家长投诉、学生差评年年有。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解校园管理现状？",
+    "options": [
+      {
+        "text": "刘处，目前20栋宿舍每栋宿管阿姨几个人？查寝频率是多少（每天/每周）？校门口摄像头有几路、覆盖了哪些区域？宿舍内部和食堂有没有监控？学生差评和家长投诉主要集中在哪里？学校有没有统一的校园管理平台？",
+        "correct": true
+      },
+      {
+        "text": "宿管阿姨跑腿查寝，是不是很辛苦？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智慧校园方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通在智慧校园方面经验丰富，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：了解宿管人力配置、查寝频率、监控覆盖、投诉构成、平台现状。高校后勤处长的痛点是「人手少+管理粗+投诉多」，先摸清现状，才能找准「智慧校园安防+物联网管理」的切入点。"
+  },
+  {
+    "scenario": "刘处长说：每栋1个阿姨，每天查一次寝，主要查有没有违规电器和夜不归宿。摄像头校门口8路，宿舍楼走廊和食堂基本没覆盖。投诉最多的就是宿舍安全——上学期有宿舍用了违规电器差点着火，家长打电话到校长那里。食堂排队拥挤也投诉多，说等餐要15分钟。",
+    "question": "刘处长说出了安防盲区和违规电器两个痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "违规电器查出后怎么处理？走廊和食堂没有监控，发生纠纷或事故时怎么追责？每天查一次寝，有没有漏查的盲区？食堂排队15分钟，高峰期大概多长？上学期差点着火的事故，最后怎么处理的？有没有被上级通报？",
+        "correct": true
+      },
+      {
+        "text": "如果有一套智慧校园方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "差点着火，最后追责到谁了？",
+        "correct": false
+      },
+      {
+        "text": "每栋1个阿姨，人工费一年多少？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——违规电器处理方式、监控盲区追责风险、查寝盲区、食堂高峰期、事故处理和上级通报情况。高校后勤最怕「安全事故+家长投诉+上级追责」，问到通报层面，就抓住了「个人担责」这个深层痛点。"
+  },
+  {
+    "scenario": "刘处长说：违规电器没收加批评教育，但治标不治本。走廊没监控，上学期有学生丢过东西，查都没法查。差点着火那次校长亲自过问，我们处被通报批评，年底评优没了。食堂高峰期12点到12点半，排队能排到门外。我现在最怕的就是再出一次安全事故。",
+    "question": "刘处长说出了被通报+评优没了的严重影响，接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "一次差点着火就通报批评、评优没了——如果真的着了呢？学生的安全、家长的追责、上级的处分，这些您扛得住吗？走廊没监控，学生丢东西查不了，矛盾升级到家长闹到学校呢？食堂排队15分钟，学生拍短视频发网上呢？这些风险叠加起来，是不是已经影响到您的职业安全和学校声誉？",
+        "correct": true
+      },
+      {
+        "text": "那确实很危险，校园安全责任重大啊。",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智慧校园方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "校长对上次事故具体怎么说？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大「安全事故+家长追责+网络舆情」三重风险。高校安全是一票否决的底线工作，让刘处长意识到，不升级不是「管理粗一点」，而是「下一次事故来了扛不住」。走廊没监控=追责无据，食堂排队=潜在舆情，每个痛点背后都是个人风险。"
+  },
+  {
+    "scenario": "刘处长说：你这么一说，我确实后怕。学校今年有数字化专项预算，我也想推智慧校园，但方案汇报了两次校长都说'再研究'，我缺的是一个能说清楚价值、让校长拍板的方案。",
+    "question": "刘处长已经说出需求（让校长拍板的方案），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套智慧校园方案能做到：宿舍违规电器智能预警防患于未然、走廊食堂安防全覆盖无盲区、物联感知设备自动巡检替代人工、校园一张图全感知——这让校长拍板时的底气、校园安全事故零发生的保障、以及您从'救火队长'到'智慧校园推动者'的形象转变，会带来什么改变？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快把方案完善报上去。",
+        "correct": false
+      },
+      {
+        "text": "我们鱼翔通有一级资质，方案一定让校长满意。",
+        "correct": false
+      },
+      {
+        "text": "刘处，数字化专项预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导刘处长描绘「方案落地后的画面」——校长有底气拍板、安全事故零发生、个人形象逆转。高校后勤的N要落在「安全有保障+校长认可+个人形象提升」上，他自己说出这些价值，就会主动帮你推动校长拍板。"
+  }
+];
+
+  var currentQ = 0;
+  var answers = [];
+  var answered = false;
+
+  function renderQ() {
+    var q = questions[currentQ];
+    document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+    document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+    var badge = q.scenario.indexOf('S -')>=0 ? 'S 现状问题' : q.scenario.indexOf('P -')>=0 ? 'P 难点问题' : q.scenario.indexOf('I -')>=0 ? 'I 影响问题' : 'N 需求回报';
+    var card = document.getElementById('questionCard');
+    card.innerHTML = '<div class="question-badge">' + badge + '</div>' +
+      '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+      '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+      '<div class="options">' +
+      q.options.map(function(opt,i){
+        return '<div class="option" onclick="selectOpt(' + i + ')">' +
+          '<div class="radio"></div>' +
+          '<div class="text">' + opt.text + '</div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+      '<div class="explanation" id="explanation">' +
+        '<h4>✅ 解析</h4>' +
+        '<p>' + q.explain + '</p>' +
+      '</div>' +
+      '<div class="correct-answer" id="correctAnswer">' +
+        '<div class="clabel">💡 正确答案解析：</div>' +
+        '<div>' + q.explain + '</div>' +
+      '</div>';
+
+    answered = false;
+    document.getElementById('btnNext').textContent = '确认答案';
+    document.getElementById('btnNext').disabled = true;
+    document.getElementById('btnNext').onclick = checkAnswer;
+    document.getElementById('btnPrev').disabled = currentQ === 0;
+    document.getElementById('resultPage').classList.remove('show');
+    document.getElementById('quizPage').style.display = '';
+  }
+
+  window.selectOpt = function(idx) {
+    if (answered) return;
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+    window.selectedIdx = idx;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.checkAnswer = function() {
+    if (window.selectedIdx === undefined) return;
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('correctAnswer').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    document.getElementById('btnNext').onclick = nextQ;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.nextQ = function() {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      renderQ();
+    } else {
+      showResult();
+    }
+  };
+
+  window.prevQ = function() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQ();
+      if (answers[currentQ] !== undefined) {
+        answered = true;
+        var q = questions[currentQ];
+        var opts = document.querySelectorAll('.option');
+        opts.forEach(function(opt,i){
+          if (q.options[i].correct) opt.classList.add('correct');
+          if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+        });
+        document.getElementById('explanation').classList.add('show');
+        document.getElementById('correctAnswer').classList.add('show');
+        document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+        document.getElementById('btnNext').onclick = nextQ;
+      }
+    }
+  };
+
+  function showResult() {
+    document.getElementById('quizPage').style.display = 'none';
+    var score = answers.filter(function(a){return a;}).length;
+    var percent = Math.round(score / questions.length * 100);
+    document.getElementById('scoreNum').textContent = score;
+    document.getElementById('percentNum').textContent = percent;
+
+    var detail = '<h3>📊 答题详情</h3>';
+    questions.forEach(function(q,i){
+      var icon = answers[i] ? '✅' : '❌';
+      var title = q.scenario.substring(0, 40) + '...';
+      detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+    });
+    document.getElementById('resultDetail').innerHTML = detail;
+    document.getElementById('resultPage').classList.add('show');
+  }
+
+  document.getElementById('restartBtn').onclick = function() {
+    currentQ = 0;
+    answers = [];
+    window.selectedIdx = undefined;
+    answered = false;
+    renderQ();
+  };
+
+  document.getElementById('btnPrev').onclick = prevQ;
+
+  renderQ();
+})();
+</script>
+</body>
+</html>
