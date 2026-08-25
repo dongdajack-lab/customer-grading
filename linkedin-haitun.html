@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>领英开发五步法 · 海豚之星共创版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f6f8; color: #2c3e50; line-height: 1.7; padding: 24px 16px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, #0a4d8c 0%, #1173c4 60%, #1b8f4d 130%);
+    color: #fff; border-radius: 14px; padding: 26px 30px; margin-bottom: 18px;
+  }
+  .header h1 { font-size: 26px; letter-spacing: 1px; }
+  .header .sub { margin-top: 6px; font-size: 14px; opacity: .92; }
+  .header .badge {
+    display: inline-block; margin-top: 12px; background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.4); border-radius: 20px;
+    padding: 3px 14px; font-size: 13px; margin-right: 8px;
+  }
+  .flow {
+    display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .flow .step {
+    flex: 1; min-width: 150px; background: #fff; border-radius: 10px;
+    padding: 12px 10px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    border-top: 4px solid #1173c4; position: relative;
+  }
+  .flow .step .num { font-size: 22px; font-weight: 700; color: #1173c4; }
+  .flow .step .name { font-size: 14px; font-weight: 600; margin-top: 2px; }
+  .flow .step .q { font-size: 12px; color: #7f8c8d; margin-top: 2px; }
+  .flow .arrow { align-self: center; color: #95a5a6; font-size: 18px; font-weight: 700; }
+  .card {
+    background: #fff; border-radius: 12px; padding: 22px 26px; margin-bottom: 18px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.07);
+  }
+  .card h2 {
+    font-size: 19px; padding-left: 12px; border-left: 5px solid #1173c4; margin-bottom: 14px;
+  }
+  .card h2 .en { font-size: 13px; color: #95a5a6; font-weight: 400; margin-left: 8px; }
+  .card h3 { font-size: 15px; color: #0a4d8c; margin: 14px 0 6px; }
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 5px; font-size: 14px; }
+  li b { color: #0a4d8c; }
+  .kw {
+    display: inline-block; background: #eef5fc; border: 1px solid #bcd8f0;
+    border-radius: 6px; padding: 1px 10px; margin: 3px 4px 3px 0; font-size: 13px; color: #0a4d8c;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13.5px; }
+  th { background: #0a4d8c; color: #fff; padding: 8px 10px; text-align: left; }
+  td { border: 1px solid #e3e8ee; padding: 8px 10px; vertical-align: top; background: #fff; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .script {
+    background: #f4faf6; border: 1px solid #bfe3cd; border-radius: 10px;
+    padding: 14px 16px; font-size: 14px; margin-top: 12px;
+  }
+  .script .label { font-weight: 700; color: #1b8f4d; font-size: 13px; }
+  .script .en { font-family: Georgia, serif; color: #34495e; font-style: italic; }
+  .tip {
+    background: #fff8e8; border: 1px solid #f0dca8; border-radius: 10px;
+    padding: 12px 16px; font-size: 13.5px; margin-top: 12px; color: #7d6608;
+  }
+  .tip b { color: #b8860b; }
+  .footer {
+    text-align: center; color: #95a5a6; font-size: 12.5px; margin-top: 8px; padding: 10px;
+  }
+  .closing {
+    background: linear-gradient(135deg, #1b8f4d, #1173c4);
+    color: #fff; border-radius: 12px; padding: 20px 26px; font-size: 15px;
+  }
+  .closing b { color: #ffe082; }
+  @media (max-width: 760px) {
+    .flow { flex-direction: column; }
+    .flow .arrow { display: none; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card, .flow .step { box-shadow: none; border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <h1>领英开发五步法 · 海豚之星共创版</h1>
+    <div class="sub">线索收集十八招 · 互联网通道落地工具 —— 出海企业主动获客 SOP</div>
+    <div>
+      <span class="badge">目标客户：海外3PL / 冷链仓储 / 电商履约中心 / 制造工厂 / 叉车经销商</span>
+      <span class="badge">产品：AMR 智能物流搬运机器人</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="step"><div class="num">1</div><div class="name">搜索关键词</div><div class="q">怎么找到目标客户？</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="num">2</div><div class="name">主页分析与判断</div><div class="q">是不是我的客户？</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="num">3</div><div class="name">决策人及职位</div><div class="q">该跟谁聊？</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="num">4</div><div class="name">如何建立联系</div><div class="q">怎么搭上话？</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="num">5</div><div class="name">打造专业领英页面</div><div class="q">客户凭什么信我？</div></div>
+  </div>
+
+  <!-- 第1步 -->
+  <div class="card">
+    <h2>第 1 步 · 搜索关键词<span class="en">Search Keywords</span></h2>
+    <h3>① 产品关键词（搜到"用这类设备的人"）</h3>
+    <span class="kw">AMR / Autonomous Mobile Robot</span>
+    <span class="kw">AGV / Automated Guided Vehicle</span>
+    <span class="kw">Pallet Mover / Automated Pallet Jack</span>
+    <span class="kw">Forklift Automation / Automated Forklift</span>
+    <span class="kw">Reach Truck / Stacker Automation</span>
+    <span class="kw">Warehouse Robot / Intralogistics Robot</span>
+    <h3>② 应用场景关键词（搜到"有这个痛点的行业"）</h3>
+    <span class="kw">Cold Storage / Cold Chain Warehouse</span>
+    <span class="kw">Fulfillment Center / E-commerce Warehouse</span>
+    <span class="kw">3PL / Third-Party Logistics</span>
+    <span class="kw">Manufacturing / Factory Internal Logistics</span>
+    <span class="kw">Cross-docking / Distribution Center</span>
+    <h3>③ 成交客户网站关键词（搜到"相似画像的客户"）</h3>
+    <p style="font-size:14px;">把已成交客户（欧洲冷链仓、东南亚电商履约中心、海外超市配送仓）官网上的用词扒下来，用同类词去搜——<b>成交客户的"自我描述"，就是下一批客户的"搜索密码"</b>。</p>
+    <span class="kw">warehouse automation project</span>
+    <span class="kw">internal logistics solution</span>
+    <span class="kw">pallet transfer / pallet handling</span>
+    <span class="kw">labor shortage solution</span>
+    <h3>④ 组合搜索技巧</h3>
+    <ul>
+      <li><b>关键词 + 职位</b>：如 "Warehouse Operations Manager" + AMR —— 直接搜出"管仓库的人"</li>
+      <li><b>关键词 + 地区</b>：欧洲（冷链）、东南亚（电商履约）、中东（新物流枢纽）—— 按海豚之星已进入的 20+ 国家排优先级</li>
+      <li><b>竞品关键词</b>：搜竞品品牌的关注者/客户评价，竞品教育过的客户最容易转化</li>
+    </ul>
+  </div>
+
+  <!-- 第2步 -->
+  <div class="card">
+    <h2>第 2 步 · 进入主页分析与判断<span class="en">Profile Analysis</span></h2>
+    <table>
+      <tr><th style="width:110px;">判断维度</th><th>海豚之星客户的判断标准</th></tr>
+      <tr>
+        <td><b>① 公司类型</b></td>
+        <td>
+          <b>直接客户</b>：3PL/物流服务商、电商履约中心、冷链仓储运营商、制造企业（食品/家电/3C/汽车零部件/新能源——厂内物流搬运）<br>
+          <b>渠道客户</b>：叉车/物料搬运设备（MHE）经销商——海豚之星有渠道伙伴体系，经销商是规模化入口<br>
+          <b>生态客户</b>：仓储自动化集成商——项目带入型合作<br>
+          <b>排除对象</b>：同类 AMR 厂商——不开发，转为竞情分析对象
+        </td>
+      </tr>
+      <tr>
+        <td><b>② 公司规模</b></td>
+        <td>员工人数：2-10 小规模｜10-20 中小型｜20-50 中型｜50-100 大型｜100-500 超大型。<br>重点看<b>仓库数量与面积</b>（主页/动态/官网判断）；大型连锁（如超市配送中心）决策链长，要顺着组织架构找到总部供应链部门</td>
+      </tr>
+      <tr>
+        <td><b>③ 业务范围</b></td>
+        <td>有没有仓库/工厂？现在怎么搬运？——<b>还在用人工叉车 = 最好的替换目标</b>；已上过输送线的，找"改造扩建"机会；已用竞品 AGV 的，记入竞情库</td>
+      </tr>
+      <tr>
+        <td><b>④ 市场方向</b></td>
+        <td>动态里是否有：新开仓库/新工厂、业务扩张、关注 labor shortage / automation / efficiency 话题——有 = 需求窗口已开</td>
+      </tr>
+      <tr>
+        <td><b>⑤ 动态发布</b></td>
+        <td><b>旺季招聘叉车司机/仓管 = 人力成本痛点信号 = 自动化切入时机</b>；招聘 "Automation Manager / Continuous Improvement" = 已有自动化预算，重点跟进</td>
+      </tr>
+    </table>
+    <div class="tip"><b>判断口诀：</b>招聘信息比广告真实——一个仓库在疯狂招叉车司机，说明它最需要不招人的叉车。</div>
+  </div>
+
+  <!-- 第3步 -->
+  <div class="card">
+    <h2>第 3 步 · 决策人及职位<span class="en">Decision Makers</span></h2>
+    <h3>仓库 / 物流 / 制造类客户</h3>
+    <span class="kw">Owner / CEO / General Manager（中小仓库一把手）</span>
+    <span class="kw">COO / Operations Director</span>
+    <span class="kw">Supply Chain Director / Manager</span>
+    <span class="kw">Logistics / Warehouse Operations Manager</span>
+    <span class="kw">Plant / Factory Manager</span>
+    <span class="kw">Automation / Innovation Manager</span>
+    <span class="kw">Procurement / Purchasing Manager</span>
+    <span class="kw">Project Manager</span>
+    <h3>渠道类客户（叉车/MHE 经销商）</h3>
+    <span class="kw">Owner / General Manager</span>
+    <span class="kw">Business Development Manager</span>
+    <h3>找人顺序（跟找邮箱一样重要）</h3>
+    <ul>
+      <li><b>先用"职位 + 地区 + 行业"搜人 → 再从人进入公司主页</b>——真人比公司主页容易建立联系</li>
+      <li>对标决策链口诀：<b>使用者</b>（仓库主管，提需求）→ <b>拍板者</b>（COO/老板，批预算）→ <b>采购者</b>（Procurement，走流程），三条线都要有人</li>
+      <li>发好友申请前先看对方"近期动态"，最近发过仓储/扩张内容的，通过率最高</li>
+    </ul>
+  </div>
+
+  <!-- 第4步 -->
+  <div class="card">
+    <h2>第 4 步 · 如何建立联系<span class="en">Make Contact</span></h2>
+    <ol>
+      <li><b>发好友申请前，先写好针对性模板</b>——不写产品介绍，写对方痛点场景；消息里带一个真实案例钩子</li>
+      <li><b>关注客户公司主页 + 决策人个人</b>，通过 Find E-mail 等插件找到邮箱</li>
+      <li><b>进入公司官网进一步找联系方式</b>：邮箱、电话、WhatsApp——领英 + 邮件 + WhatsApp 三通道立体触达（欧洲客户邮件正式沟通，东南亚/中东客户 WhatsApp 直接高效）</li>
+      <li><b>配合跟进节奏</b>：领英破冰 → 发同类场景案例视频（如超市配送仓 31 台机器人项目）→ 约线上 Demo（远程看真机运行）→ 邀约展会见面（LogiMAT / CeMAT / Modex 现场看设备）</li>
+    </ol>
+    <div class="script">
+      <span class="label">好友申请模板（海豚之星版）：</span><br>
+      <span class="en">"Hi Mark, saw your post about expanding to the new fulfillment center. Many warehouse managers we work with in [region] struggle with seasonal hiring forklift drivers — we helped a supermarket distribution center automate pallet transfer with 31 AMRs. Would love to connect and share how it works."</span><br>
+      <span class="label">中译：</span>看到您新履约中心开业的消息。我们服务的很多 [地区] 仓库经理都被旺季招叉车司机难住了——我们帮一个超市配送仓用 31 台 AMR 解决了托盘搬运。希望与您建立联系，聊聊具体怎么做。
+    </div>
+  </div>
+
+  <!-- 第5步 -->
+  <div class="card">
+    <h2>第 5 步 · 打造专业领英页面<span class="en">Professional Profile</span></h2>
+    <h3>① 个人主页 Intro</h3>
+    <ul>
+      <li><b>Headline 职业头衔</b>：<span class="en">"AiTEN AMR Robots | Warehouse Automation | No Infrastructure Required, Deploy in 1 Day | 800+ Customers in 20+ Countries"</span>——头衔就是搜索关键词，让客户搜 AMR 时搜到你</li>
+      <li><b>Profile URL</b>：用产品行业关键词自定义（如 linkedin.com/in/xxx-amr-warehouse-automation），并填写公司网址</li>
+      <li><b>Summary 自我简介五要素</b>：你是谁（AiTEN 海外销售）+ 提供什么（搬运/堆垛/装卸/移载全场景物流机器人 + 智慧调度平台）+ 优势（第三代 SLAM 导航，无需磁条二维码，到货即部署；112+ 专利；国家级专精特新小巨人）+ 给客户带来什么（省人、防损、快回本，配数据）+ 官网/邮箱联系方式——搭配案例视频作品展示实力</li>
+    </ul>
+    <h3>② Background 经历</h3>
+    <ul><li>Work experience / Education 尽量完善——信息越详细，客户心里的可信度越高；每段经历配照片和公司主页链接</li></ul>
+    <h3>③ Skills 技能专长</h3>
+    <span class="kw">AMR</span><span class="kw">AGV</span><span class="kw">Warehouse Automation</span><span class="kw">Intralogistics</span><span class="kw">Material Handling</span><span class="kw">Forklift Automation</span><span class="kw">Supply Chain</span><span class="kw">Logistics 4.0</span>
+    <ul><li>系统推荐 + 核心产品行业关键词组合——Skills 直接影响领英搜索排名</li></ul>
+    <h3>④ Accomplishments 个人成就</h3>
+    <ul>
+      <li>海外项目案例：欧洲冷链仓库、东南亚电商履约中心、海外超市配送仓 31 台项目</li>
+      <li>展会经历：LogiMAT / CeMAT / Modex 现场照片</li>
+      <li>客户验收现场、发货柜照片——客户翻你主页时，看到的是"这家公司海外案例很多"</li>
+    </ul>
+    <h3>⑤ 定期发布（运营策划图片视频，销售总监给思路和文案）</h3>
+    <ul>
+      <li>一周 2 次：新品发布、整柜发货、海外项目现场、客户验收、展会预告</li>
+      <li>每条动态 = 一次自我广告；持续输出，客户主动找上门</li>
+    </ul>
+  </div>
+
+  <div class="closing">
+    <b>五步法的价值：</b>老销售的"人脉感觉" → 变成新销售的"标准动作"。<br>
+    关键词搜得出、主页看得懂、决策人找得到、联系搭得上、页面信得过——<b>新员工入职第一周就能照着开发海外线索，这就是流程化 + 工具化的力量。</b>
+  </div>
+
+  <div class="footer">天地人销售管理体系 · 线索搜集共创工具 · 大董老师</div>
+</div>
+</body>
+</html>
