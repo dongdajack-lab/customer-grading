@@ -161,7 +161,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.55}
 
     <div class="card">
       <div class="card-title"><span class="ico">4</span>盘筹码</div>
-      <p class="card-sub">列出你本次谈判可以交换的资源（价格、账期、交付、服务、案例、关系等）</p>
+      <p class="card-sub">列出你本次谈判可以交换的资源（价格 / 条件 / 方案 / 服务 / 资源 / 关系 六大类）</p>
       <div id="p-chips-list"></div>
       <button class="addlink" onclick="addPrepChip()">+ 添加筹码</button>
     </div>
@@ -193,6 +193,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.55}
     <div class="card">
       <div class="card-title"><span class="ico">02</span>筹码盘点表</div>
       <div class="card-sub">盘点你手上所有筹码：价格 / 条件 / 方案 / 服务 / 资源 / 关系，建立自己的筹码库</div>
+      <div class="card-note">竞争八维中的7维可转化为以上6种筹码；组织实力是竞争基础而非直接筹码，通过「资源筹码」变现（高管站台、专家支持、产能倾斜）。</div>
       <div class="row">
         <div><label>客户名称</label><input type="text" id="c-client" placeholder="输入客户名称"></div>
         <div><label>盘点日期</label><input type="date" id="c-date"></div>
@@ -339,8 +340,8 @@ const CHIP_CATS=[
   {key:'condition',name:'条件筹码',desc:'付款方式、交付周期、验收标准、违约条款等',color:'#2E86AB'},
   {key:'solution',name:'方案筹码',desc:'功能模块、服务范围、配置档次、交付范围等',color:'#2B8A3E'},
   {key:'service',name:'服务筹码',desc:'培训、驻场、售后响应、增值服务、延保等',color:'#C0392B'},
-  {key:'resource',name:'资源筹码',desc:'高管时间、专家团队、稀缺产能、优先排期等',color:'#1B3A5C'},
-  {key:'relation',name:'关系筹码',desc:'人情往来、私人关系、背书推荐、情报支持等',color:'#F08C00'}
+  {key:'resource',name:'资源筹码',desc:'品牌背书、案例共享、渠道资源、联合营销、高管时间、专家团队、稀缺产能、优先排期等',color:'#1B3A5C'},
+  {key:'relation',name:'关系筹码',desc:'高层引荐、行业人脉、信任积累、情报支持等',color:'#F08C00'}
 ];
 function initChipCats(){
   const container=document.getElementById('chip-categories');
