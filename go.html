@@ -211,7 +211,7 @@ function applyMove(board, p, color, N){
     }
   }
   if (groupOf(b, p, N).libs.size === 0) return null;
-  return { board: b, captured: captured };
+  return { board: b, captured: captured, key: boardKey(b) };
 }
 
 function boardKey(b){ return Array.prototype.join.call(b, ""); }
