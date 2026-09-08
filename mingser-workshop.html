@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名瑟电子 9.17-18 共创工作坊 · 课堂练习入口</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%);
+            color: #fff;
+            padding: 40px 20px 36px;
+            text-align: center;
+        }
+        header .brand {
+            font-size: 13px;
+            letter-spacing: 2px;
+            opacity: .85;
+            margin-bottom: 10px;
+        }
+        header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        header p { font-size: 15px; opacity: .9; }
+        header .date {
+            display: inline-block;
+            margin-top: 16px;
+            background: rgba(255,255,255,.15);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 20px 48px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(47,60,126,.08);
+            padding: 24px;
+            text-align: center;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(47,60,126,.12); }
+        .card .tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            background: #B85042;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .card h2 { font-size: 20px; color: #2F3C7E; margin-bottom: 8px; }
+        .card .desc { font-size: 13px; color: #666; min-height: 38px; margin-bottom: 16px; }
+        .card img {
+            width: 220px;
+            height: 220px;
+            border-radius: 10px;
+            background: #f8f9fc;
+            padding: 10px;
+            margin-bottom: 12px;
+        }
+        .card .url {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f5f7fa;
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-top: 4px;
+        }
+        .card .url a {
+            flex: 1;
+            font-size: 12px;
+            color: #2F3C7E;
+            text-decoration: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .card .copy {
+            border: none;
+            background: #2F3C7E;
+            color: #fff;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .footer {
+            text-align: center;
+            padding: 24px 20px 40px;
+            color: #888;
+            font-size: 12px;
+        }
+        .footer strong { color: #2F3C7E; }
+        @media (max-width: 480px) {
+            header h1 { font-size: 22px; }
+            .card img { width: 180px; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand">博商 · 大董销售体系</div>
+        <h1>名瑟电子 9.17-18 共创工作坊</h1>
+        <p>课堂练习入口 · 微信扫码即可进入对应练习</p>
+        <div class="date">2026年9月17-18日 · 厦门</div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <span class="tag">学员练习</span>
+                <h2>SPIN 销售话术练习</h2>
+                <p class="desc">LED 照明芯片销售场景<br>从背景→难点→暗示→效益四步训练</p>
+                <img src="qr-spin-mingser.png" alt="SPIN练习二维码">
+                <div class="url">
+                    <a href="https://dongdajack-lab.github.io/customer-grading/spin-mingser.html" target="_blank">https://dongdajack-lab.github.io/customer-grading/spin-mingser.html</a>
+                    <button class="copy" onclick="copy(this)">复制</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="tag">学员练习</span>
+                <h2>PPP 拜访开场白练习</h2>
+                <p class="desc">拜访中山 LED 球泡灯厂张总<br>训练 30 秒开场、过程预告与收益收口</p>
+                <img src="qr-ppp-mingser.png" alt="PPP练习二维码">
+                <div class="url">
+                    <a href="https://dongdajack-lab.github.io/customer-grading/ppp-mingser.html" target="_blank">https://dongdajack-lab.github.io/customer-grading/ppp-mingser.html</a>
+                    <button class="copy" onclick="copy(this)">复制</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="tag">模拟闯关</span>
+                <h2>拜访模拟训练 · 第1关</h2>
+                <p class="desc">AI 扮演张总，6 轮对话闯关<br>训练 SPIN 需求挖掘与推进下一步动作</p>
+                <img src="qr-visit-sim-mingser.png" alt="拜访模拟二维码">
+                <div class="url">
+                    <a href="https://dongdajack-lab.github.io/customer-grading/visit-sim-mingser.html" target="_blank">https://dongdajack-lab.github.io/customer-grading/visit-sim-mingser.html</a>
+                    <button class="copy" onclick="copy(this)">复制</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="tag" style="background:#336633;">决策参考</span>
+                <h2>晶丰明源八维对标分析</h2>
+                <p class="desc">名瑟总经理决策版<br>规模/产品/技术/渠道/价格/品牌/组织/财务八维拆解</p>
+                <img src="qr-competition-mingser.png" alt="竞品分析二维码">
+                <div class="url">
+                    <a href="https://dongdajack-lab.github.io/customer-grading/competition-mingser.html" target="_blank">https://dongdajack-lab.github.io/customer-grading/competition-mingser.html</a>
+                    <button class="copy" onclick="copy(this)">复制</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        网址长期有效，建议收藏。如无法扫码，可直接在浏览器打开对应链接。<br>
+        <strong>博商 · 大董销售体系</strong>
+    </div>
+
+    <script>
+        function copy(btn) {
+            const url = btn.parentElement.querySelector('a').href;
+            navigator.clipboard.writeText(url).then(() => {
+                btn.textContent = '已复制';
+                setTimeout(() => btn.textContent = '复制', 1500);
+            });
+        }
+    </script>
+</body>
+</html>
