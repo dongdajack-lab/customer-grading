@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="format-detection" content="telephone=no">
-<title>拜访模拟训练 · 第1关 SPIN需求挖掘（名瑟实战）</title>
+<title>拜访模拟训练 · 第1关 SPIN需求挖掘（张总/王总/林总随机版）</title>
 <style>
+
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body {
     font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
@@ -104,6 +105,20 @@
   .recall-item .r-why { color:#5F5E5A; font-size:12.5px; margin-top:3px; }
   .btn-re { display:block; width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px; background:#B85042; color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
   .foot-note { text-align:center; font-size:12px; color:#88877F; margin-top:18px; line-height:1.7; }
+
+  /* ===== 多客户随机版 新增 ===== */
+  .modebar { display:flex; align-items:center; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  .mode-tag { background:#B85042; color:#fff; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; }
+  .mode-txt { font-size:13px; color:#5F5E5A; }
+  .mode-txt b { color:#2C2C2A; }
+  .opp-tag { display:inline-block; margin-left:6px; background:#EEEDFE; color:#534AB7; font-size:11px; padding:1px 8px; border-radius:999px; vertical-align:1px; }
+  .mode-hint { font-size:12px; color:#88877F; margin-top:6px; line-height:1.55; }
+  .btn-go { display:block; width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px; background:#336633; color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  .btn-ghost { display:block; width:100%; margin-top:8px; padding:11px; border:1.5px solid #D3D1C7; border-radius:10px; background:#fff; color:#2C2C2A; font-size:14px; cursor:pointer; }
+  .btn-go:active, .btn-ghost:active { opacity:.88; }
+  .ladder { margin-top:12px; font-size:12px; color:#88877F; line-height:1.7; border-top:1px dashed #E3E1D8; padding-top:10px; }
+  .ladder b { color:#2F3C7E; }
+
 </style>
 </head>
 <body>
@@ -111,13 +126,20 @@
 <div class="topbar">
   <div class="kicker">大董销售训练营 · 拜访模拟训练</div>
   <h1>第 1 关 · SPIN 需求挖掘</h1>
-  <div class="sub">实战场景：厦门名瑟 × 中山古镇 LED 灯具厂</div>
+  <div class="sub">实战场景：厦门名瑟 × 中山古镇 LED 灯具厂 · 三位客户随机匹配</div>
 </div>
 
 <div class="wrap">
+  <div class="modebar">
+    <span class="mode-tag">🎲 随机匹配</span>
+    <span class="mode-txt">本局对手：<b id="oppName">—</b><span class="opp-tag" id="oppTag"></span></span>
+  </div>
+  <div class="mode-hint">开局随机匹配一位客户（防止背答案）；打完看战绩卡亮出的弱项，教练会推荐专治短板的对手。同关换人、不换 SPIN 框架。</div>
 
-  <!-- 人设卡 -->
-  <div class="card">
+
+  <!-- ========== 客户人设: zhang ========== -->
+  <div class="persona-root" id="proot-zhang" style="display:none;">
+<div class="card">
     <h3><span class="dot"></span>今日客户 · 人设卡</h3>
     <div class="persona-row">
       <div class="avatar">张</div>
@@ -134,18 +156,15 @@
     </div>
     <div style="font-size:12.5px;color:#88877F;margin-top:10px;">背景：电源方案两年没换过供应商。你（名瑟销售工程师小李）经朋友引荐，第一次见到张总本人。</div>
   </div>
-
-  <!-- 任务卡 -->
-  <div class="card">
+<div class="card">
     <h3><span class="dot"></span>本关任务</h3>
     <div class="mission">
       6 轮对话内，把张总从「没打算换供应商」推进到<span class="hl">「愿意安排样品测试」</span>。<br>
       评分标准：问对问题（SPIN 的时机判断）&gt; 说漂亮话术。张总的隐藏信息和内心评价，通关后揭晓。
     </div>
   </div>
+    <div class="chat-area" id="chatArea">
 
-  <!-- ================= 对话区 ================= -->
-  <div class="chat-area" id="chatArea">
 
     <!-- ============ 第1轮 ============ -->
     <div class="round-block" id="rb0" style="display:block;">
@@ -435,11 +454,10 @@
       <button class="btn" id="btn-5" onclick="showResult()">查看战绩卡 →</button>
     </div>
 
-  </div>
-
-  <!-- ================= 结果页 ================= -->
-  <div id="resultPage">
-    <div class="card">
+  
+    </div>
+    <div id="resultPage">
+<div class="card">
       <div class="score-hero">
         <div class="big"><span id="scoreNum">0</span><span class="of"> / 100</span></div>
         <div class="lv" id="lvTitle">—</div>
@@ -447,6 +465,352 @@
         <div class="lv-div" id="lvB">节奏基本对，个别轮次操之过急。回看上面那几处「+8分」「+5分」的点评，那是最值得练的地方。</div>
         <div class="lv-div" id="lvC">框架你已经知道了，卡在时机感——什么时候问、什么时候忍住不说话。建议先重刷一遍SPIN练习页，再来挑战。</div>
         <div class="lv-div" id="lvD">别灰心，每个销冠都死过这几个坑。重点复盘第1、3、5轮的点评，那是本场翻车重灾区。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>五维得分</h3>
+      <div class="dim-row"><div class="dim-label"><span>背景摸底（S）</span><span id="d1t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d1"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>难点挖掘（P）</span><span id="d2t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d2"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>痛点放大（I）</span><span id="d3t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d3"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>价值引导（N）</span><span id="d4t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d4"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>推进承诺（收口）</span><span id="d5t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d5"></div></div></div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>张总隐藏档案（通关揭秘）</h3>
+      <div class="reveal-item">🎯 张总其实<b>正在评估一款出口欧洲的智能调光产品</b>——这是比球泡灯返修率大十倍的机会。你本场没挖到，下一关的入口。</div>
+      <div class="reveal-item">🩹 他<b>上个月刚被老经销商削减了订单</b>——你选对了话，他会主动说；选错了话，他永远不会告诉你。</div>
+      <div class="reveal-item">🧮 张总是<b>算账型决策者</b>：数字能说服他，形容词说服不了他。本场所有满分答案的共同点——都在算他的账，而不是夸自己的货。</div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>满分话术六连 · 带走背熟</h3>
+      <div class="recall-item"><span class="r-tag">S</span>「咱们厂现在月产量大概什么规模？主要走国内还是也有出口？」<div class="r-why">背景问题：给方向不给结论，客户张口就能答。</div></div>
+      <div class="recall-item"><span class="r-tag">P</span>「这套方案在实际生产里，有没有让您头疼的地方？」<div class="r-why">难点问题：不问「满意吗」，问「哪里头疼」。</div></div>
+      <div class="recall-item"><span class="r-tag">I</span>「月产50万颗，0.8%就是月返4000颗，一颗3块，一年15万——这笔账您算过吗？」<div class="r-why">暗示问题：用客户的数字，算成钱。</div></div>
+      <div class="recall-item"><span class="r-tag">I</span>「返修的灯退回经销商，牌子是您自己的——他们还愿意主推您的货吗？」<div class="r-why">暗示深水区：把成本痛点升级成渠道流失。</div></div>
+      <div class="recall-item"><span class="r-tag">N</span>「如果返修率降到0.2%，一年省十几万——值不值得花两周认真验证一次？」<div class="r-why">效益问题：让客户自己说服自己。</div></div>
+      <div class="recall-item"><span class="r-tag">收</span>「200颗样品+工程师驻厂+您的标准来测，两周后我带数据来见您。」<div class="r-why">收口收的是下一步动作，不是合同。</div></div>
+    </div>
+    </div>
+  </div>
+
+  <!-- ========== 客户人设: wang ========== -->
+  <div class="persona-root" id="proot-wang" style="display:none;">
+<div class="card">
+    <h3><span class="dot"></span>今日客户 · 人设卡</h3>
+    <div class="persona-row">
+      <div class="avatar" style="background:#336633;">王</div>
+      <div class="persona-info">
+        <b>王建军（王总）</b>
+        <div class="tagline">星锐照明 采购经理 · 中山古镇 · LED面板灯/筒灯厂 · 月采购驱动IC 40万颗</div>
+        <div class="chips">
+          <span class="chip">流程控</span>
+          <span class="chip">精明砍价</span>
+          <span class="chip">怕担责</span>
+          <span class="chip">合规敏感</span>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:#88877F;margin-top:10px;">背景：他跟现供应商合作三年、价格已谈到底，最怕"换出问题背锅"。你经同行采购引荐约到他，他在会议室摊开本子，一脸审视。</div>
+  </div>
+<div class="card">
+    <h3><span class="dot"></span>本关任务</h3>
+    <div class="mission">
+      6 轮对话内，把王总从「用惯老供应商、怕担责」推进到<span class="hl">「愿意牵头安排一次小批量试单」</span>。<br>
+      评分标准：问对问题（SPIN 的时机判断）&gt; 说漂亮话术。采购型客户最怕的是"担责"——他的隐藏顾虑，通关后揭晓。
+    </div>
+  </div>
+    <div class="chat-area" id="chatArea">
+<div class="round-block" id="rb0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava" style="background:#336633;">王</div>
+        <div class="bubble boss">小李是吧？名瑟的。我们采购量不小，价格你直接报最低价，别整虚的。还有，你拿什么证明你们供货稳定？我们现在这家合作三年了——换供应商，出了事谁负责？</div>
+      </div>
+      <div class="ask">—— 采购一上来就压价 + 甩"责任"两个字。你怎么接？——</div>
+      <div class="options">
+<div class="option" data-score="0" onclick="pick(0,0)">
+          <span class="opt-label">A</span>王总您量大，我直接给您最低价，包您满意。
+        </div>
+<div class="option" data-score="0" onclick="pick(0,1)">
+          <span class="opt-label">B</span>我们是杰华特核心代理、产品线特别全，先花几分钟给您介绍下公司实力。
+        </div>
+<div class="option" data-score="0" onclick="pick(0,2)">
+          <span class="opt-label">C</span>那我先了解一下，有需要您随时联系我，不打扰您了。
+        </div>
+<div class="option" data-score="15" onclick="pick(0,3)">
+          <span class="opt-label">D</span>王总，报价之前我得先把需求搞明白，不然报也是瞎报。想请教下：咱们星锐一个月驱动IC采购量大概多少？主要配在哪些产品线上？旺季一般集中在几月？
+        </div>
+</div>
+<div class="reply-box" id="reply-0-0">
+        <div class="bubble-row me"><div class="bubble me">王总您量大，我直接给您最低价，包您满意。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">最低价？呵，你这价我拿去压现在的供应商，他们跟不跟？跟了，我还要你干嘛？</div></div>
+        <div class="coach"><b>教练点评：</b>采购最精的就是比价——你主动钻进他的主场，只会变成他压现供应商的筹码。先摸底，再谈价。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>先问采购量和旺季节奏——背景问题（S），聊他天天在管的盘子。</div>
+      </div>
+<div class="reply-box" id="reply-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们是杰华特核心代理、产品线特别全，先花几分钟给您介绍下公司实力。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">介绍资料发我邮箱就行。我们是采购，不兴面谈推销这套。</div></div>
+        <div class="coach"><b>教练点评：</b>采购每天被N家供应商介绍公司，你讲得再全也是噪音。他要的是"你能帮我解决什么"——而答案只能靠提问挖，不能靠介绍。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>用背景问题（S）开局：采购量、产品线、旺季节奏，张口就能答。</div>
+      </div>
+<div class="reply-box" id="reply-0-2">
+        <div class="bubble-row me"><div class="bubble me">那我先了解一下，有需要您随时联系我，不打扰您了。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">行，名片留下，有需要联系你。（低头看本子）</div></div>
+        <div class="coach"><b>教练点评：</b>缴械式开场。他报"出了事谁负责"是试探，不是送客——采购嘴上说"没必要换"，心里其实装着去年那些糟心事，只是没人帮他说出来。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>不接"责任"的话茬，用背景问题（S）把话题引向他的采购盘子。</div>
+      </div>
+<div class="reply-box" id="reply-0-3">
+        <div class="bubble-row me"><div class="bubble me">王总，报价之前我得先把需求搞明白，不然报也是瞎报。想请教下：咱们星锐一个月驱动IC采购量大概多少？主要配在哪些产品线上？旺季一般集中在几月？</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">……这问题问到点子上了。一个月连整灯带备料，40来万颗吧。旺季？下半年9到12月，双十一前基本满产。你问这个，是想打旺季的主意？</div></div>
+        <div class="coach"><b>教练点评：</b>标准的背景问题（S），而且是"采购版"的——量、产品线、旺季节奏，都是他天天在管的盘子，答得专业又有掌控感。更重要的是：你听到了「旺季满产」这个信号，后面有大用。<span class="score-chip good">+15 分</span></div>
+      </div>
+<button class="btn" id="btn-0" onclick="nextRound(0)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb1">
+      <div class="round-head"><span class="num">第 2 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava" style="background:#336633;">王</div>
+        <div class="bubble boss">行，算你专业。但直说吧——我们跟现在的供应商合作三年，磨合得好好的，价格也谈到底了。我凭什么冒着风险换你？</div>
+      </div>
+      <div class="ask">—— 采购把「风险」两个字摆上了桌。这正是你要挖的地方。你问什么？——</div>
+      <div class="options">
+<div class="option" data-score="15" onclick="pick(1,0)">
+          <span class="opt-label">A</span>王总，我不劝您换。就想请教一句——这三年合作，有没有哪几次让您特别为难的？比如旺季交期延误、或者来料批次出过问题，要您去跟产线解释、跟老板汇报的？
+        </div>
+<div class="option" data-score="0" onclick="pick(1,1)">
+          <span class="opt-label">B</span>王总，我们可以在他报价的基础上再让3个点。
+        </div>
+<div class="option" data-score="5" onclick="pick(1,2)">
+          <span class="opt-label">C</span>我们月产能几个亿颗，供货绝对没问题，旺季也跟得上。
+        </div>
+<div class="option" data-score="0" onclick="pick(1,3)">
+          <span class="opt-label">D</span>那是他们产能管理不行，我们比他们专业多了。
+        </div>
+</div>
+<div class="reply-box" id="reply-1-0">
+        <div class="bubble-row me"><div class="bubble me">王总，我不劝您换。就想请教一句——这三年合作，有没有哪几次让您特别为难的？比如旺季交期延误、或者来料批次出过问题，要您去跟产线解释、跟老板汇报的？</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">……（放下笔）你别说，去年真有。双十一前那批货，说好8月底到，拖到9月中，产线停了两天。老板把我叫办公室，我解释了一上午。</div></div>
+        <div class="coach"><b>教练点评：</b>教科书级难点问题（P），而且是"采购版"的：不给结论只给方向——交期、批次、汇报，让他自己挑最疼的那件说。采购的痛点从来不是"价格不够低"，是"供应商掉链子时，背锅的是我"。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-1-1">
+        <div class="bubble-row me"><div class="bubble me">王总，我们可以在他报价的基础上再让3个点。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">这不是钱的问题，是担责的问题。为了3个点让我去跟老板解释换供应商？我图什么？</div></div>
+        <div class="coach"><b>教练点评：</b>拿钱去砸"怕担责"是白扔——采购为3个点去担换供应商的责，风险收益完全不对等。价格解决不了他的恐惧。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>难点问题（P）直击："这三年，有没有哪几次让您特别为难的？"</div>
+      </div>
+<div class="reply-box" id="reply-1-2">
+        <div class="bubble-row me"><div class="bubble me">我们月产能几个亿颗，供货绝对没问题，旺季也跟得上。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">产能是你们的，不是承诺。去年那家供应商产能也不小，旺季照样拖。</div></div>
+        <div class="coach"><b>教练点评：</b>空头支票。采购听过太多"绝对没问题"，他们只认合同条款和交付记录。自夸产能解决不了他对"不可控"的恐惧。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>「有没有哪几次让您特别为难的？」——把话题引向他的真实经历。</div>
+      </div>
+<div class="reply-box" id="reply-1-3">
+        <div class="bubble-row me"><div class="bubble me">那是他们产能管理不行，我们比他们专业多了。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">别急着踩别人。你踩他，等于说我这三年的选择都是错的。</div></div>
+        <div class="coach"><b>教练点评：</b>贬低现供应商 = 攻击采购的专业判断。他会立刻从"聊问题"切回"维护自己的决策"。让痛点自己浮出来，别替客户下判断。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>不评价任何人，只问他的经历——难点自然浮出水面。</div>
+      </div>
+<button class="btn" id="btn-1" onclick="nextRound(1)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb2">
+      <div class="round-head"><span class="num">第 3 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava" style="background:#336633;">王</div>
+        <div class="bubble boss">那批货最后还不是到了？晚半个月而已。哪个供应商没个延迟？你至于拿这个做文章？</div>
+      </div>
+      <div class="ask">—— 王总在给供应商的失误「找补」。你怎么把这件事变成他自己的事？——</div>
+      <div class="options">
+<div class="option" data-score="0" onclick="pick(2,0)">
+          <span class="opt-label">A</span>也是，延迟这事确实难免，大家都差不多。
+        </div>
+<div class="option" data-score="3" onclick="pick(2,1)">
+          <span class="opt-label">B</span>所以趁现在没出事，换个靠谱的，省得旺季再赌一次。
+        </div>
+<div class="option" data-score="15" onclick="pick(2,2)">
+          <span class="opt-label">C</span>王总，晚半个月听着是小事，但您细想：产线停两天，整灯交期全顺延，经销商催单、老板问责——一次延误您还能解释成"意外"，要是今年旺季再拖一次呢？到时候老板心里记的，是"供应商不给力"，还是"采购把关不严"？
+        </div>
+<div class="option" data-score="0" onclick="pick(2,3)">
+          <span class="opt-label">D</span>他们就是吃准了您不敢换，才敢这么拖。
+        </div>
+</div>
+<div class="reply-box" id="reply-2-0">
+        <div class="bubble-row me"><div class="bubble me">也是，延迟这事确实难免，大家都差不多。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">那不就结了。（合上本子）</div></div>
+        <div class="coach"><b>教练点评：</b>客户自我找补时你点头 = 帮他把痛点埋回去。他说"哪个供应商没延迟"恰恰说明心里有刺——真无所谓的人不会解释。这正是上暗示问题（I）的时机。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>「一次延误能解释，旺季再来两次呢？」——把责任引到他身上。</div>
+      </div>
+<div class="reply-box" id="reply-2-1">
+        <div class="bubble-row me"><div class="bubble me">所以趁现在没出事，换个靠谱的，省得旺季再赌一次。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">换不换是我评估的事，你越这么说我越警惕。</div></div>
+        <div class="coach"><b>教练点评：</b>方向对了一半——知道该放大风险，但"换我们最保险"把决定权抢走了。采购最反感被销售推着走：先让他自己意识到风险，别急着给答案。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>只问不推："旺季再拖一次，老板记的是供应商，还是您？"</div>
+      </div>
+<div class="reply-box" id="reply-2-2">
+        <div class="bubble-row me"><div class="bubble me">王总，晚半个月听着是小事，但您细想：产线停两天，整灯交期全顺延，经销商催单、老板问责——一次延误您还能解释成"意外"，要是今年旺季再拖一次呢？到时候老板心里记的，是"供应商不给力"，还是"采购把关不严"？</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">……（沉默几秒）你这人说话扎心。说白了，我在这行最怕的，就是替别人担责。</div></div>
+        <div class="coach"><b>教练点评：</b>完美的暗示问题（I）三要素：用他的经历（停线两天）、算他的账（老板问责的是谁）、留钩子（"把关不严"四个字直击怕担责）。注意全程没提自家产品——采购型客户的痛点不是公司成本，是他个人的责任风险。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-2-3">
+        <div class="bubble-row me"><div class="bubble me">他们就是吃准了您不敢换，才敢这么拖。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">激将法？我做了十年采购，这套对我没用。</div></div>
+        <div class="coach"><b>教练点评：</b>对采购玩激将法是外行——他见过太多套路，只会更警惕。放大痛点靠推演后果，不靠激将。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>用推演代替激将："再拖一次，您要跟老板解释几回？"</div>
+      </div>
+<button class="btn" id="btn-2" onclick="nextRound(2)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb3">
+      <div class="round-head"><span class="num">第 4 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava" style="background:#336633;">王</div>
+        <div class="bubble boss">就算我个人觉得有道理，上面还有老板，还有采购制度。老板一句话"用得好好的换什么"，我全白搭。</div>
+      </div>
+      <div class="ask">—— 采购抬出了「老板 + 制度」两座大山。这是挡箭牌，还是真障碍？你怎么翻？——</div>
+      <div class="options">
+<div class="option" data-score="5" onclick="pick(3,0)">
+          <span class="opt-label">A</span>我可以帮您整理一份两家供应商的对比分析报告，您好拿去跟老板汇报。
+        </div>
+<div class="option" data-score="15" onclick="pick(3,1)">
+          <span class="opt-label">B</span>王总，老板那关其实好过——关键看您怎么定义这件事。您不是在"换供应商"，是在给公司上一道保险：搞一次双供应商试单，让两家各供一部分，谁的交付稳、配合好，旺季的量就给谁。老板看到的是您在帮公司控风险、留后手，不是您要折腾。责任也从"您一个人拍板换人"，变成"用数据说话的多供应商策略"——这事成了，是您采购部的业绩。
+        </div>
+<div class="option" data-score="0" onclick="pick(3,2)">
+          <span class="opt-label">C</span>那您把老板约出来，我跟老板当面聊聊我们方案的优势。
+        </div>
+<div class="option" data-score="3" onclick="pick(3,3)">
+          <span class="opt-label">D</span>那我们价格再让一步，您好跟老板有个交代。
+        </div>
+</div>
+<div class="reply-box" id="reply-3-0">
+        <div class="bubble-row me"><div class="bubble me">我可以帮您整理一份两家供应商的对比分析报告，您好拿去跟老板汇报。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">报告我自己会写。我要的是思路，不是代笔。</div></div>
+        <div class="coach"><b>教练点评：</b>方向对（帮他过老板关）但太浅——他要的是能扛住老板追问的"策略逻辑"，不是一份代写的报告。先给思路，工具是后话。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>给策略：把"换供应商"重构成"双供应商试单=上一道保险"。</div>
+      </div>
+<div class="reply-box" id="reply-3-1">
+        <div class="bubble-row me"><div class="bubble me">王总，老板那关其实好过——关键看您怎么定义这件事。您不是在"换供应商"，是在给公司上一道保险：搞一次双供应商试单，让两家各供一部分，谁的交付稳、配合好，旺季的量就给谁。老板看到的是您在帮公司控风险、留后手，不是您要折腾。责任也从"您一个人拍板换人"，变成"用数据说话的多供应商策略"——这事成了，是您采购部的业绩。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">……双供应商，这个思路倒新鲜。等于我手里多张牌，老板那边也好说话。你继续说。</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）的深水区，也是全场最关键的一刀：把"个人拍板换供应商"（高风险）重构成"制度化的双供应商策略"（低风险 + 业绩）。你给怕担责的采购递了一把"向上汇报的枪"——他从"拦路的人"变成了"这件事的主导者"。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-3-2">
+        <div class="bubble-row me"><div class="bubble me">那您把老板约出来，我跟老板当面聊聊我们方案的优势。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">你想绕开我直接找老板？小李，这是采购大忌。</div></div>
+        <div class="coach"><b>教练点评：</b>越级是B2B销售的死穴——尤其对采购。你绕过他找老板，等于告诉全世界"采购这关你过不去"。他一句话就能让你永远进不了这家厂。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>永远让采购当"这件事的提出者"，你做他背后的军师。</div>
+      </div>
+<div class="reply-box" id="reply-3-3">
+        <div class="bubble-row me"><div class="bubble me">那我们价格再让一步，您好跟老板有个交代。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">又回到价格？价格只能让老板觉得你"图便宜"，不能让老板觉得我"专业"。</div></div>
+        <div class="coach"><b>教练点评：</b>采购过老板关靠的是"控风险"的业绩叙事，不是"省了3个点"的价格战。你还在用价格思维解一道风险题。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>给采购一个能在老板面前加分的框架——双供应商、控风险、留后手。</div>
+      </div>
+<button class="btn" id="btn-3" onclick="nextRound(3)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb4">
+      <div class="round-head"><span class="num">第 5 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava" style="background:#336633;">王</div>
+        <div class="bubble boss">思路我认可。但凭什么信你们名瑟？你拿什么让我觉得，你们比现在这家更值得试？</div>
+      </div>
+      <div class="ask">—— 王总要"试的理由"了。这时候该上 N（效益问题）——怎么让他自己说服自己？——</div>
+      <div class="options">
+<div class="option" data-score="0" onclick="pick(4,0)">
+          <span class="opt-label">A</span>我们是大代理，杰华特原厂直供，品牌你放心。
+        </div>
+<div class="option" data-score="5" onclick="pick(4,1)">
+          <span class="opt-label">B</span>您要什么资料、什么承诺，尽管提，我们都全力配合。
+        </div>
+<div class="option" data-score="15" onclick="pick(4,2)">
+          <span class="opt-label">C</span>王总，我反过来问您一句：如果名瑟能给您三样东西——一份写进合同的交期承诺，旺季延期按天赔付；一批免费试单的样品，走您现有流程，不让您担一点额外责任；外加一份现成的《双供应商试单方案》，您拿去就能向老板汇报。这三样，能让您从"被动等供应商出问题"，变成"主动给公司上一道保险"——这件事，值不值得您花一次试单的精力？
+        </div>
+<div class="option" data-score="3" onclick="pick(4,3)">
+          <span class="opt-label">D</span>这样，我先送一批样品给您工程师测，好用再说。
+        </div>
+</div>
+<div class="reply-box" id="reply-4-0">
+        <div class="bubble-row me"><div class="bubble me">我们是大代理，杰华特原厂直供，品牌你放心。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">品牌是原厂的，服务是你们的。我要的是你拿什么担保，不是谁家牌子大。</div></div>
+        <div class="coach"><b>教练点评：</b>采购不吃"品牌背书"这套——原厂再大，出了问题背锅的还是他。他要的是"你拿什么担保"，不是"谁家牌子大"。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>给担保不给背书：合同化交期、试单不担责、方案能汇报。</div>
+      </div>
+<div class="reply-box" id="reply-4-1">
+        <div class="bubble-row me"><div class="bubble me">您要什么资料、什么承诺，尽管提，我们都全力配合。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">这种话最不值钱——"都配合"等于什么都没说。给我具体的。</div></div>
+        <div class="coach"><b>教练点评：</b>被动迎合不是方案。采购每天收一打"全力配合"，他们要的是"我能拿走什么去汇报"的具体承诺。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>主动给出三样具体的东西：合同承诺、免费试单、现成汇报方案。</div>
+      </div>
+<div class="reply-box" id="reply-4-2">
+        <div class="bubble-row me"><div class="bubble me">王总，我反过来问您一句：如果名瑟能给您三样东西——一份写进合同的交期承诺，旺季延期按天赔付；一批免费试单的样品，走您现有流程，不让您担一点额外责任；外加一份现成的《双供应商试单方案》，您拿去就能向老板汇报。这三样，能让您从"被动等供应商出问题"，变成"主动给公司上一道保险"——这件事，值不值得您花一次试单的精力？</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">……你要真能把这三样落地，那我这关，确实没理由拦着。多一个备份，我汇报也好做。</div></div>
+        <div class="coach"><b>教练点评：</b>满分效益问题（N）："值不值得……"让采购自己在脑子里过答案。关键是把他的收益翻译成"职场安全 + 业绩"——他从"拦路的人"变成"主动要试的人"。合同化交期承诺这一条，精准拆掉了"怕担责"的最后防线。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-4-3">
+        <div class="bubble-row me"><div class="bubble me">这样，我先送一批样品给您工程师测，好用再说。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">样品谁都能送。你先把"为什么值得试"说清楚，我再决定要不要花这个精力。</div></div>
+        <div class="coach"><b>教练点评：</b>时机不对——他还没认可"试"的价值，送样只会变成他抽屉里又一份样品。先讲清"为什么值得试"，再谈怎么试。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>先上效益问题（N），让他说出"值得试"，再给试单方案。</div>
+      </div>
+<button class="btn" id="btn-4" onclick="nextRound(4)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb5">
+      <div class="round-head"><span class="num">第 6 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava" style="background:#336633;">王</div>
+        <div class="bubble boss">行，试单这事算过了我这关。你打算怎么落地？丑话说前头：别给我整一堆PPT，也别想走什么捷径。</div>
+      </div>
+      <div class="ask">—— 王总开口要落地方案了。最后一击：怎么收口？——</div>
+      <div class="options">
+<div class="option" data-score="5" onclick="pick(5,0)">
+          <span class="opt-label">A</span>那我先回去整理下资料，整理好了再联系您。
+        </div>
+<div class="option" data-score="0" onclick="pick(5,1)">
+          <span class="opt-label">B</span>那咱今天就把试单意向定了吧，签个备忘录，这事就启动了。
+        </div>
+<div class="option" data-score="0" onclick="pick(5,2)">
+          <span class="opt-label">C</span>晚上我请您吃个便饭，边吃边聊，顺便把细节定一定。
+        </div>
+<div class="option" data-score="15" onclick="pick(5,3)">
+          <span class="opt-label">D</span>王总，我建议这么办，全程不让您为难：第一，明天我把《双供应商试单方案》发您邮箱——风险点、对比维度、时间表都写清楚，您直接能拿去汇报；第二，首批500颗样品走您现有采购流程小批量试单，不占您今年的预算额度，也不需要您特批；第三，两周后我出试单对比报告，数据您说了算——行就转正，不行我绝不缠着您。您看第一步，我明天上午把方案发过来？
+        </div>
+</div>
+<div class="reply-box" id="reply-5-0">
+        <div class="bubble-row me"><div class="bubble me">那我先回去整理下资料，整理好了再联系您。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">行，整理好发我邮箱吧。（低头看表）</div></div>
+        <div class="coach"><b>教练点评：</b>临门一脚踢空。他刚说"怎么落地"，你要给的是方案 + 时间表，不是"回去整理"。热情会过期，采购的注意力尤其短。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>给具体动作：明天发方案、500颗样品走现有流程、两周出报告。</div>
+      </div>
+<div class="reply-box" id="reply-5-1">
+        <div class="bubble-row me"><div class="bubble me">那咱今天就把试单意向定了吧，签个备忘录，这事就启动了。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">备忘录？我连你方案都没看到，签什么？流程不是这么走的。</div></div>
+        <div class="coach"><b>教练点评：</b>前五轮节奏都对，最后一步跳崖。采购的决策要过流程、过老板、过制度——他要的是"先看到方案"这种安全的小步骤，不是当场签约。逼单逼死单。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>收口收"第一步动作"（发方案），不是收"合同"。</div>
+      </div>
+<div class="reply-box" id="reply-5-2">
+        <div class="bubble-row me"><div class="bubble me">晚上我请您吃个便饭，边吃边聊，顺便把细节定一定。</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">小李，我们公司有阳光采购规定，饭局就免了。业务是业务，别搞这些。</div></div>
+        <div class="coach"><b>教练点评：</b>大雷区：越大的厂，采购越有合规红线——请客送礼不但没用，还会让采购直接把你拉黑。注意：跟老板吃饭也许能成事（张总那类），跟采购吃饭是事故。对象不同，规则不同。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>用专业方案代替饭局——合规，才是对采购最大的尊重。</div>
+      </div>
+<div class="reply-box" id="reply-5-3">
+        <div class="bubble-row me"><div class="bubble me">王总，我建议这么办，全程不让您为难：第一，明天我把《双供应商试单方案》发您邮箱——风险点、对比维度、时间表都写清楚，您直接能拿去汇报；第二，首批500颗样品走您现有采购流程小批量试单，不占您今年的预算额度，也不需要您特批；第三，两周后我出试单对比报告，数据您说了算——行就转正，不行我绝不缠着您。您看第一步，我明天上午把方案发过来？</div></div>
+        <div class="bubble-row boss"><div class="b-ava" style="background:#336633;">王</div><div class="bubble boss">……行。方案先发我看看。要是真像你说的这么清爽，这事就往下推。</div></div>
+        <div class="coach"><b>教练点评：</b>满分收口四件套，套套打在采购的点上：给他的"向上汇报武器"（方案）、低风险动作（走现有流程、不占预算、不需特批）、决定权（数据您说了算）、具体时限（明天上午）。注意你说的是"发方案"不是"签合同"——对采购，下一步动作越小越安全。<span class="score-chip good">+15 分</span></div>
+      </div>
+<button class="btn" id="btn-5" onclick="showResult()">查看战绩卡 →</button>
+    </div>
+    </div>
+    <div id="resultPage">
+<div class="card">
+      <div class="score-hero">
+        <div class="big"><span id="scoreNum">0</span><span class="of"> / 100</span></div>
+        <div class="lv" id="lvTitle">—</div>
+        <div class="lv-div" id="lvA">王总主动说"方案先发我看看"。采购这道最难的关，你用的是"帮他担责变业绩"的钥匙。</div>
+        <div class="lv-div" id="lvB">方向对了，个别轮次还急着推自己。回看上面那几处"+5分""+3分"的点评——对采购，慢就是快。</div>
+        <div class="lv-div" id="lvC">你还在用"对老板那套"打采购：比价、让利、介绍公司。采购怕担责——你越推销他越躲。建议先重刷SPIN练习页，再来挑战。</div>
+        <div class="lv-div" id="lvD">别灰心，重点复盘第2、4轮：采购的痛点不是价格，是"背锅"。挖不出风险，就永远过不了采购这关。</div>
       </div>
     </div>
 
@@ -460,108 +824,580 @@
     </div>
 
     <div class="card">
-      <h3><span class="dot"></span>张总隐藏档案（通关揭秘）</h3>
-      <div class="reveal-item">🎯 张总其实<b>正在评估一款出口欧洲的智能调光产品</b>——这是比球泡灯返修率大十倍的机会。你本场没挖到，下一关的入口。</div>
-      <div class="reveal-item">🩹 他<b>上个月刚被老经销商削减了订单</b>——你选对了话，他会主动说；选错了话，他永远不会告诉你。</div>
-      <div class="reveal-item">🧮 张总是<b>算账型决策者</b>：数字能说服他，形容词说服不了他。本场所有满分答案的共同点——都在算他的账，而不是夸自己的货。</div>
+      <h3><span class="dot"></span>王总隐藏档案（通关揭秘）</h3>
+      <div class="reveal-item">🎯 王总去年双十一前被供应商拖期，产线停了两天，他被老板叫去办公室——他最怕的不是"贵"，是<b>再担一次责</b>。</div>
+      <div class="reveal-item">🩹 今年采购部的年度KPI里，真有一条<b>"引入备份供应商、降低断供风险"</b>——他比谁都想要一个合规的换人理由，只是不敢自己背锅。</div>
+      <div class="reveal-item">🧮 采购型决策是<b>风险规避型</b>：打动他的不是便宜，是"把风险变成他的业绩"。合规红线：这种客户不能请客送礼，越级找老板是死穴。</div>
     </div>
 
     <div class="card">
       <h3><span class="dot"></span>满分话术六连 · 带走背熟</h3>
-      <div class="recall-item"><span class="r-tag">S</span>「咱们厂现在月产量大概什么规模？主要走国内还是也有出口？」<div class="r-why">背景问题：给方向不给结论，客户张口就能答。</div></div>
-      <div class="recall-item"><span class="r-tag">P</span>「这套方案在实际生产里，有没有让您头疼的地方？」<div class="r-why">难点问题：不问「满意吗」，问「哪里头疼」。</div></div>
-      <div class="recall-item"><span class="r-tag">I</span>「月产50万颗，0.8%就是月返4000颗，一颗3块，一年15万——这笔账您算过吗？」<div class="r-why">暗示问题：用客户的数字，算成钱。</div></div>
-      <div class="recall-item"><span class="r-tag">I</span>「返修的灯退回经销商，牌子是您自己的——他们还愿意主推您的货吗？」<div class="r-why">暗示深水区：把成本痛点升级成渠道流失。</div></div>
-      <div class="recall-item"><span class="r-tag">N</span>「如果返修率降到0.2%，一年省十几万——值不值得花两周认真验证一次？」<div class="r-why">效益问题：让客户自己说服自己。</div></div>
-      <div class="recall-item"><span class="r-tag">收</span>「200颗样品+工程师驻厂+您的标准来测，两周后我带数据来见您。」<div class="r-why">收口收的是下一步动作，不是合同。</div></div>
+      <div class="recall-item"><span class="r-tag">S</span>「咱们一个月驱动IC采购量大概多少？旺季集中在几月？」<div class="r-why">背景问题：聊他天天在管的盘子，顺便埋旺季钩子。</div></div>
+      <div class="recall-item"><span class="r-tag">P</span>「这三年合作，有没有哪几次让您特别为难的？比如旺季拖期、批次出问题，要您去跟老板解释的？」<div class="r-why">难点问题：挖出"背锅"经历，不问满意不满意。</div></div>
+      <div class="recall-item"><span class="r-tag">I</span>「产线停两天，老板问责的是供应商，还是负责采购把关的您？」<div class="r-why">暗示问题：把供应商的锅，算到采购头上。</div></div>
+      <div class="recall-item"><span class="r-tag">I</span>「您不是在换供应商，是给公司上一道保险——双供应商试单，责任从'您拍板'变成'数据说话'」<div class="r-why">暗示深水区：把高风险动作，重构成低风险业绩。</div></div>
+      <div class="recall-item"><span class="r-tag">N</span>「让您从'被动等出问题'变成'主动控风险'，值不值得花一次试单的精力？」<div class="r-why">效益问题：把收益翻译成职场安全 + 业绩。</div></div>
+      <div class="recall-item"><span class="r-tag">收</span>「方案您拿去能汇报 + 500颗样品走现有流程 + 两周对比数据，数据您说了算。」<div class="r-why">收口收的是"发方案"这个小动作，不是合同。</div></div>
     </div>
-
-    <button class="btn-re" onclick="location.reload()">再练一遍 ↻</button>
-    <div class="foot-note">
-      拜访模拟训练 · 第1关 SPIN需求挖掘<br>
-      场景素材：厦门名瑟电子 × 中山古镇LED灯具厂 · 大董销售训练营<br>
-      截图战绩卡发到团队群，@教练 约下一关
     </div>
   </div>
 
+  <!-- ========== 客户人设: lin ========== -->
+  <div class="persona-root" id="proot-lin" style="display:none;">
+<div class="card">
+    <h3><span class="dot"></span>今日客户 · 人设卡</h3>
+    <div class="persona-row">
+      <div class="avatar" style="background:#2F3C7E;">林</div>
+      <div class="persona-info">
+        <b>林博文（林总）</b>
+        <div class="tagline">瑞光照明 技术总监 · 中山古镇 · 出口商照/工矿灯 · 专注认证与品质管控</div>
+        <div class="chips">
+          <span class="chip">数据控</span>
+          <span class="chip">严谨较真</span>
+          <span class="chip">讨厌空话</span>
+          <span class="chip">惜时</span>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:#88877F;margin-top:10px;">背景：瑞光以出口灯具为主，今年在攻UL/DLC美国认证。你经行业展会认识林总，他给了你15分钟，条件只有一句——"只聊数据，别整话术"。</div>
+  </div>
+<div class="card">
+    <h3><span class="dot"></span>本关任务</h3>
+    <div class="mission">
+      6 轮对话内，把林总从「现方案磨合两年、不愿折腾」推进到<span class="hl">「愿意按他的标准做一轮技术验证」</span>。<br>
+      评分标准：问对问题（SPIN 的时机判断）&gt; 背熟术语。技术型客户只认可复现的数据——他的隐藏顾虑，通关后揭晓。
+    </div>
+  </div>
+    <div class="chat-area" id="chatArea">
+<div class="round-block" id="rb0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">林</div>
+        <div class="bubble boss">名瑟的？杰华特代理是吧。丑话说前头：一，我不听销售讲故事，只听数据；二，我们现在的方案，工程师团队磨合了两年，外围电路、失效分析都是自己人，熟得很；三，我很忙，给你15分钟。想问就问，别铺垫。</div>
+      </div>
+      <div class="ask">—— 技术总监给你立了三条规矩。你怎么用第一个问题证明自己"懂行"？——</div>
+      <div class="options">
+<div class="option" data-score="0" onclick="pick(0,0)">
+          <span class="opt-label">A</span>我们跟杰华特原厂是战略合作，渠道关系硬，您放心。
+        </div>
+<div class="option" data-score="3" onclick="pick(0,1)">
+          <span class="opt-label">B</span>咱们月产量大概多少？出口占比有多少？
+        </div>
+<div class="option" data-score="15" onclick="pick(0,2)">
+          <span class="opt-label">C</span>林总，那我也直接点，先摸个底：咱们瑞光出口主力是商照还是家居？电源走隔离还是非隔离？目前过了哪些认证，接下来卡在哪一个？
+        </div>
+<div class="option" data-score="0" onclick="pick(0,3)">
+          <span class="opt-label">D</span>林总，我们方案性能特别稳定，行业里口碑非常好。
+        </div>
 </div>
+<div class="reply-box" id="reply-0-0">
+        <div class="bubble-row me"><div class="bubble me">我们跟杰华特原厂是战略合作，渠道关系硬，您放心。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">渠道关系是老板关心的事。我是技术负责人，我要的是方案本身能不能打。</div></div>
+        <div class="coach"><b>教练点评：</b>对老板讲关系、对采购讲渠道，对技术总监通通无效。他只为"方案能不能打"负责——这个问题只能靠技术提问挖出来。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>用技术背景问题（S）开场：产品线、拓扑、认证阶段。</div>
+      </div>
+<div class="reply-box" id="reply-0-1">
+        <div class="bubble-row me"><div class="bubble me">咱们月产量大概多少？出口占比有多少？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">产量是工厂的事，选型我说了算。你问这个，是想按量报价？那是采购的事。</div></div>
+        <div class="coach"><b>教练点评：</b>问错了对象——产量、价格归采购管，技术总监的坐标系是"性能、认证、良率"。问他不关心的，等于告诉他你不懂行。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>问技术坐标系的事：产品线、拓扑、认证、工况。</div>
+      </div>
+<div class="reply-box" id="reply-0-2">
+        <div class="bubble-row me"><div class="bubble me">林总，那我也直接点，先摸个底：咱们瑞光出口主力是商照还是家居？电源走隔离还是非隔离？目前过了哪些认证，接下来卡在哪一个？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">出口以商照筒灯为主，非隔离方案。CE、ERP早过了，今年在攻UL和DLC——美国单利润高，但认证卡得死。</div></div>
+        <div class="coach"><b>教练点评：</b>标准的背景问题（S），而且是"技术版"的：产品线、拓扑、认证阶段——问得越专业，技术总监越觉得你"懂行"。更重要的是：你听到了钩子——UL/DLC认证，是他今年最大的心事。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-0-3">
+        <div class="bubble-row me"><div class="bubble me">林总，我们方案性能特别稳定，行业里口碑非常好。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">"特别稳定"？数据呢？测试报告呢？在什么工况下测的？谁都会说。</div></div>
+        <div class="coach"><b>教练点评：</b>形容词在技术总监面前等于零。他说"只听数据"不是客套——没有可复现的测试，你的话跟没说一样。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>别下结论，先提问——让他的数据自己说话。</div>
+      </div>
+<button class="btn" id="btn-0" onclick="nextRound(0)">继续对话 →</button>
+    </div>
 
+    <div class="round-block" id="rb1">
+      <div class="round-head"><span class="num">第 2 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">林</div>
+        <div class="bubble boss">行，起码你问的问题像回事。那说重点——你凭什么觉得能替代我们现在的方案？告诉你，我们驱动的不良率做到行业前20%，工程师用了两年，滚瓜烂熟。</div>
+      </div>
+      <div class="ask">—— 林总亮出了"行业前20%"的成绩单。正面PK必死。你从哪个角度切？——</div>
+      <div class="options">
+<div class="option" data-score="0" onclick="pick(1,0)">
+          <span class="opt-label">A</span>我们不良率比行业前20%还低，有实测数据，回头发您对比。
+        </div>
+<div class="option" data-score="3" onclick="pick(1,1)">
+          <span class="opt-label">B</span>我们支持免费送样，您拿到自己测，好不好测了就知道。
+        </div>
+<div class="option" data-score="0" onclick="pick(1,2)">
+          <span class="opt-label">C</span>我们综合成本能帮您降10%以上，这对出口产品很有竞争力。
+        </div>
+<div class="option" data-score="15" onclick="pick(1,3)">
+          <span class="opt-label">D</span>前20%，这个我信，不质疑。林总，我更想请教的是极端工况：咱们方案在冬天低温冷启动、工业区电网波动、还有批量来料一致性这三块，有没有哪块出过让您头疼的事？
+        </div>
+</div>
+<div class="reply-box" id="reply-1-0">
+        <div class="bubble-row me"><div class="bubble me">我们不良率比行业前20%还低，有实测数据，回头发您对比。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">数字呢？在哪测的？什么条件下？什么批次？没有同条件可复现的测试，你这句话等于没说。</div></div>
+        <div class="coach"><b>教练点评：</b>"我比你低"是技术交流的大忌——你没有他的工况、他的批次、他的测试方法，任何对比都是空口PK，还会激他逐条反驳。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>不PK成绩单，只问"极端工况下有没有头疼的事"。</div>
+      </div>
+<div class="reply-box" id="reply-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们支持免费送样，您拿到自己测，好不好测了就知道。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">样品我有的是。问题是我为什么要花两周时间，去测一个还没让我看到价值的方案？</div></div>
+        <div class="coach"><b>教练点评：</b>送样太早等于没送——技术总监的测试时间是最贵的资源，没看到价值前，他连测都不会测。先挖出痛点，送样才有意义。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>先问出他头疼的工况，再谈送样验证。</div>
+      </div>
+<div class="reply-box" id="reply-1-2">
+        <div class="bubble-row me"><div class="bubble me">我们综合成本能帮您降10%以上，这对出口产品很有竞争力。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">成本？我是技术负责人，不是采购。你连方案价值都没证明，跟我谈成本？</div></div>
+        <div class="coach"><b>教练点评：</b>又找错了对象——成本是采购的KPI，技术总监的KPI是性能、认证、良率。跟他说成本，等于告诉他"你不懂技术决策"。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>只聊他负责的事：极端工况、认证、批次一致性。</div>
+      </div>
+<div class="reply-box" id="reply-1-3">
+        <div class="bubble-row me"><div class="bubble me">前20%，这个我信，不质疑。林总，我更想请教的是极端工况：咱们方案在冬天低温冷启动、工业区电网波动、还有批量来料一致性这三块，有没有哪块出过让您头疼的事？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">……（推了推眼镜）你问到点子上了。今年年初有一批，来料批次一致性出了问题，整批退货，我在产线蹲了两天查失效。低温启动倒是没出过事。</div></div>
+        <div class="coach"><b>教练点评：</b>教科书级难点问题（P），而且是"技术版"的：先肯定他的成绩单（建立信任），再给方向不给结论——低温、电网、一致性，让他自己挑最疼的说。他果然交出真话：批次一致性翻车，蹲了两天产线。<span class="score-chip good">+15 分</span></div>
+      </div>
+<button class="btn" id="btn-1" onclick="nextRound(1)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb2">
+      <div class="round-head"><span class="num">第 3 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">林</div>
+        <div class="bubble boss">批次那事，后来查出来是对方案晶圆批次的问题，行业里谁没遇到过？再说不良率千分之几，客户哪会知道。</div>
+      </div>
+      <div class="ask">—— 林总在给事故「找补」。技术事故要放大，该算哪本账？——</div>
+      <div class="options">
+<div class="option" data-score="15" onclick="pick(2,0)">
+          <span class="opt-label">A</span>林总，千分之几看着是小概率，但对出口生意，账不能这么算：欧洲客户会抽检，抽中一次，后面所有订单全部加严验厂；要是再抽中一次，丢的不是这一批货，是"瑞光品控"在渠道里的信任标签。您在产线蹲两天是小事，真正贵的是——这个标签一旦贴上，撕下来要多久？
+        </div>
+<div class="option" data-score="0" onclick="pick(2,1)">
+          <span class="opt-label">B</span>也是，晶圆批次问题确实难免，偶发情况谁都避不开。
+        </div>
+<div class="option" data-score="5" onclick="pick(2,2)">
+          <span class="opt-label">C</span>我们给XX大厂常年供货，从没出过这种事，您可以放心。
+        </div>
+<div class="option" data-score="0" onclick="pick(2,3)">
+          <span class="opt-label">D</span>那是他们品控不行，我们的批次管控严格得多，不会出这种事。
+        </div>
+</div>
+<div class="reply-box" id="reply-2-0">
+        <div class="bubble-row me"><div class="bubble me">林总，千分之几看着是小概率，但对出口生意，账不能这么算：欧洲客户会抽检，抽中一次，后面所有订单全部加严验厂；要是再抽中一次，丢的不是这一批货，是"瑞光品控"在渠道里的信任标签。您在产线蹲两天是小事，真正贵的是——这个标签一旦贴上，撕下来要多久？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">……你倒把我最烦的事说出来了。去年有个客户，就因为我们一批灯珠色温漂移，后面每单都要求加严抽检，烦了整整半年。</div></div>
+        <div class="coach"><b>教练点评：</b>完美的暗示问题（I）：把"偶发批次问题"放大成"品控信任标签"——技术总监的痛不在返修成本，在"客户对瑞光品质的信任"，那正是他负责的东西。他自己说出了"加严抽检半年"的实锤。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-2-1">
+        <div class="bubble-row me"><div class="bubble me">也是，晶圆批次问题确实难免，偶发情况谁都避不开。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">嗯。（低头看表）</div></div>
+        <div class="coach"><b>教练点评：</b>技术型客户找补时你点头 = 把话题聊死。他说"行业里谁没遇到过"恰恰是心虚——真无所谓的人不会解释。这正是上暗示问题（I）的时机。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>不算返修账，算信任账——抽检加严、渠道标签、撕下要多久。</div>
+      </div>
+<div class="reply-box" id="reply-2-2">
+        <div class="bubble-row me"><div class="bubble me">我们给XX大厂常年供货，从没出过这种事，您可以放心。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">XX是XX，我是我。他家的产线、他家工况跟我一样吗？案例不能当数据用。</div></div>
+        <div class="coach"><b>教练点评：</b>技术型客户不吃"案例背书"——别人的产线、工况、批次跟你不同，案例在他眼里没有可复现性。讲案例，等于自曝不懂技术验证。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>不搬案例，只推演：抽检加严、信任标签、要撕多久。</div>
+      </div>
+<div class="reply-box" id="reply-2-3">
+        <div class="bubble-row me"><div class="bubble me">那是他们品控不行，我们的批次管控严格得多，不会出这种事。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">你连我们的失效分析报告都没看过，就下结论？这不像工程师该说的话。</div></div>
+        <div class="coach"><b>教练点评：</b>贬低别人的品控 = 质疑他的选型判断，还暴露了你没看过他的数据就乱下结论。技术圈子里，这等于自毁 credibility。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>不评价别人，只放大他自己说出的事故后果。</div>
+      </div>
+<button class="btn" id="btn-2" onclick="nextRound(2)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb3">
+      <div class="round-head"><span class="num">第 4 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">林</div>
+        <div class="bubble boss">道理我认。但换方案要重新选型、重新验证、重新走认证——UL排期都排到半年后了。项目等不起，这个风险比你说的还大。</div>
+      </div>
+      <div class="ask">—— 林总抬出了「认证周期」这座大山。对技术决策者，这堵墙怎么拆？——</div>
+      <div class="options">
+<div class="option" data-score="5" onclick="pick(3,0)">
+          <span class="opt-label">A</span>认证费用这块，我们可以帮您分担一部分。
+        </div>
+<div class="option" data-score="3" onclick="pick(3,1)">
+          <span class="opt-label">B</span>我们帮好几家客户都顺利过了UL，经验非常丰富，可以给您参考。
+        </div>
+<div class="option" data-score="0" onclick="pick(3,2)">
+          <span class="opt-label">C</span>那等您认证排期宽松了，我们再来拜访，不急这一时。
+        </div>
+<div class="option" data-score="15" onclick="pick(3,3)">
+          <span class="opt-label">D</span>林总，认证排期您比我懂，但您想过没有——UL、DLC认证认的是"产品型号 + 测试数据"，不是"哪个品牌"。真正拖慢认证的，从来不是排队本身，是"先上车后补票"：方案测完不合格，改一版再重测，来回几轮，半年就没了。如果名瑟从选型阶段就按UL/DLC的测试要求，把外围电路、EMI裕量、温升这些提前调好，把"测试数据前置"——您拿到的就是"一次送测就过"的方案，验证周期从"串行等半年"压成"并行往前推"。我们最想做的，是陪您把周期抢回来。
+        </div>
+</div>
+<div class="reply-box" id="reply-3-0">
+        <div class="bubble-row me"><div class="bubble me">认证费用这块，我们可以帮您分担一部分。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">费用不是卡点，周期才是。你还没听懂我要什么。</div></div>
+        <div class="coach"><b>教练点评：</b>对技术总监，钱永远不是第一变量——他的稀缺资源是时间（认证排期、项目节点）。拿钱砸，等于没听懂他的问题。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>解决"周期"：测试数据前置，把串行验证改成并行推进。</div>
+      </div>
+<div class="reply-box" id="reply-3-1">
+        <div class="bubble-row me"><div class="bubble me">我们帮好几家客户都顺利过了UL，经验非常丰富，可以给您参考。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">经验是你们的，数据要在我这复现才算数。</div></div>
+        <div class="coach"><b>教练点评：</b>又是案例背书——技术总监只信"在我这复现"。经验可以讲，但必须落到"我能为你的项目前置什么"。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>把经验翻译成机制：选型阶段就按认证要求调好外围与EMI。</div>
+      </div>
+<div class="reply-box" id="reply-3-2">
+        <div class="bubble-row me"><div class="bubble me">那等您认证排期宽松了，我们再来拜访，不急这一时。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">我等得起，项目等不起。你这种销售我见多了——遇难就退。</div></div>
+        <div class="coach"><b>教练点评：</b>认证周期不是"等"出来的，是"设计"出来的。他抛出障碍是在考你，你一退，等于承认自己只有价格没有解法。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>拆掉"先测再改"的串行流程，把验证提前到选型阶段。</div>
+      </div>
+<div class="reply-box" id="reply-3-3">
+        <div class="bubble-row me"><div class="bubble me">林总，认证排期您比我懂，但您想过没有——UL、DLC认证认的是"产品型号 + 测试数据"，不是"哪个品牌"。真正拖慢认证的，从来不是排队本身，是"先上车后补票"：方案测完不合格，改一版再重测，来回几轮，半年就没了。如果名瑟从选型阶段就按UL/DLC的测试要求，把外围电路、EMI裕量、温升这些提前调好，把"测试数据前置"——您拿到的就是"一次送测就过"的方案，验证周期从"串行等半年"压成"并行往前推"。我们最想做的，是陪您把周期抢回来。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">……前置验证，这个说法有点意思。你是说在正式送样前，你们就能把参考设计和EMI预测试数据给我？</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）的深水区：他没被"换供应商风险大"吓住——那是外行话术。真正打动技术决策者的是"确定性 + 时间"。你把"换方案 = 重新等认证"重构成"验证流程前置 = 周期并行"，这是给技术总监算的专属账。他主动追问细节，说明门开了。<span class="score-chip good">+15 分</span></div>
+      </div>
+<button class="btn" id="btn-3" onclick="nextRound(3)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb4">
+      <div class="round-head"><span class="num">第 5 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">林</div>
+        <div class="bubble boss">行，你要是真能前置，我得看到东西：完整测试数据、参考设计、还有你们工程师的成色。我怎么验证你不是纸上谈兵？</div>
+      </div>
+      <div class="ask">—— 林总提出了终极考验：怎么验证你。这时候该上 N（效益问题）——怎么让他自己说出"愿意"？——</div>
+      <div class="options">
+<div class="option" data-score="0" onclick="pick(4,0)">
+          <span class="opt-label">A</span>您放心，我们的方案在XX客户那边已经量产好几年了，绝对靠谱。
+        </div>
+<div class="option" data-score="15" onclick="pick(4,1)">
+          <span class="opt-label">B</span>林总，我建议用您的标准来验证，分三步：第一步，我先给您一份《技术验证清单》——把您关心的低温冷启动、批次一致性、EMI裕量这些项，测试方法、通过标准、数据格式全列清楚，标准您来定、清单您来审；第二步，我们提供10套工程样品加完整预测试报告，您让工程师在您自己的实验室、用您自己的流程跑一遍；第三步，数据您看完，再决定要不要进UL流程。我就问一句：如果这三步走完、数据全部达标，您愿不愿意把瑞光下一代产品的方案池里，放进名瑟？
+        </div>
+<div class="option" data-score="3" onclick="pick(4,2)">
+          <span class="opt-label">C</span>要不您来我们实验室实地考察一下，眼见为实。
+        </div>
+<div class="option" data-score="5" onclick="pick(4,3)">
+          <span class="opt-label">D</span>我可以请杰华特的原厂FAE工程师过来，跟您做一次深度的技术交流。
+        </div>
+</div>
+<div class="reply-box" id="reply-4-0">
+        <div class="bubble-row me"><div class="bubble me">您放心，我们的方案在XX客户那边已经量产好几年了，绝对靠谱。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">"绝对"这两个字，在我这等于零分。我要的是数据，不是态度。</div></div>
+        <div class="coach"><b>教练点评：</b>"绝对靠谱"是销售口头禅，却是技术总监的扣分项——他见过太多"绝对"，只信可复现的数据。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>给可复现的验证路径：清单您审、样品您测、数据您定。</div>
+      </div>
+<div class="reply-box" id="reply-4-1">
+        <div class="bubble-row me"><div class="bubble me">林总，我建议用您的标准来验证，分三步：第一步，我先给您一份《技术验证清单》——把您关心的低温冷启动、批次一致性、EMI裕量这些项，测试方法、通过标准、数据格式全列清楚，标准您来定、清单您来审；第二步，我们提供10套工程样品加完整预测试报告，您让工程师在您自己的实验室、用您自己的流程跑一遍；第三步，数据您看完，再决定要不要进UL流程。我就问一句：如果这三步走完、数据全部达标，您愿不愿意把瑞光下一代产品的方案池里，放进名瑟？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">……标准我来定，这个我喜欢。你要真能按我的标准跑出数据，备选池不是问题。</div></div>
+        <div class="coach"><b>教练点评：</b>满分效益问题（N），句句踩在技术决策者的点上：全程用他的语言（标准、清单、复现），把"换供应商"翻译成"按我的标准做一次验证"；最后"愿不愿意放进备选池"是个小承诺，让技术总监自己说出"愿意"。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-4-2">
+        <div class="bubble-row me"><div class="bubble me">要不您来我们实验室实地考察一下，眼见为实。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">参观可以往后放。先把数据发我，我要先看到东西。</div></div>
+        <div class="coach"><b>教练点评：</b>参观考察是"关系型推进"，技术总监要的是"数据型推进"——他的流程是：先看数据，再谈见面。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>先给验证清单和预测试数据，见面自然水到渠成。</div>
+      </div>
+<div class="reply-box" id="reply-4-3">
+        <div class="bubble-row me"><div class="bubble me">我可以请杰华特的原厂FAE工程师过来，跟您做一次深度的技术交流。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">原厂FAE可以来，但那是锦上添花。你先让我看到你的诚意——清单和数据。</div></div>
+        <div class="coach"><b>教练点评：</b>请原厂FAE是张好牌，但出早了——他现在要验证的是"你"，不是"你的后台"。先拿出自己的清单和数据，FAE才有出场价值。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>先交自己的作业（清单+样品+报告），再放大招（原厂FAE）。</div>
+      </div>
+<button class="btn" id="btn-4" onclick="nextRound(4)">继续对话 →</button>
+    </div>
+
+    <div class="round-block" id="rb5">
+      <div class="round-head"><span class="num">第 6 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">林</div>
+        <div class="bubble boss">那就按你说的来。技术验证清单，你什么时候能给我？我这人不喜欢拖。</div>
+      </div>
+      <div class="ask">—— 林总开口要时间表了。最后一击：怎么收口？——</div>
+      <div class="options">
+<div class="option" data-score="15" onclick="pick(5,0)">
+          <span class="opt-label">A</span>林总，我给您一个明确的时间表：明天上午10点前，《技术验证清单》发到您邮箱——6大项24小项，每项写清测试方法、通过标准、数据格式，全部按您今天的口径来；您审完提出修改，48小时内我们按修订版寄出10套工程样品加完整预测试报告；工程师驻厂联调，您说几点到就几点到。两周后，咱们坐下来一起过数据。您看这个节奏行吗？
+        </div>
+<div class="option" data-score="5" onclick="pick(5,1)">
+          <span class="opt-label">B</span>我回去跟公司申请一下资源，尽快给您一个答复。
+        </div>
+<div class="option" data-score="0" onclick="pick(5,2)">
+          <span class="opt-label">C</span>那今天先把合作意向签了吧，签完我们马上启动。
+        </div>
+<div class="option" data-score="3" onclick="pick(5,3)">
+          <span class="opt-label">D</span>我先把资料整理齐，过两周再来拜访您，到时候详聊。
+        </div>
+</div>
+<div class="reply-box" id="reply-5-0">
+        <div class="bubble-row me"><div class="bubble me">林总，我给您一个明确的时间表：明天上午10点前，《技术验证清单》发到您邮箱——6大项24小项，每项写清测试方法、通过标准、数据格式，全部按您今天的口径来；您审完提出修改，48小时内我们按修订版寄出10套工程样品加完整预测试报告；工程师驻厂联调，您说几点到就几点到。两周后，咱们坐下来一起过数据。您看这个节奏行吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">明天上午10点，我等你邮件。清单要是做得专业，这事就真能往下推。</div></div>
+        <div class="coach"><b>教练点评：</b>满分收口：跟技术控谈"时间表"，不谈"感情"——三个明确节点（明天10点、48小时内、两周后）+ 三个可交付物（清单、样品、报告）+ 他的主导权（您审、您定、您说了算）。最后一句"您看行吗"，把节奏交还给他。对技术总监，守时就是最大的诚意。<span class="score-chip good">+15 分</span></div>
+      </div>
+<div class="reply-box" id="reply-5-1">
+        <div class="bubble-row me"><div class="bubble me">我回去跟公司申请一下资源，尽快给您一个答复。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">申请资源？清单、样品、报告是你的本分，不是资源。你连本分都要申请？</div></div>
+        <div class="coach"><b>教练点评：</b>"回去申请"在技术总监耳朵里 = "这事我自己都还没把握"。他要的是你当场给出承诺和时间表，不是回去走流程。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>当场给时间表：明天10点清单、48小时样品、两周过数据。</div>
+      </div>
+<div class="reply-box" id="reply-5-2">
+        <div class="bubble-row me"><div class="bubble me">那今天先把合作意向签了吧，签完我们马上启动。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">意向书？那是采购和老板的流程。在我这，数据不过关，签了也是废纸一张。</div></div>
+        <div class="coach"><b>教练点评：</b>技术总监不吃"签约推进"这套——他的世界里只有"数据过关"才有下一步。逼单在他面前不仅无效，还显得你不懂技术决策的规矩。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>收口收"数据验证"的时间表，不是收"合同意向"。</div>
+      </div>
+<div class="reply-box" id="reply-5-3">
+        <div class="bubble-row me"><div class="bubble me">我先把资料整理齐，过两周再来拜访您，到时候详聊。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">林</div><div class="bubble boss">两周？项目排期不等我，你让我等你两周？</div></div>
+        <div class="coach"><b>教练点评：</b>节奏错位——技术项目排期是以天计的，他给你时间表，你要还他更快的时间表。"过两周再来"等于告诉他自己不着急、项目不重要。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>给出比他预期更快的节点：明天10点清单、48小时样品。</div>
+      </div>
+<button class="btn" id="btn-5" onclick="showResult()">查看战绩卡 →</button>
+    </div>
+    </div>
+    <div id="resultPage">
+<div class="card">
+      <div class="score-hero">
+        <div class="big"><span id="scoreNum">0</span><span class="of"> / 100</span></div>
+        <div class="lv" id="lvTitle">—</div>
+        <div class="lv-div" id="lvA">林总说"明天上午10点，我等你邮件"。能让技术总监把时间表给你，你已经赢了一半。</div>
+        <div class="lv-div" id="lvB">节奏不错，个别轮次还在用"对老板/对采购"的招。回看那几处"+3分""+5分"的点评——技术只认数据。</div>
+        <div class="lv-div" id="lvC">你跟技术总监讲案例、拍胸脯、谈价格——招招踩雷。技术型客户要的是"标准您定、数据说话"。建议先重刷SPIN练习页，再来挑战。</div>
+        <div class="lv-div" id="lvD">别灰心，重点复盘第2、4轮：他的痛点不是成本，是"批次翻车丢信任"和"认证周期拖项目"。挖不到这两点，技术关过不了。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>五维得分</h3>
+      <div class="dim-row"><div class="dim-label"><span>背景摸底（S）</span><span id="d1t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d1"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>难点挖掘（P）</span><span id="d2t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d2"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>痛点放大（I）</span><span id="d3t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d3"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>价值引导（N）</span><span id="d4t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d4"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>推进承诺（收口）</span><span id="d5t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d5"></div></div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>林总隐藏档案（通关揭秘）</h3>
+      <div class="reveal-item">🎯 林总今年最大的心事是<b>UL/DLC认证周期</b>——美国单利润高，但认证排期卡着整个项目。他的焦虑是时间，不是价格。</div>
+      <div class="reveal-item">🩹 年初那批来料批次问题导致整批退货、客户加严抽检了半年——<b>"品控信任"是他的逆鳞</b>：你踩对了他会交心，踩错了（讲案例、拍胸脯）他直接拉黑。</div>
+      <div class="reveal-item">🧮 技术型决策者只认<b>可复现的数据 + 自己定的标准</b>。打动他的句式："标准您定、流程您审、数据您说了算"。在他面前谈价格、讲关系、请客送礼，一律无效。</div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>满分话术六连 · 带走背熟</h3>
+      <div class="recall-item"><span class="r-tag">S</span>「出口主力是商照还是家居？电源走隔离还是非隔离？现在卡在哪个认证？」<div class="r-why">背景问题：问技术坐标系的事，他才会觉得你懂行。</div></div>
+      <div class="recall-item"><span class="r-tag">P</span>「低温冷启动、电网波动、批次一致性——哪块出过让您头疼的事？」<div class="r-why">难点问题：极端工况是技术选型者的专属痛点区。</div></div>
+      <div class="recall-item"><span class="r-tag">I</span>「客户抽检一次，后面全加严——'瑞光品控'这个标签撕下来要多久？」<div class="r-why">暗示问题：把批次事故放大成品控信任资产。</div></div>
+      <div class="recall-item"><span class="r-tag">I</span>「真正慢的不是认证本身，是'先上车后补票'——测试数据前置，周期就能并行」<div class="r-why">暗示深水区：用确定性 + 时间，拆掉认证周期大山。</div></div>
+      <div class="recall-item"><span class="r-tag">N</span>「标准您定、流程您审、数据您说了算——三步走完数据达标，愿不愿意把名瑟放进备选池？」<div class="r-why">效益问题：让技术总监用他自己的标准说服自己。</div></div>
+      <div class="recall-item"><span class="r-tag">收</span>「明天10点《技术验证清单》到您邮箱，48小时内10套工程样品，两周后一起过数据。」<div class="r-why">收口收"时间表"——对技术控，守时就是最大的诚意。</div></div>
+    </div>
+    </div>
+  </div>
+
+
+  <!-- ================= 下一局(打完出) ================= -->
+  <div class="card" id="nextCard" style="display:none;">
+    <h3><span class="dot"></span>教练建议 · 下一局</h3>
+    <div class="mission" id="sugTxt" style="font-size:13.5px;"></div>
+    <button class="btn-go" id="btnMain">再战一位客户</button>
+    <button class="btn-ghost" onclick="startMatch(curKey)">↻ 同一位客户 再练一遍</button>
+    <div class="ladder">难度阶梯：<b>张总</b>(老板·算账型) → <b>王总</b>(采购·刁钻型) → <b>林总</b>(技术·数据控)<br>
+    换人不换框架：同一套 SPIN，不同岗位挖不同的痛点——老板怕亏钱挖「利润」、采购怕担责挖「风险」、技术怕不稳挖「数据」。</div>
+  </div>
+
+  <div class="foot-note" id="footNote" style="display:none;">
+    拜访模拟训练 · 第1关 SPIN需求挖掘（多客户随机版）<br>
+    场景素材：厦门名瑟电子 × 中山古镇LED灯具厂 · 大董销售训练营<br>
+    开局随机匹配客户，防背答案；打完看战绩卡亮弱项，再按教练推荐换对手。<br>
+    截图战绩卡发到团队群，@教练 约下一关
+  </div>
+
+</div>
 <script>
-  var TOTAL = 6;
-  var scores = [];
-  var currentRound = 0;
 
-  function pick(round, idx) {
-    if (scores[round] !== undefined) return; // 已答过
-    var opts = document.querySelectorAll('#rb' + round + ' .option');
-    var score = parseInt(opts[idx].getAttribute('data-score'), 10);
-    scores[round] = score;
+var TOTAL = 6;
+var CUSTOMERS = ['zhang', 'wang', 'lin'];
+var META = {
+  zhang: { name: '张总', role: '明泰照明 总经理', diff: 1, diffLabel: '标准 · 老板·算账型', tag: '挖利润' },
+  wang:  { name: '王总', role: '星锐照明 采购经理', diff: 2, diffLabel: '进阶 · 采购·刁钻型', tag: '挖风险' },
+  lin:   { name: '林总', role: '瑞光照明 技术总监', diff: 3, diffLabel: '硬核 · 技术·数据控', tag: '挖数据' }
+};
+var DIM_NAMES = ['背景摸底(S)', '难点挖掘(P)', '痛点放大(I)', '价值引导(N)', '推进承诺(收口)'];
+var scores = [], currentRound = 0, curKey = null, lastKey = null;
 
-    opts[idx].classList.add('selected');
-    for (var i = 0; i < opts.length; i++) {
-      opts[i].onclick = null;
-      opts[i].style.opacity = (i === idx) ? '1' : '.45';
+function randKey() {
+  var pool = CUSTOMERS.filter(function (k) { return k !== lastKey; });
+  if (!pool.length) pool = CUSTOMERS.slice();
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+function root() { return document.getElementById('proot-' + curKey); }
+function q(id) { return root().querySelector('#' + id); }
+
+function resetPersona(key) {
+  var r = document.getElementById('proot-' + key);
+  if (!r) return;
+  var ca = r.querySelector('#chatArea');
+  if (ca) ca.style.display = 'block';
+  var i, j;
+  for (i = 0; i < TOTAL; i++) {
+    var rb = r.querySelector('#rb' + i);
+    if (!rb) continue;
+    rb.style.display = (i === 0) ? 'block' : 'none';
+    var opts = rb.querySelectorAll('.option');
+    for (j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('selected');
+      opts[j].style.opacity = '1';
     }
+    var boxes = rb.querySelectorAll('.reply-box');
+    for (j = 0; j < boxes.length; j++) boxes[j].classList.remove('show');
+    var bt = rb.querySelector('.btn');
+    if (bt) bt.classList.remove('show');
+  }
+  var rp = r.querySelector('#resultPage');
+  if (rp) rp.classList.remove('show');
+  var fills = r.querySelectorAll('.dim-fill');
+  for (j = 0; j < fills.length; j++) fills[j].style.width = '0%';
+  var labels = r.querySelectorAll('.dim-label span:last-child');
+  for (j = 0; j < labels.length; j++) labels[j].textContent = '0%';
+  var lvs = r.querySelectorAll('.lv-div');
+  for (j = 0; j < lvs.length; j++) lvs[j].style.display = 'none';
+}
 
-    var reply = document.getElementById('reply-' + round + '-' + idx);
-    if (reply) reply.classList.add('show');
-    document.getElementById('btn-' + round).classList.add('show');
+function startMatch(key) {
+  var all = document.querySelectorAll('.persona-root');
+  for (var i = 0; i < all.length; i++) all[i].style.display = 'none';
+  curKey = key;
+  lastKey = key;
+  scores = [];
+  currentRound = 0;
+  resetPersona(key);
+  document.getElementById('proot-' + key).style.display = 'block';
+  var m = META[key];
+  document.getElementById('oppName').textContent = m.name + ' · ' + m.role;
+  document.getElementById('oppTag').textContent = m.diffLabel + ' · 专治' + m.tag;
+  document.getElementById('nextCard').style.display = 'none';
+  document.getElementById('footNote').style.display = 'none';
+  window.scrollTo(0, 0);
+}
 
-    setTimeout(function () {
-      var el = document.getElementById('rb' + round);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, 150);
+function pick(round, idx) {
+  if (scores[round] !== undefined) return; // 已答过
+  var r = root();
+  var rb = r.querySelector('#rb' + round);
+  if (!rb) return;
+  var opts = rb.querySelectorAll('.option');
+  var score = parseInt(opts[idx].getAttribute('data-score'), 10);
+  scores[round] = score;
+  opts[idx].classList.add('selected');
+  for (var i = 0; i < opts.length; i++) {
+    if (i !== idx) opts[i].style.opacity = '.45';
+  }
+  var reply = rb.querySelector('#reply-' + round + '-' + idx);
+  if (reply) reply.classList.add('show');
+  var btn = rb.querySelector('#btn-' + round);
+  if (btn) btn.classList.add('show');
+  setTimeout(function () {
+    var el = root().querySelector('#rb' + round);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, 150);
+}
+
+function nextRound(round) {
+  currentRound = round + 1;
+  var r = root();
+  var cur = r.querySelector('#rb' + round);
+  var next = r.querySelector('#rb' + currentRound);
+  if (cur) cur.style.display = 'none';
+  if (next) {
+    next.style.display = 'block';
+    next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function showResult() {
+  var total = 0, allCorrect = true, i, j;
+  for (i = 0; i < TOTAL; i++) {
+    total += (scores[i] || 0);
+    if ((scores[i] || 0) < 15) allCorrect = false;
+  }
+  if (allCorrect) total += 10; // 全对奖励
+
+  var r = root();
+  var ca = r.querySelector('#chatArea');
+  if (ca) ca.style.display = 'none';
+  var rp = r.querySelector('#resultPage');
+  if (rp) rp.classList.add('show');
+
+  r.querySelector('#scoreNum').textContent = total;
+  var lvTitle = r.querySelector('#lvTitle');
+  var lvDiv = '';
+  if (total >= 90)      { lvTitle.textContent = '教练级销售'; lvTitle.style.background = '#336633'; lvDiv = 'lvA'; }
+  else if (total >= 70) { lvTitle.textContent = '熟练销售';   lvTitle.style.background = '#2F3C7E'; lvDiv = 'lvB'; }
+  else if (total >= 50) { lvTitle.textContent = '需要陪跑';   lvTitle.style.background = '#BA7517'; lvDiv = 'lvC'; }
+  else                  { lvTitle.textContent = '回炉重造';   lvTitle.style.background = '#B85042'; lvDiv = 'lvD'; }
+  var lvs = r.querySelectorAll('.lv-div');
+  for (i = 0; i < lvs.length; i++) lvs[i].style.display = 'none';
+  var dv = r.querySelector('#' + lvDiv);
+  if (dv) dv.style.display = 'block';
+
+  var dims = [
+    [scores[0] || 0],
+    [scores[1] || 0],
+    Math.round(((scores[2] || 0) + (scores[3] || 0)) / 2),
+    [scores[4] || 0],
+    [scores[5] || 0]
+  ];
+  var maxes = [15, 15, 15, 15, 15];
+  var pcts = [];
+  for (j = 0; j < dims.length; j++) {
+    var pct = Math.min(100, Math.round(dims[j] / maxes[j] * 100));
+    pcts.push(pct);
+    r.querySelector('#d' + (j + 1)).style.width = pct + '%';
+    r.querySelector('#d' + (j + 1) + 't').textContent = pct + '%';
   }
 
-  function nextRound(round) {
-    currentRound = round + 1;
-    var next = document.getElementById('rb' + currentRound);
-    var cur = document.getElementById('rb' + round);
-    if (cur) cur.style.display = 'none';
-    if (next) {
-      next.style.display = 'block';
-      next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // 弱项 = 五维中最低的一项
+  var weak = 0;
+  for (j = 1; j < pcts.length; j++) { if (pcts[j] < pcts[weak]) weak = j; }
+
+  var m = META[curKey];
+  var sug = '', recKey = null, recLabel = '';
+  if (total >= 85) {
+    var harder = null;
+    for (j = 0; j < CUSTOMERS.length; j++) {
+      var k2 = CUSTOMERS[j];
+      if (META[k2].diff > m.diff) { harder = k2; break; }
     }
+    if (harder) {
+      recKey = harder; recLabel = '去会会更硬的：' + META[harder].name + '（' + META[harder].diffLabel + '）';
+      sug = '本局弱项：' + DIM_NAMES[weak] + '（' + pcts[weak] + '%）。<b>这位客户已被你拿捏，敢不敢换个更硬的？</b>' + META[harder].name + '是' + META[harder].diffLabel + '，正好专治你刚暴露的短板。';
+    } else {
+      recKey = 'random'; recLabel = '三位客户都被你征服了（随机巡场）';
+      sug = '<b>张总、王总、林总全被你拿下——老板/采购/技术三种打法已集齐。</b>恭喜通关第1关，是时候找教练约第2关了！';
+    }
+  } else if (total >= 50) {
+    recKey = 'same';
+    sug = '本局弱项：' + DIM_NAMES[weak] + '（' + pcts[weak] + '%）。<b>先别急着换人</b>——同一客户再战一局，把'+ DIM_NAMES[weak] +'对应的满分话术练进肌肉记忆，稳了再上难度。';
+  } else {
+    recKey = 'same';
+    sug = '本局丢分较多，先别开新地图。<b>点开每轮"+0分"的点评逐条读</b>，同一客户重练，基本功先过关再挑战新对手。';
   }
-
-  function showResult() {
-    var total = 0, allCorrect = true;
-    for (var i = 0; i < TOTAL; i++) {
-      total += (scores[i] || 0);
-      if ((scores[i] || 0) < 15) allCorrect = false;
-    }
-    if (allCorrect) total += 10; // 全对奖励
-
-    document.getElementById('chatArea').style.display = 'none';
-    document.getElementById('resultPage').classList.add('show');
-
-    document.getElementById('scoreNum').textContent = total;
-    var lvTitle = document.getElementById('lvTitle');
-    var lvDiv = null;
-    if (total >= 90) { lvTitle.textContent = '教练级销售'; lvTitle.style.background = '#336633'; lvDiv = 'lvA'; }
-    else if (total >= 70) { lvTitle.textContent = '熟练销售'; lvTitle.style.background = '#2F3C7E'; lvDiv = 'lvB'; }
-    else if (total >= 50) { lvTitle.textContent = '需要陪跑'; lvTitle.style.background = '#BA7517'; lvDiv = 'lvC'; }
-    else { lvTitle.textContent = '回炉重造'; lvTitle.style.background = '#B85042'; lvDiv = 'lvD'; }
-    var d = document.getElementById(lvDiv);
-    if (d) d.style.display = 'block';
-
-    var dims = [
-      [scores[0] || 0],
-      [scores[1] || 0],
-      Math.round(((scores[2] || 0) + (scores[3] || 0)) / 2),
-      [scores[4] || 0],
-      [scores[5] || 0]
-    ];
-    var maxes = [15, 15, 15, 15, 15];
-    for (var j = 0; j < dims.length; j++) {
-      var pct = Math.min(100, Math.round(dims[j] / maxes[j] * 100));
-      document.getElementById('d' + (j + 1)).style.width = pct + '%';
-      document.getElementById('d' + (j + 1) + 't').textContent = pct + '%';
-    }
-
-    window.scrollTo(0, 0);
+  document.getElementById('sugTxt').innerHTML = sug;
+  var btnMain = document.getElementById('btnMain');
+  if (recKey === 'same') {
+    btnMain.textContent = '再战同一位客户（' + m.name + '）';
+    btnMain.onclick = function () { startMatch(curKey); };
+  } else if (recKey === 'random') {
+    btnMain.textContent = '随机换一位对手';
+    btnMain.onclick = function () { startMatch(randKey()); };
+  } else {
+    btnMain.textContent = recLabel;
+    btnMain.onclick = function () { startMatch(recKey); };
   }
+  document.getElementById('nextCard').style.display = 'block';
+  document.getElementById('footNote').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+startMatch(randKey());
+
 </script>
-
 </body>
 </html>
