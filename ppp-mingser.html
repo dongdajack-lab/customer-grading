@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>名瑟·PPP拜访开场白练习 | LED照明芯片销售场景</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%);
+  min-height: 100vh;
+  color: #1a2547;
+  line-height: 1.6;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+
+.header {
+  background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 20px rgba(47, 60, 126, 0.25);
+}
+.brand-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.header h1 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
+.header p { font-size: 13px; opacity: 0.9; }
+.ppp-formula {
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.ppp-formula strong { color: #ffd97a; }
+.scenario-info {
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.progress-wrap {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+.progress-text .current-num {
+  color: #2F3C7E;
+  font-weight: 700;
+  font-size: 16px;
+}
+.progress-bar {
+  height: 6px;
+  background: #e8ecf5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2F3C7E 0%, #4a5fa8 100%);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.q-block { display: none; }
+.q-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.question-badge {
+  display: inline-block;
+  background: #2F3C7E;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.scenario {
+  background: #f5f7fc;
+  border-left: 4px solid #2F3C7E;
+  padding: 14px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+}
+.scenario .label {
+  color: #2F3C7E;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.q-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2547;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border-radius: 8px;
+  border: 1px dashed #d0d8ec;
+}
+.q-title .stage-hint {
+  display: inline-block;
+  font-size: 12px;
+  background: #fff4e6;
+  color: #c47b1f;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border: 2px solid #e8ecf5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+}
+.option:hover {
+  border-color: #2F3C7E;
+  background: #f5f7fc;
+  transform: translateX(2px);
+}
+.option.selected {
+  border-color: #2F3C7E;
+  background: #eef2fb;
+}
+.option.correct {
+  border-color: #336633;
+  background: #eaf5ea;
+}
+.option.wrong {
+  border-color: #c14545;
+  background: #fbeaea;
+}
+.option.disabled { cursor: not-allowed; }
+.option .radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+  position: relative;
+}
+.option.selected .radio {
+  border-color: #2F3C7E;
+  background: #2F3C7E;
+}
+.option.selected .radio::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+.option.correct .radio {
+  border-color: #336633;
+  background: #336633;
+}
+.option.correct .radio::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.option.wrong .radio {
+  border-color: #c14545;
+  background: #c14545;
+}
+.option.wrong .radio::after {
+  content: '✗';
+  position: absolute;
+  top: -2px;
+  left: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+.option .text { flex: 1; }
+.opt-label {
+  font-weight: 700;
+  color: #2F3C7E;
+  margin-right: 4px;
+}
+.option.correct .opt-label { color: #336633; }
+.option.wrong .opt-label { color: #c14545; }
+.type-tag {
+  display: inline-block;
+  font-size: 11px;
+  background: #e8ecf5;
+  color: #555;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.option.correct .type-tag { background: #d5e8d5; color: #2a4d2a; }
+.option.wrong .type-tag { background: #f0d4d4; color: #6a2a2a; }
+
+.correct-answer, .explanation {
+  display: none;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.correct-answer {
+  background: #eaf5ea;
+  border-left: 4px solid #336633;
+  color: #2a4d2a;
+}
+.correct-answer .label {
+  font-weight: 700;
+  margin-right: 6px;
+}
+.explanation {
+  background: #fafbff;
+  border-left: 4px solid #2F3C7E;
+  color: #333;
+}
+.explanation h4 {
+  font-size: 14px;
+  color: #2F3C7E;
+  margin-bottom: 8px;
+}
+.explanation p { margin-bottom: 8px; font-size: 13.5px; line-height: 1.7; }
+.explanation .formula {
+  background: #2F3C7E;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+.correct-answer.show, .explanation.show { display: block; }
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: #2F3C7E;
+  color: white;
+}
+.btn-primary:hover:not(:disabled) { background: #1e2a5c; }
+.btn-primary:disabled { background: #b0b8c8; cursor: not-allowed; }
+.btn-secondary {
+  background: white;
+  color: #2F3C7E;
+  border: 2px solid #2F3C7E;
+}
+.btn-secondary:hover:not(:disabled) { background: #f5f7fc; }
+.btn-secondary:disabled { color: #b0b8c8; border-color: #d0d8ec; cursor: not-allowed; }
+
+.result-card {
+  display: none;
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.result-card.show { display: block; }
+.result-title { font-size: 22px; color: #1a2547; margin-bottom: 8px; font-weight: 700; }
+.score-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2F3C7E 0%, #4a5fa8 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  box-shadow: 0 4px 16px rgba(47, 60, 126, 0.3);
+}
+.score-circle .num { font-size: 42px; font-weight: 700; }
+.score-circle .total { font-size: 14px; opacity: 0.9; }
+.score-percent { font-size: 18px; color: #2F3C7E; margin-bottom: 6px; font-weight: 600; }
+.score-remark { font-size: 14px; color: #666; margin-bottom: 24px; }
+.result-detail {
+  text-align: left;
+  background: #fafbff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.result-detail h3 { font-size: 15px; color: #2F3C7E; margin-bottom: 12px; }
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13.5px;
+  color: #333;
+  border-bottom: 1px solid #e8ecf5;
+}
+.result-item:last-child { border-bottom: none; }
+.result-item .status { font-weight: 700; }
+
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #999;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .container { padding: 16px 12px; }
+  .header { padding: 20px 16px; }
+  .header h1 { font-size: 20px; }
+  .q-card { padding: 20px 16px; }
+  .option { padding: 12px 14px; font-size: 13.5px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="brand-tag">博商 · 大董销售体系</span>
+    <h1>名瑟·PPP拜访开场白练习</h1>
+    <p>拜访客户总经理的 30 秒黄金开场 · 8 道情景判断题</p>
+    <div class="ppp-formula">
+      <strong>PPP 三要素（顾问式拜访开场）：</strong><br>
+      <strong>P</strong> - <strong>Purpose 目的</strong>：为什么来？给客户一个"见面理由"<br>
+      <strong>P</strong> - <strong>Process 过程</strong>：怎么谈？多长时间？流程是什么？<br>
+      <strong>P</strong> - <strong>Payoff 收益</strong>：对客户的价值？为什么要给你时间？<br>
+      <em>最后用一句"您看这样安排可以吗？"锁定客户配合。</em>
+    </div>
+    <div class="scenario-info">
+      <strong>场景设定：</strong>你是厦门名瑟电子销售工程师李明，这次是<strong>第二次</strong>拜访中山某LED球泡灯厂的<strong>总经理张总</strong>。第一次是送样和初步接触，这次需要约 30 分钟，沟通杰华特AC/DC方案在5W球泡灯上的应用，重点解决ErP认证通率问题。月出货 80 万颗。
+    </div>
+  </div>
+
+  <div id="quizPage">
+    <div class="progress-wrap">
+      <div class="progress-text">
+        <span>答题进度</span>
+        <span><span class="current-num" id="currentNum">1</span> / <span id="totalNum">8</span></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- 第 1 题 -->
+    <div class="q-block" id="q0" style="display:block;">
+      <div class="q-card">
+        <span class="question-badge">第 1 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>你准时到达张总办公室，握手寒暄后，<strong>第一句话</strong>应该说什么？
+        </div>
+        <div class="q-title">
+          总经理时间宝贵，开门见山就要回答"为什么要见我"。哪个是最佳的 Purpose 开场？
+          <span class="stage-hint">P1 - Purpose 目的</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "张总好！我是厦门名瑟的李明，上次送样您收到了吧？这次是特地来感谢您抽空见我的。"<span class="type-tag">寒暄感谢</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "张总好！我是名瑟的李明。今天专程来，是想跟您聊一下上次5W球泡样片在贵司的测试情况，看看我们杰华特的AC/DC方案能不能帮您解决ErP认证通率的问题。"<span class="type-tag">P-Purpose</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "张总好！我是名瑟的李明。我们公司是杰华特微电子的核心代理，专注LED电源芯片18年，服务过200多家头部灯具厂..."<span class="type-tag">公司介绍</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "张总好！最近您朋友圈发的工厂加班照片挺多，生意不错啊！我们这个方案能帮您一年省下30万成本！"<span class="type-tag">套近乎</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca0">
+          <span class="label">✅ 正确答案：B</span>Purpose（目的）—— 30秒内说清楚"为什么来"+"对客户的价值方向"。
+        </div>
+        <div class="explanation" id="ex0">
+          <h4>解析：总经理的"30秒耐心"</h4>
+          <p><strong>关键认知：</strong>总经理每天见 5-10 个销售，开场超过 30 秒没说清"为什么见你"，心理已经在准备送客。</p>
+          <p><strong>B 为什么对：</strong>1) 一句话讲清"为什么来"（聊上次样片测试）；2) 暗示客户业务痛点（ErP 认证通率）；3) 不超过 20 秒，符合总经理节奏。</p>
+          <p><strong>A 为什么错：</strong>寒暄感谢是礼貌，但没回答"为什么要见我"，对总经理没价值。</p>
+          <p><strong>C 为什么错：</strong>上来介绍公司 18 年 200 家客户——这是你的卖点，不是总经理的痛点，错位。</p>
+          <p><strong>D 为什么错：</strong>"省30万"太具体且没依据，总经理一听就觉得是吹牛，秒关信任。</p>
+          <div class="formula">P-Purpose 标准句式："张总好！今天来是想跟您聊一下（与客户痛点相关的话题）。"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 2 题 -->
+    <div class="q-block" id="q1">
+      <div class="q-card">
+        <span class="question-badge">第 2 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>张总点头："上次样品我们测了，能效确实不错，工程师也做了几版方案。"接下来你要说明本次见面的时间安排和流程。
+        </div>
+        <div class="q-title">
+          哪个是最佳的 Process 过程说明？
+          <span class="stage-hint">P2 - Process 过程</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "那我把PPT从头给您讲一下，大概一个半小时，您不介意吧？"<span class="type-tag">反客为主</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "张总，我准备先花10分钟跟您了解一下贵司目前球泡灯方案的应用现状，再用10分钟看看我们新方案能不能帮上忙，最后10分钟咱们定一下下一步。整个过程大概30分钟，您看可以吗？"<span class="type-tag">P-Process</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "您工程师在旁边吗？叫上他一起听吧，我正好把方案都讲一遍。"<span class="type-tag">拉人旁听</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "时间您说，我配合您就行。"<span class="type-tag">无计划</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca1">
+          <span class="label">✅ 正确答案：B</span>Process（过程）—— 三个"10分钟"清晰透明，最后用"您看可以吗？"锁定同意。
+        </div>
+        <div class="explanation" id="ex1">
+          <h4>解析：Process 为什么必须由销售来定？</h4>
+          <p><strong>核心心法：</strong>Process 是为了让客户"对时间有掌控感"——知道 30 分钟会怎么花，而不是焦虑"你到底要讲多久"。</p>
+          <p><strong>B 为什么对：</strong>1) 时间分段具体（10+10+10）；2) 流程有节奏（了解→讨论→决策）；3) 主动询问"您看可以吗"——这是 PPP 的关键收口动作。</p>
+          <p><strong>A 为什么错：</strong>"您不介意吧"是反向锁定，等于把决定权交出去——客户十有八九会说"我等下还有会"。</p>
+          <p><strong>C 为什么错：</strong>没经允许拉人进来，是销售大忌，破坏一对一信任节奏。</p>
+          <p><strong>D 为什么错：</strong>"您说"看似尊重客户，实则是销售没准备的表现，总经理会立刻降低对你的评价。</p>
+          <div class="formula">P-Process 标准句式："我准备用X分钟做A，再用X分钟做B，最后X分钟做C，整个X分钟。您看可以吗？"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 3 题 -->
+    <div class="q-block" id="q2">
+      <div class="q-card">
+        <span class="question-badge">第 3 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>张总点头说："行，30分钟可以。但你这30分钟能给我带来什么？我时间很贵的。"
+        </div>
+        <div class="q-title">
+          总经理直接挑战价值，哪个 Payoff 回应最得体？
+          <span class="stage-hint">P3 - Payoff 收益</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "您放心，我们产品是杰华特的，杰华特是上市公司，质量绝对有保证。"<span class="type-tag">品牌背书</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "张总，30分钟给您三样东西：第一，看贵司现在方案还有没有 ErP 认证的隐患；第二，我们杰华特新方案在 5W 球泡上实测能效数据；第三，下次送样的成本对比分析。如果这三样您觉得有用，咱们就继续；觉得没用，10分钟我就走。"<span class="type-tag">P-Payoff</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "您是大客户，我们给您最优惠的价格，比X家便宜5%。"<span class="type-tag">低价诱惑</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "张总您是见过大世面的人，我这30分钟对您就是小意思，您随便听听就好。"<span class="type-tag">贬低客户</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca2">
+          <span class="label">✅ 正确答案：B</span>Payoff（收益）—— 给出 3 个具体、可验证的产出 + "10分钟就撤"的安全承诺。
+        </div>
+        <div class="explanation" id="ex2">
+          <h4>解析：Payoff 的关键不是"画饼"，是"清单+承诺"</h4>
+          <p><strong>Payoff 的精髓：</strong>让客户感觉"这30分钟=3个具体收获"，而不是"30分钟听你吹牛"。</p>
+          <p><strong>B 为什么对：</strong>1) 三件具体事（隐患诊断/实测数据/成本分析）——具体到客户能预判收获；2) "觉得没用10分钟就撤"——零风险承诺，降低客户心理负担；3) 把决定权优雅地交回客户（"觉得有用就继续"）。</p>
+          <p><strong>A 为什么错：</strong>"质量绝对保证"是空话，总经理每天听 100 遍。</p>
+          <p><strong>C 为什么错：</strong>上来就比价，是销售自杀式开场。还没建立价值锚点，谈价格就是裸奔。</p>
+          <p><strong>D 为什么错：</strong>"您见过大世面"=拍马屁，"小意思"=贬低自己的内容。客户会立刻问"既然小意思，那就别浪费我时间了"。</p>
+          <div class="formula">P-Payoff 标准句式："X分钟给您三样东西：① ② ③。觉得有用就继续，没用随时叫停。"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 4 题 -->
+    <div class="q-block" id="q3">
+      <div class="q-card">
+        <span class="question-badge">第 4 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>你把 Purpose + Process + Payoff 三段都说完了，张总点头示意"那开始吧"。
+        </div>
+        <div class="q-title">
+          完整 PPP 开场白结束，最关键的"锁定"动作是什么？
+          <span class="stage-hint">PPP 收口</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "那我们开始吧，我先讲一下杰华特公司的发展史..."<span class="type-tag">自顾自开场</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "好的张总！那咱们就按刚才说的来，您先简单跟我讲讲贵司现在5W球泡方案的具体情况，我边听边记。"<span class="type-tag">锁定+引导</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 赶紧把PPT打开，翻到第一页："张总您看，这是我们公司的介绍..."<span class="type-tag">PPT救场</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "那我加您微信，先把资料发您？"<span class="type-tag">线上转移</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca3">
+          <span class="label">✅ 正确答案：B</span>用"按刚才说的来"确认锁定，再顺势用 SPIN 背景问题引导客户开口。
+        </div>
+        <div class="explanation" id="ex3">
+          <h4>解析：PPP 收口的"反客为主"原则</h4>
+          <p><strong>关键心法：</strong>PPP 说完，客户答"那开始吧"——这时候必须"反客为主"立刻引导客户先开口，而不是销售继续说。</p>
+          <p><strong>B 为什么对：</strong>1) "按刚才说的来"=显式锁定，让客户意识到他已同意了规则；2) 立刻用 SPIN 背景问题（"您先简单讲讲..."）让客户开口——客户说得越多，你越掌握主动；3) 体现"我是来听您说的，不是来推销的"姿态。</p>
+          <p><strong>A 为什么错：</strong>客户说"开始吧"是给你机会，你却开始讲公司发展史——客户立刻进入防御模式："又来了"。</p>
+          <p><strong>C 为什么错：</strong>PPT 救场=销售准备不足、控场失败的标志。PPT 是工具，不是拐杖。</p>
+          <p><strong>D 为什么错：</strong>30分钟见面不是说好现场谈吗？突然转线上=你退缩了，张总立刻会觉得"果然没什么干货"。</p>
+          <div class="formula">PPP 收口标准句式："好！那咱们就按刚才说的来，X总您先跟我讲讲（背景问题）..."</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 5 题 -->
+    <div class="q-block" id="q4">
+      <div class="q-card">
+        <span class="question-badge">第 5 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>你通过助理约了张总下午 3 点见，但助理偷偷告诉你："张总下午要赶 4 点的客户接待，可能只给你 15 分钟。"
+        </div>
+        <div class="q-title">
+          拜访总经理前，关于 Process 时间设定，哪个策略最专业？
+          <span class="stage-hint">拜访前准备</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 按原计划说30分钟，到现场再看情况随机应变。<span class="type-tag">赌一把</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 主动说"15分钟"，把 PPP 流程设计成"5分钟痛点+5分钟方案+5分钟下一步"紧凑版，体现对客户时间的尊重。<span class="type-tag">量身定制</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 约改天，张总今天没空就不打扰了。<span class="type-tag">放弃机会</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 直接找张总的工程师谈，跳过总经理。<span class="type-tag">降级沟通</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca4">
+          <span class="label">✅ 正确答案：B</span>主动适配 15 分钟，把 PPP 流程重新设计为"5+5+5"——专业感 ×10。
+        </div>
+        <div class="explanation" id="ex4">
+          <h4>解析：总经理时间被压缩时的"逆向 PPP"</h4>
+          <p><strong>关键认知：</strong>助理的信息是金矿——它告诉你客户的真实时间预算。按这个预算设计 Process，张总反而会高看你一眼。</p>
+          <p><strong>B 为什么对：</strong>1) 主动说"15分钟"=比客户预期更短，制造惊喜；2) "5+5+5"是紧凑版 PPP，仍然有 Purpose（痛点）+ Process（讨论）+ Payoff（下一步）；3) 体现"我懂你时间宝贵"的同理心。</p>
+          <p><strong>A 为什么错：</strong>到现场才随机应变=没准备，总经理最反感销售"拖堂"。</p>
+          <p><strong>C 为什么错：</strong>改天可能永远约不到。15 分钟的高质量见面 > 改天的30分钟敷衍。</p>
+          <p><strong>D 为什么错：</strong>绕过总经理=放弃决策人。总经理是 A 级客户，必须亲自拿下。</p>
+          <div class="formula">时间压缩版 PPP 公式：5′痛点诊断 + 5′方案亮点 + 5′下一步约定。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 6 题 -->
+    <div class="q-block" id="q5">
+      <div class="q-card">
+        <span class="question-badge">第 6 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>你到了张总办公室，发现他桌上摆着女儿的小学生作文奖状，墙上挂着工厂的合影。
+        </div>
+        <div class="q-title">
+          30秒破冰环节，哪个寒暄最得体？（注：寒暄不超过30秒就要进 PPP）
+          <span class="stage-hint">破冰与寒暄</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "张总！您女儿作文得奖了啊！几年级？写得什么题目？来来来给我看看..."<span class="type-tag">过度八卦</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "哟，这工厂照片好气派，张总生意做得真大啊！"然后开始恭维 5 分钟。<span class="type-tag">马屁不停</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "张总好！看到您女儿作文得奖——孩子教育您抓得真好。（5秒停顿，给客户微笑时间）那咱们直接聊正题吧。"<span class="type-tag">轻触+切入</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 不寒暄，握手后直接说"张总好，咱们开始吧。"<span class="type-tag">冷启动</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca5">
+          <span class="label">✅ 正确答案：C</span>轻触话题（5秒）+ 立刻进 PPP——既给面子，又不浪费时间。
+        </div>
+        <div class="explanation" id="ex5">
+          <h4>解析：与总经理寒暄的"5秒原则"</h4>
+          <p><strong>关键认知：</strong>总经理时间颗粒度很细，<strong>寒暄超过30秒=不专业</strong>。但完全不寒暄=冷启动，破坏关系。</p>
+          <p><strong>C 为什么对：</strong>1) 5秒轻触桌面上看到的话题（女儿奖状）——给面子；2) "孩子教育您抓得真好"——正向反馈但不深入；3) 立刻"切入正题"——尊重时间。</p>
+          <p><strong>A 为什么错：</strong>看到女儿奖状就 5 个追问——把销售见面变成家庭访谈。张总会想"这人怎么这么没分寸"。</p>
+          <p><strong>B 为什么错：</strong>"工厂气派/生意大"是销售最常用的客套，总经理听腻了，恭维 5 分钟=谋杀时间。</p>
+          <p><strong>D 为什么错：</strong>完全不寒暄是机器人销售。给面子和浪费时间之间，需要那个"5秒"。</p>
+          <div class="formula">总经理寒暄公式：1句轻触 + 1句正向反馈（5秒内）+ 立刻"咱们直接聊正题"。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 7 题 -->
+    <div class="q-block" id="q6">
+      <div class="q-card">
+        <span class="question-badge">第 7 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>你按 PPP 流程进行到一半，张总突然接了个重要电话，说"我先出去 5 分钟"。这时你已经讲了 5 分钟公司介绍。
+        </div>
+        <div class="q-title">
+          张总离开的 5 分钟，你应该做什么？
+          <span class="stage-hint">中场应变</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 继续对着空气讲完剩下的PPT，等张总回来再接上。<span class="type-tag">自嗨</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 立刻调整议程：把剩下的公司介绍砍掉，列出 3 个最关键的问题，等张总回来直接以"张总，刚趁您出去我把议题压缩了一下，咱们接下来只聊这三件最关键的事..."开启新流程。<span class="type-tag">临场调整</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 玩 5 分钟手机，等张总回来再继续讲 PPT。<span class="type-tag">浪费时间</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 趁张总不在，赶紧去和旁边工位的工程师套近乎，让他帮忙说服老板。<span class="type-tag">绕后路</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca6">
+          <span class="label">✅ 正确答案：B</span>利用客户离开的 5 分钟"重置议程"——把 PPT 砍掉，转为以问题为主线。
+        </div>
+        <div class="explanation" id="ex6">
+          <h4>解析：客户"中场消失"是 PPP 的反转机会</h4>
+          <p><strong>关键认知：</strong>总经理中途离开=他意识到你的内容有水分。这时如果你还坚持讲完，公司在他心中的印象会进一步打折。</p>
+          <p><strong>B 为什么对：</strong>1) 用 5 分钟重置议程——这是高水平销售的临场反应；2) 把 PPT 砍掉——主动承认"刚才的讲法不够好"；3) 用"三件关键事"重新对齐节奏；4) 张总回来会觉得："这销售懂得变通，靠谱"。</p>
+          <p><strong>A 为什么错：</strong>对着空气讲完——这是销售最大的自嗨。张总回来发现你在念 PPT，立刻降低评价。</p>
+          <p><strong>C 为什么错：</strong>5分钟什么都不做=白等，客户回来你仍没准备。</p>
+          <p><strong>D 为什么错：</strong>绕后路是销售大忌。总经理回来发现你在和工程师窃窃私语，信任立刻崩塌。</p>
+          <div class="formula">中场消失的应对公式：5分钟重置议程 + 砍掉 PPT + 列出 3 个关键问题 + 张总回来用"刚才..."重新开启。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 8 题 -->
+    <div class="q-block" id="q7">
+      <div class="q-card">
+        <span class="question-badge">第 8 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>30分钟快到了，张总开始看表，暗示要结束会议。
+        </div>
+        <div class="q-title">
+          PPP 拜访的"完美收尾"应该说什么？
+          <span class="stage-hint">结尾承诺</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "张总您先忙，那资料我留您这儿，有需要您联系我。"<span class="type-tag">自杀式收尾</span></div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "今天就讲到这儿吧，张总您自己考虑考虑。"<span class="type-tag">放任自流</span></div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "张总，今天我们达成了3点共识：① 您工程师下周做一版对比方案；② 我们这周内发一份ErP认证资料；③ 下周三下午我带原厂FAE来给您详细汇报一次。您看这样安排可以吗？"<span class="type-tag">承诺锁定</span></div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "张总，那我回去等您消息，您尽快给我个答复。"<span class="type-tag">催促客户</span></div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca7">
+          <span class="label">✅ 正确答案：C</span>3 个具体动作（每方都有事）+ 下次见面时间 + "您看这样安排可以吗？"再次锁定。
+        </div>
+        <div class="explanation" id="ex7">
+          <h4>解析：PPP 开场必须有"开场呼应"</h4>
+          <p><strong>关键心法：</strong>PPP 不是开场讲完就完了，<strong>开场讲什么，收尾必须呼应什么</strong>，这才叫闭环。</p>
+          <p><strong>C 为什么对：</strong>1) 3 个具体动作（每方各承担 1-2 件）——避免"回去等消息"的虚收尾；2) 客户有明确动作（工程师做对比方案），己方有明确动作（发资料 + 约 FAE）；3) "您看这样安排可以吗"——再次用 PPP 收口句锁定承诺；4) 下次见面具体到"下周三下午"——不是"改天"。</p>
+          <p><strong>A 为什么错：</strong>销售最经典的自杀式收尾。"有需要联系你"=销售自己把门关上了，90% 不会有下文。</p>
+          <p><strong>B 为什么错：</strong>"您自己考虑"=把球完全踢给客户，没有销售推动力。客户只会考虑到他有更重要的事。</p>
+          <p><strong>D 为什么错：</strong>"尽快给我答复"=催客户，压迫感极强，总经理最反感被销售追着跑。</p>
+          <div class="formula">PPP 完美收尾公式：复述 3 个共识动作（具体到人/事/时）+ "您看这样安排可以吗？" + 锁定下次见面。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">查看结果</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结果页 -->
+  <div class="result-card" id="resultPage">
+    <div class="result-title">练习完成！</div>
+    <div class="score-circle">
+      <div class="num" id="scoreNum">0</div>
+      <div class="total">/ 8 题</div>
+    </div>
+    <div class="score-percent">正确率 <span id="percentNum">0</span>%</div>
+    <div class="score-remark" id="scoreRemark"></div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="btn btn-primary" onclick="restart()">再练一遍 🔁</button>
+  </div>
+
+  <div class="footer">
+    博商 · 大董销售体系 · 名瑟PPP开场白练习 · 仅供内部培训使用
+  </div>
+</div>
+
+<script>
+var current = 0;
+var selected = null;
+var answered = false;
+var results = [];
+var totalQuestions = 8;
+
+function init() {
+  updateProgress();
+  showQuestion(0);
+}
+
+function updateProgress() {
+  document.getElementById("currentNum").textContent = (current + 1);
+  document.getElementById("progressFill").style.width =
+    (current / totalQuestions * 100) + "%";
+}
+
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) {
+    var el = document.getElementById('q' + i);
+    if (el) el.style.display = 'none';
+  }
+  var curr = document.getElementById('q' + idx);
+  if (curr) curr.style.display = 'block';
+  selected = null;
+  answered = false;
+  var btnNext = document.getElementById("btnNext");
+  var btnPrev = document.getElementById("btnPrev");
+  btnNext.textContent = (idx === totalQuestions - 1) ? "查看结果" : "确认答案";
+  btnNext.disabled = true;
+  btnNext.onclick = confirmAnswer;
+  btnPrev.disabled = (idx === 0);
+}
+
+function selectOpt(idx) {
+  if (answered) return;
+  selected = idx;
+  var container = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < container.length; i++) {
+    if (i === idx) {
+      container[i].classList.add('selected');
+    } else {
+      container[i].classList.remove('selected');
+    }
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function confirmAnswer() {
+  if (selected === null) return;
+  var qBlock = document.getElementById('q' + current);
+  var options = qBlock.querySelectorAll('.option');
+  var isCorrect = false;
+  for (var i = 0; i < options.length; i++) {
+    var optCorrect = options[i].getAttribute('data-correct') === 'true';
+    if (optCorrect) options[i].classList.add('correct');
+    if (i === selected && !optCorrect) options[i].classList.add('wrong');
+    if (i === selected && optCorrect) isCorrect = true;
+    options[i].onclick = null;
+  }
+  answered = true;
+  results[current] = isCorrect;
+  var ca = document.getElementById('ca' + current);
+  var ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show');
+  if (ex) ex.classList.add('show');
+  var btnNext = document.getElementById("btnNext");
+  btnNext.disabled = false;
+  if (current < totalQuestions - 1) {
+    btnNext.textContent = "下一题 →";
+    btnNext.onclick = goNext;
+  } else {
+    btnNext.textContent = "查看结果";
+    btnNext.onclick = showResult;
+  }
+}
+
+function goNext() {
+  current++;
+  updateProgress();
+  showQuestion(current);
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent =
+    Math.round(score / results.length * 100);
+
+  var pct = Math.round(score / results.length * 100);
+  var remark = "";
+  if (pct === 100) remark = "🏆 完美！30秒内搞定总经理的开场白，你已经炉火纯青";
+  else if (pct >= 75) remark = "👍 PPP 基础扎实，'您看这样可以吗？'已经成为你的肌肉记忆";
+  else if (pct >= 50) remark = "💪 已掌握核心框架，重点复习 Payoff 的具体化表达";
+  else remark = "📚 建议重新看一遍 Purpose-Process-Payoff 三段，先背熟再实战";
+  document.getElementById("scoreRemark").textContent = remark;
+
+  var detail = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    detail += '<div class="result-item"><span class="status">' +
+      (results[i] ? '✅ 正确' : '❌ 错误') + '</span><span>第 ' + (i + 1) + ' 题</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detail;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  for (var i = 0; i < totalQuestions; i++) {
+    var opts = document.querySelectorAll('#q' + i + ' .option');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('selected', 'correct', 'wrong');
+      var idx = parseInt(opts[j].getAttribute('data-idx'));
+      opts[j].onclick = function() {
+        var myIdx = parseInt(this.getAttribute('data-idx'));
+        selectOpt(myIdx);
+      };
+    }
+    var ca = document.getElementById('ca' + i);
+    var ex = document.getElementById('ex' + i);
+    if (ca) ca.classList.remove('show');
+    if (ex) ex.classList.remove('show');
+  }
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  init();
+}
+
+document.getElementById("btnPrev").onclick = function() {
+  if (current > 0) {
+    current--;
+    updateProgress();
+    showQuestion(current);
+  }
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
