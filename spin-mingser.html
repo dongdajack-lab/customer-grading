@@ -805,6 +805,18 @@ function updateProgress() {
     (current / totalQuestions * 100) + "%";
 }
 
+function currentBlock() {
+  return document.getElementById('q' + current);
+}
+
+function currentBtns() {
+  var q = currentBlock();
+  return {
+    next: q.querySelector('#btnNext'),
+    prev: q.querySelector('#btnPrev')
+  };
+}
+
 function showQuestion(idx) {
   for (var i = 0; i < totalQuestions; i++) {
     var el = document.getElementById('q' + i);
@@ -812,14 +824,23 @@ function showQuestion(idx) {
   }
   var curr = document.getElementById('q' + idx);
   if (curr) curr.style.display = 'block';
+  current = idx;
   selected = null;
   answered = false;
-  var btnNext = document.getElementById("btnNext");
-  var btnPrev = document.getElementById("btnPrev");
+  var btns = currentBtns();
+  var btnNext = btns.next;
+  var btnPrev = btns.prev;
   btnNext.textContent = (idx === totalQuestions - 1) ? "查看结果" : "确认答案";
   btnNext.disabled = true;
   btnNext.onclick = confirmAnswer;
   btnPrev.disabled = (idx === 0);
+  btnPrev.onclick = function() {
+    if (current > 0) {
+      current--;
+      updateProgress();
+      showQuestion(current);
+    }
+  };
 }
 
 function selectOpt(idx) {
@@ -833,7 +854,7 @@ function selectOpt(idx) {
       container[i].classList.remove('selected');
     }
   }
-  document.getElementById("btnNext").disabled = false;
+  currentBtns().next.disabled = false;
 }
 
 function confirmAnswer() {
@@ -854,7 +875,7 @@ function confirmAnswer() {
   var ex = document.getElementById('ex' + current);
   if (ca) ca.classList.add('show');
   if (ex) ex.classList.add('show');
-  var btnNext = document.getElementById("btnNext");
+  var btnNext = currentBtns().next;
   btnNext.disabled = false;
   if (current < totalQuestions - 1) {
     btnNext.textContent = "下一题 →";
@@ -907,7 +928,6 @@ function restart() {
     var opts = document.querySelectorAll('#q' + i + ' .option');
     for (var j = 0; j < opts.length; j++) {
       opts[j].classList.remove('selected', 'correct', 'wrong');
-      var idx = parseInt(opts[j].getAttribute('data-idx'));
       opts[j].onclick = function() {
         var myIdx = parseInt(this.getAttribute('data-idx'));
         selectOpt(myIdx);
@@ -922,14 +942,6 @@ function restart() {
   document.getElementById("resultPage").classList.remove("show");
   init();
 }
-
-document.getElementById("btnPrev").onclick = function() {
-  if (current > 0) {
-    current--;
-    updateProgress();
-    showQuestion(current);
-  }
-};
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
