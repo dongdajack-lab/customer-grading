@@ -55,6 +55,7 @@
   .option {
     background:#fff; border:1.5px solid #D3D1C7; border-radius:10px; padding:11px 13px;
     font-size:14px; cursor:pointer; transition:border-color .15s;
+    -webkit-tap-highlight-color:transparent; touch-action:manipulation;
   }
   .option:active { border-color:#2F3C7E; }
   .option.selected { border-color:#2F3C7E; background:#EEF1FA; }
@@ -78,6 +79,7 @@
   .btn {
     display:none; width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px;
     background:#2F3C7E; color:#fff; font-size:15px; font-weight:600; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; touch-action:manipulation; -webkit-appearance:none;
   }
   .btn.show { display:block; }
   .btn:active { opacity:.88; }
@@ -1281,8 +1283,9 @@ function pick(round, idx) {
   if (btn) btn.classList.add('show');
   setTimeout(function () {
     var el = root().querySelector('#rb' + round);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, 150);
+    if (el) el.scrollIntoView({ behavior: 'auto', block: 'end' });
+    if (btn) btn.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+  }, 80);
 }
 
 function nextRound(round) {
@@ -1293,7 +1296,7 @@ function nextRound(round) {
   if (cur) cur.style.display = 'none';
   if (next) {
     next.style.display = 'block';
-    next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    next.scrollIntoView({ behavior: 'auto', block: 'start' });
   }
 }
 
