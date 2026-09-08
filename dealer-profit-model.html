@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>经销商盈利模型一页纸</title>
+<style>
+  :root{
+    --primary:#2d6a4f; --primary-light:#d8f3dc; --primary-mid:#95d5b2;
+    --accent:#bc4749; --gold:#b7791f;
+    --ink:#1b2a1e; --muted:#5c6f62; --line:#cde3d4; --bg:#f4f9f5; --card:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft YaHei",sans-serif;}
+  body{background:var(--bg);color:var(--ink);padding:18px;font-size:12px;}
+  .page{max-width:900px;margin:0 auto;}
+
+  /* ===== 头部 ===== */
+  .header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--primary);padding-bottom:10px;margin-bottom:14px;}
+  .header h1{font-size:22px;color:var(--primary);letter-spacing:1px;}
+  .header .sub{font-size:11px;color:var(--muted);margin-top:3px;}
+  .header .brand{text-align:right;}
+  .brand .logo{font-size:16px;font-weight:700;color:var(--primary);}
+  .brand .tag{font-size:10px;color:var(--gold);}
+
+  /* ===== 布局 ===== */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;box-shadow:0 1px 3px rgba(45,106,79,.08);}
+  .card h2{font-size:13px;color:var(--primary);border-left:4px solid var(--primary);padding-left:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+  .card h2 .note{font-size:10px;color:var(--muted);font-weight:400;border:0;padding:0;}
+
+  /* ===== 输入行 ===== */
+  .row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line);}
+  .row:last-child{border-bottom:none;}
+  .row label{color:var(--muted);font-size:11.5px;}
+  .row .input-wrap{display:flex;align-items:center;gap:4px;}
+  .row input{width:70px;border:1px solid var(--line);border-radius:4px;padding:3px 6px;font-size:12px;text-align:right;color:var(--ink);background:#fff;}
+  .row input:focus{outline:none;border-color:var(--primary);background:var(--primary-light);}
+  .row .unit{font-size:10px;color:var(--muted);width:24px;}
+  .row.total{font-weight:700;border-top:2px solid var(--primary);margin-top:4px;padding-top:8px;}
+  .row.total label{color:var(--primary);font-size:12.5px;}
+  .row.total .val{font-size:15px;color:var(--accent);font-weight:700;}
+
+  /* ===== 漏斗 ===== */
+  .funnel{display:flex;flex-direction:column;gap:6px;margin:4px 0 10px;}
+  .funnel-step{display:flex;align-items:center;gap:8px;}
+  .funnel-bar{height:26px;border-radius:4px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;}
+  .funnel-label{font-size:11px;color:var(--muted);white-space:nowrap;}
+
+  /* ===== 三情景表 ===== */
+  table.scenario{width:100%;border-collapse:collapse;font-size:11px;}
+  table.scenario th{background:var(--primary);color:#fff;padding:6px 4px;font-weight:600;}
+  table.scenario th:first-child{border-radius:4px 0 0 0;}
+  table.scenario th:last-child{border-radius:0 4px 0 0;}
+  table.scenario td{padding:5px 4px;text-align:center;border-bottom:1px solid var(--line);}
+  table.scenario td:first-child{text-align:left;color:var(--muted);}
+  table.scenario tr.hl td{background:var(--primary-light);font-weight:700;color:var(--primary);}
+  .scenario-note{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5;}
+
+  /* ===== 回本结论 ===== */
+  .verdict{background:linear-gradient(135deg,#2d6a4f,#40916c);border-radius:8px;color:#fff;padding:14px 16px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;}
+  .verdict .left .big{font-size:24px;font-weight:800;line-height:1.2;}
+  .verdict .left .small{font-size:11px;opacity:.9;margin-top:2px;}
+  .verdict .right{text-align:right;font-size:11px;line-height:1.7;opacity:.95;}
+
+  /* ===== 底部 ===== */
+  .footer{margin-top:12px;display:flex;gap:12px;}
+  .pitch{flex:2;background:#fff;border-left:4px solid var(--gold);border-radius:6px;padding:10px 12px;font-size:11.5px;line-height:1.7;}
+  .pitch b{color:var(--gold);}
+  .risk{flex:1;background:#fdf1f0;border-left:4px solid var(--accent);border-radius:6px;padding:10px 12px;font-size:10px;color:#7a3b3c;line-height:1.6;}
+  .print-tip{text-align:center;font-size:10px;color:var(--muted);margin-top:10px;}
+
+  /* ===== 打印 ===== */
+  @media print{
+    body{background:#fff;padding:0;font-size:11px;}
+    .card{box-shadow:none;break-inside:avoid;}
+    .print-tip{display:none;}
+    input{border:none !important;background:transparent !important;font-weight:700;}
+  }
+  @media (max-width:700px){
+    .grid{grid-template-columns:1fr;}
+    .header{flex-direction:column;align-items:flex-start;gap:8px;}
+    .header .brand{text-align:left;}
+    .footer{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 头部 -->
+  <div class="header">
+    <div>
+      <h1>经销商盈利模型</h1>
+      <div class="sub">加盟投入 → 月度盈亏 → 回本周期 · 三情景测算 · 一页看懂</div>
+    </div>
+    <div class="brand">
+      <div class="logo">睡密坊 · 草本床垫</div>
+      <div class="tag">华西联合研发 · AASM认证 · PICC承保</div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- 左上：一次性投入 -->
+    <div class="card">
+      <h2>① 一次性投入 <span class="note">开一家店要投多少</span></h2>
+      <div class="row"><label>品牌加盟费（含授权·3年）</label><div class="input-wrap"><input type="number" id="i_join" value="50000"><span class="unit">元</span></div></div>
+      <div class="row"><label>门店装修（约80㎡旗舰店标准）</label><div class="input-wrap"><input type="number" id="i_deco" value="100000"><span class="unit">元</span></div></div>
+      <div class="row"><label>首批进货（3大系列样品+库存）</label><div class="input-wrap"><input type="number" id="i_stock" value="60000"><span class="unit">元</span></div></div>
+      <div class="row"><label>房租押金（押三付一）</label><div class="input-wrap"><input type="number" id="i_rentdep" value="40000"><span class="unit">元</span></div></div>
+      <div class="row"><label>开业活动+流动资金</label><div class="input-wrap"><input type="number" id="i_float" value="20000"><span class="unit">元</span></div></div>
+      <div class="row total"><label>总投入</label><div class="input-wrap"><span class="val" id="o_total">27.0万</span></div></div>
+    </div>
+
+    <!-- 右上：收入模型 -->
+    <div class="card">
+      <h2>② 月度收入模型 <span class="note">钱从哪里来</span></h2>
+      <div class="row"><label>日均进店客流</label><div class="input-wrap"><input type="number" id="i_traffic" step="0.5" value="8"><span class="unit">人/天</span></div></div>
+      <div class="row"><label>成交转化率（体验型品类）</label><div class="input-wrap"><input type="number" id="i_conv" step="0.5" value="18"><span class="unit">%</span></div></div>
+      <div class="row"><label>平均客单价（含配套枕/被）</label><div class="input-wrap"><input type="number" id="i_atv" value="4000"><span class="unit">元</span></div></div>
+      <div class="row"><label>经销商毛利率（终端零售）</label><div class="input-wrap"><input type="number" id="i_margin" step="1" value="60"><span class="unit">%</span></div></div>
+      <div class="funnel">
+        <div class="funnel-step"><div class="funnel-bar" id="f_bar1" style="background:#2d6a4f;width:100%;">月进店 240 人</div></div>
+        <div class="funnel-step"><div class="funnel-bar" id="f_bar2" style="background:#40916c;width:60%;">成交 43 单</div></div>
+        <div class="funnel-step"><div class="funnel-bar" id="f_bar3" style="background:#74c69d;width:45%;">月销售额 17.3万</div><span class="funnel-label" id="f_lbl3"></span></div>
+      </div>
+      <div class="row total"><label>月销售额</label><div class="input-wrap"><span class="val" id="o_rev">17.3万</span></div></div>
+    </div>
+
+    <!-- 左下：月度盈亏 -->
+    <div class="card">
+      <h2>③ 月度盈亏 <span class="note">每月能赚多少</span></h2>
+      <div class="row"><label>月房租（80㎡·优质卖场/临街）</label><div class="input-wrap"><input type="number" id="i_rent" value="10000"><span class="unit">元</span></div></div>
+      <div class="row"><label>人工（店长1+导购2）</label><div class="input-wrap"><input type="number" id="i_labor" value="20000"><span class="unit">元</span></div></div>
+      <div class="row"><label>水电杂费+营销分摊</label><div class="input-wrap"><input type="number" id="i_util" value="5000"><span class="unit">元</span></div></div>
+      <div class="row"><label>月固定成本合计</label><div class="input-wrap"><b id="o_fixed">3.5万</b></div></div>
+      <div class="row total"><label>月净利润</label><div class="input-wrap"><span class="val" id="o_profit">6.9万</span></div></div>
+      <div class="scenario-note">注：按当前②中参数实时计算。毛利率60%基于行业终端约3倍加价（品牌方出厂价5千→零售1.5万为行业常态），睡密坊畅销价位2,000-6,000元。</div>
+    </div>
+
+    <!-- 右下：三情景对比 -->
+    <div class="card">
+      <h2>④ 三情景测算 <span class="note">保守 / 正常 / 乐观</span></h2>
+      <table class="scenario">
+        <tr><th>情景</th><th>日均客流</th><th>成交率</th><th>客单价</th><th>月净利</th><th>回本周期*</th></tr>
+        <tr><td>🐢 保守</td><td>4人</td><td>15%</td><td>3,500元</td><td id="s_p1">0.5万</td><td id="s_r1">＞36个月</td></tr>
+        <tr class="hl"><td>✅ 正常</td><td>8人</td><td>18%</td><td>4,000元</td><td id="s_p2">6.9万</td><td id="s_r2">10-14个月</td></tr>
+        <tr><td>🚀 乐观</td><td>12人</td><td>20%</td><td>5,000元</td><td id="s_p3">17.6万</td><td id="s_r3">6-8个月</td></tr>
+      </table>
+      <div class="scenario-note">* 回本周期已计入3-6个月爬坡期（新店客流从低到高的过程）。<b>决定成败的分水岭是"日均客流能否站上6人"</b>——品牌方线上引流+异业联盟+社区睡眠检测是三大抓手，这是睡密坊总部对经销商的核心赋能承诺。</div>
+    </div>
+  </div>
+
+  <!-- 回本结论 -->
+  <div class="verdict">
+    <div class="left">
+      <div class="big" id="v_big">正常情景：约12个月回本</div>
+      <div class="small" id="v_small">总投入27万 · 月净利6.9万（稳定期）· 年净利约80万+（成熟店）</div>
+    </div>
+    <div class="right">
+      畅销价位：2,000 - 6,000 元<br>
+      终端毛利：约 60%（3倍加价空间）<br>
+      售后率：&lt; 0.2% · 出厂合格率 99.9%
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <div class="pitch">
+      <b>招商一句话：</b>床垫行业终端3倍加价是公开的秘密，缺的不是利润空间，是<b>"能把客人引进店、留得住、说得信"</b>的品牌。睡密坊给您的三样东西——<b>华西研发背书</b>（客人信）、<b>草本新品类</b>（没有比价对象）、<b>总部引流赋能</b>（线上内容+社区睡眠检测帮您获客）。您出店面和团队，剩下的交给我们。
+    </div>
+    <div class="risk">
+      <b>⚠ 诚实的风险提示</b><br>
+      草本床垫为新品类，需接受3-6个月市场培育期；保守情景（日均客流＜4人）回本困难。建议首批进货控制在6万内，与品牌方约定滞销换货条款。
+    </div>
+  </div>
+
+  <div class="print-tip">💡 所有数字可点击修改、实时重算 · Ctrl/Cmd+P 可打印为A4一页纸招商物料</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmtW=v=>(v/10000).toFixed(1)+'万';
+const fmt=v=>Math.round(v).toLocaleString();
+
+function calc(){
+  // ① 投入
+  const total=(+$('i_join').value)+(+$('i_deco').value)+(+$('i_stock').value)+(+$('i_rentdep').value)+(+$('i_float').value);
+  $('o_total').textContent=fmtW(total);
+
+  // ② 收入
+  const traf=+$('i_traffic').value, conv=+$('i_conv').value/100, atv=+$('i_atv').value, mg=+$('i_margin').value/100;
+  const monthlyVisitors=traf*30;
+  const deals=monthlyVisitors*conv;
+  const rev=deals*atv;
+  const profit=rev*mg;
+
+  $('o_rev').textContent=fmtW(rev);
+  // 漏斗
+  $('f_bar1').style.width='100%';
+  $('f_bar1').textContent='月进店 '+Math.round(monthlyVisitors)+' 人';
+  $('f_bar2').style.width=Math.max(20,conv*100*1.6)+'%';
+  $('f_bar2').textContent='成交 '+Math.round(deals)+' 单';
+  $('f_bar3').style.width='55%';
+  $('f_bar3').textContent='月销售额 '+fmtW(rev);
+
+  // ③ 盈亏
+  const fixed=(+$('i_rent').value)+(+$('i_labor').value)+(+$('i_util').value);
+  $('o_fixed').textContent=fmtW(fixed);
+  const net=profit-fixed;
+  $('o_profit').textContent=fmtW(net);
+  $('o_profit').style.color=net>=0?'var(--accent)':'#999';
+
+  // ④ 三情景（复用当前固定成本与毛利率）
+  function scenario(t,c,a){
+    const p=t*30*c/100*a*mg-fixed;
+    return p;
+  }
+  const p1=scenario(4,15,3500), p2=scenario(8,18,4000), p3=scenario(12,20,5000);
+  $('s_p1').textContent=fmtW(p1); $('s_p2').textContent=fmtW(p2); $('s_p3').textContent=fmtW(p3);
+
+  function payback(p_now,p_stable,total){
+    if(p_now<=0&&p_stable<=0) return '＞36个月';
+    // 爬坡6个月：前6个月平均为稳定期50%，之后稳定
+    let months=0,acc=0;
+    for(let m=1;m<=48;m++){
+      const pm=m<=6?p_stable*0.5:p_stable;
+      acc+=pm;months=m;
+      if(acc>=total)break;
+    }
+    return acc>=total?months+'个月':'＞48个月';
+  }
+  $('s_r1').textContent=payback(p1,p1,total);
+  $('s_r2').textContent=payback(p2,p2,total);
+  $('s_r3').textContent=payback(p3,p3,total);
+
+  // 结论
+  let verdict,sub;
+  if(net>50000){verdict='乐观情景：约'+payback(p3,p3,total).replace('个月','')+'个月回本';sub='总投入'+fmtW(total)+' · 月净利'+fmtW(net)+' · 建议加快复制开店';}
+  else if(net>20000){verdict='正常情景：约'+payback(p2,p2,total).replace('个月','')+'个月回本';sub='总投入'+fmtW(total)+' · 月净利'+fmtW(net)+'（稳定期）· 年净利约'+fmtW(net*12)+'+（成熟店）';}
+  else if(net>0){verdict='微利情景：回本'+payback(net,net,total);sub='月净利'+fmtW(net)+' · 关键抓手：提升客流与转化率';}
+  else{verdict='⚠ 亏损情景：模型需调整';sub='当前参数下月亏'+fmtW(Math.abs(net))+' · 优先解决客流，或降低固定成本';}
+  $('v_big').textContent=verdict;
+  $('v_small').textContent=sub;
+}
+
+document.querySelectorAll('input').forEach(el=>el.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>

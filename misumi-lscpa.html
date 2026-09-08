@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSCPA异议处理 + FABE价值呈现 练习 - 米思米全渠道沟通实战</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f7fa; min-height:100vh; }
+
+  header { background:linear-gradient(135deg,#1B2A4A,#2E6B9E); color:white; padding:22px 28px; text-align:center; }
+  header .logo { font-size:13px; letter-spacing:2px; opacity:0.7; margin-bottom:4px; }
+  header h1 { font-size:22px; letter-spacing:1px; }
+  header p { font-size:13px; opacity:0.75; margin-top:5px; }
+
+  .container { max-width:780px; margin:0 auto; padding:24px 16px 40px; }
+
+  .progress-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .progress-label { font-size:12px; color:#888; }
+  .progress-bar { height:5px; background:#e2e8f0; border-radius:3px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#1B2A4A,#E67E22); border-radius:3px; transition:width 0.5s ease; }
+
+  .card { background:white; border-radius:16px; padding:26px 22px; box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:16px; }
+
+  .q-badge { display:inline-block; background:#1B2A4A; color:white; border-radius:20px; padding:3px 12px; font-size:12px; margin-bottom:14px; font-weight:600; }
+  .q-type { display:inline-block; background:#dbeafe; color:#1B2A4A; border-radius:20px; padding:3px 10px; font-size:11px; margin-left:8px; }
+  .q-text { font-size:15px; line-height:1.75; color:#222; margin-bottom:14px; }
+
+  .scenario { background:#f8fafc; border-left:4px solid #2E6B9E; padding:12px 16px; border-radius:0 10px 10px 0; margin-bottom:16px; font-size:14px; line-height:1.7; color:#334155; }
+  .scenario .role-tag { display:inline-block; background:#2E6B9E; color:white; border-radius:12px; padding:2px 10px; font-size:11px; font-weight:600; margin-bottom:6px; }
+  .scenario .role-tag.customer { background:#E67E22; }
+
+  .model-box { background:#f0f4f8; border-radius:12px; padding:14px 16px; margin-bottom:16px; }
+  .model-box h4 { font-size:14px; color:#1B2A4A; margin-bottom:10px; }
+  .step-item { display:flex; gap:10px; margin-bottom:8px; font-size:13px; line-height:1.6; }
+  .step-letter { min-width:28px; height:28px; border-radius:6px; color:white; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+  .step-l { background:#3B82F6; }
+  .step-s { background:#10B981; }
+  .step-c { background:#F59E0B; }
+  .step-p { background:#8B5CF6; }
+  .step-a { background:#EF4444; }
+  .step-f { background:#3B82F6; }
+  .step-aa { background:#10B981; }
+  .step-b { background:#F59E0B; }
+  .step-e { background:#8B5CF6; }
+  .step-text { color:#334155; padding-top:4px; }
+  .step-text strong { color:#1B2A4A; }
+
+  .options { display:flex; flex-direction:column; gap:10px; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #e5e7eb; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.65; color:#374151; }
+  .option:hover { border-color:#2E6B9E; background:#f0f4f8; }
+  .option.selected { border-color:#2E6B9E; background:#dbeafe; }
+  .option.correct { border-color:#22C55E; background:#F0FDF4; }
+  .option.wrong { border-color:#EF4444; background:#FEF2F2; }
+  .opt-letter { min-width:28px; height:28px; border-radius:50%; border:2px solid #d1d5db; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#9ca3af; flex-shrink:0; margin-top:1px; transition:all 0.2s; }
+  .option.selected .opt-letter { border-color:#1B2A4A; background:#1B2A4A; color:white; }
+  .option.correct .opt-letter { border-color:#22C55E; background:#22C55E; color:white; }
+  .option.wrong .opt-letter { border-color:#EF4444; background:#EF4444; color:white; }
+  .option .opt-text { flex:1; }
+  .opt-tag { display:inline-block; border-radius:4px; padding:1px 6px; font-size:11px; font-weight:700; margin-right:6px; }
+
+  .explanation { margin-top:16px; padding:14px 16px; border-radius:12px; display:none; font-size:14px; line-height:1.7; }
+  .explanation.show { display:block; }
+  .exp-correct { background:#F0FDF4; border-left:4px solid #22C55E; }
+  .exp-correct .exp-title { color:#22C55E; font-weight:700; margin-bottom:6px; }
+  .exp-wrong { background:#FFFBEB; border-left:4px solid #F59E0B; }
+  .exp-wrong .exp-title { color:#D97706; font-weight:700; margin-bottom:6px; }
+  .explanation p { color:#334155; }
+
+  .compare-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+  .compare-box { border-radius:10px; padding:12px; font-size:13px; line-height:1.6; }
+  .compare-bad { background:#FEF2F2; border-left:3px solid #EF4444; }
+  .compare-good { background:#F0FDF4; border-left:3px solid #22C55E; }
+  .compare-label { font-size:11px; font-weight:700; margin-bottom:4px; }
+  .compare-bad .compare-label { color:#EF4444; }
+  .compare-good .compare-label { color:#22C55E; }
+
+  .btn-row { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#1B2A4A; color:white; }
+  .btn-primary:hover { background:#2E6B9E; }
+  .btn-primary:disabled { background:#94a3b8; cursor:not-allowed; }
+  .btn-outline { background:white; color:#1B2A4A; border:2px solid #1B2A4A; }
+  .btn-outline:hover { background:#f0f4f8; }
+
+  .result-screen { display:none; text-align:center; padding:20px 10px; }
+  .result-screen.show { display:block; }
+  .score-ring { background:conic-gradient(var(--color,#22C55E) var(--pct,0%), #e5e7eb 0%); border-radius:50%; width:120px; height:120px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .score-inner { width:96px; height:96px; background:white; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .score-num { font-size:32px; font-weight:800; color:#1B2A4A; line-height:1; }
+  .score-total { font-size:14px; color:#9ca3af; }
+  .result-title { font-size:20px; font-weight:700; color:#1B2A4A; margin-bottom:8px; }
+  .result-desc { font-size:14px; color:#666; margin-bottom:20px; line-height:1.6; }
+  .review-list { text-align:left; margin-top:16px; }
+  .review-item { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px; }
+  .review-item.pass { background:#F0FDF4; }
+  .review-item.fail { background:#FEF2F2; }
+  .review-icon { font-size:16px; }
+
+  .section-divider { text-align:center; margin:24px 0 16px; position:relative; }
+  .section-divider span { background:#f5f7fa; padding:0 16px; font-size:13px; color:#999; position:relative; z-index:1; }
+  .section-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:#e2e8f0; }
+
+  footer { text-align:center; padding:20px; font-size:12px; color:#aaa; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">米思米中心营业 · 全渠道沟通实战</div>
+  <h1>LSCPA异议处理 + FABE价值呈现</h1>
+  <p>12道实战题 · 扫码开始练习</p>
+</header>
+
+<div class="container">
+  <div class="progress-top">
+    <span class="progress-label" id="progressLabel">第 1 / 12 题</span>
+    <span class="progress-label" id="scoreLabel">得分：0</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:8.3%"></div></div>
+
+  <div id="quizArea"></div>
+
+  <div class="btn-row" id="btnRow" style="display:none;">
+    <button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()" style="display:none;">上一题</button>
+    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>提交答案</button>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="score-ring" id="scoreRing">
+      <div class="score-inner">
+        <div class="score-num" id="finalScore">0</div>
+        <div class="score-total">/ 12</div>
+      </div>
+    </div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-desc" id="resultDesc"></div>
+    <div class="review-list" id="reviewList"></div>
+    <button class="btn btn-primary" onclick="restart()" style="max-width:200px; margin:20px auto 0;">重新练习</button>
+  </div>
+</div>
+
+<footer>电话 · 邮件 · 企微 —— 三个通道，一个方法论 | 讲师：董仁杰</footer>
+
+<script>
+const questions = [
+  // ===== Part 1: LSCPA步骤识别 (5题) =====
+  {
+    type: 'LSCPA步骤识别',
+    scenario: '<span class="role-tag customer">客户</span> "你们的价格比别家贵20%，我凭什么选你？"',
+    question: '销售员听完后，停顿了3秒才开口，没有立即反驳。这一步属于LSCPA的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">L</span>倾听', correct: true },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">S</span>确认', correct: false },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">C</span>澄清', correct: false },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">P</span>陈述', correct: false },
+    ],
+    explanation: '<b>L - 倾听</b>：核心是"不给方案，先听完整"。客户说完后停顿3秒再回应，让客户感受到你在认真听，而不是急着反驳。这是LSCPA的第一步，也是最重要的一步——很多销售员失败就是因为客户话没说完就开始解释。',
+    compare: {
+      bad: '客户话说到一半就打断："其实我们的性价比更高……"',
+      good: '客户说完后停顿3秒，然后回应："您说的是价格比别家贵20%？"'
+    }
+  },
+  {
+    type: 'LSCPA步骤识别',
+    scenario: '<span class="role-tag customer">客户</span> "你们的丝杆太慢了，影响产能。"',
+    question: '销售员回应："所以您的意思是，目前用的丝杆模组节拍慢了30%？"这一步属于LSCPA的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">L</span>倾听', correct: false },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">S</span>确认', correct: true },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">C</span>澄清', correct: false },
+      { text: '<span class="opt-tag" style="background:#EF4444;color:#fff">A</span>促成', correct: false },
+    ],
+    explanation: '<b>S - 确认</b>：用自己的话复述客户的异议，确认你理解的是否正确。"所以您的意思是……"是典型的确认句式。关键是用自己的话复述，不是照抄客户的原话。',
+    compare: {
+      bad: '直接复述原话："您说丝杆太慢了影响产能？"',
+      good: '转化为具体信息："节拍慢了30%？排产压力应该挺大的吧？"'
+    }
+  },
+  {
+    type: 'LSCPA步骤识别',
+    scenario: '<span class="role-tag customer">客户</span> "你们交期不太稳定。"',
+    question: '销售员追问："交期具体差多少？对您排产影响有多大？"这一步属于LSCPA的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">S</span>确认', correct: false },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">C</span>澄清', correct: true },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">P</span>陈述', correct: false },
+      { text: '<span class="opt-tag" style="background:#EF4444;color:#fff">A</span>促成', correct: false },
+    ],
+    explanation: '<b>C - 澄清</b>：追问顾虑的具体大小和影响。不是停留在"交期不稳定"这个模糊表述上，而是追问"差多少""影响多大"，把模糊的异议变成可量化的问题，为后续P（陈述）提供精准方向。',
+  },
+  {
+    type: 'LSCPA步骤识别',
+    scenario: '<span class="role-tag customer">客户</span> "你们的价格比别家贵20%。"<br><br>销售员经过L、S、C三步后回应："针对您说的总持有成本，我们标准品免定制，初期投入低30%。"',
+    question: '这一步属于LSCPA的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">C</span>澄清', correct: false },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">P</span>陈述', correct: true },
+      { text: '<span class="opt-tag" style="background:#EF4444;color:#fff">A</span>促成', correct: false },
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">L</span>倾听', correct: false },
+    ],
+    explanation: '<b>P - 陈述</b>：给出针对性解决方案。不是泛泛说"我们的产品很好"，而是针对客户澄清的具体问题（总持有成本）给出具体方案（标准品免定制，初期投入低30%）。P的关键是"针对性"。',
+  },
+  {
+    type: 'LSCPA步骤识别',
+    scenario: '<span class="role-tag customer">客户</span> 听完销售员的方案后，沉默了一会儿。',
+    question: '销售员说："要不先寄个样品试试，可以吗？"这一步属于LSCPA的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">P</span>陈述', correct: false },
+      { text: '<span class="opt-tag" style="background:#EF4444;color:#fff">A</span>促成', correct: true },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">S</span>确认', correct: false },
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">L</span>倾听', correct: false },
+    ],
+    explanation: '<b>A - 促成</b>：低门槛推进，确认接受度。"先寄个样品试试"是典型的低门槛促成——不是要求客户直接下单，而是给出一个容易接受的下一步动作。A的关键是"低门槛"，让客户觉得试一试没什么风险。',
+  },
+
+  // ===== Part 2: FABE分类匹配 (4题) =====
+  {
+    type: 'FABE分类匹配',
+    scenario: '<span class="role-tag">产品信息</span> "直线电机重复精度±2μm"',
+    question: '这条产品信息属于FABE的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">F</span>特征 - 产品客观参数', correct: true },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">A</span>优势 - 同类对比中的领先', correct: false },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">B</span>利益 - 对客户的具体好处', correct: false },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">E</span>证据 - 已验证的案例', correct: false },
+    ],
+    explanation: '<b>F - 特征</b>：产品的客观参数。"重复精度±2μm"是一个技术规格，不涉及对比、不涉及客户利益、也不是案例，纯粹是产品本身的属性。F是FABE的起点——先说产品"是什么"。',
+  },
+  {
+    type: 'FABE分类匹配',
+    scenario: '<span class="role-tag">产品信息</span> "同级别中行程/推力比最高"',
+    question: '这条产品信息属于FABE的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">F</span>特征', correct: false },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">A</span>优势 - 同类对比中的领先', correct: true },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">B</span>利益', correct: false },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">E</span>证据', correct: false },
+    ],
+    explanation: '<b>A - 优势</b>：在同类对比中的领先地位。"同级别中最高"是一个比较性表述，说明这个参数在竞品中处于领先位置。A的关键词是"最""领先""第一"等对比性词汇。',
+  },
+  {
+    type: 'FABE分类匹配',
+    scenario: '<span class="role-tag">产品信息</span> "整机省10%空间，不加配重"',
+    question: '这条产品信息属于FABE的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">F</span>特征', correct: false },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">A</span>优势', correct: false },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">B</span>利益 - 对客户的具体好处', correct: true },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">E</span>证据', correct: false },
+    ],
+    explanation: '<b>B - 利益</b>：对客户的具体好处。"省10%空间"不是产品参数，也不是和竞品对比，而是告诉客户"这对你有什么用"。B是FABE中最重要的一步——客户不关心你的产品有多好，只关心对他有什么好处。',
+  },
+  {
+    type: 'FABE分类匹配',
+    scenario: '<span class="role-tag">产品信息</span> "XX设备商已切换，良率提升2%"',
+    question: '这条产品信息属于FABE的哪一步？',
+    options: [
+      { text: '<span class="opt-tag" style="background:#3B82F6;color:#fff">F</span>特征', correct: false },
+      { text: '<span class="opt-tag" style="background:#10B981;color:#fff">A</span>优势', correct: false },
+      { text: '<span class="opt-tag" style="background:#F59E0B;color:#fff">B</span>利益', correct: false },
+      { text: '<span class="opt-tag" style="background:#8B5CF6;color:#fff">E</span>证据 - 已验证的案例', correct: true },
+    ],
+    explanation: '<b>E - 证据</b>：已验证的案例。"XX设备商已切换，良率提升2%"是用真实客户的使用结果来证明前面的F/A/B不是空话。E的关键是有具体客户名+具体数据，让客户觉得"别人用了确实好"。',
+  },
+
+  // ===== Part 3: LSCPA+FABE综合场景 (3题) =====
+  {
+    type: '综合场景',
+    scenario: '<span class="role-tag customer">客户</span> "你们的价格比别家贵20%，我凭什么选你？"',
+    question: '以下哪个回应最符合LSCPA+FABE的标准流程？',
+    options: [
+      { text: '"我们的产品品质一流，精度±2μm，同级别最高，很多大客户都在用。价格虽然贵一点但物有所值。"', correct: false },
+      { text: '"您说的是价格比别家贵20%？您是否比过总持有成本？我们标准品免定制，初期投入低30%。重复精度±2μm，同级最高，整机省10%空间，XX设备商已验证。先寄个样品试试？"', correct: true },
+      { text: '"价格贵是因为我们用的是更好的材料，而且售后服务也很好，您可以放心。要不我给您打个折？"', correct: false },
+      { text: '"我理解您的顾虑，但其实我们的性价比很高，您用了就知道了。要不先下个小单试试？"', correct: false },
+    ],
+    explanation: '正确答案完整走完了LSCPA+FABE全流程：<br><b>L</b>听完后停顿 → <b>S</b>"您说的是价格比别家贵20%？"（确认异议）→ <b>C</b>"您是否比过总持有成本？"（澄清真实顾虑）→ <b>P</b>"标准品免定制，初期投入低30%"（针对性方案）→ <b>FABE</b>：F±2μm→A同级最高→B省10%空间→E已验证（价值呈现）→ <b>A</b>"先寄个样品试试？"（低门槛促成）。',
+    compare: {
+      bad: '直接讲产品优势，没有L/S/C直接跳到P，缺少倾听和确认，客户觉得你不在听他说话',
+      good: '先LSCPA化解异议，再用FABE呈现价值，最后低门槛促成，完整闭环'
+    }
+  },
+  {
+    type: '综合场景',
+    scenario: '<span class="role-tag customer">客户</span> "你们的交期太长了，我们等不了那么久。"',
+    question: '以下哪个回应最符合LSCPA的标准流程？',
+    options: [
+      { text: '"交期长是因为定制件需要时间，这是行业惯例，其他厂家也一样。"', correct: false },
+      { text: '"我们可以加急处理，但需要加收加急费，您看可以吗？"', correct: false },
+      { text: '（停顿3秒）"您说的是交期等不了？您目前需要多久？标准品3天可以到货，定制件2周。要不先确认一个标准品型号试试？"', correct: true },
+      { text: '"我理解您的着急，但我们的产品品质好，值得等待。"', correct: false },
+    ],
+    explanation: '正确答案完整走了LSCPA四步（此场景未用FABE）：<br><b>L</b>停顿3秒（倾听）→ <b>S</b>"交期等不了？"（确认异议）→ <b>C</b>"您目前需要多久？"（澄清具体需求）→ <b>P</b>"标准品3天到货"（针对性方案）→ <b>A</b>"先确认一个标准品型号"（低门槛促成）。<br>其他选项的问题：A直接辩解没有LSC；B跳过S/C直接给方案；D只共情不解决问题。',
+  },
+  {
+    type: '综合场景',
+    scenario: '<span class="role-tag customer">客户</span> "我没听说过你们米思米这个牌子，还是选大品牌吧。"',
+    question: '以下哪个回应最符合LSCPA的标准流程？',
+    options: [
+      { text: '"米思米是全球知名的工业零部件品牌，在日本和欧美都有很高的市场份额，您可以放心。"', correct: false },
+      { text: '（停顿3秒）"您是说对我们品牌不太熟悉，所以有顾虑？您目前用的是哪个品牌？我们和XX品牌相比，标准品品类更全、交期更短。要不先试一单标准品，您体验一下我们的服务？"', correct: true },
+      { text: '"品牌不重要，重要的是产品品质和价格，我们性价比很高。"', correct: false },
+      { text: '"很多客户一开始也这么说，但用了我们的产品后都成了回头客。"', correct: false },
+    ],
+    explanation: '正确答案走了完整LSCPA：<br><b>L</b>停顿倾听 → <b>S</b>"对我们品牌不太熟悉，所以有顾虑？"（确认真实异议——不是不信任产品，而是品牌认知不足）→ <b>C</b>"您目前用的是哪个品牌？"（澄清对标对象）→ <b>P</b>"标准品品类更全、交期更短"（针对性优势）→ <b>A</b>"先试一单标准品"（低门槛促成）。<br>关键：A选项虽然也是在介绍品牌，但没有经过LSC就直接陈述，客户会觉得你在自说自话。',
+  },
+];
+
+// ===== State =====
+let currentQ = 0;
+let selectedOption = -1;
+let answered = false;
+let scores = [];
+let userAnswers = [];
+
+// ===== Render =====
+function renderQuestion() {
+  const q = questions[currentQ];
+  const area = document.getElementById('quizArea');
+
+  let html = '<div class="card">';
+  html += `<span class="q-badge">第 ${currentQ + 1} 题</span>`;
+  html += `<span class="q-type">${q.type}</span>`;
+  html += `<div class="q-text">${q.question}</div>`;
+
+  if (q.scenario) {
+    html += `<div class="scenario">${q.scenario}</div>`;
+  }
+
+  // Model reference box for first question of each part
+  if (currentQ === 0) {
+    html += `<div class="model-box"><h4>📋 LSCPA异议处理五步法</h4>`;
+    html += `<div class="step-item"><div class="step-letter step-l">L</div><div class="step-text"><strong>倾听</strong> · 不给方案，先听完整。客户说完后停顿3秒再回应</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-s">S</div><div class="step-text"><strong>确认</strong> · 用自己的话复述客户的异议</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-c">C</div><div class="step-text"><strong>澄清</strong> · 追问顾虑的具体大小和影响</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-p">P</div><div class="step-text"><strong>陈述</strong> · 给出针对性解决方案</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-a">A</div><div class="step-text"><strong>促成</strong> · 低门槛推进，确认接受度</div></div>`;
+    html += `</div>`;
+  }
+  if (currentQ === 5) {
+    html += `<div class="model-box"><h4>📋 FABE价值呈现四步法</h4>`;
+    html += `<div class="step-item"><div class="step-letter step-f">F</div><div class="step-text"><strong>特征</strong> · 产品客观参数</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-aa">A</div><div class="step-text"><strong>优势</strong> · 同类对比中的领先</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-b">B</div><div class="step-text"><strong>利益</strong> · 对客户的具体好处</div></div>`;
+    html += `<div class="step-item"><div class="step-letter step-e">E</div><div class="step-text"><strong>证据</strong> · 已验证的案例</div></div>`;
+    html += `</div>`;
+  }
+
+  html += `<div class="options" id="optionsArea">`;
+  q.options.forEach((opt, i) => {
+    html += `<div class="option" data-idx="${i}" onclick="selectOption(${i})">`;
+    html += `<div class="opt-letter">${String.fromCharCode(65 + i)}</div>`;
+    html += `<div class="opt-text">${opt.text}</div>`;
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  // Explanation area
+  html += `<div class="explanation" id="explanationArea"></div>`;
+
+  html += `</div>`;
+
+  area.innerHTML = html;
+
+  // Update progress
+  const pct = ((currentQ + 1) / questions.length * 100).toFixed(1);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `第 ${currentQ + 1} / ${questions.length} 题`;
+  const totalScore = scores.filter(s => s).length;
+  document.getElementById('scoreLabel').textContent = `得分：${totalScore}`;
+
+  // Reset state
+  selectedOption = -1;
+  answered = false;
+  document.getElementById('btnRow').style.display = 'flex';
+  document.getElementById('nextBtn').textContent = '提交答案';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('prevBtn').style.display = currentQ > 0 ? 'block' : 'none';
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  selectedOption = idx;
+  const opts = document.querySelectorAll('.option');
+  opts.forEach((o, i) => o.classList.toggle('selected', i === idx));
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion() {
+  if (!answered) {
+    // Submit answer
+    if (selectedOption === -1) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = q.options[selectedOption].correct;
+    scores[currentQ] = isCorrect;
+    userAnswers[currentQ] = selectedOption;
+
+    // Show correct/wrong styling
+    const opts = document.querySelectorAll('.option');
+    opts.forEach((o, i) => {
+      if (q.options[i].correct) o.classList.add('correct');
+      else if (i === selectedOption) o.classList.add('wrong');
+      o.style.cursor = 'default';
+      o.onclick = null;
+    });
+
+    // Show explanation
+    const expArea = document.getElementById('explanationArea');
+    let expHtml = isCorrect
+      ? `<div class="exp-correct"><div class="exp-title">✓ 回答正确</div>`
+      : `<div class="exp-wrong"><div class="exp-title">✗ 回答错误</div>`;
+    expHtml += `<p>${q.explanation}</p>`;
+
+    if (q.compare) {
+      expHtml += `<div class="compare-row">`;
+      expHtml += `<div class="compare-box compare-bad"><div class="compare-label">✗ 常见错误</div>${q.compare.bad}</div>`;
+      expHtml += `<div class="compare-box compare-good"><div class="compare-label">✓ 推荐做法</div>${q.compare.good}</div>`;
+      expHtml += `</div>`;
+    }
+    expHtml += `</div>`;
+    expArea.innerHTML = expHtml;
+    expArea.classList.add('show');
+
+    // Update score
+    const totalScore = scores.filter(s => s).length;
+    document.getElementById('scoreLabel').textContent = `得分：${totalScore}`;
+
+    // Change button
+    if (currentQ < questions.length - 1) {
+      document.getElementById('nextBtn').textContent = '下一题';
+    } else {
+      document.getElementById('nextBtn').textContent = '查看结果';
+    }
+  } else {
+    // Go to next question or show results
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+    // Restore previous answer state
+    if (scores[currentQ] !== undefined) {
+      answered = true;
+      selectedOption = userAnswers[currentQ];
+      const q = questions[currentQ];
+      const opts = document.querySelectorAll('.option');
+      opts.forEach((o, i) => {
+        if (q.options[i].correct) o.classList.add('correct');
+        else if (i === selectedOption) o.classList.add('wrong');
+        o.style.cursor = 'default';
+        o.onclick = null;
+      });
+      const expArea = document.getElementById('explanationArea');
+      const isCorrect = scores[currentQ];
+      let expHtml = isCorrect
+        ? `<div class="exp-correct"><div class="exp-title">✓ 回答正确</div>`
+        : `<div class="exp-wrong"><div class="exp-title">✗ 回答错误</div>`;
+      expHtml += `<p>${q.explanation}</p>`;
+      if (q.compare) {
+        expHtml += `<div class="compare-row">`;
+        expHtml += `<div class="compare-box compare-bad"><div class="compare-label">✗ 常见错误</div>${q.compare.bad}</div>`;
+        expHtml += `<div class="compare-box compare-good"><div class="compare-label">✓ 推荐做法</div>${q.compare.good}</div>`;
+        expHtml += `</div>`;
+      }
+      expHtml += `</div>`;
+      expArea.innerHTML = expHtml;
+      expArea.classList.add('show');
+      if (currentQ < questions.length - 1) {
+        document.getElementById('nextBtn').textContent = '下一题';
+      } else {
+        document.getElementById('nextBtn').textContent = '查看结果';
+      }
+    }
+  }
+}
+
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('btnRow').style.display = 'none';
+  document.getElementById('resultScreen').classList.add('show');
+
+  const total = scores.filter(s => s).length;
+  const pct = (total / questions.length * 100).toFixed(0);
+
+  document.getElementById('finalScore').textContent = total;
+  document.getElementById('scoreRing').style.setProperty('--pct', pct + '%');
+  document.getElementById('scoreRing').style.setProperty('--color',
+    pct >= 80 ? '#22C55E' : pct >= 60 ? '#F59E0B' : '#EF4444');
+
+  let title, desc;
+  if (pct >= 90) {
+    title = '🎉 优秀！LSCPA+FABE已经内化';
+    desc = '你已经能熟练运用异议处理五步法和价值呈现四步法，可以在实战中灵活组合运用了。';
+  } else if (pct >= 70) {
+    title = '👍 不错！基本掌握了核心框架';
+    desc = '你对LSCPA和FABE的流程有清晰认知，建议复习错题中的场景对比，加深理解。';
+  } else if (pct >= 50) {
+    title = '💪 还需练习，重点复习错题';
+    desc = '建议重新学习讲义P58-P62的内容，特别注意LSCPA每一步的核心要点和FABE的区分。';
+  } else {
+    title = '📖 需要重新学习';
+    desc = '不要灰心，LSCPA和FABE需要反复练习。建议先复习讲义P58-P62，再来挑战。';
+  }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultDesc').textContent = desc;
+
+  // Review list
+  let reviewHtml = '';
+  questions.forEach((q, i) => {
+    const pass = scores[i];
+    reviewHtml += `<div class="review-item ${pass ? 'pass' : 'fail'}">`;
+    reviewHtml += `<span class="review-icon">${pass ? '✓' : '✗'}</span>`;
+    reviewHtml += `<span>第${i + 1}题 · ${q.type}</span>`;
+    reviewHtml += `</div>`;
+  });
+  document.getElementById('reviewList').innerHTML = reviewHtml;
+}
+
+function restart() {
+  currentQ = 0;
+  selectedOption = -1;
+  answered = false;
+  scores = [];
+  userAnswers = [];
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('btnRow').style.display = 'flex';
+  document.getElementById('resultScreen').classList.remove('show');
+  renderQuestion();
+}
+
+// Init
+renderQuestion();
+</script>
+</body>
+</html>

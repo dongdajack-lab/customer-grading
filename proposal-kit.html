@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案营销五件套工作台 · 大董销售体系</title>
+<style>
+:root{
+  --main:#E8590C; --main-dark:#C74405; --main-light:#FFF4E6; --main-mid:#FFE3CC;
+  --ink:#212529; --ink2:#495057; --ink3:#868E96; --line:#E9ECEF; --bg:#FAF9F7;
+  --ok:#2B8A3E; --warn:#E8590C; --card:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+
+/* ===== Header ===== */
+header{background:linear-gradient(135deg,#C74405 0%,#E8590C 55%,#F08C00 100%);color:#fff;padding:34px 0 26px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.08)}
+header::before{content:"";position:absolute;right:40px;bottom:-90px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.h-tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:2px 14px;font-size:12px;letter-spacing:2px;margin-bottom:12px}
+h1{font-size:26px;font-weight:800;letter-spacing:1px}
+.h-sub{font-size:14px;opacity:.92;margin-top:8px}
+.h-usage{font-size:12px;opacity:.8;margin-top:10px}
+
+/* ===== Tabs ===== */
+.tabs{position:sticky;top:0;z-index:50;background:var(--bg);padding:10px 0 6px;border-bottom:1px solid var(--line)}
+.tabbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbtn{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;color:var(--ink2);padding:8px 14px;border-radius:22px;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
+.tabbtn:hover{border-color:var(--main);color:var(--main)}
+.tabbtn.on{background:var(--main);border-color:var(--main);color:#fff;box-shadow:0 3px 10px rgba(232,89,12,.3)}
+.tab-num{display:inline-block;background:var(--main-light);color:var(--main);border-radius:10px;padding:0 7px;margin-right:6px;font-size:12px;font-weight:800}
+.tabbtn.on .tab-num{background:rgba(255,255,255,.25);color:#fff}
+
+/* ===== Sections ===== */
+section.tab{display:none;padding-top:22px}
+section.tab.on{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.card-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;margin-bottom:4px}
+.card-title .ico{width:26px;height:26px;border-radius:8px;background:var(--main);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto}
+.card-sub{font-size:13px;color:var(--ink3);margin-bottom:14px;line-height:1.5}
+.card-note{background:var(--main-light);border-left:4px solid var(--main);padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;color:var(--ink2);margin:10px 0}
+
+/* ===== 表单 ===== */
+label{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12px 0 5px}
+label .req{color:var(--main)}
+input[type=text],input[type=number],input[type=date],textarea,select{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff;outline:none;transition:border .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--main);box-shadow:0 0 0 3px rgba(232,89,12,.1)}
+textarea{resize:vertical;min-height:64px;line-height:1.55}
+.ph{font-size:11px;color:var(--ink3);margin-top:4px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.row,.row3{grid-template-columns:1fr}}
+
+/* ===== 按钮 ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--main);color:#fff}
+.btn-primary:hover{background:var(--main-dark)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink2)}
+.btn-ghost:hover{border-color:var(--main);color:var(--main)}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:8px}
+.btn-danger{background:#fff;border:1.5px solid #FFA8A8;color:#C92A2A}
+.btn-ok{background:var(--ok);color:#fff}
+.btn-ok:hover{filter:brightness(.92)}
+.btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+/* ===== 动态列表 ===== */
+.dyn-item{display:grid;grid-template-columns:1.1fr .8fr 34px;gap:8px;margin-bottom:8px;align-items:center}
+.dyn-item input{background:var(--bg)}
+.dyn-item .del{width:34px;height:36px;border:1.5px solid var(--line);background:#fff;border-radius:9px;color:#C92A2A;cursor:pointer;font-size:16px;font-weight:700;transition:all .15s}
+.dyn-item .del:hover{background:#FFF5F5;border-color:#FFA8A8}
+.addlink{display:inline-flex;align-items:center;gap:4px;color:var(--main);font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;border:none;background:none}
+.addlink:hover{text-decoration:underline}
+
+/* ===== 结果卡片 ===== */
+.result{background:linear-gradient(135deg,#FFF4E6,#FFF9F0);border:1.5px solid var(--main-mid);border-radius:14px;padding:18px;margin-top:14px}
+.result h4{color:var(--main-dark);font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:640px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.metric{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.metric .v{font-size:20px;font-weight:800;color:var(--main-dark)}
+.metric .k{font-size:11px;color:var(--ink3);margin-top:2px}
+.verdict{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:700;line-height:1.5}
+.verdict.good{background:#EBFBEE;color:#2B8A3E;border:1px solid #B2F2BB}
+.verdict.warn{background:#FFF4E6;color:#E8590C;border:1px solid #FFE3CC}
+.verdict.bad{background:#FFF5F5;color:#C92A2A;border:1px solid #FFC9C9}
+
+/* ===== Tab1 一页纸 ===== */
+.paper-preview{background:#fff;border:1.5px solid var(--main-mid);border-radius:12px;padding:20px;margin-top:16px}
+.paper-preview .pp-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px double var(--main);padding-bottom:10px;margin-bottom:12px}
+.paper-preview .pp-title{font-size:18px;font-weight:800;color:var(--main-dark)}
+.paper-preview .pp-meta{font-size:11px;color:var(--ink3);text-align:right;line-height:1.5}
+.pp-block{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.pp-block .b-t{font-size:13px;font-weight:800;color:var(--main-dark);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.pp-block .b-t .tag{background:var(--main);color:#fff;font-size:10px;border-radius:6px;padding:1px 6px}
+.pp-block .b-c{font-size:13px;color:var(--ink2);white-space:pre-wrap;line-height:1.55}
+.pp-cta{margin-top:10px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+td.vs{background:#F1F3F5}
+
+/* ===== Tab3 角色卡 ===== */
+.role-card{border:1.5px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.role-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;background:#fff}
+.role-head:hover{background:var(--main-light)}
+.role-badge{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;flex:0 0 auto}
+.role-name{font-size:15px;font-weight:800}
+.role-desc{font-size:12px;color:var(--ink3);margin-top:2px;line-height:1.4}
+.role-arrow{margin-left:auto;color:var(--ink3);transition:transform .2s}
+.role-card.open .role-arrow{transform:rotate(180deg)}
+.role-body{display:none;padding:4px 16px 16px;border-top:1px dashed var(--line);background:#FFFCFA}
+.role-card.open .role-body{display:block}
+.coach-tip{background:#EBFBEE;border:1px solid #B2F2BB;border-radius:10px;padding:12px;font-size:13px;color:#2B8A3E;margin-top:12px}
+
+/* ===== Tab4 战略 ===== */
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.strategy-grid{grid-template-columns:1fr}}
+.strategy-card{border:1.5px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.strategy-card.hot{border-color:var(--main);background:var(--main-light);box-shadow:0 3px 12px rgba(232,89,12,.15)}
+.strategy-card .s-name{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
+.strategy-card .s-when{font-size:12px;color:var(--ink3);margin:4px 0 8px}
+.strategy-card .s-actions{font-size:13px;color:var(--ink2)}
+.strategy-card .s-actions li{margin-left:16px;line-height:1.7}
+
+/* ===== Tab5 话术 ===== */
+.pitch-block{border:1.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;background:#fff}
+.pitch-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.pitch-time{background:var(--main);color:#fff;font-size:12px;font-weight:800;border-radius:8px;padding:3px 10px}
+.pitch-when{font-size:12px;color:var(--ink3)}
+.qz-card{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.qz-q{background:var(--main-light);padding:10px 14px;font-size:14px;font-weight:800;color:var(--main-dark);cursor:pointer;display:flex;align-items:center;gap:8px}
+.qz-q .qz-n{background:var(--main);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 auto}
+.qz-q .arr{margin-left:auto;color:var(--ink3);transition:transform .2s}
+.qz-card.open .arr{transform:rotate(180deg)}
+.qz-b{display:none;padding:12px 14px;background:#fff}
+.qz-card.open .qz-b{display:block}
+.qz-principle{font-size:13px;color:var(--ink2);background:var(--bg);border-radius:8px;padding:8px 10px;margin-bottom:8px}
+.qz-principle b{color:var(--main-dark)}
+
+/* ===== 页脚 ===== */
+footer{margin-top:30px;text-align:center;color:var(--ink3);font-size:12px;line-height:1.8}
+
+/* ===== 打印 ===== */
+@media print{
+  body{background:#fff;padding:0}
+  header,.tabs,.btnbar,.no-print,footer{display:none !important}
+  section.tab{display:none !important}
+  section.tab.on{display:none !important}
+  #print-area{display:block !important}
+  .card,.paper-preview{box-shadow:none;border-color:#999}
+}
+#print-area{display:none}
+body.printing #print-area{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="h-tag">方案营销五件套 · 学完就落地</div>
+    <h1>方案营销五件套工作台</h1>
+    <div class="h-sub">从"谈方案"到"赢大单"的五个实战工具：一页纸方案 → 效益测算 → 关键人策略 → 竞争作战 → 陈述演练</div>
+    <div class="h-usage">💡 填写内容自动保存在本机（浏览器），下次打开不丢失 · 每件套均配预置示例，点"填入示例"即可体验</div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap tabbar" id="tabbar">
+    <button class="tabbtn on" data-tab="t1"><span class="tab-num">1</span>方案论证一页纸</button>
+    <button class="tabbtn" data-tab="t2"><span class="tab-num">2</span>客户效益测算</button>
+    <button class="tabbtn" data-tab="t3"><span class="tab-num">3</span>关键人策略卡</button>
+    <button class="tabbtn" data-tab="t4"><span class="tab-num">4</span>对手作战表</button>
+    <button class="tabbtn" data-tab="t5"><span class="tab-num">5</span>陈述演练台</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= Tab1 方案论证一页纸 ================= -->
+<section class="tab on" id="t1">
+  <div class="card">
+    <div class="card-title"><span class="ico">1</span>方案论证一页纸（价值金三角：需求 × 效益 × 差异）</div>
+    <div class="card-sub">把几十页方案压缩成一页纸：客户的痛、你算的账、为什么是你、下一步行动。中小企业老板没有耐心看长方案，一页纸讲清就能赢。</div>
+    <div class="card-note">📌 四件套逻辑：<b>①需求共识</b>（SPIN挖出的痛-因-果）→ <b>②效益测算</b>（帮客户算的账）→ <b>③差异对比</b>（为什么选你）→ <b>④行动承诺</b>（下一步）。写完点"生成一页纸"可预览、可打印。</div>
+
+    <div class="row">
+      <div><label>客户名称 <span class="req">*</span></label><input type="text" id="p1_cust" placeholder="如：华邦精密制造"></div>
+      <div><label>所在行业</label><input type="text" id="p1_ind" placeholder="如：精密五金加工"></div>
+    </div>
+    <div class="row">
+      <div><label>我方产品/服务</label><input type="text" id="p1_prod" placeholder="如：MES数字化车间系统"></div>
+      <div><label>销售顾问 / 日期</label><div class="row" style="gap:8px"><input type="text" id="p1_sales" placeholder="姓名"><input type="date" id="p1_date"></div></div>
+    </div>
+
+    <label>① 需求共识 —— 客户的痛（三行讲清）</label>
+    <textarea id="p1_pain" rows="2" placeholder="最痛的是什么？(P)  如：订单交期总是延误，客户投诉不断，丢了两张大单"></textarea>
+    <textarea id="p1_cause" rows="2" placeholder="根源是什么？为什么痛？(I)  如：车间靠人工排产，插单频繁，产能数据靠猜"></textarea>
+    <textarea id="p1_impact" rows="2" placeholder="不解决会怎样？(N)  如：年底交期延误率超30%，大客户流失风险，全年损失估约200万"></textarea>
+
+    <label>② 效益测算 —— 帮他算的账（结果可直接引用工具2）</label>
+    <div class="row3">
+      <div><label style="margin-top:0">年化降本（万/年）</label><input type="number" id="p1_save" placeholder="0"></div>
+      <div><label style="margin-top:0">年化增收（万/年）</label><input type="number" id="p1_gain" placeholder="0"></div>
+      <div><label style="margin-top:0">投入总额（万）</label><input type="number" id="p1_invest" placeholder="0"></div>
+    </div>
+
+    <label>③ 差异对比 —— 为什么选你（填客户最关心的2-3个维度）</label>
+    <div id="p1_diff">
+      <div class="dyn-item" style="grid-template-columns:1fr 1fr 1fr 34px">
+        <input type="text" class="dim" placeholder="客户关心维度：如 交期保障">
+        <input type="text" class="me" placeholder="我方：如 系统排产+急单通道，交期准点率95%">
+        <input type="text" class="rival" placeholder="对手：如 只有排产，无急单通道">
+        <button class="del" onclick="this.parentElement.remove()">×</button>
+      </div>
+    </div>
+    <button class="addlink" onclick="addDiffRow()">＋ 增加对比维度</button>
+
+    <label>④ 行动承诺 —— 下一步做什么</label>
+    <textarea id="p1_next" rows="2" placeholder="如：①下周三高层演示 ②月底前完成试点车间1条线 ③6月验收，逾期赔付承诺书"></textarea>
+
+    <div class="btnbar">
+      <button class="btn btn-primary" onclick="genPaper()">🖨 生成一页纸方案</button>
+      <button class="btn btn-ghost" onclick="fillP1Demo()">填入示例</button>
+      <button class="btn btn-ghost" onclick="clearTab('p1')">清空</button>
+    </div>
+
+    <div id="paperOut"></div>
+  </div>
+</section>
+
+<!-- ================= Tab2 客户效益测算 ================= -->
+<section class="tab" id="t2">
+  <div class="card">
+    <div class="card-title"><span class="ico">2</span>客户效益测算器（帮客户算账，几行数字算出回报）</div>
+    <div class="card-sub">把效益拆成「降本＋增收」，对比「投入」，算出年化效益、投资回收期和ROI。这是"谈方案"阶段最硬的子弹。</div>
+    <div class="card-note">📌 口径：<b>回收期 ≤ 12个月</b>＝强吸引力，客户基本无法拒绝；<b>12-24个月</b>＝值得投，需要讲清楚长期价值；<b>＞24个月</b>＝故事不够硬，建议调整方案或分期投入。</div>
+
+    <label>💰 降本项（节流：库存/人力/浪费/能耗/时间……）</label>
+    <div id="t2_save"></div>
+    <button class="addlink" onclick="addItem('t2_save')">＋ 增加降本项</button>
+
+    <label>📈 增收项（开源：转化率/客单价/复购/新市场……）</label>
+    <div id="t2_gain"></div>
+    <button class="addlink" onclick="addItem('t2_gain')">＋ 增加增收项</button>
+
+    <div class="row">
+      <div><label>一次性投入（采购＋实施，万元）</label><input type="number" id="t2_invest" placeholder="如：80"></div>
+      <div><label>年化维护/使用成本（万元/年）</label><input type="number" id="t2_cost" placeholder="如：8"></div>
+    </div>
+
+    <div class="btnbar">
+      <button class="btn btn-primary" onclick="calcBenefit()">🧮 计算回报</button>
+      <button class="btn btn-ghost" onclick="fillT2Demo()">填入示例</button>
+      <button class="btn btn-ghost" onclick="clearTab('t2')">清空</button>
+    </div>
+
+    <div id="benefitOut"></div>
+  </div>
+</section>
+
+<!-- ================= Tab3 关键人策略卡 ================= -->
+<section class="tab" id="t3">
+  <div class="card">
+    <div class="card-title"><span class="ico">3</span>决策者五角色策略卡（找对关键人，对号入座）</div>
+    <div class="card-sub">一个客户五类人：出钱的、把关的、使用的、协调的、帮你赢的。给每个人定制"我该对他说什么"，并识别你的教练。</div>
+    <div class="card-note">📌 记住金句：<b>"每个需求的背后都应该有它的教父（支持者），否则无关重要。"</b> 逐个点击角色卡填写，标⭐的潜在教练重点培养。</div>
+
+    <div id="roleList"></div>
+
+    <div class="coach-tip">
+      🔍 <b>如何识别教练（Coach）？</b> 教练是"帮你赢"的人，特征：①主动告诉你客户内部信息（谁支持/谁反对/预算多少）；②帮你出主意怎么说服别人；③愿意帮你安排高层见面；④告诉你对手在干什么。<br>
+      <b>培养教练三步：</b>先给价值（帮他在公司内部出彩）→ 再给信任（承诺的事一定兑现）→ 最后给路径（让他有理由推动项目）。
+    </div>
+  </div>
+</section>
+
+<!-- ================= Tab4 对手作战表 ================= -->
+<section class="tab" id="t4">
+  <div class="card">
+    <div class="card-title"><span class="ico">4</span>对手-战略-打法作战表（先选战略，再定打法）</div>
+    <div class="card-sub">孙子兵法五类战略：正面进攻、侧翼攻击、游击战、防御战、先发制人。先看清对手，再选战略，最后落打法。</div>
+
+    <div class="row">
+      <div><label>客户名称</label><input type="text" id="p4_cust" placeholder="如：华邦精密制造"></div>
+      <div><label>主要对手</label><input type="text" id="p4_rival" placeholder="如：XX软件（本地老牌）"></div>
+    </div>
+    <div class="row">
+      <div>
+        <label>我方三大优势（实力）</label>
+        <textarea id="p4_mywin" rows="3" placeholder="每行一条：&#10;如：交期准点率95%，行业第一&#10;如：总部支持，本地有服务团队&#10;如：价格比对手低15%"></textarea>
+      </div>
+      <div>
+        <label>我方两大劣势（软肋）</label>
+        <textarea id="p4_mylose" rows="3" placeholder="每行一条：&#10;如：同行案例少&#10;如：品牌知名度低"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>对手三大优势</label>
+        <textarea id="p4_rivalwin" rows="3" placeholder="每行一条：&#10;如：本地案例多&#10;如：与客户老总私交好&#10;如：报价低10%"></textarea>
+      </div>
+      <div>
+        <label>对手两大劣势（破绽）</label>
+        <textarea id="p4_rivallose" rows="3" placeholder="每行一条：&#10;如：交付延期被投诉&#10;如：售后服务外包，响应慢"></textarea>
+      </div>
+    </div>
+
+    <div class="btnbar">
+      <button class="btn btn-primary" onclick="genStrategy()">⚔️ 生成作战计划</button>
+      <button class="btn btn-ghost" onclick="fillT4Demo()">填入示例</button>
+      <button class="btn btn-ghost" onclick="clearTab('t4')">清空</button>
+    </div>
+
+    <div id="strategyOut"></div>
+  </div>
+</section>
+
+<!-- ================= Tab5 陈述演练台 ================= -->
+<section class="tab" id="t5">
+  <div class="card">
+    <div class="card-title"><span class="ico">5</span>方案陈述演练台（三套话术 + 十大质疑应对）</div>
+    <div class="card-sub">方案做出来是一回事，讲出来让人点头是另一回事。按场景练三套话术，再背熟十大质疑的应对话术。</div>
+
+    <h3 style="font-size:15px;margin:6px 0 12px;color:var(--main-dark)">一、三套话术（按场合选）</h3>
+
+    <div class="pitch-block">
+      <div class="pitch-head">
+        <div><span class="pitch-time">3分钟 · 电梯版</span> <span style="margin-left:8px;font-weight:800;font-size:15px">一句话钩住老板</span></div>
+        <div class="pitch-when">适用：展会偶遇 / 电梯偶遇 / 开场30秒</div>
+      </div>
+      <div class="row">
+        <div><label style="margin-top:0">① 钩子（30秒）：行业/企业的扎心事实</label><textarea id="p5_3a" rows="2" placeholder="如：王总，今年五金行业平均交期延误率升到40%，但头部企业反而在抢单——差别就在排产。"></textarea></div>
+        <div><label style="margin-top:0">② 痛点（45秒）：他的具体痛</label><textarea id="p5_3b" rows="2" placeholder="如：您车间现在是不是插单就乱、排产靠老师傅记在脑子里？"></textarea></div>
+      </div>
+      <div class="row">
+        <div><label>③ 方案一句话（30秒）</label><textarea id="p5_3c" rows="2" placeholder="如：我们这套系统，把排产从"人脑"变"电脑"，急单3分钟重排，交期准点率做到95%。"></textarea></div>
+        <div><label>④ 效益一个数（45秒）：最硬的一个数字</label><textarea id="p5_3d" rows="2" placeholder="如：按您现在的规模，一年光丢单损失就省回200万，8个月回本。"></textarea></div>
+      </div>
+      <label>⑤ 行动邀请（30秒）</label>
+      <textarea id="p5_3e" rows="2" placeholder="如：下周三我带方案来您办公室，20分钟给您算清楚这笔账，方便吗？"></textarea>
+    </div>
+
+    <div class="pitch-block">
+      <div class="pitch-head">
+        <div><span class="pitch-time">10分钟 · 标准版</span> <span style="margin-left:8px;font-weight:800;font-size:15px">四件套走一遍</span></div>
+        <div class="pitch-when">适用：正式方案讲解 / 决策层小会</div>
+      </div>
+      <div class="row">
+        <div><label style="margin-top:0">开场（1分钟）：目的+议程</label><textarea id="p5_10a" rows="2" placeholder="如：王总，今天用10分钟讲清三件事：您的痛怎么解决、这笔钱多久回本、为什么是我们。"></textarea></div>
+        <div><label style="margin-top:0">① 需求共识（2分钟）：痛-因-果</label><textarea id="p5_10b" rows="2" placeholder="如：先对齐一个问题——您最痛的是交期。它源自排产靠人，不解决一年损失200万。"></textarea></div>
+      </div>
+      <div class="row">
+        <div><label>② 效益测算（3分钟）：账本</label><textarea id="p5_10c" rows="2" placeholder="如：这笔投入80万，一年降本+增收合计120万，8个月回本，ROI 150%。"></textarea></div>
+        <div><label>③ 差异对比（2分钟）：为什么是我们</label><textarea id="p5_10d" rows="2" placeholder="如：对比XX，我们交期准点率95%、有急单通道、本地服务4小时响应——这三条是您最看重的。"></textarea></div>
+      </div>
+      <label>④ 行动承诺（2分钟）：下一步</label>
+      <textarea id="p5_10e" rows="2" placeholder="如：建议下月先上1条线试点，45天见效，验收达标再全面铺开。"></textarea>
+    </div>
+
+    <div class="pitch-block">
+      <div class="pitch-head">
+        <div><span class="pitch-time">30分钟 · 深度版</span> <span style="margin-left:8px;font-weight:800;font-size:15px">高层战略对话</span></div>
+        <div class="pitch-when">适用：董事长/总经理单独汇报，谈战略价值</div>
+      </div>
+      <div class="row">
+        <div><label style="margin-top:0">① 行业与战略（5分钟）：他的生意经</label><textarea id="p5_30a" rows="2" placeholder="如：先聊行业——五金行业这两年分化，产能过剩但高端订单没人接，您的突破口在哪？"></textarea></div>
+        <div><label style="margin-top:0">② 关键成功要素（5分钟）：做成需要什么</label><textarea id="p5_30b" rows="2" placeholder="如：要在高端订单上抢份额，关键是交期可靠+柔性接单，这两条恰好是数字化最能帮您的。"></textarea></div>
+      </div>
+      <div class="row">
+        <div><label>③ 痛点根因（5分钟）</label><textarea id="p5_30c" rows="2" placeholder="如：现在卡在哪？排产靠人、数据靠猜、插单就乱——这是管理问题，不是设备问题。"></textarea></div>
+        <div><label>④ 方案与ROI（8分钟）：总览+账本</label><textarea id="p5_30d" rows="2" placeholder="如：方案三步走：先排产、再追溯、后决策。投入80万，年回报120万，8个月回本。"></textarea></div>
+      </div>
+      <div class="row">
+        <div><label>⑤ 风险与保障（4分钟）：打消顾虑</label><textarea id="p5_30e" rows="2" placeholder="如：风险共担——先上1条线试点，45天见效再铺开；总部本地双团队，4小时响应。"></textarea></div>
+        <div><label>⑥ 下一步（3分钟）</label><textarea id="p5_30f" rows="2" placeholder="如：建议：①下周三带您去看成功案例现场 ②月底启动试点 ③我出一页纸方案给您过目。"></textarea></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px;margin:18px 0 12px;color:var(--main-dark)">二、十大质疑应对卡（先跟后带，背熟即用）</h3>
+    <div class="card-note">📌 应对心法：<b>先跟（认同感受）→ 后带（回到价值）</b>。永远不要反驳客户，先接住情绪，再把他带回你的账本和差异。</div>
+    <div id="qzList"></div>
+
+    <div class="btnbar">
+      <button class="btn btn-ghost" onclick="fillT5Demo()">填入示例话术</button>
+      <button class="btn btn-ghost" onclick="clearTab('t5')">清空话术</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  方案营销五件套工作台 · 大董销售体系「谈方案」升级工具<br>
+  由《顾问式销售与方案营销》×《天地人销售体系》融合建议落地 · 供课堂与学员落地使用
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+/* ================= 通用 ================= */
+const $ = id => document.getElementById(id);
+const LSKEY = 'proposal_kit_v1';
+let state = load();
+
+function load(){
+  try{ return JSON.parse(localStorage.getItem(LSKEY)) || {}; }catch(e){ return {}; }
+}
+function save(){
+  try{ localStorage.setItem(LSKEY, JSON.stringify(state)); }catch(e){}
+}
+
+/* Tab 切换 */
+document.getElementById('tabbar').addEventListener('click', e => {
+  const b = e.target.closest('.tabbtn'); if(!b) return;
+  document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('section.tab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  document.getElementById(b.dataset.tab).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* 清空单Tab输入 */
+function clearTab(prefix){
+  if(!confirm('确认清空该模块的所有填写内容？')) return;
+  document.querySelectorAll('#'+prefix+' input, #'+prefix+' textarea').forEach(el=>{
+    if(el.type==='date') el.value='';
+    else if(el.type==='number') el.value='';
+    else el.value='';
+  });
+  document.querySelectorAll('#'+prefix+' .dyn-item').forEach(el=>el.remove());
+  const out = document.getElementById({p1:'paperOut',p2:'benefitOut',t2:'benefitOut',p4:'strategyOut',t4:'strategyOut'}[prefix] || prefix+'Out');
+  if(out) out.innerHTML='';
+  save();
+}
+
+/* 差异对比行（Tab1） */
+function addDiffRow(){
+  const d = document.createElement('div');
+  d.className = 'dyn-item';
+  d.style.gridTemplateColumns = '1fr 1fr 1fr 34px';
+  d.innerHTML = `<input type="text" class="dim" placeholder="客户关心维度"><input type="text" class="me" placeholder="我方"><input type="text" class="rival" placeholder="对手"><button class="del" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById('p1_diff').appendChild(d);
+}
+
+/* ================= Tab1 一页纸 ================= */
+function fillP1Demo(){
+  $('p1_cust').value='华邦精密制造'; $('p1_ind').value='精密五金加工'; $('p1_prod').value='MES数字化车间系统';
+  $('p1_sales').value='张三'; $('p1_date').value='2026-08-13';
+  $('p1_pain').value='订单交期总是延误（延误率30%+），客户投诉不断，今年已丢两张大单';
+  $('p1_cause').value='车间靠人工排产，插单频繁，产能数据靠经验猜，无人能说准真实交期';
+  $('p1_impact').value='大客户流失风险（2家已口头警告），全年损失估约200万，再拖明年招标就进不了名单';
+  $('p1_save').value='80'; $('p1_gain').value='40'; $('p1_invest').value='80';
+  const diff = $('p1_diff'); diff.innerHTML='';
+  [['交期保障','系统排产+急单通道，准点率95%','只有排产，无急单通道'],
+   ['服务响应','本地团队4小时到场','服务外包，响应48小时'],
+   ['总拥有成本','8个月回本，后续年维护8万','首年便宜，后续年费25万']].forEach(r=>{
+    const d=document.createElement('div'); d.className='dyn-item'; d.style.gridTemplateColumns='1fr 1fr 1fr 34px';
+    d.innerHTML=`<input type="text" class="dim" value="${r[0]}"><input type="text" class="me" value="${r[1]}"><input type="text" class="rival" value="${r[2]}"><button class="del" onclick="this.parentElement.remove()">×</button>`;
+    diff.appendChild(d);
+  });
+  $('p1_next').value='① 下周三高层演示（20分钟） ② 月底前完成1条产线试点 ③ 试点45天验收，达标再全面铺开';
+  save();
+}
+
+function genPaper(){
+  const cust=$('p1_cust').value||'（客户名称）', ind=$('p1_ind').value||'', prod=$('p1_prod').value||'（我方方案）';
+  const sales=$('p1_sales').value||'', date=$('p1_date').value||'';
+  const pain=$('p1_pain').value, cause=$('p1_cause').value, impact=$('p1_impact').value;
+  const saveV=$('p1_save').value||'0', gainV=$('p1_gain').value||'0', invV=$('p1_invest').value||'0';
+  const annual=(parseFloat(saveV)+parseFloat(gainV)).toFixed(1);
+  const inv=parseFloat(invV)||0;
+  const months = annual>0 ? (inv/(parseFloat(annual))*12).toFixed(1) : '—';
+  const diffs=[...document.querySelectorAll('#p1_diff .dyn-item')].map(d=>{
+    const dim=d.querySelector('.dim').value, me=d.querySelector('.me').value, rv=d.querySelector('.rival').value;
+    return dim||me||rv ? {dim,me,rv}:null;
+  }).filter(Boolean);
+  const next=$('p1_next').value;
+
+  const html=`
+  <div class="paper-preview" id="print-area">
+    <div class="pp-head">
+      <div class="pp-title">方案论证一页纸</div>
+      <div class="pp-meta">${cust} · ${ind}<br>${prod}<br>${sales} ${date||''}</div>
+    </div>
+    <div class="pp-block"><div class="b-t"><span class="tag">①</span>需求共识 · 痛-因-果</div>
+      <div class="b-c">【最痛】${pain||'——'}\n【根源】${cause||'——'}\n【不解决的后果】${impact||'——'}</div></div>
+    <div class="pp-block"><div class="b-t"><span class="tag">②</span>效益测算 · 这笔账</div>
+      <div class="b-c">年化降本 ${saveV}万 ＋ 年化增收 ${gainV}万 ＝ 年化效益 ${annual}万　|　总投入 ${invV}万　|　回收期约 ${months}个月</div></div>
+    <div class="pp-block"><div class="b-t"><span class="tag">③</span>差异对比 · 为什么是我们</div>
+      <div class="b-c">${diffs.length? diffs.map(d=>`【${d.dim||'维度'}】我方：${d.me||'——'} ／ 对手：${d.rv||'——'}`).join('\n') : '（未填写）'}</div></div>
+    <div class="pp-block"><div class="b-t"><span class="tag">④</span>行动承诺 · 下一步</div>
+      <div class="b-c">${next||'（未填写）'}</div></div>
+    <div class="pp-cta" style="text-align:center;color:var(--main-dark);font-weight:700;font-size:13px">—— 一页纸，讲清「你的痛 · 我的账 · 为什么是我 · 下一步」 ——</div>
+  </div>
+  <div class="btnbar no-print">
+    <button class="btn btn-ok" onclick="window.print()">🖨 打印 / 存PDF</button>
+  </div>`;
+  $('paperOut').innerHTML = html;
+  save();
+}
+
+/* ================= Tab2 效益测算 ================= */
+function addItem(pid, name='', val=''){
+  const d=document.createElement('div');
+  d.className='dyn-item';
+  d.innerHTML=`<input type="text" class="nm" placeholder="项目名称" value="${name}"><input type="number" class="vl" placeholder="万元/年" value="${val}"><button class="del" onclick="this.parentElement.remove()">×</button>`;
+  $(pid).appendChild(d);
+}
+function collect(pid){
+  return [...document.querySelectorAll('#'+pid+' .dyn-item')].map(d=>({
+    n:d.querySelector('.nm').value, v:parseFloat(d.querySelector('.vl').value)||0
+  })).filter(x=>x.n||x.v);
+}
+function fillT2Demo(){
+  $('t2_save').innerHTML='';
+  [['库存积压资金占用下降',60],['人工排产工时节省',25],['废品率降低（交期不延误）',20],['能耗降低',5]].forEach(x=>addItem('t2_save',x[0],x[1]));
+  $('t2_gain').innerHTML='';
+  [['接单能力提升（抢回延误订单）',30],['高端订单溢价',10]].forEach(x=>addItem('t2_gain',x[0],x[1]));
+  $('t2_invest').value='80'; $('t2_cost').value='8';
+  save();
+}
+function calcBenefit(){
+  const saveTotal=collect('t2_save').reduce((a,x)=>a+x.v,0);
+  const gainTotal=collect('t2_gain').reduce((a,x)=>a+x.v,0);
+  const invest=parseFloat($('t2_invest').value)||0;
+  const cost=parseFloat($('t2_cost').value)||0;
+  const annual=saveTotal+gainTotal-cost;
+  const months = annual>0 ? (invest/annual*12).toFixed(1) : '—';
+  const roi = invest>0 ? (annual/invest*100).toFixed(0) : '—';
+  let verdict, cls;
+  const m = parseFloat(months);
+  if(annual<=0){verdict='⚠️ 年化净效益为负或为零：方案账本不成立。要么加大降本/增收项的真实性，要么缩小投入、分期实施。';cls='bad';}
+  else if(m<=12){verdict=`✅ 回收期仅 ${months} 个月 —— 强吸引力！客户几乎没有理由拒绝，大胆亮出这张账。`;cls='good';}
+  else if(m<=24){verdict=`🟠 回收期 ${months} 个月 —— 值得投。讲清楚长期价值与风险保障，同时给出分期投入方案降低门槛。`;cls='warn';}
+  else {verdict=`🔴 回收期 ${months} 个月，超过24个月 —— 故事不够硬。建议：缩小首期范围（试点）、增加降本项、或打包更多隐形收益（风险规避/管理改善）。`;cls='bad';}
+
+  const rows=[...collect('t2_save'),...collect('t2_gain')].filter(x=>x.n).map(x=>`${x.n}：${x.v}万/年`).join('；')||'未填写明细';
+  const html=`
+  <div class="result">
+    <h4>🧮 回报测算结果</h4>
+    <div class="metrics">
+      <div class="metric"><div class="v">${saveTotal.toFixed(1)}万</div><div class="k">年化降本</div></div>
+      <div class="metric"><div class="v">${gainTotal.toFixed(1)}万</div><div class="k">年化增收</div></div>
+      <div class="metric"><div class="v">${annual.toFixed(1)}万</div><div class="k">年化净效益</div></div>
+      <div class="metric"><div class="v">${months}个月</div><div class="k">投资回收期</div></div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--ink3)">明细：${rows}｜年维护成本 ${cost}万｜ROI ${roi}%</div>
+    <div class="verdict ${cls}">${verdict}</div>
+  </div>`;
+  $('benefitOut').innerHTML=html;
+  save();
+}
+
+/* ================= Tab3 关键人策略卡 ================= */
+const ROLES=[
+  {k:'EB', name:'经济买家（EB）', color:'#C92A2A', short:'出钱的人 · 拍板的人',
+   care:'投入产出、总拥有成本、投资回收期、风险是否可控',
+   fear:'花冤枉钱被追责、预算超支、项目烂尾、被下属和对手架住',
+   tip:'给他：一张干净的账（工具2的回收期+ROI）+ 分阶段投入的台阶。他说"贵"不是拒绝，是要你证明值得。'},
+  {k:'TB', name:'技术把关（TB）', color:'#2B8A3E', short:'审方案的人 · 技术守门员',
+   care:'功能完整性、技术路线成熟度、数据安全、落地可行性、是否选型担责',
+   fear:'选错技术被指责、上线出问题背锅、功能承诺兑现不了',
+   tip:'给他：技术架构图+成功案例的技术细节+功能承诺清单（白纸黑字）。他点头，方案才过得了评审。'},
+  {k:'UB', name:'使用用户（UB）', color:'#1971C2', short:'天天用的人 · 一线操作者',
+   care:'好不好用、省不省事、会不会增加工作量、操作复杂不复杂',
+   fear:'系统难用拖累自己、增加填表负担、影响绩效、被老板逼着学新东西',
+   tip:'给他：操作演示+上手快的话术（"1天培训就能用"）+省时证据。他用得爽，才有内部口碑。'},
+  {k:'CO', name:'协调人（Coordinator）', color:'#E8590C', short:'组织流程的人 · 采购对接',
+   care:'流程走得顺不顺、供应商好不好配合、出问题有没有人兜底',
+   fear:'被夹在中间两头受气、流程卡壳被追责、供应商不配合',
+   tip:'给他：清晰的时间表+响应承诺+让他当"推进明星"（在老板面前有功劳）。他是你的流程加速器。'},
+  {k:'CH', name:'教练（Coach）', color:'#5F3DC4', short:'帮你赢的人 · 情报与推手',
+   care:'（他不帮你"说好话"，他帮你"看清局"）——利益上与你绑定，事业上想借项目出彩',
+   fear:'暴露身份被排挤、你让他失望、他推荐的你最后搞砸',
+   tip:'给他：功劳与面子（让他在内部有亮点）+ 及时信息互通 + 绝不让他难做。他是你赢单的关键变量。'}
+];
+function renderRoles(){
+  const box=$('roleList'); box.innerHTML='';
+  ROLES.forEach((r,i)=>{
+    const card=document.createElement('div');
+    card.className='role-card';
+    card.innerHTML=`
+      <div class="role-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="role-badge" style="background:${r.color}">${r.k}</div>
+        <div>
+          <div class="role-name">${r.name}</div>
+          <div class="role-desc">${r.short}</div>
+        </div>
+        <div class="role-arrow">▼</div>
+      </div>
+      <div class="role-body">
+        <div class="card-note" style="margin-top:12px">🎯 他关心：${r.care}　｜　😨 他怕：${r.fear}<br>💡 ${r.tip}</div>
+        <div class="row" style="margin-top:10px">
+          <div><label style="margin-top:0">姓名 / 部门</label><input type="text" class="r-name" placeholder="如：王总 / 董事长"></div>
+          <div><label style="margin-top:0">他对项目的态度</label>
+            <select class="r-att">
+              <option value="">选择…</option><option>强烈支持（教练候选）</option><option>中立观望</option><option>有顾虑</option><option>倾向对手</option><option>尚未接触</option>
+            </select></div>
+        </div>
+        <div class="row">
+          <div><label>我该对他说什么 / 做什么（策略）</label><textarea class="r-strat" rows="2" placeholder="给他讲什么、给他什么资料、请他帮什么忙…"></textarea></div>
+          <div><label>下一步动作（时间+事项）</label><textarea class="r-act" rows="2" placeholder="如：本周四 与王总一对一，带一页纸方案+回收期测算"></textarea></div>
+        </div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
+          <label style="margin:0;display:flex;align-items:center;gap:4px;font-weight:600"><input type="checkbox" class="r-coach" style="width:auto"> ⭐ 潜在教练，重点培养</label>
+          <button class="btn btn-ghost btn-sm" onclick="this.closest('.role-body').querySelectorAll('input,textarea,select').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''})">清空该角色</button>
+        </div>
+      </div>`;
+    box.appendChild(card);
+  });
+  // 回填保存的数据
+  if(state.roles){
+    document.querySelectorAll('#roleList .role-card').forEach((card,idx)=>{
+      const s=state.roles[idx]; if(!s) return;
+      card.querySelector('.r-name').value=s.name||'';
+      card.querySelector('.r-att').value=s.att||'';
+      card.querySelector('.r-strat').value=s.strat||'';
+      card.querySelector('.r-act').value=s.act||'';
+      card.querySelector('.r-coach').checked=!!s.coach;
+    });
+  }
+}
+function saveRoles(){
+  state.roles=[...document.querySelectorAll('#roleList .role-card')].map(c=>({
+    name:c.querySelector('.r-name').value, att:c.querySelector('.r-att').value,
+    strat:c.querySelector('.r-strat').value, act:c.querySelector('.r-act').value,
+    coach:c.querySelector('.r-coach').checked
+  }));
+  save();
+}
+document.addEventListener('input', e=>{ if(e.target.closest('#roleList')) saveRoles(); });
+
+/* ================= Tab4 作战表 ================= */
+const STRATEGIES=[
+  {k:'正面进攻', when:'我方整体实力碾压对手（价格/性能/服务全面占优），客户认可我方品牌', act:'对应打法「优势策略」：亮实力、做对比表、邀客户实地验证、用总成本账压对手', color:'#C92A2A'},
+  {k:'侧翼攻击', when:'对手在主流维度强，但有关键维度是空档（服务/交期/细分场景/痛点没被满足）', act:'对应打法「合理化策略」：绕开正面，专打对手软肋维度，把客户关注点引到我们赢的战场', color:'#E8590C'},
+  {k:'游击战', when:'我方总体弱于对手，但在细分客户群/区域/行业有优势，大战场打不赢', act:'对应打法「先亏后盈策略」：先拿下小切口（试点/样板），用案例滚雪球，避免全面对抗', color:'#1971C2'},
+  {k:'防御战', when:'对手正在挖我方老客户/现有地盘，守住比进攻更重要', act:'对应打法「未来发展策略」：老客户增值服务、合同锁定、高层走动、提前预警流失风险', color:'#2B8A3E'},
+  {k:'先发制人', when:'有机会在对手行动前，重新定义客户痛点/决策流程/项目范围/选型标准', act:'主动帮客户立项、定标准（把我们的优势写进招标条件）、引导预算与时间表', color:'#5F3DC4'}
+];
+function fillT4Demo(){
+  $('p4_cust').value='华邦精密制造'; $('p4_rival').value='XX软件（本地老牌）';
+  $('p4_mywin').value='交期准点率95%行业第一\n总部+本地双服务团队，4小时响应\n总拥有成本低：8个月回本';
+  $('p4_mylose').value='同行案例少（本地只有3家）\n品牌知名度不如对手';
+  $('p4_rivalwin').value='本地案例多（30家）\n与客户老总私交好\n首年报价低10%';
+  $('p4_rivallose').value='交付延期被投诉（2起）\n售后服务外包，响应48小时';
+  save();
+}
+function genStrategy(){
+  const myWin=($('p4_mywin').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const myLose=($('p4_mylose').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const rvWin=($('p4_rivalwin').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const rvLose=($('p4_rivallose').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+
+  // 战略推荐规则
+  let rec=[];
+  // 防御战：对手有明显劣势且与我方老客户相关，或我方劣势中有"被挖角风险"
+  if(myLose.some(s=>/挖|流失|老客户|守/.test(s))) rec.push('防御战');
+  // 游击战：我方优势少（≤1条硬优势）且对手案例/关系强
+  if(myWin.length<=1 && rvWin.length>=2) rec.push('游击战');
+  // 侧翼攻击：对手有明确软肋（劣势≥1）且我方有差异化
+  if(rvLose.length>=1) rec.push('侧翼攻击');
+  // 正面进攻：我方优势≥3且对手劣势≥2
+  if(myWin.length>=3 && rvLose.length>=2) rec.push('正面进攻');
+  // 先发制人：机会型，条件宽松
+  rec.push('先发制人');
+  rec=[...new Set(rec)];
+  if(rec.includes('正面进攻')) rec=rec.filter(x=>x!=='游击战');
+
+  const cards=STRATEGIES.map(s=>{
+    const hot=rec.includes(s.k);
+    return `<div class="strategy-card ${hot?'hot':''}">
+      <div class="s-name"><span style="width:10px;height:10px;border-radius:3px;background:${s.color};display:inline-block"></span>${s.k}${hot?'　🔥推荐':''}</div>
+      <div class="s-when">适用：${s.when}</div>
+      <ul class="s-actions">${s.act}</ul>
+    </div>`;
+  }).join('');
+
+  const plan=[
+    `【首选战略】${rec[0]||'侧翼攻击'} —— 理由：${rec[0]==='防御战'?'对手正在威胁我方阵地，先守住再反击':rec[0]==='游击战'?'我方硬优势少，先在小切口立样板':'抓住对手软肋，把战场引到我们赢的地方'}`,
+    `【对手破绽】${rvLose.length?rvLose.join('；'):'（未识别到明显破绽，建议深挖交付/服务/口碑）'}`,
+    `【我方弹药】${myWin.length?myWin.join('；'):'（请先梳理我方优势）'}`,
+    `【规避风险】${myLose.length?myLose.join('；'):'（未填写）'}`
+  ].join('\n');
+
+  const html=`
+  <div class="result" style="margin-top:16px">
+    <h4>⚔️ 作战计划 · ${$('p4_cust').value||'（客户）'} vs ${$('p4_rival').value||'（对手）'}</h4>
+    <div class="strategy-grid">${cards}</div>
+    <div class="card-note" style="margin-top:14px;white-space:pre-wrap">${plan}</div>
+  </div>`;
+  $('strategyOut').innerHTML=html;
+  save();
+}
+
+/* ================= Tab5 话术 ================= */
+const QZ=[
+  {q:'“你们太贵了”', principle:'先认同感受，再回到价值，最后给台阶。价格贵不贵，取决于值不值。',
+   script:'“理解，价格是您要权衡的。我帮您算过：这套投入${回收期}个月回本，之后每年省${金额}万——贵不贵，得看这笔账。要不我们把首期范围缩小，先上最痛的那块，45天见效？”'},
+  {q:'“我们没预算”', principle:'区分“没预算”和“没优先级”。预算来自痛，痛够大预算自然有。',
+   script:'“理解，预算都是排优先级的。咱们倒过来算：如果这块痛每年让您损失200万，投入80万能止损，这笔预算其实是省出来的。我帮您把效益测算做成内部立项材料，您拿去跟董事会就有依据了。”'},
+  {q:'“XX比你们便宜”', principle:'便宜≠总拥有成本。比总账：实施、维护、延期损失、风险成本。',
+   script:'“确实，首年他们便宜。但我帮您算过总账：他们年维护费高、交付延期您还有隐形损失。我们8个月回本，他们是几年？买便宜的是赌运气，买对的是控风险——您选哪个？”'},
+  {q:'“我们现在用得好好的，没必要换”', principle:'现状满意≠现状最优。指出隐性成本：效率损失、机会成本、未来风险。',
+   script:'“理解，换系统确实麻烦。我想请教：现在排产交期延误率30%，一年丢200万的单——这个代价是不是比换系统的麻烦更大？我们不是让您推倒重来，是先在1条线上试点，看到效果您再决定。”'},
+  {q:'“我们再考虑考虑”', principle:'拖延的三种真相：没痛够 / 没信任 / 没预算。先诊断再对症。',
+   script:'“没问题，考虑是应该的。想跟您确认一下：是我们方案哪里没讲透，还是预算周期的问题，还是您需要跟其他领导商量？您告诉我卡在哪，我帮您扫清障碍。”'},
+  {q:'“这个要老板/董事会定”', principle:'把决策者变成你的支持者：给他材料、给他理由、给他台阶。',
+   script:'“应该的，大额投入确实要老板拍板。这样，我帮您准备一页纸方案+回收期测算，您拿着去汇报，老板问什么答案都在上面。咱们先把内部立项材料做扎实，成不成的功劳都是您的。”'},
+  {q:'“你们没有我们行业的案例”', principle:'迁移学习：把别的行业成功逻辑翻译成客户行业语言。',
+   script:'“坦白讲，同行业案例确实少，但我们的方案逻辑是一样的——都是解决交期/成本/效率。我们帮五金厂把交期从30%降到5%，您这行的痛点同根同源。要不我带您去现场看一天？”'},
+  {q:'“上线失败/落地不了怎么办”', principle:'风险共担承诺：分阶段、试点先行、服务保障写进合同。',
+   script:'“这个担心非常合理。我们的做法：先1条线试点45天，验收达标再铺开；服务保障写进合同，本地团队4小时响应。风险我们不让你一个人扛，是共担的。”'},
+  {q:'“为什么选你们不选XX”', principle:'回到价值金三角：效益测算×差异化×需求匹配，不贬低对手。',
+   script:'“问得好。三个理由：①账——我们${回收期}个月回本，他们算不到这笔账；②差异——我们急单通道、本地服务，正是您最看重的；③匹配——您最痛的三个问题，恰好是我们最擅长的三件事。您关心的这三点，他们哪点能接住？”'},
+  {q:'“别人家功能比你们多”', principle:'功能≠价值。聚焦“能落地的功能”和“对客户重要的功能”。',
+   script:'“功能多是好事，但要看用不用得上。100个功能您用10个，不如10个功能全部落地。我们宁可承诺少、兑现多——先上您最痛的三件事，每件都做到95分，比100个90分的功能值钱。”'}
+];
+function renderQZ(){
+  const box=$('qzList'); box.innerHTML='';
+  QZ.forEach((z,i)=>{
+    const d=document.createElement('div');
+    d.className='qz-card';
+    d.innerHTML=`
+      <div class="qz-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="qz-n">${i+1}</span>${z.q}<span class="arr">▼</span>
+      </div>
+      <div class="qz-b">
+        <div class="qz-principle"><b>应对原则：</b>${z.principle}</div>
+        <label style="margin-top:0">💬 应对话术（可改成你自己的话）</label>
+        <textarea class="qz-script" rows="3" placeholder="${z.script.replace(/"/g,'')}">${state.qz&&state.qz[i]?state.qz[i]:''}</textarea>
+      </div>`;
+    box.appendChild(d);
+  });
+}
+function saveQZ(){
+  state.qz=[...document.querySelectorAll('#qzList .qz-script')].map(t=>t.value);
+  save();
+}
+document.addEventListener('input', e=>{ if(e.target.closest('#qzList')) saveQZ(); });
+
+function fillT5Demo(){
+  $('p5_3a').value='王总，今年五金行业平均交期延误率升到40%，但头部企业反而在抢单——差别就在排产。';
+  $('p5_3b').value='您车间现在是不是插单就乱、排产靠老师傅记在脑子里？';
+  $('p5_3c').value='我们这套系统，把排产从"人脑"变"电脑"，急单3分钟重排，交期准点率做到95%。';
+  $('p5_3d').value='按您现在的规模，一年光丢单损失就省回200万，8个月回本。';
+  $('p5_3e').value='下周三我带方案来您办公室，20分钟给您算清楚这笔账，方便吗？';
+  $('p5_10a').value='王总，今天用10分钟讲清三件事：您的痛怎么解决、这笔钱多久回本、为什么是我们。';
+  $('p5_10b').value='先对齐一个问题——您最痛的是交期。它源自排产靠人，不解决一年损失200万。';
+  $('p5_10c').value='这笔投入80万，一年降本+增收合计120万，8个月回本，ROI 150%。';
+  $('p5_10d').value='对比XX，我们交期准点率95%、有急单通道、本地服务4小时响应——这三条是您最看重的。';
+  $('p5_10e').value='建议下月先上1条线试点，45天见效，验收达标再全面铺开。';
+  $('p5_30a').value='先聊行业——五金行业这两年分化，产能过剩但高端订单没人接，您的突破口在哪？';
+  $('p5_30b').value='要在高端订单上抢份额，关键是交期可靠+柔性接单，这两条恰好是数字化最能帮您的。';
+  $('p5_30c').value='现在卡在哪？排产靠人、数据靠猜、插单就乱——这是管理问题，不是设备问题。';
+  $('p5_30d').value='方案三步走：先排产、再追溯、后决策。投入80万，年回报120万，8个月回本。';
+  $('p5_30e').value='风险共担——先上1条线试点，45天见效再铺开；总部本地双团队，4小时响应。';
+  $('p5_30f').value='建议：①下周三带您去看成功案例现场 ②月底启动试点 ③我出一页纸方案给您过目。';
+  document.querySelectorAll('#qzList .qz-script').forEach(t=>t.value='');
+  save();
+}
+
+/* ================= 自动保存 ================= */
+document.addEventListener('input', e=>{
+  const el=e.target;
+  if(el.closest('#roleList')||el.closest('#qzList')) return; // 已单独处理
+  // 通用字段自动保存
+  const id=el.id;
+  if(id) { state[id]=el.value; save(); }
+});
+window.addEventListener('load',()=>{
+  // 回填普通字段
+  Object.keys(state).forEach(k=>{
+    if($(k) && ['INPUT','TEXTAREA','SELECT'].includes($(k).tagName)) $(k).value=state[k];
+  });
+  // 回填动态列表：Tab1差异 & Tab2列表（从state恢复简化：若没有示例则初始化空行）
+  if(!document.querySelectorAll('#p1_diff .dyn-item').length && !state.p1_diff_has) addDiffRow();
+  if(!document.querySelectorAll('#t2_save .dyn-item').length && !state.t2_save_has) addItem('t2_save');
+  if(!document.querySelectorAll('#t2_gain .dyn-item').length && !state.t2_gain_has) addItem('t2_gain');
+  renderRoles();
+  renderQZ();
+  // 动态列表内容自动保存（input事件委托）
+  document.addEventListener('input', e=>{
+    if(e.target.closest('.dyn-item')) save();
+    if(e.target.closest('#p1_diff')) state.p1_diff_has=true;
+    if(e.target.closest('#t2_save')) state.t2_save_has=true;
+    if(e.target.closest('#t2_gain')) state.t2_gain_has=true;
+  });
+});
+</script>
+</body>
+</html>

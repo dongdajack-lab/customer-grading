@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - 森骏卓越定制版</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;min-height:100vh}
+  header{background:linear-gradient(135deg,#14213D,#2C5F8A);color:white;padding:24px 32px;text-align:center}
+  header h1{font-size:26px}
+  header .subtitle{font-size:14px;opacity:.85;margin-top:6px}
+  header .company-tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px}
+  header .custom-tag{display:inline-block;background:#F39C12;border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px;margin-left:8px;font-weight:700;color:#fff}
+  .container{max-width:800px;margin:0 auto;padding:32px 20px}
+  .progress-bar{height:6px;background:#ddd;border-radius:3px;margin-bottom:24px;overflow:hidden}
+  .progress-fill{height:100%;background:#2C5F8A;border-radius:3px;transition:width .4s}
+  .progress-text{text-align:right;font-size:13px;color:#888;margin-bottom:4px}
+  .spin-hint{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .spin-tag{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .tag-S{background:#EBF5FB;color:#2980B9}
+  .tag-P{background:#FDEDEC;color:#E67E22}
+  .tag-I{background:#FADBD8;color:#C0392B}
+  .tag-N{background:#E8F8F5;color:#27AE60}
+  .card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+  .question-badge{display:inline-block;background:#2C5F8A;color:white;border-radius:20px;padding:4px 14px;font-size:13px;margin-bottom:16px}
+  .scenario{background:#f8f9fa;border-left:4px solid #2C5F8A;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;line-height:1.8;color:#333}
+  .scenario .label{font-weight:600;color:#14213D}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1.6}
+  .option:hover{border-color:#2C5F8A;background:#E8F0F7}
+  .option.selected{border-color:#2C5F8A;background:#E8F0F7}
+  .option.correct{border-color:#27AE60;background:#E8F8F5}
+  .option.wrong{border-color:#E74C3C;background:#FDEDEC}
+  .option .radio{min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+  .option.selected .radio{border-color:#2C5F8A;background:#2C5F8A}
+  .option.selected .radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%;display:block}
+  .option .text{flex:1}
+  .explanation{margin-top:20px;padding:16px 20px;background:#E8F8F5;border-radius:12px;display:none}
+  .explanation.show{display:block}
+  .explanation h4{color:#27AE60;font-size:15px;margin-bottom:8px}
+  .explanation p{font-size:14px;color:#333;line-height:1.7}
+  .correct-answer{margin-top:20px;padding:14px 18px;background:#FFF3CD;border:2px solid #F0AD4E;border-radius:12px;display:none;font-size:14px;line-height:1.6}
+  .correct-answer.show{display:block}
+  .correct-answer .clabel{font-weight:700;color:#E67E22;margin-bottom:6px}
+  .btn-row{display:flex;gap:12px;margin-top:24px}
+  .btn{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+  .btn-primary{background:#2C5F8A;color:white}
+  .btn-primary:hover{background:#1a4568}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed}
+  .btn-secondary{background:#f0f0f0;color:#333}
+  .btn-secondary:hover{background:#e0e0e0}
+  .result-page{display:none}
+  .result-page.show{display:block;text-align:center}
+  .score-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#14213D,#2C5F8A);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .num{font-size:48px;font-weight:700;line-height:1}
+  .score-circle .slabel{font-size:14px;margin-top:4px;opacity:.85}
+  .percent-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .percent-circle .num{font-size:36px;font-weight:700;color:#2C5F8A;line-height:1}
+  .percent-circle .unit{font-size:20px;font-weight:700;color:#2C5F8A}
+  .percent-circle .sub-label{font-size:13px;color:#999;margin-top:2px}
+  .result-detail{background:white;border-radius:16px;padding:24px;margin-top:20px;text-align:left}
+  .result-detail h3{font-size:17px;margin-bottom:12px;color:#333}
+  .result-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+  .result-item:last-child{border-bottom:none}
+  .restart-btn{margin-top:24px;padding:14px 48px;background:#2C5F8A;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 挖痛练习</h1>
+  <p class="subtitle">SPIN四层提问法训练 · 共16题</p>
+  <span class="company-tag">🏭 森骏卓越精密智造 · 精密模具与注塑</span>
+  <span class="custom-tag">★ 企业定制</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="slabel">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" id="restartBtn">再来一次</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var questions = [
+  {
+    "type": "S",
+    "scenario": "你初次拜访某汽车Tier1供应商（为德系主机厂配套门板与内饰件）的项目总监李总。李总说：我们厂主要做注塑和组装，模具一直外协，常年合作两三家模具厂。这次新平台车型有十几个内外饰件要开模，主机厂给的节点卡得很死，DVP数据提交就在四个月后。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最好地摸清他的模具现状？",
+    "options": [
+      {
+        "text": "李总，这次十几个件里，大概几个是新开模、几个可以借用上一代修模？现有两三家模具厂的报价和交期水平分别怎么样？之前项目试模一般要几轮才能T1合格？模具厂有没有同步参与DFM评审？贵司和主机厂签的PPAP节点是哪个时间点？",
+        "correct": true
+      },
+      {
+        "text": "新平台节点这么紧，模具外协是不是压力很大？",
+        "correct": false
+      },
+      {
+        "text": "如果模具厂能做到一次试模合格，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们森骏做过大众、奥迪、宝马的项目，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：摸清开模构成、现有供应商水平、试模轮次、DFM参与度、PPAP节点。汽车Tier1项目总监天天活在节点里，先把他项目管理的现状问清楚，后面的痛点才有落点。"
+  },
+  {
+    "type": "P",
+    "scenario": "李总说：最头疼的就是试模轮次。上一代车型有个门板骨架模具，改了7轮才合格，前后拖了3个月。模具厂前期DFM也不深入，问题都堆到试模阶段才暴露。这次主机厂明确说了，数据提交晚一周，全项目罚款。",
+    "question": "李总说出了试模轮次多的痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "改7轮的那副模具，问题主要集中在哪类（缩水/变形/熔接线/装配干涉）？DFM评审是模具厂主导还是贵司主导？7轮修改里有多少轮是设计变更、多少轮是模具本身问题？主机厂罚款条款具体怎么写的？这次十几个件如果同样拖3个月，哪个节点最先爆？",
+        "correct": true
+      },
+      {
+        "text": "改7轮确实太折腾了，那家模具厂不太专业。",
+        "correct": false
+      },
+      {
+        "text": "如果有一家模具厂能做到T1一次合格，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "那几个借用修模的件，风险大吗？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把「试模轮次多」拆开——问题类型、责任归属、罚款条款、最先爆的节点。痛点问得可归因、可量化，后面I阶段放大影响才有依据。森骏的核心能力是DFM前期深度介入，必须先摸清现在DFM是谁在做、做到什么深度。"
+  },
+  {
+    "type": "I",
+    "scenario": "李总说：上次拖3个月，最直接的后果是爬产没爬起来——新车型上市头三个月我们只供上了60%的量，被主机厂点名批评，年度供应商评级从A掉到B，第二年份额被砍了两个件。罚款加份额损失，财务算过账，差不多小两千万。",
+    "question": "李总说出了评级下滑和份额损失的严重后果，接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "评级从A掉到B、份额被砍两个件——如果这次再拖，掉到C级会怎样？下一个平台项目定点时，主机厂还会不会考虑你们？头三个月只供60%，主机厂停线待料的索赔条款有没有触发过？这次十几个件是新平台的首批项目，做好了是下一个平台的敲门砖，做砸了呢？",
+        "correct": true
+      },
+      {
+        "text": "小两千万的损失确实太大了。",
+        "correct": false
+      },
+      {
+        "text": "如果这次模具全部按期交付，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "主机厂对供应商评级还有什么具体要求？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：三个维度放大——① 评级继续下滑的风险 ② 下一个平台定点的长期影响 ③ 停线索赔条款。让李总意识到，这不只是「这一单罚款两千万」，而是「下一个平台的入场券」——新平台首批项目做砸，长期损失无法估量。"
+  },
+  {
+    "type": "N",
+    "scenario": "李总沉默了一下：你说的评级和平台定点，确实是我最怕的。这次我需要的是能扛节点的模具伙伴——DFM前期深度介入、试模轮次有承诺、出了问题有人兜底。价格说实话不是第一位的。",
+    "question": "李总已经说出需求（能扛节点的模具伙伴），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一家模具伙伴能做到：DFM在设计冻结前介入、把问题消灭在图纸阶段，T1-T2两轮内试模合格，节点延误按合同赔付，IATF 16949体系下全流程文件齐套支持您PPAP提交——这让您这次十几个件按期SOP的把握、供应商评级保A冲A+、以及拿下下一个平台项目定点的底气，会变成什么样？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快定一家靠谱的模具厂。",
+        "correct": false
+      },
+      {
+        "text": "我们森骏服务过大众、奥迪、保时捷，一定不会让您失望。",
+        "correct": false
+      },
+      {
+        "text": "李总，这次项目模具预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导李总自己描绘「方案落地后的画面」——按期SOP、评级保A、平台定点。汽车Tier1项目总监的N要落在「节点守住+评级+长期份额」上。他自己说出这些价值，后面谈价格、谈合同就水到渠成。"
+  },
+  {
+    "type": "S",
+    "scenario": "你拜访某医疗器械公司（做体外诊断检测耗材，产品里有液态硅胶密封件和试剂瓶塞）的研发总监王博士。王博士说：我们明年要上一款新的检测耗材，硅橡胶件精度要求高，还要过生物相容性测试。现在的硅胶件供应商是家做民用硅胶的，医疗这块总感觉不放心。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的供应现状？",
+    "options": [
+      {
+        "text": "王博士，新产品的硅胶件有几个SKU？精度公差要求到什么级别（±0.02还是±0.05）？现供应商的生产环境是什么级别、有没有洁净车间？生物相容性和ISO 10993测试是供应商配合做还是贵司自己做？注册申报的时间节点定了吗？现有供应商有没有出过批次一致性的问题？",
+        "correct": true
+      },
+      {
+        "text": "民用硅胶厂做医疗件，是不是经常出问题？",
+        "correct": false
+      },
+      {
+        "text": "如果换一家有ISO 13485的硅胶件供应商，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们森骏有ISO 13485医疗体系认证，做过雅培、费森尤斯的项目，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：摸清SKU数量、公差等级、洁净车间、测试分工、注册节点、批次问题。医疗器械行业的挖痛必须围绕「注册节点+合规」展开——这些现状直接决定切换医疗级供应商的紧迫程度。"
+  },
+  {
+    "type": "P",
+    "scenario": "王博士说：确实出过问题。上批密封件尺寸波动，装配后泄漏率超标，整批3万套耗材报废，损失60多万。民用厂的质量文件也不齐，每次要DHR文件都得催。最麻烦的是他们没有医疗体系，注册申报要的供应商审核资料，我们质量部每次去审都一堆不符合项。",
+    "question": "王博士说出了批次报废和体系不符的痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "尺寸波动的原因查清楚了吗（模具精度/硫化工艺/来料波动）？DHR文件一般催多久能拿到？质量部审核的不符合项主要集中在哪些条款？整批报废60万是小账——如果注册申报因为供应商资料被药监发补，时间要拖多久？发补一次对产品上市窗口的影响有多大？",
+        "correct": true
+      },
+      {
+        "text": "民用硅胶厂做医疗件，风险确实太大了。",
+        "correct": false
+      },
+      {
+        "text": "如果有一家医疗级的硅胶件供应商，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "报废的那批，最后怎么处理的？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——波动根因、文件时效、不符合项条款、发补风险。医疗器械公司最怕「报废损失+注册发补」，问到发补时间，就抓住了切换供应商的深层动力——发补一次拖3-6个月，比报废60万痛得多。"
+  },
+  {
+    "type": "I",
+    "scenario": "王博士说：发补是大事，一次发补至少耽误3-6个月。我们这款新产品是对标进口竞品做的，竞品明年Q3在国内放量，我们的注册如果拖过那个点，市场窗口就没了。上批报废60万是小账，窗口错过才是大账——这个品类我们等了两年。",
+    "question": "王博士说出了错过窗口期的严重后果，接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "错过窗口期，竞品先放量半年，医院的采购目录先进去的是它——后面再进目录，采购价至少被压15%，这个账算过吗？加上报废损失、发补风险、反复审供应商的人力消耗，供应商问题一年拖掉的成本是不是远超几百万？如果竞品用两年时间把渠道占死，你们这款产品还有机会做到预期份额吗？",
+        "correct": true
+      },
+      {
+        "text": "窗口期确实很关键，得抓紧了。",
+        "correct": false
+      },
+      {
+        "text": "如果有一家医疗级供应商帮您把注册风险降下来，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "竞品在国内现在的注册进度到哪了？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大三层——① 窗口错过后渠道被竞品先占、进目录被压价 ② 报废+发补+审核的综合成本 ③ 两年研发投入可能归零。让王博士意识到，供应商不只是「供件的」，而是「决定产品能不能赶上窗口」的战略变量。"
+  },
+  {
+    "type": "N",
+    "scenario": "王博士说：道理我懂，但换供应商要重新走供应商审计、做生物相容性验证，至少小半年，我担心反而更慢。我现在最怕的就是换了一家，还是一堆问题。",
+    "question": "王博士说出了对切换周期的顾虑，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一家医疗级供应商能做到：ISO 13485体系加洁净车间、雅培和费森尤斯等医疗项目的审计资料可直接复用、模具与验证并行把切换周期压缩到3个月、批次一致性用CPK数据保证——这让您的注册申报一次过、产品赶上竞品放量前的窗口、以及质量部从「审供应商救火」到「资料拿来就用」的转变，会带来什么不一样？",
+        "correct": true
+      },
+      {
+        "text": "那您可以先小批量试一家再决定。",
+        "correct": false
+      },
+      {
+        "text": "我们森骏的医疗体系很成熟，切换不会慢。",
+        "correct": false
+      },
+      {
+        "text": "王博士，切换供应商的预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导王博士自己描绘「方案落地后的画面」——注册一次过、赶上窗口、质量省心。他刚表达了对切换周期的顾虑，N里必须包含「模具与验证并行压缩到3个月」来对症，让价值画面盖过切换风险。"
+  },
+  {
+    "type": "S",
+    "scenario": "你拜访某国际快消品牌（日化洗护类）的亚太包装采购负责人张总。张总说：我们一款主力洗发水瓶盖，现在全球供应靠欧洲和国内两家模具厂的注塑产能。旺季需求上来的时候总是紧张，总部一直在推降本项目，包装成本年年要降3%。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最全面地了解他的现状？",
+    "options": [
+      {
+        "text": "张总，这个瓶盖现在的模具是几腔的、注塑周期多少秒？两家供应商分别在哪个基地、各占多少份额？旺季缺口大概多少？总部降本3%是按模具全生命周期算还是按单件价格算？现在的单件成本里，材料、注塑加工、模具摊销各占多少？有没有评估过多腔高速模具改造？",
+        "correct": true
+      },
+      {
+        "text": "旺季供应紧张，是不是产能不够？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套高速多腔模具方案帮您降本，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们森骏给联合利华、乐柏美做过包装模具，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：摸清腔数与周期、供应商布局、缺口规模、降本口径、成本结构。快消品牌的降本是个「口径问题」——先问清总部按什么口径考核，后面的方案才能对上他的KPI。"
+  },
+  {
+    "type": "P",
+    "scenario": "张总说：模具是32腔的，周期大概6秒。国内这家供应商的模具老化，良率只有92%左右，飞边和水口处理损耗也大。总部要求的3%降本，我们跟现有两家谈了两年，只挤出1%——他们说自己也没利润了。多腔改造评估过，64腔要重新开模，怕风险大。",
+    "question": "张总说出了良率低和降本难的痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "良率92%里损耗的8%主要是什么（飞边/缺料/尺寸超差）？现有模具用了几年、剩余寿命还有多少？重新开64腔模，供应商报过价和投资回收周期吗？您说的风险大，是指技术风险还是投入回收风险？总部3%的降本指标，今年还差多少没完成？",
+        "correct": true
+      },
+      {
+        "text": "良率92%，一年损耗也不少吧。",
+        "correct": false
+      },
+      {
+        "text": "如果64腔模具能把良率提到98%以上，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "欧洲那家供应商的良率怎么样？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把「降不了本」拆开——损耗构成、模具寿命、改造报价、风险类型、指标缺口。快消采购的困境是「总部指标年年压、供应商年年哭穷」，问到风险类型，就能判断他真正卡在哪——是技术没把握，还是不敢向总部要预算。"
+  },
+  {
+    "type": "I",
+    "scenario": "张总说：今年指标还差2%没完成，我年终评估已经受影响了。更麻烦的是，那副32腔模具服役6年了，供应商说随时可能出大修问题——旺季如果模具趴窝，断货一周，渠道罚则加上丢失的货架陈列，总部那边我根本没法交代。",
+    "question": "张总说出了指标未完成和断货风险的严重后果，接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "旺季模具趴窝断货一周——渠道罚则加陈列损失，量化过是多少吗？6年役龄的模具大修一次至少停机两周，旺季赶上一次就是灾难；您的年终评估已经受影响，如果明年指标还是差2%，您在这个岗位上还撑得住吗？竞品品牌如果先完成包装降本、把省出来的钱砸进促销，你们的价格防线还守得住吗？",
+        "correct": true
+      },
+      {
+        "text": "旺季断货确实是灾难，得提前准备。",
+        "correct": false
+      },
+      {
+        "text": "如果现在就锁定一套高良率高速模具方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "总部对断货有没有应急预案的要求？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大三层——① 断货的量化损失（渠道罚则+陈列）② 个人年终评估连续受影响 ③ 竞品降本后的价格战。让张总看到，不改模具不是「维持现状」，而是「个人风险+品牌风险」双重暴露。"
+  },
+  {
+    "type": "N",
+    "scenario": "张总说：你说的这些我都在担心。我不是不想动，是总部对资本投入审批很严——重新开模的钱要算得清清楚楚才批得下来。我需要的是一套能说服总部的账。",
+    "question": "张总已经说出需求（一套能说服总部的账），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套方案能做到：64腔高速模具把良率从92%提到98%、周期从6秒压到4秒以内、单件综合成本降5%以上、两年内收回全部模具投入、并且把这份全生命周期成本账做成总部可以直接审批的格式——这让您今年的降本指标超额完成、明年提前锁定，以及您在总部「最会算账的亚太采购」这个标签，会带来什么改变？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快把方案报给总部。",
+        "correct": false
+      },
+      {
+        "text": "我们森骏做过很多国际品牌的包装模具，账一定算得清。",
+        "correct": false
+      },
+      {
+        "text": "张总，总部的审批预算上限是多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导张总自己描绘「方案落地后的画面」——指标超额、总部认可。快消采购的N要落在「给总部的账算得清」上——他自己说出「这套账能帮我过审批」，方案就变成了他的政绩，而不是供应商的推销。"
+  },
+  {
+    "type": "S",
+    "scenario": "你拜访某新能源零部件公司（做电池包精密结构件与连接器注塑件）的制造总监刘总。刘总说：我们技术团队是欧洲背景出来的，模具一直在德国开——品质没得说，但这两年新车型成本压力越来越大，总部开始要求供应链做国产化评估。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最清楚地了解他的模具采购现状？",
+    "options": [
+      {
+        "text": "刘总，目前德国开模大概占模具采购的多大比例？一副中型精密模具的德方报价和交期分别是什么水平？国产模具之前有没有试过、卡在了什么环节（精度/寿命/钢材/管理）？总部国产化评估的覆盖面和完成时限怎么定的？现有注塑件的模具维护是谁在做、德方远程支持响应要多久？",
+        "correct": true
+      },
+      {
+        "text": "德国模具这么贵，是不是该早点换国产？",
+        "correct": false
+      },
+      {
+        "text": "如果国产模具能做到德国品质一半的价格，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们森骏90%产品出口欧洲，给保时捷、法拉利做过模具，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：摸清德国模具占比、价格交期水平、国产尝试的失败原因、国产化评估口径、维护支持模式。其中「之前试过卡在哪」是关键——失败经历决定了他对国产模具的真实态度，不问清这个，后面说什么他都听不进去。"
+  },
+  {
+    "type": "P",
+    "scenario": "刘总说：国产不是没试过，三年前试过一副，钢材和精度出了问题，做出来的件变形控制不住，最后还是送回德国返修，一来一回反而更贵。从那以后公司就默认「高精密件必须德国开模」。但德方报价一年比一年高，交期还要16-20周，一个紧急ECN改模，光沟通来回就要两周。",
+    "question": "刘总说出了国产化失败和德方贵的痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "三年前那副模具的变形问题，最后定性是什么原因（钢材等级/热处理/结构设计/水路设计）？德方16-20周的交期，你们的项目排产每年有多少次被动等模具？紧急ECN改模两周沟通期，一年发生几次、每次影响多少产出？德方报价这两年的涨幅大概多少？总部国产化指标压下来，你们制造部门背不背这个指标？",
+        "correct": true
+      },
+      {
+        "text": "三年前那次的国产失败，确实是行业普遍情况。",
+        "correct": false
+      },
+      {
+        "text": "如果有一家国产模具厂用德国同款钢材和标准做，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "德方知道你们在做国产化评估吗？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把「国产失败」拆解定性——失败根因、等待成本、ECN时效、报价涨幅、部门指标。三年前的失败不弄清根因，他就永远认为「国产不行」；问到部门背不背指标，痛点就从公司层面落到了他个人身上。"
+  },
+  {
+    "type": "I",
+    "scenario": "刘总说：指标肯定是我背。德方报价三年涨了快30%，我们毛利率本来就在往下走，模具成本一年多支出上千万。16-20周交期意味着每个新项目都要提前大半年锁模具方案，车型一改配置，模具就废一半。ECN的两周沟通期，产线停着等，一小时损失就是几万块。",
+    "question": "刘总说出了成本高和交期长的多重影响，接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "模具成本一年多支出上千万，毛利率再往下压，明年的降本指标还完得成吗？每个项目提前大半年锁方案、改配置就废模——新能源车型迭代这么快，这种模式的隐性损失一年积累多少？产线停等ECN，一周就是几百万；如果竞品用国产模具把交期压到8周、成本降一半，用同样的报价抢你们的定点，你们的价格空间还剩多少？",
+        "correct": true
+      },
+      {
+        "text": "一年多花上千万，确实不是小数。",
+        "correct": false
+      },
+      {
+        "text": "如果交期从20周压到8周、成本降一半，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "德方对你们有没有独家协议的限制？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大三层——① 毛利与降本指标的连锁反应 ② 车型快速迭代下的模式性损失 ③ 竞品用国产模具抢定点。让刘总看到「坚持德国开模」不是稳妥，而是在新能源的迭代速度里把成本和速度双双输掉。"
+  },
+  {
+    "type": "N",
+    "scenario": "刘总说：账是这个账，但我怕的还是三年前的事重演——国产模具做完不行，最后还得送德国返修，那我在总部面前就彻底没信用了。我要的是「不冒险的国产化」。",
+    "question": "刘总已经说出需求（不冒险的国产化），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一家国产模具厂能做到：用德国同源钢材和同一套制造标准、用给保时捷法拉利配套的出口模具产线直接生产、首件精度按德式检测报告交付、出问题承担全部返修费用——这让您的模具成本降40%、交期从20周压到8周、以及您向总部汇报「国产化零风险落地」的这份成绩，会变成什么样？",
+        "correct": true
+      },
+      {
+        "text": "那您可以先拿一副不关键的模具试试。",
+        "correct": false
+      },
+      {
+        "text": "我们森骏做了几十年出口模具，一定不会重演。",
+        "correct": false
+      },
+      {
+        "text": "刘总，国产化评估今年的指标是多少套模具？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导刘总自己描绘「方案落地后的画面」——成本降40%、交期减半、国产化零风险落地。他刚说完怕三年前重演，N里「德同源钢材+出口产线+返修全兜底」三个条件逐条对应他的顾虑，让价值画面盖过失败记忆。"
+  }
+];
+
+  var currentQ = 0;
+  var answers = [];
+  var answered = false;
+  var typeNames = {'S':'S 现状问题','P':'P 难点问题','I':'I 影响问题','N':'N 需求回报'};
+
+  function renderQ() {
+    var q = questions[currentQ];
+    document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+    document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+    var badge = typeNames[q.type] || 'SPIN 训练';
+    var card = document.getElementById('questionCard');
+    card.innerHTML = '<div class="question-badge">' + badge + '</div>' +
+      '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+      '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+      '<div class="options">' +
+      q.options.map(function(opt,i){
+        return '<div class="option" onclick="selectOpt(' + i + ')">' +
+          '<div class="radio"></div>' +
+          '<div class="text">' + opt.text + '</div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+      '<div class="explanation" id="explanation">' +
+        '<h4>✅ 解析</h4>' +
+        '<p>' + q.explain + '</p>' +
+      '</div>' +
+      '<div class="correct-answer" id="correctAnswer">' +
+        '<div class="clabel">💡 正确答案解析：</div>' +
+        '<div>' + q.explain + '</div>' +
+      '</div>';
+
+    answered = false;
+    document.getElementById('btnNext').textContent = '确认答案';
+    document.getElementById('btnNext').disabled = true;
+    document.getElementById('btnNext').onclick = checkAnswer;
+    document.getElementById('btnPrev').disabled = currentQ === 0;
+    document.getElementById('resultPage').classList.remove('show');
+    document.getElementById('quizPage').style.display = '';
+  }
+
+  window.selectOpt = function(idx) {
+    if (answered) return;
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+    window.selectedIdx = idx;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.checkAnswer = function() {
+    if (window.selectedIdx === undefined) return;
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('correctAnswer').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    document.getElementById('btnNext').onclick = nextQ;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.nextQ = function() {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      renderQ();
+    } else {
+      showResult();
+    }
+  };
+
+  window.prevQ = function() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQ();
+      if (answers[currentQ] !== undefined) {
+        answered = true;
+        var q = questions[currentQ];
+        var opts = document.querySelectorAll('.option');
+        opts.forEach(function(opt,i){
+          if (q.options[i].correct) opt.classList.add('correct');
+          if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+        });
+        document.getElementById('explanation').classList.add('show');
+        document.getElementById('correctAnswer').classList.add('show');
+        document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+        document.getElementById('btnNext').onclick = nextQ;
+      }
+    }
+  };
+
+  function showResult() {
+    document.getElementById('quizPage').style.display = 'none';
+    var score = answers.filter(function(a){return a;}).length;
+    var percent = Math.round(score / questions.length * 100);
+    document.getElementById('scoreNum').textContent = score;
+    document.getElementById('percentNum').textContent = percent;
+
+    var detail = '<h3>📊 答题详情</h3>';
+    questions.forEach(function(q,i){
+      var icon = answers[i] ? '✅' : '❌';
+      var title = q.scenario.substring(0, 40) + '...';
+      detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+    });
+    document.getElementById('resultDetail').innerHTML = detail;
+    document.getElementById('resultPage').classList.add('show');
+  }
+
+  document.getElementById('restartBtn').onclick = function() {
+    currentQ = 0;
+    answers = [];
+    window.selectedIdx = undefined;
+    answered = false;
+    renderQ();
+  };
+
+  document.getElementById('btnPrev').onclick = prevQ;
+
+  renderQ();
+})();
+</script>
+</body>
+</html>

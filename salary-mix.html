@@ -16,9 +16,32 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh}
-.header{background:linear-gradient(135deg,#4c1d95 0%,#7c3aed 50%,#a78bfa 100%);color:#fff;padding:32px 24px;text-align:center}
-.header h1{font-size:24px;font-weight:800;margin-bottom:4px}
-.header p{font-size:14px;opacity:.85}
+.header {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 50%, #1a3a5c 100%);
+  color: #fff;
+  padding: 36px 24px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 400px; height: 400px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -30%; left: -5%;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 50%;
+}
+.header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 1; }
+.header p { font-size: 14px; opacity: 0.85; position: relative; z-index: 1; }
 .wrap{max-width:860px;margin:0 auto;padding:24px 16px 80px}
 
 /* Tabs */
@@ -119,6 +142,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <body>
 
 <div class="header">
+  <div style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 16px;font-size:12px;letter-spacing:2px;margin-bottom:12px;position:relative;z-index:1;">大董老师天地人销售管理体系</div>
   <h1>🧭 薪酬进化导航器</h1>
   <p>不只是查表 — 诊断你在哪、为什么在这、怎么到下一级</p>
 </div>

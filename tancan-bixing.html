@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>大董老师 · 高层客户会谈剧本</title>
+<title>大董老师 · 高层客户会谈剧本 - 碧兴物联定制版</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -226,9 +226,9 @@ body {
 
 <!-- Header -->
 <header>
-  <div class="header-badge">大董老师天地人销售管理体系</div>
-  <h1>🎬 高层客户会谈 · 剧本</h1>
-  <p>下属是总导演 · 老总是演员 · 谈参就是剧本</p>
+  <div class="header-badge">大董老师天地人销售管理体系 · 碧兴物联定制 ★</div>
+  <h1>🎬 碧兴物联 · 高层客户会谈剧本</h1>
+  <p>下属是总导演 · 老总是演员 · 谈参就是剧本 · 政府/水务客户定制场景</p>
 </header>
 
 <div class="container">
@@ -263,7 +263,7 @@ body {
       </div>
       <div class="form-group">
         <label class="form-label">会谈时间<span class="req">*</span></label>
-        <input class="form-input" id="meetTime" placeholder="例：6月10日 14:00-15:30">
+        <input class="form-input" id="meetTime" placeholder="例：8月20日 09:30-11:00">
       </div>
     </div>
     <div class="form-row">
@@ -301,11 +301,11 @@ body {
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">客户名称<span class="req">*</span></label>
-        <input class="form-input" id="custName" placeholder="例：XX科技有限公司">
+        <input class="form-input" id="custName" placeholder="例：XX省生态环境厅">
       </div>
       <div class="form-group">
         <label class="form-label">职务<span class="req">*</span></label>
-        <input class="form-input" id="custTitle" placeholder="例：副总裁/采购总监">
+        <input class="form-input" id="custTitle" placeholder="例：水生态环境处处长">
       </div>
     </div>
     <div class="form-row">
@@ -707,12 +707,12 @@ function saveScript() {
 
   // Load existing saves
   try {
-    savedScripts = JSON.parse(localStorage.getItem('tancan_scripts') || '[]');
+    savedScripts = JSON.parse(localStorage.getItem('tancan_scripts_bixing') || '[]');
   } catch(e) { savedScripts = []; }
 
   savedScripts.unshift(data);
   if (savedScripts.length > 20) savedScripts = savedScripts.slice(0, 20);
-  localStorage.setItem('tancan_scripts', JSON.stringify(savedScripts));
+  localStorage.setItem('tancan_scripts_bixing', JSON.stringify(savedScripts));
 
   document.getElementById('saveName').value = name;
   showToast('✅ 剧本「' + name + '」已保存');
@@ -771,14 +771,14 @@ function loadScript(index) {
 function deleteScript(index) {
   if (!confirm('确定删除这个剧本吗？此操作不可恢复。')) return;
   savedScripts.splice(index, 1);
-  localStorage.setItem('tancan_scripts', JSON.stringify(savedScripts));
+  localStorage.setItem('tancan_scripts_bixing', JSON.stringify(savedScripts));
   renderSaveList();
   showToast('🗑️ 已删除');
 }
 
 function renderSaveList() {
   try {
-    savedScripts = JSON.parse(localStorage.getItem('tancan_scripts') || '[]');
+    savedScripts = JSON.parse(localStorage.getItem('tancan_scripts_bixing') || '[]');
   } catch(e) { savedScripts = []; }
 
   const container = document.getElementById('saveList');
@@ -856,35 +856,49 @@ function copyScript() {
 
 // ===== Preset =====
 function loadPreset() {
-  document.getElementById('ourLeader').value = '张总（董事长）';
-  document.getElementById('meetTime').value = '6月15日 15:00-16:30';
+  document.getElementById('ourLeader').value = '潘总（执行总裁）';
+  document.getElementById('meetTime').value = '8月20日 09:30-11:00';
   document.getElementById('meetFormat').value = '正式拜访';
-  document.getElementById('meetPlace').value = 'XX科技总部 18楼会议室';
-  document.getElementById('ourTeam').value = '李经理 — 销售负责人（总导演）\n王工 — 技术方案专家';
-  document.getElementById('bossMission').value = '你今天只有一个任务：让客户觉得我们公司很重视他。表达重视、拍板态度，但不要承诺任何具体价格或交期。技术细节和商务条款全部由李经理后续对接。';
-  document.getElementById('custName').value = 'XX精密制造有限公司';
-  document.getElementById('custTitle').value = '副总裁 / 采购负责人';
-  document.getElementById('custAccompany').value = '陈主任';
-  document.getElementById('custAccompanyTitle').value = '技术部主任';
-  document.getElementById('custBg').value = '华东地区精密制造龙头，年营收约12亿，近两年在推进产线自动化升级。近期刚拿到一笔产业基金投资，扩产意愿强烈。';
-  document.getElementById('custHistory').value = '李经理已拜访过两次：第一次见了陈主任了解需求，第二次与技术团队做了初步方案交流。客户对我们的技术方案认可，但还在比价。遗留任务：答应给客户做的ROI测算还没发。';
-  document.getElementById('custPersonal').value = '王总：50岁左右，技术出身，务实派。喜欢聊行业趋势和新技术，不喜欢被推销。爱好高尔夫。最近在关注工业4.0和AI质检。上次李经理送了一本行业白皮书，王总表示很有兴趣。';
-  document.getElementById('custProject').value = '客户计划Q3启动一条新产线的自动化改造，预算约800万。我方是三家候选供应商之一。竞争对手：A公司（老牌，价格高）、B公司（新进入者，低价但案例少）。我方优势：方案定制化程度高，劣势：品牌知名度不如A。目前卡在：客户管理层还没拍板。';
+  document.getElementById('meetPlace').value = '省生态环境厅 6楼会议室';
+  document.getElementById('ourTeam').value = '王经理 — 销售负责人（总导演）
+刘工 — 水站技术专家';
+  document.getElementById('bossMission').value = '你今天只有一个任务：让客户觉得碧兴物联把这件事当成公司级战略项目。表达重视、展示资质和国控水站经验，但不要承诺任何具体价格、工期或免费项。技术细节和商务条款全部由王经理后续对接。';
+  document.getElementById('custName').value = 'XX省生态环境厅（化名）';
+  document.getElementById('custTitle').value = '水生态环境处 王处长';
+  document.getElementById('custAccompany').value = '李主任';
+  document.getElementById('custAccompanyTitle').value = '监测科科长';
+  document.getElementById('custBg').value = '省级生态环境主管部门，负责全省水环境质量监测网络建设。全省现有水质自动监测站约120座，多建于2015年前后，设备老化、运维成本高，正在推动"国控水站数智化升级"和"监测网络统筹运维"两个方向。';
+  document.getElementById('custHistory').value = '王经理前期已拜访三次：第一次由监测科李主任引荐见王处长，第二次带技术团队做了"数智化升级"初步方案交流，第三次参加了省厅组织的供应商技术答疑会。客户对我们方案认可，但涉及财政预算，流程较长。遗留任务：答应给客户做的"全省水站运维成本测算报告"还没发。';
+  document.getElementById('custPersonal').value = '王处长：52岁，监测业务出身，务实、谨慎，重视合规和"不出事"。不喜欢过度营销，喜欢数据和案例。最近关注水质自动监测数据质量、第三方运维监管要求。上次拜访时王处长提到"最担心运维公司拿了项目不干活，出数据事故被追责"。';
+  document.getElementById('custProject').value = '项目1：全省30座重点水站数智化升级（预算约1500万，财政专项资金）；项目2：重点流域水生态环境监控平台扩容（预算约600万）。我方是三家候选之一。竞争对手：A公司（老牌央企背景，价格高、方案保守）、B公司（地方小厂，低价但运维能力弱）。我方优势：科创板上市+国控水站升级中标经验+三级运维服务体系，劣势：省内本地化服务网点不及对手。目前卡在：预算审批 + 客户对"长期运维能力"有疑虑。';
   document.getElementById('g1Title').value = '破冰并表达公司对项目的重视';
-  document.getElementById('g1Content').value = '1. 感谢王总百忙之中抽出时间。提一下："上次李经理说您对工业AI质检很感兴趣，我今天特意带了一些我们在这方面的新案例。"\n2. 表达重视："这个项目我一直在关注，今天专程飞过来，就是想当面听听您的想法。"\n3. （关键传球）"具体的技术方案和商务细节，李经理比我专业。今天我来主要是表个态——这个项目是我们公司的优先级。"';
-  document.getElementById('g1Handoff').value = '客户一旦问到具体技术参数、实施周期，立刻说"这个让李经理给您详细讲"';
-  document.getElementById('g2Title').value = '传递公司核心优势和成功案例';
-  document.getElementById('g2Content').value = '1. 分享一个与客户同行业的成功案例："去年我们给XX集团（同行业top3）做的产线改造，效率提升了35%。"\n2. 强调公司对精密制造行业的长期投入："我们不是接一个项目就走的公司，这个行业我们深耕了5年。"\n3. 主动邀请："如果方便，可以安排您和陈主任来我们公司实地看一下，也让技术团队当面演示。"';
-  document.getElementById('g2Handoff').value = '客户表现出兴趣时，说"李经理，你安排一下参观事宜"，制造"这是已经决定的事"的氛围';
-  document.getElementById('g3Title').value = '推动建立定期沟通机制';
-  document.getElementById('g3Content').value = '1. 提议："我建议我们双方建立一个定期沟通机制，每季度碰一次。不管有没有项目，保持联系。"\n2. 表达灵活合作意愿："在商务条件上，我们可以根据项目的具体情况灵活调整。"（不说具体数字）\n3. 收尾："今天聊得很愉快。后续让李经理和王总这边保持密切对接，争取尽快把方案定下来。"';
-  document.getElementById('g3Handoff').value = '只要达成"保持联系"的共识就算成功。具体下次见谁、聊什么，由李经理安排。';
-  document.getElementById('caution').value = '1. 绝对不要提A公司的名字——王总和A公司华东区总经理是大学同学\n2. 不要承诺具体交付日期——我们目前的产线排期还有不确定性\n3. 不要在会谈中主动报价格——客户可能会试探"你们能比A便宜多少"，标准回答是"李经理会根据整体方案给出最优报价"';
-  document.getElementById('reminder').value = '1. 今天的目标：建立信任 + 推动高层互访。不是签合同。\n2. 全程保持"我来是表个态"的姿态，不要变成"我来是谈业务的"。\n3. 会谈结束后和李经理在楼下碰头复盘5分钟，确认下一步行动。';
-  document.getElementById('materials').value = '公司画册 ×2、成功案例集 ×2、定制笔记本套装（小礼品）';
-  document.getElementById('saveName').value = 'XX精密制造王总-6月15日会谈剧本';
+  document.getElementById('g1Content').value = '1. 感谢王处长百忙之中抽出时间，开场提一句："上次王经理汇报后，您问的全省水站运维成本那个问题，我们今天带了测算初稿。"
+2. 表达重视："这个项目我们一直当作公司战略级项目在准备，今天我专程过来，就是代表公司表个态——我们有信心也有决心做好。"
+3. 强调合规安全："生态环境数据事关公共安全和追责，我们在这方面有严格的质量和合规体系。"
+4. （关键传球）"具体的技术方案和运维模式，王经理比我在行。今天我主要是来表个态、听听您的想法。"';
+  document.getElementById('g1Handoff').value = '客户一旦问到具体技术参数、实施周期、运维细节，立刻说"这个让王经理给您详细讲"';
+  document.getElementById('g2Title').value = '传递资质、案例和长期服务能力';
+  document.getElementById('g2Content').value = '1. 讲一个国控水站数智化升级的标杆案例："去年我们中标的XX流域国控水站升级项目，数据在线率稳定在99%以上，通过了生态环境部的质量考核。"
+2. 强调上市公司的规范与实力："我们是科创板上市公司，研发投入和售后服务都有制度保障，不会出现接了项目就跑的情况。"
+3. 讲三级运维体系："我们在运维上投入很大，省—市—县三级运维网络，7×24小时响应。这也是我们和'低价供应商'最大的区别。"
+4. 邀请："如果方便，可以安排您和李主任去我们运营的标杆站点实地看看，数据大屏、运维记录都可以现场查。"';
+  document.getElementById('g2Handoff').value = '客户对案例或运维感兴趣时，说"王经理，你把标杆站点的情况介绍一下，安排一次考察"，制造"这件事已经在推进"的氛围';
+  document.getElementById('g3Title').value = '推动建立技术沟通与现场考察机制';
+  document.getElementById('g3Content').value = '1. 提议："我建议双方建立一个技术层面的定期沟通机制，我们每两周来汇报一次进度和方案迭代，让您这边随时掌握情况。"
+2. 表达灵活合作意愿："在预算和交付模式上，我们可以根据财政审批节奏灵活安排，比如分阶段实施。"（不报具体数字）
+3. 收尾："今天收获很大。后续让王经理和监测科保持密切对接，先把运维成本测算报告正式提交，争取尽快安排一次标杆站点考察。"';
+  document.getElementById('g3Handoff').value = '只要达成"建立沟通机制+安排考察"的共识就算成功。具体节奏由王经理和李主任对接。';
+  document.getElementById('caution').value = '1. 绝对不要提A公司的名字——A公司曾与省厅某领导有合作背景，提了容易踩雷
+2. 不要承诺具体完工日期和免费运维年限——这些要等财政预算正式批复后再谈
+3. 不要在会谈中主动谈价格——客户如果试探"你们比A公司便宜吗"，标准回答是"我们会根据整体方案和运维要求给出最优预算方案"
+4. 政府场合：全程称呼"王处长"，不要叫"王总"；不谈任何非业务话题';
+  document.getElementById('reminder').value = '1. 今天的目标：建立信任 + 展示长期服务能力 + 推动现场考察。不是签合同。
+2. 全程保持"公司战略重视"的姿态，不要变成"急着拿单"。政府客户最反感被催。
+3. 会谈结束后和王经理在楼下碰头复盘5分钟，确认下一步：什么时间提交测算报告、考察哪个站点。';
+  document.getElementById('materials').value = '公司画册 ×2、国控水站案例集 ×2、运维服务体系手册 ×2、合规资质证书复印件一套';
+  document.getElementById('saveName').value = '省生态环境厅王处长-8月20日会谈剧本';
 
-  showToast('✅ 示例剧本已加载');
+  showToast('✅ 示例剧本已加载（碧兴物联·政府客户场景）');
 }
 
 // ===== Helpers =====

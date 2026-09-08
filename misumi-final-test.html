@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>米思米全渠道沟通实战 · 结业测试</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  background: #f0f2f5; color: #1a1a2e; line-height: 1.7; padding: 20px 16px;
+}
+.container { max-width: 760px; margin: 0 auto; }
+
+/* Header */
+.header {
+  text-align: center; padding: 28px 24px; margin-bottom: 24px;
+  background: linear-gradient(135deg, #1B2A4A 0%, #2E6B9E 100%);
+  border-radius: 12px; color: #fff; box-shadow: 0 4px 20px rgba(27,42,74,0.2);
+}
+.header h1 { font-size: 22px; margin-bottom: 6px; letter-spacing: 1px; }
+.header .sub { font-size: 13px; opacity: 0.85; }
+.header .info { font-size: 12px; opacity: 0.7; margin-top: 6px; }
+
+/* Section divider */
+.section-div {
+  margin: 28px 0 16px; padding: 10px 20px;
+  background: #1B2A4A; color: #fff; border-radius: 8px;
+  font-size: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;
+}
+.section-div .count { font-size: 12px; opacity: 0.7; font-weight: 400; }
+
+/* Question */
+.q-card {
+  background: #fff; border-radius: 10px; padding: 20px 24px;
+  margin-bottom: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  transition: border-color 0.2s;
+}
+.q-card.answered { border-left: 3px solid #2E6B9E; }
+.q-card.correct { border-left: 3px solid #22C55E; background: #f0fdf4; }
+.q-card.wrong { border-left: 3px solid #EF4444; background: #fef2f2; }
+
+.q-num { font-size: 12px; color: #999; font-weight: 600; margin-bottom: 4px; }
+.q-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 6px; font-weight: 600; }
+.q-tag.d1 { background: #e8f0fe; color: #1a56c4; }
+.q-tag.d2 { background: #e6f4ea; color: #137333; }
+.q-text { font-size: 15px; color: #1a1a2e; margin-bottom: 12px; font-weight: 500; }
+
+/* Options */
+.opt { display: block; padding: 10px 16px; margin-bottom: 6px; border: 2px solid #eee; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.15s; }
+.opt:hover { border-color: #c3dafe; background: #f8faff; }
+.opt.selected { border-color: #2E6B9E; background: #eef4fc; }
+.opt.correct-answer { border-color: #22C55E; background: #f0fdf4; }
+.opt.wrong-answer { border-color: #EF4444; background: #fef2f2; }
+.opt input { display: none; }
+.opt-label { font-weight: 700; margin-right: 8px; color: #2E6B9E; }
+.opt.correct-answer .opt-label { color: #22C55E; }
+.opt.wrong-answer .opt-label { color: #EF4444; }
+
+/* Explanation */
+.explanation {
+  display: none; margin-top: 10px; padding: 12px 16px;
+  background: #fefce8; border: 1px solid #fde68a; border-radius: 8px;
+  font-size: 13px; color: #92400e;
+}
+.explanation.show { display: block; }
+.explanation strong { color: #1B2A4A; }
+
+/* Submit */
+.submit-bar {
+  text-align: center; margin: 28px 0;
+}
+.submit-btn {
+  padding: 14px 48px; font-size: 16px; font-weight: 700;
+  background: linear-gradient(135deg, #E67E22, #d35400); color: #fff;
+  border: none; border-radius: 10px; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(230,126,34,0.4); transition: transform 0.1s;
+}
+.submit-btn:hover { transform: translateY(-1px); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Results */
+.results { display: none; }
+.score-circle {
+  text-align: center; margin: 20px auto; width: 160px; height: 160px;
+  border-radius: 50%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  border: 6px solid; margin-bottom: 16px;
+}
+.score-circle.excellent { border-color: #22C55E; background: #f0fdf4; }
+.score-circle.good { border-color: #2E6B9E; background: #eef4fc; }
+.score-circle.pass { border-color: #E67E22; background: #fff7ed; }
+.score-circle.fail { border-color: #EF4444; background: #fef2f2; }
+.score-num { font-size: 42px; font-weight: 800; }
+.score-label { font-size: 14px; font-weight: 600; }
+
+/* Module breakdown */
+.module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.module-item {
+  background: #fff; border-radius: 8px; padding: 12px 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.module-name { font-size: 12px; color: #888; margin-bottom: 4px; }
+.module-score { font-size: 18px; font-weight: 700; }
+.module-bar { height: 6px; background: #eee; border-radius: 3px; margin-top: 6px; overflow: hidden; }
+.module-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+
+/* Review toggle */
+.review-btn {
+  display: block; width: 100%; padding: 12px; margin-bottom: 16px;
+  background: #f5f7fa; border: 1px solid #e0e0e0; border-radius: 8px;
+  font-size: 14px; font-weight: 600; color: #1B2A4A; cursor: pointer; text-align: center;
+}
+.review-btn:hover { background: #eef1f5; }
+
+/* Progress */
+.progress-bar {
+  position: sticky; top: 0; z-index: 100; background: #f0f2f5; padding: 8px 0; margin-bottom: 16px;
+}
+.progress-track { height: 6px; background: #ddd; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #2E6B9E, #22C55E); border-radius: 3px; transition: width 0.3s; }
+.progress-text { font-size: 12px; color: #888; text-align: center; margin-top: 4px; }
+
+.footer { text-align: center; margin-top: 24px; font-size: 12px; color: #aaa; }
+
+@media print {
+  .progress-bar, .submit-bar, .review-btn { display: none; }
+  .q-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+  .explanation { display: none !important; }
+  .opt { border: 1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>米思米全渠道沟通实战 · 结业测试</h1>
+    <div class="sub">讲师：董仁杰 | 满分100分 | 25题（20单选 + 5判断）</div>
+    <div class="info">Day 1 怎么开口 · Day 2 开口后怎么深入</div>
+  </div>
+
+  <div class="progress-bar" id="progressBar" style="display:none;">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text" id="progressText">已答 0 / 25</div>
+  </div>
+
+  <div id="quizArea">
+
+    <!-- Day 1 -->
+    <div class="section-div">
+      <span>Day 1 · 怎么开口（10题）</span>
+      <span class="count">三原则 / PPP / 全渠道破冰 / 信号转化</span>
+    </div>
+
+    <div class="q-card" data-q="1" data-module="三原则" data-day="d1" data-answer="A">
+      <div class="q-num">第1题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">客户接起电话说"你谁啊？我怎么不认识你？"，此时应优先使用三原则中的哪一个？</div>
+      <label class="opt"><input type="radio" name="q1" value="A"><span class="opt-label">A</span>信任先行 — 先建立身份可信度</label>
+      <label class="opt"><input type="radio" name="q1" value="B"><span class="opt-label">B</span>时间先行 — 先尊重对方时间</label>
+      <label class="opt"><input type="radio" name="q1" value="C"><span class="opt-label">C</span>价值先行 — 先抛出价值吸引</label>
+      <label class="opt"><input type="radio" name="q1" value="D"><span class="opt-label">D</span>三个同时用</label>
+      <div class="explanation"><strong>答案：A。</strong>客户质疑"你是谁"=信任缺失，此时谈价值或时间都没用，必须先解决"我是谁、我为什么找你"的身份可信度问题。</div>
+    </div>
+
+    <div class="q-card" data-q="2" data-module="三原则" data-day="d1" data-answer="B">
+      <div class="q-num">第2题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">客户说"我现在很忙，没空听你说"，应优先使用？</div>
+      <label class="opt"><input type="radio" name="q2" value="A"><span class="opt-label">A</span>信任先行</label>
+      <label class="opt"><input type="radio" name="q2" value="B"><span class="opt-label">B</span>时间先行</label>
+      <label class="opt"><input type="radio" name="q2" value="C"><span class="opt-label">C</span>价值先行</label>
+      <label class="opt"><input type="radio" name="q2" value="D"><span class="opt-label">D</span>挂电话改天再打</label>
+      <div class="explanation"><strong>答案：B。</strong>客户表达的是时间抗拒，应先用"就耽误您30秒"尊重对方时间，打开继续沟通的窗口。</div>
+    </div>
+
+    <div class="q-card" data-q="3" data-module="三原则" data-day="d1" data-answer="C">
+      <div class="q-num">第3题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">客户说"我们已经有供应商了，不需要"，应优先使用？</div>
+      <label class="opt"><input type="radio" name="q3" value="A"><span class="opt-label">A</span>信任先行</label>
+      <label class="opt"><input type="radio" name="q3" value="B"><span class="opt-label">B</span>时间先行</label>
+      <label class="opt"><input type="radio" name="q3" value="C"><span class="opt-label">C</span>价值先行</label>
+      <label class="opt"><input type="radio" name="q3" value="D"><span class="opt-label">D</span>直接挂断</label>
+      <div class="explanation"><strong>答案：C。</strong>客户表达的是价值抗拒——"我不觉得你有用"。此时需要先抛出一个差异化价值钩子，让对方产生"或许值得听听"的念头。</div>
+    </div>
+
+    <div class="q-card" data-q="4" data-module="PPP框架" data-day="d1" data-answer="B">
+      <div class="q-num">第4题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">PPP框架中，"Process"（流程）指的是什么？</div>
+      <label class="opt"><input type="radio" name="q4" value="A"><span class="opt-label">A</span>产品的生产工艺流程</label>
+      <label class="opt"><input type="radio" name="q4" value="B"><span class="opt-label">B</span>这次沟通的流程安排——"我会花2分钟介绍背景，再花3分钟展示方案"</label>
+      <label class="opt"><input type="radio" name="q4" value="C"><span class="opt-label">C</span>客户的采购审批流程</label>
+      <label class="opt"><input type="radio" name="q4" value="D"><span class="opt-label">D</span>公司的订单处理流程</label>
+      <div class="explanation"><strong>答案：B。</strong>Process是告诉客户"接下来几分钟我们会做什么"，给客户掌控感和安全感。不是产品工艺，也不是采购流程。</div>
+    </div>
+
+    <div class="q-card" data-q="5" data-module="电话破冰" data-day="d1" data-answer="B">
+      <div class="q-num">第5题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">电话破冰前30秒最重要的目标是什么？</div>
+      <label class="opt"><input type="radio" name="q5" value="A"><span class="opt-label">A</span>把产品卖点说清楚</label>
+      <label class="opt"><input type="radio" name="q5" value="B"><span class="opt-label">B</span>建立信任 + 说明来意 + 让客户愿意继续听</label>
+      <label class="opt"><input type="radio" name="q5" value="C"><span class="opt-label">C</span>报完公司名称和工号</label>
+      <label class="opt"><input type="radio" name="q5" value="D"><span class="opt-label">D</span>问出客户的需求</label>
+      <div class="explanation"><strong>答案：B。</strong>前30秒不是推销时间，是"让对方不挂电话"的时间。信任+来意+价值钩子，三者缺一不可。</div>
+    </div>
+
+    <div class="q-card" data-q="6" data-module="邮件破冰" data-day="d1" data-answer="B">
+      <div class="q-num">第6题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">邮件破冰时，标题最应该做到什么？</div>
+      <label class="opt"><input type="radio" name="q6" value="A"><span class="opt-label">A</span>用多个感叹号吸引注意</label>
+      <label class="opt"><input type="radio" name="q6" value="B"><span class="opt-label">B</span>让客户一眼看到"跟我有关"</label>
+      <label class="opt"><input type="radio" name="q6" value="C"><span class="opt-label">C</span>写满公司全称显得正式</label>
+      <label class="opt"><input type="radio" name="q6" value="D"><span class="opt-label">D</span>用全大写字母突出重要性</label>
+      <div class="explanation"><strong>答案：B。</strong>标题决定打开率。客户只关心"这封邮件跟我有什么关系"，相关性远比花哨格式重要。</div>
+    </div>
+
+    <div class="q-card" data-q="7" data-module="企微破冰" data-day="d1" data-answer="B">
+      <div class="q-num">第7题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">相比电话破冰，企微破冰的独特优势是什么？</div>
+      <label class="opt"><input type="radio" name="q7" value="A"><span class="opt-label">A</span>不需要建立信任</label>
+      <label class="opt"><input type="radio" name="q7" value="B"><span class="opt-label">B</span>可以发送图片、文件、链接，信息维度更丰富</label>
+      <label class="opt"><input type="radio" name="q7" value="C"><span class="opt-label">C</span>不需要PPP框架</label>
+      <label class="opt"><input type="radio" name="q7" value="D"><span class="opt-label">D</span>可以群发提高效率</label>
+      <div class="explanation"><strong>答案：B。</strong>企微的核心优势是多媒体——可以发产品截图、参数表PDF、案例链接，让信息传递更立体。但信任和PPP依然需要。</div>
+    </div>
+
+    <div class="q-card" data-q="8" data-module="信号转化" data-day="d1" data-answer="B">
+      <div class="q-num">第8题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">客户连续三天打开你的产品介绍邮件但未回复，这属于什么信号？</div>
+      <label class="opt"><input type="radio" name="q8" value="A"><span class="opt-label">A</span>拒绝信号 — 不感兴趣</label>
+      <label class="opt"><input type="radio" name="q8" value="B"><span class="opt-label">B</span>关注信号 — 有兴趣但犹豫</label>
+      <label class="opt"><input type="radio" name="q8" value="C"><span class="opt-label">C</span>无效信号 — 可能是误触</label>
+      <label class="opt"><input type="radio" name="q8" value="D"><span class="opt-label">D</span>投诉信号 — 不满意</label>
+      <div class="explanation"><strong>答案：B。</strong>反复打开=高度关注。客户在看，但可能有疑问或犹豫。这是主动跟进的最佳时机——"看到您关注了产品介绍，有没有什么问题我可以解答？"</div>
+    </div>
+
+    <div class="q-card" data-q="9" data-module="信号转化" data-day="d1" data-answer="B">
+      <div class="q-num">第9题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">"信号转化三步法"的正确顺序是？</div>
+      <label class="opt"><input type="radio" name="q9" value="A"><span class="opt-label">A</span>收集数据 → 分析趋势 → 制定策略</label>
+      <label class="opt"><input type="radio" name="q9" value="B"><span class="opt-label">B</span>识别信号 → 判断意图 → 匹配话术</label>
+      <label class="opt"><input type="radio" name="q9" value="C"><span class="opt-label">C</span>发现信号 → 立即报价 → 等待回复</label>
+      <label class="opt"><input type="radio" name="q9" value="D"><span class="opt-label">D</span>观察行为 → 记录日志 → 汇报上级</label>
+      <div class="explanation"><strong>答案：B。</strong>先看到客户的什么行为（识别），再判断客户在想什么（意图），最后选择对应的话术去跟进（匹配）。三步缺一不可。</div>
+    </div>
+
+    <div class="q-card" data-q="10" data-module="信号转化" data-day="d1" data-answer="B">
+      <div class="q-num">第10题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">以下哪个属于客户的"高意图"信号？</div>
+      <label class="opt"><input type="radio" name="q10" value="A"><span class="opt-label">A</span>打开邮件后立即删除</label>
+      <label class="opt"><input type="radio" name="q10" value="B"><span class="opt-label">B</span>把你的报价单转发给同事并附言"看看这个"</label>
+      <label class="opt"><input type="radio" name="q10" value="C"><span class="opt-label">C</span>长时间未回复任何消息</label>
+      <label class="opt"><input type="radio" name="q10" value="D"><span class="opt-label">D</span>说"以后再说吧"</label>
+      <div class="explanation"><strong>答案：B。</strong>转发+讨论=客户内部正在评估，购买意图最高。这是从"关注"到"行动"的关键转折点，必须重点跟进。</div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="section-div">
+      <span>Day 2 · 开口后怎么深入（10题）</span>
+      <span class="count">3F / 3P / SPIN / LSCPA / FABE</span>
+    </div>
+
+    <div class="q-card" data-q="11" data-module="3F模型" data-day="d2" data-answer="B">
+      <div class="q-num">第11题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">3F确认模型中，三个"F"分别是什么？</div>
+      <label class="opt"><input type="radio" name="q11" value="A"><span class="opt-label">A</span>Focus + Feedback + Follow-up</label>
+      <label class="opt"><input type="radio" name="q11" value="B"><span class="opt-label">B</span>Fact + Feeling + Focus（事实 + 感受 + 聚焦意图）</label>
+      <label class="opt"><input type="radio" name="q11" value="C"><span class="opt-label">C</span>Find + Filter + Fix</label>
+      <label class="opt"><input type="radio" name="q11" value="D"><span class="opt-label">D</span>First + Fast + Final</label>
+      <div class="explanation"><strong>答案：B。</strong>Fact=搞清楚发生了什么，Feeling=理解客户的情绪，Focus=聚焦到客户真正想要什么。三层递进，从事实到意图。</div>
+    </div>
+
+    <div class="q-card" data-q="12" data-module="3F模型" data-day="d2" data-answer="B">
+      <div class="q-num">第12题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">客户来电说"你们上次发的货有个件尺寸不对，影响了我们装配！"，用3F模型，第一步应该做什么？</div>
+      <label class="opt"><input type="radio" name="q12" value="A"><span class="opt-label">A</span>立即道歉并承诺赔偿</label>
+      <label class="opt"><input type="radio" name="q12" value="B"><span class="opt-label">B</span>确认事实："请问是哪个件？尺寸差多少？什么时候发现的？"</label>
+      <label class="opt"><input type="radio" name="q12" value="C"><span class="opt-label">C</span>表达感受："我非常理解您的心情"</label>
+      <label class="opt"><input type="radio" name="q12" value="D"><span class="opt-label">D</span>聚焦方案："您希望我们怎么处理？"</label>
+      <div class="explanation"><strong>答案：B。</strong>先Fact——搞清楚到底发生了什么。不了解事实就道歉或提方案，显得敷衍。确认事实后才能有效共情和聚焦。</div>
+    </div>
+
+    <div class="q-card" data-q="13" data-module="3P模型" data-day="d2" data-answer="B">
+      <div class="q-num">第13题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">3P模型（Position-Pain-Proposal）主要用于分析什么？</div>
+      <label class="opt"><input type="radio" name="q13" value="A"><span class="opt-label">A</span>产品的三个核心卖点</label>
+      <label class="opt"><input type="radio" name="q13" value="B"><span class="opt-label">B</span>客户的岗位特征、岗位痛点、以及方案如何匹配</label>
+      <label class="opt"><input type="radio" name="q13" value="C"><span class="opt-label">C</span>销售流程的三个阶段</label>
+      <label class="opt"><input type="radio" name="q13" value="D"><span class="opt-label">D</span>市场的三个竞争维度</label>
+      <div class="explanation"><strong>答案：B。</strong>不同岗位（采购/技术/生产）有不同痛点和决策逻辑。3P帮你在拜访前想清楚：对方是什么角色、最在意什么、你的方案怎么跟他匹配。</div>
+    </div>
+
+    <div class="q-card" data-q="14" data-module="SPIN" data-day="d2" data-answer="B">
+      <div class="q-num">第14题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">SPIN提问法中，"S"（Situation）问题的目的是什么？</div>
+      <label class="opt"><input type="radio" name="q14" value="A"><span class="opt-label">A</span>推销解决方案</label>
+      <label class="opt"><input type="radio" name="q14" value="B"><span class="opt-label">B</span>了解客户现状背景，为后续提问铺垫</label>
+      <label class="opt"><input type="radio" name="q14" value="C"><span class="opt-label">C</span>制造客户的不安感</label>
+      <label class="opt"><input type="radio" name="q14" value="D"><span class="opt-label">D</span>确认订单细节</label>
+      <div class="explanation"><strong>答案：B。</strong>S问题为P、I、N提供上下文。但注意：S问题不宜超过3-4个，否则变成"查户口"。</div>
+    </div>
+
+    <div class="q-card" data-q="15" data-module="SPIN" data-day="d2" data-answer="C">
+      <div class="q-num">第15题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">SPIN中，"Implication"（影响）问题的核心作用是？</div>
+      <label class="opt"><input type="radio" name="q15" value="A"><span class="opt-label">A</span>了解客户现状</label>
+      <label class="opt"><input type="radio" name="q15" value="B"><span class="opt-label">B</span>发现客户的问题</label>
+      <label class="opt"><input type="radio" name="q15" value="C"><span class="opt-label">C</span>放大问题的后果，让客户感受到痛</label>
+      <label class="opt"><input type="radio" name="q15" value="D"><span class="opt-label">D</span>让客户说出解决方案的价值</label>
+      <div class="explanation"><strong>答案：C。</strong>I问题把"有点麻烦"变成"必须解决"。比如从"交期偶尔延迟"追问到"停工4小时损失8万"，让客户自己感受到痛感。</div>
+    </div>
+
+    <div class="q-card" data-q="16" data-module="SPIN" data-day="d2" data-answer="C">
+      <div class="q-num">第16题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">以下哪个是Need-Payoff（需求-收益）问题？</div>
+      <label class="opt"><input type="radio" name="q16" value="A"><span class="opt-label">A</span>"您现在每月用多少种标准件？"</label>
+      <label class="opt"><input type="radio" name="q16" value="B"><span class="opt-label">B</span>"交期延迟对你们生产有影响吗？"</label>
+      <label class="opt"><input type="radio" name="q16" value="C"><span class="opt-label">C</span>"如果交期从5天缩短到1天，对您的库存管理有什么帮助？"</label>
+      <label class="opt"><input type="radio" name="q16" value="D"><span class="opt-label">D</span>"上次因为延迟停工，损失了多少钱？"</label>
+      <div class="explanation"><strong>答案：C。</strong>N问题的特征是"如果……就好了"——让客户自己描绘解决方案带来的价值。A是S，B是P，D是I。</div>
+    </div>
+
+    <div class="q-card" data-q="17" data-module="SPIN" data-day="d2" data-answer="B">
+      <div class="q-num">第17题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">SPIN提问中最常见的错误是什么？</div>
+      <label class="opt"><input type="radio" name="q17" value="A"><span class="opt-label">A</span>Implication问题问得太尖锐</label>
+      <label class="opt"><input type="radio" name="q17" value="B"><span class="opt-label">B</span>Situation问题问太多，然后急于推销产品</label>
+      <label class="opt"><input type="radio" name="q17" value="C"><span class="opt-label">C</span>Need-Payoff问题问得太早</label>
+      <label class="opt"><input type="radio" name="q17" value="D"><span class="opt-label">D</span>Problem问题不够多</label>
+      <div class="explanation"><strong>答案：B。</strong>"查户口"后直接推销是最大通病。很多销售问了一堆背景问题就急着介绍产品，根本没有走到P和I，客户根本没感觉到痛。</div>
+    </div>
+
+    <div class="q-card" data-q="18" data-module="LSCPA" data-day="d2" data-answer="B">
+      <div class="q-num">第18题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">LSCPA异议处理五步法中，第一步"L"是？</div>
+      <label class="opt"><input type="radio" name="q18" value="A"><span class="opt-label">A</span>Lead（引导）</label>
+      <label class="opt"><input type="radio" name="q18" value="B"><span class="opt-label">B</span>Listen（倾听）</label>
+      <label class="opt"><input type="radio" name="q18" value="C"><span class="opt-label">C</span>Learn（学习）</label>
+      <label class="opt"><input type="radio" name="q18" value="D"><span class="opt-label">D</span>Locate（定位）</label>
+      <div class="explanation"><strong>答案：B。</strong>先听客户把异议说完，不要打断。很多销售一听"太贵了"就急着反驳，但客户可能后面还有更重要的话。</div>
+    </div>
+
+    <div class="q-card" data-q="19" data-module="FABE" data-day="d2" data-answer="C">
+      <div class="q-num">第19题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">FABE价值呈现中，"B"（Benefit）指的是什么？</div>
+      <label class="opt"><input type="radio" name="q19" value="A"><span class="opt-label">A</span>产品的技术特征</label>
+      <label class="opt"><input type="radio" name="q19" value="B"><span class="opt-label">B</span>产品比竞品强在哪里</label>
+      <label class="opt"><input type="radio" name="q19" value="C"><span class="opt-label">C</span>产品能给客户带来什么实际利益</label>
+      <label class="opt"><input type="radio" name="q19" value="D"><span class="opt-label">D</span>证明产品好的数据</label>
+      <div class="explanation"><strong>答案：C。</strong>客户最关心的不是你多好（Feature/Advantage），而是"对我有什么好处"（Benefit）。Feature是"公差±0.01mm"，Benefit是"返工率降到0.1%，每月省1万"。</div>
+    </div>
+
+    <div class="q-card" data-q="20" data-module="LSCPA" data-day="d2" data-answer="B">
+      <div class="q-num">第20题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">客户说"你们的价格比别家贵了8%"，用LSCPA处理，正确步骤是？</div>
+      <label class="opt"><input type="radio" name="q20" value="A"><span class="opt-label">A</span>立即降价 → 说明性价比 → 促成</label>
+      <label class="opt"><input type="radio" name="q20" value="B"><span class="opt-label">B</span>倾听 → "我理解价格是重要考量" → 澄清"是单价还是总成本？" → 陈述TCO价值 → 促成试用</label>
+      <label class="opt"><input type="radio" name="q20" value="C"><span class="opt-label">C</span>反驳 → 列举优势 → 压价 → 促成</label>
+      <label class="opt"><input type="radio" name="q20" value="D"><span class="opt-label">D</span>倾听 → 直接报最低价 → 促成</label>
+      <div class="explanation"><strong>答案：B。</strong>标准的L-S-C-P-A流程：先听，再共情确认，然后澄清"贵"的真实含义（单价vs总成本），接着陈述价值，最后促成。不是降价，是换一个比较维度。</div>
+    </div>
+
+    <!-- 判断题 -->
+    <div class="section-div">
+      <span>判断题（5题）</span>
+      <span class="count">每题4分 · 对或错</span>
+    </div>
+
+    <div class="q-card" data-q="21" data-module="三原则" data-day="d1" data-answer="B">
+      <div class="q-num">第21题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">信任·时间·价值三原则中，"信任先行"适用于所有客户接触场景。</div>
+      <label class="opt"><input type="radio" name="q21" value="A"><span class="opt-label">A</span>对</label>
+      <label class="opt"><input type="radio" name="q21" value="B"><span class="opt-label">B</span>错</label>
+      <div class="explanation"><strong>答案：错。</strong>不同抗拒类型用不同原则。客户说"不需要"用价值先行，说"没空"用时间先行，说"你是谁"才用信任先行。一刀切只会让客户更抗拒。</div>
+    </div>
+
+    <div class="q-card" data-q="22" data-module="邮件破冰" data-day="d1" data-answer="B">
+      <div class="q-num">第22题 <span class="q-tag d1">Day1</span></div>
+      <div class="q-text">邮件破冰时，正文应该尽可能详细，把产品参数和优势全部列出来，让客户一目了然。</div>
+      <label class="opt"><input type="radio" name="q22" value="A"><span class="opt-label">A</span>对</label>
+      <label class="opt"><input type="radio" name="q22" value="B"><span class="opt-label">B</span>错</label>
+      <div class="explanation"><strong>答案：错。</strong>邮件要简洁聚焦，信息过载会降低回复率。一个钩子 + 一个行动号召，足够了。详细参数可以放附件，让客户主动下载。</div>
+    </div>
+
+    <div class="q-card" data-q="23" data-module="SPIN" data-day="d2" data-answer="B">
+      <div class="q-num">第23题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">SPIN提问中，Situation问题应该尽量多问，以全面了解客户情况。</div>
+      <label class="opt"><input type="radio" name="q23" value="A"><span class="opt-label">A</span>对</label>
+      <label class="opt"><input type="radio" name="q23" value="B"><span class="opt-label">B</span>错</label>
+      <div class="explanation"><strong>答案：错。</strong>S问题不宜超过3-4个。问太多变成"查户口"，客户会反感。S只是为了给P、I、N铺路，快速切入痛点才是关键。</div>
+    </div>
+
+    <div class="q-card" data-q="24" data-module="FABE" data-day="d2" data-answer="A">
+      <div class="q-num">第24题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">FABE中的Evidence（证据）可以包括检测报告、客户案例、使用数据等。</div>
+      <label class="opt"><input type="radio" name="q24" value="A"><span class="opt-label">A</span>对</label>
+      <label class="opt"><input type="radio" name="q24" value="B"><span class="opt-label">B</span>错</label>
+      <div class="explanation"><strong>答案：对。</strong>任何能证明Benefit真实性的材料都算Evidence——检测报告、客户案例、使用数据、甚至样品本身。证据越具体越可信。</div>
+    </div>
+
+    <div class="q-card" data-q="25" data-module="3F模型" data-day="d2" data-answer="A">
+      <div class="q-num">第25题 <span class="q-tag d2">Day2</span></div>
+      <div class="q-text">3F模型中，应该先确认Fact（事实）再确认Feeling（感受），顺序不能反。</div>
+      <label class="opt"><input type="radio" name="q25" value="A"><span class="opt-label">A</span>对</label>
+      <label class="opt"><input type="radio" name="q25" value="B"><span class="opt-label">B</span>错</label>
+      <div class="explanation"><strong>答案：对。</strong>先搞清楚发生了什么（Fact），再共情感受（Feeling），最后聚焦意图（Focus）。如果顺序反了，不了解事实就共情，会显得空洞敷衍。</div>
+    </div>
+
+    <div class="submit-bar">
+      <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">提交试卷 · 查看成绩</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <div class="score-circle" id="scoreCircle">
+      <div class="score-num" id="scoreNum">0</div>
+      <div class="score-label" id="scoreLabel">分</div>
+    </div>
+
+    <div id="moduleBreakdown"></div>
+
+    <button class="review-btn" onclick="toggleReview()" id="reviewToggle">查看每题解析</button>
+
+    <div id="reviewArea" style="display:none;">
+      <!-- Answer review will be shown here by JS -->
+    </div>
+
+    <div style="text-align:center; margin-top:24px;">
+      <button class="submit-btn" style="background:linear-gradient(135deg,#2E6B9E,#1B2A4A);" onclick="resetQuiz()">重新测试</button>
+    </div>
+  </div>
+
+  <div class="footer">米思米全渠道高效沟通实战 | 电话 · 邮件 · 企微 —— 三个通道，一个方法论 | 讲师：董仁杰</div>
+</div>
+
+<script>
+var TOTAL_Q = 25;
+var POINTS_PER_Q = 4;
+
+document.querySelectorAll('.opt input').forEach(function(input) {
+  input.addEventListener('change', function() {
+    var card = this.closest('.q-card');
+    card.querySelectorAll('.opt').forEach(function(o) { o.classList.remove('selected'); });
+    this.closest('.opt').classList.add('selected');
+    card.classList.add('answered');
+    updateProgress();
+  });
+});
+
+function updateProgress() {
+  var answered = document.querySelectorAll('.q-card.answered').length;
+  var pct = Math.round(answered / TOTAL_Q * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = '已答 ' + answered + ' / ' + TOTAL_Q;
+  document.getElementById('progressBar').style.display = 'block';
+}
+
+function submitQuiz() {
+  var answered = document.querySelectorAll('.q-card.answered').length;
+  if (answered < TOTAL_Q) {
+    if (!confirm('还有 ' + (TOTAL_Q - answered) + ' 题未作答，确定提交吗？')) return;
+  }
+
+  var score = 0;
+  var moduleStats = {};
+
+  document.querySelectorAll('.q-card').forEach(function(card) {
+    var qNum = card.dataset.q;
+    var correctAns = card.dataset.answer;
+    var module = card.dataset.module;
+    var selected = card.querySelector('input:checked');
+    var userAns = selected ? selected.value : null;
+
+    if (!moduleStats[module]) moduleStats[module] = { correct: 0, total: 0 };
+    moduleStats[module].total++;
+
+    // Reset classes
+    card.classList.remove('answered');
+    card.querySelectorAll('.opt').forEach(function(o) {
+      o.classList.remove('selected', 'correct-answer', 'wrong-answer');
+    });
+
+    // Mark correct answer
+    var correctOpt = card.querySelector('input[value="' + correctAns + '"]');
+    if (correctOpt) correctOpt.closest('.opt').classList.add('correct-answer');
+
+    if (userAns === correctAns) {
+      score += POINTS_PER_Q;
+      card.classList.add('correct');
+      moduleStats[module].correct++;
+    } else {
+      card.classList.add('wrong');
+      if (userAns && userAns !== correctAns) {
+        var wrongOpt = card.querySelector('input[value="' + userAns + '"]');
+        if (wrongOpt) wrongOpt.closest('.opt').classList.add('wrong-answer');
+      }
+    }
+
+    // Show explanation
+    var exp = card.querySelector('.explanation');
+    if (exp) exp.classList.add('show');
+  });
+
+  // Show results
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressBar').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+
+  // Score circle
+  var circle = document.getElementById('scoreCircle');
+  var num = document.getElementById('scoreNum');
+  var label = document.getElementById('scoreLabel');
+
+  circle.className = 'score-circle';
+  if (score >= 90) { circle.classList.add('excellent'); label.textContent = '优秀'; }
+  else if (score >= 80) { circle.classList.add('good'); label.textContent = '良好'; }
+  else if (score >= 60) { circle.classList.add('pass'); label.textContent = '合格'; }
+  else { circle.classList.add('fail'); label.textContent = '需要复习'; }
+
+  // Animate score
+  var current = 0;
+  var timer = setInterval(function() {
+    current += 2;
+    if (current >= score) { current = score; clearInterval(timer); }
+    num.textContent = current;
+  }, 20);
+
+  // Module breakdown
+  var breakdown = document.getElementById('moduleBreakdown');
+  var html = '<div style="font-size:15px;font-weight:700;color:#1B2A4A;margin-bottom:12px;text-align:center;">各模块得分</div><div class="module-grid">';
+  for (var mod in moduleStats) {
+    var s = moduleStats[mod];
+    var pct = Math.round(s.correct / s.total * 100);
+    var color = pct >= 80 ? '#22C55E' : (pct >= 60 ? '#E67E22' : '#EF4444');
+    html += '<div class="module-item">' +
+      '<div class="module-name">' + mod + '</div>' +
+      '<div class="module-score" style="color:' + color + '">' + s.correct + '/' + s.total + '  (' + pct + '%)</div>' +
+      '<div class="module-bar"><div class="module-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+    '</div>';
+  }
+  html += '</div>';
+  breakdown.innerHTML = html;
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleReview() {
+  var area = document.getElementById('reviewArea');
+  var btn = document.getElementById('reviewToggle');
+  if (area.style.display === 'none') {
+    area.style.display = 'block';
+    btn.textContent = '收起解析';
+    // Show all q-cards in review area
+    document.querySelectorAll('.q-card').forEach(function(card) {
+      area.appendChild(card);
+      card.style.display = 'block';
+    });
+  } else {
+    area.style.display = 'none';
+    btn.textContent = '查看每题解析';
+    // Move cards back
+    var quizArea = document.getElementById('quizArea');
+    document.querySelectorAll('.q-card').forEach(function(card) {
+      quizArea.appendChild(card);
+    });
+  }
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.q-card').forEach(function(card) {
+    card.classList.remove('answered', 'correct', 'wrong');
+    card.querySelectorAll('.opt').forEach(function(o) {
+      o.classList.remove('selected', 'correct-answer', 'wrong-answer');
+    });
+    card.querySelectorAll('input').forEach(function(i) { i.checked = false; });
+    var exp = card.querySelector('.explanation');
+    if (exp) exp.classList.remove('show');
+  });
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressBar').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

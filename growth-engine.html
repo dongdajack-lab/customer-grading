@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>销售增长引擎2.0 | 业绩=商机数×赢单率×客单价×团队战力</title>
+<style>
+  :root{
+    --orange:#ea5b0c; --orange-deep:#c74a06; --orange-light:#fff1e6;
+    --ink:#2b2b2b; --sub:#6b6b6b; --line:#eee; --card:#fff;
+    --bg:#faf7f4; --green:#2e8b57; --blue:#2563eb; --red:#dc2626;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+  .wrap{max-width:960px;margin:0 auto;padding:20px 16px 80px;}
+
+  /* 头部 */
+  .hero{background:linear-gradient(135deg,#f97316,#ea5b0c 60%,#c74a06);color:#fff;border-radius:16px;padding:28px 26px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);}
+  .hero h1{font-size:26px;font-weight:800;letter-spacing:1px;}
+  .hero .formula{margin-top:10px;font-size:15px;background:rgba(255,255,255,.16);display:inline-block;padding:6px 14px;border-radius:8px;font-weight:600;}
+  .hero p{margin-top:8px;font-size:13px;opacity:.92;max-width:640px;}
+  .hero .tags{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
+  .hero .tag{font-size:12px;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px;}
+
+  /* 步骤条 */
+  .steps{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap;}
+  .step-chip{flex:1;min-width:150px;text-align:center;padding:10px 8px;border-radius:10px;background:#fff;border:2px solid var(--line);font-size:13px;color:var(--sub);cursor:pointer;transition:.2s;}
+  .step-chip b{display:block;font-size:12px;color:var(--orange);margin-bottom:2px;}
+  .step-chip.active{border-color:var(--orange);background:var(--orange-light);color:var(--ink);font-weight:600;}
+
+  /* 卡片 */
+  .card{background:var(--card);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05);border:1px solid var(--line);}
+  .card h3{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .card h3 .no{background:var(--orange);color:#fff;width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+  /* 输入 */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .field label{display:block;font-size:13px;color:var(--sub);margin-bottom:5px;}
+  .field input,.field select{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;outline:none;transition:.2s;}
+  .field input:focus{border-color:var(--orange);}
+  .field .hint{font-size:11.5px;color:#999;margin-top:4px;}
+  .unit{position:relative;}
+  .unit input{padding-right:44px;}
+  .unit .u{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;color:#999;}
+
+  /* 结果区 */
+  .result-band{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+  .result-item{background:var(--orange-light);border:1.5px dashed var(--orange);border-radius:12px;padding:14px;text-align:center;}
+  .result-item .k{font-size:12px;color:var(--sub);}
+  .result-item .v{font-size:24px;font-weight:800;color:var(--orange);margin-top:2px;}
+  .result-item .s{font-size:11.5px;color:var(--sub);margin-top:2px;}
+  .result-item.warn{background:#fef2f2;border-color:#fca5a5;}
+  .result-item.warn .v{color:var(--red);}
+  .result-item.ok{background:#f0fdf4;border-color:#86efac;}
+  .result-item.ok .v{color:var(--green);}
+
+  /* 杠杆卡 */
+  .lever{display:grid;grid-template-columns:1.15fr 1.4fr .9fr;gap:14px;align-items:center;padding:14px 0;border-bottom:1px dashed var(--line);}
+  .lever:last-child{border-bottom:none;}
+  .lever .name b{font-size:15px;display:block;}
+  .lever .name span{font-size:12px;color:var(--sub);}
+  .lever .slider input[type=range]{width:100%;accent-color:var(--orange);}
+  .lever .slider .vals{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-top:2px;}
+  .lever .effect{text-align:center;}
+  .lever .effect .lvl{font-size:12px;color:var(--sub);}
+  .lever .effect .badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:20px;font-weight:600;}
+  .badge.hi{background:#fef2f2;color:var(--red);border:1px solid #fca5a5;}
+  .badge.mid{background:#fffbeb;color:#b45309;border:1px solid #fcd34d;}
+  .badge.lo{background:#f0fdf4;color:var(--green);border:1px solid #86efac;}
+
+  /* 路径卡 */
+  .path{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .path-card{border:2px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:.2s;position:relative;}
+  .path-card:hover{border-color:#fdba74;}
+  .path-card.sel{border-color:var(--orange);background:var(--orange-light);}
+  .path-card .pname{font-weight:700;font-size:15px;}
+  .path-card .pdesc{font-size:12px;color:var(--sub);margin:4px 0 10px;min-height:34px;}
+  .path-card .row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;border-bottom:1px dashed #eee;}
+  .path-card .row:last-child{border:none;}
+  .path-card .row b{font-weight:700;}
+  .path-card .mark{position:absolute;top:-10px;right:12px;background:var(--orange);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;}
+  .path-detail{margin-top:14px;background:#fff8f0;border:1px solid #fdba74;border-radius:10px;padding:14px;font-size:13px;}
+  .path-detail table{width:100%;border-collapse:collapse;font-size:13px;}
+  .path-detail th,.path-detail td{padding:6px 8px;border-bottom:1px solid #f5e6d8;text-align:left;}
+  .path-detail th{color:var(--sub);font-weight:600;}
+
+  /* 行动清单 */
+  .action-group{margin-bottom:16px;}
+  .action-group .gh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:8px 12px;border-radius:8px;margin-bottom:8px;}
+  .action-group .gh .dim{font-size:11px;background:rgba(0,0,0,.08);padding:1px 8px;border-radius:10px;font-weight:600;}
+  .action-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;background:#fff;cursor:pointer;transition:.15s;}
+  .action-item:hover{border-color:#fdba74;}
+  .action-item input{margin-top:4px;accent-color:var(--orange);width:16px;height:16px;flex-shrink:0;}
+  .action-item .t{font-size:13.5px;}
+  .action-item .d{font-size:12px;color:var(--sub);}
+  .action-item.done{background:#f8f8f6;opacity:.72;}
+  .action-item.done .t{text-decoration:line-through;color:#999;}
+  .action-item.hot{border-color:var(--orange);background:var(--orange-light);}
+
+  /* 按钮 */
+  .btn{background:var(--orange);color:#fff;border:none;padding:11px 26px;border-radius:9px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;}
+  .btn:hover{background:var(--orange-deep);}
+  .btn.ghost{background:#fff;color:var(--orange);border:1.5px solid var(--orange);}
+  .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+
+  /* 其他 */
+  .note{font-size:12px;color:#999;margin-top:8px;}
+  .tip{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;font-size:13px;color:#1e40af;margin-top:12px;}
+  .footer{text-align:center;font-size:12px;color:#aaa;margin-top:30px;}
+  @media(max-width:720px){.grid4{grid-template-columns:1fr 1fr;}.lever{grid-template-columns:1fr;}.path{grid-template-columns:1fr;}.result-band{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>销售增长引擎 2.0</h1>
+    <div class="formula">业绩 = 商机数 × 赢单率 × 客单价 × 团队战力</div>
+    <p>把两套体系的底层公式合二为一：张老师教你把「单」算明白（商机数×赢单率×客单价），大董老师教你把「盘」管明白（天·方向聚焦 → 商机数；地·过程管控 → 赢单率；地·方案营销 → 客单价；人·铁军打造 → 团队战力）。</p>
+    <div class="tags"><span class="tag">天 · 商机数</span><span class="tag">地 · 赢单率</span><span class="tag">地 · 客单价</span><span class="tag">人 · 团队战力</span></div>
+  </div>
+
+  <div class="steps">
+    <div class="step-chip active" data-step="0"><b>第1步</b>现状与目标</div>
+    <div class="step-chip" data-step="1"><b>第2步</b>杠杆试算</div>
+    <div class="step-chip" data-step="2"><b>第3步</b>达成路径</div>
+    <div class="step-chip" data-step="3"><b>第4步</b>行动清单</div>
+  </div>
+
+  <!-- 第1步 现状与目标 -->
+  <div class="card" id="step-0">
+    <h3><span class="no">1</span> 现状与目标</h3>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:14px;">填入团队四个杠杆的当前值，系统自动算出当前业绩；再填入目标业绩，看看差距有多大。</p>
+    <div class="grid4">
+      <div class="field">
+        <label>月均商机数（个）</label>
+        <input type="number" id="in-quota" min="0" value="40">
+        <div class="hint">已确认的有效商机（非线索）</div>
+      </div>
+      <div class="field">
+        <label>赢单率（%）</label>
+        <input type="number" id="in-rate" min="0" max="100" value="20">
+        <div class="hint">成交商机 ÷ 商机总数</div>
+      </div>
+      <div class="field unit">
+        <label>客单价（万元）</label>
+        <input type="number" id="in-price" min="0" value="8">
+        <div class="u">万</div>
+        <div class="hint">平均单笔合同金额</div>
+      </div>
+      <div class="field">
+        <label>有效销售人数</label>
+        <input type="number" id="in-team" min="0" value="6">
+        <div class="hint">能独立作战的销售</div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:14px;">
+      <div class="field">
+        <label>年度目标业绩（万元）</label>
+        <input type="number" id="in-target" min="0" value="2000">
+        <div class="hint">本年度要达成的总业绩</div>
+      </div>
+      <div class="field">
+        <label>编制目标人数（可选）</label>
+        <input type="number" id="in-headcount" min="0" value="8">
+        <div class="hint">计划扩到多少人</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(1)">计算并进入杠杆试算 →</button>
+    </div>
+
+    <div class="result-band" id="band-cur" style="display:none;">
+      <div class="result-item"><div class="k">当前年业绩（估）</div><div class="v" id="r-cur">—</div><div class="s">商机×赢单×客单×人数×12月</div></div>
+      <div class="result-item" id="r-gap-box"><div class="k">距目标缺口</div><div class="v" id="r-gap">—</div><div class="s">目标 − 当前</div></div>
+      <div class="result-item" id="r-fold-box"><div class="k">需要的增长倍数</div><div class="v" id="r-fold">—</div><div class="s">目标 ÷ 当前</div></div>
+    </div>
+    <div class="tip" id="tip-step1" style="display:none;"></div>
+  </div>
+
+  <!-- 第2步 杠杆试算 -->
+  <div class="card" id="step-1" style="display:none;">
+    <h3><span class="no">2</span> 杠杆试算：四个杠杆各拉到多少，业绩能到多少？</h3>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:6px;">拖动滑块调整每个杠杆的目标值，右侧实时显示组合业绩。<b>红色高潜力</b> = 当前值明显偏低，优先发力；绿色低潜力 = 已接近合理水平，别在这上面死磕。</p>
+    <div id="lever-box"></div>
+    <div class="result-band">
+      <div class="result-item"><div class="k">组合年业绩</div><div class="v" id="r-combo">—</div><div class="s">实时计算</div></div>
+      <div class="result-item" id="combo-gap-box"><div class="k">vs 目标</div><div class="v" id="r-combo-gap">—</div><div class="s" id="r-combo-gap-s">—</div></div>
+      <div class="result-item" id="combo-ratio-box"><div class="k">达成度</div><div class="v" id="r-combo-ratio">—</div><div class="s">组合业绩 ÷ 目标</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="goStep(0)">← 返回修改</button>
+      <button class="btn" onclick="genPaths();goStep(2)">生成达成路径 →</button>
+    </div>
+  </div>
+
+  <!-- 第3步 达成路径 -->
+  <div class="card" id="step-2" style="display:none;">
+    <h3><span class="no">3</span> 三套达成路径：怎么凑够这个增长倍数？</h3>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:14px;">同样的目标，三套打法侧重点不同，点击卡片看具体数字。实际操盘时，结合你的团队情况选一套主线，另外两套作为参照。</p>
+    <div class="path" id="path-box"></div>
+    <div class="path-detail" id="path-detail" style="display:none;"></div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="goStep(1)">← 返回试算</button>
+      <button class="btn" onclick="buildChecklist();goStep(3)">生成行动清单 →</button>
+    </div>
+  </div>
+
+  <!-- 第4步 行动清单 -->
+  <div class="card" id="step-3" style="display:none;">
+    <h3><span class="no">4</span> 行动清单：每个杠杆靠什么拉起来？</h3>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:14px;">勾选落地动作，自动保存在本机；<b>高亮的橙色条目</b>是你的薄弱杠杆（高潜力项），优先执行。全部勾完可打印贴在工位或发团队。</p>
+    <div id="action-box"></div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="goStep(2)">← 返回路径</button>
+      <button class="btn" onclick="window.print()">打印行动清单</button>
+      <button class="btn ghost" onclick="clearActions()">清空勾选</button>
+    </div>
+  </div>
+
+  <div class="footer">天地人销售管理体系 · 大董老师 | 销售增长引擎2.0 · 建议与张老师《顾问式销售与方案营销》融合版</div>
+</div>
+
+<script>
+// ===== 数据 =====
+const ACTIONS = [
+  {
+    key:"quota", name:"商机数（天 · 方向聚焦）", dim:"天",
+    items:[
+      {t:"客户分级 S/A/B/C，把时间花在能赢的客户上", d:"工具：客户分级系统 / 单客户快速分级"},
+      {t:"月月盘商机池，线索→商机要有明确确认动作", d:"线索≠商机，卡住「已确认」三个条件"},
+      {t:"用3C&8维给重点客户做一户一策", d:"工具：3C&8维客户策略分析"},
+      {t:"目标用五种方法拆到人、拆到月、拆到产品线", d:"SMART / 自下而上 / 标杆法 / 历史法 / 战略法"},
+      {t:"线索收集十八招轮着用，别等客户上门", d:"老客转介绍 / 行业活动 / 政府园区 / 产业链上下游…"}
+    ]
+  },
+  {
+    key:"rate", name:"赢单率（地 · 过程管控）", dim:"地",
+    items:[
+      {t:"销售漏斗周会：每单卡在哪个阶段，卡了多久", d:"工具：销售预测系统（六阶段漏斗）"},
+      {t:"用SPIN把客户的痛挖透再谈方案", d:"工具：SPIN提问训练"},
+      {t:"拜访按「前11项准备→中5项动作→后KISS复盘」标准动作走", d:"工具：客户拜访管理 / KISS复盘工作台"},
+      {t:"投诉用灵魂三问+三步曲处理，别让老客户流失", d:"工具：投诉处理练习"},
+      {t:"竞争单用七维分析+四种拿单策略逐个击破", d:"工具：竞争分析计算器"}
+    ]
+  },
+  {
+    key:"price", name:"客单价（地 · 方案营销）", dim:"地",
+    items:[
+      {t:"从卖产品升级到卖方案：先共识需求，再算效益，再谈价格", d:"工具：方案营销五件套·方案论证一页纸"},
+      {t:"帮客户算账：降本+增收−投入，亮出ROI和回收期", d:"工具：方案营销五件套·客户效益测算器"},
+      {t:"用价值金三角（效益+差异+需求）守住价格防线", d:"差异化=同样价格你价值高，同样价值你价格低"},
+      {t:"决策链五角色逐个攻：决策人/使用人/技术/财务/教练", d:"工具：方案营销五件套·决策者五角色策略卡"},
+      {t:"大单打高层：先谈老板的经营账，再谈产品参数", d:"工具：高层客户会谈剧本"}
+    ]
+  },
+  {
+    key:"team", name:"团队战力（人 · 铁军打造）", dim:"人",
+    items:[
+      {t:"按标准JD招人，面试用评分表，宁缺毋滥", d:"工具：招聘JD生成器+面试评分表"},
+      {t:"用1314测评筛出销冠潜质，把培训资源花对地方", d:"工具：1314销冠能力测评"},
+      {t:"薪酬激励：钱（提成方案）+前（晋升通道）+情（情感账户）三管齐下", d:"工具：薪酬进化导航器 / 提成方案设计器"},
+      {t:"老带新+师徒制，让新人快速能独立作战", d:"有效人数=能独立作战的人，不是人头数"},
+      {t:"每月开复盘会：目标→结果→原因→规律→行动", d:"工具：KISS复盘工作台"}
+    ]
+  }
+];
+
+const PATHS = [
+  {name:"均衡发力型", desc:"四个杠杆都提一点，风险最小、最稳", weights:[.25,.25,.25,.25], mark:"最稳"},
+  {name:"效率优先型", desc:"主攻赢单率，不增员不换打法，把现有单子赢下来", weights:[.1,.45,.2,.25], mark:"最省"},
+  {name:"大单进攻型", desc:"主攻客单价+扩编制，向大客户要量，适合翻倍目标", weights:[.15,.15,.38,.32], mark:"最猛"}
+];
+
+// ===== 状态 =====
+let cur = {quota:40, rate:.2, price:8, team:6, target:2000, headcount:8};
+let combo = {quota:40, rate:.2, price:8, team:6};
+let pathSel = 0;
+
+const $ = id => document.getElementById(id);
+const fmt = n => n>=10000 ? (n/10000).toFixed(1)+"亿" : n>=100 ? Math.round(n).toLocaleString() : (Math.round(n*10)/10).toString();
+const fmtW = n => n>=10000 ? (n/10000).toFixed(2)+"亿" : n>=100 ? Math.round(n).toLocaleString() : (Math.round(n*10)/10).toString();
+
+function annual(a){ return a.quota * a.rate * a.price * a.team * 12; }
+
+// 潜力评估：返回 hi/mid/lo + 理由
+function potential(key, v){
+  if(key==="quota"){ // 用商机转化参考：无法自动算，按商机绝对量粗估
+    if(v < 20) return {lvl:"hi", txt:"商机池偏小"};
+    if(v < 50) return {lvl:"mid", txt:"商机量中等"};
+    return {lvl:"lo", txt:"商机量充足"};
+  }
+  if(key==="rate"){
+    if(v < .15) return {lvl:"hi", txt:"赢单率明显偏低"};
+    if(v < .28) return {lvl:"mid", txt:"赢单率有提升空间"};
+    return {lvl:"lo", txt:"赢单率已不错"};
+  }
+  if(key==="price"){
+    if(v < 10) return {lvl:"hi", txt:"客单价偏低，在卖小单"};
+    if(v < 30) return {lvl:"mid", txt:"客单价有上探空间"};
+    return {lvl:"lo", txt:"客单价已较高"};
+  }
+  if(key==="team"){
+    if(v < 5) return {lvl:"hi", txt:"作战人数太少"};
+    if(v < 10) return {lvl:"mid", txt:"人数中等"};
+    return {lvl:"lo", txt:"团队规模可观"};
+  }
+}
+
+// ===== 步骤切换 =====
+function goStep(n){
+  document.querySelectorAll(".step-chip").forEach((c,i)=>c.classList.toggle("active",i===n));
+  for(let i=0;i<4;i++) $("step-"+i).style.display = i===n ? "block" : "none";
+  if(n===0) renderStep0();
+  if(n===1) renderLevers();
+  if(n===3) renderActions();
+}
+
+// ===== 第1步 =====
+function readStep0(){
+  cur.quota = Math.max(0, +$("in-quota").value || 0);
+  cur.rate  = Math.min(1, (+$("in-rate").value || 0)/100);
+  cur.price = Math.max(0, +$("in-price").value || 0);
+  cur.team  = Math.max(0, +$("in-team").value || 0);
+  cur.target= Math.max(0, +$("in-target").value || 0);
+  cur.headcount = Math.max(0, +$("in-headcount").value || 0);
+}
+function renderStep0(){
+  readStep0();
+  const now = annual(cur), gap = cur.target - now, fold = now>0 ? cur.target/now : 0;
+  $("band-cur").style.display = "grid";
+  $("r-cur").textContent = fmtW(now);
+  $("r-gap").textContent = gap>=0 ? fmtW(gap) : "已超额✓";
+  $("r-gap-box").className = "result-item " + (gap<0 ? "ok" : "");
+  $("r-fold").textContent = now>0 ? fold.toFixed(1)+"×" : "—";
+  $("r-fold-box").className = "result-item " + (fold>2 ? "warn" : (fold<=1 ? "ok":""));
+  let tip = "";
+  if(now<=0){ tip = "⚠ 当前业绩为0，请检查输入：商机数、赢单率、客单价、人数都大于0。"; }
+  else if(fold<=1){ tip = "🎉 当前打法已能覆盖目标，这份表你可以反过来用：把目标抬高，或者把省下来的力气投到「赢大单」上。"; }
+  else if(fold>3){ tip = "⚠ 需要翻 3 倍以上——单靠优化赢单率或客单价不够，必须「提客单（卖方案）+ 扩编制（人）」双管齐下，建议重点看第3步的「大单进攻型」。"; }
+  else{ tip = "💡 缺口约 "+fold.toFixed(1)+" 倍：这在一个年度内完全可行。往下拖滑块，试试每个杠杆拉多少能补上。"; }
+  $("tip-step1").style.display = "block";
+  $("tip-step1").textContent = tip;
+}
+
+// ===== 第2步 杠杆 =====
+function renderLevers(){
+  readStep0();
+  combo = {quota:cur.quota, rate:cur.rate, price:cur.price, team:cur.team};
+  const defs = [
+    {key:"quota", label:"商机数", unit:"个/月", min:0, max:Math.max(20, Math.ceil(cur.quota*4/5)*5), step:1, val:cur.quota},
+    {key:"rate", label:"赢单率", unit:"%", min:0, max:60, step:1, val:Math.round(cur.rate*100)},
+    {key:"price", label:"客单价", unit:"万", min:0, max:Math.max(10, Math.ceil(cur.price*3/5)*5), step:.5, val:cur.price},
+    {key:"team", label:"有效人数", unit:"人", min:0, max:Math.max(5, Math.ceil(cur.headcount*1.5)), step:1, val:cur.team}
+  ];
+  const pot = potential("quota", cur.quota);
+  const potR = potential("rate", cur.rate);
+  const potP = potential("price", cur.price);
+  const potT = potential("team", cur.team);
+  const lvlTxt = {hi:"高潜力", mid:"有空间", lo:"合理"};
+  const lvlCls = {hi:"hi", mid:"mid", lo:"lo"};
+  $("lever-box").innerHTML = defs.map(d=>{
+    const p = d.key==="quota"?pot : d.key==="rate"?potR : d.key==="price"?potP : potT;
+    return `<div class="lever">
+      <div class="name"><b>${d.label} <span style="font-size:11px;color:#999;">(${d.unit})</span></b><span>当前 ${d.key==="rate"? Math.round(cur.rate*100)+"%": d.val}</span></div>
+      <div class="slider">
+        <input type="range" id="sl-${d.key}" min="${d.min}" max="${d.max}" step="${d.step}" value="${d.val}" oninput="sliderMove('${d.key}',${d.step})">
+        <div class="vals"><span id="sv-${d.key}">${d.val}</span><span>${d.max}</span></div>
+      </div>
+      <div class="effect"><div class="lvl">潜力</div><span class="badge ${lvlCls[p.lvl]}">${lvlTxt[p.lvl]}·${p.txt}</span></div>
+    </div>`;
+  }).join("");
+  sliderMove("quota",1); // 触发一次重算
+}
+
+function sliderMove(key, step){
+  const v = +$("sl-"+key).value;
+  combo[key] = key==="rate" ? v/100 : v;
+  $("sv-"+key).textContent = key==="rate" ? v+"%" : v;
+  const total = annual(combo);
+  const gap = cur.target - total;
+  $("r-combo").textContent = fmtW(total);
+  $("r-combo-gap").textContent = gap>=0 ? fmtW(gap) : "已超额✓";
+  $("r-combo-gap-s").textContent = "组合业绩 − 目标";
+  $("combo-gap-box").className = "result-item " + (gap<0?"ok":"");
+  $("r-combo-ratio").textContent = cur.target>0 ? (total/cur.target*100).toFixed(0)+"%" : "—";
+  $("combo-ratio-box").className = "result-item " + (total>=cur.target?"ok":"");
+}
+
+// ===== 第3步 路径 =====
+function genPaths(){
+  readStep0();
+  const now = annual(cur);
+  const fold = now>0 ? cur.target/now : 1;
+  $("path-box").innerHTML = PATHS.map((p,i)=>{
+    const w = p.weights;
+    const t = {quota:cur.quota*Math.pow(fold,w[0]), rate:cur.rate*Math.pow(fold,w[1]), price:cur.price*Math.pow(fold,w[2]), team:cur.team*Math.pow(fold,w[3])};
+    const total = annual(t);
+    return `<div class="path-card ${i===pathSel?"sel":""}" onclick="selPath(${i})">
+      <span class="mark">${p.mark}</span>
+      <div class="pname">${p.name}</div>
+      <div class="pdesc">${p.desc}</div>
+      <div class="row"><span>商机数</span><b>${Math.round(t.quota)} 个/月</b></div>
+      <div class="row"><span>赢单率</span><b>${(t.rate*100).toFixed(0)}%</b></div>
+      <div class="row"><span>客单价</span><b>${t.price.toFixed(1)} 万</b></div>
+      <div class="row"><span>有效人数</span><b>${Math.ceil(t.team)} 人</b></div>
+      <div class="row"><span>达成业绩</span><b style="color:var(--orange)">${fmtW(total)}</b></div>
+    </div>`;
+  }).join("");
+  selPath(pathSel);
+}
+
+function selPath(i){
+  pathSel = i;
+  document.querySelectorAll(".path-card").forEach((c,j)=>c.classList.toggle("sel",j===i));
+  const p = PATHS[i], now = annual(cur), fold = now>0 ? cur.target/now : 1, w = p.weights;
+  const t = {quota:cur.quota*Math.pow(fold,w[0]), rate:cur.rate*Math.pow(fold,w[1]), price:cur.price*Math.pow(fold,w[2]), team:cur.team*Math.pow(fold,w[3])};
+  const main = w.indexOf(Math.max(...w));
+  const mainName = ["商机数","赢单率","客单价","有效人数"][main];
+  const tips = {
+    0:"均衡发力型：每个杠杆都提一点。适合「目标翻倍以内、团队执行力好」的情况——不押注单一杠杆，执行压力分散。",
+    1:"效率优先型：几乎不动商机数和客单价，把赢单率拉上去。适合「商机量充足但老赢不了单」的团队——先解决过程管控，这是最快的杠杆。",
+    2:"大单进攻型：客单价+人数双主攻。适合「目标要翻2倍以上」的情况——小单打法撑不起大目标，必须卖方案（提客单）和扩编制（增人）同时上。"
+  };
+  $("path-detail").style.display = "block";
+  $("path-detail").innerHTML = `
+    <div style="font-weight:700;margin-bottom:8px;">${p.name} · 主线杠杆：${mainName} <span style="font-weight:400;color:var(--sub);font-size:12.5px;">（权重 ${Math.round(w[main]*100)}%）</span></div>
+    <table>
+      <tr><th>杠杆</th><th>当前</th><th>目标</th><th>提升幅度</th></tr>
+      <tr><td>商机数（月）</td><td>${cur.quota}</td><td>${Math.round(t.quota)}</td><td>+${Math.max(0,Math.round((t.quota/cur.quota-1)*100))}%</td></tr>
+      <tr><td>赢单率</td><td>${(cur.rate*100).toFixed(0)}%</td><td>${(t.rate*100).toFixed(0)}%</td><td>+${Math.max(0,Math.round((t.rate/cur.rate-1)*100))}%</td></tr>
+      <tr><td>客单价（万）</td><td>${cur.price}</td><td>${t.price.toFixed(1)}</td><td>+${Math.max(0,Math.round((t.price/cur.price-1)*100))}%</td></tr>
+      <tr><td>有效人数</td><td>${cur.team}</td><td>${Math.ceil(t.team)}</td><td>+${Math.max(0,Math.ceil(t.team-cur.team))}人</td></tr>
+    </table>
+    <div class="note" style="margin-top:8px;">💡 ${tips[i]}</div>`;
+}
+
+// ===== 第4步 清单 =====
+function buildChecklist(){
+  pathSel = pathSel || 0;
+  renderActions();
+}
+function renderActions(){
+  // 依据当前值判定高潜力杠杆
+  const hiKeys = ["quota","rate","price","team"].filter(k=>potential(k, cur[k]).lvl==="hi");
+  const stored = JSON.parse(localStorage.getItem("ge_done")||"{}");
+  $("action-box").innerHTML = ACTIONS.map(g=>{
+    const isHot = hiKeys.includes(g.key);
+    return `<div class="action-group">
+      <div class="gh" style="background:${g.dim==="天"?"#fff1e6":g.dim==="人"?"#fef2f2":"#f0f7ff"};color:var(--ink);">
+        <span>⚙ ${g.name}</span><span class="dim">${g.dim}</span>${isHot?'<span class="dim" style="background:var(--orange);color:#fff;">薄弱·优先</span>':""}
+      </div>
+      ${g.items.map(it=>{
+        const k = g.key+"::"+it.t;
+        const done = !!stored[k];
+        return `<div class="action-item ${done?"done":""} ${isHot?"hot":""}" onclick="toggleAction('${k.replace(/'/g,"\\'")}',this)">
+          <input type="checkbox" ${done?"checked":""} onchange="toggleAction('${k.replace(/'/g,"\\'")}',this.closest('.action-item'))">
+          <div><div class="t">${it.t}</div><div class="d">${it.d}</div></div>
+        </div>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+}
+function toggleAction(k, el){
+  const stored = JSON.parse(localStorage.getItem("ge_done")||"{}");
+  stored[k] = !stored[k];
+  localStorage.setItem("ge_done", JSON.stringify(stored));
+  el.classList.toggle("done", !!stored[k]);
+}
+function clearActions(){
+  if(confirm("确定清空所有勾选？")){
+    localStorage.removeItem("ge_done");
+    renderActions();
+  }
+}
+
+// ===== 初始化 =====
+renderStep0();
+</script>
+</body>
+</html>

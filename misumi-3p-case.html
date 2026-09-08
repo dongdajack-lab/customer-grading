@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研讨案例：三套话术，三次碰壁 | 米思米中心营业</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    line-height: 1.7;
+  }
+  .header {
+    background: linear-gradient(135deg, #1B2A4A 0%, #2E6B9E 100%);
+    color: #fff;
+    padding: 30px 20px 24px;
+    text-align: center;
+  }
+  .header .tag {
+    display: inline-block;
+    background: rgba(230, 126, 34, 0.9);
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .section-num {
+    background: #E67E22;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 17px;
+    color: #1B2A4A;
+    font-weight: 700;
+  }
+  .bg-text {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 12px;
+    text-indent: 2em;
+  }
+  .quote-box {
+    background: #eef4fa;
+    border-left: 4px solid #2E6B9E;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+  .quote-box .label {
+    font-size: 12px;
+    color: #2E6B9E;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .quote-box .text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.8;
+  }
+  .result-line {
+    text-align: center;
+    color: #E67E22;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 14px 0 6px;
+    padding: 8px;
+    background: #fff5eb;
+    border-radius: 8px;
+  }
+  /* Three columns */
+  .role-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .role-card {
+    border: 1px solid #e0e6ed;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .role-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .role-header.r1 { background: #2E6B9E; }
+  .role-header.r2 { background: #3d8b5e; }
+  .role-header.r3 { background: #8B4513; }
+  .role-body {
+    padding: 12px 14px;
+  }
+  .dialog-block {
+    margin-bottom: 10px;
+  }
+  .dialog-block .who {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 3px;
+  }
+  .dialog-block .what {
+    font-size: 13.5px;
+    color: #333;
+    background: #f7f9fb;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border-left: 3px solid #ccc;
+  }
+  .dialog-block.sales .what { border-left-color: #2E6B9E; }
+  .dialog-block.client .what { border-left-color: #E67E22; }
+  .outcome {
+    font-size: 13px;
+    color: #c0392b;
+    background: #fdf2f2;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  /* Discussion */
+  .discuss-intro {
+    background: #fff5eb;
+    border: 1px solid #fde2c3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #8B4513;
+    margin-bottom: 14px;
+  }
+  .question-list {
+    counter-reset: q;
+    list-style: none;
+  }
+  .question-item {
+    position: relative;
+    padding: 12px 14px 12px 48px;
+    margin-bottom: 10px;
+    background: #f7f9fb;
+    border-radius: 8px;
+    border-left: 3px solid #2E6B9E;
+  }
+  .question-item::before {
+    counter-increment: q;
+    content: "Q" counter(q);
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    background: #1B2A4A;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .question-item .q-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.7;
+  }
+  .question-item .q-hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #999;
+  }
+  .footer .line {
+    width: 40px;
+    height: 3px;
+    background: #E67E22;
+    margin: 0 auto 10px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="tag">§05 3P模型 &amp; SPIN提问工具</span>
+  <h1>研讨案例：三套话术，三次碰壁</h1>
+  <div class="subtitle">米思米中心营业 · 全渠道沟通实战 | 讲师：董仁杰</div>
+</div>
+
+<div class="container">
+
+  <!-- Part 1: Background -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-num">1</div>
+      <h2>案例背景</h2>
+    </div>
+    <p class="bg-text">小陈是米思米中心营业的销售，跟进一家做智能装备的客户——南方智装公司，已经三个月了。这家公司有三个关键人物：采购总监张姐、技术总监李工、总经理王总。小陈之前一直通过邮件和张姐单线联系，但进展不大。</p>
+    <p class="bg-text">今天是南方智装的供应商开放日，小陈终于有机会一次性见到三个人。他想起Day1学过的PPP破冰模型——Purpose（目的）、Process（过程）、Payoff（收益），于是精心准备了一套PPP话术，打算对三个人都用这一套：</p>
+    <div class="quote-box">
+      <div class="label">小陈的PPP话术</div>
+      <div class="text">「您好，我是米思米的中心营业小陈。今天来主要是想跟您介绍一下我们最新的导轨产品线（Purpose），大概占用您5分钟，我带了几份产品选型手册您看看（Process），如果有合适的型号我们可以进一步沟通合作（Payoff）。」</div>
+    </div>
+    <div class="result-line">结果——三个人都没接他的话，场面一度很尴尬。</div>
+  </div>
+
+  <!-- Part 2: Three Roles -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-num">2</div>
+      <h2>三个岗位，三种反应</h2>
+    </div>
+
+    <div class="role-cards">
+
+      <!-- Role 1: Zhang -->
+      <div class="role-card">
+        <div class="role-header r1">
+          <span>采购总监 · 张姐</span>
+        </div>
+        <div class="role-body">
+          <div class="dialog-block sales">
+            <div class="who">小陈（PPP话术）</div>
+            <div class="what">「您好，我是米思米的小陈。今天想跟您介绍一下我们最新的导轨产品线，大概占用5分钟，我带了几份选型手册您看看，有合适的型号可以进一步沟通合作。」</div>
+          </div>
+          <div class="dialog-block client">
+            <div class="who">张姐</div>
+            <div class="what">「产品手册我收过好几份了。你直接说吧，你们导轨比我现在用的XX品牌便宜多少？交期能缩短到几周？我手上有三个供应商在比价，你给个实在的数字。」</div>
+          </div>
+          <div class="outcome">小陈被动报了一个价格，张姐说"比XX贵3%，再低点才有戏"，小陈卡住了。</div>
+        </div>
+      </div>
+
+      <!-- Role 2: Li -->
+      <div class="role-card">
+        <div class="role-header r2">
+          <span>技术总监 · 李工</span>
+        </div>
+        <div class="role-body">
+          <div class="dialog-block sales">
+            <div class="who">小陈（PPP话术）</div>
+            <div class="what">「您好，我是米思米的小陈。今天想跟您介绍一下我们最新的导轨产品线，大概占用5分钟，我带了几份选型手册您看看，有合适的型号可以进一步沟通合作。」</div>
+          </div>
+          <div class="dialog-block client">
+            <div class="who">李工</div>
+            <div class="what">「产品介绍？你们导轨的精度等级是多少？额定载荷多少？运行速度多少？跟我现在用的XX品牌比，参数差在哪？你连参数都说不清楚，我怎么判断要不要换？」</div>
+          </div>
+          <div class="outcome">小陈翻开手册念参数，李工说"你照着念谁不会，我问你跟XX比差在哪"，小陈答不上来。</div>
+        </div>
+      </div>
+
+      <!-- Role 3: Wang -->
+      <div class="role-card">
+        <div class="role-header r3">
+          <span>总经理 · 王总</span>
+        </div>
+        <div class="role-body">
+          <div class="dialog-block sales">
+            <div class="who">小陈（PPP话术）</div>
+            <div class="what">「您好，我是米思米的小陈。今天想跟您介绍一下我们最新的导轨产品线，大概占用5分钟，我带了几份选型手册您看看，有合适的型号可以进一步沟通合作。」</div>
+          </div>
+          <div class="dialog-block client">
+            <div class="who">王总</div>
+            <div class="what">「我跟你们米思米合作三年了，你告诉我，你们给我带来什么价值了？每年帮我省了多少成本？提升了多少效率？你光说'质量好服务好'，这种话我一年听一百遍。」</div>
+          </div>
+          <div class="outcome">小陈说"我们质量确实好，售后服务也到位"，王总说"这种话我听太多了"，转身走了。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Part 3: Discussion -->
+  <div class="section">
+    <div class="section-title">
+      <div class="section-num">3</div>
+      <h2>小组讨论（3分钟）</h2>
+    </div>
+    <div class="discuss-intro">
+      请各小组讨论以下问题，3分钟后每组派一人分享：
+    </div>
+    <div class="question-list">
+      <div class="question-item">
+        <div class="q-text">小陈的PPP话术本身有没有问题？话术没错，但为什么对三个人都不灵？</div>
+      </div>
+      <div class="question-item">
+        <div class="q-text">这三个岗位——采购总监、技术总监、总经理——各自最关心什么？小陈的话术里，有没有说到任何一个人关心的点？</div>
+      </div>
+      <div class="question-item">
+        <div class="q-text">如果你是小陈，针对这三个岗位，你会怎么调整PPP话术里的Payoff（收益）部分？请分别写出三个版本的Payoff。</div>
+        <div class="q-hint">提示：用Day1学过的PPP模型，只改Payoff</div>
+      </div>
+      <div class="question-item">
+        <div class="q-text">话术调整完之后，接下来你要"问"客户什么？面对采购、技术、总经理，你第一句话会分别问什么？为什么对三个人问的问题不能一样？</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="line"></div>
+  <div>米思米中心营业 · 全渠道沟通实战</div>
+  <div>§05 3P模型 &amp; SPIN提问工具 | 讲师：董仁杰</div>
+</div>
+
+</body>
+</html>

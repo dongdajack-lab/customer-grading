@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 挖痛练习 - 碧兴物联定制版</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f6fa;min-height:100vh}
+  header{background:linear-gradient(135deg,#0E4D64,#2E86C1);color:white;padding:24px 32px;text-align:center}
+  header h1{font-size:26px}
+  header .subtitle{font-size:14px;opacity:.85;margin-top:6px}
+  header .company-tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px}
+  header .custom-tag{display:inline-block;background:#F39C12;border-radius:20px;padding:3px 14px;font-size:13px;margin-top:8px;margin-left:8px;font-weight:700;color:#fff}
+  .container{max-width:800px;margin:0 auto;padding:32px 20px}
+  .progress-bar{height:6px;background:#ddd;border-radius:3px;margin-bottom:24px;overflow:hidden}
+  .progress-fill{height:100%;background:#2E86C1;border-radius:3px;transition:width .4s}
+  .progress-text{text-align:right;font-size:13px;color:#888;margin-bottom:4px}
+  .spin-hint{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .spin-tag{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .tag-S{background:#EBF5FB;color:#2980B9}
+  .tag-P{background:#FDEDEC;color:#E67E22}
+  .tag-I{background:#FADBD8;color:#C0392B}
+  .tag-N{background:#E8F8F5;color:#27AE60}
+  .card{background:white;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+  .question-badge{display:inline-block;background:#2E86C1;color:white;border-radius:20px;padding:4px 14px;font-size:13px;margin-bottom:16px}
+  .scenario{background:#f8f9fa;border-left:4px solid #2E86C1;padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;font-size:15px;line-height:1.8;color:#333}
+  .scenario .label{font-weight:600;color:#0E4D64}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1.6}
+  .option:hover{border-color:#2E86C1;background:#E8F6F3}
+  .option.selected{border-color:#2E86C1;background:#E8F6F3}
+  .option.correct{border-color:#27AE60;background:#E8F8F5}
+  .option.wrong{border-color:#E74C3C;background:#FDEDEC}
+  .option .radio{min-width:22px;height:22px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+  .option.selected .radio{border-color:#2E86C1;background:#2E86C1}
+  .option.selected .radio::after{content:'';width:8px;height:8px;background:white;border-radius:50%;display:block}
+  .option .text{flex:1}
+  .explanation{margin-top:20px;padding:16px 20px;background:#E8F8F5;border-radius:12px;display:none}
+  .explanation.show{display:block}
+  .explanation h4{color:#27AE60;font-size:15px;margin-bottom:8px}
+  .explanation p{font-size:14px;color:#333;line-height:1.7}
+  .correct-answer{margin-top:20px;padding:14px 18px;background:#FFF3CD;border:2px solid #F0AD4E;border-radius:12px;display:none;font-size:14px;line-height:1.6}
+  .correct-answer.show{display:block}
+  .correct-answer .clabel{font-weight:700;color:#E67E22;margin-bottom:6px}
+  .opt-label{font-weight:700;color:#0E4D64;margin-right:6px}
+  .btn-row{display:flex;gap:12px;margin-top:24px}
+  .btn{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+  .btn-primary{background:#2E86C1;color:white}
+  .btn-primary:hover{background:#0e6b5c}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed}
+  .btn-secondary{background:#f0f0f0;color:#333}
+  .btn-secondary:hover{background:#e0e0e0}
+  .result-page{display:none}
+  .result-page.show{display:block;text-align:center}
+  .score-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#0E4D64,#2E86C1);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .num{font-size:48px;font-weight:700;line-height:1}
+  .score-circle .slabel{font-size:14px;margin-top:4px;opacity:.85}
+  .percent-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .percent-circle .num{font-size:36px;font-weight:700;color:#2E86C1;line-height:1}
+  .percent-circle .unit{font-size:20px;font-weight:700;color:#2E86C1}
+  .percent-circle .sub-label{font-size:13px;color:#999;margin-top:2px}
+  .result-detail{background:white;border-radius:16px;padding:24px;margin-top:20px;text-align:left}
+  .result-detail h3{font-size:17px;margin-bottom:12px;color:#333}
+  .result-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+  .result-item:last-child{border-bottom:none}
+  .restart-btn{margin-top:24px;padding:14px 48px;background:#2E86C1;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 挖痛练习</h1>
+  <p class="subtitle">SPIN四层提问法训练 · 共16题</p>
+  <span class="company-tag">🌊 碧兴物联 · 智慧环境监测</span>
+  <span class="custom-tag">★ 定制开发</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="spin-hint">
+      <span class="spin-tag tag-S">S 现状问题</span>
+      <span class="spin-tag tag-P">P 难点问题</span>
+      <span class="spin-tag tag-I">I 影响问题</span>
+      <span class="spin-tag tag-N">N 需求回报</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="slabel">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" id="restartBtn">再来一次</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var questions = [
+  {
+    "scenario": "你初次拜访省生态环境厅水生态环境处陈处长，他说：我们省现在国控断面120多个、省控断面200多个，主要依托现有自动监测站做例行监测。整体运行还算正常，就是数据质量和运维响应这块，偶尔有波动。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的现状？",
+    "options": [
+      {
+        "text": "陈处，目前全省国控和省控断面的自动监测站分别有多少座？覆盖了哪些河流/湖泊？现有的站分几批建设、设备使用年限大概多久？运维是由省里统一招标还是分区域外包？数据有效率目前大概是什么水平？",
+        "correct": true
+      },
+      {
+        "text": "数据质量和运维这块，最近是不是出了什么问题？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套更稳定的方案，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联是国内最早做环境自动监测的企业之一，服务过很多省厅，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：第一步先摸清家底——断面数量、站点年限、运维模式、数据有效率。省厅处长关心的是「全省一盘棋」的格局和数据水平。在不了解现状时直接问痛点，容易问偏，也让对方觉得你不专业。"
+  },
+  {
+    "scenario": "陈处长说：全省自动站大概分三批建设，最早一批2015年前后的设备已经老化，故障率上来了。运维是按区域分给三家单位，响应速度参差不齐，个别站点设备故障一周都没人处理，数据有效率整体在90%左右，离国家要求的95%还有差距，一到考核评估就紧张。",
+    "question": "陈处长说出了痛点，接下来哪句话是 <strong>P - 难点问题</strong>，能进一步挖深痛点？",
+    "options": [
+      {
+        "text": "老旧站点占比大概多少？故障一周没人处理的情况平均每月发生几次？数据有效率90%主要是哪几类原因（设备老化/运维不及时/数据审核）？考核评估时数据缺失的站点，对全省排名影响大吗？",
+        "correct": true
+      },
+      {
+        "text": "如果有一家运维响应快的服务商，您愿意了解一下吗？",
+        "correct": false
+      },
+      {
+        "text": "设备老化，大概要花多少钱换新的？",
+        "correct": false
+      },
+      {
+        "text": "三家里哪家运维做得最差？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——老旧站点占比、故障频次、有效率不达标的原因构成、考核的影响。问得越具体，后面提方案的针对性就越强。碧兴物联在水站数智化升级上有国控水站首批改造项目经验，必须用数据语言问专业问题。"
+  },
+  {
+    "scenario": "陈处长说：老旧站点占三成左右，故障不及时处理每月三五次。数据有效率不达标，意味着国考断面监测数据有缺失，直接影响全省水质考核排名，去年有两个断面因为数据问题被扣分，排名从全国第12掉到第18，分管副省长都过问了，我们处里压力很大。",
+    "question": "陈处长说出了严重影响（考核排名下滑、领导过问），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "排名从第12掉到第18，除了面子问题，还意味着什么？——考核结果会不会影响明年的中央生态环保资金分配？监测数据缺失会不会导致「水质未达标」的误判，让地方白白承担整改成本？处里连续被点名，是不是连累您个人和团队的年度评价？",
+        "correct": true
+      },
+      {
+        "text": "那确实挺严重的，应该尽快解决。",
+        "correct": false
+      },
+      {
+        "text": "如果数据有效率提上来，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "去年被扣分的那两个断面，具体是哪个市的？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：三个维度放大影响——① 资金分配（考核结果影响中央资金）② 误判风险（数据缺失导致误判、地方白背成本）③ 个人与团队评价（连续被点名）。让处长意识到这不止是「数据少一点」，而是全省政绩、资金和团队前途的系统性问题。"
+  },
+  {
+    "scenario": "陈处长沉吟片刻：你这么一分析，这个问题确实绕不过去。省里明年要推进监测数智化升级，我们也想借这个机会把老站改造一遍，但方案怎么定、钱怎么花，心里还没底。",
+    "question": "陈处长已经意识到问题严重且明年有改造计划，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套数智化升级方案能做到：老旧站点分批智能改造、数据有效率稳定在95%以上、AI辅助自动研判水质异常、运维故障2小时内响应——这让您明年的考核排名、省里对监测工作的评价、以及您个人和团队的工作局面，会有什么改变？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快启动改造项目了。",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联可以做智能改造，您要不要试试？",
+        "correct": false
+      },
+      {
+        "text": "陈处，这个项目预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导处长自己说出「问题解决后的画面」——考核排名回升、省里认可、团队扬眉吐气。客户自己描绘的价值，比你说十遍都有说服力。战略层面的N要落在「政绩和资金」上，而不是技术参数。"
+  },
+  {
+    "scenario": "你拜访某市水务集团分管运营的刘副总，他说：我们集团城区供水管网1200公里、水厂4座，服务人口200多万。最近在推智慧水务建设，但总感觉进展慢，各部门各搞各的，数据对不上。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最全面地了解现状？",
+    "options": [
+      {
+        "text": "刘总，目前集团供水管网的监测点大概有多少个？覆盖哪些环节（水源/水厂/管网/二次供水）？各部门现在用的系统有几套、数据格式统一吗？漏损率目前是多少？离国家和市里的考核目标差多少？",
+        "correct": true
+      },
+      {
+        "text": "各部门各搞各的，协调起来是不是很头疼？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套统一的平台，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联和住建部工程技术中心有战略合作，做过很多智慧水务项目。",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：问清楚「家底和瓶颈」——监测点位覆盖、系统孤岛情况、漏损率水平。水务集团是国企，讲的是考核指标和民生责任。先摸清现状，才能找到「漏损率15%」这类切入的抓手。"
+  },
+  {
+    "scenario": "刘副总说：目前管网监测点不到300个，主要覆盖主干管，小区和支管基本是盲区。各部门系统有七八套，各自为政，数据打通不了。最头疼的是漏损率，现在平均15%，市里要求三年内降到10%以下，按现在的办法很难实现。",
+    "question": "刘副总说出了核心痛点（漏损率），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "漏损率15%，主要漏在哪几块（管网老化/计量误差/偷水盗水/爆管抢修）？有没有做过分区计量（DMA）的测算？各部门系统数据打通不了，卡在技术还是管理上？水厂之间的调度现在靠什么方式？",
+        "correct": true
+      },
+      {
+        "text": "漏损率降不下来，一年要损失多少钱？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套方案能解决漏损，您会考虑吗？",
+        "correct": false
+      },
+      {
+        "text": "市里要求的10%，您觉得定得合理吗？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把漏损拆开问——漏损构成、分区计量基础、数据孤岛成因、调度方式。水务行业的行话是「分区计量、产销差、调度」，说到数据层面，他就知道你是行家，而不是来卖设备的。"
+  },
+  {
+    "scenario": "刘副总说：漏损15%，一年白流的水费差不多2000万，这还是明面上的。更麻烦的是夏天用水高峰，水厂之间调度全靠打电话，去年7月有一片城区水压骤降，居民投诉把12345热线打爆了，市领导专门批示过问。",
+    "question": "刘副总说出了严重影响（2000万损失+民生投诉），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "一年2000万水费流失，五年就是一个亿，这些钱本来可以用于管网改造和员工激励。水压骤降引发大量投诉、领导批示，如果再发生一次爆管停水，政府热线、媒体曝光、甚至停职问责，这些风险叠加起来，是不是已经影响到集团的经营考核和您的职业前途？",
+        "correct": true
+      },
+      {
+        "text": "那确实损失不小，应该想办法解决。",
+        "correct": false
+      },
+      {
+        "text": "如果漏损率降到10%，对集团帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "去年水压骤降那次，最后是怎么处理的？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：把数字算给他看——2000万/年、五年一个亿，加上民生投诉、领导批示、爆管停水的问责风险。让刘副总看到，漏损和调度问题不只是「运营小毛病」，而是经营指标、民生责任和职业风险的综合压力。"
+  },
+  {
+    "scenario": "刘副总说：你这么一算，这笔账确实不能不算。集团明年有智慧水务专项预算，就是想找一套能真正落地的方案，把管网摸清、把调度做智能，但市面上方案商太多，说得好听的也多，我们怕选错。",
+    "question": "刘副总已经说出预算和顾虑，接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一家方案商能做到：供水全链条从源头到龙头一图监测、DMA分区计量把漏损率三年内从15%压到10%以内、泵站水厂智能联动自动调度、爆管提前预警——这让集团明年的考核指标、市里的民生口碑、以及您作为分管副总的政绩，会变成什么样？",
+        "correct": true
+      },
+      {
+        "text": "您应该尽快选一家靠谱的方案商。",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联的方案一定不会让您失望。",
+        "correct": false
+      },
+      {
+        "text": "刘总，预算大概有多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导刘副总描绘「方案落地后的画面」——漏损达标、调度智能、口碑政绩双收。国企高管的N要落在「考核达标、领导认可、民生安全」上，他描绘的画面越具体，推进的决心就越大。"
+  },
+  {
+    "scenario": "你拜访某国家级经济技术开发区管委会环保办周主任，他说：园区现在规上企业80多家，涉水涉气的30多家，都装了在线监测设备。但说实话，几十个品牌几十套系统，数据格式都不统一，我们自己人都看不太懂。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最清楚地了解他的监管现状？",
+    "options": [
+      {
+        "text": "周主任，园区目前在线监测设备涉及几个品牌？数据是通过什么方式上传（各自的平台/统一平台）？环保办现在靠几个人盯这些数据？有没有发生过数据异常没及时发现、被上级通报的情况？",
+        "correct": true
+      },
+      {
+        "text": "设备品牌杂，管理起来是不是很麻烦？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套统一平台，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联在污染源监测这块做了很多年，您要不要了解一下？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：了解设备品牌、数据上传方式、人员配置、历史通报情况。园区环保办是「最后一公里」监管者，人手少、压力大、怕通报。先摸清家底，才能找准「统一监管平台」的切入角度。"
+  },
+  {
+    "scenario": "周主任说：设备有十来个品牌，各自有各自的平台，我们环保办就5个人，根本盯不过来。去年有一家企业夜间偷排，数据异常三天没人发现，被市生态环境局专项执法查到，我们园区被全省通报，限批了半年。",
+    "question": "周主任说出了痛点（被通报限批），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "数据异常三天没人发现，主要是设备报警没人看，还是数据根本没汇到一起？目前园区对在线监测数据有没有自动预警机制？偷排那家企业用的是哪种规避手段（关停设备/篡改数据/稀释排放）？限批期间对招商影响有多大？",
+        "correct": true
+      },
+      {
+        "text": "如果有一套自动预警系统，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "限批半年，园区损失了多少招商项目？",
+        "correct": false
+      },
+      {
+        "text": "那家企业最后罚了多少钱？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——异常发现的断点、预警机制有无、偷排手段、限批代价。监管者的痛点是「看不见、盯不住、怕担责」，问到机制层面，你就抓住了他真正想要的东西。"
+  },
+  {
+    "scenario": "周主任说：限批那半年，三个意向项目转投了隔壁园区，管委会主任在大会上点名批评我们环保办。我现在最怕的就是再出一次这样的漏子，一旦再被通报，限批事小，处分事大，我们几个人前途都得搭进去。",
+    "question": "周主任说出了严重影响（丢项目+前途压力），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "一次偷排被查，丢了三个项目、背了通报批评，如果再有第二次呢？——园区招商引资的口碑是不是彻底受损？环保办5个人的精力全耗在盯数据上，其他监管工作是不是都荒废了？一旦再出数据造假事件，中央环保督察来了，会不会追责到具体经办人？",
+        "correct": true
+      },
+      {
+        "text": "那确实挺严重的，环保工作不好做啊。",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智能监控平台，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "中央环保督察一般多久来一次？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大三个维度——① 招商口碑受损 ② 团队精力被耗尽 ③ 督察追责风险。让周主任看到，一次漏子背后是「园区发展+个人前途」的双重风险。监管者最怕的不是罚款，是追责。"
+  },
+  {
+    "scenario": "周主任说：你这么一说，我现在确实夜不能寐。我们园区明年想申报绿色园区，上级也要求污染源监管数字化，我今年就在争取预算把监管平台建起来，但方案五花八门，不知道选哪家。",
+    "question": "周主任已经说出诉求（建监管平台），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套污染源智能监管平台能做到：30多家企业数据全部统一接入、异常自动预警到手机、偷排智能识别、与执法系统联动——这让您明年申报绿色园区的把握、园区招商引资的环境、以及环保办从「救火队」变成「指挥部」的角色转变，会带来什么改变？",
+        "correct": true
+      },
+      {
+        "text": "那您应该赶紧把预算申请下来。",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联的平台是行业领先的。",
+        "correct": false
+      },
+      {
+        "text": "周主任，申报绿色园区大概要多长时间？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导周主任想象「平台建成后的画面」——数据一目了然、异常自动报警、绿色园区申报成功、环保办地位提升。他描绘的愿景越具体，推进项目的动力就越强，也越愿意在预算上为你说话。"
+  },
+  {
+    "scenario": "你拜访某市住建局排水管理处孙处长，他说：我们市排水管网总长1800公里，泵站40多座。每年汛期都是我们最紧张的时候，去年那场暴雨，城区三个片区积水严重，直接上了本地新闻头条。",
+    "question": "下面哪句话是 <strong>S - 现状问题</strong>，能最好地了解他的防汛现状？",
+    "options": [
+      {
+        "text": "孙处，目前城区排水管网有没有做全面的监测覆盖？易涝点主要分布在哪几个片区？汛期现在靠什么方式预警和调度（人工巡查/视频监控/水位监测）？40多座泵站是集中控制还是分散管理？",
+        "correct": true
+      },
+      {
+        "text": "去年那场暴雨，是不是损失很严重？",
+        "correct": false
+      },
+      {
+        "text": "如果有一套智能排水系统，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联在数字排涝上有成熟的方案，您要不要看看？",
+        "correct": false
+      }
+    ],
+    "explain": "S - 现状问题：问清监测覆盖、易涝分布、调度方式、泵站管理模式。排水管理处的核心痛点是「底数不清、预警靠人」。先了解现状，才能把「一张图感知+智能调度」的价值讲到位。"
+  },
+  {
+    "scenario": "孙处长说：说实话，管网底下什么情况，我们心里真没底。监测点位就主干管上几十个，易涝点全靠汛期人工蹲守。泵站是分散管理的，雨量一大，站和站之间靠电话协调，数据滞后，根本做不到提前预判，都是等淹了才反应。",
+    "question": "孙处长说出了痛点（底数不清+调度滞后），接下来哪句话是 <strong>P - 难点问题</strong>，能挖得更深？",
+    "options": [
+      {
+        "text": "目前监测点位覆盖不了易涝片区，汛期人工蹲守需要投入多少人？泵站间电话协调一次大概要多久？雨量数据现在从哪获取（气象台/自有站点）？预警响应大概滞后多长时间？去年三个片区积水，从降雨到发现到处置各花了多久？",
+        "correct": true
+      },
+      {
+        "text": "如果有一套智能调度系统，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "汛期人工蹲守，一年要花多少钱？",
+        "correct": false
+      },
+      {
+        "text": "那三座泵站的站长是不是该换了？",
+        "correct": false
+      }
+    ],
+    "explain": "P - 难点问题：把痛点问具体——蹲守人力、协调耗时、数据来源、响应滞后时长、去年处置时间线。防汛是「时间竞赛」，问到时间线层面，就抓住了「提前预判」这个核心价值。"
+  },
+  {
+    "scenario": "孙处长说：去年那场雨，三个片区被淹，最深的地方水没到膝盖，市委主要领导到现场指挥，我们处被全市通报批评。今年如果再淹一次，处分可能就来了。而且被淹的商铺索赔、居民的投诉电话，全都压在我这儿。",
+    "question": "孙处长说出了严重影响（通报+处分风险），接下来哪句话是 <strong>I - 影响问题</strong>，能进一步放大严重性？",
+    "options": [
+      {
+        "text": "一次内涝上头条、领导现场指挥、全处通报——如果今年汛期再淹一次，影响会是什么？——市委主要领导对住建局的信任是不是彻底透支？索赔和投诉升级成群体事件、媒体连续曝光，您的个人处分甚至更严重的后果，是不是就在眼前？防汛是「一票否决」的底线工作，这个风险您扛得住吗？",
+        "correct": true
+      },
+      {
+        "text": "那确实很危险，防汛责任重大啊。",
+        "correct": false
+      },
+      {
+        "text": "如果有一套预警系统，对您帮助大吗？",
+        "correct": false
+      },
+      {
+        "text": "去年被淹的三家商铺，每家索赔多少钱？",
+        "correct": false
+      }
+    ],
+    "explain": "I - 影响问题：放大「一票否决」的风险——信任透支、群体事件、个人处分。防汛工作出一次大事就是政治事件，让孙处长意识到，问题不是「要不要升级」，而是「今年汛期前必须解决」。"
+  },
+  {
+    "scenario": "孙处长说：你这么一说，我心里更没底了。市里其实有数字城管、智慧城市的盘子，我今年也在争取把排水监测纳入专项，但方案汇报过两次，领导都说「再研究研究」，我缺的是一个能拿得出手、说得清楚的整体方案。",
+    "question": "孙处长已经说出需求（需要一个整体方案），接下来哪句话是 <strong>N - 需求回报问题</strong>，能引导他说出解决后的价值？",
+    "options": [
+      {
+        "text": "如果有一套数字排涝方案能做到：管网一图全感知、易涝点水位实时预警、泵站自动联动调度、汛前预判汛中调度汛后复盘全闭环——这让您向领导汇报时「拿得出手」的底气、今年汛期全市的防汛安全、以及您个人从「背锅侠」到「治水功臣」的转变，会带来什么改变？",
+        "correct": true
+      },
+      {
+        "text": "那您应该尽快把这个专项申请下来。",
+        "correct": false
+      },
+      {
+        "text": "我们碧兴物联的数字排涝方案很成熟，您要不要先看看？",
+        "correct": false
+      },
+      {
+        "text": "孙处，专项预算大概多少？",
+        "correct": false
+      }
+    ],
+    "explain": "N - 需求回报问题：引导孙处长想象「方案落地后的画面」——汇报有底气、汛期有保障、个人形象逆转。政绩类客户的N要落在「领导认可、仕途加分、民生口碑」上，他自己说出这些价值，就会主动帮你推动项目立项。"
+  }
+];
+
+  var currentQ = 0;
+  var answers = [];
+  var answered = false;
+
+  function renderQ() {
+    var q = questions[currentQ];
+    document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+    document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+    var badge = q.scenario.indexOf('S -')>=0 ? 'S 现状问题' : q.scenario.indexOf('P -')>=0 ? 'P 难点问题' : q.scenario.indexOf('I -')>=0 ? 'I 影响问题' : 'N 需求回报';
+    var card = document.getElementById('questionCard');
+    card.innerHTML = '<div class="question-badge">' + badge + '</div>' +
+      '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+      '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+      '<div class="options">' +
+      q.options.map(function(opt,i){
+        return '<div class="option" onclick="selectOpt(' + i + ')">' +
+          '<div class="radio"></div>' +
+          '<div class="text">' + opt.text + '</div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+      '<div class="explanation" id="explanation">' +
+        '<h4>✅ 解析</h4>' +
+        '<p>' + q.explain + '</p>' +
+      '</div>' +
+      '<div class="correct-answer" id="correctAnswer">' +
+        '<div class="clabel">💡 正确答案解析：</div>' +
+        '<div>' + q.explain + '</div>' +
+      '</div>';
+
+    answered = false;
+    document.getElementById('btnNext').textContent = '确认答案';
+    document.getElementById('btnNext').disabled = true;
+    document.getElementById('btnNext').onclick = checkAnswer;
+    document.getElementById('btnPrev').disabled = currentQ === 0;
+    document.getElementById('resultPage').classList.remove('show');
+    document.getElementById('quizPage').style.display = '';
+  }
+
+  window.selectOpt = function(idx) {
+    if (answered) return;
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+    window.selectedIdx = idx;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.checkAnswer = function() {
+    if (window.selectedIdx === undefined) return;
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('correctAnswer').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    document.getElementById('btnNext').onclick = nextQ;
+    document.getElementById('btnNext').disabled = false;
+  };
+
+  window.nextQ = function() {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      renderQ();
+    } else {
+      showResult();
+    }
+  };
+
+  window.prevQ = function() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQ();
+      if (answers[currentQ] !== undefined) {
+        answered = true;
+        var q = questions[currentQ];
+        var opts = document.querySelectorAll('.option');
+        opts.forEach(function(opt,i){
+          if (q.options[i].correct) opt.classList.add('correct');
+          if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+        });
+        document.getElementById('explanation').classList.add('show');
+        document.getElementById('correctAnswer').classList.add('show');
+        document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+        document.getElementById('btnNext').onclick = nextQ;
+      }
+    }
+  };
+
+  function showResult() {
+    document.getElementById('quizPage').style.display = 'none';
+    var score = answers.filter(function(a){return a;}).length;
+    var percent = Math.round(score / questions.length * 100);
+    document.getElementById('scoreNum').textContent = score;
+    document.getElementById('percentNum').textContent = percent;
+
+    var detail = '<h3>📊 答题详情</h3>';
+    questions.forEach(function(q,i){
+      var icon = answers[i] ? '✅' : '❌';
+      var title = q.scenario.substring(0, 40) + '...';
+      detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+    });
+    document.getElementById('resultDetail').innerHTML = detail;
+    document.getElementById('resultPage').classList.add('show');
+  }
+
+  document.getElementById('restartBtn').onclick = function() {
+    currentQ = 0;
+    answers = [];
+    window.selectedIdx = undefined;
+    answered = false;
+    renderQ();
+  };
+
+  document.getElementById('btnPrev').onclick = prevQ;
+
+  renderQ();
+})();
+</script>
+</body>
+</html>

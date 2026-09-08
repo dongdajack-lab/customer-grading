@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - 宇凡微定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#311B92,#5E35B1); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header p { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  header .custom-tag { display:inline-block; background:#F39C12; border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; margin-left:8px; font-weight:700; color:#fff; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#5E35B1; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#5E35B1; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #5E35B1; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#311B92; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#EBF5FB; color:#2980B9; }
+  .tag-A { background:#D5F5E3; color:#1E8449; }
+  .tag-B { background:#FEF9E7; color:#D35400; }
+  .tag-E { background:#F4ECF7; color:#7D3C98; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#5E35B1; background:#EDE7F6; }
+  .option.selected { border-color:#5E35B1; background:#EDE7F6; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#5E35B1; background:#5E35B1; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#5E35B1; color:white; }
+  .btn-primary:hover { background:#4527A0; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#311B92,#5E35B1); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#5E35B1; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#5E35B1; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#5E35B1; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#EDE7F6; border:1px solid #D1C4E9; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#311B92; line-height:1.7; }
+  .tip-box strong { color:#311B92; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共16题</p>
+  <span class="company-tag">💡 宇凡微电子 · 单片机方案与合封定制</span>
+  <span class="custom-tag">★ 企业定制</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    "scenario": "你是宇凡微的销售工程师，正在向某电动牙刷厂商（年出货500万台）的采购总监和研发经理介绍主控芯片方案。该厂商新款声波电动牙刷正在选型主控。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品/服务本身的属性/规格）？",
+    "options": [
+      {
+        "text": "宇凡微YF系列8位单片机，SOP8/SSOP24等封装可选，内置EEPROM、PWM与10位ADC，工作电压1.8-5.5V；支持把MCU与驱动器件、存储芯片合封成单颗定制芯片；方案侧由80余人的工程师团队提供从原理图、参考固件、样机调试到量产测试程序的全流程支持；自有封装测试产线，日产能100万颗。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比直接从原厂买标准MCU再自己搭外围电路，合封定制能把外围器件从七八颗减到一两颗；而且方案、固件、测试程序全包，原厂只给芯片不给方案。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用了宇凡微的方案，贵司单机BOM成本能降10%-15%，开发周期从3个月压到4-6周，新品能提前一个季度上市抢市场。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微服务过美的、小米、九阳等800多个品牌，持有42项发明专利、6项集成电路布图设计，是国家级专精特新企业。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的属性——封装规格、内置资源、工作电压、合封能力、方案支持内容、产能。这些都是宇凡微方案的客观规格，不涉及比较和利益。<br><br>A是与标准芯片方案的对比优势；B是给客户带来的好处；E是企业资质与客户案例背书。"
+  },
+  {
+    "scenario": "研发经理说：我们现在用的是某台系原厂的标准MCU，自己搭外围电路，方案自己写。你们比这个强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有方案相比的优势）？",
+    "options": [
+      {
+        "text": "相比原厂标准MCU加自搭外围，宇凡微有三个核心差异：一是合封定制——MCU与驱动、存储合封成一颗，外围器件从七八颗减到一两颗，贴片工序和故障点同步减少；二是方案全包——原理图、固件、测试程序全部交付，原厂只给芯片，方案得自己烧钱养团队写；三是供应灵活——从试产几千颗到爬坡几十万颗都能接，日产能100万颗兜底，原厂大客户优先、小体量客户排期靠后。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "宇凡微YF系列8位单片机，SOP8/SSOP24封装，内置EEPROM、PWM与10位ADC，支持合封定制。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用了我们的方案，BOM成本降10%-15%，开发周期从3个月压到4-6周。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微服务过美的、小米、九阳等800多个品牌，日产能100万颗。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比现有方案强在哪」——合封减外围、方案全包、供应灵活。这三点精准针对「自己搭外围+自己写方案+小体量排期吃亏」三个痛点。研发经理最关心开发工作量，A要打在「方案全包」上。<br><br>F讲规格、B讲好处、E讲案例。"
+  },
+  {
+    "scenario": "采购总监问：方案和供应我认可，但我要的是实际好处——换你们，我们公司到底能得到什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换宇凡微，贵司三笔账都变好：一是成本账——外围器件从七八颗减到一两颗，加上贴片工序减少，单机BOM成本降10%-15%，按年出货500万台算，一年省的成本是千万级；二是时间账——方案固件直接复用，开发周期从3个月压到4-6周，新品提前一个季度上市；三是风险账——深圳本地供应加日产能100万颗，缺货潮来了不断供，不用像用原厂那样排队等晶圆。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "宇凡微YF系列单片机支持合封定制，方案团队80余人，日产能100万颗。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比原厂标准MCU，我们合封减外围、方案全包、供应灵活。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "宇凡微服务过美的、小米、九阳等800多个品牌，42项发明专利。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——成本账（千万级）、时间账（提前一季度）、风险账（不断供）。采购总监的KPI是降本和保供，研发经理的KPI是上市速度，B要同时覆盖两个人的考核指标，并落到可量化的数字上。<br><br>F讲规格、A讲对比、E讲案例。"
+  },
+  {
+    "scenario": "采购总监说：听下来不错，但我们换主控供应商要走公司评审，需要资质和客户案例证明。你们有什么拿得出手的？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "宇凡微是国家级高新技术企业和专精特新企业，2017年成立至今服务美的、小米、九阳、木林森等800多个品牌客户；持有42项发明专利、6项集成电路布图设计、17项软件著作权；80余人的工程师研发团队；与台湾九齐、上海普冉等原厂战略合作，晶圆供应有保障；自有封装测试产线日产能100万颗——从华强北小门面起步，七年做到年营收超1.5亿，这个增长本身就是交付能力的证明。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "宇凡微YF系列单片机支持合封定制，方案团队80余人，日产能100万颗。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比原厂标准MCU，我们合封减外围、方案全包、供应灵活。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用了我们的方案，BOM成本降10%-15%，开发周期压缩一半，缺货期不断供。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——800多个品牌客户、42项发明专利、专精特新认证、原厂战略合作、七年从门面到1.5亿。供应商评审最认「大品牌客户背书+资质认证+真实增长曲线」，E就是给采购总监过评审会的「弹药」。<br><br>F/A/B分别是规格、优势、利益。"
+  },
+  {
+    "scenario": "你向某LED照明企业（年出货2000万套灯具）的研发总监介绍宇凡微的智能调光驱动方案。该公司正在做新一代智能灯具，要过新国标和CE认证。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（方案本身的属性/功能）？",
+    "options": [
+      {
+        "text": "宇凡微智能照明方案包含：照明专用MCU（内置恒流控制与调光算法库，支持可控硅、0-10V、PWM多协议调光）、工作温度-40℃~105℃宽温设计、内置过压过流过温保护固件库、支持蓝牙/红外等接口扩展；方案侧提供原理图、参考设计、认证技术文档和量产烧录测试全流程支持。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比用普通MCU自己写调光算法，宇凡微的算法库是量产验证过的成熟代码，认证测试一次通过率高；宽温设计直接覆盖驱动电源的高温环境。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用宇凡微方案，认证周期缩短、光效一致性提升、调光客诉减少，产品能按计划赶上出口旺季。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微是木林森等照明上市企业的方案供应商，服务800多个品牌，42项发明专利。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述方案的构成——专用MCU、调光协议、宽温范围、保护固件库、接口扩展、全流程支持。照明研发总监关心「认证能不能过+高温环境稳不稳」，F把这些规格讲清楚。<br><br>A是相对自研方案的优势；B是给研发的利益；E是案例背书。"
+  },
+  {
+    "scenario": "研发总监说：我们现在用普通MCU加自己写的调光程序，认证测了两轮才过，调光曲线还会闪。你们比这个强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有方案相比的优势）？",
+    "options": [
+      {
+        "text": "相比自己写调光程序，宇凡微有三个核心优势：一是算法成熟——调光算法库经过千万级出货量验证，无频闪曲线直接调用，自研代码要反复试错；二是认证友好——方案自带新国标和CE的认证技术文档，测试一次通过率高，自研方案认证资料要自己摸索着补；三是宽温可靠——-40℃~105℃专为驱动电源高温环境设计，普通MCU在灯体里长时间高温运行容易出问题。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "宇凡微智能照明方案包含照明专用MCU、多协议调光、宽温设计和保护固件库。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用宇凡微方案，认证周期缩短、无频闪、客诉减少，产品赶上出口旺季。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微是木林森等照明企业的方案供应商，42项发明专利，日产能100万颗。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比自己写程序强在哪」——算法经过千万级验证、认证文档现成、宽温专为灯内环境设计。这三点精准针对「认证两轮才过+调光闪+高温不稳」三个痛点。照明研发总监最怕认证反复，A要打在「一次通过」上。<br><br>F讲方案、B讲好处、E讲案例。"
+  },
+  {
+    "scenario": "研发总监说：算法和认证我认可，但公司要的是结果——换了你们的方案，我们产品和团队到底能得到什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换宇凡微方案，贵司四个变化：一是认证周期从两轮压缩到一轮，新品按计划赶上出口旺季，错过旺季一批货的利润全无；二是调光无频闪，光效一致性提升，终端客诉率下降，渠道口碑变好；三是研发团队从「写调光代码、补认证资料」里解放出来，聚焦在产品差异化上；四是深圳本地供应，缺货期不断供，交期可控。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "宇凡微智能照明方案包含照明专用MCU、多协议调光、宽温设计和保护固件库。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比自己写程序，我们算法成熟、认证文档齐、宽温可靠。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "宇凡微是木林森等照明企业的方案供应商，42项发明专利。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——认证一轮过赶上旺季、客诉下降口碑变好、研发聚焦差异化、供应不断保交期。照明企业的生死线是「旺季窗口+渠道口碑」，B要站在这些结果上说话，而不是讲方案多先进。<br><br>F/A/E分别是方案、优势、案例。"
+  },
+  {
+    "scenario": "研发总监说：方案是好，但换方案商要走公司流程，需要照明行业的成功案例证明。你们有什么？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "宇凡微是木林森等照明上市企业的方案合作方，照明类客户累计服务数百家；公司持有42项发明专利、6项集成电路布图设计、17项软件著作权；国家级高新技术企业、专精特新企业；与台湾九齐、上海普冉等原厂战略合作；80余人研发团队提供本地化技术支持，量产问题48小时响应——照明行业要的「有案例、有专利、有产能、有人响应」，四样都齐。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "宇凡微智能照明方案包含照明专用MCU、多协议调光、宽温设计和保护固件库。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比自己写程序，我们算法成熟、认证文档齐、宽温可靠。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用宇凡微方案，认证一轮过、无频闪、客诉减少、交期可控。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——木林森等上市企业案例、42项发明专利、专精特新认证、48小时响应。照明企业换方案商最怕「量产出问题没人管」，E里的「有案例、有专利、有产能、有人响应」四件套就是给研发总监推动公司流程的依据。<br><br>F/A/B分别是方案、优势、利益。"
+  },
+  {
+    "scenario": "你向某智能玩具厂商（做电子宠物、互动玩具）的硬件负责人介绍宇凡微的合封定制方案。他们新产品要做指甲盖大小的主控板，成本卡得极死。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/能力）？",
+    "options": [
+      {
+        "text": "宇凡微的合封定制能力包括：把MCU与EEPROM、传感器、驱动器件合封成单颗芯片，封装最小可做到DFN超小封装；合封后单颗芯片直接替代「主控+外围」的多芯片方案；提供从合封布图设计、样品验证到量产的全流程服务，打样周期约2-4周；自有封装测试产线，日产能100万颗。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比标准封装MCU加外围贴片，合封方案省板面积、省贴片成本，而且合封之后外人无法拆解逆向，天然防抄板。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用合封方案，贵司的板子能做进指甲盖的外壳里，单机成本降下来，创意产品也不怕上市就被抄。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微持有6项集成电路布图设计和42项发明专利，合封定制服务过800多个品牌。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述合封定制的能力——可合封的器件类型、最小封装、替代关系、打样周期、产能。玩具硬件负责人关心「能不能做小、多久出样」，F把这些能力边界讲清楚。<br><br>A是相对标准方案的对比优势；B是给产品的利益；E是专利与案例背书。"
+  },
+  {
+    "scenario": "硬件负责人说：我们现在用标准封装MCU加外围器件，板上七八颗料，SMT贴片费用也不低。你们比这个强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有方案相比的优势）？",
+    "options": [
+      {
+        "text": "相比标准封装加外围贴片，合封定制有三个核心优势：一是体积——多颗芯片合成一颗DFN小封装，板面积省一半以上；二是成本——外围器件的物料费和贴片费一起省，BOM直接瘦身；三是防抄板——合封后外人拆开只能看到一颗黑封芯片，无法逆向还原电路，标准方案焊在板上一看就懂——玩具行业新品三个月就被抄，这一点是标准方案给不了的。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "宇凡微支持MCU与EEPROM、传感器、驱动器件合封，最小DFN封装，打样周期2-4周。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用合封方案，板子能做进指甲盖外壳、成本降下来、不怕被抄。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微持有6项集成电路布图设计和42项发明专利，服务过800多个品牌。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比标准方案强在哪」——体积省一半、BOM瘦身、天然防抄板。玩具行业最狠的痛点是「爆品三个月被抄」，前两条优势别家也能讲，防抄板是合封独有的，A要把这个差异化讲透。<br><br>F讲能力、B讲好处、E讲专利。"
+  },
+  {
+    "scenario": "硬件负责人说：合封的思路我认可，但老板要看到实际好处才会批这个定制费。换合封，我们产品到底能得到什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换合封方案，贵司产品三个变化：一是ID设计自由——主控板缩到指甲盖大小，外壳想做多小做多小，同尺寸下能塞进更多电池和功能；二是成本下降——外围物料加贴片工序一起省，年出货量摊下来，省的钱远超定制费；三是爆品生命周期变长——别人抄外观抄得走，合封的电路三个月内拆不透，您的销售窗口期就是别人的模仿期，多卖一个旺季就多赚一个旺季。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "宇凡微支持MCU与存储、传感器合封，最小DFN封装，打样周期2-4周。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比标准方案，合封省体积、省成本、防抄板。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "宇凡微持有6项集成电路布图设计，服务过800多个品牌。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「产品和老板得到什么」——ID设计自由、成本省超定制费、爆品窗口期拉长。玩具公司老板的账本是「一个爆款赚多久」，B里「销售窗口期就是别人的模仿期」这句话他听得最懂。<br><br>F/A/E分别是能力、优势、专利。"
+  },
+  {
+    "scenario": "硬件负责人说：好处能说通，但合封定制是新东西，老板会问：凭什么相信你们做得出来、做得稳？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "宇凡微持有6项集成电路布图设计和42项发明专利，合封定制是公司的核心业务之一；80余人的工程师团队里相当一部分专职做封装设计与验证；自有封装测试产线日产能100万颗，打样到量产都在自己产线上，不外发；服务过的800多个品牌里，相当比例用的就是合封方案——七年从华强北门面做到年营收1.5亿，靠的就是合封定制的交付口碑。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "宇凡微支持MCU与存储、传感器合封，最小DFN封装，打样周期2-4周。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比标准方案，合封省体积、省成本、防抄板。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用合封方案，ID自由、成本下降、爆品窗口期拉长。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——6项布图设计专利、自有产线不外发、800多个品牌的交付记录、七年1.5亿的增长曲线。客户对「新东西」的信任来自「别人用过了」——E要证明合封不是实验能力，而是量产验证过的成熟业务。<br><br>F/A/B分别是能力、优势、利益。"
+  },
+  {
+    "scenario": "你向某方案商/ODM公司（替品牌客户做整机方案，自己采购芯片）的采购负责人介绍宇凡微的供应服务。该公司常年被交期和缺货折腾。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（服务体系本身的属性/构成）？",
+    "options": [
+      {
+        "text": "宇凡微的供应体系包含：与台湾九齐、上海普冉等原厂的战略合作协议；自有封装测试产线，日产能100万颗；深圳本地仓储，常规型号现货、合封定制打样2-4周；80余人工程师团队提供选型、技术支持和量产问题响应；支持从小批量试产到大批量爬坡的全周期供货。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比从贸易商渠道拿货，宇凡微是原厂协议价不炒货，缺货期优先保障合作客户，批次一致性有自有产线保证。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "跟宇凡微合作，急单交期从6-8周压到1-2周，缺货期不断供，不用囤货压资金。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微七年从华强北门面做到年营收超1.5亿，800多个品牌长期合作，国家级专精特新企业。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述供应体系的构成——原厂协议、自有产线、本地仓储、打样周期、技术支持团队、全周期供货能力。方案商采购最关心「交期+价格+技术支持」，F把这些服务内容列清楚。<br><br>A是相对贸易商渠道的优势；B是给采购的利益；E是经营记录背书。"
+  },
+  {
+    "scenario": "采购负责人说：我们现在主要从贸易商渠道拿货，价格有时便宜，但缺货的时候被炒货炒到翻倍，急单也经常拿不到。你们比贸易商强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与贸易商渠道相比的优势）？",
+    "options": [
+      {
+        "text": "相比贸易商渠道，宇凡微有三个核心优势：一是价格透明——原厂战略合作协议价，行情涨跌不跟风炒货，贸易商缺货期翻倍是常态；二是供应优先级——缺货期自有产线的产能优先保障合作客户，贸易商手里没货就是没货；三是批次一致性——自有封装测试产线自己生产，批次稳定可追溯，贸易商拼缝拿货，不同批次混着来，量产良率波动大。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "宇凡微与九齐、普冉等原厂战略合作，自有产线日产能100万颗，深圳本地现货。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "跟宇凡微合作，急单1-2周到货，缺货期不断供，不压库存资金。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "宇凡微七年做到年营收1.5亿，800多个品牌长期合作。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比贸易商强在哪」——协议价不炒货、缺货期优先保供、批次一致可追溯。这三点精准针对贸易商「缺货炒价、急单没货、批次混乱」三大痛点。方案商采购最怕「终端客户催货自己没货」，A要打在供应保障上。<br><br>F讲体系、B讲好处、E讲记录。"
+  },
+  {
+    "scenario": "采购负责人说：供应能力我认可，但我老板看的是结果——换了供应渠道，我们公司经营上到底得到什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换宇凡微直供，贵司经营三本账都变好：一是交期账——急单交期从贸易商的6-8周压到1-2周，终端客户的项目不再因为芯片等料延期；二是保供账——缺货期产能优先保障，不用为了安全提前囤货，省下的备货资金是几十上百万的现金流；三是客户账——交期稳了、批次稳了，品牌客户那边的订单能接得更多、做得更大，你从「找货的」变成「供应链可靠的方案商」。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "宇凡微与原厂战略合作，自有产线日产能100万颗，深圳本地现货。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比贸易商，我们价格透明、缺货优先保供、批次一致可追溯。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "宇凡微七年做到年营收1.5亿，800多个品牌长期合作，专精特新企业。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「经营上得到什么」——交期账、保供账（现金流）、客户账（订单变大）。方案商老板的账本里最重的是现金流和终端客户口碑，B里「省下的备货资金」和「从找货的变成供应链可靠的方案商」直接打到他的经营逻辑上。<br><br>F/A/E分别是体系、优势、记录。"
+  },
+  {
+    "scenario": "采购负责人说：道理通，但换核心供应渠道要走老板审批，得有能证明你们靠得住的硬材料。你们有什么？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "宇凡微2017年从华强北一个小门面起步，七年做到年营收超1.5亿的芯片公司——这个增长本身就是在缺货周期里没断过供的证明；服务美的、小米、九阳、木林森等800多个品牌，多数是多年复购客户；国家级高新技术企业、专精特新企业，42项发明专利、6项集成电路布图设计；与台湾九齐、上海普冉等原厂的战略协议可以出具合作证明——老板要审的「资质、案例、供应保障」，材料全部齐备。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "宇凡微与原厂战略合作，自有产线日产能100万颗，深圳本地现货。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比贸易商，我们价格透明、缺货优先保供、批次一致可追溯。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "跟宇凡微合作，急单1-2周到货、不压库存资金、订单能接得更大。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——七年穿越缺货周期没断供、800多个品牌多年复购、原厂协议可出具证明。老板审批供应渠道看的是「死不死得快、断不断得货」，七年1.5亿的复购记录比任何承诺都硬。<br><br>F/A/B分别是体系、优势、利益。"
+  }
+];
+
+var currentQ = 0;
+var answers = [];
+var answered = false;
+
+function renderQ() {
+  var q = questions[currentQ];
+  document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+  var typeName = {'F':'F 特征','A':'A 优势','B':'B 利益','E':'E 证明'}[q.options.find(function(o){return o.type;}).type] || 'FABE 训练';
+
+  var card = document.getElementById('questionCard');
+  card.innerHTML = '<div class="question-badge">' + typeName + ' 训练</div>' +
+    '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+    '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+    '<div class="options">' +
+    q.options.map(function(opt,i){
+      return '<div class="option" onclick="selectOpt(' + i + ')">' +
+        '<div class="radio"></div>' +
+        '<div class="text">' + opt.text + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="explanation" id="explanation">' +
+      '<h4>✅ 解析</h4>' +
+      '<p>' + q.explain + '</p>' +
+    '</div>';
+
+  answered = false;
+  document.getElementById('btnNext').textContent = '确认答案';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultPage').classList.remove('show');
+  document.getElementById('quizPage').style.display = '';
+}
+
+window.selectOpt = function(idx) {
+  if (answered) return;
+  var opts = document.querySelectorAll('.option');
+  opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+  window.selectedIdx = idx;
+  document.getElementById('btnNext').disabled = false;
+};
+
+window.nextQ = function() {
+  if (window.selectedIdx === undefined) return;
+  if (!answered) {
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+  } else {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      window.selectedIdx = undefined;
+      renderQ();
+    } else {
+      showResult();
+    }
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    window.selectedIdx = undefined;
+    renderQ();
+    if (answers[currentQ] !== undefined) {
+      answered = true;
+      var q = questions[currentQ];
+      var opts = document.querySelectorAll('.option');
+      opts.forEach(function(opt,i){
+        if (q.options[i].correct) opt.classList.add('correct');
+        if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+      });
+      document.getElementById('explanation').classList.add('show');
+      document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    }
+  }
+};
+
+function showResult() {
+  document.getElementById('quizPage').style.display = 'none';
+  var score = answers.filter(function(a){return a;}).length;
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('percentNum').textContent = percent;
+
+  var detail = '<h3>📊 答题详情</h3>';
+  questions.forEach(function(q,i){
+    var icon = answers[i] ? '✅' : '❌';
+    var title = q.scenario.substring(0, 40) + '...';
+    detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+  });
+  document.getElementById('resultDetail').innerHTML = detail;
+  document.getElementById('resultPage').classList.add('show');
+}
+
+window.restart = function() {
+  currentQ = 0;
+  answers = [];
+  window.selectedIdx = undefined;
+  answered = false;
+  renderQ();
+};
+
+renderQ();
+</script>
+</body>
+</html>

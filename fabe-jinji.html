@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - 金记食品定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#1B5E20,#43A047); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header p { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  header .custom-tag { display:inline-block; background:#F39C12; border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; margin-left:8px; font-weight:700; color:#fff; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#43A047; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#43A047; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #43A047; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#1B5E20; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#EBF5FB; color:#2980B9; }
+  .tag-A { background:#D5F5E3; color:#1E8449; }
+  .tag-B { background:#FEF9E7; color:#D35400; }
+  .tag-E { background:#F4ECF7; color:#7D3C98; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#43A047; background:#E8F5E9; }
+  .option.selected { border-color:#43A047; background:#E8F5E9; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#43A047; background:#43A047; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#1B5E20; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#43A047; color:white; }
+  .btn-primary:hover { background:#2E7D32; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#1B5E20,#43A047); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#43A047; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#43A047; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#43A047; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#E8F5E9; border:1px solid #A9DFBF; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#1B5E20; line-height:1.7; }
+  .tip-box strong { color:#1B5E20; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共16题</p>
+  <span class="company-tag">🫘 金记食品 · 老相食豆制品</span>
+  <span class="custom-tag">★ 苏州826定制</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    "scenario": "你是金记食品的KA销售，正在向苏州某连锁超市（80家门店）的采购总监陈总介绍老相食盒装豆腐产品线。该超市正在寻找优质豆制品供应商。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    "options": [
+      {
+        "text": "老相食盒装豆腐采用东北黑土地五大连池产区一级非转基因大豆，蛋白质含量≥40%；生产采用RO反渗透超洁净水处理技术和碟片式离心过滤工艺，3道精密过滤系统去除豆渣与气泡；产品线覆盖内酯豆腐、绢豆腐、冲浆豆腐等10余个SKU，保质期7天，冷链配送。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比市场上多数豆制品小作坊，老相食是工信部认证的国家级数字三品应用场景典型案例，数字化供应链实现从生产到终端全链路追溯，品质稳定性和供应保障能力远超行业平均水平。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "上了老相食产品，贵超市的豆制品品类退货率能从行业平均的3%降到1%以内，客单价提升15%，生鲜区口碑评分拉高，帮您稳住周边社区复购客群。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "老相食是中国驰名商标、江苏省专精特新小巨人企业，年产销豆制品8.5万吨全国前三、江苏第一，在苏州本地12000多家门店有售，连续十年蝉联江苏生鲜豆制品产销榜首。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的属性——大豆产地等级、蛋白质含量、RO水处理工艺、离心过滤技术、SKU覆盖、保质期和配送方式。这些都是产品本身的客观规格。<br><br>A是与小作坊比较的优势；B是给超市带来的利益；E是企业资质与市场地位的佐证。"
+  },
+  {
+    "scenario": "陈总说：你们豆腐规格看着挺标准，但我们超市现在也有豆制品供应商，虽然是个本地小厂，价格比你们便宜。你们比那家强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与竞品相比的优势）？",
+    "options": [
+      {
+        "text": "相比本地小厂，老相食有三个核心差异：一是品控——数字化供应链全程追溯，每批产品有唯一追溯码，小厂做不到；二是供应稳定性——我们有自有冷链物流体系和12000+终端网点支撑，旺季不断货、不涨价，小厂旺季经常供不上；三是品类丰富度——10余个SKU覆盖凉拌、火锅、炒菜全场景，小厂一般只有3-5个品。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "老相食盒装豆腐采用东北非转基因大豆，蛋白质含量≥40%，RO超洁净水处理，碟片式离心过滤工艺。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "上了老相食，退货率降到1%以内，客单价提升15%，帮您稳住社区复购客群。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "老相食是中国驰名商标，年产销8.5万吨全国前三，连续十年江苏第一。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比小厂强在哪」——品控可追溯、供应稳定不断货、品类丰富覆盖全场景。这三点精准针对本地小厂「品控不稳、旺季断货、品类单一」的痛点。超市采购总监最怕的是「货架空了+退货多」，A要打在供应稳定性和品类丰富度上。<br><br>F讲规格、B讲好处、E讲资质。"
+  },
+  {
+    "scenario": "陈总问：品控和供应稳定我认可，但我要的是实际好处——上架你们的产品，我们超市能得到什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "上了老相食，贵超市豆制品退货率从行业平均3%降到1%以内——退货少了，损耗成本直接下降；老相食品牌自带流量，苏州本地消费者认这个牌子，上架后生鲜区客流提升15%以上；10余个SKU覆盖一日三餐全场景（凉拌/火锅/炒菜/即食），客单价拉高；全程冷链+追溯码，食药监检查时拿得出手续，让您省心。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "老相食盒装豆腐采用东北非转基因大豆，RO超洁净水处理，碟片式离心过滤工艺，保质期7天冷链配送。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比本地小厂，我们品控可追溯、供应稳定不断货、品类丰富覆盖全场景。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "老相食是中国驰名商标，年产销8.5万吨全国前三，连续十年江苏第一。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么实在好处」——退货少损耗降、品牌自带客流、品类全客单价高、检查有手续省心。超市采购总监的KPI是「品类毛利+客流+退货率」，B要站在他的考核指标上说话，而不是讲产品多好。<br><br>F讲规格、A讲对比优势、E讲资质。"
+  },
+  {
+    "scenario": "陈总有点动心了：听下来确实不错，但我们是连锁超市，80家门店上新品要走审批流程，你们凭什么证明能持续达到说的效果？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "老相食是中国驰名商标、江苏省专精特新小巨人企业，年产销豆制品8.5万吨全国前三、江苏第一；在苏州本地12000多家门店有售，覆盖连锁超市、生鲜电商、社区专卖连锁全渠道；连续十年蝉联江苏生鲜豆制品产销榜首；2024年入选工信部数字三品应用场景典型案例，与中农大、南农大、江南大学有产学研合作，主持制订15项国家行业标准，拥有292件专利。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "老相食盒装豆腐采用东北非转基因大豆，RO超洁净水处理，保质期7天冷链配送。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比本地小厂，我们品控可追溯、供应稳定不断货、品类丰富覆盖全场景。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "上了老相食，退货率降到1%以内，客流提升15%，客单价拉高，检查省心。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——驰名商标、专精特新小巨人、全国前三、12000家门店在售、十年产销榜首、工信部数字三品案例、15项国标主持制订。连锁超市走审批流程最认品牌资质和市场占有率，E就是给采购总监审批时的「弹药」。<br><br>F/A/B分别是规格、优势、利益。"
+  },
+  {
+    "scenario": "你向苏州某高校后勤餐饮中心李主任介绍金记食品的团餐豆制品供应方案。该校在校生1.2万人，3个食堂，日均供餐3万人次。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品/服务本身的属性/构成）？",
+    "options": [
+      {
+        "text": "金记食品团餐供应方案包含三大模块：一是日配鲜豆制品（豆腐/百叶/素鸡/豆干等20余个SKU），当日生产当日冷链配送；二是定制化产品（如食堂专用大包装、按菜谱切配的半成品）；三是数字化供应链系统，下单、配送、库存全流程线上可视，配备食品安全追溯码。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比传统农贸市场采购，金记的工厂化生产品控更稳定、冷链配送更准时、品类更丰富，且每批产品都有追溯码，食药监和教育局检查时手续齐全。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用金记的供应方案，贵校食堂不再为豆制品断供发愁、菜品花样从10道增加到15道、学生满意度提升、后勤从天天跑市场变成线上下单坐等配送。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "金记是江苏省专精特新小巨人、中国豆制品行业协会副会长单位，主持制订15项国家行业标准，苏州市政府指定放心豆制品供应商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述供应方案的构成——日配鲜品+定制化+数字化供应链系统。高校后勤关心的是「每天有货+品种多样+安全可追溯」，F把这些讲清楚。<br><br>A是相对农贸市场采购的优势；B是给后勤的利益；E是资质背书。"
+  },
+  {
+    "scenario": "李主任说：我们现在豆制品是从农贸市场进的，每天凌晨派人去采购，价格波动大，品质看运气。你们比这个强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有采购方式相比的优势）？",
+    "options": [
+      {
+        "text": "相比农贸市场零散采购，金记有三个核心优势：一是品控稳定——工厂化标准化生产，每批口感品质一致，不会出现今天嫩明天老的问题；二是价格稳定——签订年度框架协议，淡旺季不涨价，而农贸市场旺季经常涨价30%-50%；三是供应保障——自有冷链物流+12000家终端网点支撑，不管什么天气都准时配送到校，农贸市场遇到恶劣天气可能断供。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "金记团餐方案包含日配鲜豆制品20余个SKU、定制化产品、数字化供应链系统。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用金记方案，食堂不断供、菜品花样增加、学生满意度提升、后勤省心。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "金记是专精特新小巨人、豆制品行业协会副会长单位，苏州市政府放心豆制品供应商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比农贸市场采购强在哪」——品控稳定、价格不波动、天气再差也准时送。这三点精准针对农贸市场采购「品质看运气、价格波动大、天气断供」的痛点。高校后勤最怕「天气断供+价格突涨」，A要打在稳定性和可预期性上。<br><br>F讲方案、B讲好处、E讲资质。"
+  },
+  {
+    "scenario": "李主任说：供应稳定我认可，但我最关心的是——换了你们，我们后勤到底能省什么心？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换了金记，贵校后勤三个变化：一是不用每天凌晨派人去农贸市场了，线上下单、次日冷链配送到食堂门口，省3个人力；二是豆制品品类从农贸市场能买到的5-6种增加到20余种，食堂菜品花样从10道增加到15道，学生满意度直接提升；三是每批产品都有追溯码，教育局和食药监来检查时手续齐全，后勤不用再为食品安全提心吊胆。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "金记团餐方案包含日配鲜豆制品20余个SKU、定制化产品、数字化供应链系统。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比农贸市场，我们品控稳定、价格不波动、天气再差也准时送。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "金记是专精特新小巨人、豆制品行业协会副会长单位，苏州市政府放心豆制品供应商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——省人力、增菜品、提满意度、检查有手续。高校后勤主任的KPI是「食品安全+学生满意度+人力效率」，B要站在这三个维度讲好处。省3个人力和增加5道菜是最具象的利益，能让李主任立刻算出账来。<br><br>F/A/E分别是方案、优势、资质。"
+  },
+  {
+    "scenario": "李主任追问：食品安全是学校后勤的红线，去年隔壁高校食堂吃出问题被教育局通报了。你们凭什么证明你们的豆制品安全可靠？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "金记是苏州市政府指定放心豆制品供应商，连续十年蝉联江苏生鲜豆制品产销榜首，是中国豆制品行业协会副会长单位；主持制订15项国家行业标准，拥有292件专利、授权发明专利27件；与中农大、南农大、江南大学建立产学研合作，承担国家星火计划等科研项目15项；生产车间采用HACCP体系+全自动流水线+智能温控+追溯系统，从磨浆到包装全流程密闭化生产，2024年通过吴中区安全生产专项检查。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "金记团餐方案包含日配鲜豆制品20余个SKU、定制化产品、数字化供应链系统。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比农贸市场，我们品控稳定、价格不波动、天气再差也准时送。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用金记方案，省3个人力、增5道菜、检查有手续、学生满意度提升。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——政府指定放心供应商、十年产销榜首、副会长单位、15项国标、292件专利、产学研合作、HACCP体系。高校食品安全是红线，最认政府背书和国标制订者身份，E就是给后勤主任「出了事有人兜底」的安全感。<br><br>F/A/B分别是方案、优势、利益。"
+  },
+  {
+    "scenario": "你向某生鲜电商平台（叮咚买菜/美团买菜类）的招商负责人周总介绍老相食豆制品产品线。平台正在扩充豆制品品类，寻求优质供应商。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品/服务本身的属性/功能）？",
+    "options": [
+      {
+        "text": "老相食产品线覆盖非发酵豆制品（豆腐/百叶/香干/素鸡/油豆腐等）、植物蛋白饮料（淳豆奶/五谷豆奶/豆浆）、速冻食品（速冻腐竹/年糕/粉丝）和休闲即食（撕撕素肉/多味豆干/酸梅汤）四大品类，共60余个SKU；采用RO反渗透水处理+碟片式离心过滤工艺，东北非转基因大豆，蛋白质含量≥40%，HACCP体系全程品控。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比多数豆制品供应商只能供3-5个品，老相食60余个SKU一站式覆盖全场景；且自建数字化供应链系统，已与淘宝、拼多多、美团、饿了么、京东到家、叮咚买菜等平台深度对接，API接口现成，上手即用。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "上了老相食全品类，贵平台豆制品品类从5个SKU扩充到60个，品类丰富度直接拉满；老相食品牌自带搜索流量，苏州本地认知度极高，上架即有销量；全程冷链+追溯码，品质纠纷率极低，客诉少运营省心。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "老相食已与叮咚买菜、京东到家、美团、拼多多等平台深度合作，是江苏省专精特新小巨人企业、工信部数字三品应用场景典型案例，数字化供应链成熟度行业领先。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的属性——四大品类60余个SKU、工艺技术、原料标准、品控体系。电商平台招商负责人最关心「品类丰富度+供应链对接能力」，F把SKU数量和工艺规格讲清楚。<br><br>A是相对其他供应商的优势；B是给平台的利益；E是合作案例背书。"
+  },
+  {
+    "scenario": "周总说：你们品类确实丰富，但我们平台现在也有豆制品供应商，只有5个SKU但价格低。你们比他们强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有供应商相比的优势）？",
+    "options": [
+      {
+        "text": "相比现有5个SKU的供应商，老相食有三个核心优势：一是品类深度——60余个SKU覆盖豆腐/百叶/饮料/速冻/即食全场景，一个供应商替代5家，减少平台管理成本；二是系统对接——已与叮咚、京东到家、美团等平台深度对接，API现成不用开发，现有供应商通常没有这个能力；三是品牌认知度——老相食是苏州本地中国驰名商标，消费者搜'老相食'直接带来自然流量，现有供应商没有品牌溢价。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "老相食覆盖非发酵豆制品、植物蛋白饮料、速冻食品和休闲即食四大品类，共60余个SKU。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "上了老相食全品类，豆制品从5个扩充到60个，品牌自带流量，客诉少运营省心。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "老相食已与叮咚买菜、京东到家等平台深度合作，是工信部数字三品典型案例。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比现有供应商强在哪」——品类深度一个顶五个、系统对接API现成、品牌自带搜索流量。电商平台最怕「管太多供应商+系统对接麻烦+没有品牌流量」，A要打在这三个维度上。<br><br>F讲品类、B讲好处、E讲合作案例。"
+  },
+  {
+    "scenario": "周总说：品类丰富和系统对接我认可，但平台的KPI是GMV和复购率，上了你们的产品，我们平台到底能得到什么实际好处？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "上了老相食全品类，贵平台豆制品GMV三个变化：一是品类从5个SKU扩充到60个，覆盖早中晚三餐+零食全场景，客单价从15元拉到35元；二是老相食品牌自带搜索流量，苏州消费者搜'老相食'直接带来日均UV增量，获客成本为零；三是品质纠纷率极低（追溯码+HACCP），客诉减少40%，复购率提升——这些直接拉高您的GMV和复购率两个核心KPI。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "老相食覆盖四大品类60余个SKU，采用RO水处理+离心过滤工艺，东北非转基因大豆。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比现有供应商，我们品类深度一个顶五个、系统对接API现成、品牌自带搜索流量。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "老相食已与叮咚买菜、京东到家等平台深度合作，是工信部数字三品典型案例。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「平台得到什么」——客单价翻倍、品牌自带流量获客成本为零、客诉减少复购提升。电商平台招商负责人的KPI就是GMV和复购率，B必须站在他的考核指标上讲。15元→35元的客单价提升和「搜老相食」的自然流量是最有力的数字。<br><br>F/A/E分别是品类、优势、案例。"
+  },
+  {
+    "scenario": "周总说：听下来GMV和复购的提升逻辑是通的，但我们上新品要走平台评审，需要供应商资质和合作案例证明。你们有什么拿得出手的？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "老相食已与叮咚买菜、京东到家、美团、饿了么、拼多多、淘宝等6大平台深度合作，是这些平台的豆制品核心供应商之一；2024年入选工信部数字三品应用场景典型案例（全国仅3家消费品企业入选）；自建老相食智能移动电商平台，3公里食品互联网营销模式被江苏省评为数字商务企业；年产销8.5万吨全国前三、江苏第一，连续十年蝉联江苏生鲜豆制品产销榜首。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "老相食覆盖四大品类60余个SKU，采用RO水处理+离心过滤工艺，东北非转基因大豆。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比现有供应商，我们品类深度一个顶五个、系统对接API现成、品牌自带搜索流量。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "上了老相食，客单价从15元拉到35元，品牌自带流量，客诉减少40%。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——6大平台核心供应商、工信部数字三品案例、3公里互联网营销模式、全国前三。电商平台评审最认「同行合作案例+数字化能力」，E就是给周总平台评审时的「通过依据」。已经和叮咚、京东到家合作，说明系统对接和品质已经过平台检验。<br><br>F/A/B分别是品类、优势、利益。"
+  },
+  {
+    "scenario": "你向苏州某五星级酒店餐饮部总监介绍老相食的豆腐/百叶/素鸡等高端餐饮豆制品系列。酒店有3个餐厅，日均供餐800人次，追求食材品质和稳定性。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    "options": [
+      {
+        "text": "老相食餐饮系列豆制品包括：绢豆腐（入口即化适合凉拌/火锅）、冲浆豆腐（适合红烧/烧汤）、薄百叶/百叶结（适合包肉/清炒）、海鲜豆腐（配合现代厨艺做出高品质新时尚佳肴）、豆腐衣（蒸煮/烧汤/炒菜），以及老卤素火腿、老相食手包豆干等高端即食品类；全部采用东北非转基因大豆，RO超洁净水处理，HACCP体系品控，当日生产当日冷链配送。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比酒店现有从农贸市场采购的方式，老食食的工厂化标准化生产每批品质口感一致，冷链配送准时到后厨，不用厨师长每天操心采购；且品类丰富，一道菜换一种豆腐就是新菜品。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用老相食餐饮系列，贵酒店厨师长不用再为豆制品采购品质发愁，菜品创新有了更多食材选择，食材追溯码让食品安全检查一查就有，餐厅口碑和回头客自然增加。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "老相食是中国驰名商标、江苏省专精特新小巨人企业，年产销8.5万吨全国前三，是苏州市政府指定放心豆制品供应商，连续十年江苏生鲜豆制品产销榜首。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品的属性——具体品类（绢豆腐/冲浆/百叶/海鲜豆腐/豆腐衣）、用途场景、原料标准、工艺、品控和配送方式。酒店餐饮总监关心的是「食材品质+品种+配送时效」，F要把每个品类适合做什么菜讲清楚。<br><br>A是相对农贸市场采购的优势；B是给餐饮部的利益；E是资质背书。"
+  },
+  {
+    "scenario": "餐饮部总监说：我们现在豆制品是后厨每天去农贸市场采购的，品质时好时坏。你们比这个强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与现有采购方式相比的优势）？",
+    "options": [
+      {
+        "text": "相比农贸市场采购，老相食有三个核心优势：一是品质一致性——工厂化标准化生产，每批绢豆腐口感一致，不会出现今天嫩明天老的问题，厨师出品稳定性有保障；二是品类丰富度——农贸市场能买5-6种，老相食有20余种餐饮专用品类，一道菜换一种豆腐就是新菜品；三是配送保障——当日生产当日冷链配送到后厨，风雨无阻，农贸市场恶劣天气可能断供。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "老相食餐饮系列包括绢豆腐、冲浆豆腐、薄百叶、海鲜豆腐、豆腐衣等20余种品类。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用老相食，厨师长不用操心采购、菜品创新有更多选择、食材追溯码让检查省心、回头客增加。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "老相食是中国驰名商标、专精特新小巨人，苏州市政府放心豆制品供应商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比农贸市场采购强在哪」——品质一致性、品类丰富度、配送保障。酒店餐饮总监最怕「出品不稳定+天气断供+菜品单一」，A要打在这三个痛点上。尤其是「每批口感一致」对五星级酒店最重要——客人今天吃的和明天吃的必须一样。<br><br>F讲品类、B讲好处、E讲资质。"
+  },
+  {
+    "scenario": "餐饮部总监说：品质稳定和品类丰富我认可，但我们酒店要的是实际效果——换了你们，我们餐饮部到底能得到什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换了老相食，贵酒店餐饮部三个变化：一是出品稳定性提升——每批豆腐口感一致，客人评价稳定，不再因为食材忽好忽坏被投诉；二是菜品创新加速——20余种餐饮专用品类，厨师长每月新增2-3道豆制品特色菜，吸引回头客复购；三是食品安全有追溯码兜底，卫生检查时一查就有，厨师长不用再为食安提心吊胆，可以把精力放在菜品研发上。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "老相食餐饮系列包括绢豆腐、冲浆豆腐、薄百叶、海鲜豆腐、豆腐衣等20余种品类。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比农贸市场，我们品质一致、品类丰富、冷链配送准时到后厨。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "老相食是中国驰名商标、专精特新小巨人，苏州市政府放心豆制品供应商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「餐饮部得到什么」——出品稳定不被投诉、菜品创新吸引回头客、食安有追溯码省心。酒店餐饮总监的KPI是「客人评价+复购率+食安合规」，B要站在这三个维度讲好处。每月新增2-3道特色菜是最具象的利益——直接拉高复购率。<br><br>F/A/E分别是品类、优势、资质。"
+  },
+  {
+    "scenario": "餐饮部总监说：听下来不错，但五星级酒店换食材供应商要走采购评审，需要资质和案例证明。你们有什么能拿得出手的？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "老相食是中国驰名商标、江苏省专精特新小巨人企业、苏州市政府指定放心豆制品供应商、中国豆制品行业协会副会长单位；连续十年蝉联江苏生鲜豆制品产销榜首，年产销8.5万吨全国前三；与中农大、南农大、江南大学产学研合作，主持制订15项国家行业标准，拥有292件专利；生产车间通过HACCP体系认证，采用全自动流水线+智能温控+追溯系统，全流程密闭化生产，2024年通过吴中区安全生产专项检查——五星级酒店食材评审需要的资质，我们全部具备。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "老相食餐饮系列包括绢豆腐、冲浆豆腐、薄百叶、海鲜豆腐、豆腐衣等20余种品类。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比农贸市场，我们品质一致、品类丰富、冷链配送准时到后厨。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用老相食，出品稳定、菜品创新、食安有追溯码、回头客增加。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——驰名商标、专精特新、政府放心供应商、副会长单位、十年榜首、全国前三、15项国标、292件专利、HACCP认证。五星级酒店采购评审最认「政府背书+行业地位+安全认证」，E要面面俱到，让评审委员会挑不出毛病。<br><br>F/A/B分别是品类、优势、利益。"
+  }
+];
+
+var currentQ = 0;
+var answers = [];
+var answered = false;
+
+function renderQ() {
+  var q = questions[currentQ];
+  document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+  var fabeType = q.options.find(function(o){return o.type;}) ? q.options.find(function(o){return o.type;}).type : 'F';
+  var typeName = {'F':'F 特征','A':'A 优势','B':'B 利益','E':'E 证明'}[fabeType];
+
+  var card = document.getElementById('questionCard');
+  card.innerHTML = '<div class="question-badge">' + typeName + ' 训练</div>' +
+    '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+    '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+    '<div class="options">' +
+    q.options.map(function(opt,i){
+      return '<div class="option" onclick="selectOpt(' + i + ')">' +
+        '<div class="radio"></div>' +
+        '<div class="text">' + opt.text + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="explanation" id="explanation">' +
+      '<h4>✅ 解析</h4>' +
+      '<p>' + q.explain + '</p>' +
+    '</div>';
+
+  answered = false;
+  document.getElementById('btnNext').textContent = '确认答案';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultPage').classList.remove('show');
+  document.getElementById('quizPage').style.display = '';
+}
+
+window.selectOpt = function(idx) {
+  if (answered) return;
+  var opts = document.querySelectorAll('.option');
+  opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+  window.selectedIdx = idx;
+  document.getElementById('btnNext').disabled = false;
+};
+
+window.nextQ = function() {
+  if (window.selectedIdx === undefined) return;
+  if (!answered) {
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+  } else {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      window.selectedIdx = undefined;
+      renderQ();
+    } else {
+      showResult();
+    }
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    window.selectedIdx = undefined;
+    renderQ();
+    if (answers[currentQ] !== undefined) {
+      answered = true;
+      var q = questions[currentQ];
+      var opts = document.querySelectorAll('.option');
+      opts.forEach(function(opt,i){
+        if (q.options[i].correct) opt.classList.add('correct');
+        if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+      });
+      document.getElementById('explanation').classList.add('show');
+      document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    }
+  }
+};
+
+function showResult() {
+  document.getElementById('quizPage').style.display = 'none';
+  var score = answers.filter(function(a){return a;}).length;
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('percentNum').textContent = percent;
+
+  var detail = '<h3>📊 答题详情</h3>';
+  questions.forEach(function(q,i){
+    var icon = answers[i] ? '✅' : '❌';
+    var title = q.scenario.substring(0, 40) + '...';
+    detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+  });
+  document.getElementById('resultDetail').innerHTML = detail;
+  document.getElementById('resultPage').classList.add('show');
+}
+
+window.restart = function() {
+  currentQ = 0;
+  answers = [];
+  window.selectedIdx = undefined;
+  answered = false;
+  renderQ();
+};
+
+renderQ();
+</script>
+</body>
+</html>

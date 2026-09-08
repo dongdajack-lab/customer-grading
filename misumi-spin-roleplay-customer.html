@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN实战演练 · 客户卡（手机端）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  background: #f0f2f5; color: #1a1a2e; line-height: 1.75; padding: 16px 12px;
+}
+.container { max-width: 600px; margin: 0 auto; }
+
+.scenario-title {
+  text-align: center; margin: 28px 0 20px; padding: 16px;
+  border-radius: 10px; color: #fff;
+}
+.scenario-title h2 { font-size: 18px; margin-bottom: 4px; }
+.scenario-title .meta { font-size: 12px; opacity: 0.85; }
+.s1-bg { background: linear-gradient(135deg, #2E6B9E, #1B2A4A); }
+.s2-bg { background: linear-gradient(135deg, #7C2D12, #DC2626); }
+
+.card {
+  background: #fff; border-radius: 10px; overflow: hidden;
+  margin-bottom: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+}
+.card-top {
+  padding: 12px 20px; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-top .role-tag { font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+.card-top .privacy { font-size: 11px; opacity: 0.8; }
+.card-body { padding: 20px 22px; }
+
+.role-customer .card-top { background: #92400e; }
+
+.sec { margin-bottom: 14px; }
+.sec-title {
+  font-size: 12px; font-weight: 700; color: #999;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sec-title::before { content: ""; width: 3px; height: 14px; border-radius: 2px; }
+.role-customer .sec-title::before { background: #92400e; }
+
+.sec p { font-size: 14px; color: #333; }
+.sec ul { list-style: none; padding: 0; }
+.sec li { font-size: 14px; color: #333; padding: 3px 0 3px 18px; position: relative; }
+.sec li::before { content: "·"; position: absolute; left: 6px; font-weight: 700; color: #aaa; }
+
+.pain-box {
+  background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px;
+  padding: 14px 18px; margin-top: 8px;
+}
+.pain-box .sec-title { color: #92400e; }
+.pain-box .sec-title::before { background: #E67E22; }
+.pain-box li { color: #92400e; }
+.pain-box li::before { color: #E67E22; }
+
+.bottom-line {
+  background: #fef2f2; border-left: 4px solid #DC2626; border-radius: 4px;
+  padding: 12px 16px; margin-top: 8px;
+}
+.bottom-line .sec-title { color: #DC2626; }
+.bottom-line .sec-title::before { background: #DC2626; }
+
+.main-header {
+  text-align: center; margin-bottom: 24px; padding: 20px;
+  background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+  border-radius: 12px; color: #fff;
+}
+.main-header h1 { font-size: 20px; margin-bottom: 4px; }
+.main-header .sub { font-size: 12px; opacity: 0.8; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="main-header">
+    <h1>SPIN实战演练 · 客户卡</h1>
+    <div class="sub">米思米全渠道高效沟通实战 | 仅客户本人可见</div>
+  </div>
+
+  <!-- ========== 场景一 ========== -->
+  <div class="scenario-title s1-bg">
+    <h2>场景一：交期困局</h2>
+    <div class="meta">中等难度 | 汽车零部件厂采购经理</div>
+  </div>
+
+  <div class="card role-customer">
+    <div class="card-top">
+      <span class="role-tag">客户卡</span>
+      <span class="privacy">仅客户本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p><strong>李明</strong>，某汽车零部件厂采购经理。工厂每月需要200+种标准件，目前分散在3家供应商采购。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的态度</div>
+        <ul>
+          <li>对新供应商有戒心，觉得"切换成本高，都差不多"</li>
+          <li>跟米思米销售通过一次电话，还没正式合作</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你愿意主动说的（销售问到就说）</div>
+        <ul>
+          <li>"偶尔会有交期延迟，但哪家都一样"</li>
+          <li>"目前用3家供应商，价格还行"</li>
+        </ul>
+      </div>
+
+      <div class="pain-box">
+        <div class="sec-title">隐藏痛点（只有被深入问到才说）</div>
+        <ul>
+          <li>3家供应商3套系统3份对账单，每月光对账就要多花<strong>2个人天</strong></li>
+          <li>上个月一个关键件延迟到货，产线停工4小时，损失约<strong>8万元</strong></li>
+          <li>有时候搞混供应商，重复下了单，库存积压</li>
+        </ul>
+      </div>
+
+      <div class="bottom-line">
+        <div class="sec-title">你的底线（决定演练结果）</div>
+        <ul>
+          <li>如果销售只谈价格或产品功能 → 礼貌结束，"我再考虑考虑"</li>
+          <li>如果销售帮你算清了隐性成本 → 愿意试一单</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 场景二 ========== -->
+  <div class="scenario-title s2-bg">
+    <h2>场景二：价格壁垒</h2>
+    <div class="meta">高难度 | 电子厂技术主管 | 面对价格异议如何用SPIN破局</div>
+  </div>
+
+  <div class="card role-customer">
+    <div class="card-top">
+      <span class="role-tag">客户卡</span>
+      <span class="privacy">仅客户本人可见</span>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">你的身份</div>
+        <p><strong>王芳</strong>，某电子厂技术主管。目前用竞品牌标准件，价格比米思米便宜5-8%。米思米销售已经联系你四次了，你一直以"价格高"推脱。</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你的态度</div>
+        <ul>
+          <li>觉得标准件都差不多，看价格就行</li>
+          <li>对米思米销售有点烦了，"又来了"</li>
+          <li>但如果对方问到点子上，你还是愿意聊的</li>
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">你愿意主动说的（销售问到就说）</div>
+        <ul>
+          <li>"你们比人家贵5-8%，没什么好谈的"</li>
+          <li>"质量都差不多，我们用了很多年了"</li>
+        </ul>
+      </div>
+
+      <div class="pain-box">
+        <div class="sec-title">隐藏痛点（只有被深入问到才说）</div>
+        <ul>
+          <li>竞品偶尔尺寸公差不一致，装配返工率<strong>0.3%</strong>（行业平均0.1%）</li>
+          <li>每月返工约50件，每件返工成本200元，月损失约<strong>1万元</strong></li>
+          <li>上季度一批出口订单因返工延迟交货，被客户扣了<strong>2万罚金</strong></li>
+        </ul>
+      </div>
+
+      <div class="bottom-line">
+        <div class="sec-title">你的底线（决定演练结果）</div>
+        <ul>
+          <li>如果销售只说"我们质量好" → 不信，"谁都说自己质量好"</li>
+          <li>如果销售帮你算清了返工+罚金的总成本 → 愿意拿小批量试试</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

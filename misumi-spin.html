@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN提问训练 - 米思米电话沟通实战</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f8fafc; min-height:100vh; }
+
+  header { background:linear-gradient(135deg,#92400E,#D97706); color:white; padding:22px 28px; text-align:center; }
+  header .logo { font-size:13px; letter-spacing:2px; opacity:0.7; margin-bottom:4px; }
+  header h1 { font-size:24px; letter-spacing:1px; }
+  header p { font-size:13px; opacity:0.75; margin-top:5px; }
+
+  .container { max-width:780px; margin:0 auto; padding:24px 16px 40px; }
+
+  .progress-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .progress-label { font-size:12px; color:#888; }
+  .progress-bar { height:5px; background:#fef3c7; border-radius:3px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#92400E,#D97706); border-radius:3px; transition:width 0.5s ease; }
+
+  .card { background:white; border-radius:16px; padding:26px 22px; box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:16px; }
+
+  .q-badge { display:inline-block; background:#D97706; color:white; border-radius:20px; padding:3px 12px; font-size:12px; margin-bottom:14px; font-weight:600; }
+  .q-type { display:inline-block; background:#FEF3C7; color:#92400E; border-radius:20px; padding:3px 10px; font-size:11px; margin-left:8px; }
+  .q-text { font-size:15px; line-height:1.75; color:#222; margin-bottom:14px; }
+
+  .scenario { background:#fffbeb; border-left:4px solid #D97706; padding:12px 16px; border-radius:0 10px 10px 0; margin-bottom:16px; font-size:14px; line-height:1.7; color:#334155; }
+  .scenario .role-tag { display:inline-block; background:#D97706; color:white; border-radius:12px; padding:2px 10px; font-size:11px; font-weight:600; margin-bottom:6px; }
+
+  /* SPIN tags */
+  .spin-hint { display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; }
+  .spin-tag { padding:4px 11px; border-radius:14px; font-size:12px; font-weight:700; }
+  .tag-S { background:#DBEAFE; color:#1E40AF; }
+  .tag-P { background:#FEF3C7; color:#92400E; }
+  .tag-I { background:#FEE2E2; color:#991B1B; }
+  .tag-N { background:#D1FAE5; color:#065F46; }
+
+  .options { display:flex; flex-direction:column; gap:10px; }
+  .option { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:2px solid #e5e7eb; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:14px; line-height:1.65; color:#374151; }
+  .option:hover { border-color:#D97706; background:#fffbeb; }
+  .option.selected { border-color:#D97706; background:#FEF3C7; }
+  .option.correct { border-color:#22C55E; background:#F0FDF4; }
+  .option.wrong { border-color:#EF4444; background:#FEF2F2; }
+  .opt-letter { min-width:24px; height:24px; border-radius:50%; border:2px solid #d1d5db; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#9ca3af; flex-shrink:0; margin-top:1px; transition:all 0.2s; }
+  .option.selected .opt-letter { border-color:#D97706; background:#D97706; color:white; }
+  .option.correct .opt-letter { border-color:#22C55E; background:#22C55E; color:white; }
+  .option.wrong .opt-letter { border-color:#EF4444; background:#EF4444; color:white; }
+  .option .opt-text { flex:1; }
+
+  .explanation { margin-top:16px; padding:14px 16px; border-radius:12px; display:none; font-size:14px; line-height:1.7; }
+  .explanation.show { display:block; }
+  .exp-correct { background:#F0FDF4; border-left:4px solid #22C55E; }
+  .exp-correct .exp-title { color:#22C55E; font-weight:700; margin-bottom:6px; }
+  .exp-wrong { background:#FFFBEB; border-left:4px solid #F59E0B; }
+  .exp-wrong .exp-title { color:#D97706; font-weight:700; margin-bottom:6px; }
+  .explanation p { color:#334155; }
+
+  .spin-chain { margin-top:12px; background:#fffbeb; border-radius:12px; padding:12px 16px; }
+  .chain-title { font-size:13px; font-weight:700; color:#92400E; margin-bottom:8px; }
+  .chain-row { display:flex; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+  .chain-step { padding:4px 12px; border-radius:16px; font-size:12px; font-weight:700; }
+  .chain-step.s { background:#DBEAFE; color:#1E40AF; }
+  .chain-step.p { background:#FEF3C7; color:#92400E; }
+  .chain-step.i { background:#FEE2E2; color:#991B1B; }
+  .chain-step.n { background:#D1FAE5; color:#065F46; }
+
+  .core-logic { margin-top:12px; background:#FEF3C7; border-radius:10px; padding:10px 14px; font-size:13px; color:#92400E; line-height:1.65; font-weight:600; }
+
+  .btn-row { display:flex; gap:10px; margin-top:20px; }
+  .btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#D97706; color:white; }
+  .btn-primary:hover { background:#B45309; }
+  .btn-primary:disabled { background:#fcd34d; cursor:not-allowed; }
+  .btn-outline { background:white; color:#D97706; border:2px solid #D97706; }
+  .btn-outline:hover { background:#fffbeb; }
+
+  .result-screen { display:none; text-align:center; padding:20px 10px; }
+  .result-screen.show { display:block; }
+  .score-ring { background:conic-gradient(var(--color,#22C55E) var(--pct,0%), #e5e7eb 0%); border-radius:50%; width:120px; height:120px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+  .score-inner { width:96px; height:96px; background:white; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .score-num { font-size:32px; font-weight:800; color:#D97706; line-height:1; }
+  .score-total { font-size:14px; color:#9ca3af; }
+  .result-title { font-size:22px; font-weight:700; color:#D97706; margin-bottom:8px; }
+  .result-sub { font-size:14px; color:#6b7280; margin-bottom:24px; line-height:1.6; }
+
+  .stats-row { display:flex; gap:12px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-card { background:white; border-radius:12px; padding:14px 20px; text-align:center; min-width:80px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  .stat-num { font-size:24px; font-weight:800; }
+  .stat-label { font-size:12px; color:#9ca3af; margin-top:2px; }
+  .stat-card.green .stat-num { color:#22C55E; }
+  .stat-card.red .stat-num { color:#EF4444; }
+  .stat-card.orange .stat-num { color:#D97706; }
+
+  .review-title { text-align:left; font-size:16px; font-weight:700; color:#D97706; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #fef3c7; }
+  .review-item { background:white; border-radius:12px; padding:16px; margin-bottom:12px; text-align:left; border-left:4px solid #e5e7eb; }
+  .review-item.right { border-left-color:#22C55E; }
+  .review-item.wrong { border-left-color:#EF4444; }
+  .review-q { font-size:13px; font-weight:600; color:#6b7280; margin-bottom:6px; }
+  .review-answer { font-size:13px; color:#D97706; margin-bottom:4px; }
+  .review-exp { font-size:12px; color:#6b7280; line-height:1.6; margin-top:6px; background:#f8faf9; padding:8px 10px; border-radius:8px; }
+
+  .intro-card { background:white; border-radius:16px; padding:28px 24px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.07); margin-bottom:16px; }
+  .intro-card h2 { font-size:20px; color:#D97706; margin-bottom:10px; }
+  .intro-card p { font-size:14px; color:#6b7280; line-height:1.7; margin-bottom:12px; }
+  .spin-grid { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; margin:16px 0; }
+  .spin-card { border-radius:12px; padding:12px 8px; text-align:center; }
+  .spin-card.s { background:#DBEAFE; }
+  .spin-card.p { background:#FEF3C7; }
+  .spin-card.i { background:#FEE2E2; }
+  .spin-card.n { background:#D1FAE5; }
+  .spin-letter { font-size:24px; font-weight:900; margin-bottom:4px; }
+  .s .spin-letter { color:#1E40AF; }
+  .p .spin-letter { color:#92400E; }
+  .i .spin-letter { color:#991B1B; }
+  .n .spin-letter { color:#065F46; }
+  .spin-name { font-size:11px; font-weight:700; margin-bottom:4px; }
+  .s .spin-name { color:#1E40AF; }
+  .p .spin-name { color:#92400E; }
+  .i .spin-name { color:#991B1B; }
+  .n .spin-name { color:#065F46; }
+  .spin-desc { font-size:10px; color:#6b7280; line-height:1.45; }
+  .key-insight { background:#FEF3C7; border-radius:10px; padding:10px 14px; margin-top:12px; font-size:13px; color:#92400E; text-align:left; }
+  .key-insight strong { font-weight:700; }
+  .covers { font-size:12px; color:#9ca3af; margin-top:12px; }
+  .covers span { background:#f3f4f6; padding:2px 8px; border-radius:8px; margin:2px; display:inline-block; }
+
+  .start-screen.hidden { display:none; }
+  .quiz-content { display:none; }
+  .quiz-content.active { display:block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MISUMI · 中心营业培训</div>
+  <h1>SPIN提问训练</h1>
+  <p>从"浅层推销"到"深度顾问"</p>
+</header>
+
+<div class="container">
+
+  <div class="start-screen" id="startScreen">
+    <div class="intro-card">
+      <h2>🎯 SPIN提问模型</h2>
+      <p>不是审问，是帮客户梳理他的真实问题<br>底层逻辑：你的问题我刚好能解决</p>
+      <div class="spin-grid">
+        <div><div class="spin-card s">
+          <div class="spin-letter">S</div>
+          <div class="spin-name">Situation</div>
+          <div class="spin-desc">情境提问<br>你现在啥情况？</div>
+        </div></div>
+        <div><div class="spin-card p">
+          <div class="spin-letter">P</div>
+          <div class="spin-name">Problem</div>
+          <div class="spin-desc">难点提问<br>哪里不爽？</div>
+        </div></div>
+        <div><div class="spin-card i">
+          <div class="spin-letter">I</div>
+          <div class="spin-name">Implication</div>
+          <div class="spin-desc">暗示提问<br>不改会怎样？</div>
+        </div></div>
+        <div><div class="spin-card n">
+          <div class="spin-letter">N</div>
+          <div class="spin-name">Need-payoff</div>
+          <div class="spin-desc">回报提问<br>改了有啥好处？</div>
+        </div></div>
+      </div>
+      <div class="key-insight">
+        <strong>⚡ 最关键的一步是I（暗示）！</strong><br>
+        让客户自己意识到问题必须解决——不是你告诉他，是他自己想通。<br>
+        <strong>「如果这条产线停一天，损失多少？」</strong>——这句话比「我们产品很好」有力100倍。
+      </div>
+      <div class="covers">
+        适用场景：<span>需求挖掘</span><span>追单跟进</span><span>价格异议</span><span>采购谈判
+      </span></div>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="startQuiz()">开始练习 →</button>
+    </div>
+  </div>
+
+  <div class="quiz-content" id="quizContent">
+    <div class="progress-top">
+      <span class="progress-label" id="progressLabel">第 1 / 10 题</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+
+    <div class="card" id="questionCard">
+      <span class="q-badge" id="qBadge">第 1 题</span>
+      <span class="q-type" id="qType" style="display:none"></span>
+      <div class="q-text" id="qText"></div>
+      <div class="scenario" id="scenarioBox" style="display:none">
+        <div class="role-tag" id="roleTag"></div>
+        <div id="scenarioText"></div>
+      </div>
+      <div class="spin-hint" id="hintRow" style="display:none"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation"></div>
+      <div class="spin-chain" id="spinChain" style="display:none">
+        <div class="chain-title" id="chainTitle"></div>
+        <div class="chain-row" id="chainRow"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="submitBtn" disabled onclick="submitAnswer()">确认答案</button>
+        <button class="btn btn-outline" id="nextBtn" style="display:none" onclick="nextQuestion()">下一题 →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="score-ring" id="scoreRing" style="--pct:0%; --color:#22C55E">
+      <div class="score-inner">
+        <div class="score-num" id="scoreNum">0</div>
+        <div class="score-total">/ 10</div>
+      </div>
+    </div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-sub" id="resultSub"></div>
+
+    <div class="stats-row">
+      <div class="stat-card green"><div class="stat-num" id="statRight">0</div><div class="stat-label">答对</div></div>
+      <div class="stat-card red"><div class="stat-num" id="statWrong">0</div><div class="stat-label">答错</div></div>
+      <div class="stat-card orange"><div class="stat-num" id="statScore">0%</div><div class="stat-label">正确率</div></div>
+    </div>
+
+    <div class="review-title" id="reviewTitle">📋 答题回顾</div>
+    <div id="reviewList"></div>
+
+    <button class="btn btn-primary" style="margin-top:20px; width:100%;" onclick="restartQuiz()">🔄 再练一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    type: "SPIN识别",
+    text: "以下哪句话属于SPIN中的S（Situation，情境提问）？",
+    options: [
+      "您现在导轨这块主要用哪些品牌，月采购额大概多少？",
+      "有没有遇到过供应商临时涨价或交期延误被催的情况？",
+      "如果延迟一周到货，对您排产和考核有多大影响？",
+      "如果锁定价格加提前备货，被催概率能降多少？"
+    ],
+    correct: 0,
+    explanation: "选项A是S（情境提问）：<br>✅ 收集客观事实：「用哪些品牌」「月采购额」<br><br>选项B是P（难点提问）：问的是不满和困难<br>选项C是I（暗示提问）：问的是不改的后果<br>选项D是N（回报提问）：问的是改变后的好处"
+  },
+  {
+    type: "SPIN识别",
+    text: "「您现在这款轴承，有没有遇到过断货或精度不稳定的情况？」——这句话属于SPIN中的哪一个？",
+    options: [
+      "S（Situation）情境提问",
+      "P（Problem）难点提问",
+      "I（Implication）暗示提问",
+      "N（Need-payoff）回报提问"
+    ],
+    correct: 1,
+    explanation: "这是<strong>P（Problem，难点提问）</strong>：<br>✅ 问的是客户当下的不满和痛点<br>✅ 「断货」「精度不稳定」是具体的问题描述<br><br>注意：P问的是「当下存在的问题」，而不是「这个问题不改会怎样」（那是I的工作）。"
+  },
+  {
+    type: "I的重要性",
+    text: "在SPIN提问链中，I（Implication，暗示提问）为什么是最关键的一步？",
+    options: [
+      "因为I问的是客户的现状，是所有提问的基础",
+      "因为I让客户自己意识到问题的严重性——是你说服他买，还是他自己决定要买，两者的区别就在这里",
+      "因为I可以直接推导出解决方案",
+      "因为I是最后一个问题，决定了成交"
+    ],
+    correct: 1,
+    explanation: "<strong>I（暗示）是最关键的一步！</strong><br><br>SPIN的底层逻辑：不是你在说服客户买，而是<strong>让客户自己意识到问题必须解决</strong>。<br><br>「如果延迟一周到货，这条线停下来，一天损失多少？」——<br>客户自己算出来了：「一天大概损失XXX元」<br>他自己说：「那确实不能拖」——这比你花10分钟介绍产品有效100倍。<br><br>P是发现痛苦，<strong>I是把痛苦放大到客户无法忽视的程度</strong>。"
+  },
+  {
+    type: "采购vs工程师",
+    text: "对采购经理使用SPIN，以下哪句是「I（暗示）提问」的最佳示例？",
+    options: [
+      "您现在导轨供应商有几个品牌？",
+      "有没有遇到过紧急采购时供应商加价的情况？",
+      "如果导轨晚到一周导致产线停工，对您部门考核和排产有多大影响？",
+      "如果换成我们，月采购成本能降10%-15%，您觉得值得了解吗？"
+    ],
+    correct: 2,
+    explanation: "选项C是典型的I（暗示）提问：<br>✅ 「晚到一周」——假设一个具体场景<br>✅ 「产线停工」——把影响具象化<br>✅ 「对考核和排产的影响」——与采购经理的核心KPI挂钩<br><br>注意：I不是问当下的困难（P），而是<strong>假设不解决时的后果</strong>——让客户自己算账。"
+  },
+  {
+    type: "采购vs工程师",
+    scenario: { role: "工程师 · 需求挖掘", text: "一位工程师浏览了轴承参数页但没有询价，你打电话跟进。" },
+    text: "对工程师使用SPIN，以下哪句是「N（Need-payoff，回报提问）」的最佳示例？",
+    options: [
+      "您现在用的是哪款轴承，月用量大概多少？",
+      "有没有遇到过轴承精度不稳定，导致设备调参返工的情况？",
+      "如果精度出问题，整条线停下来，一天损失多少？",
+      "有一款精度对标、价格更优的轴承，愿意拿样品测试一下参数吗？"
+    ],
+    correct: 3,
+    explanation: "选项D是典型的N（Need-payoff，回报提问）：<br>✅ 「精度对标、价格更优」——说明改变后的好处<br>✅ 「拿样品测试」——极低风险的行动承诺<br>✅ 工程师的N要<strong>用技术语言</strong>：「精度对标」而非「价格便宜」<br><br>选项C是I（暗示）；选项B是P（难点）；选项A是S（情境）。"
+  },
+  {
+    type: "话术判断",
+    text: "以下哪句SPIN提问链的排列顺序是正确的？",
+    options: [
+      "S→P→N→I（情境→难点→回报→暗示）",
+      "S→P→I→N（情境→难点→暗示→回报）",
+      "P→S→I→N（难点→情境→暗示→回报）",
+      "I→P→S→N（暗示→难点→情境→回报）"
+    ],
+    correct: 1,
+    explanation: "正确的SPIN顺序是 <strong>S → P → I → N</strong>：<br><br><strong>S（情境）</strong>：先了解客观情况——品牌/用量/供应商<br><strong>P（难点）</strong>：发现痛点——涨价/延误/断货<br><strong>I（暗示）</strong>：放大痛苦——产线停工/考核受损/成本增加<br><strong>N（回报）</strong>：给出解决方案——锁定价格/样品测试/降低成本<br><br>注意：I在N前面——先让他意识到不改很痛，再给解药。"
+  },
+  {
+    type: "底层逻辑",
+    text: "SPIN的底层逻辑是什么？请选择最准确的表述。",
+    options: [
+      "通过提问收集客户信息，然后推荐合适的产品",
+      "通过层层递进的提问，让客户自己意识到问题并决定解决——底层是「你的问题我刚好能解决」",
+      "通过暗示客户问题的严重性，让他产生购买焦虑",
+      "通过问问题建立信任，然后再推销产品"
+    ],
+    correct: 1,
+    explanation: "<strong>SPIN的底层逻辑：「你的问题我刚好能解决」</strong><br><br>❌ 不是：我产品很好，你买吧<br>❌ 不是：通过问问题收集信息<br>❌ 不是：制造焦虑让他购买<br><br>✅ 是：通过S了解现状 → 通过P发现痛苦 → 通过<strong>I放大痛苦</strong> → 通过<strong>N给出解药</strong><br><br>关键：你不是说服者，<strong>你是帮客户梳理问题的人</strong>。他自己想通了，他自己决定解决。"
+  },
+  {
+    type: "场景应用",
+    scenario: { role: "采购 · 价格异议", text: "客户收到报价后说：「你们的价格比某品牌高了8%。」你需要用SPIN来挖出这个异议背后的真实需求。" },
+    text: "面对「价格高8%」的异议，以下SPIN提问链中，哪一句最符合「I（暗示）提问」的原则？",
+    options: [
+      "您是和哪个品牌比觉得高了8%？",
+      "除了价格，这款导轨的交期、起订量、紧急加急费，您有了解过吗？",
+      "如果您按总采购成本（TCO）来算，加上紧急采购加急费、起订量成本、库存占用成本，实际上综合成本差距可能不到3%。您平时是怎么评估采购成本的？",
+      "如果换成我们，交期3天，无起订量，成本更可控，这个方案您有兴趣了解吗？"
+    ],
+    correct: 2,
+    explanation: "选项C最符合I（暗示）提问：<br>✅ <strong>重构评估维度</strong>：「单价差距8%」≠「总采购成本差距8%」<br>✅ <strong>让客户自己算账</strong>：列出各项成本——紧急加急费/起订量成本/库存占用——客户自己算出「可能不到3%」<br>✅ <strong>最后补一句反问</strong>：「您平时怎么评估？」——让客户自己应用新的评估框架<br><br>这就是「让他自己想通」的力量——不是我告诉你贵得有道理，是你算出差距不大。"
+  },
+  {
+    type: "话术判断",
+    text: "以下哪句最接近「好的SPIN提问」的定义？",
+    options: [
+      "您是采购经理，我问您几个问题，请如实回答：您现在的供应商有没有问题？",
+      "张经理，您现在导轨月用量大概多少？有没有遇到过交期延误？如果交期延误导致产线停工损失多少？如果换成我们月成本能降12%，愿意了解一下吗？",
+      "您的问题我听懂了，我们的导轨品质很好，价格也合理，而且我们交期稳定、服务好，值得信赖。",
+      "请问您为什么觉得我们价格贵呢？是因为质量问题，还是别的原因？"
+    ],
+    correct: 1,
+    explanation: "选项B最接近完整的SPIN提问链：<br>✅ <strong>S</strong>：「月用量大概多少？」——了解客观情境<br>✅ <strong>P</strong>：「有没有遇到过交期延误？」——发现痛点<br>✅ <strong>I</strong>：「如果交期延误导致产线停工损失多少？」——放大痛苦<br>✅ <strong>N</strong>：「换成我们月成本能降12%，愿意了解吗？」——给出回报<br><br>而且这段话体现了<strong>3F前置</strong>——先复述「您的问题我听懂了」，再进入SPIN。"
+  },
+  {
+    type: "3F+SPIN串联",
+    text: "3F确认和SPIN的关系是什么？3F应该放在SPIN的什么位置？",
+    options: [
+      "3F是SPIN的一部分，S就是Fact，F就是Feeling",
+      "3F应在SPIN之前——先用3F确认客户的问题，让客户感到被理解，再进入SPIN挖需求",
+      "3F应在SPIN之后——先用SPIN挖出需求，最后用3F总结",
+      "3F和SPIN是完全独立的两个工具，不需要串联使用"
+    ],
+    correct: 1,
+    explanation: "<strong>3F在SPIN之前，SPIN在3F之后</strong>——串联顺序：<strong>3F → SPIN</strong><br><br>为什么？<br>客户说痛点后，如果你直接SPIN追问，会让客户感觉「你在审问我」——触发防御。<br><br>用3F先处理：<br>✅ <strong>F（Fact）</strong>：「您刚才说的是导轨交期不稳定，对吗？」<br>✅ <strong>F（Feeling）</strong>：「听起来这个问题让您很着急。」<br>✅ <strong>F（Focus）</strong>：「所以您希望找到交期稳定的供应商，对吗？」<br><br>然后进入SPIN：「您现在供应商交期一般是多少天？」……"
+  }
+];
+
+let current = 0;
+let selected = null;
+let answers = [];
+
+function startQuiz() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizContent').classList.add('active');
+  current = 0;
+  answers = [];
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  selected = null;
+  document.getElementById('qBadge').textContent = '第 ' + (current+1) + ' 题';
+  document.getElementById('progressLabel').textContent = '第 ' + (current+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((current+1)/questions.length*100) + '%';
+  document.getElementById('qType').textContent = q.type;
+  document.getElementById('qType').style.display = 'inline-block';
+  document.getElementById('qText').innerHTML = q.text;
+
+  if (q.scenario) {
+    document.getElementById('scenarioBox').style.display = 'block';
+    document.getElementById('roleTag').textContent = q.scenario.role;
+    document.getElementById('scenarioText').textContent = q.scenario.text;
+  } else {
+    document.getElementById('scenarioBox').style.display = 'none';
+  }
+
+  if (q.spinChain) {
+    document.getElementById('spinChain').style.display = 'block';
+    document.getElementById('chainTitle').textContent = q.spinChain.title;
+    document.getElementById('chainRow').innerHTML = q.spinChain.steps.map((s, i) =>
+      '<span class="chain-step ' + s.cls + '">' + s.label + '</span>'
+    ).join('');
+  } else {
+    document.getElementById('spinChain').style.display = 'none';
+  }
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = '<div class="opt-letter">' + letters[i] + '</div><div class="opt-text">' + opt + '</div>';
+    div.onclick = () => selectOption(i);
+    container.appendChild(div);
+  });
+
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('explanation').innerHTML = '';
+  document.getElementById('submitBtn').style.display = '';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectOption(i) {
+  document.querySelectorAll('.option').forEach((o, idx) => {
+    o.classList.remove('selected');
+    if (idx === i) o.classList.add('selected');
+  });
+  selected = i;
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function submitAnswer() {
+  if (selected === null) return;
+  const q = questions[current];
+  const isCorrect = selected === q.correct;
+  answers.push({ q, selected, isCorrect });
+  document.querySelectorAll('.option').forEach((o, i) => {
+    o.onclick = null;
+    if (i === q.correct) o.classList.add('correct');
+    else if (i === selected && !isCorrect) o.classList.add('wrong');
+  });
+  const expDiv = document.getElementById('explanation');
+  expDiv.className = 'explanation show ' + (isCorrect ? 'exp-correct' : 'exp-wrong');
+  expDiv.innerHTML = '<div class="exp-title">' + (isCorrect ? '✅ 正确！' : '⚠️ 错误，正确答案是 ' + ['A','B','C','D'][q.correct]) + '</div><p>' + q.explanation + '</p>';
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+  document.getElementById('nextBtn').textContent = current === questions.length - 1 ? '查看结果 →' : '下一题 →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) showResults();
+  else renderQuestion();
+}
+
+function showResults() {
+  document.getElementById('quizContent').classList.remove('active');
+  document.getElementById('resultScreen').classList.add('show');
+  const right = answers.filter(a => a.isCorrect).length;
+  const pct = Math.round(right / answers.length * 100);
+  document.getElementById('scoreNum').textContent = right;
+  document.getElementById('statRight').textContent = right;
+  document.getElementById('statWrong').textContent = answers.length - right;
+  document.getElementById('statScore').textContent = pct + '%';
+  document.getElementById('scoreRing').style.setProperty('--pct', pct + '%');
+  let title = '', sub = '';
+  if (pct === 100) { title = '🎉 满分！SPIN已完全掌握'; sub = 'S→P→I→N闭环 + I是最关键一步 + 3F前置，你已融会贯通。'; }
+  else if (pct >= 80) { title = '👍 优秀！SPIN已熟练'; sub = '核心逻辑已掌握，建议重点强化：I（暗示）让客户自己算账 + 采购岗/工程师岗的语言区分。'; }
+  else if (pct >= 60) { title = '💪 不错！SPIN需要多练习'; sub = '建议重温模块2-1，重点理解：I不是问困难，是假设不改的后果——让客户自己决定解决。'; }
+  else { title = '📚 SPIN需要强化学习'; sub = '先理解核心：「你的问题我刚好能解决」——不是审问，是帮客户梳理。再重做练习。'; }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSub').textContent = sub;
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '';
+  answers.forEach((a, i) => {
+    const item = document.createElement('div');
+    item.className = 'review-item ' + (a.isCorrect ? 'right' : 'wrong');
+    item.innerHTML = '<div class="review-q">第' + (i+1) + '题 · ' + a.q.type + '</div>' +
+      '<div class="review-answer">' + (a.isCorrect ? '✅ 正确' : '❌ 你的答案：' + ['A','B','C','D'][a.selected] + '｜正确答案：' + ['A','B','C','D'][a.q.correct]) + '</div>' +
+      '<div class="review-exp">' + a.q.explanation.replace(/<br>/g, ' ') + '</div>';
+    reviewList.appendChild(item);
+  });
+}
+
+function restartQuiz() {
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('startScreen').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 介绍练习 - 千分一智能定制版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f5f6fa; min-height:100vh; }
+  header { background:linear-gradient(135deg,#283593,#EF6C00); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:26px; }
+  header p { font-size:14px; opacity:0.85; margin-top:6px; }
+  header .company-tag { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; }
+  header .custom-tag { display:inline-block; background:#F39C12; border-radius:20px; padding:3px 14px; font-size:13px; margin-top:8px; margin-left:8px; font-weight:700; color:#fff; }
+  .container { max-width:800px; margin:0 auto; padding:32px 20px; }
+  .progress-bar { height:6px; background:#ddd; border-radius:3px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:#EF6C00; border-radius:3px; transition:width 0.4s; }
+  .progress-text { text-align:right; font-size:13px; color:#888; margin-bottom:4px; }
+  .card { background:white; border-radius:16px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .question-badge { display:inline-block; background:#EF6C00; color:white; border-radius:20px; padding:4px 14px; font-size:13px; margin-bottom:16px; }
+  .scenario { background:#f8f9fa; border-left:4px solid #EF6C00; padding:16px 20px; border-radius:0 12px 12px 0; margin:16px 0; font-size:15px; line-height:1.8; color:#333; }
+  .scenario .label { font-weight:600; color:#283593; }
+  .fabe-hint { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fabe-tag { padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+  .tag-F { background:#EBF5FB; color:#2980B9; }
+  .tag-A { background:#D5F5E3; color:#1E8449; }
+  .tag-B { background:#FEF9E7; color:#D35400; }
+  .tag-E { background:#F4ECF7; color:#7D3C98; }
+  .options { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .option { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border:2px solid #e0e0e0; border-radius:12px; cursor:pointer; transition:all 0.2s; font-size:15px; line-height:1.6; }
+  .option:hover { border-color:#EF6C00; background:#E8F6F3; }
+  .option.selected { border-color:#EF6C00; background:#E8F6F3; }
+  .option.correct { border-color:#27AE60; background:#E8F8F5; }
+  .option.wrong { border-color:#E74C3C; background:#FDEDEC; }
+  .option .radio { min-width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; margin-top:1px; }
+  .option.selected .radio { border-color:#EF6C00; background:#EF6C00; }
+  .option.selected .radio::after { content:''; width:8px; height:8px; background:white; border-radius:50%; display:block; }
+  .option .text { flex:1; }
+  .explanation { margin-top:20px; padding:16px 20px; background:#E8F8F5; border-radius:12px; display:none; }
+  .explanation.show { display:block; }
+  .explanation h4 { color:#27AE60; font-size:15px; margin-bottom:8px; }
+  .explanation p { font-size:14px; color:#333; line-height:1.7; }
+  .correct-answer { margin-top:20px; padding:14px 18px; background:#FFF3CD; border:2px solid #F0AD4E; border-radius:12px; display:none; font-size:14px; line-height:1.6; }
+  .correct-answer.show { display:block; }
+  .correct-answer .label { font-weight:700; color:#E67E22; margin-bottom:6px; }
+  .opt-label { font-weight:700; color:#283593; margin-right:6px; }
+  .btn-row { display:flex; gap:12px; margin-top:24px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary { background:#EF6C00; color:white; }
+  .btn-primary:hover { background:#0e6b5c; }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+  .result-page { display:none; }
+  .result-page.show { display:block; text-align:center; }
+  .score-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#283593,#EF6C00); color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .score-circle .num { font-size:48px; font-weight:700; line-height:1; }
+  .score-circle .sub { font-size:14px; margin-top:4px; opacity:0.85; }
+  .percent-circle { display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .percent-circle .num { font-size:36px; font-weight:700; color:#EF6C00; line-height:1; }
+  .percent-circle .unit { font-size:20px; font-weight:700; color:#EF6C00; }
+  .percent-circle .sub-label { font-size:13px; color:#999; margin-top:2px; }
+  .result-detail { background:white; border-radius:16px; padding:24px; margin-top:20px; text-align:left; }
+  .result-detail h3 { font-size:17px; margin-bottom:12px; color:#333; }
+  .result-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; }
+  .result-item:last-child { border-bottom:none; }
+  .result-item .status { font-size:18px; }
+  .restart-btn { margin-top:24px; padding:14px 48px; background:#EF6C00; color:white; border:none; border-radius:10px; font-size:16px; cursor:pointer; }
+  .tip-box { background:#E8F6F3; border:1px solid #A9DFBF; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:#0E4D5C; line-height:1.7; }
+  .tip-box strong { color:#283593; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>大董老师 · 介绍练习</h1>
+  <p>FABE产品价值呈现训练 · 共16题</p>
+  <span class="company-tag">✏️ 千分一智能 · 智能笔与传感器</span>
+  <span class="custom-tag">★ 定制开发</span>
+</header>
+
+<div class="container">
+  <div id="quizPage">
+    <div class="tip-box">
+      <strong>FABE 公式：</strong>先讲 <strong>F（特征）</strong>产品本身的属性 → <strong>A（优势）</strong>与竞品相比的优势 → <strong>B（利益）</strong>给客户带来的好处 → <strong>E（证明）</strong>用案例/数据/证据证明
+    </div>
+    <div class="progress-text" id="progressText"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="fabe-hint">
+      <span class="fabe-tag tag-F">F 特征</span>
+      <span class="fabe-tag tag-A">A 优势</span>
+      <span class="fabe-tag tag-B">B 利益</span>
+      <span class="fabe-tag tag-E">E 证明</span>
+    </div>
+    <div class="card" id="questionCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnPrev" onclick="prevQ()" disabled>上一题</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" disabled>确认答案</button>
+    </div>
+  </div>
+
+  <div class="result-page" id="resultPage">
+    <div class="score-circle">
+      <span class="num" id="scoreNum">0</span>
+      <span class="sub">正确 / 16 题</span>
+    </div>
+    <div class="percent-circle">
+      <span class="num" id="percentNum">0</span>
+      <span class="unit">分</span>
+      <span class="sub-label">百分制</span>
+    </div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="restart-btn" onclick="restart()">再来一次</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    "scenario": "你是千分一智能的销售，正在向一家智能笔方案商的技术负责人介绍你们自主研发的悬臂梁应变计式压力传感器。这款传感器用于智能笔的压力感应。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    "options": [
+      {
+        "text": "我们的悬臂梁应变计式压力传感器采用悬臂梁结构设计，基于应变片电阻变化原理感知笔尖压力，具有高灵敏度、无晃动感和高可靠性的特性，实现书写手感与传统笔无差异的拟真体验，解决了行业长期存在的「写感失真」问题。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比市场上主流的电容式传感器（日本松下垄断）和MEMS电阻式传感器（日本ALPS垄断），我们的应变计式方案灵敏度更高、无晃动感、成本更低且不受国外专利限制。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的传感器，您的智能笔书写手感更真实，用户口碑更好，产品差异化更强，在市场上更容易脱颖而出。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们累计研发投入超2亿元，拥有318项专利（发明专利46项），传感器技术打破了国外垄断，是全球第二大电容笔供应商。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身的原理和属性——悬臂梁结构、应变片电阻变化原理、高灵敏度、无晃动感、书写拟真。这些都是传感器本身的规格特性。<br><br>A是与国外方案对比的优势；B是客户利益；E是企业实力佐证。"
+  },
+  {
+    "scenario": "技术负责人问：市面上主流是电容式和MEMS电阻式，你们这个应变计式方案，到底比主流方案强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与竞品相比的优势）？",
+    "options": [
+      {
+        "text": "主流电容式被日本松下垄断、MEMS电阻式被日本ALPS垄断，价格高、交期长、定制难；我们的应变计式方案灵敏度更高、书写时无晃动感、可靠性高，能实现传统笔般的拟真手感，同时成本更低、供应链自主可控，不受国外专利和断供限制。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "我们的传感器采用悬臂梁结构设计，基于应变片电阻变化原理感知笔尖压力，具有高灵敏度、无晃动感、高可靠性的特性。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用我们的传感器，笔的书写手感更真实，用户口碑更好，产品差异化更强。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们累计研发投入超2亿元，拥有318项专利，传感器技术打破国外垄断。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比主流方案强在哪」——打破垄断、灵敏度更高、无晃动感、成本更低、供应链自主可控。这几条精准对比国外方案的痛点（贵、定制难、断供风险）。<br><br>F讲原理、B讲利益、E讲实力。"
+  },
+  {
+    "scenario": "技术负责人说：性能优势我认可，但我要向老板汇报的是——换这个方案，对我们产品到底有什么实在好处？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换用我们的传感器，您的智能笔书写手感实现「像在纸上写字」的体验，评测机构和用户口碑双双提升；成本比进口方案低、交期短、无断供风险，产品量产更从容；更重要的是，差异化体验让您的产品卖得上价、卖得出量。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "我们的传感器采用悬臂梁结构，基于应变片电阻变化原理感知笔尖压力，高灵敏度、无晃动感、高可靠性。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比被国外垄断的电容式和MEMS电阻式方案，我们灵敏度更高、成本更低、供应链自主可控。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "我们拥有318项专利（发明专利46项），累计研发投入超2亿元，传感器打破国外垄断。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——口碑提升、成本降低、量产从容、卖得上价。B要站在客户的商业结果上讲好处，而不是讲传感器参数。<br><br>F/A/E分别是原理、优势、实力。"
+  },
+  {
+    "scenario": "技术负责人说：说得挺美，但传感器是核心部件，万一出问题影响整笔，你们怎么证明技术真的成熟？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "我们深耕智能笔行业十年，累计研发投入超2亿元，拥有318项专利（发明专利46项）；2024年全球电容笔市场份额8.5%，排名全球第二仅次于苹果；已服务亚马逊、联想、华硕、惠普、OPPO、vivo、科大讯飞、作业帮等头部客户，传感器经过千万级出货验证。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "我们的传感器采用悬臂梁结构设计，基于应变片电阻变化原理感知笔尖压力，高灵敏度、无晃动感、高可靠性。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比主流电容式和MEMS电阻式方案，我们灵敏度更高、成本更低、供应链自主可控。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的传感器，书写手感真实、口碑提升、产品差异化更强、卖得上价。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——十年深耕、318项专利、全球市占率第二、头部客户名单、千万级出货验证。头部客户和出货量，是技术负责人最信服的证据。<br><br>F/A/B分别是原理、优势、利益。"
+  },
+  {
+    "scenario": "你向一家消费电子品牌的供应链负责人介绍千分一自主研发的C型结构压力传感器，这款产品用于替代进口MEMS电阻式传感器。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（产品本身的属性/规格）？",
+    "options": [
+      {
+        "text": "C型结构压力传感器采用C型弹性体结构设计，是国内较早实现供应链完全自主的智能笔传感器之一，性能对标进口MEMS电阻式传感器，作为国产替代方案打通了国产智能笔的完整技术链。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比进口MEMS电阻式传感器（日本ALPS主导），我们的C型结构方案不受专利限制、价格更低、交期更短，且供应不受地缘政治影响。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的C型传感器，贵司不用再为断供担惊受怕，供应链完全自主可控，产品量产更稳定，采购成本还能降下来。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们是国内较早实现智能笔传感器供应链完全国产化的厂商，产品已在多个头部品牌的智能笔上量产应用。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述产品本身——C型弹性体结构、供应链自主、性能对标进口。这些都是产品本身的属性。<br><br>A是相对进口方案的优势；B是客户的利益；E是量产应用案例。"
+  },
+  {
+    "scenario": "供应链负责人说：我们现在的MEMS电阻式传感器从日本进口，用得好好的，为什么要换你们国产的？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与进口方案相比的优势）？",
+    "options": [
+      {
+        "text": "进口MEMS电阻式传感器被日本ALPS垄断，价格高、交期长（最慢12周）、定制难；我们的C型结构传感器性能对标进口，但价格更低、交期更短、支持定制，供应完全自主可控，不受贸易摩擦和断供影响，还能配合你们产品迭代快速响应。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "C型结构传感器采用C型弹性体结构设计，是国内较早实现供应链完全自主的智能笔传感器之一。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用我们的传感器，不用再为断供担惊受怕，供应链自主可控，量产更稳定，采购成本降下来。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们已在国内多个头部品牌的智能笔上量产应用，出货验证充分。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比进口方案强在哪」——打破垄断、价格更低、交期更短、支持定制、供应链自主。这几条精准针对进口方案的「贵、慢、定制难、断供风险」。<br><br>F讲结构、B讲利益、E讲案例。"
+  },
+  {
+    "scenario": "供应链负责人说：国产替代这些道理我懂，但老板要的是实打实的好处，换供应商到底能带来什么？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "换用我们的C型传感器，贵司采购成本立降（价格比进口低）、交期缩短（不再等12周）、供应链断供风险归零，采购部从「求着日本供应商」变成「掌握主动权」；配合我们快速响应定制，新品迭代更快，市场竞争力更强。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "C型结构传感器采用C型弹性体结构设计，是国内较早实现供应链完全自主的智能笔传感器之一。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比进口MEMS方案，我们价格更低、交期更短、支持定制、供应自主可控。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "我们已在国内多个头部品牌智能笔上量产应用，出货验证充分。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「客户得到什么」——采购成本下降、交期缩短、断供风险归零、主动权回归、迭代更快。B要站在采购负责人的工作成果上讲好处。<br><br>F/A/E分别是结构、优势、案例。"
+  },
+  {
+    "scenario": "供应链负责人说：道理都懂，但国产替代失败案例太多了，你们凭什么让我相信国产的能顶住？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "我们深耕智能笔十年，累计研发投入超2亿元，拥有318项专利（发明专利46项）；C型传感器是国内较早实现供应链完全国产化的产品，已在亚马逊、联想、华硕、惠普、OPPO、vivo等头部客户的智能笔上量产，全球市占率8.5%排名第二，出货量足以证明品质。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "C型结构传感器采用C型弹性体结构设计，是国内较早实现供应链完全自主的智能笔传感器之一。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比进口MEMS方案，我们价格更低、交期更短、支持定制、供应自主可控。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "换用我们的传感器，采购成本立降、断供风险归零、主动权回归。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实回应「国产能不能顶住」——318项专利、头部客户量产、全球市占率第二、出货验证。客户对国产有疑虑，就要用最硬的量产事实来消除。<br><br>F/A/B分别是结构、优势、利益。"
+  },
+  {
+    "scenario": "你向一家平板品牌的产品经理介绍千分一的主动电容笔整笔方案（含笔体+传感器+算法），品牌方只需定义外观即可快速量产。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（方案本身的属性/构成）？",
+    "options": [
+      {
+        "text": "我们的主动电容笔整笔方案包含自研压力传感器、笔体结构、触觉反馈算法和量产工艺四大部分，B端客户只需定义外观设计即可快速量产，方案支持多级压感、防误触、低功耗等特性，笔屏交互体验行业领先。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比品牌方自己从零开发，我们的整笔方案把研发周期从12-18个月压缩到3-4个月，省去传感器选型、算法调试、产线磨合的漫长过程。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的整笔方案，贵司新品上市时间大幅提前，抢占市场窗口，研发团队可以从「造笔」中解放出来专注系统体验，产品竞争力更强。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们已为联想、华硕、惠普、OPPO、vivo等头部品牌提供笔方案，全球出货量领先，方案经过千万级量产验证。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述方案构成——传感器+笔体+算法+量产工艺四大模块、只需定义外观、支持多级压感防误触低功耗。这些都是方案本身的属性。<br><br>A是相对自主开发的优势；B是品牌方的利益；E是量产案例。"
+  },
+  {
+    "scenario": "产品经理问：我们本来打算自己组团队开发手写笔，你们整笔方案比自研强在哪？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与自研相比的优势）？",
+    "options": [
+      {
+        "text": "自研一支笔要12-18个月，传感器选型、算法调试、产线磨合全是坑，还容易翻车；我们的整笔方案把研发周期压缩到3-4个月，传感器、算法、工艺全部成熟验证过，品牌方只需定义外观，把资源和时间投入到自己擅长的系统体验和品牌营销上。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "我们的整笔方案包含自研压力传感器、笔体结构、触觉反馈算法和量产工艺四大部分，支持多级压感、防误触、低功耗。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用我们的整笔方案，新品上市时间大幅提前，研发团队从造笔中解放出来，产品竞争力更强。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们已为联想、华硕、惠普、OPPO、vivo等头部品牌提供笔方案，出货量领先。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比自研强在哪」——研发周期从12-18个月压缩到3-4个月、避开选型调试产线磨合的坑、成熟验证过、团队精力聚焦主业。这几条精准击中品牌方「自研慢、风险高」的顾虑。<br><br>F讲构成、B讲利益、E讲案例。"
+  },
+  {
+    "scenario": "产品经理说：3-4个月量产确实快，但我们品牌方最看重的是上市后的口碑，用你们方案，用户能感知到什么好处？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "用我们的方案，用户拿到笔的第一感受就是「写感真实」——压感细腻、笔迹跟手、无延迟晃动，评测机构好评、用户口碑发酵，发布会现场演示不出丑；同时低功耗设计让笔续航更长，防误触让书写更省心，这些体验最终都转化为品牌口碑和复购率。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "我们的整笔方案包含自研传感器、笔体结构、触觉反馈算法和量产工艺，支持多级压感、防误触、低功耗。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比自研，我们把研发周期压缩到3-4个月，避开选型调试产线磨合的坑，团队精力聚焦主业。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "我们已为联想、华硕、惠普、OPPO、vivo等头部品牌提供方案，出货量领先，千万级量产验证。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「用户和品牌得到什么」——写感真实、评测好评、口碑发酵、发布会不翻车、续航长省心。B要站在品牌口碑和用户体验上讲好处。<br><br>F/A/E分别是构成、优势、案例。"
+  },
+  {
+    "scenario": "产品经理最后说：方案不错，但我们这种体量的品牌，选供应商很谨慎，你们有什么硬实力证明？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "根据QYResearch数据，2024年千分一全球电容笔市场份额8.5%，排名全球第二仅次于苹果；已服务亚马逊、联想、华硕、惠普、OPPO、vivo、科大讯飞、作业帮、好未来、猿辅导等头部客户，拥有318项专利（发明专利46项），累计研发投入超2亿元，方案经过千万级出货验证。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "我们的整笔方案包含自研压力传感器、笔体结构、触觉反馈算法和量产工艺四大部分，支持多级压感、防误触、低功耗。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比自研，我们把研发周期压缩到3-4个月，避开选型调试产线磨合的坑。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的方案，写感真实、评测好评、口碑发酵、发布会不翻车。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用硬数据背书——全球市占率第二、头部客户名单、318项专利、千万级出货验证。国际权威数据（QYResearch）+头部客户矩阵，是品牌方最看重的信任凭证。<br><br>F/A/B分别是构成、优势、利益。"
+  },
+  {
+    "scenario": "你向一家高端智能终端品牌的技术总监介绍千分一的「多传感器融合算法+触觉反馈（Haptic）算法」方案，用于提升笔的书写体验和交互反馈。",
+    "question": "下面四句话，哪一句是 <strong>F - 特征</strong>（方案本身的属性/功能）？",
+    "options": [
+      {
+        "text": "我们的多传感器融合算法将压力、加速度、陀螺仪等多路传感器数据实时融合，实现笔迹跟手、倾斜识别、抬笔预判；触觉反馈算法可模拟不同书写介质的阻尼感和笔触震动，实现「在纸上写」的沉浸体验，两项算法均为行业率先突破。",
+        "type": "F",
+        "correct": true
+      },
+      {
+        "text": "相比只做单点压感的竞品，我们的多传感器融合让笔迹更跟手、识别更精准，触觉反馈让体验从「屏幕上的笔」升级为「手上的笔」。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用我们的算法方案，用户书写延迟大幅降低、笔迹精准跟手，沉浸式体验让产品在评测中脱颖而出，高端定位立得住。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们在新型压力传感器和Haptic触觉反馈算法领域实现行业率先突破，多款旗舰产品已搭载该方案上市。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ F - 特征</strong><br><br>特征是客观描述方案功能——多路传感器融合、笔迹跟手、倾斜识别、抬笔预判、介质阻尼模拟。这些都是算法方案本身的属性功能。<br><br>A是相对竞品的优势；B是客户利益；E是行业突破和上市案例。"
+  },
+  {
+    "scenario": "技术总监说：触觉反馈和传感器融合，市面上也有方案商在讲，你们凭什么说自己是行业领先？",
+    "question": "下面哪一句是 <strong>A - 优势</strong>（与竞品相比的优势）？",
+    "options": [
+      {
+        "text": "竞品的方案大多是「单点压感+基础反馈」，笔迹发飘、反应滞后；我们的多传感器融合实现毫秒级跟手、倾斜和抬笔预判，触觉反馈能按书写介质（纸张/玻璃/皮革）模拟真实阻尼，且传感器和算法全栈自研，一体化调优效果远非外购拼凑可比。",
+        "type": "A",
+        "correct": true
+      },
+      {
+        "text": "我们的方案将压力、加速度、陀螺仪等多路传感器数据实时融合，实现笔迹跟手、倾斜识别、抬笔预判。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "用我们的方案，延迟大幅降低、笔迹精准跟手，沉浸式体验让产品在评测中脱颖而出。",
+        "type": "B",
+        "correct": false
+      },
+      {
+        "text": "我们在新型压力传感器和Haptic触觉反馈算法领域实现行业率先突破，多款旗舰产品已搭载上市。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ A - 优势</strong><br><br>优势是「比竞品强在哪」——毫秒级跟手、按介质模拟阻尼、传感器算法全栈自研一体化调优。这几条精准对比竞品「单点压感、发飘、拼凑方案」的短板。<br><br>F讲功能、B讲利益、E讲案例。"
+  },
+  {
+    "scenario": "技术总监问：技术强是一回事，用户感知到才是真功夫，这套方案到底能带来什么体验上的好处？",
+    "question": "下面哪一句是 <strong>B - 利益</strong>（给客户带来的实际好处）？",
+    "options": [
+      {
+        "text": "用户用搭载我们方案的笔书写，笔迹实时跟手不延迟，写字像在纸上一样有阻尼感，绘画时笔触细腻多变——这种「用起来会上瘾」的体验，让您的产品在KOL评测、用户口碑中脱颖而出，高端机型卖点立得住，价格体系也撑得住。",
+        "type": "B",
+        "correct": true
+      },
+      {
+        "text": "我们的方案将压力、加速度、陀螺仪等多路传感器数据实时融合，实现笔迹跟手、倾斜识别、抬笔预判。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比竞品单点压感方案，我们毫秒级跟手、按介质模拟阻尼，全栈自研一体化调优。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "我们在新型压力传感器和Haptic触觉反馈算法领域实现行业率先突破，多款旗舰产品已搭载上市。",
+        "type": "E",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ B - 利益</strong><br><br>利益是「用户体验和市场结果」——跟手不延迟、阻尼真实、笔触细腻、评测口碑、高端卖点立得住。B要讲用户「用起来会上瘾」的体验和它带来的商业回报。<br><br>F/A/E分别是功能、优势、案例。"
+  },
+  {
+    "scenario": "技术总监最后问：算法这种东西最难验证，你们说行业率先突破，有没有实际落地的成果？",
+    "question": "下面哪一句是 <strong>E - 证明</strong>（用案例/数据/资质证明）？",
+    "options": [
+      {
+        "text": "我们在新型压力传感器和Haptic触觉反馈算法领域是行业率先突破者，相关算法已搭载于多款旗舰级智能笔和平板产品上市，累计出货千万级；拥有318项专利（发明专利46项）覆盖传感器结构和交互算法，服务联想、华硕、惠普、OPPO、vivo等头部客户，体验有真实市场验证。",
+        "type": "E",
+        "correct": true
+      },
+      {
+        "text": "我们的方案将压力、加速度、陀螺仪等多路传感器数据实时融合，实现笔迹跟手、倾斜识别、抬笔预判。",
+        "type": "F",
+        "correct": false
+      },
+      {
+        "text": "相比竞品单点压感方案，我们毫秒级跟手、按介质模拟阻尼，全栈自研一体化调优。",
+        "type": "A",
+        "correct": false
+      },
+      {
+        "text": "用户书写笔迹实时跟手，写字像在纸上一样有阻尼感，产品在评测和口碑中脱颖而出。",
+        "type": "B",
+        "correct": false
+      }
+    ],
+    "explain": "<strong>✅ E - 证明</strong><br><br>证明是用事实背书——行业率先突破、旗舰产品搭载上市、千万级出货、318项专利、头部客户验证。算法类产品最怕「纸上谈兵」，落地案例和出货量就是最好的证明。<br><br>F/A/B分别是功能、优势、利益。"
+  }
+];
+
+var currentQ = 0;
+var answers = [];
+var answered = false;
+
+function renderQ() {
+  var q = questions[currentQ];
+  document.getElementById('progressText').textContent = '第 ' + (currentQ+1) + ' / ' + questions.length + ' 题';
+  document.getElementById('progressFill').style.width = ((currentQ+1)/questions.length*100) + '%';
+
+  var fabeType = q.options.find(function(o){return o.type;}) ? q.options.find(function(o){return o.type;}).type : 'F';
+  var typeName = {'F':'F 特征','A':'A 优势','B':'B 利益','E':'E 证明'}[fabeType];
+
+  var card = document.getElementById('questionCard');
+  card.innerHTML = '<div class="question-badge">' + typeName + ' 训练</div>' +
+    '<div class="scenario"><span class="label">📋 场景：</span><br>' + q.scenario + '</div>' +
+    '<div style="font-size:16px;font-weight:600;color:#333;margin-bottom:16px;">' + q.question + '</div>' +
+    '<div class="options">' +
+    q.options.map(function(opt,i){
+      return '<div class="option" onclick="selectOpt(' + i + ')">' +
+        '<div class="radio"></div>' +
+        '<div class="text">' + opt.text + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="explanation" id="explanation">' +
+      '<h4>✅ 解析</h4>' +
+      '<p>' + q.explain + '</p>' +
+    '</div>';
+
+  answered = false;
+  document.getElementById('btnNext').textContent = '确认答案';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultPage').classList.remove('show');
+  document.getElementById('quizPage').style.display = '';
+}
+
+window.selectOpt = function(idx) {
+  if (answered) return;
+  var opts = document.querySelectorAll('.option');
+  opts.forEach(function(opt,i){ opt.classList.toggle('selected', i===idx); });
+  window.selectedIdx = idx;
+  document.getElementById('btnNext').disabled = false;
+};
+
+window.nextQ = function() {
+  if (window.selectedIdx === undefined) return;
+  if (!answered) {
+    answered = true;
+    var q = questions[currentQ];
+    var opts = document.querySelectorAll('.option');
+    opts.forEach(function(opt,i){
+      if (q.options[i].correct) opt.classList.add('correct');
+      if (i === window.selectedIdx && !q.options[i].correct) opt.classList.add('wrong');
+    });
+    answers[currentQ] = q.options[window.selectedIdx].correct;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+  } else {
+    if (currentQ < questions.length-1) {
+      currentQ++;
+      window.selectedIdx = undefined;
+      renderQ();
+    } else {
+      showResult();
+    }
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    window.selectedIdx = undefined;
+    renderQ();
+    if (answers[currentQ] !== undefined) {
+      answered = true;
+      var q = questions[currentQ];
+      var opts = document.querySelectorAll('.option');
+      opts.forEach(function(opt,i){
+        if (q.options[i].correct) opt.classList.add('correct');
+        if (answers[currentQ] === false && i === window.selectedIdx) opt.classList.add('wrong');
+      });
+      document.getElementById('explanation').classList.add('show');
+      document.getElementById('btnNext').textContent = currentQ < questions.length-1 ? '下一题 →' : '查看结果';
+    }
+  }
+};
+
+function showResult() {
+  document.getElementById('quizPage').style.display = 'none';
+  var score = answers.filter(function(a){return a;}).length;
+  var percent = Math.round(score / questions.length * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('percentNum').textContent = percent;
+
+  var detail = '<h3>📊 答题详情</h3>';
+  questions.forEach(function(q,i){
+    var icon = answers[i] ? '✅' : '❌';
+    var title = q.scenario.substring(0, 40) + '...';
+    detail += '<div class="result-item"><span style="font-size:18px;">' + icon + '</span><span>第' + (i+1) + '题：' + title + '</span></div>';
+  });
+  document.getElementById('resultDetail').innerHTML = detail;
+  document.getElementById('resultPage').classList.add('show');
+}
+
+window.restart = function() {
+  currentQ = 0;
+  answers = [];
+  window.selectedIdx = undefined;
+  answered = false;
+  renderQ();
+};
+
+renderQ();
+</script>
+</body>
+</html>
