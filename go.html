@@ -147,6 +147,7 @@
         <button id="btnUndo">悔棋</button>
         <button id="btnResign">认输</button>
         <button id="btnNew" class="green">重新开始</button>
+        <button id="btnEval" style="grid-column:1/3;">形势判断（暂停看赢面）</button>
       </div>
     </div>
     <div class="card" id="resultCard" style="display:none;">
@@ -157,7 +158,7 @@
       <div style="font-size:13px; color:var(--muted); margin-bottom:6px;">对局记录</div>
       <div class="log" id="log"></div>
       <div class="hint" style="margin-top:10px;">
-        规则提示：连续两次「停一手」即自动终局点目（数子法）；落子禁止自杀；打劫须先在别处落一子方可提回。人机模式为入门级启发式 AI。
+        规则提示：连续两次「停一手」即自动终局点目（数子法）；把对方棋子全部提掉即判全歼获胜；落子禁止自杀；打劫须先在别处落一子方可提回。人机模式为入门级启发式 AI。中途想看谁赢面大，点「形势判断」即可暂停估算。
       </div>
     </div>
   </div>
@@ -309,7 +310,7 @@ const G = {
   mode: 'ai-b', aiThinking: false,
   history: [],
   posHistory: [],
-  owner: null, hover: -1
+  owner: null, hover: -1, showEval: false
 };
 
 const cv = document.getElementById('board');
@@ -329,6 +330,7 @@ function newGame(){
   G.turn = 1; G.capB = 0; G.capW = 0; G.lastMove = -1;
   G.passes = 0; G.over = false; G.moveNo = 0;
   G.history = []; G.owner = null; G.aiThinking = false; G.hover = -1;
+  G.showEval = false;
   G.posHistory = [boardKey(G.board)];
   $('log').innerHTML = '';
   $('resultCard').style.display = 'none';
@@ -382,7 +384,18 @@ function snapshot(){
   });
 }
 
+function clearEval(){
+  G.showEval = false;
+}
+
+function countStones(color){
+  let c = 0;
+  for (let i = 0; i < G.board.length; i++) if (G.board[i] === color) c++;
+  return c;
+}
+
 function commit(res, p, captured){
+  clearEval();
   G.board = res.board;
   G.posHistory.push(res.key);
   if (G.turn === 1) G.capB += captured; else G.capW += captured;
@@ -392,6 +405,17 @@ function commit(res, p, captured){
   const who = G.turn === 1 ? '黑' : '白';
   pushLog('<span class="mv-' + (G.turn === 1 ? 'b' : 'w') + '">' + who + '</span> ' + coordName(p) + (captured ? ' 提' + captured + '子' : ''));
   G.turn = 3 - G.turn;
+  // 全歼判定：对手棋子被吃光（且己方至少2子，避免开局误判）
+  const mover = 3 - G.turn;
+  if (!G.over && countStones(G.turn) === 0 && countStones(mover) >= 2){
+    G.over = true;
+    G.lastMove = p;
+    pushLog('<b>' + (mover === 1 ? '黑' : '白') + '方全歼对手！</b>');
+    showResult('<span class="win">' + (mover === 1 ? '黑' : '白') + '方全歼对手，中盘胜！</span><br>对手棋子已被全部提掉，直接判定胜负。', null);
+    updatePanel();
+    draw();
+    return;
+  }
   updatePanel();
   draw();
   maybeAiMove();
@@ -437,6 +461,7 @@ function doResign(){
 
 function endGame(){
   G.over = true;
+  clearEval();
   const sc = scoreArea(G.board, G.N, KOMI);
   G.owner = sc.owner;
   const diff = Math.abs(sc.black - sc.white);
@@ -457,8 +482,31 @@ function showResult(html, sc){
   $('resultCard').style.display = 'block';
 }
 
+/* 形势判断：中途暂停估算当前赢面 */
+function estimate(){
+  if (G.over || G.aiThinking || !G.board) return;
+  const sc = scoreArea(G.board, G.N, KOMI);
+  G.owner = sc.owner;
+  G.showEval = true;
+  const diff = Math.abs(sc.black - sc.white);
+  const b = (Math.round(sc.black * 2) / 2).toFixed(1);
+  const w = (Math.round(sc.white * 2) / 2).toFixed(1);
+  const lead = sc.black > sc.white
+    ? '黑方领先约 ' + diff + ' 目'
+    : (sc.white > sc.black ? '白方领先约 ' + diff + ' 目' : '双方均势');
+  showResult(
+    '<b style="font-size:17px;">形势判断（暂停估算）</b><br>' +
+    '<span class="win">' + lead + '</span><br>' +
+    '估算目数：黑 ' + b + ' · 白 ' + w + '（数子法，白贴 ' + KOMI + '）<br>' +
+    '<span style="font-size:12px;color:#8a7c66;">棋盘小方块标出双方目前围到的实地（■黑 □白）；再落一子或悔棋后自动清除，不影响继续对局。</span>'
+  );
+  pushLog('形势判断：黑 ' + b + ' / 白 ' + w + ' — ' + lead);
+  draw();
+}
+
 function undo(){
   if (G.aiThinking || !G.history.length) return;
+  clearEval();
   function pop(){
     const h = G.history.pop();
     if (!h) return false;
@@ -568,8 +616,8 @@ function draw(){
   if (!G.board) return;
   const N = G.N, w = boardPx;
   ctx.clearRect(0, 0, w, w);
-  // 终局领地标记
-  if (G.over && G.owner){
+  // 终局领地 / 形势判断标记
+  if (G.owner && (G.over || G.showEval)){
     for (let p = 0; p < N * N; p++){
       const o = G.owner[p];
       if (o === 1 || o === 2){
@@ -640,6 +688,7 @@ cv.addEventListener('touchstart', function(e){
 }, {passive:true});
 
 $('btnPass').onclick = function(){ doPass(false); };
+$('btnEval').onclick = estimate;
 $('btnUndo').onclick = undo;
 $('btnResign').onclick = doResign;
 $('btnNew').onclick = newGame;
