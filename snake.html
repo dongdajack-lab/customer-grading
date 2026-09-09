@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>美琳&琳娜的贪吃蛇</title>
+<style>
+  :root{
+    --bg1:#f5efe3; --bg2:#e9e0cc;
+    --card:#ffffff; --ink:#2c2418; --muted:#8a7c66;
+    --accent:#B85042; --accent2:#336633;
+    --line:#e3dcc9;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--ink); min-height:100vh;
+    display:flex; flex-direction:column; align-items:center;
+    padding:18px 14px 40px;
+  }
+  header{width:100%; max-width:680px; display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap;}
+  header h1{font-size:26px; margin:0; letter-spacing:2px;}
+  header .sub{color:var(--muted); font-size:13px;}
+  .wrap{width:100%; max-width:680px; display:flex; flex-direction:column; gap:14px;}
+  .board-shell{
+    position:relative; border-radius:16px; overflow:hidden;
+    background:radial-gradient(ellipse at 30% 20%, #f2e6c4, #e2cf94 55%, #d3ba72);
+    box-shadow:0 10px 30px rgba(90,64,20,.18), inset 0 0 0 1px rgba(120,85,30,.25);
+    padding:10px;
+  }
+  canvas#game{display:block; width:100%; border-radius:10px; touch-action:none;}
+  .overlay{
+    position:absolute; inset:10px; border-radius:10px;
+    background:rgba(44,36,24,.55); backdrop-filter:blur(2px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:#fff; text-align:center; padding:20px; gap:10px;
+  }
+  .overlay.hidden{display:none;}
+  .overlay h2{margin:0; font-size:28px; letter-spacing:2px;}
+  .overlay p{margin:0; font-size:14px; line-height:1.8; color:#f0e6d0;}
+  .overlay .big{font-size:40px; font-weight:800; color:#ffd76e; line-height:1.2;}
+  .panel{display:flex; gap:14px; flex-wrap:wrap;}
+  .card{
+    flex:1 1 200px; background:var(--card); border-radius:14px; padding:14px 18px;
+    box-shadow:0 4px 16px rgba(90,64,20,.08); border:1px solid var(--line);
+  }
+  .scores{display:flex; gap:22px; font-size:13.5px; color:var(--muted);}
+  .scores b{color:var(--ink); font-size:20px; display:block; font-variant-numeric:tabular-nums;}
+  .scores .rec b{color:var(--accent);}
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  label{font-size:13px; color:var(--muted);}
+  select,button{
+    font:inherit; font-size:14px; padding:7px 12px; border-radius:9px;
+    border:1px solid var(--line); background:#faf7ef; color:var(--ink); cursor:pointer;
+  }
+  .btns{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  button.primary{background:var(--accent); border-color:var(--accent); color:#fff;}
+  button.primary:hover{background:#a04436;}
+  button.green{background:var(--accent2); border-color:var(--accent2); color:#fff;}
+  button.green:hover{background:#2a522a;}
+  button:hover{background:#f2ecdc;}
+  button:active{transform:scale(.97);}
+  .hint{font-size:12px; color:var(--muted); line-height:1.8;}
+  /* 手机方向键 */
+  .dpad{display:none; margin:2px auto 0; width:180px;}
+  .dpad .drow{display:flex; justify-content:center; gap:8px; margin:6px 0;}
+  .dpad button{
+    width:56px; height:56px; font-size:22px; border-radius:14px; background:#faf7ef;
+    border:1px solid var(--line);
+  }
+  @media (pointer:coarse){ .dpad{display:block;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>🐍 美琳&amp;琳娜的贪吃蛇</h1>
+  <div class="sub">吃苹果变长 · 别咬自己 · 撞墙扣命</div>
+</header>
+<div class="wrap">
+  <div class="board-shell">
+    <canvas id="game" width="600" height="600"></canvas>
+    <div class="overlay" id="overlay">
+      <h2 id="ovTitle">准备好了吗？</h2>
+      <div class="big" id="ovBig" style="display:none;">0</div>
+      <p id="ovText">电脑：方向键 / WASD 控制，空格暂停<br>手机：滑动画布或用屏幕方向键</p>
+      <div class="row" style="justify-content:center;">
+        <button class="primary" id="ovBtn" style="padding:10px 28px;">开始游戏</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <div class="scores">
+        <div class="rec">最高分<b id="hiScore">0</b></div>
+        <div>当前得分<b id="score">0</b></div>
+        <div>长度<b id="lenScore">3</b></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div><label>速度</label><br>
+          <select id="selSpeed">
+            <option value="160">悠闲</option>
+            <option value="110" selected>正常</option>
+            <option value="70">飞速</option>
+          </select>
+        </div>
+        <div><label>穿墙模式</label><br>
+          <select id="selWall">
+            <option value="wall" selected>经典（撞墙死）</option>
+            <option value="pass">穿墙（更简单）</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="btns">
+      <button id="btnStart" class="primary">开始 / 重新开始</button>
+      <button id="btnPause">暂停</button>
+      <button id="btnResign" style="grid-column:span 2;">结束并保存成绩</button>
+    </div>
+    <div class="hint" style="margin-top:10px;">
+      规则：吃到 🍎 得 10 分并变长一节；连续快速吃到会有连击加分；撞到自己或（经典模式下）撞墙则游戏结束。最高分会自动保存在本机。
+    </div>
+  </div>
+
+  <div class="dpad">
+    <div class="drow"><button data-dir="U">▲</button></div>
+    <div class="drow">
+      <button data-dir="L">◀</button>
+      <button data-dir="D">▼</button>
+      <button data-dir="R">▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================== 贪吃蛇 ================== */
+const cv = document.getElementById('game');
+const ctx = cv.getContext('2d');
+const COLS = 24, ROWS = 24;
+const $ = id => document.getElementById(id);
+
+const S = {
+  snake: [], dir: 'R', nextDir: 'R',
+  food: null, score: 0, combo: 0, lastEat: 0,
+  running: false, paused: false, dead: false,
+  timer: null, speed: 110, wall: 'wall',
+  growing: 0, pop: 0
+};
+
+const DIRS = { U:[0,-1], D:[0,1], L:[-1,0], R:[1,0] };
+const OPP = { U:'D', D:'U', L:'R', R:'L' };
+
+function cellPx(){
+  return cv.width / COLS;
+}
+
+function reset(){
+  S.snake = [{x:8,y:12},{x:7,y:12},{x:6,y:12}];
+  S.dir = 'R'; S.nextDir = 'R';
+  S.score = 0; S.combo = 0; S.growing = 0; S.pop = 0;
+  S.dead = false; S.paused = false;
+  spawnFood();
+  updatePanel();
+}
+
+function freeCells(){
+  const occ = new Set(S.snake.map(s => s.x + ',' + s.y));
+  const r = [];
+  for (let x = 0; x < COLS; x++)
+    for (let y = 0; y < ROWS; y++)
+      if (!occ.has(x + ',' + y)) r.push({x, y});
+  return r;
+}
+
+function spawnFood(){
+  const cells = freeCells();
+  if (!cells.length){ S.food = null; return; }
+  S.food = cells[Math.floor(Math.random() * cells.length)];
+}
+
+function step(){
+  if (!S.running || S.paused || S.dead) return;
+  // 应用转向（不允许直接掉头）
+  if (S.nextDir !== OPP[S.dir]) S.dir = S.nextDir;
+  const head = S.snake[0];
+  const [dx, dy] = DIRS[S.dir];
+  let nx = head.x + dx, ny = head.y + dy;
+
+  if (S.wall === 'pass'){
+    nx = (nx + COLS) % COLS;
+    ny = (ny + ROWS) % ROWS;
+  } else if (nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS){
+    return die();
+  }
+
+  // 咬到自己（尾巴即将移走的位置除外——若不增长尾巴会腾出）
+  const willGrow = S.growing > 0;
+  for (let i = 0; i < S.snake.length - (willGrow ? 0 : 1); i++){
+    if (S.snake[i].x === nx && S.snake[i].y === ny) return die();
+  }
+
+  S.snake.unshift({x: nx, y: ny});
+
+  if (S.food && nx === S.food.x && ny === S.food.y){
+    const now = Date.now();
+    if (now - S.lastEat < 1500) S.combo = Math.min(S.combo + 1, 5);
+    else S.combo = 1;
+    S.lastEat = now;
+    S.score += 10 + (S.combo - 1) * 5;
+    S.growing += 1;
+    S.pop = 8;
+    spawnFood();
+    updatePanel();
+  }
+
+  if (S.growing > 0) S.growing--;
+  else S.snake.pop();
+
+  draw();
+}
+
+function die(){
+  S.dead = true; S.running = false;
+  clearInterval(S.timer);
+  const hi = loadHi();
+  const isRecord = S.score > hi;
+  if (isRecord) saveHi(S.score);
+  updatePanel();
+  $('ovTitle').textContent = isRecord ? '🎉 新纪录！' : '游戏结束';
+  $('ovBig').style.display = 'block';
+  $('ovBig').textContent = S.score;
+  $('ovText').innerHTML = isRecord
+    ? '打破了之前的最高分 ' + hi + ' 分！<br>点下面再来一局'
+    : '本局 ' + S.score + ' 分 · 长度 ' + S.snake.length + ' 节<br>点下面再来一局';
+  $('ovBtn').textContent = '再来一局';
+  $('overlay').classList.remove('hidden');
+  draw();
+}
+
+function start(){
+  reset();
+  S.running = true;
+  clearInterval(S.timer);
+  S.timer = setInterval(step, S.speed);
+  $('overlay').classList.add('hidden');
+  draw();
+}
+
+function togglePause(){
+  if (!S.running || S.dead) return;
+  S.paused = !S.paused;
+  if (S.paused){
+    $('ovTitle').textContent = '⏸ 已暂停';
+    $('ovBig').style.display = 'none';
+    $('ovText').innerHTML = '休息一下～<br>点按钮或按空格继续';
+    $('ovBtn').textContent = '继续游戏';
+    $('overlay').classList.remove('hidden');
+  } else {
+    $('overlay').classList.add('hidden');
+  }
+}
+
+function setDir(d){
+  if (!S.running || S.paused || S.dead) return;
+  if (d !== OPP[S.dir]) S.nextDir = d;
+}
+
+/* ---------- 存储 ---------- */
+function loadHi(){
+  try { return parseInt(localStorage.getItem('snake-hi') || '0', 10) || 0; }
+  catch(e){ return 0; }
+}
+function saveHi(v){
+  try { localStorage.setItem('snake-hi', String(v)); } catch(e){}
+}
+
+function updatePanel(){
+  $('score').textContent = S.score;
+  $('lenScore').textContent = S.snake.length;
+  $('hiScore').textContent = loadHi();
+}
+
+/* ---------- 绘制 ---------- */
+function draw(){
+  const c = cellPx();
+  // 棋盘底
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  for (let x = 0; x < COLS; x++){
+    for (let y = 0; y < ROWS; y++){
+      if ((x + y) % 2 === 0){
+        ctx.fillStyle = 'rgba(255,250,230,.35)';
+        ctx.fillRect(x*c, y*c, c, c);
+      }
+    }
+  }
+  // 食物 🍎
+  if (S.food){
+    ctx.font = Math.floor(c * 0.9) + 'px sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🍎', S.food.x*c + c/2, S.food.y*c + c/2 + c*0.05);
+  }
+  // 蛇身
+  for (let i = S.snake.length - 1; i >= 0; i--){
+    const s = S.snake[i];
+    const t = 1 - i / Math.max(S.snake.length, 1);
+    const pad = c * (0.09 + (1 - t) * 0.06);
+    const r = c * 0.28;
+    const x = s.x * c + pad, y = s.y * c + pad;
+    const w = c - pad * 2;
+    roundRect(x, y, w, w, r);
+    if (i === 0){
+      ctx.fillStyle = '#B85042';
+      ctx.shadowColor = 'rgba(184,80,66,.5)';
+      ctx.shadowBlur = S.pop > 0 ? 12 : 5;
+    } else {
+      const g = Math.round(150 - t * 60 + (1 - t) * 30);
+      ctx.fillStyle = 'rgb(' + Math.round(60 - t*20) + ',' + Math.round(160 - t*50) + ',' + Math.round(80 - t*25) + ')';
+      ctx.shadowBlur = 0;
+    }
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    // 眼睛
+    if (i === 0){
+      const [dx, dy] = DIRS[S.dir];
+      const cx = s.x*c + c/2, cy = s.y*c + c/2;
+      const ex = -dy, ey = dx; // 垂直于前进方向
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(cx + dx*c*0.12 + ex*c*0.18, cy + dy*c*0.12 + ey*c*0.18, c*0.11, 0, Math.PI*2);
+      ctx.arc(cx + dx*c*0.12 - ex*c*0.18, cy + dy*c*0.12 - ey*c*0.18, c*0.11, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = '#111';
+      ctx.beginPath();
+      ctx.arc(cx + dx*c*0.16 + ex*c*0.18, cy + dy*c*0.16 + ey*c*0.18, c*0.05, 0, Math.PI*2);
+      ctx.arc(cx + dx*c*0.16 - ex*c*0.18, cy + dy*c*0.16 - ey*c*0.18, c*0.05, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+  if (S.pop > 0) S.pop--;
+  // 死亡红叉
+  if (S.dead){
+    const h = S.snake[0];
+    ctx.strokeStyle = 'rgba(184,80,66,.9)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(h.x*c + c*0.3, h.y*c + c*0.3);
+    ctx.lineTo(h.x*c + c*0.7, h.y*c + c*0.7);
+    ctx.moveTo(h.x*c + c*0.7, h.y*c + c*0.3);
+    ctx.lineTo(h.x*c + c*0.3, h.y*c + c*0.7);
+    ctx.stroke();
+  }
+}
+
+function roundRect(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/* ---------- 事件 ---------- */
+document.addEventListener('keydown', function(e){
+  const k = e.key.toLowerCase();
+  if (k === ' ' || k === 'spacebar'){
+    e.preventDefault();
+    if (!S.running && !S.dead) start();
+    else if (S.dead) start();
+    else togglePause();
+    return;
+  }
+  if (k === 'enter' && (!S.running || S.dead)){ start(); return; }
+  const map = {
+    arrowup:'U', w:'U', arrowdown:'D', s:'D',
+    arrowleft:'L', a:'L', arrowright:'R', d:'R'
+  };
+  if (map[k]){ e.preventDefault(); setDir(map[k]); }
+});
+
+// 手机滑动
+let tsx = 0, tsy = 0;
+cv.addEventListener('touchstart', function(e){
+  tsx = e.touches[0].clientX; tsy = e.touches[0].clientY;
+}, {passive:true});
+cv.addEventListener('touchend', function(e){
+  const dx = e.changedTouches[0].clientX - tsx;
+  const dy = e.changedTouches[0].clientY - tsy;
+  if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+  if (Math.abs(dx) > Math.abs(dy)) setDir(dx > 0 ? 'R' : 'L');
+  else setDir(dy > 0 ? 'D' : 'U');
+}, {passive:true});
+
+// 屏幕方向键
+document.querySelectorAll('.dpad button').forEach(function(b){
+  b.addEventListener('click', function(){ setDir(b.dataset.dir); });
+});
+
+$('ovBtn').onclick = function(){
+  if (S.paused) togglePause();
+  else start();
+};
+$('btnStart').onclick = start;
+$('btnPause').onclick = function(){ if (!S.running && !S.dead) start(); else togglePause(); };
+$('btnResign').onclick = function(){ if (S.running) die(); };
+$('selSpeed').onchange = function(){
+  S.speed = parseInt(this.value, 10);
+  if (S.running && !S.paused){
+    clearInterval(S.timer);
+    S.timer = setInterval(step, S.speed);
+  }
+};
+$('selWall').onchange = function(){ S.wall = this.value; };
+
+reset();
+draw();
+</script>
+</body>
+</html>
