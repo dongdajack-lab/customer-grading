@@ -84,7 +84,7 @@
     <div class="overlay" id="overlay">
       <h2 id="ovTitle">准备好了吗？</h2>
       <div class="big" id="ovBig" style="display:none;">0</div>
-      <p id="ovText">电脑：方向键 / WASD 控制，空格暂停<br>手机：滑动画布或用屏幕方向键</p>
+      <p id="ovText">现在是「超简单」模式：蛇走得慢、不会咬到自己、还能穿墙 🐣<br>电脑：方向键 / WASD，空格暂停<br>手机：滑动画布或用屏幕方向键</p>
       <div class="row" style="justify-content:center;">
         <button class="primary" id="ovBtn" style="padding:10px 28px;">开始游戏</button>
       </div>
@@ -94,27 +94,26 @@
   <div class="panel">
     <div class="card">
       <div class="scores">
-        <div class="rec">最高分<b id="hiScore">0</b></div>
+        <div class="rec"><span id="hiLabel">最高分 · 超简单</span><b id="hiScore">0</b></div>
         <div>当前得分<b id="score">0</b></div>
         <div>长度<b id="lenScore">3</b></div>
       </div>
     </div>
     <div class="card">
       <div class="row">
-        <div><label>速度</label><br>
-          <select id="selSpeed">
-            <option value="160">悠闲</option>
-            <option value="110" selected>正常</option>
-            <option value="70">飞速</option>
+        <div><label>难度</label><br>
+          <select id="selDiff">
+            <option value="super" selected>超简单（小朋友）</option>
+            <option value="easy">简单</option>
+            <option value="classic">经典</option>
+            <option value="hard">挑战（快）</option>
           </select>
         </div>
-        <div><label>穿墙模式</label><br>
-          <select id="selWall">
-            <option value="wall" selected>经典（撞墙死）</option>
-            <option value="pass">穿墙（更简单）</option>
-          </select>
+        <div id="livesBox" style="display:none;"><label>生命</label><br>
+          <span id="lives" style="font-size:20px; letter-spacing:2px;">❤❤❤</span>
         </div>
       </div>
+      <div class="hint" id="diffHint" style="margin-top:10px;"></div>
     </div>
   </div>
 
@@ -124,8 +123,9 @@
       <button id="btnPause">暂停</button>
       <button id="btnResign" style="grid-column:span 2;">结束并保存成绩</button>
     </div>
-    <div class="hint" style="margin-top:10px;">
-      规则：吃到 🍎 得 10 分并变长一节；连续快速吃到会有连击加分；撞到自己或（经典模式下）撞墙则游戏结束。最高分会自动保存在本机。
+    <div id="statusLine" style="min-height:20px; font-size:14px; font-weight:600; color:var(--accent); text-align:center; margin-top:8px;"></div>
+    <div class="hint" style="margin-top:6px;">
+      规则：吃到 🍎 得 10 分并变长一节；连续快速吃到会有连击加分。超简单模式不咬自己、可穿墙，还有 3 条命。最高分会自动保存在本机（不同难度分开记）。
     </div>
   </div>
 
@@ -143,14 +143,27 @@
 /* ================== 贪吃蛇 ================== */
 const cv = document.getElementById('game');
 const ctx = cv.getContext('2d');
-const COLS = 24, ROWS = 24;
 const $ = id => document.getElementById(id);
+
+/* 难度预设：超简单专为小朋友设计 */
+const DIFF = {
+  super:   { cols:14, speed:270, wall:'pass', selfPass:true,  lives:3, name:'超简单',
+             hint:'🐣 棋盘小、蛇走得慢、可以穿墙、不会咬到自己，还有 3 条命，放心大胆玩！' },
+  easy:    { cols:18, speed:180, wall:'pass', selfPass:false, lives:2, name:'简单',
+             hint:'🙂 棋盘中等、速度较慢、可以穿墙，但会咬到自己，有 2 条命。' },
+  classic: { cols:24, speed:110, wall:'wall', selfPass:false, lives:1, name:'经典',
+             hint:'🏛 标准棋盘、撞墙会死、只有 1 条命。' },
+  hard:    { cols:24, speed:70,  wall:'wall', selfPass:false, lives:1, name:'挑战',
+             hint:'🔥 标准棋盘、速度飞快、撞墙会死，1 条命，高手专属！' }
+};
 
 const S = {
   snake: [], dir: 'R', nextDir: 'R',
   food: null, score: 0, combo: 0, lastEat: 0,
   running: false, paused: false, dead: false,
-  timer: null, speed: 110, wall: 'wall',
+  timer: null, speed: 270, wall: 'pass',
+  cols: 14, diff: 'super', selfPass: true,
+  lives: 3, maxLives: 3, respawn: 0,
   growing: 0, pop: 0
 };
 
@@ -158,23 +171,41 @@ const DIRS = { U:[0,-1], D:[0,1], L:[-1,0], R:[1,0] };
 const OPP = { U:'D', D:'U', L:'R', R:'L' };
 
 function cellPx(){
-  return cv.width / COLS;
+  return Math.min(cv.width / S.cols, cv.height / S.cols);
 }
 
-function reset(){
-  S.snake = [{x:8,y:12},{x:7,y:12},{x:6,y:12}];
+function applyDiff(key){
+  const d = DIFF[key] || DIFF.super;
+  S.diff = key;
+  S.cols = d.cols;
+  S.speed = d.speed;
+  S.wall = d.wall;
+  S.selfPass = d.selfPass;
+  S.maxLives = d.lives;
+  $('diffHint').textContent = d.hint;
+  $('livesBox').style.display = d.lives > 1 ? '' : 'none';
+}
+
+function reset(keepScore){
+  const c = S.cols;
+  const cx = Math.floor(c / 2), cy = Math.floor(c / 2);
+  S.snake = [{x:cx,y:cy},{x:cx-1,y:cy},{x:cx-2,y:cy}];
   S.dir = 'R'; S.nextDir = 'R';
-  S.score = 0; S.combo = 0; S.growing = 0; S.pop = 0;
+  if (!keepScore) S.score = 0;
+  S.combo = 0; S.growing = 0; S.pop = 0;
+  S.respawn = 0;
   S.dead = false; S.paused = false;
+  S.lives = S.maxLives;
   spawnFood();
   updatePanel();
+  setStatus('');
 }
 
 function freeCells(){
   const occ = new Set(S.snake.map(s => s.x + ',' + s.y));
   const r = [];
-  for (let x = 0; x < COLS; x++)
-    for (let y = 0; y < ROWS; y++)
+  for (let x = 0; x < S.cols; x++)
+    for (let y = 0; y < S.cols; y++)
       if (!occ.has(x + ',' + y)) r.push({x, y});
   return r;
 }
@@ -187,23 +218,27 @@ function spawnFood(){
 
 function step(){
   if (!S.running || S.paused || S.dead) return;
+  if (S.respawn > 0){ S.respawn--; draw(); return; }
   // 应用转向（不允许直接掉头）
   if (S.nextDir !== OPP[S.dir]) S.dir = S.nextDir;
   const head = S.snake[0];
   const [dx, dy] = DIRS[S.dir];
   let nx = head.x + dx, ny = head.y + dy;
+  const N = S.cols;
 
   if (S.wall === 'pass'){
-    nx = (nx + COLS) % COLS;
-    ny = (ny + ROWS) % ROWS;
-  } else if (nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS){
-    return die();
+    nx = (nx + N) % N;
+    ny = (ny + N) % N;
+  } else if (nx < 0 || ny < 0 || nx >= N || ny >= N){
+    return loseLife('撞墙了');
   }
 
-  // 咬到自己（尾巴即将移走的位置除外——若不增长尾巴会腾出）
-  const willGrow = S.growing > 0;
-  for (let i = 0; i < S.snake.length - (willGrow ? 0 : 1); i++){
-    if (S.snake[i].x === nx && S.snake[i].y === ny) return die();
+  // 咬到自己（尾巴即将移走的位置除外——若不增长尾巴会腾出）。超简单模式不会死
+  if (!S.selfPass){
+    const willGrow = S.growing > 0;
+    for (let i = 0; i < S.snake.length - (willGrow ? 0 : 1); i++){
+      if (S.snake[i].x === nx && S.snake[i].y === ny) return loseLife('咬到自己了');
+    }
   }
 
   S.snake.unshift({x: nx, y: ny});
@@ -213,9 +248,11 @@ function step(){
     if (now - S.lastEat < 1500) S.combo = Math.min(S.combo + 1, 5);
     else S.combo = 1;
     S.lastEat = now;
-    S.score += 10 + (S.combo - 1) * 5;
+    const gain = 10 + (S.combo - 1) * 5;
+    S.score += gain;
     S.growing += 1;
     S.pop = 8;
+    setStatus(S.combo > 1 ? '连击 ×' + S.combo + '　+' + gain + ' 分！' : '好吃！+' + gain + ' 分', 900);
     spawnFood();
     updatePanel();
   }
@@ -226,7 +263,23 @@ function step(){
   draw();
 }
 
-function die(){
+/* 丢一条命：还有命就原地重来（保留分数），否则真的结束 */
+function loseLife(reason){
+  S.lives--;
+  updatePanel();
+  if (S.lives > 0){
+    const c = S.cols, cx = Math.floor(c / 2), cy = Math.floor(c / 2);
+    S.snake = [{x:cx,y:cy},{x:cx-1,y:cy},{x:cx-2,y:cy}];
+    S.dir = 'R'; S.nextDir = 'R'; S.growing = 0;
+    S.respawn = 2; // 暂停两拍让小朋友看清
+    setStatus('💔 ' + reason + '！还剩 ' + S.lives + ' 条命，继续加油～', 2200);
+    draw();
+    return;
+  }
+  return die(reason);
+}
+
+function die(reason){
   S.dead = true; S.running = false;
   clearInterval(S.timer);
   const hi = loadHi();
@@ -236,17 +289,18 @@ function die(){
   $('ovTitle').textContent = isRecord ? '🎉 新纪录！' : '游戏结束';
   $('ovBig').style.display = 'block';
   $('ovBig').textContent = S.score;
-  $('ovText').innerHTML = isRecord
+  $('ovText').innerHTML = (reason ? reason + '～<br>' : '') + (isRecord
     ? '打破了之前的最高分 ' + hi + ' 分！<br>点下面再来一局'
-    : '本局 ' + S.score + ' 分 · 长度 ' + S.snake.length + ' 节<br>点下面再来一局';
+    : '本局 ' + S.score + ' 分 · 长度 ' + S.snake.length + ' 节<br>点下面再来一局');
   $('ovBtn').textContent = '再来一局';
   $('overlay').classList.remove('hidden');
   draw();
 }
 
 function start(){
-  reset();
+  reset(false);
   S.running = true;
+  S.dead = false;
   clearInterval(S.timer);
   S.timer = setInterval(step, S.speed);
   $('overlay').classList.add('hidden');
@@ -272,33 +326,61 @@ function setDir(d){
   if (d !== OPP[S.dir]) S.nextDir = d;
 }
 
-/* ---------- 存储 ---------- */
+/* ---------- 状态提示 ---------- */
+let statusTimer = null;
+function setStatus(t, ms){
+  $('statusLine').textContent = t || '';
+  if (statusTimer) clearTimeout(statusTimer);
+  if (t && ms) statusTimer = setTimeout(function(){
+    if ($('statusLine').textContent === t) $('statusLine').textContent = '';
+  }, ms);
+}
+
+/* ---------- 存储（按难度分开记最高分） ---------- */
+function hiKey(){ return 'snake-hi-' + S.diff; }
 function loadHi(){
-  try { return parseInt(localStorage.getItem('snake-hi') || '0', 10) || 0; }
-  catch(e){ return 0; }
+  try {
+    const v = localStorage.getItem(hiKey());
+    if (v !== null) return parseInt(v, 10) || 0;
+    // 兼容旧版单一记录
+    if (S.diff === 'classic') return parseInt(localStorage.getItem('snake-hi') || '0', 10) || 0;
+    return 0;
+  } catch(e){ return 0; }
 }
 function saveHi(v){
-  try { localStorage.setItem('snake-hi', String(v)); } catch(e){}
+  try { localStorage.setItem(hiKey(), String(v)); } catch(e){}
 }
 
 function updatePanel(){
   $('score').textContent = S.score;
   $('lenScore').textContent = S.snake.length;
   $('hiScore').textContent = loadHi();
+  $('lives').textContent = '❤'.repeat(Math.max(S.lives, 0)) + '♡'.repeat(Math.max(S.maxLives - S.lives, 0));
+  $('hiLabel').textContent = '最高分 · ' + DIFF[S.diff].name;
 }
 
 /* ---------- 绘制 ---------- */
 function draw(){
   const c = cellPx();
+  const N = S.cols;
   // 棋盘底
   ctx.clearRect(0, 0, cv.width, cv.height);
-  for (let x = 0; x < COLS; x++){
-    for (let y = 0; y < ROWS; y++){
+  for (let x = 0; x < N; x++){
+    for (let y = 0; y < N; y++){
       if ((x + y) % 2 === 0){
         ctx.fillStyle = 'rgba(255,250,230,.35)';
         ctx.fillRect(x*c, y*c, c, c);
       }
     }
+  }
+  // 超简单/简单模式为可穿墙：画一圈柔和虚线提示
+  if (S.wall === 'pass'){
+    ctx.save();
+    ctx.setLineDash([8, 6]);
+    ctx.strokeStyle = 'rgba(51,102,51,.45)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, 1, cv.width - 2, cv.height - 2);
+    ctx.restore();
   }
   // 食物 🍎
   if (S.food){
@@ -344,6 +426,17 @@ function draw(){
     }
   }
   if (S.pop > 0) S.pop--;
+  // 丢命重来提示
+  if (S.respawn > 0){
+    ctx.fillStyle = 'rgba(44,36,24,.32)';
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = 'bold ' + Math.floor(cv.width * 0.085) + 'px sans-serif';
+    ctx.fillText('💔 少一条命', cv.width/2, cv.height/2 - cv.width*0.06);
+    ctx.font = Math.floor(cv.width * 0.05) + 'px sans-serif';
+    ctx.fillText('还剩 ' + S.lives + ' 条命，继续！', cv.width/2, cv.height/2 + cv.width*0.07);
+  }
   // 死亡红叉
   if (S.dead){
     const h = S.snake[0];
@@ -411,16 +504,16 @@ $('ovBtn').onclick = function(){
 $('btnStart').onclick = start;
 $('btnPause').onclick = function(){ if (!S.running && !S.dead) start(); else togglePause(); };
 $('btnResign').onclick = function(){ if (S.running) die(); };
-$('selSpeed').onchange = function(){
-  S.speed = parseInt(this.value, 10);
-  if (S.running && !S.paused){
-    clearInterval(S.timer);
-    S.timer = setInterval(step, S.speed);
-  }
+$('selDiff').onchange = function(){
+  applyDiff(this.value);
+  clearInterval(S.timer);
+  S.running = false; S.dead = false;
+  reset(false);
+  start(); // 换难度直接开新局，小朋友少点一步
 };
-$('selWall').onchange = function(){ S.wall = this.value; };
 
-reset();
+applyDiff('super');
+reset(false);
 draw();
 </script>
 </body>
