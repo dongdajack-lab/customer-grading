@@ -1449,6 +1449,7 @@ body {
     </div>
     <div style="text-align:center;margin-top:16px;">
       <button class="btn-primary" onclick="downloadPoster()" style="font-size:15px;padding:12px 28px;">📥 保存为图片</button>
+      <button class="btn-primary" id="copyResultBtn" onclick="copyResultReport()" style="font-size:15px;padding:12px 28px;margin-left:12px;background:#8B6914;">📋 复制我的成绩</button>
     </div>
     <div class="poster-share-row">
       <button class="poster-share-btn" onclick="shareWechat()"><span class="s-icon">💬</span> 微信分享</button>
@@ -1776,6 +1777,53 @@ function getSubScores(dim) {
     result[k] = { total: subs[k].reduce((a, b) => a + b, 0), count: subs[k].length };
   });
   return result;
+}
+
+function copyResultReport() {
+  const aData = getScore('A');
+  const sData = getScore('S');
+  const kData = getScore('K');
+  const totalScore = aData.total + sData.total + kData.total;
+  const segName = totalScore === 150 ? '钻石销冠' : totalScore >= 120 ? '金牌销售' : totalScore >= 90 ? '银牌销售' : '铜牌销售';
+  const subLine = function(dim) {
+    const subs = getSubScores(dim);
+    return Object.keys(subs).map(function(k) { return k + ' ' + subs[k].total + '/' + (subs[k].count * 5); }).join('，');
+  };
+  const now = new Date();
+  const pad = function(n) { return String(n).padStart(2, '0'); };
+  const ts = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  const report =
+    '【销冠能力测评结果】\n' +
+    '姓名：' + (userName || '未填写') + '\n' +
+    '总分：' + totalScore + ' / 150（段位：' + segName + '）\n' +
+    '三心·态度：' + aData.total + ' / ' + (aData.count * 5) + '（' + subLine('A') + '）\n' +
+    '流程6技·技能：' + sData.total + ' / ' + (sData.count * 5) + '（' + subLine('S') + '）\n' +
+    '四知·知识：' + kData.total + ' / ' + (kData.count * 5) + '（' + subLine('K') + '）\n' +
+    '完成时间：' + ts;
+  const markDone = function() {
+    const b = document.getElementById('copyResultBtn');
+    if (b) {
+      const old = b.innerHTML;
+      b.innerHTML = '✅ 已复制，去微信粘贴发送';
+      setTimeout(function() { b.innerHTML = old; }, 2500);
+    }
+  };
+  const fallbackCopy = function(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); markDone(); }
+    catch (e) { alert('复制失败，请手动选择以下内容复制：\n\n' + text); }
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(report).then(markDone).catch(function() { fallbackCopy(report); });
+  } else {
+    fallbackCopy(report);
+  }
 }
 
 function showResult() {
