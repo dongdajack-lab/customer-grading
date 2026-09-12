@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>名瑟·FABE销售话术练习 | LED照明芯片销售场景</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%);
+  min-height: 100vh;
+  color: #1a2547;
+  line-height: 1.6;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+
+/* === 头部 === */
+.header {
+  background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 20px rgba(47, 60, 126, 0.25);
+}
+.brand-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.header h1 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
+.header p { font-size: 13px; opacity: 0.9; }
+.scenario-info {
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* === 回顾区 === */
+.review-card {
+  background: white;
+  border-radius: 16px;
+  padding: 26px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.review-card h2 { font-size: 18px; color: #1a2547; margin-bottom: 14px; }
+.review-card h2 .sub { font-size: 13px; color: #888; font-weight: 400; margin-left: 8px; }
+.fabe-row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: #fafbff;
+  border: 1px solid #e8ecf5;
+}
+.fabe-row .letter {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fabe-row .letter.f { background: #2F3C7E; }
+.fabe-row .letter.a { background: #4a5fa8; }
+.fabe-row .letter.b { background: #c47b1f; }
+.fabe-row .letter.e { background: #336633; }
+.fabe-row .body { font-size: 13.5px; color: #333; }
+.fabe-row .body strong { color: #1a2547; }
+.fabe-row .body .check { display: block; font-size: 12px; color: #c47b1f; margin-top: 3px; }
+.tips-box {
+  background: #fff8ef;
+  border-left: 4px solid #c47b1f;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin: 14px 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.tips-box strong { color: #a3641a; }
+.new-industry {
+  background: #eef7ee;
+  border-left: 4px solid #336633;
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #2a4d2a;
+}
+.review-card .btn { width: 100%; margin-top: 6px; }
+
+/* === 进度条 === */
+.progress-wrap {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+.progress-text .current-num {
+  color: #2F3C7E;
+  font-weight: 700;
+  font-size: 16px;
+}
+.progress-bar {
+  height: 6px;
+  background: #e8ecf5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2F3C7E 0%, #4a5fa8 100%);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* === 题目卡 === */
+.q-block { display: none; }
+.q-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.question-badge {
+  display: inline-block;
+  background: #2F3C7E;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.question-badge.gate { background: #c47b1f; }
+.scenario {
+  background: #f5f7fc;
+  border-left: 4px solid #2F3C7E;
+  padding: 14px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+}
+.scenario .label {
+  color: #2F3C7E;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.q-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2547;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border-radius: 8px;
+  border: 1px dashed #d0d8ec;
+}
+
+/* === 选项 === */
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border: 2px solid #e8ecf5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+}
+.option:hover {
+  border-color: #2F3C7E;
+  background: #f5f7fc;
+  transform: translateX(2px);
+}
+.option.selected {
+  border-color: #2F3C7E;
+  background: #eef2fb;
+}
+.option.correct {
+  border-color: #336633;
+  background: #eaf5ea;
+}
+.option.wrong {
+  border-color: #c14545;
+  background: #fbeaea;
+}
+.option.disabled { cursor: not-allowed; }
+.option .radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+  position: relative;
+}
+.option.selected .radio {
+  border-color: #2F3C7E;
+  background: #2F3C7E;
+}
+.option.selected .radio::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+.option.correct .radio {
+  border-color: #336633;
+  background: #336633;
+}
+.option.correct .radio::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.option.wrong .radio {
+  border-color: #c14545;
+  background: #c14545;
+}
+.option.wrong .radio::after {
+  content: '✗';
+  position: absolute;
+  top: -2px;
+  left: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+.option .text { flex: 1; }
+.opt-label {
+  font-weight: 700;
+  color: #2F3C7E;
+  margin-right: 4px;
+}
+.option.correct .opt-label { color: #336633; }
+.option.wrong .opt-label { color: #c14545; }
+
+/* === 答案和解析 === */
+.correct-answer, .explanation {
+  display: none;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.correct-answer {
+  background: #eaf5ea;
+  border-left: 4px solid #336633;
+  color: #2a4d2a;
+}
+.correct-answer .label {
+  font-weight: 700;
+  margin-right: 6px;
+}
+.explanation {
+  background: #fafbff;
+  border-left: 4px solid #2F3C7E;
+  color: #333;
+}
+.explanation h4 {
+  font-size: 14px;
+  color: #2F3C7E;
+  margin-bottom: 8px;
+}
+.explanation p { margin-bottom: 8px; font-size: 13.5px; line-height: 1.7; }
+.explanation .formula {
+  background: #2F3C7E;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+.correct-answer.show, .explanation.show { display: block; }
+
+/* === 按钮 === */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: #2F3C7E;
+  color: white;
+}
+.btn-primary:hover:not(:disabled) { background: #1e2a5c; }
+.btn-primary:disabled { background: #b0b8c8; cursor: not-allowed; }
+.btn-secondary {
+  background: white;
+  color: #2F3C7E;
+  border: 2px solid #2F3C7E;
+}
+.btn-secondary:hover:not(:disabled) { background: #f5f7fc; }
+.btn-secondary:disabled { color: #b0b8c8; border-color: #d0d8ec; cursor: not-allowed; }
+
+/* === 结果页 === */
+.result-card {
+  display: none;
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.result-card.show { display: block; }
+.result-title { font-size: 22px; color: #1a2547; margin-bottom: 8px; font-weight: 700; }
+.score-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2F3C7E 0%, #4a5fa8 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  box-shadow: 0 4px 16px rgba(47, 60, 126, 0.3);
+}
+.score-circle .num { font-size: 42px; font-weight: 700; }
+.score-circle .total { font-size: 14px; opacity: 0.9; }
+.score-percent { font-size: 18px; color: #2F3C7E; margin-bottom: 6px; font-weight: 600; }
+.score-remark { font-size: 14px; color: #666; margin-bottom: 24px; }
+.result-detail {
+  text-align: left;
+  background: #fafbff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.result-detail h3 { font-size: 15px; color: #2F3C7E; margin-bottom: 12px; }
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13.5px;
+  color: #333;
+  border-bottom: 1px solid #e8ecf5;
+}
+.result-item:last-child { border-bottom: none; }
+.result-item .status { font-weight: 700; }
+
+/* === 页脚 === */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #999;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .container { padding: 16px 12px; }
+  .header { padding: 20px 16px; }
+  .header h1 { font-size: 20px; }
+  .q-card { padding: 20px 16px; }
+  .option { padding: 12px 14px; font-size: 13.5px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="brand-tag">博商 · 大董销售体系</span>
+    <h1>名瑟·FABE销售话术练习</h1>
+    <p>LED照明芯片销售场景 · 回顾 ＋ 四关闯关</p>
+    <div class="scenario-info">
+      <strong>场景设定：</strong>你是厦门名瑟电子的销售工程师，代理杰华特电源管理芯片。客户是中山某LED灯具厂的张总——在用别家方案，最关心 ErP 认证、交期和成本。先花 2 分钟回顾，再进四关，答错不要紧——错的关就是你的复习清单。
+    </div>
+  </div>
+
+  <!-- ============ 回顾区 ============ -->
+  <div class="review-card" id="reviewPage">
+    <h2>先回顾：FABE 到底怎么用<span class="sub">约 2 分钟</span></h2>
+    <div class="fabe-row">
+      <div class="letter f">F</div>
+      <div class="body"><strong>Feature 特征</strong>——产品/方案的事实。只占半句，别念参数表。
+        <span class="check">自检：这个特征，这个客户用得上吗？用不上就不配当F。</span></div>
+    </div>
+    <div class="fabe-row">
+      <div class="letter a">A</div>
+      <div class="body"><strong>Advantage 优势</strong>——特征"对您意味着什么"。句子里的主角必须是"您"，不许出现"我们公司"。
+        <span class="check">自检：把主语换成"您"，句子还成立吗？</span></div>
+    </div>
+    <div class="fabe-row">
+      <div class="letter b">B</div>
+      <div class="body"><strong>Benefit 利益</strong>——挂客户自己说过的痛点原话。"您刚才说最怕认证折腾，这正好……"
+        <span class="check">自检：有没有引用他自己的原话？</span></div>
+    </div>
+    <div class="fabe-row">
+      <div class="letter e">E</div>
+      <div class="body"><strong>Evidence 证据</strong>——可验证的东西：评估板实测数据、同行量产案例、原厂FAE支持。
+        <span class="check">自检：形容词不算证据，"肯定靠谱"拿出来给谁看？</span></div>
+    </div>
+    <div class="tips-box">
+      <strong>三句话结构（金标准）：</strong>① B 开场——把价值讲成客户的账 → ② E 收差异——被比价时给比较证据 → ③ 挡板对账收口——"跟您关心的交期和成本对上了吗？"对上账＋未否决，才约送样。<br>
+      <strong>差异化陪比（被比价时）：</strong>先认对方优点 → 讲自己的差异 → 把差异翻译成客户的账。<strong>不贬对手、不急降价。</strong>
+    </div>
+    <div class="new-industry">
+      💡 <strong>新行业思路（汽车电子）：</strong>流程一模一样，证据要升级——把"量产实测"换成 AEC-Q 认证、车规量产案例、原厂车规线支持。照明练熟的骨架，切汽车时只换证据层级。
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()">开始闯关 →</button>
+  </div>
+
+  <div id="quizPage" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-text">
+        <span>闯关进度</span>
+        <span><span class="current-num" id="currentNum">1</span> / <span id="totalNum">6</span></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- 第1关 F -->
+    <div class="q-block" id="q0" style="display:block;">
+      <div class="q-card">
+        <span class="question-badge gate">第 1 关 · F 特征</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>客户是做智能感应灯的电子厂，研发王工最在意"灯要常年待机等感应信号，耗电不能大"。
+        </div>
+        <div class="q-title">下面哪句是"对这个客户有用的 F 特征"？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 我们代理杰华特全系列300多颗料，什么需求都能满足。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 这款DC/DC静态功耗只有几十微安，专门对应感应灯常年待机的场景。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 杰华特是科创板上市公司（688141），实力放心。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 我们做芯片代理十几年了，中山古镇做遍了的。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca0">
+          <span class="label">✅ 正确答案：B</span>F＝这个客户用得上的产品事实。
+        </div>
+        <div class="explanation" id="ex0">
+          <h4>解析：F 不是产品简介，是"对他有用的那一个事实"</h4>
+          <p><strong>A 为什么错：</strong>"什么都能满足"＝没有重点，王工只关心待机功耗。</p>
+          <p><strong>C 为什么错：</strong>上市公司是公司背书，不是产品特征。</p>
+          <p><strong>D 为什么错：</strong>资历是讲给你听的，不是讲给客户的问题听的。</p>
+          <div class="formula">F 的检验法：这句话能不能直接帮他解决"待机功耗"？不能就换。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一关</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第2关 A -->
+    <div class="q-block" id="q1">
+      <div class="q-card">
+        <span class="question-badge gate">第 2 关 · A 优势</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>王工听完特征点点头，但没有接话。哪句才是合格的 A（对您意味着什么）？
+        </div>
+        <div class="q-title">哪句是合格的 A？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 这款料的转换效率在业界是领先的。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 效率高这两个点，对您整灯就是待机更省电、温升更小，感应灯可以做得更小巧。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 我们比X家的价格更有优势。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 这个料好多大客户都在用。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca1">
+          <span class="label">✅ 正确答案：B</span>A＝把特征翻译成"对您意味着什么"。
+        </div>
+        <div class="explanation" id="ex1">
+          <h4>解析：A 的检验法——把主语换成"您"，句子还成立吗？</h4>
+          <p><strong>B 为什么对：</strong>特征（效率高）→ 客户指标（待机功耗、温升、体积），每一步都长在"您"身上。</p>
+          <p><strong>A 为什么错：</strong>"业界领先"是自夸，主语是"我们"。</p>
+          <p><strong>C 为什么错：</strong>聊价格就掉进价格战，而且A关还没到比价环节。</p>
+          <p><strong>D 为什么错：</strong>别人在用≠对他有什么好处，证据应该放到 E 关去打。</p>
+          <div class="formula">A 的标准句式："（特征），对您（具体业务指标）意味着（什么变化）。"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一关</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第3关 B -->
+    <div class="q-block" id="q2">
+      <div class="q-card">
+        <span class="question-badge gate">第 3 关 · B 利益</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>张总刚说过："我最怕的就是认证反复折腾，耽误出货。"
+        </div>
+        <div class="q-title">哪句是合格的 B（利益挂他的原话）？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 我们的方案能帮您把BOM成本降下来。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 这个方案效率很高、性能很稳。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 您刚才说最怕认证折腾耽误出货——这套方案有ErP一次过的量产记录，能帮您把认证周期从两个月压到两周。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 用了我们的方案，您客户的投诉肯定少。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca2">
+          <span class="label">✅ 正确答案：C</span>B＝引用客户自己的原话＋收益挂他说过的指标。
+        </div>
+        <div class="explanation" id="ex2">
+          <h4>解析：B 的灵魂是"用他自己的话，解决他自己说的问题"</h4>
+          <p><strong>C 为什么对：</strong>1) 复述原话"认证折腾耽误出货"；2) 收益落到他的指标（认证周期）；3) 有具体量级（两个月→两周）。</p>
+          <p><strong>A 为什么错：</strong>成本不是他刚说的痛点——你解决的是"你想卖的"，不是"他愁的"。</p>
+          <p><strong>B 为什么错：</strong>"效率高很稳"是 F/A 的话，不是 B。</p>
+          <p><strong>D 为什么错：</strong>"投诉肯定少"是他没说过的承诺——替客户编，禁区。</p>
+          <div class="formula">B 的标准句式："您刚才说（原话）——这正好（收益），（量级）。"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一关</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第4关 E -->
+    <div class="q-block" id="q3">
+      <div class="q-card">
+        <span class="question-badge gate">第 4 关 · E 证据</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>张总抱着胳膊："你们说的，跟X家也差不多吧。"
+        </div>
+        <div class="q-title">哪句 E（证据）最有说服力？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 我们是大代理，肯定靠谱。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 这是古镇XX灯厂的量产实测：同规格整灯效率提升了X%，跑了半年零批量投诉——测试报告我现在发您，也欢迎去他们产线看。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> X家最近不是涨价了嘛，我们价格更好。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 我们技术支持响应很快的，放心。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca3">
+          <span class="label">✅ 正确答案：B</span>E＝可验证的第三方证据：实测数据、量产案例、原厂支持。
+        </div>
+        <div class="explanation" id="ex3">
+          <h4>解析：形容词不是证据，可验证的才是</h4>
+          <p><strong>B 为什么对：</strong>1) 具体案例（古镇灯厂）；2) 有数字（效率+X%、半年零投诉）；3) 可验证（报告现在发、欢迎考察）——三层全是"拿得出来的"。</p>
+          <p><strong>A/D 为什么错：</strong>"肯定""放心"是形容词，客户听同行说了十年了。</p>
+          <p><strong>C 为什么错：</strong>贬对手＋拉价格，专业度双杀。</p>
+          <div class="formula">E 的弹药库：评估板实测数据 / 同行量产案例 / 原厂FAE支持响应。被比价时，先给证据再谈价。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一关</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第4关 E·差异化陪比 -->
+    <div class="q-block" id="q4">
+      <div class="q-card">
+        <span class="question-badge gate">第 4 关 · E 差异化陪比</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>张总："X家跟你们功能差不多，就是贵点，但我用惯了。"
+        </div>
+        <div class="q-title">最佳回应是哪句？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "X家方案是成熟，这点我认。我们不一样的地方在原厂FAE直连、出问题当天响应——这是上个月XX客户的切换实测记录，您看这个差别值不值这点价差。"</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "X家方案是三年前的架构了，好多客户都换过来了。"</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "那您先用着，有需要随时找我。"</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "您换过来，我给您申请降价5%。"</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca4">
+          <span class="label">✅ 正确答案：A</span>差异化陪比三步：认对方 → 讲差异＋给证据 → 翻译成客户的账。
+        </div>
+        <div class="explanation" id="ex4">
+          <h4>解析：被比价时，先认后比，把差异算成钱</h4>
+          <p><strong>A 为什么对：</strong>先认"成熟，我认"（不树敌）→ 差异落在可验证的服务（FAE直连、当天响应）→ 给证据（切换实测）→ 让客户自己算（值不值价差）。</p>
+          <p><strong>B 为什么错：</strong>贬对手——客户会想"他这么说别人，也会这么说我"。</p>
+          <p><strong>C 为什么错：</strong>一句话把主动权全交出去。</p>
+          <p><strong>D 为什么错：</strong>降价=承认价值讲不过，把价值战打成价格战，以后每次都被压5%。</p>
+          <div class="formula">陪比口诀：先认优点 → 讲差异 → 给证据 → 让他自己算账。不贬对手、不急降价。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一关</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 终极关 挡板收口 -->
+    <div class="q-block" id="q5">
+      <div class="q-card">
+        <span class="question-badge">终极关 · 挡板收口</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>FABE三句话讲完，张总没说好，也没说不好。
+        </div>
+        <div class="q-title">下一步最该做什么？</div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 趁热报价："您一年用多少？我给您算个总价。"</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 再补充几个产品优势，把方案讲得更全面。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 对账收口："刚才说的三点，跟您关心的认证周期和交期对上了吗？"——对上账＋客户未否决，才推进："要不要列个样品清单，我们安排评估板测试？"</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 加个微信，把产品手册发过去，回去等消息。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca5">
+          <span class="label">✅ 正确答案：C</span>讲完不等于认可——先对账，再约送样。
+        </div>
+        <div class="explanation" id="ex5">
+          <h4>解析：防"假过关"的挡板——客户要方案≠认可方案</h4>
+          <p><strong>C 为什么对：</strong>③章过门＝对账＋未否决＋同意走送样流程。客户给出样品清单/料号/测试条件，才算真过门。</p>
+          <p><strong>A 为什么错：</strong>没确认价值就报价，把价值战打成价格战。</p>
+          <p><strong>B 为什么错：</strong>继续讲是自嗨——客户没说不好，可能压根没听进去。</p>
+          <p><strong>D 为什么错：</strong>发手册等消息＝送样试单前的动作全跳过了，这单八成挂在"等回复"上。</p>
+          <div class="formula">挡板收口公式：对账（跟您关心的XX对上了吗）→ 未否决 → 约送样（列个样品清单/安排评估板）。三项齐了才算过门。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一关</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">查看结果</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结果页 -->
+  <div class="result-card" id="resultPage">
+    <div class="result-title">闯关完成！</div>
+    <div class="score-circle">
+      <div class="num" id="scoreNum">0</div>
+      <div class="total">/ 6 关</div>
+    </div>
+    <div class="score-percent">通过率 <span id="percentNum">0</span>%</div>
+    <div class="score-remark" id="scoreRemark"></div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="btn btn-primary" onclick="restart()">再练一遍 🔁</button>
+  </div>
+
+  <div class="footer">
+    博商 · 大董销售体系 · 名瑟FABE话术练习 · 仅供内部培训使用
+  </div>
+</div>
+
+<script>
+var current = 0;
+var selected = null;
+var answered = false;
+var results = [];
+var totalQuestions = 6;
+
+function startQuiz() {
+  document.getElementById("reviewPage").style.display = "none";
+  document.getElementById("quizPage").style.display = "block";
+  init();
+}
+
+function init() {
+  updateProgress();
+  showQuestion(0);
+}
+
+function updateProgress() {
+  document.getElementById("currentNum").textContent = (current + 1);
+  document.getElementById("progressFill").style.width =
+    (current / totalQuestions * 100) + "%";
+}
+
+function currentBlock() {
+  return document.getElementById('q' + current);
+}
+
+function currentBtns() {
+  var q = currentBlock();
+  return {
+    next: q.querySelector('#btnNext'),
+    prev: q.querySelector('#btnPrev')
+  };
+}
+
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) {
+    var el = document.getElementById('q' + i);
+    if (el) el.style.display = 'none';
+  }
+  var curr = document.getElementById('q' + idx);
+  if (curr) curr.style.display = 'block';
+  current = idx;
+  selected = null;
+  answered = false;
+  var btns = currentBtns();
+  var btnNext = btns.next;
+  var btnPrev = btns.prev;
+  btnNext.textContent = (idx === totalQuestions - 1) ? "查看结果" : "确认答案";
+  btnNext.disabled = true;
+  btnNext.onclick = confirmAnswer;
+  btnPrev.disabled = (idx === 0);
+  btnPrev.onclick = function() {
+    if (current > 0) {
+      current--;
+      updateProgress();
+      showQuestion(current);
+    }
+  };
+}
+
+function selectOpt(idx) {
+  if (answered) return;
+  selected = idx;
+  var container = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < container.length; i++) {
+    if (i === idx) {
+      container[i].classList.add('selected');
+    } else {
+      container[i].classList.remove('selected');
+    }
+  }
+  currentBtns().next.disabled = false;
+}
+
+function confirmAnswer() {
+  if (selected === null) return;
+  var qBlock = document.getElementById('q' + current);
+  var options = qBlock.querySelectorAll('.option');
+  var isCorrect = false;
+  for (var i = 0; i < options.length; i++) {
+    var optCorrect = options[i].getAttribute('data-correct') === 'true';
+    if (optCorrect) options[i].classList.add('correct');
+    if (i === selected && !optCorrect) options[i].classList.add('wrong');
+    if (i === selected && optCorrect) isCorrect = true;
+    options[i].onclick = null;
+  }
+  answered = true;
+  results[current] = isCorrect;
+  var ca = document.getElementById('ca' + current);
+  var ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show');
+  if (ex) ex.classList.add('show');
+  var btnNext = currentBtns().next;
+  btnNext.disabled = false;
+  if (current < totalQuestions - 1) {
+    btnNext.textContent = "下一关 →";
+    btnNext.onclick = goNext;
+  } else {
+    btnNext.textContent = "查看结果";
+    btnNext.onclick = showResult;
+  }
+}
+
+function goNext() {
+  current++;
+  updateProgress();
+  showQuestion(current);
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent =
+    Math.round(score / results.length * 100);
+
+  var pct = Math.round(score / results.length * 100);
+  var remark = "";
+  if (pct === 100) remark = "🏆 四关全过！FABE已经长在你身上了——就等真人演练上场";
+  else if (pct >= 75) remark = "👍 只差一步——错的那关把解析再看一遍，练的就是它";
+  else if (pct >= 50) remark = "💪 单项都见过钱了，重点补证据（E）和挡板收口";
+  else remark = "📚 回到最上面，把'三句话结构'再过一遍，再来一次";
+  document.getElementById("scoreRemark").textContent = remark;
+
+  var gates = ["F 特征", "A 优势", "B 利益", "E 证据", "E 陪比", "挡板收口"];
+  var detail = "<h3>闯关详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    detail += '<div class="result-item"><span class="status">' +
+      (results[i] ? '✅ 通过' : '❌ 未过') + '</span><span>第' + gates[i] + '关</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detail;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  for (var i = 0; i < totalQuestions; i++) {
+    var opts = document.querySelectorAll('#q' + i + ' .option');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('selected', 'correct', 'wrong');
+      opts[j].onclick = function() {
+        var myIdx = parseInt(this.getAttribute('data-idx'));
+        selectOpt(myIdx);
+      };
+    }
+    var ca = document.getElementById('ca' + i);
+    var ex = document.getElementById('ex' + i);
+    if (ca) ca.classList.remove('show');
+    if (ex) ex.classList.remove('show');
+  }
+  document.getElementById("resultPage").classList.remove("show");
+  document.getElementById("quizPage").style.display = "block";
+  init();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {});
+} else {
+}
+</script>
+</body>
+</html>

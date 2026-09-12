@@ -223,19 +223,7 @@ body {
 }
 .option.correct .opt-label { color: #336633; }
 .option.wrong .opt-label { color: #c14545; }
-.type-tag {
-  display: inline-block;
-  font-size: 11px;
-  background: #e8ecf5;
-  color: #555;
-  padding: 1px 6px;
-  border-radius: 4px;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-.option.correct .type-tag { background: #d5e8d5; color: #2a4d2a; }
-.option.wrong .type-tag { background: #f0d4d4; color: #6a2a2a; }
-
+.option.correct .option.wrong 
 /* === 答案和解析 === */
 .correct-answer, .explanation {
   display: none;
@@ -407,19 +395,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> 你们的球泡灯现在能效做到多少？为什么这么低？<span class="type-tag">P-难点</span></div>
+            <div class="text"><span class="opt-label">[A]</span> 你们的球泡灯现在能效做到多少？为什么这么低？</div>
           </div>
           <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> 张总，方便介绍下您目前球泡灯的电源方案吗？用的是哪家的方案、批量多大？<span class="type-tag">S-背景</span></div>
+            <div class="text"><span class="opt-label">[B]</span> 张总，方便介绍下您目前球泡灯的电源方案吗？用的是哪家的方案、批量多大？</div>
           </div>
           <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> 用我们的方案，可以让您的整灯成本下降5%，您觉得有兴趣吗？<span class="type-tag">N-效益</span></div>
+            <div class="text"><span class="opt-label">[C]</span> 用我们的方案，可以让您的整灯成本下降5%，您觉得有兴趣吗？</div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> 如果电源方案不稳定，会导致您客户投诉返修，这会带来多大损失？<span class="type-tag">I-暗示</span></div>
+            <div class="text"><span class="opt-label">[D]</span> 如果电源方案不稳定，会导致您客户投诉返修，这会带来多大损失？</div>
           </div>
         </div>
         <div class="correct-answer" id="ca0">
@@ -453,19 +441,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> 我们的ErP线性方案能帮您通过最严的新能效法规！<span class="type-tag">N-效益</span></div>
+            <div class="text"><span class="opt-label">[A]</span> 我们的ErP线性方案能帮您通过最严的新能效法规！</div>
           </div>
           <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> 如果您的方案过不了ErP认证，整个欧洲订单会全部停掉，您能承受吗？<span class="type-tag">I-暗示</span></div>
+            <div class="text"><span class="opt-label">[B]</span> 如果您的方案过不了ErP认证，整个欧洲订单会全部停掉，您能承受吗？</div>
           </div>
           <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> 在用X家方案的过程中，有没有什么让您觉得不太顺手的地方？比如方案稳定性、性价比、技术支持？<span class="type-tag">P-难点</span></div>
+            <div class="text"><span class="opt-label">[C]</span> 在用X家方案的过程中，有没有什么让您觉得不太顺手的地方？比如方案稳定性、性价比、技术支持？</div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> 您上一年的销售额是多少？公司有多少研发人员？<span class="type-tag">S-背景</span></div>
+            <div class="text"><span class="opt-label">[D]</span> 您上一年的销售额是多少？公司有多少研发人员？</div>
           </div>
         </div>
         <div class="correct-answer" id="ca1">
@@ -500,19 +488,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> 您上一年的销售额是多少？公司有多少研发人员？<span class="type-tag">S-背景</span></div>
+            <div class="text"><span class="opt-label">[A]</span> 您上一年的销售额是多少？公司有多少研发人员？</div>
           </div>
           <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> 如果技术支持慢两周，遇上客户急单怎么办？会不会影响您按时交付？<span class="type-tag">I-暗示</span></div>
+            <div class="text"><span class="opt-label">[B]</span> 如果技术支持慢两周，遇上客户急单怎么办？会不会影响您按时交付？</div>
           </div>
           <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> 如果我们能当天响应技术支持，对您有什么价值？<span class="type-tag">N-效益</span></div>
+            <div class="text"><span class="opt-label">[C]</span> 如果我们能当天响应技术支持，对您有什么价值？</div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> 您觉得技术支持响应多少小时比较合理？<span class="type-tag">P-难点</span></div>
+            <div class="text"><span class="opt-label">[D]</span> 您觉得技术支持响应多少小时比较合理？</div>
           </div>
         </div>
         <div class="correct-answer" id="ca2">
@@ -547,19 +535,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> 那您有没有考虑过换一家芯片厂商？<span class="type-tag">P-难点</span></div>
+            <div class="text"><span class="opt-label">[A]</span> 那您有没有考虑过换一家芯片厂商？</div>
           </div>
           <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> 如果这200万订单不丢，您打算怎么用？<span class="type-tag">N-效益</span></div>
+            <div class="text"><span class="opt-label">[B]</span> 如果这200万订单不丢，您打算怎么用？</div>
           </div>
           <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> 我们的杰华特ErP方案能帮您一次过认证，您要不要试试？<span class="type-tag">N-效益（错）</span></div>
+            <div class="text"><span class="opt-label">[C]</span> 我们的杰华特ErP方案能帮您一次过认证，您要不要试试？</div>
           </div>
           <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> 如果有一种方案能让您一次过ErP认证，对您的客户满意度、复购率会带来什么变化？<span class="type-tag">N-效益</span></div>
+            <div class="text"><span class="opt-label">[D]</span> 如果有一种方案能让您一次过ErP认证，对您的客户满意度、复购率会带来什么变化？</div>
           </div>
         </div>
         <div class="correct-answer" id="ca3">
@@ -594,19 +582,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> 继续问更多 S 问题，比如"您工厂有多大、有几条产线"。<span class="type-tag">S-背景</span></div>
+            <div class="text"><span class="opt-label">[A]</span> 继续问更多 S 问题，比如"您工厂有多大、有几条产线"。</div>
           </div>
           <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> 继续挖痛点："那您还遇到其他什么问题吗？"<span class="type-tag">P-难点</span></div>
+            <div class="text"><span class="opt-label">[B]</span> 继续挖痛点："那您还遇到其他什么问题吗？"</div>
           </div>
           <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> 顺势提议："那我下次带我们杰华特应用工程师 + 样品过来，帮您做一份针对性的 ErP 方案？" <span class="type-tag">推进承诺</span></div>
+            <div class="text"><span class="opt-label">[C]</span> 顺势提议："那我下次带我们杰华特应用工程师 + 样品过来，帮您做一份针对性的 ErP 方案？" </div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> 直接报底价："我们比X家便宜 10%，现在下单我给您申请优惠。"<span class="type-tag">硬销</span></div>
+            <div class="text"><span class="opt-label">[D]</span> 直接报底价："我们比X家便宜 10%，现在下单我给您申请优惠。"</div>
           </div>
         </div>
         <div class="correct-answer" id="ca4">
@@ -641,19 +629,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> 立即降价 5% 留住客户。<span class="type-tag">让步</span></div>
+            <div class="text"><span class="opt-label">[A]</span> 立即降价 5% 留住客户。</div>
           </div>
           <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> "一分价钱一分货，我们质量好。"<span class="type-tag">争辩</span></div>
+            <div class="text"><span class="opt-label">[B]</span> "一分价钱一分货，我们质量好。"</div>
           </div>
           <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> "张总，5% 的价差带来的综合成本差异，您之前算过吗？比如 ErP 通率、售后投诉、技术响应这些。"<span class="type-tag">I-暗示</span></div>
+            <div class="text"><span class="opt-label">[C]</span> "张总，5% 的价差带来的综合成本差异，您之前算过吗？比如 ErP 通率、售后投诉、技术响应这些。"</div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> "我回去跟领导申请，看能不能再让 2%。"<span class="type-tag">拖延</span></div>
+            <div class="text"><span class="opt-label">[D]</span> "我回去跟领导申请，看能不能再让 2%。"</div>
           </div>
         </div>
         <div class="correct-answer" id="ca5">
@@ -687,19 +675,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> "我们是大厂，杰华特也是上市公司，绝对没问题。"<span class="type-tag">打消</span></div>
+            <div class="text"><span class="opt-label">[A]</span> "我们是大厂，杰华特也是上市公司，绝对没问题。"</div>
           </div>
           <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> "张总，您最担心的是哪个环节出问题？是品质异常、产能不足还是技术支持不到位？"<span class="type-tag">P-难点</span></div>
+            <div class="text"><span class="opt-label">[B]</span> "张总，您最担心的是哪个环节出问题？是品质异常、产能不足还是技术支持不到位？"</div>
           </div>
           <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> "如果换供应商出问题，您觉得会有什么后果？"<span class="type-tag">I-暗示</span></div>
+            <div class="text"><span class="opt-label">[C]</span> "如果换供应商出问题，您觉得会有什么后果？"</div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> "我们可以先送您 5K 颗样品做小批量验证。"<span class="type-tag">行动建议</span></div>
+            <div class="text"><span class="opt-label">[D]</span> "我们可以先送您 5K 颗样品做小批量验证。"</div>
           </div>
         </div>
         <div class="correct-answer" id="ca6">
@@ -734,19 +722,19 @@ body {
         <div class="options">
           <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[A]</span> "我保证100%没问题。"<span class="type-tag">过度承诺</span></div>
+            <div class="text"><span class="opt-label">[A]</span> "我保证100%没问题。"</div>
           </div>
           <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[B]</span> "保证做不到，但我可以给您方案 ABC 三重保障..."<span class="type-tag">理性分析</span></div>
+            <div class="text"><span class="opt-label">[B]</span> "保证做不到，但我可以给您方案 ABC 三重保障..."</div>
           </div>
           <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[C]</span> "张总，没人敢100%保证。我能做的是：1) 我们的应用工程师驻点中山，2) 急单4小时响应，3) 杰华特原厂FAE直接对接。您看这三件事，对您够不够？"<span class="type-tag">N-效益+承诺</span></div>
+            <div class="text"><span class="opt-label">[C]</span> "张总，没人敢100%保证。我能做的是：1) 我们的应用工程师驻点中山，2) 急单4小时响应，3) 杰华特原厂FAE直接对接。您看这三件事，对您够不够？"</div>
           </div>
           <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
             <div class="radio"></div>
-            <div class="text"><span class="opt-label">[D]</span> 避开话题："我们先看方案细节吧。"<span class="type-tag">逃避</span></div>
+            <div class="text"><span class="opt-label">[D]</span> 避开话题："我们先看方案细节吧。"</div>
           </div>
         </div>
         <div class="correct-answer" id="ca7">
