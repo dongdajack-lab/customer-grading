@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="format-detection" content="telephone=no">
+<title>拜访模拟训练 · 第2关 FABE方案呈现（张总续）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+    background:#F4F2ED; color:#2C2C2A; line-height:1.65; font-size:15px;
+  }
+  .wrap { max-width:520px; margin:0 auto; padding:0 14px 40px; }
+  .topbar { background:#2F3C7E; color:#fff; padding:18px 16px 16px; }
+  .topbar .kicker { font-size:12px; opacity:.75; letter-spacing:1px; }
+  .topbar h1 { font-size:19px; font-weight:600; margin-top:4px; }
+  .topbar .sub { font-size:12px; opacity:.85; margin-top:4px; }
+  .card { background:#fff; border-radius:12px; padding:16px; margin-top:14px; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+  .card h3 { font-size:14px; color:#2F3C7E; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .card h3 .dot { width:8px; height:8px; border-radius:50%; background:#B85042; display:inline-block; }
+  .persona-row { display:flex; gap:12px; align-items:flex-start; }
+  .avatar { flex:0 0 52px; height:52px; border-radius:50%; background:#B85042; color:#fff; font-size:20px; display:flex; align-items:center; justify-content:center; }
+  .persona-info { flex:1; }
+  .persona-info b { font-size:16px; }
+  .persona-info .tagline { font-size:13px; color:#5F5E5A; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .chip { font-size:12px; padding:3px 10px; border-radius:999px; background:#EEEDFE; color:#534AB7; }
+  .mission { font-size:14px; }
+  .mission .hl { color:#B85042; font-weight:600; }
+  .chat-area { margin-top:14px; }
+  .round-block { display:none; }
+  .round-head { font-size:12px; color:#88877F; text-align:center; margin:16px 0 10px; }
+  .round-head .num { background:#2F3C7E; color:#fff; border-radius:999px; padding:2px 12px; }
+  .bubble-row { display:flex; gap:8px; margin-bottom:12px; }
+  .bubble-row.boss { justify-content:flex-start; }
+  .bubble-row.me { justify-content:flex-end; }
+  .b-ava { flex:0 0 36px; height:36px; border-radius:50%; background:#B85042; color:#fff; font-size:14px; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+  .bubble { max-width:78%; padding:10px 13px; border-radius:12px; font-size:15px; position:relative; }
+  .bubble.boss { background:#fff; border:1px solid #E3E1D8; border-top-left-radius:4px; }
+  .bubble.me { background:#2F3C7E; color:#fff; border-top-right-radius:4px; }
+  .ask { font-size:13px; color:#5F5E5A; text-align:center; margin:14px 0 8px; }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .option {
+    background:#fff; border:1.5px solid #D3D1C7; border-radius:10px; padding:11px 13px;
+    font-size:14px; cursor:pointer; transition:border-color .15s;
+    -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  }
+  .option:active { border-color:#2F3C7E; }
+  .option.selected { border-color:#2F3C7E; background:#EEF1FA; }
+  .option .opt-label { color:#2F3C7E; font-weight:600; margin-right:4px; }
+  .reply-box { display:none; margin-top:14px; }
+  .reply-box.show { display:block; }
+  .coach {
+    background:#FBEED9; border-left:3px solid #BA7517; border-radius:0 8px 8px 0;
+    padding:10px 12px; font-size:13px; margin-top:10px; color:#4A3A1A;
+  }
+  .coach b { color:#854F0B; }
+  .score-chip { display:inline-block; font-size:12px; border-radius:999px; padding:2px 10px; margin-left:8px; font-weight:600; }
+  .score-chip.good { background:#EAF3DE; color:#3B6D11; }
+  .score-chip.mid { background:#FAEEDA; color:#854F0B; }
+  .score-chip.bad { background:#FCEBEB; color:#A32D2D; }
+  .best-line { background:#E1F5EE; border-left:3px solid #0F6E56; border-radius:0 8px 8px 0; padding:10px 12px; font-size:13px; margin-top:8px; color:#085041; }
+  .best-line b { color:#0F6E56; }
+  .btn {
+    display:none; width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px;
+    background:#2F3C7E; color:#fff; font-size:15px; font-weight:600; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; touch-action:manipulation; -webkit-appearance:none;
+  }
+  .btn.show { display:block; }
+  .btn:active { opacity:.88; }
+  #resultPage { display:none; }
+  #resultPage.show { display:block; }
+  .score-hero { text-align:center; padding:26px 16px 20px; }
+  .score-hero .big { font-size:56px; font-weight:700; color:#2F3C7E; line-height:1.1; }
+  .score-hero .of { font-size:14px; color:#88877F; }
+  .score-hero .lv { display:inline-block; margin-top:10px; font-size:15px; font-weight:600; padding:5px 18px; border-radius:999px; background:#2F3C7E; color:#fff; }
+  .lv-div { display:none; margin-top:10px; font-size:13px; color:#5F5E5A; }
+  .dim-row { margin-bottom:12px; }
+  .dim-row .dim-label { display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; }
+  .dim-track { height:10px; background:#EDEBE4; border-radius:999px; overflow:hidden; }
+  .dim-fill { height:100%; border-radius:999px; background:#2F3C7E; width:0; transition:width .8s ease; }
+  .reveal-item { font-size:14px; padding:8px 0; border-bottom:1px dashed #E3E1D8; }
+  .reveal-item:last-child { border-bottom:none; }
+  .reveal-item b { color:#B85042; }
+  .recall-item { font-size:13.5px; padding:10px 0; border-bottom:1px dashed #E3E1D8; }
+  .recall-item:last-child { border-bottom:none; }
+  .recall-item .r-tag { font-size:11px; color:#fff; background:#2F3C7E; border-radius:4px; padding:1px 6px; margin-right:6px; }
+  .recall-item .r-why { color:#5F5E5A; font-size:12.5px; margin-top:3px; }
+  .btn-re { display:block; width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px; background:#B85042; color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  .btn-link { display:block; width:100%; margin-top:8px; padding:11px; border:1.5px solid #2F3C7E; border-radius:10px; background:#fff; color:#2F3C7E; font-size:14px; font-weight:600; text-align:center; text-decoration:none; }
+  .foot-note { text-align:center; font-size:12px; color:#88877F; margin-top:18px; line-height:1.7; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="kicker">大董销售训练营 · 拜访模拟训练</div>
+  <h1>第 2 关 · FABE 方案呈现与获认可</h1>
+  <div class="sub">实战场景：名瑟 × 明泰照明 · 样品测试通过后的第二次拜访（接第1关SPIN剧情）</div>
+</div>
+
+<div class="wrap">
+  <!-- ========== 客户人设 ========== -->
+  <div class="card">
+    <h3><span class="dot"></span>今日客户 · 人设卡</h3>
+    <div class="persona-row">
+      <div class="avatar">张</div>
+      <div class="persona-info">
+        <b>张卫东（张总）</b>
+        <div class="tagline">明泰照明 总经理 · 中山古镇 · 研发王工陪同 · 样品测试刚通过</div>
+        <div class="chips">
+          <span class="chip">务实精明</span>
+          <span class="chip">算账型</span>
+          <span class="chip">在用X家</span>
+          <span class="chip">最怕误出货</span>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:#88877F;margin-top:10px;">背景：上周送样测试数据不错（第1关的成果），张总今天愿意花20分钟听你正式讲方案。王工坐在旁边——技术关他点头，张总才敢动。</div>
+  </div>
+  <div class="card">
+    <h3><span class="dot"></span>本关任务</h3>
+    <div class="mission">
+      6 轮对话内，把张总从「听你讲方案」推进到<span class="hl">「同意列样品清单、安排小批量试单」</span>（＝获认可的过门线）。<br>
+      评分标准：FABE 四招出对时机、挂没挂他的原话，&gt; 说漂亮话术。张总的隐藏信息和内心评价，通关后揭晓。
+    </div>
+  </div>
+
+  <div class="chat-area" id="chatArea">
+    <!-- ============ 第1轮 F ============ -->
+    <div class="round-block" id="rb0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">张</div>
+        <div class="bubble boss">行，上次样品测得是不错。小李，你说吧，你们这套方案到底好在哪？我听着，长话短说。</div>
+      </div>
+      <div class="ask">—— 张总把话筒递过来了。第一句说什么？——</div>
+      <div class="options">
+        <div class="option" data-score="0" onclick="pick(0,0)">
+          <span class="opt-label">A</span>我们代理杰华特全系列300多颗料，产品线特别全，什么需求都能满足。
+        </div>
+        <div class="option" data-score="15" onclick="pick(0,1)">
+          <span class="opt-label">B</span>王工最清楚——上次测的那颗DC/DC，静态功耗只有几十微安，就是冲着咱们感应灯常年待机来的。
+        </div>
+        <div class="option" data-score="0" onclick="pick(0,2)">
+          <span class="opt-label">C</span>杰华特是科创板上市公司（688141），跟我们合作您放心。
+        </div>
+        <div class="option" data-score="5" onclick="pick(0,3)">
+          <span class="opt-label">D</span>我们方案好在效率高、性能稳、服务好，业内有口皆碑。
+        </div>
+      </div>
+      <div class="reply-box" id="reply-0-0">
+        <div class="bubble-row me"><div class="bubble me">我们代理杰华特全系列300多颗料，产品线特别全，什么需求都能满足。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">全不全我不关心，我就一套感应灯。捡有用的说。</div></div>
+        <div class="coach"><b>教练点评：</b>「什么都能满足」＝没有重点。F不是产品简介，是<b>对这位客户有用的那一个产品事实</b>。王工就坐在旁边——他关心的是待机功耗。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>点名上次测的那颗料＋它的关键参数＋它对应的场景（感应灯待机）。</div>
+      </div>
+      <div class="reply-box" id="reply-0-1">
+        <div class="bubble-row me"><div class="bubble me">王工最清楚——上次测的那颗DC/DC，静态功耗只有几十微安，就是冲着咱们感应灯常年待机来的。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">（看了王工一眼）王工，是这样吗？……嗯，数据是好看。</div></div>
+        <div class="coach"><b>教练点评：</b>F的满分打法三连：具体产品（那颗DC/DC）＋具体事实（静态功耗几十微安）＋具体场景（感应灯常年待机）。顺手还把王工拉进来了——技术关他先点头，张总才敢往下听。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="reply-0-2">
+        <div class="bubble-row me"><div class="bubble me">杰华特是科创板上市公司（688141），跟我们合作您放心。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">上市公司关我什么事？我买的是芯片，不是股票。</div></div>
+        <div class="coach"><b>教练点评：</b>公司背书≠产品特征。F必须是「这个客户用得上的产品事实」——检验法：这句话能帮他解决待机功耗吗？<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>讲上次测的那颗料的关键参数，不讲公司招牌。</div>
+      </div>
+      <div class="reply-box" id="reply-0-3">
+        <div class="bubble-row me"><div class="bubble me">我们方案好在效率高、性能稳、服务好，业内有口皆碑。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">每家来了都这么说。有没有点具体的？</div></div>
+        <div class="coach"><b>教练点评：</b>「效率高、性能稳、服务好」全是形容词。张总是算账型客户——形容词说服不了他，数字才能。形容词后面到E关有它们的去处（变成证据）。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>F说事实：静态功耗几十微安＋对应感应灯待机场景。</div>
+      </div>
+      <button class="btn" id="btn-0" onclick="nextRound(0)">继续对话 →</button>
+    </div>
+
+    <!-- ============ 第2轮 A ============ -->
+    <div class="round-block" id="rb1">
+      <div class="round-head"><span class="num">第 2 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">张</div>
+        <div class="bubble boss">参数是不错。然后呢？跟我有什么关系？</div>
+      </div>
+      <div class="ask">—— 「跟我有什么关系」——这就是A关的哨声。怎么接？——</div>
+      <div class="options">
+        <div class="option" data-score="0" onclick="pick(1,0)">
+          <span class="opt-label">A</span>所以我们虽然是新供应商，但绝对是业界领先水平。
+        </div>
+        <div class="option" data-score="15" onclick="pick(1,1)">
+          <span class="opt-label">B</span>效率高这两个点，直接带来的是待机电流更低、整灯温升更小——您的感应灯可以做得更省电、更小巧。
+        </div>
+        <div class="option" data-score="3" onclick="pick(1,2)">
+          <span class="opt-label">C</span>意思是您用我们的，比用别家的更明智。
+        </div>
+        <div class="option" data-score="0" onclick="pick(1,3)">
+          <span class="opt-label">D</span>关系就是——您换了准没错，很多客户用了都说好。
+        </div>
+      </div>
+      <div class="reply-box" id="reply-1-0">
+        <div class="bubble-row me"><div class="bubble me">所以我们虽然是新供应商，但绝对是业界领先水平。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">领先不领先你说了不算。说点跟我的灯有关系的。</div></div>
+        <div class="coach"><b>教练点评：</b>客户问「跟我什么关系」，你答「我们很厉害」——答非所问。A的功能优点句式：「（特征），带来（更低/更小/更快）」。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>「效率高两个点→待机电流更低、温升更小→灯更省电、更小巧」。</div>
+      </div>
+      <div class="reply-box" id="reply-1-1">
+        <div class="bubble-row me"><div class="bubble me">效率高这两个点，直接带来的是待机电流更低、整灯温升更小——您的感应灯可以做得更省电、更小巧。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">哦？小巧这个有点意思，出口的单子对体积有要求。接着说。</div></div>
+        <div class="coach"><b>教练点评：</b>A的检验法：把主语换成「您」，句子还成立吗？这句成立——待机电流、温升、体积，全是长在他的灯上的。注意张总随口漏了个信号：「出口的单子」——记下来，E关用得上。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="reply-1-2">
+        <div class="bubble-row me"><div class="bubble me">意思是您用我们的，比用别家的更明智。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">我现在的选择不明智？（皱眉）</div></div>
+        <div class="coach"><b>教练点评：</b>踩雷了——暗示他现在的选择蠢，等于说他眼光差。X家是他自己选的，你贬X家就是贬他。A只说自己的功能优点，不碰对手。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>把特征翻译成他灯上的变化：更省电、更小巧。</div>
+      </div>
+      <div class="reply-box" id="reply-1-3">
+        <div class="bubble-row me"><div class="bubble me">关系就是——您换了准没错，很多客户用了都说好。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">「都说好」？一个名字都报不出来？</div></div>
+        <div class="coach"><b>教练点评：</b>这句其实是E（证据）的活儿——但证据要具体到案例和数字才算数，空口的「都说好」连E都算不上。顺序也没到：A还没说完。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>先把A的功能优点说完，证据留到被质疑时再上。</div>
+      </div>
+      <button class="btn" id="btn-1" onclick="nextRound(1)">继续对话 →</button>
+    </div>
+
+    <!-- ============ 第3轮 B ============ -->
+    <div class="round-block" id="rb2">
+      <div class="round-head"><span class="num">第 3 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">张</div>
+        <div class="bubble boss">省电这些王工关心。我关心的是别耽误我出货——去年ErP认证折腾了两回，差点误了欧洲的船期。</div>
+      </div>
+      <div class="ask">—— 张总把痛点原话递到你手上了。这就是B关——接得住吗？——</div>
+      <div class="options">
+        <div class="option" data-score="0" onclick="pick(2,0)">
+          <span class="opt-label">A</span>放心，我们交期业内最快，从不耽误事。
+        </div>
+        <div class="option" data-score="3" onclick="pick(2,1)">
+          <span class="opt-label">B</span>效率高对您整灯成本也有好处，BOM能省不少钱。
+        </div>
+        <div class="option" data-score="15" onclick="pick(2,2)">
+          <span class="opt-label">C</span>您刚才说最怕认证折腾误了船期——这套方案有ErP一次过的量产记录，能帮您把认证周期从两个月压到两周，船期您自己排。
+        </div>
+        <div class="option" data-score="0" onclick="pick(2,3)">
+          <span class="opt-label">D</span>出货是采购和计划的事，我们把芯片品质管好就行。
+        </div>
+      </div>
+      <div class="reply-box" id="reply-2-0">
+        <div class="bubble-row me"><div class="bubble me">放心，我们交期业内最快，从不耽误事。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">每家供应商第一次来都说自己从不耽误。</div></div>
+        <div class="coach"><b>教练点评：</b>他把具体的痛（ErP认证折腾、差点误船期）递过来了，你回了句形容词——B的灵魂是<b>引用他的原话</b>。「从不耽误」还是空口承诺，恰好撞在他最痛的地方却没止痛。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>「您刚才说最怕认证折腾误船期——这套方案有ErP一次过的量产记录……」</div>
+      </div>
+      <div class="reply-box" id="reply-2-1">
+        <div class="bubble-row me"><div class="bubble me">效率高对您整灯成本也有好处，BOM能省不少钱。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">省几个点的事，误一次船就全赔进去了。</div></div>
+        <div class="coach"><b>教练点评：</b>方向没错但没接住——他在说认证和船期，你还在说BOM成本。B必须挂<b>他刚说过的那个痛点</b>，不是你备好的卖点。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>复述他的原话＋把收益挂到认证周期上。</div>
+      </div>
+      <div class="reply-box" id="reply-2-2">
+        <div class="bubble-row me"><div class="bubble me">您刚才说最怕认证折腾误了船期——这套方案有ErP一次过的量产记录，能帮您把认证周期从两个月压到两周，船期您自己排。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">……两个月压到两周？这个说法我头一回听。</div></div>
+        <div class="coach"><b>教练点评：</b>B的满分三连：复述原话（认证折腾误船期）＋收益挂他的指标（船期您自己排）＋具体量级（两个月→两周）。他复述你的数字了——「头一回听」就是注意力到位的标志。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="reply-2-3">
+        <div class="bubble-row me"><div class="bubble me">出货是采购和计划的事，我们把芯片品质管好就行。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">那咱们今天好像没什么好谈的了。</div></div>
+        <div class="coach"><b>教练点评：</b>把客户的痛点推出门外＝把订单推出门外。客户说「我关心出货」，B的答案永远从「您刚才说」开始。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>接住原话：认证周期两个月→两周，船期他自己排。</div>
+      </div>
+      <button class="btn" id="btn-2" onclick="nextRound(2)">继续对话 →</button>
+    </div>
+
+    <!-- ============ 第4轮 E ============ -->
+    <div class="round-block" id="rb3">
+      <div class="round-head"><span class="num">第 4 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">张</div>
+        <div class="bubble boss">说得好听。你们说的这些，跟X家也差不多吧。</div>
+      </div>
+      <div class="ask">—— 比价信号来了。这时候靠什么说话？——</div>
+      <div class="options">
+        <div class="option" data-score="0" onclick="pick(3,0)">
+          <span class="opt-label">A</span>我们是大代理，肯定比X家靠谱。
+        </div>
+        <div class="option" data-score="15" onclick="pick(3,1)">
+          <span class="opt-label">B</span>这是古镇XX灯厂的量产实测：同规格整灯效率提升X%，跑了半年零批量投诉——报告我现在发您，也欢迎去他们产线看。
+        </div>
+        <div class="option" data-score="0" onclick="pick(3,2)">
+          <span class="opt-label">C</span>X家最近不是涨价了嘛，我们价格更好。
+        </div>
+        <div class="option" data-score="5" onclick="pick(3,3)">
+          <span class="opt-label">D</span>我们方案是杰华特原厂直供，品质肯定过硬。
+        </div>
+      </div>
+      <div class="reply-box" id="reply-3-0">
+        <div class="bubble-row me"><div class="bubble me">我们是大代理，肯定比X家靠谱。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">X家也是老代理。拿点实在的。</div></div>
+        <div class="coach"><b>教练点评：</b>「肯定靠谱」在算账型客户耳朵里＝没有信息量。E的铁律：<b>形容词不是证据，可验证的才是</b>——实测数据、量产案例、原厂支持响应。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>甩证据：量产实测数据＋报告现在发＋欢迎去产线看。</div>
+      </div>
+      <div class="reply-box" id="reply-3-1">
+        <div class="bubble-row me"><div class="bubble me">这是古镇XX灯厂的量产实测：同规格整灯效率提升X%，跑了半年零批量投诉——报告我现在发您，也欢迎去他们产线看。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">XX灯厂？……跟老板有点交情。报告发我，回头我打听打听。</div></div>
+        <div class="coach"><b>教练点评：</b>E的满分三件套：具体案例（古镇XX灯厂）＋具体数字（效率+X%、半年零投诉）＋可验证（报告现发、欢迎考察）。「欢迎去看厂」是最狠的一招——敢让客户验证的自信，本身就是证据。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="reply-3-2">
+        <div class="bubble-row me"><div class="bubble me">X家最近不是涨价了嘛，我们价格更好。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">人家涨是人家的本事，你拿这个说事？</div></div>
+        <div class="coach"><b>教练点评：</b>贬对手＋拉价格，专业度双杀。客户会想：「他这么说同行，转头也会这么说我们。」E关的证据是自己的弹药，不是对手的黑料。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>只讲自己拿得出的证据，不碰对手一句坏话。</div>
+      </div>
+      <div class="reply-box" id="reply-3-3">
+        <div class="bubble-row me"><div class="bubble me">我们方案是杰华特原厂直供，品质肯定过硬。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">「肯定」这个词，我一天能听八回。</div></div>
+        <div class="coach"><b>教练点评：</b>方向对（原厂直供确实是差异化），但落点又是形容词。差一步就满分：补上证据——「原厂FAE当天响应，这是上个月XX客户切换的实测记录」。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>「原厂直供」后面必须跟可验证的东西：FAE响应时限、切换案例。</div>
+      </div>
+      <button class="btn" id="btn-3" onclick="nextRound(3)">继续对话 →</button>
+    </div>
+
+    <!-- ============ 第5轮 E·差异化陪比 ============ -->
+    <div class="round-block" id="rb4">
+      <div class="round-head"><span class="num">第 5 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">张</div>
+        <div class="bubble boss">就算你说的都是真的。X家方案成熟，我用惯了，换你这边，我图什么？</div>
+      </div>
+      <div class="ask">—— 「我用惯了」——比价的深水区。差异化陪比怎么打？——</div>
+      <div class="options">
+        <div class="option" data-score="15" onclick="pick(4,0)">
+          <span class="opt-label">A</span>X家方案是成熟，这点我认。我们不一样的地方在原厂FAE直连、出问题当天响应——这是上个月XX客户的切换实测记录，您看这个差别值不值这点价差。
+        </div>
+        <div class="option" data-score="0" onclick="pick(4,1)">
+          <span class="opt-label">B</span>X家方案是三年前的架构了，早该淘汰了。
+        </div>
+        <div class="option" data-score="3" onclick="pick(4,2)">
+          <span class="opt-label">C</span>您先用着，有需要随时找我。
+        </div>
+        <div class="option" data-score="0" onclick="pick(4,3)">
+          <span class="opt-label">D</span>您换过来，我给您申请降价5%。
+        </div>
+      </div>
+      <div class="reply-box" id="reply-4-0">
+        <div class="bubble-row me"><div class="bubble me">X家方案是成熟，这点我认。我们不一样的地方在原厂FAE直连、出问题当天响应——这是上个月XX客户的切换实测记录，您看这个差别值不值这点价差。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">……当天响应？X家的技术支持上次等了两周。（身体前倾）切换记录发我看看。</div></div>
+        <div class="coach"><b>教练点评：</b>陪比三步满分：①先认对方优点（「成熟，我认」——不树敌）②讲自己的差异＋给证据（FAE直连、切换实测）③把差异翻译成他的账（「值不值这点价差」让他自己算）。注意他主动说了X家的伤疤（支持等两周）——认对方，对方才脱防。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="reply-4-1">
+        <div class="bubble-row me"><div class="bubble me">X家方案是三年前的架构了，早该淘汰了。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">三年前是我选的。你的意思我瞎？</div></div>
+        <div class="coach"><b>教练点评：</b>贬对手＝贬他的判断力——X家是他自己选的。差异化陪比第一条：先认对方，把身段放低；证明自己，而不是证明对手不行。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>「X家是成熟，这点我认」——先认，再讲差异。</div>
+      </div>
+      <div class="reply-box" id="reply-4-2">
+        <div class="bubble-row me"><div class="bubble me">您先用着，有需要随时找我。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">行，那你慢走。（会谈提前结束）</div></div>
+        <div class="coach"><b>教练点评：</b>一句话把主动权全交出去。客户说「用惯了」是谈判姿态——他在等你给出「换值得」的理由。你退了，这个问题就永远没有答案。<span class="score-chip mid">+3 分</span></div>
+        <div class="best-line"><b>满分做法：</b>认对方→讲差异→给证据→让他自己算账。</div>
+      </div>
+      <div class="reply-box" id="reply-4-3">
+        <div class="bubble-row me"><div class="bubble me">您换过来，我给您申请降价5%。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">5%？X家知道了会还你个10%。价格这东西，没有最低。</div></div>
+        <div class="coach"><b>教练点评：</b>降价＝承认价值讲不过。这一降，前面F/A/B/E四招白使——价值战瞬间被打成价格战，以后每次见面他都会压5%起。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>把「换的代价」翻译成「值得」：当天响应＋切换实测＋他自己算。</div>
+      </div>
+      <button class="btn" id="btn-4" onclick="nextRound(4)">继续对话 →</button>
+    </div>
+
+    <!-- ============ 第6轮 挡板收口 ============ -->
+    <div class="round-block" id="rb5">
+      <div class="round-head"><span class="num">第 6 / 6 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">张</div>
+        <div class="bubble boss">（沉默几秒，看了看王工）……说得好像有点道理。那你说，具体怎么个合作法？</div>
+      </div>
+      <div class="ask">—— 张总开口了。最后一击：怎么收口才算「获认可」？——</div>
+      <div class="options">
+        <div class="option" data-score="15" onclick="pick(5,0)">
+          <span class="opt-label">A</span>先对个账：省电、认证周期、当天响应这三点，跟您关心的船期和成本对上了吗？——对上了的话，我列个样品清单，安排小批量试单，用您的产线跑一个月，数据说话。
+        </div>
+        <div class="option" data-score="0" onclick="pick(5,1)">
+          <span class="opt-label">B</span>那就今天把合作定了，早换早受益。
+        </div>
+        <div class="option" data-score="5" onclick="pick(5,2)">
+          <span class="opt-label">C</span>我回去做个完整的方案PPT，下周过来给您汇报。
+        </div>
+        <div class="option" data-score="0" onclick="pick(5,3)">
+          <span class="opt-label">D</span>先报个价吧张总，您一年大概用多少量？
+        </div>
+      </div>
+      <div class="reply-box" id="reply-5-0">
+        <div class="bubble-row me"><div class="bubble me">先对个账：省电、认证周期、当天响应这三点，跟您关心的船期和成本对上了吗？——对上了的话，我列个样品清单，安排小批量试单，用您的产线跑一个月，数据说话。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">对上了，三点都对上了。王工，一会儿你跟小李对一下清单。（转头）小李，试单的事，下周出结果我请你吃饭。</div></div>
+        <div class="coach"><b>教练点评：</b>满分收口＝挡板三件套：①对账（三点跟他的两个关心对上）②未否决（他自己说「对上了」）③同意走流程（样品清单＋小批量试单＋时限）。张总给出清单和王工对接——<b>③章「获认可」正式过门</b>。恭喜，方案关通关。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="reply-5-1">
+        <div class="bubble-row me"><div class="bubble me">那就今天把合作定了，早换早受益。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">今天定？你当我买菜呢？（脸色变了）</div></div>
+        <div class="coach"><b>教练点评：</b>前五轮节奏全对，最后一步跳崖。客户问「怎么合作」是要一个低风险的下一步，不是要你逼单。逼单逼死单——刚建立的那点信任一句话清零。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>对账→未否决→样品清单＋小批量试单。收「下一步动作」，不收「合同」。</div>
+      </div>
+      <div class="reply-box" id="reply-5-2">
+        <div class="bubble-row me"><div class="bubble me">我回去做个完整的方案PPT，下周过来给您汇报。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">……行吧，那你下周来。（热情明显降温）</div></div>
+        <div class="coach"><b>教练点评：</b>客户正热着，你却回去做PPT——把「当场能定的下一步」拖成「下周再说」，热情是有保质期的。PPT什么时候做？客户给出清单之后，作为试单方案书才做。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>满分做法：</b>当场对账＋当场列清单，别把今天的事拖到下周。</div>
+      </div>
+      <div class="reply-box" id="reply-5-3">
+        <div class="bubble-row me"><div class="bubble me">先报个价吧张总，您一年大概用多少量？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">张</div><div class="bubble boss">哦，谈到价格了。那你报吧，我拿去跟X家比比。</div></div>
+        <div class="coach"><b>教练点评：</b>「拿去跟X家比比」——一句话你就从「方案」降级成了「报价单」。价值没被确认之前报价，等于自己走进比价场。确认过门（清单＋试单）之后，价格才有讲价值的资格。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>满分做法：</b>对账＋样品清单＋试单，价格留到试单数据出来之后。</div>
+      </div>
+      <button class="btn" id="btn-5" onclick="showResult()">查看战绩卡 →</button>
+    </div>
+  </div>
+
+  <!-- ========== 结果页 ========== -->
+  <div id="resultPage">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big"><span id="scoreNum">0</span><span class="of"> / 100</span></div>
+        <div class="lv" id="lvTitle">—</div>
+        <div class="lv-div" id="lvA">张总让王工跟你对了清单，还答应试单出结果请你吃饭——③章「获认可」满分过门。</div>
+        <div class="lv-div" id="lvB">四招都见了钱，个别时机快了半拍。回看那几处「+5分」「+3分」的点评——差的都是「挂他的原话」这一步。</div>
+        <div class="lv-div" id="lvC">招式知道，但被张总带跑了节奏。建议回 fabe-mingser 静态页重刷四关，再回来战。</div>
+        <div class="lv-div" id="lvD">别灰心——本场翻车点集中在「形容词当证据」和「降价求换」。先复盘每轮的满分做法，再来。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>五维得分</h3>
+      <div class="dim-row"><div class="dim-label"><span>讲特征（F）</span><span id="d1t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d1"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>讲优势（A）</span><span id="d2t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d2"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>讲利益（B）</span><span id="d3t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d3"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>证据·陪比（E）</span><span id="d4t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d4"></div></div></div>
+      <div class="dim-row"><div class="dim-label"><span>挡板收口（获认可）</span><span id="d5t">0%</span></div><div class="dim-track"><div class="dim-fill" id="d5"></div></div></div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>张总隐藏档案（通关揭秘）</h3>
+      <div class="reveal-item">🎯 张总真正在意的<b>不是省电，是船期</b>——「认证折腾误船期」才是他的心头痛。谁先挂上这句原话，谁就拿到注意力。</div>
+      <div class="reveal-item">👨‍🔧 <b>王工是隐形决策人</b>——第1轮你点名他，技术关就先过了；全程不提他，张总点头之后他也能一票否决。</div>
+      <div class="reveal-item">🧮 张总是<b>算账型决策者</b>：本场所有满分答案的共同点——把优势翻译成他的账（船期、成本、价差），形容词一个没用。</div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>满分话术六连 · 带走背熟</h3>
+      <div class="recall-item"><span class="r-tag">F</span>「上次测的那颗DC/DC，静态功耗几十微安，就是冲着咱们感应灯常年待机来的。」<div class="r-why">F＝对这位客户有用的那一个产品事实。</div></div>
+      <div class="recall-item"><span class="r-tag">A</span>「效率高两个点，带来的是待机电流更低、整灯温升更小——灯可以更省电、更小巧。」<div class="r-why">A＝因为…所以…的功能优点，主语落在他的灯上。</div></div>
+      <div class="recall-item"><span class="r-tag">B</span>「您刚才说最怕认证折腾误船期——这套方案有ErP一次过的量产记录，认证周期两个月压到两周。」<div class="r-why">B＝复述他的原话＋收益挂他的指标＋具体量级。</div></div>
+      <div class="recall-item"><span class="r-tag">E</span>「古镇XX灯厂的量产实测：效率提升X%，半年零批量投诉——报告现在发您，欢迎去产线看。」<div class="r-why">E＝具体案例＋具体数字＋可验证。</div></div>
+      <div class="recall-item"><span class="r-tag">陪</span>「X家是成熟，这点我认。我们不一样在原厂FAE直连、当天响应——这个差别值不值这点价差，您自己算。」<div class="r-why">陪比三步：认对方→讲差异＋证据→让他自己算账。</div></div>
+      <div class="recall-item"><span class="r-tag">收</span>「先对个账：三点跟您关心的船期和成本对上了吗？对上了就列样品清单，小批量试单跑一个月，数据说话。」<div class="r-why">收口＝对账＋未否决＋同意走流程＝③章过门。</div></div>
+    </div>
+    <button class="btn-re" onclick="restart()">再战一遍 🔁</button>
+    <a class="btn-link" href="fabe-mingser.html">← 回FABE静态四关复习</a>
+    <div class="foot-note">博商 · 大董销售体系 · 名瑟FABE拜访模拟 · 仅供内部培训使用<br>通关线：样品清单＋试单安排＝「匹配方案·获认可」过门</div>
+  </div>
+</div>
+
+<script>
+var TOTAL = 6;
+var scores = [];
+var currentRound = 0;
+
+function q(id) { return document.getElementById(id); }
+
+function resetPage() {
+  var i, j;
+  scores = [];
+  currentRound = 0;
+  for (i = 0; i < TOTAL; i++) {
+    var rb = q('rb' + i);
+    if (!rb) continue;
+    rb.style.display = (i === 0) ? 'block' : 'none';
+    var opts = rb.querySelectorAll('.option');
+    for (j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('selected');
+      opts[j].style.opacity = '1';
+    }
+    var boxes = rb.querySelectorAll('.reply-box');
+    for (j = 0; j < boxes.length; j++) boxes[j].classList.remove('show');
+    var bt = rb.querySelector('.btn');
+    if (bt) bt.classList.remove('show');
+  }
+  q('chatArea').style.display = 'block';
+  q('resultPage').classList.remove('show');
+  var fills = document.querySelectorAll('.dim-fill');
+  for (j = 0; j < fills.length; j++) fills[j].style.width = '0%';
+  var labels = document.querySelectorAll('.dim-label span:last-child');
+  for (j = 0; j < labels.length; j++) labels[j].textContent = '0%';
+  var lvs = document.querySelectorAll('.lv-div');
+  for (j = 0; j < lvs.length; j++) lvs[j].style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+function pick(round, idx) {
+  if (scores[round] !== undefined) return;
+  var rb = q('rb' + round);
+  if (!rb) return;
+  var opts = rb.querySelectorAll('.option');
+  var score = parseInt(opts[idx].getAttribute('data-score'), 10);
+  scores[round] = score;
+  opts[idx].classList.add('selected');
+  for (var i = 0; i < opts.length; i++) {
+    if (i !== idx) opts[i].style.opacity = '.45';
+  }
+  var reply = rb.querySelector('#reply-' + round + '-' + idx);
+  if (reply) reply.classList.add('show');
+  var btn = rb.querySelector('#btn-' + round);
+  if (btn) btn.classList.add('show');
+  setTimeout(function () {
+    var el = q('rb' + round);
+    if (el) el.scrollIntoView({ behavior: 'auto', block: 'end' });
+  }, 80);
+}
+
+function nextRound(round) {
+  currentRound = round + 1;
+  var cur = q('rb' + round);
+  var next = q('rb' + currentRound);
+  if (cur) cur.style.display = 'none';
+  if (next) {
+    next.style.display = 'block';
+    next.scrollIntoView({ behavior: 'auto', block: 'start' });
+  }
+}
+
+function showResult() {
+  var total = 0, allGood = true, i, j;
+  for (i = 0; i < TOTAL; i++) {
+    total += (scores[i] || 0);
+    if ((scores[i] || 0) < 15) allGood = false;
+  }
+  if (allGood) total += 10;
+
+  q('chatArea').style.display = 'none';
+  q('resultPage').classList.add('show');
+
+  q('scoreNum').textContent = total;
+  var lvTitle = q('lvTitle');
+  var lvDiv = '';
+  if (total >= 90)      { lvTitle.textContent = '教练级销售'; lvTitle.style.background = '#336633'; lvDiv = 'lvA'; }
+  else if (total >= 70) { lvTitle.textContent = '熟练销售';   lvTitle.style.background = '#2F3C7E'; lvDiv = 'lvB'; }
+  else if (total >= 50) { lvTitle.textContent = '需要陪跑';   lvTitle.style.background = '#BA7517'; lvDiv = 'lvC'; }
+  else                  { lvTitle.textContent = '回炉重造';   lvTitle.style.background = '#B85042'; lvDiv = 'lvD'; }
+  var lvs = document.querySelectorAll('.lv-div');
+  for (i = 0; i < lvs.length; i++) lvs[i].style.display = 'none';
+  var dv = q(lvDiv);
+  if (dv) dv.style.display = 'block';
+
+  var dims = [
+    [scores[0] || 0],
+    [scores[1] || 0],
+    [scores[2] || 0],
+    Math.round(((scores[3] || 0) + (scores[4] || 0)) / 2),
+    [scores[5] || 0]
+  ];
+  var maxes = [15, 15, 15, 15, 15];
+  for (j = 0; j < dims.length; j++) {
+    var pct = Math.min(100, Math.round(dims[j] / maxes[j] * 100));
+    q('d' + (j + 1)).style.width = pct + '%';
+    q('d' + (j + 1) + 't').textContent = pct + '%';
+  }
+  window.scrollTo(0, 0);
+}
+
+function restart() { resetPage(); }
+
+resetPage();
+</script>
+</body>
+</html>
