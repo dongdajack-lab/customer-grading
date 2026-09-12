@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大董老师 · 760班专属在线工具</title>
+<style>
+  :root{
+    --navy:#1B2A4A; --navy2:#24365e; --steel:#2E6B9E; --orange:#E67E22;
+    --ink:#22304a; --muted:#7a8699; --line:#e4e9f1; --card:#ffffff; --bg:#f3f6fb;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); min-height:100vh;
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 55%,var(--steel) 130%);
+    color:#fff; padding:34px 18px 30px; text-align:center;
+  }
+  header .badge{
+    display:inline-block; font-size:12.5px; letter-spacing:3px; color:#ffd9b0;
+    border:1px solid rgba(255,217,176,.45); border-radius:999px; padding:4px 14px; margin-bottom:12px;
+  }
+  header h1{margin:0; font-size:27px; letter-spacing:2px;}
+  header .sub{margin-top:8px; font-size:13.5px; color:#c9d6ea; letter-spacing:1px;}
+  main{max-width:980px; margin:0 auto; padding:26px 16px 46px;}
+  .group{margin-bottom:26px;}
+  .group-title{
+    display:flex; align-items:center; gap:10px; font-size:16px; font-weight:700;
+    color:var(--navy); margin:0 4px 12px;
+  }
+  .group-title::after{content:''; flex:1; height:1px; background:var(--line);}
+  .group-title .tag{
+    font-size:11.5px; font-weight:600; color:#fff; background:var(--steel);
+    border-radius:999px; padding:2px 10px; letter-spacing:1px;
+  }
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px;}
+  a.tool{
+    display:flex; gap:13px; align-items:flex-start; text-decoration:none;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 16px 15px; color:inherit;
+    box-shadow:0 2px 10px rgba(27,42,74,.05);
+    transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  a.tool:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(27,42,74,.12); border-color:#c8d6ea;}
+  a.tool:active{transform:scale(.985);}
+  .num{
+    flex:0 0 auto; width:34px; height:34px; border-radius:10px; margin-top:1px;
+    background:linear-gradient(135deg,var(--navy),var(--steel));
+    color:#fff; font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .t-name{font-size:16px; font-weight:700; margin:0 0 5px; color:var(--navy);}
+  .t-desc{font-size:13px; line-height:1.65; color:var(--muted); margin:0;}
+  .go{
+    display:block; margin-top:8px; font-size:12.5px; font-weight:700; color:var(--orange);
+  }
+  footer{
+    text-align:center; padding:22px 16px 34px; color:var(--muted); font-size:12.5px; line-height:1.9;
+  }
+  footer .brand{color:var(--navy); font-weight:700; letter-spacing:2px;}
+  @media (max-width:480px){
+    header h1{font-size:22px;}
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">总裁班销售管理实战</div>
+  <h1>760班专属在线工具</h1>
+  <div class="sub">点击下方卡片，直接进入对应工具 · 建议收藏本页</div>
+</header>
+<main>
+
+  <div class="group">
+    <div class="group-title">体系诊断与客户策略<span class="tag">3 个</span></div>
+    <div class="grid">
+      <a class="tool" href="diag-760.html">
+        <div class="num">1</div>
+        <div>
+          <p class="t-name">天地人诊断报告</p>
+          <p class="t-desc">输入企业销售体系现状，自动生成天·地·人三维度健康度诊断与改进建议。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="c3-8d-760.html">
+        <div class="num">2</div>
+        <div>
+          <p class="t-name">3C&amp;8维客户策略分析</p>
+          <p class="t-desc">从客户、竞争、公司三个维度、八个视角，把大客户的打法一次理清。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="tancan-760.html">
+        <div class="num">3</div>
+        <div>
+          <p class="t-name">高层客户会谈剧本</p>
+          <p class="t-desc">见决策层之前把谈话推演一遍：开场、议程、提问、收口，逐段备好剧本。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">能力训练与复盘<span class="tag">3 个</span></div>
+    <div class="grid">
+      <a class="tool" href="spin-760.html">
+        <div class="num">4</div>
+        <div>
+          <p class="t-name">挖痛练习 · SPIN提问训练</p>
+          <p class="t-desc">现状、难点、暗示、需求效益，四步提问层层递进，练出挖痛真功夫。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="ask-1314-760.html">
+        <div class="num">5</div>
+        <div>
+          <p class="t-name">1314销冠能力测评</p>
+          <p class="t-desc">一生一世做销冠：三心、一流、四知，测一测你离销冠还差几步。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="kiss-760.html">
+        <div class="num">6</div>
+        <div>
+          <p class="t-name">KISS复盘工作台</p>
+          <p class="t-desc">Keep · Improve · Start · Stop，四步结构化复盘，把每次拜访变成进步。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">薪酬激励设计<span class="tag">5 个</span></div>
+    <div class="grid">
+      <a class="tool" href="salary-budget-760.html">
+        <div class="num">7</div>
+        <div>
+          <p class="t-name">定总包 · 财务安全性测算</p>
+          <p class="t-desc">先算账再定薪：验证薪酬总包是否在公司财务安全线之内。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="salary-mix-760.html">
+        <div class="num">8</div>
+        <div>
+          <p class="t-name">薪酬进化导航器</p>
+          <p class="t-desc">团队不同阶段该用哪种薪酬模式？给出选择依据与演进路径。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="salary-760.html">
+        <div class="num">9</div>
+        <div>
+          <p class="t-name">销售薪酬提成计算器</p>
+          <p class="t-desc">底薪、提成、阶梯、封顶……方案算一遍，激励力度一目了然。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="commission-classroom-760.html">
+        <div class="num">10</div>
+        <div>
+          <p class="t-name">销售提成方案 · 课堂演练版</p>
+          <p class="t-desc">课堂现场分组设计提成方案，边做边比，即时验证激励效果。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+      <a class="tool" href="emotional-bank-760.html">
+        <div class="num">11</div>
+        <div>
+          <p class="t-name">情感账户储蓄工具</p>
+          <p class="t-desc">把对客户的每次"储蓄"记下来，让关系资产看得见、可积累。</p>
+          <span class="go">进入工具 →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</main>
+<footer>
+  <div class="brand">大董老师 · 销售体系搭建</div>
+  <div>天地人销售管理体系 · 1314销冠模型</div>
+</footer>
+</body>
+</html>
