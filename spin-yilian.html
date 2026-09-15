@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>亿联无限·SPIN销售话术练习 | 网络设备出海销售场景</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%);
+  min-height: 100vh;
+  color: #1a2547;
+  line-height: 1.6;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+
+/* === 头部 === */
+.header {
+  background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 20px rgba(47, 60, 126, 0.25);
+}
+.brand-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.header h1 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
+.header p { font-size: 13px; opacity: 0.9; }
+.scenario-info {
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* === 进度条 === */
+.progress-wrap {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+.progress-text .current-num {
+  color: #2F3C7E;
+  font-weight: 700;
+  font-size: 16px;
+}
+.progress-bar {
+  height: 6px;
+  background: #e8ecf5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2F3C7E 0%, #4a5fa8 100%);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* === 题目卡 === */
+.q-block { display: none; }
+.q-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.question-badge {
+  display: inline-block;
+  background: #2F3C7E;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.scenario {
+  background: #f5f7fc;
+  border-left: 4px solid #2F3C7E;
+  padding: 14px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+}
+.scenario .label {
+  color: #2F3C7E;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.q-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2547;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border-radius: 8px;
+  border: 1px dashed #d0d8ec;
+}
+.q-title .stage-hint {
+  display: inline-block;
+  font-size: 12px;
+  background: #fff4e6;
+  color: #c47b1f;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+/* === 选项 === */
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border: 2px solid #e8ecf5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+}
+.option:hover {
+  border-color: #2F3C7E;
+  background: #f5f7fc;
+  transform: translateX(2px);
+}
+.option.selected {
+  border-color: #2F3C7E;
+  background: #eef2fb;
+}
+.option.correct {
+  border-color: #336633;
+  background: #eaf5ea;
+}
+.option.wrong {
+  border-color: #c14545;
+  background: #fbeaea;
+}
+.option.disabled { cursor: not-allowed; }
+.option .radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+  position: relative;
+}
+.option.selected .radio {
+  border-color: #2F3C7E;
+  background: #2F3C7E;
+}
+.option.selected .radio::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+.option.correct .radio {
+  border-color: #336633;
+  background: #336633;
+}
+.option.correct .radio::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.option.wrong .radio {
+  border-color: #c14545;
+  background: #c14545;
+}
+.option.wrong .radio::after {
+  content: '✗';
+  position: absolute;
+  top: -2px;
+  left: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+.option .text { flex: 1; }
+.opt-label {
+  font-weight: 700;
+  color: #2F3C7E;
+  margin-right: 4px;
+}
+.option.correct .opt-label { color: #336633; }
+.option.wrong .opt-label { color: #c14545; }
+.option.correct .option.wrong 
+/* === 答案和解析 === */
+.correct-answer, .explanation {
+  display: none;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.correct-answer {
+  background: #eaf5ea;
+  border-left: 4px solid #336633;
+  color: #2a4d2a;
+}
+.correct-answer .label {
+  font-weight: 700;
+  margin-right: 6px;
+}
+.explanation {
+  background: #fafbff;
+  border-left: 4px solid #2F3C7E;
+  color: #333;
+}
+.explanation h4 {
+  font-size: 14px;
+  color: #2F3C7E;
+  margin-bottom: 8px;
+}
+.explanation p { margin-bottom: 8px; font-size: 13.5px; line-height: 1.7; }
+.explanation .formula {
+  background: #2F3C7E;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+.correct-answer.show, .explanation.show { display: block; }
+
+/* === 按钮 === */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: #2F3C7E;
+  color: white;
+}
+.btn-primary:hover:not(:disabled) { background: #1e2a5c; }
+.btn-primary:disabled { background: #b0b8c8; cursor: not-allowed; }
+.btn-secondary {
+  background: white;
+  color: #2F3C7E;
+  border: 2px solid #2F3C7E;
+}
+.btn-secondary:hover:not(:disabled) { background: #f5f7fc; }
+.btn-secondary:disabled { color: #b0b8c8; border-color: #d0d8ec; cursor: not-allowed; }
+
+/* === 结果页 === */
+.result-card {
+  display: none;
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.result-card.show { display: block; }
+.result-title { font-size: 22px; color: #1a2547; margin-bottom: 8px; font-weight: 700; }
+.score-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2F3C7E 0%, #4a5fa8 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  box-shadow: 0 4px 16px rgba(47, 60, 126, 0.3);
+}
+.score-circle .num { font-size: 42px; font-weight: 700; }
+.score-circle .total { font-size: 14px; opacity: 0.9; }
+.score-percent { font-size: 18px; color: #2F3C7E; margin-bottom: 6px; font-weight: 600; }
+.score-remark { font-size: 14px; color: #666; margin-bottom: 24px; }
+.result-detail {
+  text-align: left;
+  background: #fafbff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.result-detail h3 { font-size: 15px; color: #2F3C7E; margin-bottom: 12px; }
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13.5px;
+  color: #333;
+  border-bottom: 1px solid #e8ecf5;
+}
+.result-item:last-child { border-bottom: none; }
+.result-item .status { font-weight: 700; }
+
+/* === 页脚 === */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #999;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .container { padding: 16px 12px; }
+  .header { padding: 20px 16px; }
+  .header h1 { font-size: 20px; }
+  .q-card { padding: 20px 16px; }
+  .option { padding: 12px 14px; font-size: 13.5px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="brand-tag">博商 · 大董销售体系</span>
+    <h1>亿联无限·SPIN销售话术练习</h1>
+    <p>网络设备出海销售场景 · 8道情景判断题</p>
+    <div class="scenario-info">
+      <strong>场景设定：</strong>你是深圳亿联无限的销售经理，公司是国家级专精特新"小巨人"，自有制造基地年产900万台终端，光猫（ONT）、路由器、FTTR全屋光网设备卖到全球60多个国家。这位客户是马来西亚吉隆坡的贴牌品牌商 NetLink，现用深圳另一家 ODM 两年多，月订单约 5 万台，今年想升级 WiFi6 产品线。下面 8 个场景，请你选出<strong>最佳</strong>的提问方式。
+    </div>
+  </div>
+
+  <div id="quizPage">
+    <div class="progress-wrap">
+      <div class="progress-text">
+        <span>答题进度</span>
+        <span><span class="current-num" id="currentNum">1</span> / <span id="totalNum">8</span></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- 第 1 题 -->
+    <div class="q-block" id="q0" style="display:block;">
+      <div class="q-card">
+        <span class="question-badge">第 1 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>你第一次拜访马来西亚 NetLink 的陈总，对方正在用深圳另一家 ODM 的光猫做运营商订单。第一步接触。
+        </div>
+        <div class="q-title">
+          此刻最应该问的是哪类问题？
+          <span class="stage-hint">开局阶段</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 你们的路由器现在返修率多少？为什么这么高？</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 陈总，方便介绍下您目前的产品线吗？卖哪些型号、月出货多大、主要供哪国市场？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 用我们的 WiFi6 方案，可以让您的整机成本下降 5%，您觉得有兴趣吗？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 如果供货经常断货，会导致您旺季丢订单，这会带来多大损失？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca0">
+          <span class="label">✅ 正确答案：B</span>S（Situation 背景问题）—— 先了解客户现状：卖什么、量多大、供哪个市场。开局阶段不熟悉就问痛点，会让客户反感。
+        </div>
+        <div class="explanation" id="ex0">
+          <h4>解析：SPIN开场为什么必须是 S？</h4>
+          <p><strong>原因 1：</strong>背景问题（S）建立信任。你刚见面就问"为什么这么高"等于指责对方供应商差，关系直接破裂。</p>
+          <p><strong>原因 2：</strong>S 是 P/I/N 的基础。不知道客户的盘子，痛点无从谈起。</p>
+          <p><strong>原因 3：</strong>品牌商老板很务实，开门见山聊产品线、聊出货量才是共同语言。</p>
+          <div class="formula">SPIN顺序口诀：先问"是什么"（S），再问"哪里难"（P），再问"会怎样"（I），最后问"想要啥"（N）。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 2 题 -->
+    <div class="q-block" id="q1">
+      <div class="q-card">
+        <span class="question-badge">第 2 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>陈总说："我们现在用X家的光猫和路由器，月出货5万台，主要走马来西亚本国的宽带运营商和连锁渠道。"
+        </div>
+        <div class="q-title">
+          接下来最合适的提问是？
+          <span class="stage-hint">了解阶段</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 我们的WiFi6方案能帮您抢下明年运营商集采的大单！</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 如果您的产品过不了运营商入网测试，整个市场会被竞品拿走，您能承受吗？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 跟X家合作这两年，有没有什么让您觉得不太顺手的地方？比如交期、售后返修、技术支持？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 您公司上一年的销售额是多少？有多少个渠道代理？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca1">
+          <span class="label">✅ 正确答案：C</span>P（Problem 难点问题）—— 客户已经告诉你现状了（X家方案、月出货5万、运营商渠道），现在该挖痛点。
+        </div>
+        <div class="explanation" id="ex1">
+          <h4>解析：什么时候该从 S 切到 P？</h4>
+          <p><strong>关键信号：</strong>客户主动说出"在用X家方案、月出货5万台、走运营商渠道"——这是 S 阶段信息已经收集充分的信号。</p>
+          <p><strong>C 为什么对：</strong>用三个具体维度（交期、售后返修、技术支持）引导客户说出难点，是经典的 P 问题。</p>
+          <p><strong>A 为什么错：</strong>还没挖出痛点就上产品话术，是硬销。</p>
+          <p><strong>D 为什么错：</strong>继续问 S 类问题，会让客户觉得你在走流程、不专业。</p>
+          <div class="formula">P 问题的标准句式："在跟XX合作的过程中，有没有遇到XX的不便/困难/不满意？"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 3 题 -->
+    <div class="q-block" id="q2">
+      <div class="q-card">
+        <span class="question-badge">第 3 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>陈总吐槽："X家交期越走越长，旺季一催单就要排队；售后返修回来，等换机要等两三周。"
+        </div>
+        <div class="q-title">
+          客户说出了痛点，下一步最该问什么？
+          <span class="stage-hint">放大阶段</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 您上一年的销售额是多少？有多少个渠道代理？</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 如果旺季交期再拖，运营商那边的装机任务完不成，会怎么处理您这个品牌？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 如果我们能保证45天交期、备库常驻，对您有什么价值？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 您觉得交期多少天比较合理？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca2">
+          <span class="label">✅ 正确答案：B</span>I（Implication 暗示问题）—— 客户说出痛点后，要"放大"痛点的影响，让客户自己感受到紧迫性。
+        </div>
+        <div class="explanation" id="ex2">
+          <h4>解析：I 问题的核心是"放大"不是"补刀"</h4>
+          <p><strong>I 的精髓：</strong>不评价、不推销，而是帮客户算账——"这个问题如果不解决，会带来什么连锁后果？"</p>
+          <p><strong>B 为什么对：</strong>把"交期拖"和"运营商装机任务/品牌信任"挂上钩，让客户自己意识到这是一个会引发更大损失的问题。</p>
+          <p><strong>C 为什么错：</strong>N 是让客户自己说出"我想要"——但 P 还没挖透，I 还没放大，不能急。</p>
+          <p><strong>D 为什么错：</strong>还在 P 阶段打转，问题没深入。</p>
+          <div class="formula">I 问题的标准句式："如果/当XX，会导致什么？最终会影响到您的什么？"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 4 题 -->
+    <div class="q-block" id="q3">
+      <div class="q-card">
+        <span class="question-badge">第 4 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>陈总叹了口气："去年黑五旺季断了两周货，运营商的装机任务没接上，有两个渠道商转头去推竞品了。"
+        </div>
+        <div class="q-title">
+          此时最该问的是什么？
+          <span class="stage-hint">引向价值</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 那您有没有考虑过换一家 ODM？</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 如果这两个渠道商的订单没丢，您打算怎么用？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 我们自有工厂900万台年产能，能帮您一次解决交期问题，您要不要试试？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 如果旺季能保证稳供、售后两周转机，对您跟运营商续约、渠道商复购会带来什么变化？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca3">
+          <span class="label">✅ 正确答案：D</span>N（Need-payoff 需求效益问题）—— 让客户自己描述"如果问题解决了，对我有什么价值"。
+        </div>
+        <div class="explanation" id="ex3">
+          <h4>解析：N 问题的两个关键：客户说+具体场景</h4>
+          <p><strong>N 的精髓：</strong>让客户"自己说服自己"——价值由客户嘴巴说出来，比销售说 100 句都管用。</p>
+          <p><strong>D 为什么对：</strong>1) 用了"如果能保证"——假设句式；2) 让客户关联到具体业务（运营商续约、渠道复购）；3) 没推销自家产品。</p>
+          <p><strong>B 为什么是陷阱：</strong>看起来是 N，但问的是"订单怎么花"，是私人问题，跳跃太大且不合适。</p>
+          <p><strong>C 为什么错：</strong>这是销售硬推产品（"您要不要试试？"），不是 N 问题。N 是开放式的，让客户自己说价值。</p>
+          <div class="formula">N 问题的标准句式："如果（痛点被解决），对您的（具体业务指标）会有什么好处？"</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 5 题 -->
+    <div class="q-block" id="q4">
+      <div class="q-card">
+        <span class="question-badge">第 5 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>陈总点头说："是啊，旺季不缺货、售后响应快，运营商那边续约就稳了，渠道商也敢压货了。"
+        </div>
+        <div class="q-title">
+          客户已经"自我说服"了，下一步你最该做什么？
+          <span class="stage-hint">临门一脚</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 继续问更多 S 问题，比如"您公司有多大、几个员工"。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 继续挖痛点："那您还遇到其他什么问题吗？"</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 顺势提议："那我下次带WiFi6样机、认证报告过来，再约您去我们江西工厂走一圈，看看产线和备库？"</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 直接报底价："我们比X家便宜 10%，现在下单我给您申请优惠。"</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca4">
+          <span class="label">✅ 正确答案：C</span>不是 SPIN 里的某一类，但这是 N 之后的"行动承诺（Advance）"—— 销售流程的自然推进。
+        </div>
+        <div class="explanation" id="ex4">
+          <h4>解析：N 之后是"行动推进"，不是"继续提问"</h4>
+          <p><strong>SPIN 不是终点：</strong>SPIN 是挖掘需求的方法，挖到位后要顺势推向"具体下一步"。</p>
+          <p><strong>C 为什么对：</strong>1) 样机+认证报告，让客户"看得见摸得着"；2) 邀请看工厂，用自有产能做信任背书，给客户一个低门槛的"试一下"动作；3) 不报价、不硬推。</p>
+          <p><strong>D 为什么错：</strong>还没到报价时机。一旦报底价，客户就用价格筛选而不是价值筛选。</p>
+          <p><strong>A/B 为什么错：</strong>客户已经自我说服了，再回到 S/P 就是"煮熟的鸭子又飞了"。</p>
+          <div class="formula">N 之后的标准动作：邀请具体下一步（送样机、约见、看厂、做方案），而不是继续提问或报价。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 6 题 -->
+    <div class="q-block" id="q5">
+      <div class="q-card">
+        <span class="question-badge">第 6 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>两周后你回访，陈总说："你们的WiFi6样机测试表现不错，但整机报价比X家贵了 5%。"
+        </div>
+        <div class="q-title">
+          客户提出价格异议，最佳回应是？
+          <span class="stage-hint">异议处理</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 立即降价 5% 留住客户。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "一分价钱一分货，我们品质好。"</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "陈总，5% 的价差带来的综合成本差异，您之前算过吗？比如售后返修、旺季断货、技术响应这些。"</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "我回去跟领导申请，看能不能再让 2%。"</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca5">
+          <span class="label">✅ 正确答案：C</span>用 I（暗示问题）把"价格贵 5%"放大到"全生命周期综合成本"——回到客户之前自己说过的痛点。
+        </div>
+        <div class="explanation" id="ex5">
+          <h4>解析：价格异议的本质是"价值还没立住"</h4>
+          <p><strong>核心思维：</strong>客户说"贵"，不是真要你降价，是"价值认知不够"。要回到客户自己说过的痛点（返修、断货、响应）算总账。</p>
+          <p><strong>C 为什么对：</strong>用客户自己提过的指标（售后/断货/响应）做对比，让客户自己算出 5% 价差换回的是旺季整个销售季的保障。</p>
+          <p><strong>A/B/D 为什么错：</strong>直接降价/争辩/拖延，都没解决"价值认知"问题，反而削弱了销售专业度。</p>
+          <div class="formula">价格异议的SPIN反制：用 I 把"采购成本"放大为"总拥有成本 TCO"，让客户自己重新算账。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 7 题 -->
+    <div class="q-block" id="q6">
+      <div class="q-card">
+        <span class="question-badge">第 7 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>陈总点头："确实，去年光售后换机就花了 30 多万马币。"但随后说："不过换 ODM 是大事，怕出品质事故，我们对现供应商还是放心的。"
+        </div>
+        <div class="q-title">
+          这是新冒出的风险类痛点，下一步最该问？
+          <span class="stage-hint">挖风险痛点</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "我们是国家级专精特新小巨人，上市公司控股，绝对没问题。"</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "陈总，您最担心的是哪个环节出问题？是批量品质、旺季产能还是固件支持跟不上？"</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "如果换供应商出问题，您觉得会有什么后果？"</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> "我们可以先送 500 台样机做小批量试单。"</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca6">
+          <span class="label">✅ 正确答案：B</span>P（难点问题）—— 客户提出"担心风险"，先要把"风险"具体化，才能针对性打消。
+        </div>
+        <div class="explanation" id="ex6">
+          <h4>解析：客户说"担心"时，最忌讳的就是立刻打消</h4>
+          <p><strong>"我们绝对没问题"为什么错：</strong>客户说担心，你的"绝对没问题"是空口承诺，反而加深不信任。</p>
+          <p><strong>B 为什么对：</strong>把"担心"拆成三个具体场景（批量品质/旺季产能/固件支持），让客户自己说出到底怕什么。一旦具体化，你才能精准打消。</p>
+          <p><strong>C 为什么错：</strong>客户刚说"怕"，你接着说"会怎样"——会让客户更紧张，是反向 I。</p>
+          <p><strong>D 为什么错：</strong>还没弄清楚具体风险，就直接上行动，错位。</p>
+          <div class="formula">当客户表达"担心/顾虑/犹豫"时，先 P（具体化）→ 再 I（放大不解决的后果）→ 再 N（解忧后的价值）→ 最后推进。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 8 题 -->
+    <div class="q-block" id="q7">
+      <div class="q-card">
+        <span class="question-badge">第 8 题</span>
+        <div class="scenario">
+          <span class="label">【场景】</span>陈总说："主要是怕批量品质出问题，旺季补货跟不上。"你回答后客户追问："那你能保证不出问题吗？"
+        </div>
+        <div class="q-title">
+          客户要"保证"时，最佳回答策略是？
+          <span class="stage-hint">建立信任</span>
+        </div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> "我保证100%没问题。"</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> "保证做不到，但我可以给您方案 ABC 三重保障..."</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> "陈总，没人敢100%保证。我能做的是：1) 您的型号在我们江西工厂做常备安全库存，2) 售后换机两周内到位，3) 原厂固件工程师直接对接。您看这三件事，对您够不够？"</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 避开话题："我们先看产品规格书吧。"</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca7">
+          <span class="label">✅ 正确答案：C</span>用 N 问题"对您够不够"——把"保证"转化为"具体保障条款"，让客户自己判断。
+        </div>
+        <div class="explanation" id="ex7">
+          <h4>解析："保证"类问题的销售话术策略</h4>
+          <p><strong>客户要"保证"的心理：</strong>其实是想要"安全感"，但销售硬承诺 100% 反而会让客户觉得不专业。</p>
+          <p><strong>C 为什么对：</strong>1) 先承认没人能 100% 保证（真诚）；2) 给出三个具体保障（常备库存/售后时效/原厂工程师）；3) 反问"对您够不够"——这是高级 N 问题，让客户自己评估是否被满足。</p>
+          <p><strong>A 为什么错：</strong>100% 承诺=以后出问题就违约，专业度归零。</p>
+          <p><strong>B 为什么错：</strong>"方案 ABC 三重保障"是销售自吹自擂，没让客户参与评估。</p>
+          <p><strong>D 为什么错：</strong>逃避 = 没担当，关系立刻降温。</p>
+          <div class="formula">面对"保证"类问题，公式 = 承认现实 + 3 个具体保障 + 反问"对您够不够"（让客户自己说 YES）。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev">← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">查看结果</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结果页 -->
+  <div class="result-card" id="resultPage">
+    <div class="result-title">练习完成！</div>
+    <div class="score-circle">
+      <div class="num" id="scoreNum">0</div>
+      <div class="total">/ 8 题</div>
+    </div>
+    <div class="score-percent">正确率 <span id="percentNum">0</span>%</div>
+    <div class="score-remark" id="scoreRemark"></div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="btn btn-primary" onclick="restart()">再练一遍 🔁</button>
+  </div>
+
+  <div class="footer">
+    博商 · 大董销售体系 · 亿联无限SPIN话术练习 · 仅供内部培训使用
+  </div>
+</div>
+
+<script>
+var current = 0;
+var selected = null;
+var answered = false;
+var results = [];
+var totalQuestions = 8;
+
+function init() {
+  updateProgress();
+  showQuestion(0);
+}
+
+function updateProgress() {
+  document.getElementById("currentNum").textContent = (current + 1);
+  document.getElementById("progressFill").style.width =
+    (current / totalQuestions * 100) + "%";
+}
+
+function currentBlock() {
+  return document.getElementById('q' + current);
+}
+
+function currentBtns() {
+  var q = currentBlock();
+  return {
+    next: q.querySelector('#btnNext'),
+    prev: q.querySelector('#btnPrev')
+  };
+}
+
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) {
+    var el = document.getElementById('q' + i);
+    if (el) el.style.display = 'none';
+  }
+  var curr = document.getElementById('q' + idx);
+  if (curr) curr.style.display = 'block';
+  current = idx;
+  selected = null;
+  answered = false;
+  var btns = currentBtns();
+  var btnNext = btns.next;
+  var btnPrev = btns.prev;
+  btnNext.textContent = (idx === totalQuestions - 1) ? "查看结果" : "确认答案";
+  btnNext.disabled = true;
+  btnNext.onclick = confirmAnswer;
+  btnPrev.disabled = (idx === 0);
+  btnPrev.onclick = function() {
+    if (current > 0) {
+      current--;
+      updateProgress();
+      showQuestion(current);
+    }
+  };
+}
+
+function selectOpt(idx) {
+  if (answered) return;
+  selected = idx;
+  var container = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < container.length; i++) {
+    if (i === idx) {
+      container[i].classList.add('selected');
+    } else {
+      container[i].classList.remove('selected');
+    }
+  }
+  currentBtns().next.disabled = false;
+}
+
+function confirmAnswer() {
+  if (selected === null) return;
+  var qBlock = document.getElementById('q' + current);
+  var options = qBlock.querySelectorAll('.option');
+  var isCorrect = false;
+  for (var i = 0; i < options.length; i++) {
+    var optCorrect = options[i].getAttribute('data-correct') === 'true';
+    if (optCorrect) options[i].classList.add('correct');
+    if (i === selected && !optCorrect) options[i].classList.add('wrong');
+    if (i === selected && optCorrect) isCorrect = true;
+    options[i].onclick = null;
+  }
+  answered = true;
+  results[current] = isCorrect;
+  var ca = document.getElementById('ca' + current);
+  var ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show');
+  if (ex) ex.classList.add('show');
+  var btnNext = currentBtns().next;
+  btnNext.disabled = false;
+  if (current < totalQuestions - 1) {
+    btnNext.textContent = "下一题 →";
+    btnNext.onclick = goNext;
+  } else {
+    btnNext.textContent = "查看结果";
+    btnNext.onclick = showResult;
+  }
+}
+
+function goNext() {
+  current++;
+  updateProgress();
+  showQuestion(current);
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent =
+    Math.round(score / results.length * 100);
+
+  var pct = Math.round(score / results.length * 100);
+  var remark = "";
+  if (pct === 100) remark = "🏆 完美！您已是SPIN高手，可以去指导亿联无限的销售团队了";
+  else if (pct >= 75) remark = "👍 SPIN基础扎实，多练几遍就能形成肌肉记忆";
+  else if (pct >= 50) remark = "💪 已掌握核心思路，重点复习 I 和 N 阶段的提问技巧";
+  else remark = "📚 建议从 S→P→I→N 的顺序再过一遍，先建立对话节奏";
+  document.getElementById("scoreRemark").textContent = remark;
+
+  var detail = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    detail += '<div class="result-item"><span class="status">' +
+      (results[i] ? '✅ 正确' : '❌ 错误') + '</span><span>第 ' + (i + 1) + ' 题</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detail;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  for (var i = 0; i < totalQuestions; i++) {
+    var opts = document.querySelectorAll('#q' + i + ' .option');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('selected', 'correct', 'wrong');
+      opts[j].onclick = function() {
+        var myIdx = parseInt(this.getAttribute('data-idx'));
+        selectOpt(myIdx);
+      };
+    }
+    var ca = document.getElementById('ca' + i);
+    var ex = document.getElementById('ex' + i);
+    if (ca) ca.classList.remove('show');
+    if (ex) ex.classList.remove('show');
+  }
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  init();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
