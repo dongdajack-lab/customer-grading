@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>福麦斯·FABE测试 | 三线场景</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%); min-height: 100vh; color: #1a2547; line-height: 1.65; }
+.container { max-width: 880px; margin: 0 auto; padding: 24px 20px 60px; }
+.header { background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%); color: #fff; border-radius: 16px;
+  padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 6px 20px rgba(47,60,126,.25); }
+.brand-tag { display: inline-block; background: rgba(255,255,255,.15); font-size: 12px; padding: 4px 10px;
+  border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+.header h1 { font-size: 23px; margin-bottom: 6px; font-weight: 700; }
+.header p { font-size: 13px; opacity: .9; }
+.key-box { background: rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
+.key-box strong { color: #ffd97a; }
+.progress-wrap { background: #fff; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }
+.progress-bar { height: 8px; background: #e6ebf5; border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: linear-gradient(90deg,#4F81BC,#2F3C7E); transition: width .3s; }
+.progress-text { font-size: 12px; color: #5A6482; margin-top: 6px; }
+.q-block { display: none; background: #fff; border-radius: 14px; padding: 20px 22px; margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(47,60,126,.08); }
+.q-badge { font-size: 12px; color: #fff; background: #4F81BC; border-radius: 99px; padding: 3px 10px;
+  display: inline-block; margin-bottom: 10px; }
+.scenario { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 6px; padding: 10px 12px;
+  font-size: 13px; margin-bottom: 12px; color: #333f5c; }
+.q-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; line-height: 1.6; }
+.option { border: 1.5px solid #DCE3F0; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer;
+  font-size: 14px; display: flex; gap: 10px; align-items: flex-start; transition: .15s; }
+.option:hover { border-color: #4F81BC; background: #F7F9FE; }
+.option.selected { border-color: #2F3C7E; background: #EEF3FC; }
+.option.correct { border-color: #1D9E75; background: #E7F7F1; }
+.option.wrong { border-color: #E24B4A; background: #FDECEC; }
+.radio { width: 16px; height: 16px; border: 2px solid #BFC5D3; border-radius: 50%; flex: 0 0 16px; margin-top: 3px; }
+.option.selected .radio { border-color: #2F3C7E; box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 8px #2F3C7E; }
+.correct-answer, .explanation { display: none; margin-top: 10px; border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+.correct-answer.show, .explanation.show { display: block; }
+.correct-answer { background: #E7F7F1; color: #0F6E56; border-left: 3px solid #1D9E75; }
+.explanation { background: #FFF8E6; border-left: 3px solid #EF9F27; color: #633806; }
+.explanation h4 { font-size: 13px; margin-bottom: 6px; }
+.explanation p { margin-bottom: 6px; }
+.nav { display: flex; gap: 10px; justify-content: space-between; margin-top: 6px; }
+.btn { border: none; border-radius: 10px; padding: 12px 20px; font-size: 14px; cursor: pointer;
+  background: #E4EAF5; color: #43506e; font-family: inherit; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
+#resultPage { display: none; background: #fff; border-radius: 16px; padding: 26px; text-align: center;
+  box-shadow: 0 2px 10px rgba(47,60,126,.08); }
+#resultPage.show { display: block; }
+.score-num { font-size: 52px; font-weight: 700; color: #2F3C7E; }
+.verdict { display: inline-block; margin: 8px 0 14px; padding: 6px 16px; border-radius: 99px; font-size: 14px; }
+.v-pass { background: #E7F7F1; color: #0F6E56; }
+.v-mid { background: #FFF3D6; color: #854F0B; }
+.v-fail { background: #FDECEC; color: #A32D2D; }
+.result-item { display: flex; gap: 8px; align-items: center; border-bottom: 1px dashed #E2E7F2; padding: 8px 0;
+  font-size: 13px; color: #3c4665; text-align: left; }
+textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px solid #DCE3F0; border-radius: 8px; padding: 10px; }
+.foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
+.next-card { background: #fff; border-radius: 14px; padding: 18px 20px; margin-top: 16px;
+  box-shadow: 0 2px 10px rgba(47,60,126,.08); border-top: 4px solid #4F81BC; font-size: 13px; color: #5A6482; }
+.next-card b { color: #2F3C7E; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="brand-tag">福麦斯 · 销售铁军一期 · M1</span>
+    <h1>FABE 测试</h1>
+    <p>先回顾口径 → 9 道题 → 出一条通关判定。测试过了，再去《FABE 真人演练》那一页动笔。</p>
+    <div class="key-box">
+      <strong>F 特征</strong>＝产品上客观存在、量得到的东西（成分／粒径／纯度／效期／规格／资质／服务条款）｜句式"它是……"<br>
+      <strong>A 作用</strong>＝这个特征发挥出来的作用，<strong>产品视角</strong>｜句式"<strong>它能做到……</strong>"<br>
+      <strong>B 利益</strong>＝落到这个客户身上的好处，<strong>客户视角</strong>｜句式"<strong>你能得到……</strong>"，必须挂痛点<br>
+      <strong>E 证据</strong>＝报告／数据／案例／名单，用来证明上面三句<br>
+      <strong>两条硬规矩</strong>：① A 写"它能做到什么"，<strong>不写"比同行好"</strong>——同行对比归 <strong>E</strong>（是证明我确有这个作用的材料），也归竞品弹药库，不重复做；② <strong>盖住痛点再读 B</strong>，还立得住就是废话。
+    </div>
+  </div>
+
+  <div id="quizPage">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">第 1 题 / 共 9 题</div>
+    </div>
+
+    <div class="q-block" id="q0" style="display:block;">
+      <div class="q-badge">第 1 题 · 四格识别</div>
+      <div class="scenario">关于同一款磁珠分选试剂，下面四句话：</div>
+      <div class="q-title">哪一句是 B（客户视角的好处）？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. "磁珠粒径 CV ≤ 5%"</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. "同一批做出来的结果更一致"</div></div>
+        <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. "你不用每个样品都重跑一遍"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. "第三方检测报告，某某老师的文章用的也是这个 panel"</div></div>
+      </div>
+      <div class="correct-answer" id="ca0">✅ 正确答案：C — "你不用每个样品都重跑一遍"</div>
+      <div class="explanation" id="ex0"><h4>解析</h4>
+        <p>B 是客户视角的好处，而且是<strong>这件产品落到他身上</strong>的结果。同一条 F，另外三句分别是：A 是 F（客观参数）、B 是 A（"它能做到"）、D 是 E（可查的证据）。</p>
+        <p>A 和 B 最容易混：A 讲"它能做什么"（产品视角），B 讲"你能少做什么"（客户视角）。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q1">
+      <div class="q-badge">第 2 题 · 什么时候用 FABE</div>
+      <div class="scenario">一位新人第一次见客户，寒暄两句就开始把 F / A / B / E 一口气讲完。</div>
+      <div class="q-title">这段呈现，最根本的问题出在哪？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. 内容不够详细，参数应该讲得更深一点</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. 痛还没挖出来就讲 FABE，B 挂不上任何东西——客户听到的是"你在介绍产品"</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. 应该先报价，再讲 FABE</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. 应该把 E 提到最前面先讲</div></div>
+      </div>
+      <div class="correct-answer" id="ca1">✅ 正确答案：B — 顺序反了</div>
+      <div class="explanation" id="ex1"><h4>解析</h4>
+        <p>FABE 是<strong>价值呈现</strong>，它站在 SPIN 的下游：先用 SPIN 把痛挖出来，再用 FABE 呈现。痛没挖到，B 那一格只能写成"你能得到更好的产品"——客户听不出跟自己有关。</p>
+        <p>顺序反了，再漂亮的 FABE 也是对着空气打靶。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q2">
+      <div class="q-badge">第 3 题 · 同行对比放哪</div>
+      <div class="scenario">销售手上有一张和竞品的对比数据，做得挺扎实。</div>
+      <div class="q-title">这张对比数据在 FABE 里应该放在哪？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. 放 F（特征）</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. 放 A（作用）</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. 放 B（利益）</div></div>
+        <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. 放 E（证据）</div></div>
+      </div>
+      <div class="correct-answer" id="ca2">✅ 正确答案：D — E 证据</div>
+      <div class="explanation" id="ex2"><h4>解析</h4>
+        <p>同行对比是"<strong>证明我确有这个作用</strong>"的材料，所以它归 E。</p>
+        <p>竞品的详细对比另有《竞品弹药库》专门承载，两边不重复做——FABE 里只放用来佐证的那一条。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q3">
+      <div class="q-badge">第 4 题 · 三线 B 的差异</div>
+      <div class="scenario">同一个特征："批次一致性好"。</div>
+      <div class="q-title">对<strong>渠道线</strong>的客户，B 应该怎么写？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. "你的实验能重复出来"</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. "终端不退货、你好卖、不砸你的招牌"</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. "验证不用重跑、审计过得去"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. "发文章更顺利"</div></div>
+      </div>
+      <div class="correct-answer" id="ca3">✅ 正确答案：B — 终端不退货、你好卖</div>
+      <div class="explanation" id="ex3"><h4>解析</h4>
+        <p>同一个 F，三线写出来的是三个完全不同的 B——这才是 FABE 要练的东西。</p>
+        <p>渠道客户的脑子里是"能不能赚钱、会不会砸招牌"，不是"你的实验重复性好不好"。另外两句分别是科研线的 B 和工业线的 B，都对，但都放错了客户。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q4">
+      <div class="q-badge">第 5 题 · E 的证明力</div>
+      <div class="scenario">现场要给客户拿出"证据"，下面哪一类最有证明力？</div>
+      <div class="q-title">最有证明力的是？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. "我们质量很好，做了很多年"</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. 第三方检测报告 / 批次稳定性数据 / 文献引用 / 可公开的同行业客户名单</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. "我们老板说我们最好"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. "客户都说好"</div></div>
+      </div>
+      <div class="correct-answer" id="ca4">✅ 正确答案：B — 可查、可核、可追溯</div>
+      <div class="explanation" id="ex4"><h4>解析</h4>
+        <p>E 必须<strong>拿得出、查得到</strong>。A、C、D 是自述，客户心里会自动打折。</p>
+        <p>E 是整个 FABE 里最值钱的一格，也是新人手上最缺的——所以课前请技术把能用的报告和数据先摆出来。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q5">
+      <div class="q-badge">第 6 题 · 渠道线的 F</div>
+      <div class="scenario">渠道这条线要做 FABE，"特征 F"该写什么？</div>
+      <div class="q-title">哪一种说法是对的？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. 渠道的 F 只能写产品参数</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. 渠道的 F 可以是政策：返点、账期、动销支持、区域保护</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. 渠道不需要 FABE</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. 渠道的 F 必须是价格</div></div>
+      </div>
+      <div class="correct-answer" id="ca5">✅ 正确答案：B — 政策也是特征</div>
+      <div class="explanation" id="ex5"><h4>解析</h4>
+        <p>经销商买的不是试剂本身，是"跟你做这门生意划不划算"。所以返点、账期、动销支持、区域保护，都是你产品的特征。</p>
+        <p>如果渠道那张卡上写满了产品性能参数，说明还在用科研的语言跟经销商说话。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q6">
+      <div class="q-badge">第 7 题 · B 的检验法</div>
+      <div class="scenario">写好一句 B 之后，现场最快的检验方法是什么？</div>
+      <div class="q-title">哪一句检验方法是对的？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. B 写得越通用越好，任何客户都能用</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. 把痛点那句盖住再读 B，如果照样立得住，说明没挂上痛，是废话</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. B 只要提到产品的好处就行</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. B 应该写得比 A 更长更详细</div></div>
+      </div>
+      <div class="correct-answer" id="ca6">✅ 正确答案：B — 盖住痛点读 B</div>
+      <div class="explanation" id="ex6"><h4>解析</h4>
+        <p>挂不住痛的 B，换个客户照样成立——那就说明它不是为"这一个客户"写的。</p>
+        <p>这一招现场三秒钟就能验，比讲十分钟定义管用。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q7">
+      <div class="q-badge">第 8 题 · 链路顺序</div>
+      <div class="scenario">FABE 四格要能一路推下去。</div>
+      <div class="q-title">正确的顺序是？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. F 特征 → A 作用 → B 利益 → E 证据</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. A → F → B → E</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. B → A → F → E</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. E → B → A → F</div></div>
+      </div>
+      <div class="correct-answer" id="ca7">✅ 正确答案：A — F→A→B→E</div>
+      <div class="explanation" id="ex7"><h4>解析</h4>
+        <p>它是什么 → 它能做什么 → 这对你有什么好处 → 凭什么这么说。四格读出来自洽，才算一条完整的呈现。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q8">
+      <div class="q-badge">第 9 题 · 工业线的 E</div>
+      <div class="scenario">给工业客户（IVD / 药企）做呈现，他最认哪一种证据？</div>
+      <div class="q-title">工业线最认的 E 是？</div>
+      <div class="options">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)"><div class="radio"></div><div class="text">A. 朋友圈里客户的好评截图</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)"><div class="radio"></div><div class="text">B. COA / 批次稳定性数据 / 验证报告 / 可公开的同行业客户名单</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)"><div class="radio"></div><div class="text">C. "我们服务响应很及时"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)"><div class="radio"></div><div class="text">D. "这次可以给你折扣"</div></div>
+      </div>
+      <div class="correct-answer" id="ca8">✅ 正确答案：B — 能进流程、经得起审计的那种</div>
+      <div class="explanation" id="ex8"><h4>解析</h4>
+        <p>工业客户的证据要能<strong>进他的流程</strong>：要被 QA 收进变更文件、供应商名录。所以必须是文档、数据、报告、可核查的名单。</p>
+        <p>D 把证据变成价格动作，说明前面的 A、B 没立住。</p>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn" id="btnPrev">← 上一题</button>
+      <button class="btn primary" id="btnNext">确认答案</button>
+    </div>
+  </div>
+
+  <div id="resultPage">
+    <div class="brand-tag" style="background:#EEF3FC;color:#2F3C7E;">通关结果</div>
+    <div class="score-num"><span id="scoreNum">0</span> / 9</div>
+    <div>正确率 <span id="percentNum">0</span>%</div>
+    <div class="verdict" id="verdict"></div>
+    <div id="resultDetail"></div>
+    <textarea id="copyArea" rows="7" placeholder="点下面按钮生成成绩文本"></textarea>
+    <button class="btn primary" onclick="copyScore()">📋 复制我的成绩</button>
+    <div style="margin-top:14px;"><button class="btn" onclick="restart()">再做一遍</button></div>
+    <div style="font-size:12px;color:#8A8A96;margin-top:10px;">通关线 80%。过了再翻到《FABE 真人演练与打分标准》；没过，先把 B 那一格弄明白。</div>
+  </div>
+
+  <div class="next-card">
+    <b>下一站：FABE 真人演练</b>（单独一份）——每组领一个主推品＋一条现场共创出来的真实痛点，写出 F / A / B / E 四句，按五维打分器互评。<br>
+    顺序别跳：<b>SPIN 先挖痛 → FABE 再呈现</b>。
+  </div>
+
+  <div class="foot">福麦斯销售团队共创 · 2026.09｜F/A 由技术课前提供，B/E 现场共创</div>
+</div>
+
+<script>
+var current = 0, selected = null, answered = false, results = [], totalQuestions = 9;
+
+function updateProgress() {
+  document.getElementById("progressText").textContent = "第 " + (current + 1) + " 题 / 共 " + totalQuestions + " 题";
+  document.getElementById("progressFill").style.width = (current / totalQuestions * 100) + "%";
+}
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) { var el = document.getElementById('q' + i); if (el) el.style.display = 'none'; }
+  var curr = document.getElementById('q' + idx); if (curr) curr.style.display = 'block';
+  selected = null; answered = false;
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = confirmAnswer;
+  document.getElementById("btnPrev").disabled = (idx === 0);
+}
+function selectOpt(idx) {
+  if (answered) return;
+  selected = idx;
+  var c = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < c.length; i++) { if (i === idx) c[i].classList.add('selected'); else c[i].classList.remove('selected'); }
+  document.getElementById("btnNext").disabled = false;
+}
+function confirmAnswer() {
+  if (selected === null) return;
+  var qb = document.getElementById('q' + current), opts = qb.querySelectorAll('.option'), ok = false;
+  for (var i = 0; i < opts.length; i++) {
+    var c = opts[i].getAttribute('data-correct') === 'true';
+    if (c) opts[i].classList.add('correct');
+    if (i === selected && !c) opts[i].classList.add('wrong');
+    if (i === selected && c) ok = true;
+  }
+  answered = true; results[current] = ok;
+  var ca = document.getElementById('ca' + current), ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show'); if (ex) ex.classList.add('show');
+  document.getElementById("btnNext").disabled = false;
+  if (current < totalQuestions - 1) { document.getElementById("btnNext").textContent = "下一题 →"; document.getElementById("btnNext").onclick = goNext; }
+  else { document.getElementById("btnNext").textContent = "查看结果"; document.getElementById("btnNext").onclick = showResult; }
+}
+function goNext() { current++; updateProgress(); showQuestion(current); }
+document.getElementById("btnPrev").onclick = function() { if (current > 0) { current--; updateProgress(); showQuestion(current); } };
+function getWrong() { var w = []; for (var i = 0; i < results.length; i++) { if (!results[i]) w.push('第' + (i + 1) + '题'); } return w.length ? w.join('、') : '无'; }
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var s = 0; for (var i = 0; i < results.length; i++) { if (results[i]) s++; }
+  var pct = Math.round(s / results.length * 100);
+  document.getElementById("scoreNum").textContent = s;
+  document.getElementById("percentNum").textContent = pct;
+  var v = document.getElementById("verdict"), t = "";
+  if (pct >= 80) { v.className = "verdict v-pass"; t = "通关 · 去动笔写四格"; }
+  else if (pct >= 60) { v.className = "verdict v-mid"; t = "待练 · 错题那句重写后再来"; }
+  else { v.className = "verdict v-fail"; t = "重来 · 先把 A 和 B 的分界弄清楚"; }
+  v.textContent = t;
+  var d = "";
+  for (var j = 0; j < results.length; j++) { d += '<div class="result-item"><span>' + (results[j] ? '✅' : '❌') + '</span><span>第 ' + (j + 1) + ' 题：' + (results[j] ? '正确' : '错误') + '</span></div>'; }
+  document.getElementById("resultDetail").innerHTML = d;
+  window.__fb = { s: s, pct: pct, t: t, w: getWrong() };
+}
+function copyScore() {
+  var x = window.__fb; if (!x) return;
+  var txt = '【福麦斯·FABE测试】\n姓名：______\n得分：' + x.s + '/9（' + x.pct + '%）\n判定：' + x.t + '\n错题：' + x.w +
+    '\n我要重写的那句 B：______';
+  var a = document.getElementById("copyArea"); a.value = txt; a.select();
+  try { document.execCommand('copy'); alert('成绩已复制'); } catch (e) { alert('请手动复制'); }
+}
+function restart() {
+  current = 0; selected = null; answered = false; results = [];
+  for (var i = 0; i < totalQuestions; i++) {
+    var o = document.querySelectorAll('#q' + i + ' .option');
+    for (var j = 0; j < o.length; j++) o[j].classList.remove('selected','correct','wrong');
+    var ca = document.getElementById('ca' + i), ex = document.getElementById('ex' + i);
+    if (ca) ca.classList.remove('show'); if (ex) ex.classList.remove('show');
+  }
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  updateProgress(); showQuestion(0);
+}
+function init() { updateProgress(); showQuestion(0); }
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+</script>
+</body>
+</html>

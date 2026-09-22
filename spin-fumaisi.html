@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="06TujOjitYiZiJxGzRTupl">
+<head data-page-node-id="SuYAkus7YEB2rFaMlMHz5U">
+<meta charset="UTF-8" data-page-node-id="KBFVvx6YYR8ePz7f7HiLEN">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="7X977Y5g98KCdyrKLbGeQD">
+<title>福麦斯·SPIN测试与通关演练 | 三线场景</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%); min-height: 100vh; color: #1a2547; line-height: 1.6; }
+.container { max-width: 820px; margin: 0 auto; padding: 24px 20px 60px; }
+.header { background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%); color: #fff; border-radius: 16px;
+  padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 6px 20px rgba(47,60,126,.25); }
+.brand-tag { display: inline-block; background: rgba(255,255,255,.15); font-size: 12px; padding: 4px 10px;
+  border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+.header h1 { font-size: 23px; margin-bottom: 6px; font-weight: 700; }
+.header p { font-size: 13px; opacity: .9; }
+.key-box { background: rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
+.key-box strong { color: #ffd97a; }
+.progress-wrap { background: #fff; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }
+.progress-bar { height: 8px; background: #e6ebf5; border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: linear-gradient(90deg,#4F81BC,#2F3C7E); transition: width .3s; }
+.progress-text { font-size: 12px; color: #5A6482; margin-top: 6px; }
+.q-block { display: none; background: #fff; border-radius: 14px; padding: 20px 22px; margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(47,60,126,.08); }
+.q-badge { font-size: 12px; color: #fff; background: #4F81BC; border-radius: 99px; padding: 3px 10px;
+  display: inline-block; margin-bottom: 10px; }
+.scenario { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 6px; padding: 10px 12px;
+  font-size: 13px; margin-bottom: 12px; color: #333f5c; }
+.q-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; line-height: 1.6; }
+.option { border: 1.5px solid #DCE3F0; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer;
+  font-size: 14px; display: flex; gap: 10px; align-items: flex-start; transition: .15s; }
+.option:hover { border-color: #4F81BC; background: #F7F9FE; }
+.option.selected { border-color: #2F3C7E; background: #EEF3FC; }
+.option.correct { border-color: #1D9E75; background: #E7F7F1; }
+.option.wrong { border-color: #E24B4A; background: #FDECEC; }
+.radio { width: 16px; height: 16px; border: 2px solid #BFC5D3; border-radius: 50%; flex: 0 0 16px; margin-top: 3px; }
+.option.selected .radio { border-color: #2F3C7E; box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 8px #2F3C7E; }
+.correct-answer, .explanation { display: none; margin-top: 10px; border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+.correct-answer.show, .explanation.show { display: block; }
+.correct-answer { background: #E7F7F1; color: #0F6E56; border-left: 3px solid #1D9E75; }
+.explanation { background: #FFF8E6; border-left: 3px solid #EF9F27; color: #633806; }
+.explanation h4 { font-size: 13px; margin-bottom: 6px; }
+.explanation p { margin-bottom: 6px; }
+.nav { display: flex; gap: 10px; justify-content: space-between; margin-top: 6px; }
+.btn { border: none; border-radius: 10px; padding: 12px 20px; font-size: 14px; cursor: pointer;
+  background: #E4EAF5; color: #43506e; font-family: inherit; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
+#resultPage { display: none; background: #fff; border-radius: 16px; padding: 26px; text-align: center;
+  box-shadow: 0 2px 10px rgba(47,60,126,.08); }
+#resultPage.show { display: block; }
+.score-num { font-size: 52px; font-weight: 700; color: #2F3C7E; }
+.verdict { display: inline-block; margin: 8px 0 14px; padding: 6px 16px; border-radius: 99px; font-size: 14px; }
+.v-pass { background: #E7F7F1; color: #0F6E56; }
+.v-mid { background: #FFF3D6; color: #854F0B; }
+.v-fail { background: #FDECEC; color: #A32D2D; }
+.result-item { display: flex; gap: 8px; align-items: center; border-bottom: 1px dashed #E2E7F2; padding: 8px 0;
+  font-size: 13px; color: #3c4665; text-align: left; }
+#copyArea { width: 100%; margin-top: 12px; font-size: 12px; border: 1px solid #DCE3F0; border-radius: 8px; padding: 10px; }
+.foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
+</style>
+</head>
+<body data-page-node-id="8Q0cZ5itcEgI8dYde2oQxu">
+<div class="container" data-page-node-id="RYTLhIK0zEqL5MPASgY2lL">
+
+  <div class="header" data-page-node-id="pSQO7KkqADnzi4RpG8UMxu">
+    <span class="brand-tag" data-page-node-id="8sD3bFW3tDd9t59Yk2vJao">福麦斯 · 销售铁军一期 · M1</span>
+    <h1 data-page-node-id="IwDHQ2mVzaKcJt5Bht3l3D">SPIN 测试与通关演练</h1>
+    <p data-page-node-id="KZWhKOXictJond9Xxty7XM">大3P 的 Proposal＝引导路径｜三线场景 · 共 10 题</p>
+    <div class="key-box" data-page-node-id="uOurMvG743weK5AuJ7REgq">
+      <strong data-page-node-id="T8QZDN8QA155wmlEQSMLbw">Proposal＝引导方案＝SPIN 四问</strong>（不是给客户的产品方案；方案是 FABE 的活）。<br data-page-node-id="EG9iZ3ibG4LFlENeGpflez">
+      <strong data-page-node-id="7JDDMLOIltHn7AeukUsvbm">S 现状</strong>问事实｜<strong data-page-node-id="anEdBFu1eqBBL06bXOC0pb">P 难点</strong>把模糊抱怨钉成具体痛点｜<strong data-page-node-id="VOaD92NFzMZF3e2ID6XjjW">I 暗示</strong>放大后果代价｜<strong data-page-node-id="3cuLvEf0QUzEfUigKDQ21O">N 需求效益</strong>让他<strong data-page-node-id="tz3NlHnI6ImzCwW1xbArhB">自己</strong>说出好处。<br data-page-node-id="iqHEJj137wOXq3UmKuWgKx">
+      硬约束：四句念下来是<strong data-page-node-id="g2xACvR2p0m9tyy8IamAUQ">一条递进的路径</strong>，不是四个互不相干的好奇心问题；过程中您说的不超过三成。
+    </div>
+  </div>
+
+  <div id="quizPage" data-page-node-id="6g9qQf6iQl5ABAm8VbeeGG">
+    <div class="progress-wrap" data-page-node-id="BAD7T3wZBes63IKbCggGFU">
+      <div class="progress-bar" data-page-node-id="wPK21eIEaUlIFjA7s3Grjs"><div class="progress-fill" id="progressFill" data-page-node-id="FcvXDc0oydElXHlHmJx9Lm"></div></div>
+      <div class="progress-text" id="progressText" data-page-node-id="x4Kz817nvVB7V6oMyepOzR">第 1 题 / 共 10 题</div>
+    </div>
+
+    <div class="q-block" id="q0" style="display:block;" data-page-node-id="rVENd3ziu2mTbUlKQlCq4l">
+      <div class="q-badge" data-page-node-id="BG51caPMulK3s9KMoYYnW2">第 1 题 · 识别题型</div>
+      <div class="scenario" data-page-node-id="qMlJ7zJ862Zm1BoFXJeXFg">销售问 PI："您现在流式分选一个月大概做多少例？用的是哪台设备、什么 panel？"</div>
+      <div class="q-title" data-page-node-id="CdFSwemUF0Senngnd6eRXa">这句话属于 SPIN 里的哪一类？</div>
+      <div class="options" data-page-node-id="ryiSjN1tcFOYy21BaBIrap">
+        <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)" data-page-node-id="KrSYpYbAK7DZCvJ9l0Tzu1"><div class="radio" data-page-node-id="OI0x003BPmW2wz9zVLQBOi"></div><div class="text" data-page-node-id="hkGSYZheazqGIMGLEMQNnQ">A. S 现状题</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)" data-page-node-id="Xp3yhBPGTKllSB4wLgGEZJ"><div class="radio" data-page-node-id="snlOvHfRs8QdfThy1wKFy9"></div><div class="text" data-page-node-id="AFq19d0j3AM9G5A0mi43f9">B. P 难点题</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="1HC0nWBTLZmcMRAtz1Xxde"><div class="radio" data-page-node-id="C6I90gHHWLOo9BTHp9ycwC"></div><div class="text" data-page-node-id="o1SIdBaZAjHfT4Z5v0ZkxF">C. I 暗示题</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="Jub2bQxOlPm067ZgsZsN3v"><div class="radio" data-page-node-id="Y8MDoRcjNqlkDTtVxbcMJg"></div><div class="text" data-page-node-id="Mg04rhBuBXm9BgAfS3X1Zf">D. N 需求效益题</div></div>
+      </div>
+      <div class="correct-answer" id="ca0" data-page-node-id="UArsLWGCv8RqFOm90ouFWe">✅ 正确答案：A — S 现状题</div>
+      <div class="explanation" id="ex0" data-page-node-id="znlP8us9QMU8yLkxgmOtow"><h4 data-page-node-id="15jSfTNEGGhr70euCbZ40Q">解析</h4>
+        <p data-page-node-id="BbppINv4fE6nqDEmEXvTbc">S 现状题问的是客观事实：量、设备、panel、频次、现有牌子。问到具体的才算数，只问"你们现在用什么"太空。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q1" data-page-node-id="r9SHFbaVios0SAkNgX5ecW">
+      <div class="q-badge" data-page-node-id="Ryk7nRCR46dPqBROyMABnq">第 2 题 · 识别题型</div>
+      <div class="scenario" data-page-node-id="yNZJCMsoOJBMdFW7sraGkI">销售问："您说'有时候会飘'，一般是哪种样本、哪一步最明显？最近一次大概是什么时候？"</div>
+      <div class="q-title" data-page-node-id="nAcc1Q50GMhF3JRU7yIm8Z">这句话属于哪一类？</div>
+      <div class="options" data-page-node-id="IghCRCyWDMqV5JWUQV6BrA">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="ebzA5F1sGXqhrE23FoszpY"><div class="radio" data-page-node-id="hDKlEEpHF4DqilbbQBhj0g"></div><div class="text" data-page-node-id="behqRoAaHL4j1TQf52EeGR">A. S 现状题</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)" data-page-node-id="tVOi4jsblQsFBZ5o9yAGBJ"><div class="radio" data-page-node-id="7WyaYn7xtU1632lCSRBmky"></div><div class="text" data-page-node-id="wnQsTzWG1qjWqTtl94GucG">B. P 难点题</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="sjqld1AA9sj3FkrxC6rlBU"><div class="radio" data-page-node-id="RSgtrsEWgAhXlToyhpCaBT"></div><div class="text" data-page-node-id="ON053LryXOC5Xca6XPYHiR">C. I 暗示题</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="rfpo4XC8Hw07a4BlCzoAgH"><div class="radio" data-page-node-id="TRe8i7PHGYsOEvO1GV8WpT"></div><div class="text" data-page-node-id="AONvpczikJHf9TTuYiYOLD">D. N 需求效益题</div></div>
+      </div>
+      <div class="correct-answer" id="ca1" data-page-node-id="5OuGBinNYLuusHedH9jRIA">✅ 正确答案：B — P 难点题</div>
+      <div class="explanation" id="ex1" data-page-node-id="Q1JTiHYVCX6rpwgWzEFSnz"><h4 data-page-node-id="LDFFgTkm5HxLObY82iKYI0">解析</h4>
+        <p data-page-node-id="dTZmw6UME9OpnZwy0sTxLi">客户嘴里的抱怨都是模糊的（"有时候""不太好""有点麻烦"）。P 题的唯一任务，是把它钉成一个可复述的具体难点。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q2" data-page-node-id="H5x3yHi2qjnMFSggQ0VtMu">
+      <div class="q-badge" data-page-node-id="mYsnzhruXFmUtpGxBhEuBn">第 3 题 · 识别题型</div>
+      <div class="scenario" data-page-node-id="RSpbgYC3ShePBh8A7CbC4n">销售问："如果这一步每个月都要返工一次，您后面排的实验和交付节点，是不是都得跟着往后挪？"</div>
+      <div class="q-title" data-page-node-id="pti0n0Gml6pVTNzcN1aIYe">这句话属于哪一类？</div>
+      <div class="options" data-page-node-id="74JOUlhyxnnaDyEJG8JKaM">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="sur8ACpfdc0zR1cMWecmDS"><div class="radio" data-page-node-id="SfRHXOCC8bZt0FAB3NxonM"></div><div class="text" data-page-node-id="CeFuuW0h8xWUvxQCtzG6L3">A. P 难点题</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)" data-page-node-id="zpBx5up9IGLiLkodexIQmm"><div class="radio" data-page-node-id="5ThXGcpISG2aIDAZHlO4MR"></div><div class="text" data-page-node-id="Y7acdN1WMqGUmR2S69u41b">B. S 现状题</div></div>
+        <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)" data-page-node-id="xS453KFG9iEluXiHjtb2UJ"><div class="radio" data-page-node-id="91OX0vVvNgadvQ9imcecb6"></div><div class="text" data-page-node-id="jEVFVUI49JmdjKM3NMkuBn">C. I 暗示题</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="RsyKdHZ2PkddFBRbNsFqzb"><div class="radio" data-page-node-id="0T63Wmr7EnlTSV4Y1DU3ZV"></div><div class="text" data-page-node-id="oXVfc7FRfCQ2dPjuuDrcwb">D. N 需求效益题</div></div>
+      </div>
+      <div class="correct-answer" id="ca2" data-page-node-id="cNXmRSUK1ICoeZwrh6OsJ0">✅ 正确答案：C — I 暗示题</div>
+      <div class="explanation" id="ex2" data-page-node-id="H22VSn6aD2Gf5hZCycWqwn"><h4 data-page-node-id="xsPscXvHxXNi87bAp9eh56">解析</h4>
+        <p data-page-node-id="wcsAlZiBJzLwVgGV1XpM17">I 题是让他自己看见<strong data-page-node-id="8NjBejGLRQ9bZA4Sfu3j4R">后果和代价</strong>：进度、预算、信用、被投诉。注意它必须长在 P 挖出来的那个痛上——不挖痛就放大后果，客户会觉得你在吓唬他。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q3" data-page-node-id="e3SLlcevYeKNY5oep2SQg9">
+      <div class="q-badge" data-page-node-id="YBoD7qHxH2ZycTJtsjGqcu">第 4 题 · 识别题型</div>
+      <div class="scenario" data-page-node-id="ITP0UQjNGGOD77zvkWGBVm">销售问："如果有个办法让这一步不用反复重来，对您现在排的课题进度意味着什么？"</div>
+      <div class="q-title" data-page-node-id="9s1GlUCxbKUJniHjdoWIcZ">这句话属于哪一类？</div>
+      <div class="options" data-page-node-id="kah7gD23xqHOYbhzXBBKjG">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="qNHomDCgtXPvtUydAcqbY0"><div class="radio" data-page-node-id="FotTOvEdYqj8smGSdw3w5E"></div><div class="text" data-page-node-id="MIMnDkP8r7cpG1V6BI8ed2">A. P 难点题</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)" data-page-node-id="16Lrc0XawoEfcRai1sEk37"><div class="radio" data-page-node-id="OnNfcqd66lCrvT3i18QCUc"></div><div class="text" data-page-node-id="RxnMvg3eRp93G2EXfv5tPH">B. I 暗示题</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="LffbNOxnSJFEpLLU9fDC4X"><div class="radio" data-page-node-id="dvfZHYKANbsIigfVdZFon1"></div><div class="text" data-page-node-id="ZbRqbP8z5PkFSK3e7715sV">C. S 现状题</div></div>
+        <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)" data-page-node-id="DdRwwPQSVKukndnt8EdqZL"><div class="radio" data-page-node-id="0yOPXfbclK6sPiEJWjSiFF"></div><div class="text" data-page-node-id="eeZtaDiUMY2NAl8O6c9NLO">D. N 需求效益题</div></div>
+      </div>
+      <div class="correct-answer" id="ca3" data-page-node-id="Dh9xeqi9IhEFE0pU60kcYV">✅ 正确答案：D — N 需求效益题</div>
+      <div class="explanation" id="ex3" data-page-node-id="a3ui73jMGHr5unydiLQirP"><h4 data-page-node-id="kkfIIcVdcZlLff4RkQ5LtI">解析</h4>
+        <p data-page-node-id="tXkpo4Q82bRa5hq8ovTDuV">N 题的标志是：好处由<strong data-page-node-id="WuSIsngGSxngOKITR2KlKy">客户自己说出口</strong>。销售替他讲完好处，等于白讲——人不信自己没说过的话。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q4" data-page-node-id="DnTpw1VAgC1aPMBrRvnJvf">
+      <div class="q-badge" data-page-node-id="VRyrsTzBP12yay28beNZXG">第 5 题 · 科研线</div>
+      <div class="scenario" data-page-node-id="tJ8mPSzrnvpe444jmFRvUG">在实验室里，真正做实验的博士后说："现在这套也能用，就是有时候结果飘。"</div>
+      <div class="q-title" data-page-node-id="hfBj4jNtYhM2BzVr4gO00E">销售下一句最好说哪句？</div>
+      <div class="options" data-page-node-id="XJCVrjGxESNCRlCVKHfOP1">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="e87bs2mH1D9r759otC7yUM"><div class="radio" data-page-node-id="XV6LvzhKOZikJUzpGt2pZY"></div><div class="text" data-page-node-id="7FOjxvmFzjMLJKXAHHl9VS">A. "我们磁珠粒径 CV 更稳定，我寄个试用装给您。"</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)" data-page-node-id="y0XrOQ0AgTUgkoiOjQIg0L"><div class="radio" data-page-node-id="VfmiSorsLIhel3HsGhcPGA"></div><div class="text" data-page-node-id="qQ3AnbtmMODg7yBcpXxxIp">B. "您说'有时候'，一般是哪种样本、哪一步最明显？最近一次大概是什么时候？"</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="yCCCLYyv6Gt63cwdxWLmN8"><div class="radio" data-page-node-id="ZXP3oJAUxSgoZ79AeKfCMv"></div><div class="text" data-page-node-id="25IZzIpbHlOeA9E7nnncsl">C. "价格您不用太担心，我们可以谈。"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="FIqwNv2B9KODaahEouDtra"><div class="radio" data-page-node-id="KtKsE01oBWCogT8D34zIPu"></div><div class="text" data-page-node-id="0APPCVXu4CkHEIGI3OQFXv">D. "要不要我先给您做一份方案？"</div></div>
+      </div>
+      <div class="correct-answer" id="ca4" data-page-node-id="KIWn3FfeZdbY9uw5MRWFTU">✅ 正确答案：B — 先把"有时候"钉成具体难点</div>
+      <div class="explanation" id="ex4" data-page-node-id="JUFLxpeePUlqNLdWJfbjgJ"><h4 data-page-node-id="oUuGeIs0lQIOV0gRLodJDA">解析</h4>
+        <p data-page-node-id="MvKsloH2rBf2Eb6D2aSxOV">A 是 FABE 抢跑——痛点还没成型就甩参数，后面的 I、N 全废。</p>
+        <p data-page-node-id="SbIQrjF1DkWR5h9DKO9ucy">操作的人往往不敢把话说满（" будет"怕担责）。P 题问到"哪种样本、哪一步、最近一次"，他才会给出真信息。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q5" data-page-node-id="dqBrFM1lE4NdcufqGtNLEt">
+      <div class="q-badge" data-page-node-id="aBEGXhLmXTJWXZEwGfJ5b2">第 6 题 · 工业线</div>
+      <div class="scenario" data-page-node-id="oM2LgJUcFNoOHUbpt7mmd6">IVD 企业质量部（QA）经理说："换供应商要走变更验证，很麻烦。"</div>
+      <div class="q-title" data-page-node-id="X8Gk1l8nNdayCFh1LiKfHM">销售下一句最好说哪句？</div>
+      <div class="options" data-page-node-id="CSLg2vTFA5x1Zo4UhYNYyP">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="cvHvVUIGZgt2Ns4bZkbC1y"><div class="radio" data-page-node-id="lGL7fdPGrT7PbSX4bH58Xn"></div><div class="text" data-page-node-id="Q5tQ3yPmcQSxQqmH5GccV2">A. "我们资料齐全，可以马上进你们的合格供应商名录。"</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)" data-page-node-id="8NUjrNaiiorZS4zTg62KDG"><div class="radio" data-page-node-id="8aoYtgmaPNvwRRzIxv1VbU"></div><div class="text" data-page-node-id="k8cEiPqrm7uC1MAWAwNdSl">B. "麻烦主要卡在哪一步？上一回走到一半停下来的，最后是谁去兜的底？"</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="ZpN5XEBvY6sYMT71iV9crd"><div class="radio" data-page-node-id="CyoWoqa8rodCTubNVoMQ4w"></div><div class="text" data-page-node-id="yHhEmEsgmHfVZiGv1C29Yo">C. "能不能先小批量试用，把评审绕过去？"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="qHDWu7hICcsoXN28VhESCb"><div class="radio" data-page-node-id="sxw5gCqUBYB6vSuB3hXay0"></div><div class="text" data-page-node-id="algmZQGLC1abaJcK6xmYEc">D. "那您什么时候方便，我把样品送过来。"</div></div>
+      </div>
+      <div class="correct-answer" id="ca5" data-page-node-id="j5sJ592mLkoMFZYJ9xdBxN">✅ 正确答案：B — 问"麻烦卡在哪一步"，别正面撞流程</div>
+      <div class="explanation" id="ex5" data-page-node-id="XKGCN42zHY56SuIx2Fi7EL"><h4 data-page-node-id="RfmBU2b0WsebautJdhSqym">解析</h4>
+        <p data-page-node-id="LKDWGL9so8fuFT21hXTFIN">QA 说"麻烦"，是在保护自己。C 是硬闯，会让他把门关死；A、D 是自说自话。</p>
+        <p data-page-node-id="FOPExR2hbv7rBvhcAbHBNe">问"上一回谁兜的底"，是把他从流程的守门人，变成当事人——这才是后面 I、N 能落地的地方。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q6" data-page-node-id="xgInp5cnkVXpt8JhmtWQG5">
+      <div class="q-badge" data-page-node-id="bCug4H2mvaxRNmHgAu5kAJ">第 7 题 · 工业线</div>
+      <div class="scenario" data-page-node-id="AfSzXR52cyv80L87mv1vUu">采购（管商务条款与付款流程）说："你们价格比现在这家高。"</div>
+      <div class="q-title" data-page-node-id="bB83A8XrkFQmnscUsEZwWu">销售下一句最好说哪句？</div>
+      <div class="options" data-page-node-id="uQOTSCzghy5lAGVnSRcDRo">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="KrKMGBT7F36gAGDK6Hb09O"><div class="radio" data-page-node-id="SmUw5OrJkeBqxp4RLQ76Ge"></div><div class="text" data-page-node-id="Cws1TaE488Yq02ICBpHEWK">A. "我们可以申请折扣，您说个数。"</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)" data-page-node-id="1Ogd3zDeDMTNSVjF8K0okD"><div class="radio" data-page-node-id="gP5MhZMhUT2YBniPnbghPV"></div><div class="text" data-page-node-id="anmL0jXaSA3OZTKHa6SFDp">B. "别家质量没我们好。"</div></div>
+        <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)" data-page-node-id="x22vlci2PxRyrxlZYRGAUU"><div class="radio" data-page-node-id="DP8FsDwI6hDGUzoNcOuv1r"></div><div class="text" data-page-node-id="AE8g1JilEYIoKfolvn1JJf">C. "高出这部分如果能换来不用重做验证、也不再走一次变更，您这边更看重哪一头？"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="PFd71YeMWYOmVdXgPWdJRy"><div class="radio" data-page-node-id="e1wEuL1REnnGX9dMcuFOF2"></div><div class="text" data-page-node-id="8lNdjF4JDYnZQuyAihlBYQ">D. "那您预算到底多少？"</div></div>
+      </div>
+      <div class="correct-answer" id="ca6" data-page-node-id="5XbBCFNt2XEEFpXBtIqfoz">✅ 正确答案：C — 把权衡交回给他自己说</div>
+      <div class="explanation" id="ex6" data-page-node-id="DAEINS1feCBl21Bq1WwQc8"><h4 data-page-node-id="RwfMcctMuOGKgr8euuUGMG">解析</h4>
+        <p data-page-node-id="I6nLzempRqX6VqKjCzTiX5">直接降价（A）等于承认自己的价不值；踩同行（B）是外部视角，他不信。</p>
+        <p data-page-node-id="carKdWinFYDi8ca1Sagj9z">C 让他在"省一点"'和"不出事"之间自己选，选出来的才是他真正认的价值。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q7" data-page-node-id="dEsuO6le72Abp2AOTOCnWe">
+      <div class="q-badge" data-page-node-id="yLgYm0VaB8NQdGOkyc7cVT">第 8 题 · 渠道线</div>
+      <div class="scenario" data-page-node-id="hP7MUsrSmgSx7VbvaHu3p9">经销商老板说："你们政策跟别家也没多大差别。"</div>
+      <div class="q-title" data-page-node-id="OBVfVnYX0dRXhki6qdBoA2">销售下一句最好说哪句？</div>
+      <div class="options" data-page-node-id="Uvyo4f37yM6JNCgxBFWZgO">
+        <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)" data-page-node-id="j0uxN0d0HtUFiRwa4TGUOL"><div class="radio" data-page-node-id="LgoHtXGboHXTnz4Kp68UNZ"></div><div class="text" data-page-node-id="DyevKtnshjxfe6MxtXh8Y8">A. "差别先不谈。我想先弄清：您手上这几个牌子，哪个最好卖、哪个最压库？"</div></div>
+        <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)" data-page-node-id="ysx2FMcFYONZfOFvLQ8FDb"><div class="radio" data-page-node-id="XCDlwDP5EHZIKdhL09qZqI"></div><div class="text" data-page-node-id="MzFD9iPFg1Z3TlmmIOoc9v">B. "我们返点可以给到 X 个点。"</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="iEUueEFYJgiNXKQHNQXC0C"><div class="radio" data-page-node-id="ri6JajClpKHOWfhNk4EvGc"></div><div class="text" data-page-node-id="VqNH4eO4xZyXjeJ66KxFoO">C. "别家服务跟不上，我们更稳。"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="JJ0u29wFzA5Bx2WSdl638e"><div class="radio" data-page-node-id="TGg4Cn6u1eexHRpMt8X0WQ"></div><div class="text" data-page-node-id="klBEKu7pnYdI416dnNEkac">D. "那您想要什么政策？"</div></div>
+      </div>
+      <div class="correct-answer" id="ca7" data-page-node-id="URTqES7IIXkRelCHyFQp3C">✅ 正确答案：A — 先算他的账，别急着亮政策</div>
+      <div class="explanation" id="ex7" data-page-node-id="ScyXLQTHHjssG8R4tISFk4"><h4 data-page-node-id="xbQ65XArR7jxaLScFXI6AF">解析</h4>
+        <p data-page-node-id="FI11aDrUvyZLJgA4LLVLgl">渠道客户开口谈政策，你就先别顺着答。用 S 题把他的账面摆到桌上：哪个牌子好卖、哪个压库、多少钱压在里面。</p>
+        <p data-page-node-id="SkVaFccgGiZktoyKeamGYH">B 是提前亮底牌；D 把提问权白白送出去。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q8" data-page-node-id="1gjsuiWmlqWvUteg4bDYZJ">
+      <div class="q-badge" data-page-node-id="vgXxok44sonkmZHqd9pmCm">第 9 题 · 渠道线（最容易漏的人）</div>
+      <div class="scenario" data-page-node-id="kOuaThLmkWA0fvfWYPA46k">经销商的一线销售员说："我推熟的牌子就行。"</div>
+      <div class="q-title" data-page-node-id="9gC9ppMnQTfzIqC0ofekw8">销售下一句最好说哪句？</div>
+      <div class="options" data-page-node-id="BJnBcbAve7HCWH3LEvWt84">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="yUK9k4U0XODUlIybXVaoxE"><div class="radio" data-page-node-id="gbRECAAFDPt6rylWTF4Mvl"></div><div class="text" data-page-node-id="2PivQAAtzRlb6VFwX3dboc">A. "我们产品性能好，你推了不吃亏。"</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)" data-page-node-id="GNXEedDWhaCad766p4X9Cl"><div class="radio" data-page-node-id="D79BgND30sEyDdew522Zsd"></div><div class="text" data-page-node-id="X9ZTYOSmmnjicWqfiajEQ7">B. "熟的确实省心。您推一单，最难受的是价格谈不下来、还是终端出了问题你得背着？"</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="OEouul9v6VjWoBHhruSVtg"><div class="radio" data-page-node-id="uRTGmaBDyn8ThMDHcCawtY"></div><div class="text" data-page-node-id="83DoYFfTgdrGWXRZltDmQc">C. "我们返点更高，你推我这个更划算。"</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="1JFofwiezfHwyzfFRjTBC3"><div class="radio" data-page-node-id="qLfGxhxjomV1we3SZqG5gU"></div><div class="text" data-page-node-id="fO9tmZSyWticW5DBTfpPkg">D. "你们老板都同意了，你还犹豫什么。"</div></div>
+      </div>
+      <div class="correct-answer" id="ca8" data-page-node-id="AFGzhqbPpRGqEumedhWp5D">✅ 正确答案：B — 先问他的难处</div>
+      <div class="explanation" id="ex8" data-page-node-id="Jib85leWqWQeEQPwD2t1zj"><h4 data-page-node-id="8FBnIJzir1aCggWxx3iCrC">解析</h4>
+        <p data-page-node-id="wulPEHPDYv1MRRFkbHdAzY">决定货动不动的，往往不是经销商老板，是<strong data-page-node-id="BBObGb2jFKe5ASfghqbrhB">真正跑终端的一线销售员</strong>——他推谁，取决于好不好卖、返点、以及出问题谁背。</p>
+        <p data-page-node-id="cwLMwdTiRCqj6edPDZlqNV">D 是搬老板压人，最伤后续合作；B 先承认"熟的省心"，再问难受在哪，他才会往下说。</p>
+      </div>
+    </div>
+
+    <div class="q-block" id="q9" data-page-node-id="9xKb6NkTjfKf5o2FzSq9md">
+      <div class="q-badge" data-page-node-id="DQQkaqBoTKpfGtFynZBXeg">第 10 题 · 路径与节奏</div>
+      <div class="scenario" data-page-node-id="K9s1NqIC7jxEkfsWnnDsME">关于 SPIN 四问的顺序和拜访中的听说比例，哪一项说法正确？</div>
+      <div class="q-title" data-page-node-id="Z1t6NLegeTxvJRZYfzLc6w">哪一个是对的？</div>
+      <div class="options" data-page-node-id="23BfpoFOd4yL5CHUHuAzRu">
+        <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)" data-page-node-id="bxMvRiaFBRYL4XHyTVfQqG"><div class="radio" data-page-node-id="lylDBTgUPXFRCTWOWv2AV2"></div><div class="text" data-page-node-id="IOzYHaXo81Hh6wQUuizYCe">A. 顺序无所谓，问到就行，关键是气氛好。</div></div>
+        <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)" data-page-node-id="qG6Cf71oE96sQOMUrD8hKr"><div class="radio" data-page-node-id="iswR4aZ7qYwyJWvziLIHyn"></div><div class="text" data-page-node-id="EGHy32udBB20cA8KlSlAO1">B. 按 S→P→I→N 推进，四句要连成一条递进路径；过程中您说的不超过三成。</div></div>
+        <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)" data-page-node-id="zjuYHX8DS3ZUBMmTkE1W2R"><div class="radio" data-page-node-id="qVkluwR9nCB3W14gdRZbnm"></div><div class="text" data-page-node-id="6j7vJbgs6b0OnDzgMzp7KO">C. N 要放在最前面，先把好处讲了客户才愿意聊。</div></div>
+        <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)" data-page-node-id="2Rq6kpjiB9iYnqqShyuy5K"><div class="radio" data-page-node-id="eDYyKDCD2ZcFi56HBoFrKG"></div><div class="text" data-page-node-id="6ZrvfWnOxcUOaLB7dJuqOl">D. I 暗示题尽量少问，问多了容易得罪客户。</div></div>
+      </div>
+      <div class="correct-answer" id="ca9" data-page-node-id="1DWuhApLgH3XBLQoOpj792">✅ 正确答案：B — 顺序、路径、听说比都对</div>
+      <div class="explanation" id="ex9" data-page-node-id="tTtDU1UApFfxxapptW8ERB"><h4 data-page-node-id="HKqPSKFnTHFDFsJA8UsAqB">解析</h4>
+        <p data-page-node-id="ovye8JfjdaISO9Fh0MQdOk">I 靠 P 撑，N 靠 I 撑：跳过 P 直接放大后果，像在吓唬人；跳过 I 直接问好处，客户一句"挺好的，没必要"就堵回来。</p>
+        <p data-page-node-id="XxgpCH4kIwZtXCGAQju97M">听说比例 30/70：您说的不超过三成。四问能用问号解决的事，别用句号。</p>
+      </div>
+    </div>
+
+    <div class="nav" data-page-node-id="mzuPzSl33PyUDvRHb0RlqD">
+      <button class="btn" id="btnPrev" data-page-node-id="qZIfZ3mHmFPzG1TtZeGBOI">← 上一题</button>
+      <button class="btn primary" id="btnNext" data-page-node-id="qn5x6OHpqVFgOUYiBGwiXZ">确认答案</button>
+    </div>
+  </div>
+
+  <div id="resultPage" data-page-node-id="mBRe5InAsPwluUeVh7Z7T6">
+    <div class="brand-tag" style="background:#EEF3FC;color:#2F3C7E;" data-page-node-id="FBKZd0GHFAT5zsmiPjoDxX">通关结果</div>
+    <div class="score-num" data-page-node-id="HILucdGwQJMHoPgzYGECJf"><span id="scoreNum" data-page-node-id="arugHMTDwX4qQ5qjvGYxDN">0</span> / 10</div>
+    <div data-page-node-id="xxv9fMBYeuDiSObAgvuu5y">正确率 <span id="percentNum" data-page-node-id="hJfS6jre5dvawHeZuoDoOd">0</span>%</div>
+    <div class="verdict" id="verdict" data-page-node-id="hPZ7rp1PLVaZbs7k5RNlZt"></div>
+    <div id="resultDetail" data-page-node-id="2iEVUl95a0wGhHBBru5J3F"></div>
+    <textarea id="copyArea" rows="7" placeholder="点下面按钮生成成绩文本"></textarea>
+    <button class="btn primary" onclick="copyScore()" data-page-node-id="ZbN0fwxgARX5wtN12ykc4O">📋 复制我的成绩</button>
+    <div style="margin-top:14px;" data-page-node-id="bfZTGhQqyGM5kvdmhHAxpk"><button class="btn" onclick="restart()" data-page-node-id="6lIciQOBwWEjkTXyshN5ix">再做一遍</button></div>
+    <div style="font-size:12px;color:#8A8A96;margin-top:10px;" data-page-node-id="inTs34vVEeR797L6sax6Zu">通关线 80%。没过就把错题对应的那句问话，对着自己最熟的客户重写一遍。</div>
+  </div>
+
+  <div class="foot" data-page-node-id="9AnLOlDLkuXp6GyVPZUUcC">福麦斯销售团队共创 · 2026.09</div>
+</div>
+
+<script>
+var current = 0;
+var selected = null;
+var answered = false;
+var results = [];
+var totalQuestions = 10;
+
+function updateProgress() {
+  document.getElementById("progressText").textContent = "第 " + (current + 1) + " 题 / 共 " + totalQuestions + " 题";
+  document.getElementById("progressFill").style.width = (current / totalQuestions * 100) + "%";
+}
+
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) {
+    var el = document.getElementById('q' + i);
+    if (el) el.style.display = 'none';
+  }
+  var curr = document.getElementById('q' + idx);
+  if (curr) curr.style.display = 'block';
+  selected = null;
+  answered = false;
+  document.getElementById("btnNext").textContent = "确认答案";
+  document.getElementById("btnNext").disabled = true;
+  document.getElementById("btnNext").onclick = confirmAnswer;
+  document.getElementById("btnPrev").disabled = (idx === 0);
+}
+
+function selectOpt(idx) {
+  if (answered) return;
+  selected = idx;
+  var container = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < container.length; i++) {
+    if (i === idx) { container[i].classList.add('selected'); }
+    else { container[i].classList.remove('selected'); }
+  }
+  document.getElementById("btnNext").disabled = false;
+}
+
+function confirmAnswer() {
+  if (selected === null) return;
+  var qBlock = document.getElementById('q' + current);
+  var options = qBlock.querySelectorAll('.option');
+  var isCorrect = false;
+  for (var i = 0; i < options.length; i++) {
+    var optCorrect = options[i].getAttribute('data-correct') === 'true';
+    if (optCorrect) options[i].classList.add('correct');
+    if (i === selected && !optCorrect) options[i].classList.add('wrong');
+    if (i === selected && optCorrect) isCorrect = true;
+  }
+  answered = true;
+  results[current] = isCorrect;
+  var ca = document.getElementById('ca' + current);
+  var ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show');
+  if (ex) ex.classList.add('show');
+  document.getElementById("btnNext").disabled = false;
+  if (current < totalQuestions - 1) {
+    document.getElementById("btnNext").textContent = "下一题 →";
+    document.getElementById("btnNext").onclick = goNext;
+  } else {
+    document.getElementById("btnNext").textContent = "查看结果";
+    document.getElementById("btnNext").onclick = showResult;
+  }
+}
+
+function goNext() { current++; updateProgress(); showQuestion(current); }
+
+document.getElementById("btnPrev").onclick = function() {
+  if (current > 0) { current--; updateProgress(); showQuestion(current); }
+};
+
+function getWrongList() {
+  var w = [];
+  for (var i = 0; i < results.length; i++) { if (!results[i]) w.push('第' + (i + 1) + '题'); }
+  return w.length ? w.join('、') : '无';
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = 0;
+  for (var i = 0; i < results.length; i++) { if (results[i]) score++; }
+  var pct = Math.round(score / results.length * 100);
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent = pct;
+  var v = document.getElementById("verdict");
+  var vText = "";
+  if (pct >= 80) { v.className = "verdict v-pass"; vText = "通关 · 可进入真人演练"; }
+  else if (pct >= 60) { v.className = "verdict v-mid"; vText = "待练 · 错题那句重写后再来"; }
+  else { v.className = "verdict v-fail"; vText = "未通关 · 先背四句顺序，再约真客户练一次"; }
+  v.textContent = vText;
+  var detail = "";
+  for (var j = 0; j < results.length; j++) {
+    detail += '<div class="result-item"><span>' + (results[j] ? '✅' : '❌') +
+      '</span><span>第 ' + (j + 1) + ' 题：' + (results[j] ? '正确' : '错误') + '</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detail;
+  window.__fmScore = { score: score, pct: pct, vText: vText, wrong: getWrongList() };
+}
+
+function copyScore() {
+  var s = window.__fmScore;
+  if (!s) return;
+  var txt = '【福麦斯·SPIN测试与通关演练】\n姓名：______\n得分：' + s.score + '/10（' + s.pct + '%）\n判定：' + s.vText +
+    '\n错题：' + s.wrong + '\n我下次拜访要先用的那一问：______';
+  var area = document.getElementById("copyArea");
+  area.value = txt;
+  area.select();
+  try { document.execCommand('copy'); alert('成绩已复制，粘贴到微信群即可'); }
+  catch (e) { alert('复制失败，请手动选中文本框内容复制'); }
+}
+
+function restart() {
+  current = 0; selected = null; answered = false; results = [];
+  for (var i = 0; i < totalQuestions; i++) {
+    var opts = document.querySelectorAll('#q' + i + ' .option');
+    for (var j = 0; j < opts.length; j++) { opts[j].classList.remove('selected','correct','wrong'); }
+    var ca = document.getElementById('ca' + i);
+    var ex = document.getElementById('ex' + i);
+    if (ca) ca.classList.remove('show');
+    if (ex) ex.classList.remove('show');
+  }
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  updateProgress();
+  showQuestion(0);
+}
+
+function init() { updateProgress(); showQuestion(0); }
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+</script>
+</body>
+</html>

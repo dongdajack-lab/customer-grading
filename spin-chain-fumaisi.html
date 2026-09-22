@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>福麦斯·SPIN通关演练（角色链进阶）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%); min-height: 100vh; color: #1a2547; line-height: 1.65; }
+.container { max-width: 880px; margin: 0 auto; padding: 24px 20px 60px; }
+.header { background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%); color: #fff; border-radius: 16px;
+  padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 6px 20px rgba(47,60,126,.25); }
+.brand-tag { display: inline-block; background: rgba(255,255,255,.15); font-size: 12px; padding: 4px 10px;
+  border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+.header h1 { font-size: 23px; margin-bottom: 6px; font-weight: 700; }
+.header p { font-size: 13px; opacity: .9; }
+.key-box { background: rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
+.key-box strong { color: #ffd97a; }
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.tab { border: none; border-radius: 99px; padding: 9px 16px; font-size: 13px; cursor: pointer;
+  background: #fff; color: #43506e; font-family: inherit; box-shadow: 0 2px 6px rgba(47,60,126,.08); }
+.tab.on { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
+.card { background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(47,60,126,.08); }
+.card h2 { font-size: 17px; margin-bottom: 10px; color: #2F3C7E; border-left: 4px solid #4F81BC; padding-left: 10px; }
+.line-tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; color: #fff; display: inline-block; margin-right: 6px; }
+.t-k { background: #2E8B84; } .t-g { background: #2F3C7E; } .t-q { background: #B85042; }
+.lv { background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(47,60,126,.08); border-left: 5px solid #4F81BC; }
+.lv.locked { opacity: .6; border-left-color: #C9D2E4; }
+.lv-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.lv-no { font-size: 12px; color: #fff; background: #4F81BC; border-radius: 99px; padding: 3px 10px; }
+.lv-title { font-size: 16px; font-weight: 700; color: #1a2547; }
+.lv-pass { font-size: 11px; background: #E7F7F1; color: #0F6E56; border-radius: 99px; padding: 2px 9px; }
+.lv-lock { font-size: 11px; background: #FDECEC; color: #A32D2D; border-radius: 99px; padding: 2px 9px; }
+.lv-meta { font-size: 12px; color: #8A8A96; margin-bottom: 12px; }
+.kv { font-size: 13px; margin-bottom: 8px; }
+.kv b { color: #2F3C7E; }
+.quote { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 6px; padding: 8px 12px;
+  font-size: 13px; margin: 6px 0; color: #333f5c; }
+.passlist { background: #FFF8E6; border-left: 3px solid #EF9F27; border-radius: 6px; padding: 10px 12px;
+  font-size: 13px; color: #633806; margin-top: 8px; }
+.trap { background: #FDECEC; border-left: 3px solid #E24B4A; border-radius: 6px; padding: 10px 12px;
+  font-size: 13px; color: #8A2A2A; margin-top: 8px; }
+.btn { border: none; border-radius: 10px; padding: 11px 18px; font-size: 13.5px; cursor: pointer;
+  background: #E4EAF5; color: #43506e; font-family: inherit; margin-top: 12px; }
+.btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.pad { display: none; margin-top: 14px; border-top: 1px dashed #E2E7F2; padding-top: 12px; }
+.pad.show { display: block; }
+.srow { margin-bottom: 12px; }
+.slab { font-size: 13px; font-weight: 600; }
+.sdesc { font-size: 11.5px; color: #8A8A96; display: block; margin: 2px 0 6px; }
+.sbtns { display: flex; gap: 6px; flex-wrap: wrap; }
+.sbtn { border: 1.5px solid #DCE3F0; background: #fff; border-radius: 8px; padding: 6px 14px;
+  font-size: 13px; cursor: pointer; font-family: inherit; color: #43506e; }
+.sbtn.on { border-color: #2F3C7E; background: #EEF3FC; color: #1a2547; font-weight: 700; }
+.tot-line { margin-top: 14px; padding: 14px; border-radius: 12px; background: #F4F7FC; text-align: center; }
+.tot-num { font-size: 38px; font-weight: 700; color: #2F3C7E; }
+.verdict { display: inline-block; margin: 8px 0 6px; padding: 6px 16px; border-radius: 99px; font-size: 14px; }
+.v-pass { background: #E7F7F1; color: #0F6E56; }
+.v-mid { background: #FFF3D6; color: #854F0B; }
+.v-fail { background: #FDECEC; color: #A32D2D; }
+.chain-done { display: none; background: #E7F7F1; border-radius: 12px; padding: 14px; text-align: center;
+  font-size: 14px; color: #0F6E56; margin-bottom: 14px; }
+.chain-done.show { display: block; }
+.foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="brand-tag">福麦斯 · 销售铁军一期 · M1</span>
+    <h1>SPIN 通关演练 · 角色链进阶</h1>
+    <p>从最底下那个人，一层一层往上打。上一关没过，不许见下一关的人。</p>
+    <div class="key-box">
+      <strong>通关规则</strong>：三条线各 3 关；每关按同一张 5 维打分表打分（满分 15）。<br>
+      <strong>过关线</strong>：总分 ≥ 12，且「③ P+I 挖痛」≥ 2 —— 痛没挖出来，一票否决。<br>
+      <strong>链条铁律</strong>：从第二关起，开场必须引用上一关客户的一句原话（“我上次跟您组里的 ×× 聊，他说……”）；见上一级时，话题要从<strong>技术细节</strong>升级成<strong>进度 / 资源 / 风险 / 钱</strong>。<br>
+      <strong>难度递增三件事</strong>：对方时间更短（10→5→3 分钟）｜话题更往上｜必须带着下一级的原话上去。
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-p="k" onclick="showChain('k')">科研线</button>
+    <button class="tab" data-p="g" onclick="showChain('g')">工业线</button>
+    <button class="tab" data-p="q" onclick="showChain('q')">渠道线</button>
+  </div>
+
+  <div class="chain" data-p="k" style="display:block;">
+    <div class="chain-done" id="done-k">🎉 科研线三关全通 —— 可以拿真实客户上场了。</div>
+      <div class="lv" id="lv-k1">
+        <div class="lv-head">
+          <span class="lv-no">第 1 关</span>
+          <span class="lv-title">硕士生 / 博士后（真正做实验的人）</span>
+          <span class="lv-lock" id="badge-k1">未通关</span>
+        </div>
+        <div class="lv-meta">时间 10 分钟 · 话题层：实验细节 · 前置：无</div>
+        <div class="kv"><b>场景</b>：某高校课题组，做肿瘤免疫方向，流式多色 panel + 磁珠分选。你第一次进组，对方是天天泡在细胞房里的人。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：最近一批分选后细胞活性掉得厉害，流式结果总是飘。他自己怀疑是操作问题，<b>不敢跟老板说</b>（怕被说“你连这个都做不好”），已经耽误快两周。</div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">扮演者第一句：“我们组现在用的挺好的，你要看什么资料吗？”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“protocol 是师兄留下来的，我一直这么做的。”</div>
+        <div class="quote">“老板定的牌子，我说了也没用。”</div>
+        <div class="quote">“我也就是个干活的，你跟老板聊吧。”（若销售想跳到老板，必出此句）</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          让他自己说出“最近哪一步最卡”，并说出“飘 / 活性低”这类具体现象（不是销售替他说）；<br>          问到现状事实：样本量、机型、几色 panel、多久做一次、现有 buffer / 分选柱是谁定的；<br>          让他承认代价：这两周耽误了什么（补实验 / 进度 / 被老板催）。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：最容易一上来就讲产品、教他操作，或者顺着他说“那我去找老板”——这一关的痛在他手上，你跳上去就空了。</div>
+        <button class="btn primary" id="btn-k1" onclick="openPad('k1')">评分并通关</button>
+        <div class="pad" id="pad-k1">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k1',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k1',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k1',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k1',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k1',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k1',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k1',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k1',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k1',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k1',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k1',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k1',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k1',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k1',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k1',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k1',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：你说的≤三成，四句连成 S→P→I→N；不急着推荐产品、不替他下结论。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k1',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k1',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k1',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k1',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-k1">—</span> / 15</div>
+            <div id="vd-k1"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+      <div class="lv locked" id="lv-k2">
+        <div class="lv-head">
+          <span class="lv-no">第 2 关</span>
+          <span class="lv-title">PI / 课题组长（决定买不买、经费怎么花的人）</span>
+          <span class="lv-lock" id="badge-k2">未解锁</span>
+        </div>
+        <div class="lv-meta">时间 5 分钟 · 话题层：进度与经费 · 前置：<b>必须引用第 1 关那句原话</b> · 🔒 通过上一关后解锁</div>
+        <div class="kv"><b>场景</b>：见 PI，他很忙，只给了 5 分钟。手下有 2-3 个学生在跑流式。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：组里这个课题卡了快一个月，结题 / 文章节点在压。他知道“卡一点”，但以为是学生操作不稳定，没意识到是试剂 / protocol 的问题。<b>最怕的是经费花了没结果、学生不出活。</b></div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">销售必须这样开场：“X 老师，我上次跟您组里做分选的同学聊过，他说最近一批分选后活性掉得厉害、结果总飘，我想跟您确认一下这事。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“学生做实验出问题很正常，他自己多练练。”</div>
+        <div class="quote">“我们现在用的牌子也做了好几年了。”</div>
+        <div class="quote">“我只有五分钟，你说重点。”（若销售开始讲参数，必出此句结束）</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          开场引用了第 1 关那句原话，并且 PI 接了话（“哦？他这么说的？”）；<br>          让 PI 自己说出“最怕的是进度 / 经费 / 节点”，不是你替他总结；<br>          N 类问到：如果这一步能稳定下来，对结题 / 文章 / 下一个课题意味着什么——<b>由他说出价值</b>。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：还在跟 PI 聊 buffer 配方、磁珠粒径。细节对真正做实验的人有用，对 PI 是噪音。这一关要把“实验语言”翻译成“进度与经费语言”。</div>
+        <button class="btn primary" id="btn-k2" disabled onclick="openPad('k2')">评分并通关</button>
+        <div class="pad" id="pad-k2">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k2',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k2',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k2',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k2',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k2',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k2',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k2',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k2',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k2',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k2',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k2',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k2',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k2',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k2',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k2',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k2',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：开场引用上一关原话；话题从实验细节升级到进度 / 经费；仍守住 30/70。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k2',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k2',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k2',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k2',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-k2">—</span> / 15</div>
+            <div id="vd-k2"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+      <div class="lv locked" id="lv-k3">
+        <div class="lv-head">
+          <span class="lv-no">第 3 关</span>
+          <span class="lv-title">院长 / 平台主任 / 设备处（管资源、合规与集中采购的人）</span>
+          <span class="lv-lock" id="badge-k3">未解锁</span>
+        </div>
+        <div class="lv-meta">时间 3 分钟 · 话题层：资源、合规、风险 · 前置：<b>必须引用第 2 关 PI 的原话，并翻译成管理层语言</b> · 🔒 通过上一关后解锁</div>
+        <div class="kv"><b>场景</b>：流式平台 / 实验中心主任，或学院分管科研的院长。管平台利用率、经费合规、集中采购与供应商准入。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：平台设备利用率上不去是考核指标；去年有供应商资质不全被审计点过。<b>最怕的是“出事谁担责”和“钱花了没产出”。</b>他不在乎你磁珠粒径多少。</div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">销售开场：“X 主任，我跟 XX 老师的组聊过，他们这个课题因为分选这一步卡了快一个月；我想跟您说的是，这类问题在平台上是不是普遍存在。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“老师用什么是老师的自由，平台不干涉。”</div>
+        <div class="quote">“我们采购有目录，你这个不在里面吧？”</div>
+        <div class="quote">“你说的问题我第一次听说，有数据吗？”</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          把 PI 那一层的痛翻译成平台 / 学院层听得懂的话：利用率、合规、风险、经费产出；<br>          拿到一句可向上汇报的原话（“如果……就能……”，<b>由他自己说</b>）；<br>          问清下一步：进目录 / 走准入要哪些步骤、谁签字——<b>拿到流程，不空手走</b>。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：还在讲产品性能。这一关产品只在最后 30 秒出现，前面全是“平台 / 经费 / 风险”。另外别忘了拿流程——见高层不拿流程，等于白见。</div>
+        <button class="btn primary" id="btn-k3" disabled onclick="openPad('k3')">评分并通关</button>
+        <div class="pad" id="pad-k3">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k3',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k3',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k3',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k3',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k3',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k3',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k3',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k3',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k3',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k3',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k3',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k3',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k3',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k3',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k3',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k3',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：3 分钟内说清；引用第 2 关原话并完成翻译；结尾拿到下一步（流程 / 对接人 / 时间）。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('k3',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('k3',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('k3',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('k3',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-k3">—</span> / 15</div>
+            <div id="vd-k3"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="chain" data-p="g" style="display:none;">
+    <div class="chain-done" id="done-g">🎉 工业线三关全通 —— 可以拿真实客户上场了。</div>
+      <div class="lv" id="lv-g1">
+        <div class="lv-head">
+          <span class="lv-no">第 1 关</span>
+          <span class="lv-title">研发 / 工艺工程师（真正用的人）</span>
+          <span class="lv-lock" id="badge-g1">未通关</span>
+        </div>
+        <div class="lv-meta">时间 10 分钟 · 话题层：技术细节 · 前置：无</div>
+        <div class="kv"><b>场景</b>：一家 IVD / 生物制药企业，做磁珠法核酸提取或流式质控。对方是每天在实验室调方法的人。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：换过一批试剂后结果波动，复测了两次，项目节点被推。他怀疑是新批次，<b>但没证据，不敢上报怕担责</b>。</div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">扮演者第一句：“我们现在有合格供应商，暂时不需要新的。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“方法我们验证过了，不好随便动。”</div>
+        <div class="quote">“你要真有优势，先发资料我看看。”</div>
+        <div class="quote">“这事得我们总监定。”（若销售试图绕过流程，必出此句）</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          让他自己说出“波动 / 复测 / 耽误节点”的具体事实：哪一批、哪个指标、复测几次；<br>          问到现状：现有供应商、变更要走哪些步骤、验证几批、看什么指标；<br>          让他承认代价：复测成本、节点被推、他个人担的压力。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：一听到“我们有合格供应商”就退了，或者立刻报参数。这一关要先把“波动”钉成具体事实。</div>
+        <button class="btn primary" id="btn-g1" onclick="openPad('g1')">评分并通关</button>
+        <div class="pad" id="pad-g1">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g1',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g1',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g1',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g1',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g1',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g1',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g1',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g1',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g1',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g1',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g1',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g1',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g1',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g1',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g1',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g1',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：你说的≤三成，四句连成 S→P→I→N；不急着报价、不替他下结论。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g1',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g1',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g1',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g1',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-g1">—</span> / 15</div>
+            <div id="vd-g1"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+      <div class="lv locked" id="lv-g2">
+        <div class="lv-head">
+          <span class="lv-no">第 2 关</span>
+          <span class="lv-title">QA / 质量 或 采购 / 供应链（把关的人）</span>
+          <span class="lv-lock" id="badge-g2">未解锁</span>
+        </div>
+        <div class="lv-meta">时间 5 分钟 · 话题层：合规与商务 · 前置：<b>必须引用第 1 关那句原话</b> · 🔒 通过上一关后解锁</div>
+        <div class="kv"><b>场景</b>：见 QA 经理或采购 / 供应链负责人。管供应商准入、变更评审、资质文件。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：上次换供应商导致变更验证重跑，他被老板当众说过，<b>现在最怕担责</b>；同时老板压了降本指标。他卡在“要合规”和“要降本”之间。</div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">销售开场：“我跟您研发那边聊过，他说最近一批结果波动、复测了两次；我想跟您确认，这类波动在变更验证里是怎么处理的。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“供应商变更要走流程，很麻烦。”</div>
+        <div class="quote">“你们资质 / 文件齐吗？”</div>
+        <div class="quote">“这个我们要看 QA 和注册的意见。”</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          开场引用研发那句原话，并让对方接话；<br>          让他说出“最怕担责 / 最怕验证重跑”，<b>不是你说</b>；<br>          N 类问到：如果有一个批次稳定、文件齐全、能直接进变更验证的供应商，对他意味着什么（少担责 / 少重跑）。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：跟 QA 讲“我们质量很好”——自夸无效。这一关必须换成“文件、验证、可追溯”的语言，并且别踩“直接降价”的坑（他把降价当降本，但你一降价他反而怀疑质量）。</div>
+        <button class="btn primary" id="btn-g2" disabled onclick="openPad('g2')">评分并通关</button>
+        <div class="pad" id="pad-g2">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g2',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g2',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g2',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g2',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g2',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g2',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g2',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g2',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g2',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g2',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g2',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g2',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g2',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g2',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g2',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g2',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：开场引用上一关原话；话题从技术细节升级到合规 / 商务；仍守住 30/70。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g2',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g2',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g2',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g2',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-g2">—</span> / 15</div>
+            <div id="vd-g2"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+      <div class="lv locked" id="lv-g3">
+        <div class="lv-head">
+          <span class="lv-no">第 3 关</span>
+          <span class="lv-title">研发总监 / 总经理 / 老板（拍板的人）</span>
+          <span class="lv-lock" id="badge-g3">未解锁</span>
+        </div>
+        <div class="lv-meta">时间 3 分钟 · 话题层：项目风险与总成本 · 前置：<b>必须引用第 2 关 QA 的原话，并翻译成管理层语言</b> · 🔒 通过上一关后解锁</div>
+        <div class="kv"><b>场景</b>：见研发总监或老板。他手上有项目节点、注册 / 上市时间表。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：真正卡他的是：项目延期会撞上注册 / 上市节点；供应商出事他要担责；他要的是<b>总成本</b>（复测 + 人力 + 延误），不是单价。</div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">销售开场：“我跟您研发和 QA 都聊过，QA 那边说上次变更验证重跑过一次；我想跟您确认的是，这类波动对项目节点的影响。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“我们换供应商很慎重，不是价格的事。”</div>
+        <div class="quote">“你说的这个影响有多大？有数吗？”</div>
+        <div class="quote">“你先跟下面对接吧，定了再找我。”（若销售没有量化，必出此句打发）</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          把下面两层的痛翻译成节点风险与总成本；<br>          让他自己说出“最怕项目延期 / 出事担责”，并且能说出代价量级；<br>          拿到下一步：谁牵头、什么时间、进供应商名录还要谁批。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：到了老板这层还在讲产品参数与单价。老板只认三件事：节点、风险、总成本。另外别被“你先跟下面对接”打发走——要争一个明确的下一步。</div>
+        <button class="btn primary" id="btn-g3" disabled onclick="openPad('g3')">评分并通关</button>
+        <div class="pad" id="pad-g3">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g3',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g3',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g3',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g3',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g3',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g3',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g3',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g3',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g3',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g3',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g3',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g3',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g3',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g3',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g3',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g3',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：3 分钟内说清；引用第 2 关原话并完成翻译；结尾拿到下一步（牵头人 / 时间 / 还要谁批）。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('g3',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('g3',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('g3',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('g3',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-g3">—</span> / 15</div>
+            <div id="vd-g3"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="chain" data-p="q" style="display:none;">
+    <div class="chain-done" id="done-q">🎉 渠道线三关全通 —— 可以拿真实客户上场了。</div>
+      <div class="lv" id="lv-q1">
+        <div class="lv-head">
+          <span class="lv-no">第 1 关</span>
+          <span class="lv-title">一线销售员（真正跑终端、决定推谁的货的人）</span>
+          <span class="lv-lock" id="badge-q1">未通关</span>
+        </div>
+        <div class="lv-meta">时间 10 分钟 · 话题层：好不好卖 · 前置：无</div>
+        <div class="kv"><b>场景</b>：经销商的业务员，每天跑医院 / 实验室终端，手上有好几个牌子。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：他推谁只看三件事：<b>好不好卖、返点多少、出了问题谁背</b>。现在推的另一个牌子返点高一点、终端也认，但售后拖。</div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">扮演者第一句：“我现在推的牌子挺好的，客户也认。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“我推熟的就行，新牌子我还得重新讲。”</div>
+        <div class="quote">“客户指定牌子的，我也没办法。”</div>
+        <div class="quote">“你这个售后谁负责？出问题算谁的？”（他真正关心的这句）</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          让他自己说出“最难受的是哪一头”：压货、不好卖、售后没人管、还是返点低；<br>          问到现状：他现在推几个牌子、各走多少、终端最常问什么、返点大概什么水平、售后怎么处理；<br>          让他承认代价：压在手上的资金、被客户追、丢单。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：把渠道当成“小老板”来聊政策。这一关他不是老板，他关心的是“我好不好卖、出问题谁背”。用科研那套技术语言跟他聊，一句话都聊不下去。</div>
+        <button class="btn primary" id="btn-q1" onclick="openPad('q1')">评分并通关</button>
+        <div class="pad" id="pad-q1">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q1',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q1',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q1',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q1',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q1',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q1',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q1',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q1',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q1',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q1',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q1',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q1',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q1',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q1',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q1',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q1',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：你说的≤三成，四句连成 S→P→I→N；不谈政策、不谈任务、不替他下结论。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q1',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q1',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q1',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q1',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-q1">—</span> / 15</div>
+            <div id="vd-q1"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+      <div class="lv locked" id="lv-q2">
+        <div class="lv-head">
+          <span class="lv-no">第 2 关</span>
+          <span class="lv-title">产品线负责人 / 采购商务（选品、政策、账期的人）</span>
+          <span class="lv-lock" id="badge-q2">未解锁</span>
+        </div>
+        <div class="lv-meta">时间 5 分钟 · 话题层：压库、资金、政策 · 前置：<b>必须引用第 1 关那句原话</b> · 🔒 通过上一关后解锁</div>
+        <div class="kv"><b>场景</b>：见经销商的产品线负责人 / 商务。选品、谈政策、管库存与账期。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：库里压了一批货，资金占着；竞品的返点最近降了；厂家直销在挤压。<b>最怕的是进回来卖不动、砸在手里。</b></div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">销售开场：“我前两天跟您一线跑终端的兄弟聊过，他说现在最难受的是售后没人管；我想跟您确认，咱们库里现在压得最多的是哪一块。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“政策跟别家也差不多。”</div>
+        <div class="quote">“我们库存已经不少了。”</div>
+        <div class="quote">“厂家都这么说，最后还不是我们压货。”</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          开场引用一线销售员那句原话，让对方接话；<br>          让他说出“最怕压库 / 资金占着 / 返点不如别家”，<b>不是你说</b>；<br>          N 类问到：如果这个牌子一年能多转两轮、售后有人兜，对你们这批资金意味着什么——<b>由他说出价值</b>（不是“您要不要多进点货”）。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：N 类问题变成“您要不要多进点货”——那是推销，不是需求效益。另外别只谈返点：返点谈到底，你就成了最贵的那个。</div>
+        <button class="btn primary" id="btn-q2" disabled onclick="openPad('q2')">评分并通关</button>
+        <div class="pad" id="pad-q2">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q2',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q2',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q2',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q2',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q2',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q2',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q2',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q2',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q2',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q2',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q2',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q2',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q2',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q2',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q2',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q2',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：开场引用上一关原话；话题从“好不好卖”升级到“压库与资金”；仍守住 30/70。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q2',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q2',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q2',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q2',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-q2">—</span> / 15</div>
+            <div id="vd-q2"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+      <div class="lv locked" id="lv-q3">
+        <div class="lv-head">
+          <span class="lv-no">第 3 关</span>
+          <span class="lv-title">老板 / 总经理（决定做不做这个牌子的人）</span>
+          <span class="lv-lock" id="badge-q3">未解锁</span>
+        </div>
+        <div class="lv-meta">时间 3 分钟 · 话题层：利润、周转、渠道冲突 · 前置：<b>必须引用第 2 关那句原话，并算到钱</b> · 🔒 通过上一关后解锁</div>
+        <div class="kv"><b>场景</b>：见经销商老板 / 总经理。他手上压着资金、看着团队人效、盯着窜货。</div>
+        <div class="kv"><b>客户底牌（扮演者知道，不许主动说）</b>：他真正在算的是：整体利润、资金周转、渠道冲突（厂家直销抢单、窜货）、团队人效。<b>他不关心你磁珠粒径多少。</b></div>
+        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
+        <div class="quote">销售开场：“我跟您产品线和一线的兄弟都聊过，一线说售后没人管、产品线说库里压着一批；我想跟您算的是，这块一年占多少资金、多久能转起来。”</div>
+        <div class="kv"><b>他会怎么挡你（扮演者照着说）</b>：</div>
+        <div class="quote">“你们厂家最后还不是要压货给我们。”</div>
+        <div class="quote">“直销那边也在卖，价格比我们低，怎么弄？”（<b>这颗雷必须接住</b>）</div>
+        <div class="quote">“你先跟我们产品对接吧。”</div>
+        <div class="passlist"><b>本关通关要求（观察员打勾）</b><br>
+          把下面两层的痛翻译成利润、周转、渠道冲突三件事；<br>          让他自己说出“最怕资金压着 / 被直销挤压 / 窜货”，并且说出量级（占多少资金、压几个月）；<br>          拿到下一步：区域 / 价格体系 / 账期谁定、什么时间再谈——<b>不空手走</b>。
+        </div>
+        <div class="trap"><b>这关最容易栽在</b>：到了老板这层还在讲产品性能。渠道老板只认钱和周转。另外“直销挤压 / 窜货”这颗雷必须接住——回避它，这一关就通不过，因为那正是他最怕的。</div>
+        <button class="btn primary" id="btn-q3" disabled onclick="openPad('q3')">评分并通关</button>
+        <div class="pad" id="pad-q3">
+        <div class="srow" data-dim="0">
+          <span class="slab">① 认人</span>
+          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q3',0,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q3',0,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q3',0,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q3',0,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="1">
+          <span class="slab">② S 现状</span>
+          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q3',1,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q3',1,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q3',1,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q3',1,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="2">
+          <span class="slab">③ P+I 挖痛</span>
+          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q3',2,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q3',2,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q3',2,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q3',2,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="3">
+          <span class="slab">④ N 需求效益</span>
+          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q3',3,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q3',3,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q3',3,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q3',3,3)">3</button>
+          </div>
+        </div>
+        <div class="srow" data-dim="4">
+          <span class="slab">⑤ 过程控制</span>
+          <span class="sdesc">过程控制：3 分钟内说清；引用第 2 关原话并算到钱；结尾拿到下一步（谁定 / 什么时间）。</span>
+          <div class="sbtns">
+            <button class="sbtn" data-val="0" onclick="setScore('q3',4,0)">0</button>
+            <button class="sbtn" data-val="1" onclick="setScore('q3',4,1)">1</button>
+            <button class="sbtn" data-val="2" onclick="setScore('q3',4,2)">2</button>
+            <button class="sbtn" data-val="3" onclick="setScore('q3',4,3)">3</button>
+          </div>
+        </div>
+          <div class="tot-line">
+            <div>总分 <span class="tot-num" id="tot-q3">—</span> / 15</div>
+            <div id="vd-q3"><span class="v-mid">先给五个维度都打分</span></div>
+            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="card">
+    <h2>怎么用这套通关演练</h2>
+    <div class="kv"><b>分组</b>：3 人一组＝销售 / 客户 / 观察员。准备 1 分钟 → 演练（按关卡时间）→ 观察员反馈 2 分钟 → 轮换。</div>
+    <div class="kv"><b>扮演客户的人</b>：不许主动送答案，销售问到位才给；一句话最多给三次机会，问不出来就重复那句刁难。</div>
+    <div class="kv"><b>观察员</b>：只记录不提醒。打完分当场说出“哪一句让他自己说出痛的”。</div>
+    <div class="kv"><b>课堂上怎么排</b>：三线同时开，各练各的链。科研线 16 人分 4 组，工业 2 人一组，渠道 4 人一组。<b>新人从第一关起，不许直接挑第三关。</b></div>
+    <div class="kv" style="font-size:12px;color:#8A8A96;">说明：以下客户台词为演练设计，用于练手感，不是某位客户的真实原话。课堂上场上的素材，请用学员自己带来的真实客户。</div>
+  </div>
+
+  <div class="foot">福麦斯销售团队共创 · 2026.09</div>
+</div>
+<script>
+var PASSED = [];
+try { PASSED = JSON.parse(localStorage.getItem('fumaisi_spin_chain_v1')) || []; } catch (e) { PASSED = []; }
+function save() { try { localStorage.setItem('fumaisi_spin_chain_v1', JSON.stringify(PASSED)); } catch (e) {} }
+var SC = {};
+function openPad(id) {
+  var p = document.getElementById('pad-' + id);
+  p.className = 'pad' + (p.className.indexOf('show') >= 0 ? '' : ' show');
+}
+function setScore(id, d, v) {
+  if (!SC[id]) SC[id] = [null, null, null, null, null];
+  SC[id][d] = v;
+  var pad = document.getElementById('pad-' + id);
+  var row = pad.querySelector('.srow[data-dim="' + d + '"]');
+  var bs = row.querySelectorAll('.sbtn');
+  for (var i = 0; i < bs.length; i++) {
+    bs[i].className = 'sbtn' + (parseInt(bs[i].getAttribute('data-val'), 10) === v ? ' on' : '');
+  }
+  calc(id);
+}
+function calc(id) {
+  var s = SC[id] || [];
+  var tot = document.getElementById('tot-' + id);
+  var vd = document.getElementById('vd-' + id);
+  for (var i = 0; i < 5; i++) {
+    if (s[i] === null || typeof s[i] === 'undefined') {
+      tot.textContent = '—';
+      vd.innerHTML = '<span class="v-mid">先给五个维度都打分</span>';
+      return;
+    }
+  }
+  var sum = 0;
+  for (var j = 0; j < 5; j++) sum += s[j];
+  tot.textContent = sum;
+  var core = s[2];
+  if (sum >= 12 && core >= 2) {
+    vd.innerHTML = '<span class="v-pass">通关 ✓</span>';
+    if (PASSED.indexOf(id) < 0) { PASSED.push(id); save(); }
+    setBadge(id, '已通关');
+    unlock(id);
+  } else if (core <= 1) {
+    vd.innerHTML = '<span class="v-fail">未通关 · 痛没挖出来（P+I ≤ 1）</span>';
+  } else {
+    vd.innerHTML = '<span class="v-mid">未通关 · 总分不足（需 ≥ 12）</span>';
+  }
+}
+function setBadge(id, txt) {
+  var b = document.getElementById('badge-' + id);
+  if (b) { b.textContent = txt; b.className = (txt === '已通关' ? 'lv-pass' : (txt === '未解锁' ? 'lv-lock' : 'lv-lock')); }
+}
+function unlock(id) {
+  var p = id.charAt(0);
+  var n = parseInt(id.charAt(1), 10);
+  if (n < 3) {
+    var nx = p + (n + 1);
+    var lv = document.getElementById('lv-' + nx);
+    if (lv) lv.className = 'lv';
+    var btn = document.getElementById('btn-' + nx);
+    if (btn) btn.disabled = false;
+    if (PASSED.indexOf(nx) < 0) setBadge(nx, '未通关');
+  } else {
+    var d = document.getElementById('done-' + p);
+    if (d) d.className = 'chain-done show';
+  }
+}
+function init() {
+  var ids = ['k1','k2','k3','g1','g2','g3','q1','q2','q3'];
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+    var p = id.charAt(0);
+    var n = parseInt(id.charAt(1), 10);
+    var passed = PASSED.indexOf(id) >= 0;
+    if (n === 1) {
+      var b1 = document.getElementById('btn-' + id);
+      if (b1) b1.disabled = false;
+      setBadge(id, passed ? '已通关' : '未通关');
+    } else {
+      var prev = PASSED.indexOf(p + (n - 1)) >= 0;
+      if (prev) {
+        var lv = document.getElementById('lv-' + id);
+        if (lv) lv.className = 'lv';
+        var bb = document.getElementById('btn-' + id);
+        if (bb) bb.disabled = false;
+        setBadge(id, passed ? '已通关' : '未通关');
+      } else {
+        setBadge(id, '未解锁');
+      }
+    }
+    if (passed && n === 3) {
+      var dd = document.getElementById('done-' + p);
+      if (dd) dd.className = 'chain-done show';
+    }
+  }
+}
+function showChain(p) {
+  var cs = document.querySelectorAll('.chain');
+  for (var i = 0; i < cs.length; i++) {
+    cs[i].style.display = (cs[i].getAttribute('data-p') === p ? 'block' : 'none');
+  }
+  var ts = document.querySelectorAll('.tab');
+  for (var j = 0; j < ts.length; j++) {
+    ts[j].className = 'tab' + (ts[j].getAttribute('data-p') === p ? ' on' : '');
+  }
+}
+window.onload = init;
+</script>
+</body>
+</html>
