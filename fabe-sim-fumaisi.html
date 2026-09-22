@@ -3,285 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>福麦斯·FABE 真人演练 | 任务卡与打分标准</title>
+<title>FABE 真人演练 · 已改为课堂纸质版</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%); min-height: 100vh; color: #1a2547; line-height: 1.65; }
-.container { max-width: 880px; margin: 0 auto; padding: 24px 20px 60px; }
-.header { background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%); color: #fff; border-radius: 16px;
-  padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 6px 20px rgba(47,60,126,.25); }
-.brand-tag { display: inline-block; background: rgba(255,255,255,.15); font-size: 12px; padding: 4px 10px;
-  border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
-.header h1 { font-size: 23px; margin-bottom: 6px; font-weight: 700; }
-.header p { font-size: 13px; opacity: .9; }
-.key-box { background: rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
-.key-box strong { color: #ffd97a; }
-.card { background: #fff; border-radius: 14px; padding: 20px 22px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(47,60,126,.08); }
-.card h2 { font-size: 17px; margin-bottom: 12px; color: #2F3C7E; border-left: 4px solid #4F81BC; padding-left: 10px; }
-.task { border: 1.5px solid #DCE3F0; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
-.task .tagline { font-size: 11.5px; color: #fff; background: #4F81BC; border-radius: 99px; padding: 3px 10px; display: inline-block; margin-bottom: 8px; }
-.task.g .tagline { background: #1D9E75; }
-.task.q .tagline { background: #8B5CF6; }
-.task h3 { font-size: 15.5px; color: #2F3C7E; margin-bottom: 10px; }
-.field { font-size: 13px; margin-bottom: 7px; color: #3c4665; }
-.field b { color: #2F3C7E; }
-.line { display: inline-block; min-width: 200px; border-bottom: 1px solid #C9D2E4; height: 13px; vertical-align: middle; }
-.warn { font-size: 12.5px; color: #633806; background: #FFF8E6; border-left: 3px solid #EF9F27; border-radius: 6px; padding: 8px 10px; margin-top: 10px; }
-.check { font-size: 12.5px; color: #0F6E56; background: #E7F7F1; border-left: 3px solid #1D9E75; border-radius: 6px; padding: 8px 10px; margin-top: 8px; }
-table.rubric { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
-table.rubric th, table.rubric td { border: 1px solid #E2E7F2; padding: 8px 9px; text-align: left; vertical-align: top; }
-table.rubric th { background: #E4EAF5; color: #2F3C7E; }
-table.rubric td.dim { background: #F7F9FE; font-weight: 600; color: #2F3C7E; width: 16%; }
-.score-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #E2E7F2; flex-wrap: wrap; }
-.score-row .name { width: 190px; font-size: 13.5px; font-weight: 600; }
-.score-row .desc { font-size: 11.5px; color: #8A8A96; width: 100%; margin-top: -6px; }
-select.score-sel { font-family: inherit; font-size: 13px; padding: 7px 10px; border: 1.5px solid #DCE3F0; border-radius: 8px; background: #fff; color: #1a2547; }
-.total-box { margin-top: 14px; padding: 16px; border-radius: 12px; background: #F4F7FC; text-align: center; }
-.total-num { font-size: 40px; font-weight: 700; color: #2F3C7E; }
-.verdict { display: inline-block; margin: 8px 0 10px; padding: 6px 16px; border-radius: 99px; font-size: 14px; }
-.v-pass { background: #E7F7F1; color: #0F6E56; }
-.v-mid { background: #FFF3D6; color: #854F0B; }
-.v-fail { background: #FDECEC; color: #A32D2D; }
-#advice { font-size: 13px; color: #633806; background: #FFF8E6; border-left: 3px solid #EF9F27;
-  border-radius: 6px; padding: 10px 12px; text-align: left; margin-top: 10px; white-space: pre-line; }
-textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px solid #DCE3F0; border-radius: 8px; padding: 10px; }
-.btn { border: none; border-radius: 10px; padding: 12px 20px; font-size: 14px; cursor: pointer;
-  background: #E4EAF5; color: #43506e; font-family: inherit; margin-right: 8px; }
-.btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
-.foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
-
-/* ===== 角色分层：同一页，各看各的 ===== */
-.rolebar { position: sticky; top: 0; z-index: 20; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-  background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(47,60,126,.10); }
-.rolebar b { font-size: 13px; color: #2F3C7E; }
-.rbtn { border: 1.5px solid #DCE3F0; background: #fff; border-radius: 99px; padding: 7px 14px; font-size: 13px;
-  cursor: pointer; font-family: inherit; color: #43506e; }
-.rbtn.on { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; border-color: #2F3C7E; }
-.rolehint { font-size: 11.5px; color: #8A8A96; margin-left: auto; }
-.r-sale { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 8px; padding: 12px 14px;
-  font-size: 13px; margin-bottom: 14px; color: #333f5c; line-height: 1.8; }
-.r-sale b { color: #2F3C7E; }
-.rolewho { display: inline-block; font-size: 10.5px; color: #fff; border-radius: 99px; padding: 1px 7px;
-  margin-left: 6px; margin-right: 2px; vertical-align: middle; font-weight: 400; }
-.rolewho.w-both { background: #8B5CF6; } .rolewho.w-cust { background: #B85042; }
-.rolewho.w-obs { background: #1D9E75; } .rolewho.w-sale { background: #4F81BC; }
-.print-tag { display: none; }
-body[data-role="sales"] .r-cust, body[data-role="sales"] .r-both, body[data-role="sales"] .r-obs, body[data-role="sales"] .r-peer { display: none; }
-body[data-role="cust"] .r-obs, body[data-role="cust"] .r-sale, body[data-role="cust"] .r-peer { display: none; }
-body[data-role="obs"] .r-cust, body[data-role="obs"] .r-sale, body[data-role="obs"] .r-peer { display: none; }
-body[data-role="write"] .r-peer { display: none; }
-body[data-role="peer"] .r-write { display: none; }
-body[data-role="sales"] .rolewho, body[data-role="cust"] .rolewho, body[data-role="obs"] .rolewho,
-body[data-role="write"] .rolewho, body[data-role="peer"] .rolewho { display: none; }
-@media print { .rolebar { display: none; } .print-tag { display: block; font-size: 12px; color: #8A8A96; margin-bottom: 10px; } }
-
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#F4F2ED; color:#2C2C2A; line-height:1.7; font-size:15px; }
+.wrap { max-width:520px; margin:0 auto; padding:30px 16px 60px; }
+.card { background:#fff; border-radius:14px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.tag { display:inline-block; font-size:12px; font-weight:600; color:#fff; background:#B85042;
+  border-radius:999px; padding:3px 12px; margin-bottom:10px; }
+h1 { font-size:19px; color:#2F3C7E; margin-bottom:10px; }
+p { font-size:14px; color:#4A4A46; margin-bottom:10px; }
+b { color:#2C2C2A; }
+.box { background:#FBEED9; border-left:3px solid #BA7517; border-radius:0 8px 8px 0;
+  padding:10px 12px; font-size:13.5px; color:#4A3A1A; margin:12px 0; }
+a.btn { display:block; text-align:center; margin-top:14px; padding:12px; border-radius:10px;
+  background:#2F3C7E; color:#fff; text-decoration:none; font-weight:600; }
+.foot { text-align:center; font-size:12px; color:#88877F; margin-top:20px; }
 </style>
 </head>
 <body>
-<div class="container">
-
-  <div class="header">
-    <span class="brand-tag">福麦斯 · 销售铁军一期 · M1</span>
-    <h1>FABE 真人演练 · 任务卡与打分标准</h1>
-    <p>三条线各一张任务卡 · 组内写四格 · 换组互评 · 15 分制</p>
-    <div class="key-box">
-      <strong>玩法</strong>：每组领<strong>一个主推品</strong>＋<strong>一条课堂上共创出来的真实痛点</strong>，全组一起写出 F / A / B / E 四句 → 组内先读一遍（读得顺吗）→ 换成别组互评、按五维打分 → 拍照发群。<br>
-      <strong>卡壳时先别硬写，回痛点</strong>：写不出 B，说明痛点那一步没挖到位，不是这句话不会写。<br>
-      <strong>四格口径</strong>：F 是"它是……"｜A 是"它能做到……"（产品视角）｜B 是"你能得到……"（客户视角、必须挂痛点）｜E 是报告／数据／案例／名单。同行对比归 E，不归 A。
-    </div>
-  </div>
-
-  <div class="rolebar">
-    <b>你现在是谁：</b>
-    <button class="rbtn on" data-role="all" onclick="setRole('all')">全看 · 老师</button>
-    <button class="rbtn" data-role="write" onclick="setRole('write')">本组写卡</button>
-    <button class="rbtn" data-role="peer" onclick="setRole('peer')">互评组打分</button>
-    <span class="rolehint">写卡的那一组看不到打分表；互评的那一组只看打分表、不看任务卡里的提示。打印时按当前角色出。</span>
-  </div>
-  <div class="print-tag" id="printTag"></div>
+<div class="wrap">
   <div class="card">
-    <h2>一、三张演练任务卡</h2>
-    <p style="font-size:12.5px;color:#8A8A96;margin-bottom:12px;">主推品当场从技术给的 F/A 清单里选；选品标准＝走量的、有差异化可讲的、拿得出证据的。<b>每张卡只做一个品，做透。</b></p>
-
-    <div class="task k r-write">
-      <span class="tagline">科研线</span>
-      <h3>高校课题组 / 医院检验科</h3>
-      <div class="field"><b>主推品：</b><span class="line"></span></div>
-      <div class="field"><b>痛点（抄第二步共创出来的那条）：</b><span class="line"></span></div>
-      <div class="field"><b>A 怎么推：</b>从 F 往前一步写"它能做到……"（例：预包被即用型 → "它能省掉自己包被抗体这一步"）</div>
-      <div class="field"><b>E 能拿什么：</b>文献引用｜其他课题组的用例｜第三方检测报告｜可公开的组名或平台名</div>
-      <div class="warn"><b>最容易犯的错：</b>B 写成"实验结果更准确""品质更稳定"这类通用好处；E 拿不出，只能讲"很多老师都在用"。</div>
-      <div class="check r-peer"><b>互评重点：</b>盖住痛点单独读 B——还立得住吗？立得住就是没挂上痛。</div>
+    <span class="tag">已改为课堂纸质版</span>
+    <h1>FABE 真人演练 · 不再线上发放</h1>
+    <p>这个环节是<b>真人演练</b>：三人一组，一个当销售、一个当客户、一个当观察员。</p>
+    <div class="box">
+      真人演练的卡片里有<b>客户底牌</b>（真实痛点）和<b>观察员的评分标准</b>。
+      放在网上，谁扫码都能看到——扮演销售的人会提前看到客户的想法，演练就变成照着答案演。
     </div>
-
-    <div class="task g r-write">
-      <span class="tagline">工业线</span>
-      <h3>IVD / 药企 · 研发或质量</h3>
-      <div class="field"><b>主推品：</b><span class="line"></span></div>
-      <div class="field"><b>痛点（抄第二步共创出来的那条）：</b><span class="line"></span></div>
-      <div class="field"><b>A 怎么推：</b>（例：批间差异小 → "它能保证连续几批的检测结果落在同一区间"）</div>
-      <div class="field"><b>E 能拿什么：</b>COA｜批次稳定性数据｜验证报告｜可公开的同行业客户名单</div>
-      <div class="warn"><b>最容易犯的错：</b>A 写成"我们比进口品牌便宜"（那是同行对比，归 E，而且要有数据）；E 用"我们服务好"顶。</div>
-      <div class="check r-peer"><b>互评重点：</b>这份 E 能不能进他的变更文件、供应商名录？进不去，就还没说服 QA。</div>
-    </div>
-
-    <div class="task q r-write">
-      <span class="tagline">渠道线</span>
-      <h3>经销商 / 代理商</h3>
-      <div class="field"><b>主推品 / 政策：</b><span class="line"></span><span style="font-size:12px;color:#8A8A96;">（渠道的 F 可以是返点、账期、动销支持、区域保护）</span></div>
-      <div class="field"><b>痛点（抄第二步共创出来的那条）：</b><span class="line"></span></div>
-      <div class="field"><b>A 怎么推：</b>（例：动销支持 → "它能帮你在终端做一场推广"）</div>
-      <div class="field"><b>E 能拿什么：</b>动销数据｜复购情况｜其他经销商的实际账（可脱敏）｜可公开的区域名单</div>
-      <div class="warn"><b>最容易犯的错：</b>整张卡写满产品性能参数——那还是在用科研的语言跟经销商说话；B 写成"品质更好"，而不是"你能多赚多少、少压多少资金"。</div>
-      <div class="check r-peer"><b>互评重点：</b>这张卡的 B，说的是不是钱和周转？不是，就还没翻译到位。</div>
-    </div>
+    <p>所以这个环节改成<b>纸质角色卡</b>，课堂上按角色分发：每个场景 3 页，<b>销售页 / 客户页 / 观察员页</b>各一份，不要互相传看。</p>
+    <p>要练手的话，先在手机上做<b>模拟对战</b>：客户说一句，你从四个答法里选一个，当场给你点评。</p>
+    <a class="btn" href="fumaisi-workshop.html">回到练习中心 →</a>
   </div>
-
-  <div class="card r-peer">
-    <h2>二、打分标准（每维 0-3 分，满分 15 分）</h2>
-    <table class="rubric">
-      <tr><th>维度</th><th>0 分</th><th>1 分</th><th>2 分</th><th>3 分</th></tr>
-      <tr>
-        <td class="dim">1 F 客观可查</td>
-        <td>写的是形容词（"品质优良""国际领先"）。</td>
-        <td>写了产品相关的词，但查不到依据。</td>
-        <td>参数、成分、工艺、资质或政策条款，写清楚了。</td>
-        <td>客户能当场核对（规格书／检测项／政策原文可指出）。</td>
-      </tr>
-      <tr>
-        <td class="dim">2 A 是作用</td>
-        <td>写成自夸或同行对比。</td>
-        <td>写了作用，但和这条 F 对不上。</td>
-        <td>由这条 F 推出来的作用，句式是"它能做到……"。</td>
-        <td>作用具体到可被客户复述，且不牵扯同行。</td>
-      </tr>
-      <tr>
-        <td class="dim">3 B 挂痛点</td>
-        <td>没挂痛点，通用口号。</td>
-        <td>提到好处，但换家客户也成立。</td>
-        <td>挂住了共创出来的那条痛，且是客户视角。</td>
-        <td>盖住痛点再读就立不住——说明真挂上了，客户能听出"说的就是我"。</td>
-      </tr>
-      <tr>
-        <td class="dim">4 E 具体可查</td>
-        <td>没有证据，全是自述。</td>
-        <td>有证据但拿不出来（"好像有个报告"）。</td>
-        <td>能当场拿出：报告／数据／案例／名单其中的一种。</td>
-        <td>证据正好打在客户该关心的那一头（科研要文献，工业要 COA，渠道要动销账）。</td>
-      </tr>
-      <tr>
-        <td class="dim">5 四格自洽</td>
-        <td>四句各说各的，读不通。</td>
-        <td>能读，但中间断了一环。</td>
-        <td>F→A→B→E 一路推得下来。</td>
-        <td>整段能对着客户一口气说完，不用解释。</td>
-      </tr>
-    </table>
-    <div style="font-size:13px;margin-top:12px;color:#5A6482;">
-      <b>通关规则</b>：总分 ≥ 12 分且「第 3 项 B 挂痛点」≥ 2 分。<br>
-      <b>一票否决</b>：第 3 项 ≤ 1 分（B 挂不住痛），无论总分多少，判<strong>未通关</strong>。
-    </div>
-
-    <div style="margin-top:16px;">
-      <div class="score-row">
-        <span class="name">第 1 项 · F 客观可查</span>
-        <select class="score-sel" id="f1" onchange="calcFabe()"><option value="0">0 分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option></select>
-        <div class="desc">参数 / 成分 / 工艺 / 资质 / 政策，不是形容词</div>
-      </div>
-      <div class="score-row">
-        <span class="name">第 2 项 · A 是作用</span>
-        <select class="score-sel" id="f2" onchange="calcFabe()"><option value="0">0 分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option></select>
-        <div class="desc">"它能做到……"，不写自夸、不写同行对比</div>
-      </div>
-      <div class="score-row">
-        <span class="name">第 3 项 · B 挂痛点</span>
-        <select class="score-sel" id="f3" onchange="calcFabe()"><option value="0">0 分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option></select>
-        <div class="desc">客户视角，挂住共创出来的那条痛（一票否决项）</div>
-      </div>
-      <div class="score-row">
-        <span class="name">第 4 项 · E 具体可查</span>
-        <select class="score-sel" id="f4" onchange="calcFabe()"><option value="0">0 分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option></select>
-        <div class="desc">报告／数据／案例／名单，能当场拿出来</div>
-      </div>
-      <div class="score-row">
-        <span class="name">第 5 项 · 四格自洽</span>
-        <select class="score-sel" id="f5" onchange="calcFabe()"><option value="0">0 分</option><option value="1">1 分</option><option value="2">2 分</option><option value="3">3 分</option></select>
-        <div class="desc">F→A→B→E 一路推得下来，能一口气说完</div>
-      </div>
-
-      <div class="total-box">
-        <div class="total-num"><span id="fabeTotal">0</span> / 15</div>
-        <div class="verdict" id="fabeVerdict">请选择各项得分</div>
-        <div id="advice"></div>
-      </div>
-
-      <div style="margin-top:12px;">
-        <div style="font-size:13px;font-weight:600;margin-bottom:6px;">互评记录（写原话，不写"还不错"）</div>
-        <textarea id="fabeNotes" rows="4" placeholder="我们写的痛点：&#10;F / A / B / E 四句：&#10;对方挑出的那一处断点："></textarea>
-      </div>
-      <div style="margin-top:12px;">
-        <button class="btn primary" onclick="copyFabe()">📋 复制本组评分</button>
-        <button class="btn" onclick="resetFabe()">重置</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="foot">福麦斯销售团队共创 · 2026.09｜F/A 由技术课前提供，B/E 现场共创</div>
+  <div class="foot">福麦斯销售团队共创 · 2026.09</div>
 </div>
-
-<script>
-var fNames = ['F 客观可查','A 是作用','B 挂痛点','E 具体可查','四格自洽'];
-var fTips = [ '回到规格书：拿形容词去换一个能量到的参数或条款。',
-  '把 A 改成"它能做到……"，删掉所有"我们比同行……"的写法。',
-  '回痛点：把共创出来的那条痛抄到最左边，逼着 B 挂上去；盖住痛点读不通就是废话。',
-  'E 要拿得出来：报告、数据、案例、名单，四选一，别写"做过很多"。',
-  '四格连读一遍，中间断在哪一环就补哪一环。' ];
-function calcFabe() {
-  var v = [];
-  for (var i = 1; i <= 5; i++) v.push(parseInt(document.getElementById('f' + i).value, 10));
-  var t = v[0]+v[1]+v[2]+v[3]+v[4];
-  document.getElementById('fabeTotal').textContent = t;
-  var box = document.getElementById('fabeVerdict');
-  if (v[2] <= 1) { box.className = 'verdict v-fail'; box.textContent = '未通关 · B 挂不住痛（≤1 分）'; }
-  else if (t >= 12) { box.className = 'verdict v-pass'; box.textContent = '通关 · 拍照发群'; }
-  else if (t >= 9) { box.className = 'verdict v-mid'; box.textContent = '待练 · 补一格再来'; }
-  else { box.className = 'verdict v-fail'; box.textContent = '重练 · 四格重推一遍'; }
-  var adv = '';
-  for (var k = 0; k < 5; k++) { if (v[k] <= 1) adv += '· ' + fNames[k] + '：' + fTips[k] + '\n'; }
-  if (!adv) adv = '五维都在 2 分以上。换另外两组互挑毛病，再改一版。';
-  document.getElementById('advice').textContent = adv;
-}
-function resetFabe() {
-  for (var i = 1; i <= 5; i++) document.getElementById('f' + i).value = '0';
-  document.getElementById('fabeTotal').textContent = '0';
-  document.getElementById('fabeVerdict').className = 'verdict';
-  document.getElementById('fabeVerdict').textContent = '请选择各项得分';
-  document.getElementById('advice').textContent = '';
-}
-function copyFabe() {
-  var v = [], txt = '【福麦斯·FABE真人演练】\n主推品：______\n痛点：______\n';
-  for (var i = 1; i <= 5; i++) { var x = parseInt(document.getElementById('f' + i).value,10); v.push(x); txt += fNames[i-1] + '：' + x + ' 分\n'; }
-  txt += '总分：' + (v[0]+v[1]+v[2]+v[3]+v[4]) + '/15\n判定：' + document.getElementById('fabeVerdict').textContent +
-    '\n互评记录：\n' + document.getElementById('fabeNotes').value;
-  var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
-  try { document.execCommand('copy'); alert('评分已复制'); } catch (e) { alert('请手动复制'); }
-  document.body.removeChild(ta);
-}
-</script>
-
-<script>
-var ROLE_LABEL = { all: '全看（老师投屏）', sales: '销售', cust: '客户', obs: '观察员', write: '本组写卡', peer: '互评组打分' };
-function setRole(r) {
-  document.body.setAttribute('data-role', r);
-  var bs = document.querySelectorAll('.rbtn');
-  for (var i = 0; i < bs.length; i++) { bs[i].className = 'rbtn' + (bs[i].getAttribute('data-role') === r ? ' on' : ''); }
-  var t = document.getElementById('printTag');
-  if (t) t.textContent = (r === 'all')
-    ? '本页为【全看】版：含客户底牌与评分标准，只供老师投屏或自己看，不要整份发给学员'
-    : ('本页为【' + (ROLE_LABEL[r] || r) + '】版');
-}
-setRole('all');
-</script>
 </body>
 </html>

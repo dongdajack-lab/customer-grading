@@ -20,11 +20,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
   box-shadow: 0 2px 10px rgba(47,60,126,.08); border-top: 4px solid #4F81BC; transition: .15s; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(47,60,126,.16); }
 .card.adv { border-top-color: #8B5CF6; }
+.card.paper { border-top-color: #B85042; background: #FFFBF7; }
 .card .tag { font-size: 11px; color: #fff; background: #4F81BC; border-radius: 99px; padding: 2px 9px; }
 .card .tag.role { background: #8B5CF6; margin-left: 4px; }
+.card .tag.gp { background: #B85042; margin-left: 4px; }
 .card h3 { font-size: 16px; margin: 10px 0 6px; color: #2F3C7E; }
 .card p { font-size: 12.5px; color: #5A6482; }
 .card .go { font-size: 12px; color: #4F81BC; margin-top: 10px; font-weight: 600; }
+.card.paper .go { color: #B85042; }
 .note { background: #FFF8E6; border-left: 3px solid #EF9F27; border-radius: 8px; padding: 12px 14px;
   font-size: 13px; color: #633806; margin-top: 22px; }
 .foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 24px; }
@@ -35,7 +38,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
   <div class="header">
     <span class="brand-tag">福麦斯 · 销售铁军一期 · M1</span>
     <h1>练习中心</h1>
-    <p>先测 → 再通关演练 → 再上真人。七个练习按课堂顺序排，手机直接打开就能用。</p>
+    <p>先测 → 再模拟对战 → 最后上真人。五个线上练习按课堂顺序排，手机直接打开就能用。</p>
   </div>
 
   <div class="grid">
@@ -54,45 +57,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
     </a>
 
     <a class="card adv" href="spin-chain-fumaisi.html">
-      <span class="tag">第 3 站</span><span class="tag role">可切角色</span>
-      <h3>SPIN 通关演练 · 角色链</h3>
-      <p>三线各 3 关，从最底下那个人一层层往上打：见做实验的人 → 见拍板的人 → 见管资源的人。上一关没过，不许见下一关的人。</p>
-      <div class="go">开始练习 →</div>
-    </a>
-
-    <a class="card" href="spin-sim-fumaisi.html">
-      <span class="tag">第 4 站</span><span class="tag role">可切角色</span>
-      <h3>SPIN 真人演练 · 打分标准</h3>
-      <p>6 张场景卡（三线各 2）＋5 维打分表＋现场打分器。三人一组轮换，销售看不到底牌。</p>
-      <div class="go">开始练习 →</div>
+      <span class="tag">第 3 站</span><span class="tag role">对话模拟</span>
+      <h3>SPIN 模拟对战 · 角色链</h3>
+      <p>三线各 3 关，从最底下那个人一层层往上打。客户说一句，四个答法里选一个——选错了他会当场回你一句。<b>上一关没通关，不许见下一关的人。</b></p>
+      <div class="go">开始对战 →</div>
     </a>
 
     <a class="card" href="fabe-fumaisi.html">
-      <span class="tag">第 5 站</span>
+      <span class="tag">第 4 站</span>
       <h3>FABE 测试</h3>
       <p>F/A/B/E 四格口径＋9 道题：识别、三线差异、E 的证明力、B 的检验法。通关线 80%。</p>
       <div class="go">开始练习 →</div>
     </a>
 
     <a class="card adv" href="fabe-chain-fumaisi.html">
-      <span class="tag">第 6 站</span><span class="tag role">可切角色</span>
-      <h3>FABE 通关演练 · 角色层</h3>
-      <p>同一个产品、同一条痛，讲给三种人听：天天用的人 → 把关的人 → 拍板的人。B 和 E 要换语言。</p>
-      <div class="go">开始练习 →</div>
+      <span class="tag">第 5 站</span><span class="tag role">对话模拟</span>
+      <h3>FABE 模拟对战 · 角色层</h3>
+      <p>同一个产品、同一条痛，讲给三种人：天天用的人 → 把关的人 → 拍板的人。每一句该给哪一格，选完会告诉你这句属于 F / A / B / E 中的哪一个。</p>
+      <div class="go">开始对战 →</div>
     </a>
 
-    <a class="card" href="fabe-sim-fumaisi.html">
-      <span class="tag">第 7 站</span><span class="tag role">可切角色</span>
-      <h3>FABE 真人演练 · 打分标准</h3>
-      <p>三张任务卡（科研 / 工业 / 渠道）＋5 维打分表＋现场打分器。B 挂不住痛一票否决。</p>
-      <div class="go">开始练习 →</div>
-    </a>
+    <div class="card paper">
+      <span class="tag gp">课堂纸质版</span>
+      <h3>SPIN / FABE 真人演练（不发线上）</h3>
+      <p>真人演练有客户底牌和观察员评分标准，放网上等于把答案发给销售。因此改为<b>纸质角色卡，课堂上按角色分发</b>：每个场景 3 页（销售页 / 客户页 / 观察员页）。向老师领取。</p>
+      <div class="go">课堂上发 · 不用手机</div>
+    </div>
   </div>
 
   <div class="note">
-    <b>课堂使用顺序</b>：小3P → SPIN 测试 → SPIN 通关演练 → SPIN 真人演练 → FABE 测试 → FABE 通关演练 → FABE 真人演练。<br>
-    <b>演练页怎么用（重要）</b>：标了「可切角色」的那几页，顶部有「你现在是谁」——每个人选自己的角色即可。销售看不到客户底牌和评分标准，客户看不到评分标准，各看各的，不用印三份。<br>
-    <b>结果怎么收</b>：测试页做完点「📋 复制我的成绩」，粘贴到微信群；演练页的分数由观察员当场报，老师汇总。<br>
+    <b>课堂使用顺序</b>：小3P → SPIN 测试 → SPIN 模拟对战 → FABE 测试 → FABE 模拟对战 →（课堂纸质）SPIN 真人演练 →（课堂纸质）FABE 真人演练。<br>
+    <b>线上只放两类</b>：①自测（做完点「📋 复制我的成绩」粘到群里）；②模拟对战（客户说一句，你选怎么接，会当场给你点评）。<br>
+    <b>为什么真人演练不上网</b>：那里面有客户底牌（真实痛点）和观察员的评分标准。链接一旦发出去，扮演销售的人就能提前看到客户的想法，演练就废了。<br>
     <b>提醒</b>：练习里的客户台词是教学设计，用来练手感；真正要改的，是你自己那个客户的那句话。
   </div>
 

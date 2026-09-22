@@ -3,976 +3,1761 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>福麦斯·SPIN通关演练（角色链进阶）</title>
+<title>SPIN 模拟对战 · 角色链</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%); min-height: 100vh; color: #1a2547; line-height: 1.65; }
-.container { max-width: 880px; margin: 0 auto; padding: 24px 20px 60px; }
-.header { background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%); color: #fff; border-radius: 16px;
-  padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 6px 20px rgba(47,60,126,.25); }
-.brand-tag { display: inline-block; background: rgba(255,255,255,.15); font-size: 12px; padding: 4px 10px;
-  border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
-.header h1 { font-size: 23px; margin-bottom: 6px; font-weight: 700; }
-.header p { font-size: 13px; opacity: .9; }
-.key-box { background: rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
-.key-box strong { color: #ffd97a; }
-.tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-.tab { border: none; border-radius: 99px; padding: 9px 16px; font-size: 13px; cursor: pointer;
-  background: #fff; color: #43506e; font-family: inherit; box-shadow: 0 2px 6px rgba(47,60,126,.08); }
-.tab.on { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
-.card { background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(47,60,126,.08); }
-.card h2 { font-size: 17px; margin-bottom: 10px; color: #2F3C7E; border-left: 4px solid #4F81BC; padding-left: 10px; }
-.line-tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; color: #fff; display: inline-block; margin-right: 6px; }
-.t-k { background: #2E8B84; } .t-g { background: #2F3C7E; } .t-q { background: #B85042; }
-.lv { background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(47,60,126,.08); border-left: 5px solid #4F81BC; }
-.lv.locked { opacity: .6; border-left-color: #C9D2E4; }
-.lv-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
-.lv-no { font-size: 12px; color: #fff; background: #4F81BC; border-radius: 99px; padding: 3px 10px; }
-.lv-title { font-size: 16px; font-weight: 700; color: #1a2547; }
-.lv-pass { font-size: 11px; background: #E7F7F1; color: #0F6E56; border-radius: 99px; padding: 2px 9px; }
-.lv-lock { font-size: 11px; background: #FDECEC; color: #A32D2D; border-radius: 99px; padding: 2px 9px; }
-.lv-meta { font-size: 12px; color: #8A8A96; margin-bottom: 12px; }
-.kv { font-size: 13px; margin-bottom: 8px; }
-.kv b { color: #2F3C7E; }
-.quote { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 6px; padding: 8px 12px;
-  font-size: 13px; margin: 6px 0; color: #333f5c; }
-.passlist { background: #FFF8E6; border-left: 3px solid #EF9F27; border-radius: 6px; padding: 10px 12px;
-  font-size: 13px; color: #633806; margin-top: 8px; }
-.trap { background: #FDECEC; border-left: 3px solid #E24B4A; border-radius: 6px; padding: 10px 12px;
-  font-size: 13px; color: #8A2A2A; margin-top: 8px; }
-.btn { border: none; border-radius: 10px; padding: 11px 18px; font-size: 13.5px; cursor: pointer;
-  background: #E4EAF5; color: #43506e; font-family: inherit; margin-top: 12px; }
-.btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
-.btn:disabled { opacity: .45; cursor: not-allowed; }
-.pad { display: none; margin-top: 14px; border-top: 1px dashed #E2E7F2; padding-top: 12px; }
-.pad.show { display: block; }
-.srow { margin-bottom: 12px; }
-.slab { font-size: 13px; font-weight: 600; }
-.sdesc { font-size: 11.5px; color: #8A8A96; display: block; margin: 2px 0 6px; }
-.sbtns { display: flex; gap: 6px; flex-wrap: wrap; }
-.sbtn { border: 1.5px solid #DCE3F0; background: #fff; border-radius: 8px; padding: 6px 14px;
-  font-size: 13px; cursor: pointer; font-family: inherit; color: #43506e; }
-.sbtn.on { border-color: #2F3C7E; background: #EEF3FC; color: #1a2547; font-weight: 700; }
-.tot-line { margin-top: 14px; padding: 14px; border-radius: 12px; background: #F4F7FC; text-align: center; }
-.tot-num { font-size: 38px; font-weight: 700; color: #2F3C7E; }
-.verdict { display: inline-block; margin: 8px 0 6px; padding: 6px 16px; border-radius: 99px; font-size: 14px; }
-.v-pass { background: #E7F7F1; color: #0F6E56; }
-.v-mid { background: #FFF3D6; color: #854F0B; }
-.v-fail { background: #FDECEC; color: #A32D2D; }
-.chain-done { display: none; background: #E7F7F1; border-radius: 12px; padding: 14px; text-align: center;
-  font-size: 14px; color: #0F6E56; margin-bottom: 14px; }
-.chain-done.show { display: block; }
-.foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
-
-/* ===== 角色分层：同一页，各看各的 ===== */
-.rolebar { position: sticky; top: 0; z-index: 20; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-  background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(47,60,126,.10); }
-.rolebar b { font-size: 13px; color: #2F3C7E; }
-.rbtn { border: 1.5px solid #DCE3F0; background: #fff; border-radius: 99px; padding: 7px 14px; font-size: 13px;
-  cursor: pointer; font-family: inherit; color: #43506e; }
-.rbtn.on { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; border-color: #2F3C7E; }
-.rolehint { font-size: 11.5px; color: #8A8A96; margin-left: auto; }
-.r-sale { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 8px; padding: 12px 14px;
-  font-size: 13px; margin-bottom: 14px; color: #333f5c; line-height: 1.8; }
-.r-sale b { color: #2F3C7E; }
-.rolewho { display: inline-block; font-size: 10.5px; color: #fff; border-radius: 99px; padding: 1px 7px;
-  margin-left: 6px; margin-right: 2px; vertical-align: middle; font-weight: 400; }
-.rolewho.w-both { background: #8B5CF6; } .rolewho.w-cust { background: #B85042; }
-.rolewho.w-obs { background: #1D9E75; } .rolewho.w-sale { background: #4F81BC; }
-.print-tag { display: none; }
-body[data-role="sales"] .r-cust, body[data-role="sales"] .r-both, body[data-role="sales"] .r-obs, body[data-role="sales"] .r-peer { display: none; }
-body[data-role="cust"] .r-obs, body[data-role="cust"] .r-sale, body[data-role="cust"] .r-peer { display: none; }
-body[data-role="obs"] .r-cust, body[data-role="obs"] .r-sale, body[data-role="obs"] .r-peer { display: none; }
-body[data-role="write"] .r-peer { display: none; }
-body[data-role="peer"] .r-write { display: none; }
-body[data-role="sales"] .rolewho, body[data-role="cust"] .rolewho, body[data-role="obs"] .rolewho,
-body[data-role="write"] .rolewho, body[data-role="peer"] .rolewho { display: none; }
-@media print { .rolebar { display: none; } .print-tag { display: block; font-size: 12px; color: #8A8A96; margin-bottom: 10px; } }
-
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+         background:#F4F2ED; color:#2C2C2A; line-height:1.68; font-size:15px; }
+  .wrap { max-width:560px; margin:0 auto; padding:0 14px 50px; }
+  .topbar { background:#2F3C7E; color:#fff; padding:18px 16px 16px; }
+  .topbar .kicker { font-size:12px; opacity:.75; letter-spacing:1px; }
+  .topbar h1 { font-size:19px; font-weight:600; margin-top:4px; }
+  .topbar .sub { font-size:12px; opacity:.85; margin-top:4px; }
+  .card { background:#fff; border-radius:12px; padding:16px; margin-top:14px; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+  .card h3 { font-size:14px; color:#2F3C7E; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .card h3 .dot { width:8px; height:8px; border-radius:50%; background:#B85042; display:inline-block; }
+  .lvtag { display:inline-block; font-size:12px; font-weight:600; color:#fff; background:#B85042;
+           border-radius:999px; padding:3px 12px; margin-bottom:6px; }
+  .sceneline { font-size:16px; font-weight:600; }
+  .brief { font-size:13px; color:#5F5E5A; margin-top:6px; }
+  .memo { font-size:13px; color:#7A4A12; background:#FBEED9; border-radius:8px; padding:8px 10px; margin-top:10px; }
+  .linehead { border-left:4px solid #B85042; }
+  .persona-row { display:flex; gap:12px; align-items:flex-start; }
+  .avatar { flex:0 0 52px; height:52px; border-radius:50%; background:#B85042; color:#fff; font-size:20px;
+            display:flex; align-items:center; justify-content:center; }
+  .persona-info { flex:1; }
+  .persona-info b { font-size:16px; }
+  .persona-info .tagline { font-size:13px; color:#5F5E5A; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .chip { font-size:12px; padding:3px 10px; border-radius:999px; background:#EEEDFE; color:#534AB7; }
+  .mission { font-size:14.5px; }
+  .mission-note { font-size:12.5px; color:#88877F; margin-top:8px; border-top:1px dashed #E3E1D8; padding-top:8px; }
+  .lbtn { flex:1; padding:10px 4px; border:1.5px solid #D3D1C7; background:#fff; border-radius:10px;
+          font-size:14px; cursor:pointer; }
+  .lbtn.on { background:#2F3C7E; color:#fff; border-color:#2F3C7E; font-weight:600; }
+  .linebar { display:flex; gap:8px; margin-top:14px; }
+  .lv-block.locked > *:not(.lockmsg) { display:none; }
+  .lv-block:not(.locked) .lockmsg { display:none; }
+  .lockmsg { margin-top:14px; background:#EDEBE4; border:1px dashed #C3C0B4; border-radius:12px;
+             padding:18px 14px; font-size:14px; color:#6B6A64; text-align:center; }
+  .round-block { display:none; }
+  .round-head { font-size:12px; color:#88877F; text-align:center; margin:16px 0 10px; }
+  .round-head .num { background:#2F3C7E; color:#fff; border-radius:999px; padding:2px 12px; }
+  .bubble-row { display:flex; gap:8px; margin-bottom:12px; }
+  .bubble-row.boss { justify-content:flex-start; }
+  .bubble-row.me { justify-content:flex-end; }
+  .b-ava { flex:0 0 36px; height:36px; border-radius:50%; background:#B85042; color:#fff; font-size:14px;
+           display:flex; align-items:center; justify-content:center; margin-top:2px; }
+  .bubble { max-width:80%; padding:10px 13px; border-radius:12px; font-size:15px; }
+  .bubble.boss { background:#fff; border:1px solid #E3E1D8; border-top-left-radius:4px; }
+  .bubble.me { background:#2F3C7E; color:#fff; border-top-right-radius:4px; }
+  .ask { font-size:13px; color:#5F5E5A; text-align:center; margin:14px 0 8px; }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .option { background:#fff; border:1.5px solid #D3D1C7; border-radius:10px; padding:11px 13px;
+            font-size:14.5px; cursor:pointer; }
+  .option .opt-label { color:#2F3C7E; font-weight:600; margin-right:5px; }
+  .option.selected { border-color:#2F3C7E; background:#EEF1FA; }
+  .option.fin { cursor:default; }
+  .option.fin.ok { border-color:#3B6D11; background:#EAF3DE; }
+  .option.fin.half { border-color:#BA7517; background:#FAEEDA; }
+  .option.fin.no { border-color:#A32D2D; background:#FCEBEB; }
+  .reply-box { display:none; margin-top:12px; }
+  .coach { background:#FBEED9; border-left:3px solid #BA7517; border-radius:0 8px 8px 0;
+           padding:10px 12px; font-size:13.5px; color:#4A3A1A; }
+  .coach b { color:#854F0B; }
+  .score-chip { display:inline-block; font-size:12px; border-radius:999px; padding:2px 10px; margin-left:8px; font-weight:600; }
+  .score-chip.good { background:#EAF3DE; color:#3B6D11; }
+  .score-chip.mid { background:#FAEEDA; color:#854F0B; }
+  .score-chip.bad { background:#FCEBEB; color:#A32D2D; }
+  .best-line { background:#E1F5EE; border-left:3px solid #0F6E56; border-radius:0 8px 8px 0;
+               padding:10px 12px; font-size:13px; margin-top:8px; color:#085041; }
+  .best-line b { color:#0F6E56; }
+  .btn { display:none; width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px;
+         background:#2F3C7E; color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  .btn.show { display:block; }
+  .lv-result { display:none; }
+  .lvres { margin-top:16px; border-radius:12px; padding:14px 14px 12px; background:#fff; border:1.5px solid #D3D1C7; }
+  .lvres.p { border-color:#3B6D11; background:#F5FAEE; }
+  .lvres.f { border-color:#A32D2D; background:#FDF3F3; }
+  .lvres-top { font-size:17px; font-weight:600; }
+  .lvres.p .lvres-top { color:#3B6D11; }
+  .lvres.f .lvres-top { color:#A32D2D; }
+  .lvres-body { font-size:14px; margin-top:6px; }
+  .lvres-next { font-size:13px; color:#5F5E5A; margin-top:8px; }
+  .btn-re { display:block; width:100%; margin-top:10px; padding:11px; border:none; border-radius:10px;
+            background:#B85042; color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  .btn-copy { display:block; width:100%; margin-top:8px; padding:11px; border:1.5px solid #2F3C7E; border-radius:10px;
+              background:#fff; color:#2F3C7E; font-size:15px; font-weight:600; cursor:pointer; }
+  .tb { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px; }
+  .tb th, .tb td { border-bottom:1px dashed #E3E1D8; padding:6px 4px; text-align:left; }
+  .tb th { color:#88877F; font-weight:500; }
+  .tb td.ok { color:#3B6D11; font-weight:600; }
+  .tb td.no { color:#A32D2D; }
+  .tb td.dim { color:#B0AEA4; }
+  .ctot { font-size:13px; color:#5F5E5A; margin-top:8px; }
+  .center-card { background:#FBF9F3; }
+  .center-title { font-size:14px; font-weight:600; color:#2F3C7E; }
+  .whobox { margin-top:14px; background:#fff; border-radius:12px; padding:12px 14px; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+  .whobox label { font-size:13px; color:#5F5E5A; }
+  .whobox input { width:100%; margin-top:6px; padding:10px; border:1.5px solid #D3D1C7; border-radius:8px; font-size:15px; }
+  .note { background:#fff; border-radius:12px; padding:14px; margin-top:14px; font-size:13px; color:#5F5E5A;
+          box-shadow:0 1px 2px rgba(0,0,0,.05); }
+  .note b { color:#2C2C2A; }
+  .foot { text-align:center; font-size:12px; color:#88877F; margin-top:18px; }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="topbar">
+  <div class="kicker">福麦斯销售铁军一期 · M1</div>
+  <h1>SPIN 模拟对战 · 角色链</h1>
+  <div class="sub">三线各 3 关，从最底下那个人一层层往上打；每一句怎么接，四个选项里选。</div>
+</div>
 
-  <div class="header">
-    <span class="brand-tag">福麦斯 · 销售铁军一期 · M1</span>
-    <h1>SPIN 通关演练 · 角色链进阶</h1>
-    <p>从最底下那个人，一层一层往上打。上一关没过，不许见下一关的人。</p>
-    <div class="key-box">
-      <strong>通关规则</strong>：三条线各 3 关；每关按同一张 5 维打分表打分（满分 15）。<br>
-      <strong>过关线</strong>：总分 ≥ 12，且「③ P+I 挖痛」≥ 2 —— 痛没挖出来，一票否决。<br>
-      <strong>链条铁律</strong>：从第二关起，开场必须引用上一关客户的一句原话（“我上次跟您组里的 ×× 聊，他说……”）；见上一级时，话题要从<strong>技术细节</strong>升级成<strong>进度 / 资源 / 风险 / 钱</strong>。<br>
-      <strong>难度递增三件事</strong>：对方时间更短（10→5→3 分钟）｜话题更往上｜必须带着下一级的原话上去。
+<div class="wrap">
+
+  <div class="whobox">
+    <label>你的名字（成绩要粘到群里，先填一下）</label>
+    <input id="who" placeholder="例：王玥" />
+  </div>
+
+  <div class="linebar">
+<button class="lbtn" id="ltab-keyan" onclick="pickLine('keyan')">科研线</button>
+<button class="lbtn" id="ltab-gongye" onclick="pickLine('gongye')">工业线</button>
+<button class="lbtn" id="ltab-qudao" onclick="pickLine('qudao')">渠道线</button>
+  </div>
+
+<div class="line-root" id="line-keyan" style="display:none;">
+  <div class="card linehead">
+    <div class="lvtag">科研线 · 高校课题组</div>
+    <div class="sceneline">南京某医科大学 免疫研究所 · 流式平台</div>
+    <div class="brief">你＝福麦斯销售小王。这家实验室用流式测肿瘤浸润淋巴细胞，上机前要用磁珠先把 CD8⁺ T 细胞分出来。</div>
+  </div>
+  <div class="lv-block" id="lv-keyan-k1">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 1 关 · 见做实验的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">师</div>
+        <div class="persona-info">
+          <b>陈师姐 · 三年级博士生</b>
+          <div class="tagline">天天上机、天天抱怨，但说了不算的那个人</div>
+          <div class="chips"><span class="chip">赶样本</span><span class="chip">时间紧</span><span class="chip">怕耽误进度</span></div>
+        </div>
+      </div>
+      <div class="brief">第一次见面。她正赶一批样本，下午就要上机。她是你在这家实验室唯一的“内线”——所有真实问题都从她嘴里出来。</div>
+      
     </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">3 轮之内，让她说出一句她不敢在组会上提的麻烦事。别推产品，别报价。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-keyan-k1">
+    <div class="round-block" id="rb-keyan-k1-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">师</div>
+        <div class="bubble boss">你是福麦斯的？不好意思啊，我这边正赶一批流式样本，下午就得上机，咱们五分钟能说完吗？</div>
+      </div>
+      <div class="ask">她给了你五分钟。这五分钟怎么用？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k1-0-0" onclick="pick('keyan','k1',0,0)">
+          <span class="opt-label">A</span>五分钟够。我就问三个跟样本有关的问题——先问个最实际的：你们这批一次上机大概多少个样本？做完一套要多久？
+        </div>
+        <div class="option" id="opt-keyan-k1-0-1" onclick="pick('keyan','k1',0,1)">
+          <span class="opt-label">B</span>行，那我长话短说，流式抗体和磁珠分选我们都有，回头我把产品目录发您微信？
+        </div>
+        <div class="option" id="opt-keyan-k1-0-2" onclick="pick('keyan','k1',0,2)">
+          <span class="opt-label">C</span>我们性价比特别高，比您现在用的那家便宜，我先给您报个价吧？
+        </div>
+        <div class="option" id="opt-keyan-k1-0-3" onclick="pick('keyan','k1',0,3)">
+          <span class="opt-label">D</span>那我先加您微信，您忙完了再联系我。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-0-0">
+        <div class="bubble-row me"><div class="bubble me">五分钟够。我就问三个跟样本有关的问题——先问个最实际的：你们这批一次上机大概多少个样本？做完一套要多久？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">一次二三十个吧。流式那步跑大半天，磁珠分选我一般提前一晚做。</div></div>
+        <div class="coach"><b>教练点评：</b>标准的背景问题（S）：产量、流程、时间安排，客户张口就能答、又不涉及商业机密。更重要的是——她说了“分选提前一晚做”，这是后面所有痛点的入口。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-0-1">
+        <div class="bubble-row me"><div class="bubble me">行，那我长话短说，流式抗体和磁珠分选我们都有，回头我把产品目录发您微信？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">行吧，你发我。（低头继续配试剂，再没抬头）</div></div>
+        <div class="coach"><b>教练点评：</b>把“见面”用成了“发资料”。第一句话就把主导权交出去了——客户从此不再需要跟你说话。<span class="score-chip mid">+5 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：用背景问题（S）开口，让她先说事实，你再往下走。</div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-0-2">
+        <div class="bubble-row me"><div class="bubble me">我们性价比特别高，比您现在用的那家便宜，我先给您报个价吧？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">价格这个你找我们老师去。（转身进细胞房）</div></div>
+        <div class="coach"><b>教练点评：</b>对一个博士生报价，是把自己从“上门诊”降成了“发报价单”。她既不管钱，还会立刻把“这是个来卖东西的”这个标签贴在你身上。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：她不管钱，只受累。先问她受的累（S）。</div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-0-3">
+        <div class="bubble-row me"><div class="bubble me">那我先加您微信，您忙完了再联系我。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">行。（加上了，之后再没回过）</div></div>
+        <div class="coach"><b>教练点评：</b>缴械式开场。客户说忙，是在给你限定时间，不是在赶你走——真正被赶走的是那些没价值的问题。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：“给我五分钟”＋一个她张口就能答的背景问题。</div>
+      </div>
+      <button class="btn" id="btn-keyan-k1-0" onclick="nextRound('keyan','k1',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-keyan-k1-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">师</div>
+        <div class="bubble boss">（接上一句）一次二三十个吧。流式那步跑大半天，磁珠分选我一般提前一晚做。</div>
+      </div>
+      <div class="ask">她提到了“分选提前一晚做”。这是从背景（S）切向痛点（P）的唯一窗口，你怎么接？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k1-1-0" onclick="pick('keyan','k1',1,0)">
+          <span class="opt-label">A</span>提前一晚做——是流程长本身麻烦，还是分完细胞状态不好、第二天还得重来？
+        </div>
+        <div class="option" id="opt-keyan-k1-1-1" onclick="pick('keyan','k1',1,1)">
+          <span class="opt-label">B</span>我们是好几家品牌的代理，磁珠分选试剂盒都能拿到现货。
+        </div>
+        <div class="option" id="opt-keyan-k1-1-2" onclick="pick('keyan','k1',1,2)">
+          <span class="opt-label">C</span>这套方案的补偿您是自己调的吗？用的什么染料搭配？
+        </div>
+        <div class="option" id="opt-keyan-k1-1-3" onclick="pick('keyan','k1',1,3)">
+          <span class="opt-label">D</span>二三十个样本量挺大的，要不要考虑我们这边的打包套餐？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-1-0">
+        <div class="bubble-row me"><div class="bubble me">提前一晚做——是流程长本身麻烦，还是分完细胞状态不好、第二天还得重来？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">状态吧。磁珠洗完活率掉得厉害，第二天流式数据波动大。有一次整批数据对不上，我又补了一周。</div></div>
+        <div class="coach"><b>教练点评：</b>教科书级的难点问题（P）：不问“您满意吗”（答案永远是满意），而是给方向不给结论——流程长？还是状态差？让她自己挑一个承认。她果然挑了，而且给出了“补了一周”这么重的一句话。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们是好几家品牌的代理，磁珠分选试剂盒都能拿到现货。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">哦。（继续干活）</div></div>
+        <div class="coach"><b>教练点评：</b>她刚给了你一个通向痛点的窗口，你却把它当成推产品的台阶。记住顺序：先有痛，才轮到产品。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：问难点（P）——是流程麻烦，还是分完状态不好？</div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-1-2">
+        <div class="bubble-row me"><div class="bubble me">这套方案的补偿您是自己调的吗？用的什么染料搭配？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">自己调啊，染料是老师定的。（技术细节聊了两句，到此为止）</div></div>
+        <div class="coach"><b>教练点评：</b>这一句不坏，能显专业，但它仍然停在“技术闲聊”层面，没有让她承认任何一件让她为难的事。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-1-3">
+        <div class="bubble-row me"><div class="bubble me">二三十个样本量挺大的，要不要考虑我们这边的打包套餐？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">套餐的事我不懂，你跟老师聊吧。</div></div>
+        <div class="coach"><b>教练点评：</b>客户刚提到自己的工作量，你就顺势报价。量 ≠ 邀请报价，量只是给你算账的素材。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k1-1" onclick="nextRound('keyan','k1',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-keyan-k1-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">师</div>
+        <div class="bubble boss">状态吧。磁珠洗完活率掉得厉害，第二天流式数据波动大。有一次整批数据对不上，我又补了一周。</div>
+      </div>
+      <div class="ask">她已经说了“补了一周”。这时候最值钱的动作是什么？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k1-2-0" onclick="pick('keyan','k1',2,0)">
+          <span class="opt-label">A</span>重做一周——等于整个实验排期往后挪一周。要是这事赶在投稿前出，是不是连图都得重做？
+        </div>
+        <div class="option" id="opt-keyan-k1-2-1" onclick="pick('keyan','k1',2,1)">
+          <span class="opt-label">B</span>我们新款的试剂盒活率能到 90% 以上。
+        </div>
+        <div class="option" id="opt-keyan-k1-2-2" onclick="pick('keyan','k1',2,2)">
+          <span class="opt-label">C</span>老师知道这事吗？
+        </div>
+        <div class="option" id="opt-keyan-k1-2-3" onclick="pick('keyan','k1',2,3)">
+          <span class="opt-label">D</span>这行本来就麻烦，大家都是这么过来的。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-2-0">
+        <div class="bubble-row me"><div class="bubble me">重做一周——等于整个实验排期往后挪一周。要是这事赶在投稿前出，是不是连图都得重做？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">……上个月就是，最后师兄的图重出了一遍，老师脸都绿了。这种事我们也不太敢在组会上说，说了像自己操作有问题。</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）：把“一周”翻译成后果——排期、投稿、师兄的图、老师的脸色。更关键的是最后那句：她承认这事不敢在组会上提。这句话就是你明天去见 PI 的通行证。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-2-1">
+        <div class="bubble-row me"><div class="bubble me">我们新款的试剂盒活率能到 90% 以上。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">是吗，那挺好。（没有下文）</div></div>
+        <div class="coach"><b>教练点评：</b>痛刚露出一半你就急着上药。客户会把这当成一句广告，而不是一句解决方案。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：先放大后果（I）——重做一周意味着什么？</div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-2-2">
+        <div class="bubble-row me"><div class="bubble me">老师知道这事吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">应该不知道吧，我们一般也不说。</div></div>
+        <div class="coach"><b>教练点评：</b>方向对了，但问得太硬：学生最怕的就是“你去告老师”。换成问后果（I），她会主动把话说到老师那一步。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k1-2-3">
+        <div class="bubble-row me"><div class="bubble me">这行本来就麻烦，大家都是这么过来的。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">师</div><div class="bubble boss">嗯。（对话结束）</div></div>
+        <div class="coach"><b>教练点评：</b>共情没有错，但“习惯就好”等于替客户把痛抹平了。抹平了痛，产品就没人要。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k1-2" onclick="nextRound('keyan','k1',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-keyan-k1"></div>
   </div>
+  <div class="lv-block locked" id="lv-keyan-k2">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 2 关 · 见课题负责人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">李</div>
+        <div class="persona-info">
+          <b>李教授 · 课题组长</b>
+          <div class="tagline">批经费、担进度、最怕学生白干的那个人</div>
+          <div class="chips"><span class="chip">十分钟</span><span class="chip">经费紧</span><span class="chip">讨厌推销</span></div>
+        </div>
+      </div>
+      <div class="brief">拿着上一关从做实验的人嘴里得到的东西来见他。他给了你十分钟，明确说别念产品册。你手里有一张牌：他学生那句原话。</div>
+      <div class="memo"><b>上一关留下的那句话：</b>上一关，陈师姐说：&lt;磁珠洗完活率掉得厉害，第二天流式数据波动大，有一次整批数据作废，又补了一周&gt;</div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">用学生的话作桥，把“试剂不好用”变成“你的课题被拖了多久”。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-keyan-k2">
+    <div class="round-block" id="rb-keyan-k2-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">李</div>
+        <div class="bubble boss">小王是吧？我这十分钟空档，你别给我念产品册。我们组经费紧张，现在用的东西也凑合。</div>
+      </div>
+      <div class="ask">开场第一句，决定这十分钟还有没有第二次。</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k2-0-0" onclick="pick('keyan','k2',0,0)">
+          <span class="opt-label">A</span>不念东西。我上周碰巧遇到您组里做磁珠分选的同学，她说了一句我记住了——“分完细胞活率掉得厉害，第二天流式数据波动大，有一次整批数据作废，又补了一周。”李教授，这种事在您组里是偶发还是常事？
+        </div>
+        <div class="option" id="opt-keyan-k2-0-1" onclick="pick('keyan','k2',0,1)">
+          <span class="opt-label">B</span>理解，那我就说一条：我们价格比您现在用的便宜。
+        </div>
+        <div class="option" id="opt-keyan-k2-0-2" onclick="pick('keyan','k2',0,2)">
+          <span class="opt-label">C</span>我们产品线很全，流式抗体、磁珠、缓冲液都有，我给您介绍一下？
+        </div>
+        <div class="option" id="opt-keyan-k2-0-3" onclick="pick('keyan','k2',0,3)">
+          <span class="opt-label">D</span>您组里做流式分选的同学有几个？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-0-0">
+        <div class="bubble-row me"><div class="bubble me">不念东西。我上周碰巧遇到您组里做磁珠分选的同学，她说了一句我记住了——“分完细胞活率掉得厉害，第二天流式数据波动大，有一次整批数据作废，又补了一周。”李教授，这种事在您组里是偶发还是常事？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">……（放下手里的笔）你怎么连这个都知道。常事倒不至于，但每学期总有那么一两次。学生嘛，做完坏她也说不清原因。</div></div>
+        <div class="coach"><b>教练点评：</b>这是整条角色链里最值钱的一句话：引用上一关那个人的原话。PI 立刻明白你不是在推销，而是真的走进过他的实验室。更重要的是，你把一个技术小麻烦递到了“负责人”面前。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-0-1">
+        <div class="bubble-row me"><div class="bubble me">理解，那我就说一条：我们价格比您现在用的便宜。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">经费紧不等于图便宜。行了，我知道了。（看手机）</div></div>
+        <div class="coach"><b>教练点评：</b>PI 级别的客户，价格从来排不进前三。他把“经费紧”说出口，是在告诉你“别浪费我时间”，不是在邀请你打折。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-0-2">
+        <div class="bubble-row me"><div class="bubble me">我们产品线很全，流式抗体、磁珠、缓冲液都有，我给您介绍一下？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">不用介绍了，这种目录我这有一摞。</div></div>
+        <div class="coach"><b>教练点评：</b>他第一句话就是“别念产品册”，你第二句就念了。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-0-3">
+        <div class="bubble-row me"><div class="bubble me">您组里做流式分选的同学有几个？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">三四个吧。你问这个干嘛？</div></div>
+        <div class="coach"><b>教练点评：</b>是个背景问题，也算安全。但你把好不容易拿到的那张牌（师姐的原话）捏在手里没打，白来一趟。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k2-0" onclick="nextRound('keyan','k2',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-keyan-k2-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">李</div>
+        <div class="bubble boss">常事倒不至于，但每学期总有那么一两次。学生嘛，做完坏她也说不清原因。</div>
+      </div>
+      <div class="ask">他说“一两次”。这个数字在很多人耳朵里等于“没事”。你怎么把它变成有事？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k2-1-0" onclick="pick('keyan','k2',1,0)">
+          <span class="opt-label">A</span>一两次听着不多，但我们粗算一下：一次重做＝学生一周 + 一批耗材 + 一轮机时。更要紧的是——坏在哪一步到现在没人给过准信，下次还会坏。这笔账您之前算过吗？
+        </div>
+        <div class="option" id="opt-keyan-k2-1-1" onclick="pick('keyan','k2',1,1)">
+          <span class="opt-label">B</span>我们技术支持很到位，出了问题随叫随到。
+        </div>
+        <div class="option" id="opt-keyan-k2-1-2" onclick="pick('keyan','k2',1,2)">
+          <span class="opt-label">C</span>要不要换个品牌试试？我们有试用装。
+        </div>
+        <div class="option" id="opt-keyan-k2-1-3" onclick="pick('keyan','k2',1,3)">
+          <span class="opt-label">D</span>这事儿主要是操作、试剂，还是设备的问题？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-1-0">
+        <div class="bubble-row me"><div class="bubble me">一两次听着不多，但我们粗算一下：一次重做＝学生一周 + 一批耗材 + 一轮机时。更要紧的是——坏在哪一步到现在没人给过准信，下次还会坏。这笔账您之前算过吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">倒是没这么算过一笔账。学生的时间是最贵的，也是最容易被忽略的。现在什么都讲进度，坏一次真的挺肉疼。</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）的精髓：替客户把他没算过的账算出来——不是吓唬，是让他第一次看清全貌。他还出现了最关键的一个词：“没法子预防”。这就是后面给他方案时要承诺的东西。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们技术支持很到位，出了问题随叫随到。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">是吗，那挺好。（等着你说下一句）</div></div>
+        <div class="coach"><b>教练点评：</b>他自己都还没觉得这是个问题，你的承诺就一文不值。顺序：先让他承认痛，再谈你能做什么。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：把“一两次”换算成学生一周＋耗材＋机时（I）。</div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-1-2">
+        <div class="bubble-row me"><div class="bubble me">要不要换个品牌试试？我们有试用装。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">换牌子这种事得慎重，不是试用装能解决的。</div></div>
+        <div class="coach"><b>教练点评：</b>跳过了 I 直接给方案。客户的账还没算清楚，你先掏出了药。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-1-3">
+        <div class="bubble-row me"><div class="bubble me">这事儿主要是操作、试剂，还是设备的问题？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">说不清，没人查过。</div></div>
+        <div class="coach"><b>教练点评：</b>问归因不算错，但问归因容易让 PI 护学生（他会本能地答“操作”），把路堵死。先算账，再归因。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k2-1" onclick="nextRound('keyan','k2',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-keyan-k2-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">李</div>
+        <div class="bubble boss">倒是没这么算过一笔账。学生的时间是最贵的，也是最容易被忽略的。</div>
+      </div>
+      <div class="ask">他已经承认了。最后一步，怎么让他自己说出“值得试”？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k2-2-0" onclick="pick('keyan','k2',2,0)">
+          <span class="opt-label">A</span>所以我想问的不是您要不要换牌子——如果下一次不再坏，或者坏了能立刻查到是哪儿的问题，省下来的那一周时间和那一批耗材，对您现在的课题排期值多少钱？
+        </div>
+        <div class="option" id="opt-keyan-k2-2-1" onclick="pick('keyan','k2',2,1)">
+          <span class="opt-label">B</span>那我给您打个折？
+        </div>
+        <div class="option" id="opt-keyan-k2-2-2" onclick="pick('keyan','k2',2,2)">
+          <span class="opt-label">C</span>那您希望供货方做到什么程度，您才放心？
+        </div>
+        <div class="option" id="opt-keyan-k2-2-3" onclick="pick('keyan','k2',2,3)">
+          <span class="opt-label">D</span>我们客户名单里有南京好几个大课题组，都换成我们了。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-2-0">
+        <div class="bubble-row me"><div class="bubble me">所以我想问的不是您要不要换牌子——如果下一次不再坏，或者坏了能立刻查到是哪儿的问题，省下来的那一周时间和那一批耗材，对您现在的课题排期值多少钱？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">值不少。你要是能把“不再坏”这三个字讲明白，我可以让学生在你这儿试一批看看。</div></div>
+        <div class="coach"><b>教练点评：</b>需求效益问题（N）：不问“要不要买”，而是让客户自己把解决方案的好处说出来、把价值算出来。这笔账是他自己算出来的，比你说的任何一句广告都有用。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-2-1">
+        <div class="bubble-row me"><div class="bubble me">那我给您打个折？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">……（气氛瞬间回到报价现场）</div></div>
+        <div class="coach"><b>教练点评：</b>客户刚刚在谈“学生的时间”，你在谈打折。这是两条平行线。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-2-2">
+        <div class="bubble-row me"><div class="bubble me">那您希望供货方做到什么程度，您才放心？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">起码别让我学生白干活呗。</div></div>
+        <div class="coach"><b>教练点评：</b>方向接近 N，但太空——客户只会回你一句口号。要把好处挂钩在他刚才那笔账上（一周＋耗材＋排期）。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k2-2-3">
+        <div class="bubble-row me"><div class="bubble me">我们客户名单里有南京好几个大课题组，都换成我们了。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">李</div><div class="bubble boss">别的组是别的组。</div></div>
+        <div class="coach"><b>教练点评：</b>证据（E）要在 FABE 那一棒用，SPIN 这一棒先别甩名单。他现在要的是“这跟我有什么关系”，不是“别人用了没有”。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k2-2" onclick="nextRound('keyan','k2',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-keyan-k2"></div>
+  </div>
+  <div class="lv-block locked" id="lv-keyan-k3">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 3 关 · 见管资源的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">平</div>
+        <div class="persona-info">
+          <b>平台主任 · 设备处</b>
+          <div class="tagline">管准入、管流程、管报销，不出钱也不拦钱的那个人</div>
+          <div class="chips"><span class="chip">讲规矩</span><span class="chip">怕出事</span><span class="chip">一对一很难约</span></div>
+        </div>
+      </div>
+      <div class="brief">技术那边 PI 点了头，但真要把东西买进来，还得过平台这一关。这位主任不见得懂流式，但他决定了你多长时间能进校的门。</div>
+      
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">让他自己说出“你们这种耗材供应商，我最怕什么”，然后给他一个可执行的下一步。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-keyan-k3">
+    <div class="round-block" id="rb-keyan-k3-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">平</div>
+        <div class="bubble boss">第一次见面。学校招标库里有你们吗？</div>
+      </div>
+      <div class="ask">他把门关了一半。第一句怎么接？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k3-0-0" onclick="pick('keyan','k3',0,0)">
+          <span class="opt-label">A</span>在库里的是我们代理的其中一个牌子。不过我今天不是来要入围名额的——先问一句：像流式抗体这种耗材，课题组自己买和走平台统一，一般走哪条路更快？
+        </div>
+        <div class="option" id="opt-keyan-k3-0-1" onclick="pick('keyan','k3',0,1)">
+          <span class="opt-label">B</span>我们希望进你们库，您看需要准备哪些材料？
+        </div>
+        <div class="option" id="opt-keyan-k3-0-2" onclick="pick('keyan','k3',0,2)">
+          <span class="opt-label">C</span>学校平台的招标周期一般多久？
+        </div>
+        <div class="option" id="opt-keyan-k3-0-3" onclick="pick('keyan','k3',0,3)">
+          <span class="opt-label">D</span>我们全系列产品线都很全，可以覆盖平台所有实验室的需求。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-0-0">
+        <div class="bubble-row me"><div class="bubble me">在库里的是我们代理的其中一个牌子。不过我今天不是来要入围名额的——先问一句：像流式抗体这种耗材，课题组自己买和走平台统一，一般走哪条路更快？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">大件设备走平台招标，耗材一般是课题组自己采，超过额度要签合同。你倒是先问流程。</div></div>
+        <div class="coach"><b>教练点评：</b>先承认现状、再问流程（S），同时把自己最想要的那个东西（入围）先放下。越急着要名额，对方越觉得你只想要名额。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们希望进你们库，您看需要准备哪些材料？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">报名的公司不少，你们按招标公告来就行。</div></div>
+        <div class="coach"><b>教练点评：</b>还没搞清楚规矩就递材料，等于告诉对方：我只关心我能不能进，不关心你的流程。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-0-2">
+        <div class="bubble-row me"><div class="bubble me">学校平台的招标周期一般多久？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">一年两次，看财政的节奏。</div></div>
+        <div class="coach"><b>教练点评：</b>问周期没错，但这个信息打个电话也能问到——问了也拿不到任何别人没有的优势。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-0-3">
+        <div class="bubble-row me"><div class="bubble me">我们全系列产品线都很全，可以覆盖平台所有实验室的需求。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">覆盖是好事，具体哪几个品种？</div></div>
+        <div class="coach"><b>教练点评：</b>对“管流程的人”讲产品线，是最常见的话不投机。他关心的是：出事找谁、报销怎么走、批次变了谁通知。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k3-0" onclick="nextRound('keyan','k3',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-keyan-k3-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">平</div>
+        <div class="bubble boss">大件设备走平台招标，耗材一般是课题组自己采，超过额度要签合同。你倒是先问流程。</div>
+      </div>
+      <div class="ask">他告诉你路怎么走。接下来要挖的是——这条路上哪里卡人？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k3-1-0" onclick="pick('keyan','k3',1,0)">
+          <span class="opt-label">A</span>那课题组自己采这条路，有没有让您头疼的地方？比如报销、发票、批次万一出问题找谁。
+        </div>
+        <div class="option" id="opt-keyan-k3-1-1" onclick="pick('keyan','k3',1,1)">
+          <span class="opt-label">B</span>我们开票方便，随货就能给。
+        </div>
+        <div class="option" id="opt-keyan-k3-1-2" onclick="pick('keyan','k3',1,2)">
+          <span class="opt-label">C</span>额度大概多少以上要签合同？
+        </div>
+        <div class="option" id="opt-keyan-k3-1-3" onclick="pick('keyan','k3',1,3)">
+          <span class="opt-label">D</span>您要是引进我们，我能保证最低价。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-1-0">
+        <div class="bubble-row me"><div class="bubble me">那课题组自己采这条路，有没有让您头疼的地方？比如报销、发票、批次万一出问题找谁。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">头疼的多了。报销是一回事，最怕批次悄悄换了没人通知实验室，前后数据不可比，最后账算到平台头上。还有——你们代理商换人换得太勤，出了事不知道找谁。</div></div>
+        <div class="coach"><b>教练点评：</b>难点问题（P）给方向不给结论：报销、批次、找谁。他自己挑了最重的两个说，而且这两个恰好都不是价格问题——这一点一定要记住：流程岗位的第一个痛点永远是“责任能不能追到人”。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们开票方便，随货就能给。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">开发票谁不会。</div></div>
+        <div class="coach"><b>教练点评：</b>他还没说痛在哪，你先递一块膏药。他的痛根本不在开票。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：问难点（P）——报销、批次、找谁。</div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-1-2">
+        <div class="bubble-row me"><div class="bubble me">额度大概多少以上要签合同？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">你们那种小金额用不着。</div></div>
+        <div class="coach"><b>教练点评：</b>继续问背景，安全但没进展。这一步该转型(Contextile)到痛点了。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-1-3">
+        <div class="bubble-row me"><div class="bubble me">您要是引进我们，我能保证最低价。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">价格最低不代表省心。</div></div>
+        <div class="coach"><b>教练点评：</b>平台主任被考核的是“别出事”，不是“省钱”。用价格打他，等于往反方向使劲。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k3-1" onclick="nextRound('keyan','k3',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-keyan-k3-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">平</div>
+        <div class="bubble boss">最怕批次悄悄换了没人通知实验室，前后数据不可比，最后账算到平台头上。你们代理商还老换人。</div>
+      </div>
+      <div class="ask">两个痛点都摊开了。最后一棒怎么落？</div>
+      <div class="options">
+        <div class="option" id="opt-keyan-k3-2-0" onclick="pick('keyan','k3',2,0)">
+          <span class="opt-label">A</span>所以您真正要的不是最低价，是两件事：批次有变化提前通知、出了问题找得到一个固定的人。我要是能把这两条做成书面的、随货可查的，值不值得先从一个课题组的一次采购开始试？
+        </div>
+        <div class="option" id="opt-keyan-k3-2-1" onclick="pick('keyan','k3',2,1)">
+          <span class="opt-label">B</span>我们公司稳定，不会随便换人。
+        </div>
+        <div class="option" id="opt-keyan-k3-2-2" onclick="pick('keyan','k3',2,2)">
+          <span class="opt-label">C</span>价格方面都好商量。
+        </div>
+        <div class="option" id="opt-keyan-k3-2-3" onclick="pick('keyan','k3',2,3)">
+          <span class="opt-label">D</span>那我先给您送两批试用？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-2-0">
+        <div class="bubble-row me"><div class="bubble me">所以您真正要的不是最低价，是两件事：批次有变化提前通知、出了问题找得到一个固定的人。我要是能把这两条做成书面的、随货可查的，值不值得先从一个课题组的一次采购开始试？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">那你可以把承诺写成书面东西给我，我们先在一家实验室走一次。</div></div>
+        <div class="coach"><b>教练点评：</b>需求效益（N）+ 明确的下一步。把客户说的两个痛点原词接回来（“批次通知”“固定对接人”），再加一个他容易点头的最小动作（一家实验室、一次采购）。这一单从“谈”进入了“办”。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-2-1">
+        <div class="bubble-row me"><div class="bubble me">我们公司稳定，不会随便换人。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">你们都这么说。</div></div>
+        <div class="coach"><b>教练点评：</b>空头承诺，没有载体。要落成“书面的、随货可查的”，落到纸面才算数。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-2-2">
+        <div class="bubble-row me"><div class="bubble me">价格方面都好商量。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">我不是在跟你谈价格。</div></div>
+        <div class="coach"><b>教练点评：</b>第三次踩价格。有些人一辈子只学会一个动作，就是让价。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-keyan-k3-2-3">
+        <div class="bubble-row me"><div class="bubble me">那我先给您送两批试用？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">平</div><div class="bubble boss">试用品进平台要走登记，麻烦。</div></div>
+        <div class="coach"><b>教练点评：</b>动作给得太早也太重，而且没接住他刚说的两个痛点。先把承诺说出来，再谈怎么落地。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-keyan-k3-2" onclick="nextRound('keyan','k3',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-keyan-k3"></div>
+  </div>
+  <div class="card center-card">
+    <div class="center-title">本线战绩</div>
+    <div class="center-body" id="center-keyan">还没开打。</div>
+  </div>
+</div>
+<div class="line-root" id="line-gongye" style="display:none;">
+  <div class="card linehead">
+    <div class="lvtag">工业线 · 细胞治疗企业</div>
+    <div class="sceneline">苏州某细胞治疗公司 · 工艺开发部</div>
+    <div class="brief">你＝福麦斯销售小张。这家公司做 CD19 CAR-T，磁珠分选在工艺前端，一头连着产能，一头连着 QA 的偏差记录。</div>
+  </div>
+  <div class="lv-block" id="lv-gongye-g1">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 1 关 · 见做工艺的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">周</div>
+        <div class="persona-info">
+          <b>小周 · 工艺工程师</b>
+          <div class="tagline">天天跟参数较劲、但一句话决定不了供应商的人</div>
+          <div class="chips"><span class="chip">技术自尊</span><span class="chip">忙</span><span class="chip">说了不算</span></div>
+        </div>
+      </div>
+      <div class="brief">第一次进工艺部。他已经见过太多供应商，第一反应是把你推给采购。</div>
+      
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">别被他推走。3 轮之内让他承认一件他自己也没辙的事。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-gongye-g1">
+    <div class="round-block" id="rb-gongye-g1-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">周</div>
+        <div class="bubble boss">我们这边工艺正跑着，你现在介绍的这些东西我说了不算，你去找我们采购吧。</div>
+      </div>
+      <div class="ask">他在赶你走。你的第一句？</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g1-0-0" onclick="pick('gongye','g1',0,0)">
+          <span class="opt-label">A</span>我知道采购管下单，我今天不谈商务。我就问一句技术上的：你们磁珠分选这一步，是放在哪个工序节点做的？
+        </div>
+        <div class="option" id="opt-gongye-g1-0-1" onclick="pick('gongye','g1',0,1)">
+          <span class="opt-label">B</span>那我还是得跟您先把产品讲一遍，不然采购也听不懂。
+        </div>
+        <div class="option" id="opt-gongye-g1-0-2" onclick="pick('gongye','g1',0,2)">
+          <span class="opt-label">C</span>要不这样，我把资料发您，您帮我转给采购？
+        </div>
+        <div class="option" id="opt-gongye-g1-0-3" onclick="pick('gongye','g1',0,3)">
+          <span class="opt-label">D</span>你们做的是哪个靶点的细胞治疗？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-0-0">
+        <div class="bubble-row me"><div class="bubble me">我知道采购管下单，我今天不谈商务。我就问一句技术上的：你们磁珠分选这一步，是放在哪个工序节点做的？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">采血之后、转染之前。一次性处理几百毫升。</div></div>
+        <div class="coach"><b>教练点评：</b>背景问题（S）+ 先撇清“我不是来卖的”。技术岗最在乎的是被当成行家对待，一句“我就问一句技术上的”，比十句客套管用。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-0-1">
+        <div class="bubble-row me"><div class="bubble me">那我还是得跟您先把产品讲一遍，不然采购也听不懂。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">那你找机会吧，我这边马上开会。</div></div>
+        <div class="coach"><b>教练点评：</b>这是硬闯。他说“去找采购”，你偏要对着他推，等于当面否定他给你的路。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：先退一步（“不谈商务”），再问一个他的专业懂的问题（S）。</div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-0-2">
+        <div class="bubble-row me"><div class="bubble me">要不这样，我把资料发您，您帮我转给采购？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">行，你发我邮箱。（从此没有下文）</div></div>
+        <div class="coach"><b>教练点评：</b>把自己降级成一封邮件。资料到了采购手里，你连这家公司的门都还没进去。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-0-3">
+        <div class="bubble-row me"><div class="bubble me">你们做的是哪个靶点的细胞治疗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">CD19 CAR-T。</div></div>
+        <div class="coach"><b>教练点评：</b>能接上话，但问得太泛——这种问题百度也能查到，显不出你进过车间。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g1-0" onclick="nextRound('gongye','g1',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-gongye-g1-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">周</div>
+        <div class="bubble boss">采血之后、转染之前。一次性处理几百毫升。</div>
+      </div>
+      <div class="ask">他给了你规模。这一步能不能挖到痛点，看你怎么问。</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g1-1-0" onclick="pick('gongye','g1',1,0)">
+          <span class="opt-label">A</span>几百毫升这个量，放大之后有没有遇到过批间差异带来的麻烦？比如这一批回收率挺好，下一批就得重新调参数。
+        </div>
+        <div class="option" id="opt-gongye-g1-1-1" onclick="pick('gongye','g1',1,1)">
+          <span class="opt-label">B</span>我们产品在这个处理量级的应用很成熟。
+        </div>
+        <div class="option" id="opt-gongye-g1-1-2" onclick="pick('gongye','g1',1,2)">
+          <span class="opt-label">C</span>你们成本压力大吗？
+        </div>
+        <div class="option" id="opt-gongye-g1-1-3" onclick="pick('gongye','g1',1,3)">
+          <span class="opt-label">D</span>你们现在用的是哪家的？用了多久了？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-1-0">
+        <div class="bubble-row me"><div class="bubble me">几百毫升这个量，放大之后有没有遇到过批间差异带来的麻烦？比如这一批回收率挺好，下一批就得重新调参数。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">去年有一批换过来之后，回收率掉了十几个点，工艺这边重新调了快一个月。</div></div>
+        <div class="coach"><b>教练点评：</b>难点问题（P）的高级用法：不问“您有没有问题”，而是把工业客户最敏感的那个词挑出来——“批间差异”。他立刻接上了，而且给了一个可以量化的后果：一个月。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们产品在这个处理量级的应用很成熟。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">是吗。（无反馈）</div></div>
+        <div class="coach"><b>教练点评：</b>他说“几百毫升”，是在报参数，不是在邀请你介绍成熟度。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：问批间差异（P）——换了批次，回收率稳不稳？</div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-1-2">
+        <div class="bubble-row me"><div class="bubble me">你们成本压力大吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">那是采购的事。</div></div>
+        <div class="coach"><b>教练点评：</b>对着一线工程师问成本，问错了人。钱的事要等见到拍板的人再问。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-1-3">
+        <div class="bubble-row me"><div class="bubble me">你们现在用的是哪家的？用了多久了？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">进口那家，三年多了吧。</div></div>
+        <div class="coach"><b>教练点评：</b>标准的背景问题，安全。但这一句在这一刻偏保守——他已经把话题推到“几百毫升”了，正适合顺势进痛点（P）。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g1-1" onclick="nextRound('gongye','g1',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-gongye-g1-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">周</div>
+        <div class="bubble boss">去年有一批换过来之后，回收率掉了十几个点，工艺这边重新调了快一个月。</div>
+      </div>
+      <div class="ask">“重新调了一个月”——这句话的重量，他还自己没意识到。</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g1-2-0" onclick="pick('gongye','g1',2,0)">
+          <span class="opt-label">A</span>调一个月，等于一次生产排期让位。要是那批正好赶上给医院送样的交付节点呢？
+        </div>
+        <div class="option" id="opt-gongye-g1-2-1" onclick="pick('gongye','g1',2,1)">
+          <span class="opt-label">B</span>换哪家或多或少都会有点波动。
+        </div>
+        <div class="option" id="opt-gongye-g1-2-2" onclick="pick('gongye','g1',2,2)">
+          <span class="opt-label">C</span>我们家的批次一致性控制得特别好。
+        </div>
+        <div class="option" id="opt-gongye-g1-2-3" onclick="pick('gongye','g1',2,3)">
+          <span class="opt-label">D</span>QA 那边有记录这个问题吗？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-2-0">
+        <div class="bubble-row me"><div class="bubble me">调一个月，等于一次生产排期让位。要是那批正好赶上给医院送样的交付节点呢？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">去年底那次就这么赶上的，交付往后拖了，工艺这边被骂惨了。QA 也开了偏差。</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）：把技术波动翻译成排期、交付节点、被追责。更值钱的是他顺手带出来两个字——“QA”。那扇门，本来你还进不去。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-2-1">
+        <div class="bubble-row me"><div class="bubble me">换哪家或多或少都会有点波动。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">嗯，是吧。（话题结束）</div></div>
+        <div class="coach"><b>教练点评：</b>替客户把问题正常化。痛被你说没了，后面没人再需要用你的东西。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-2-2">
+        <div class="bubble-row me"><div class="bubble me">我们家的批次一致性控制得特别好。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">是吗，有数据吗？</div></div>
+        <div class="coach"><b>教练点评：</b>痛刚露出来就急着递药。而且他问“有数据吗”的时候，你的证据还没准备好。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g1-2-3">
+        <div class="bubble-row me"><div class="bubble me">QA 那边有记录这个问题吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">周</div><div class="bubble boss">开过偏差。具体我不清楚，你去问 QA。</div></div>
+        <div class="coach"><b>教练点评：</b>问对了部门，但问早了：账还没算清，就算转到 QA 也只是一句“开了偏差”，拿不到分量。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g1-2" onclick="nextRound('gongye','g1',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-gongye-g1"></div>
+  </div>
+  <div class="lv-block locked" id="lv-gongye-g2">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 2 关 · 见把控合规的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">孙</div>
+        <div class="persona-info">
+          <b>孙经理 · QA 主管</b>
+          <div class="tagline">批文件、批偏差、能一票否决供应商的人</div>
+          <div class="chips"><span class="chip">讲文件</span><span class="chip">怕审计</span><span class="chip">不认口头承诺</span></div>
+        </div>
+      </div>
+      <div class="brief">拿着上一关工艺同事那句话来见 QA。他是把关的人：不一定能让他买，但他一句话能让你别想买。</div>
+      <div class="memo"><b>上一关留下的那句话：</b>上一关，工艺的小周说：&lt;去年换了一批试剂，回收率掉了十几个点，工艺重新调了快一个月&gt;</div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">把“工艺重调一个月”翻译成 QA 的工作量：一次偏差、一次 CAPA、一次向客户解释。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-gongye-g2">
+    <div class="round-block" id="rb-gongye-g2-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">孙</div>
+        <div class="bubble boss">你是福麦斯的？我们供应商准入很严，先说清楚，我们不会随便换供应商。</div>
+      </div>
+      <div class="ask">开场即封城。一句话怎么破？</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g2-0-0" onclick="pick('gongye','g2',0,0)">
+          <span class="opt-label">A</span>不急着让您换。前两天跟你们工艺的同事聊，他说去年有一批试剂换过来之后，回收率掉了十几个点，工艺重新调了快一个月。我想问的是：这件事在 QA 这边，算不算一次偏差？
+        </div>
+        <div class="option" id="opt-gongye-g2-0-1" onclick="pick('gongye','g2',0,1)">
+          <span class="opt-label">B</span>我们各项资质齐全，ISO、医疗器械备案都有。
+        </div>
+        <div class="option" id="opt-gongye-g2-0-2" onclick="pick('gongye','g2',0,2)">
+          <span class="opt-label">C</span>我们的 QA 文件可以随货提供，随时配合。
+        </div>
+        <div class="option" id="opt-gongye-g2-0-3" onclick="pick('gongye','g2',0,3)">
+          <span class="opt-label">D</span>你们供应商准入都要哪些文件？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-0-0">
+        <div class="bubble-row me"><div class="bubble me">不急着让您换。前两天跟你们工艺的同事聊，他说去年有一批试剂换过来之后，回收率掉了十几个点，工艺重新调了快一个月。我想问的是：这件事在 QA 这边，算不算一次偏差？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">算。回收率波动超过内控线就必须开偏差，还要追溯到这一批物料。这是规矩。</div></div>
+        <div class="coach"><b>教练点评：</b>引用上一关那个人的原话 + 一个 QA 听得懂的词（偏差）。你瞬间从“推销员”变成“了解我们体系的人”。把关者最大的安全感来自：你懂我的规矩。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们各项资质齐全，ISO、医疗器械备案都有。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">资质是门槛，不是理由。</div></div>
+        <div class="coach"><b>教练点评：</b>文件要到第 6 棒（FABE 的 E）才有用，在 SPIN 阶段甩文件，只会被当成套路。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：先引用工艺那句原话，问它在这里算不算偏差。</div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-0-2">
+        <div class="bubble-row me"><div class="bubble me">我们的 QA 文件可以随货提供，随时配合。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">配合两个字说得很轻。</div></div>
+        <div class="coach"><b>教练点评：</b>“配合”“随时”都是没有成本的承诺。QA 只认写进流程的东西。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-0-3">
+        <div class="bubble-row me"><div class="bubble me">你们供应商准入都要哪些文件？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">资料清单我可以让采购发你。</div></div>
+        <div class="coach"><b>教练点评：</b>问清单不错，但清单是公开信息——这一步该做的是让他意识到：现在这家供应商正在给他制造额外工作。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g2-0" onclick="nextRound('gongye','g2',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-gongye-g2-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">孙</div>
+        <div class="bubble boss">算。回收率波动超过内控线就必须开偏差，还要追溯到这一批物料。这是规矩。</div>
+      </div>
+      <div class="ask">他承认了“有规矩”。但规矩背后的代价，他还没算过。</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g2-1-0" onclick="pick('gongye','g2',1,0)">
+          <span class="opt-label">A</span>那顺着往下想：下一批如果再出现这种波动，不光工艺要重调，QA 还得跟着开一次偏差、走一次 CAPA、说不定还要跟客户解释。这一套动作加起来，比那盒试剂本身贵得多吧？
+        </div>
+        <div class="option" id="opt-gongye-g2-1-1" onclick="pick('gongye','g2',1,1)">
+          <span class="opt-label">B</span>我们批次一致性控制最严。
+        </div>
+        <div class="option" id="opt-gongye-g2-1-2" onclick="pick('gongye','g2',1,2)">
+          <span class="opt-label">C</span>你们追溯要查到哪一级？COA 还是原产地？
+        </div>
+        <div class="option" id="opt-gongye-g2-1-3" onclick="pick('gongye','g2',1,3)">
+          <span class="opt-label">D</span>要不要看看我们的 COA 模板？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-1-0">
+        <div class="bubble-row me"><div class="bubble me">那顺着往下想：下一批如果再出现这种波动，不光工艺要重调，QA 还得跟着开一次偏差、走一次 CAPA、说不定还要跟客户解释。这一套动作加起来，比那盒试剂本身贵得多吧？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">确实。一次偏差的工作量，从根因分析到 CAPA 关闭，最少两三个人周。而且现在客户审计越来越严，这种记录是不好看的。</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）打的是“把关者”最疼的地方：不是钱，是工作量 + 被审计时的难看。他自己把账算到了“两三个人周”，这比你说一百遍有用。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们批次一致性控制最严。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">最严是多严？</div></div>
+        <div class="coach"><b>教练点评：</b>形容词对 QA 无效：没有数值、没有方法、没有记录，全等于零。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-1-2">
+        <div class="bubble-row me"><div class="bubble me">你们追溯要查到哪一级？COA 还是原产地？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">至少要能追到生产商那一批。</div></div>
+        <div class="coach"><b>教练点评：</b>问到了细节，说明你懂行。但这一步应该先让他意识到痛的代价，细节留到 FABE 那一棒的 E 去问。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-1-3">
+        <div class="bubble-row me"><div class="bubble me">要不要看看我们的 COA 模板？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">模板到处都有，我先看你们的偏差管理。</div></div>
+        <div class="coach"><b>教练点评：</b>连痛点都没挖到就递文件，QA 会把你归入“又一个只会发资料的供应商”。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g2-1" onclick="nextRound('gongye','g2',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-gongye-g2-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">孙</div>
+        <div class="bubble boss">确实。一次偏差的工作量，从根因分析到 CAPA 关闭，最少两三个人周。客户审计的时候这种记录也不好看。</div>
+      </div>
+      <div class="ask">账算清了。怎么把“我很贵”变成“我要你们”？</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g2-2-0" onclick="pick('gongye','g2',2,0)">
+          <span class="opt-label">A</span>所以如果我能把“批次变更提前告知 + 全套随货文件 + 换批前的工艺验证支持”这三样做成固定的机制，让 QA 不用事后追——这对您今年的内控和审计，算不算解决了一个实际问题？
+        </div>
+        <div class="option" id="opt-gongye-g2-2-1" onclick="pick('gongye','g2',2,1)">
+          <span class="opt-label">B</span>那我们就这么说定了？
+        </div>
+        <div class="option" id="opt-gongye-g2-2-2" onclick="pick('gongye','g2',2,2)">
+          <span class="opt-label">C</span>您希望我们提供哪些文件？
+        </div>
+        <div class="option" id="opt-gongye-g2-2-3" onclick="pick('gongye','g2',2,3)">
+          <span class="opt-label">D</span>我们跟很多细胞治疗公司都合作过。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-2-0">
+        <div class="bubble-row me"><div class="bubble me">所以如果我能把“批次变更提前告知 + 全套随货文件 + 换批前的工艺验证支持”这三样做成固定的机制，让 QA 不用事后追——这对您今年的内控和审计，算不算解决了一个实际问题？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">算。你要是真能做到提前告知，我可以把你们放在优先考虑里，先走一轮小批量验证。</div></div>
+        <div class="coach"><b>教练点评：</b>需求效益（N）：把解决方案拆成三条“机制”，正好对应他刚才说的三件事（追溯、审计、工作量）。把关者不是被说服的，是被“我心里那几件事你都替我想到了”说服的。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-2-1">
+        <div class="bubble-row me"><div class="bubble me">那我们就这么说定了？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">定什么？流程还没走。</div></div>
+        <div class="coach"><b>教练点评：</b>急着收兵。把关者最反感的就是被催促跳过流程。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-2-2">
+        <div class="bubble-row me"><div class="bubble me">您希望我们提供哪些文件？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">到时采购会跟你要。</div></div>
+        <div class="coach"><b>教练点评：</b>方向没错但太空——没有先把他那三件事总结成机制，他只会把你推回采购。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g2-2-3">
+        <div class="bubble-row me"><div class="bubble me">我们跟很多细胞治疗公司都合作过。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">孙</div><div class="bubble boss">别的公司的流程跟我们不一样。</div></div>
+        <div class="coach"><b>教练点评：</b>名单属于 E，现在不是它的场次。而且对 QA 来说，别家合格不代表你家也合格。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g2-2" onclick="nextRound('gongye','g2',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-gongye-g2"></div>
+  </div>
+  <div class="lv-block locked" id="lv-gongye-g3">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 3 关 · 见最后拍板的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">王</div>
+        <div class="persona-info">
+          <b>王总 · 研发总监</b>
+          <div class="tagline">决定这笔钱给谁、三年不改口的那个人</div>
+          <div class="chips"><span class="chip">务实</span><span class="chip">看性价比</span><span class="chip">被涨价搞怕了</span></div>
+        </div>
+      </div>
+      <div class="brief">技术点头、QA 松口，最后这道门在他手里。他不见供应商，今天给了你十五分钟。</div>
+      
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">让他承认：真正让他不满意的不是价格，是“不确定”。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-gongye-g3">
+    <div class="round-block" id="rb-gongye-g3-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">王</div>
+        <div class="bubble boss">我时间不多，你们跟我们现在这家比，优势在哪？</div>
+      </div>
+      <div class="ask">他直接要你的结论。你给吗？</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g3-0-0" onclick="pick('gongye','g3',0,0)">
+          <span class="opt-label">A</span>在回答之前我想先确认一件事：现在这家合作三年了，当初选他的理由，现在还成立吗？
+        </div>
+        <div class="option" id="opt-gongye-g3-0-1" onclick="pick('gongye','g3',0,1)">
+          <span class="opt-label">B</span>我们便宜十个百分点。
+        </div>
+        <div class="option" id="opt-gongye-g3-0-2" onclick="pick('gongye','g3',0,2)">
+          <span class="opt-label">C</span>我们产品线全，可以一站式配齐。
+        </div>
+        <div class="option" id="opt-gongye-g3-0-3" onclick="pick('gongye','g3',0,3)">
+          <span class="opt-label">D</span>现在这家供货稳定吗？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-0-0">
+        <div class="bubble-row me"><div class="bubble me">在回答之前我想先确认一件事：现在这家合作三年了，当初选他的理由，现在还成立吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">三年了。当初是因为文件齐、响应快。现在嘛……他们说涨价就涨价，还说不清原因。</div></div>
+        <div class="coach"><b>教练点评：</b>面对“你有什么优势”，最厉害的不是回答，是把问题接过来再问回去。他一开口就自己给出了“响应”和“价格不透明”两个裂口——这是你自己说一百句也换不来的。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们便宜十个百分点。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">便宜十个百分点，明年呢？</div></div>
+        <div class="coach"><b>教练点评：</b>拍板者听过太多“便宜”。价格是入口，不是优势——他会立刻问你明天涨不涨。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：反问当初选他的理由，今天还成不成立（S + 反转）。</div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-0-2">
+        <div class="bubble-row me"><div class="bubble me">我们产品线全，可以一站式配齐。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">全不全我无所谓，稳定就行。</div></div>
+        <div class="coach"><b>教练点评：</b>他要的是“稳定”，你给的是“全”。典型的各说各话。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-0-3">
+        <div class="bubble-row me"><div class="bubble me">现在这家供货稳定吗？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">基本稳定吧。</div></div>
+        <div class="coach"><b>教练点评：</b>问得对，但太封闭——“稳定吗”只能换来一个“基本吧”。要问的是当初的理由还成不成立。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g3-0" onclick="nextRound('gongye','g3',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-gongye-g3-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">王</div>
+        <div class="bubble boss">三年了。当初是因为文件齐、响应快。现在嘛……他们说涨价就涨价，还说不清原因。</div>
+      </div>
+      <div class="ask">“涨价说不清原因”——这句话表面上是在讲钱。底下是什么？</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g3-1-0" onclick="pick('gongye','g3',1,0)">
+          <span class="opt-label">A</span>涨价说不清原因，这三年里，除了涨价，还有没有让您觉得这家不像当初那么上心的事？
+        </div>
+        <div class="option" id="opt-gongye-g3-1-1" onclick="pick('gongye','g3',1,1)">
+          <span class="opt-label">B</span>我们价格透明，绝不会随便涨。
+        </div>
+        <div class="option" id="opt-gongye-g3-1-2" onclick="pick('gongye','g3',1,2)">
+          <span class="opt-label">C</span>要不要我们两家做个对比方案？
+        </div>
+        <div class="option" id="opt-gongye-g3-1-3" onclick="pick('gongye','g3',1,3)">
+          <span class="opt-label">D</span>你们一年的用量大概多少？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-1-0">
+        <div class="bubble-row me"><div class="bubble me">涨价说不清原因，这三年里，除了涨价，还有没有让您觉得这家不像当初那么上心的事？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">有。对接人换得太勤，出了问题要打三个电话才知道找谁。货期有时候一拖就是两周，问了也是“在订”。</div></div>
+        <div class="coach"><b>教练点评：</b>难点问题（P）从“钱”拐到了“关系”——真正的裂口从来不是价格，是“这家不把我当回事”。他果然给出了两条——换人、拖货期。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们价格透明，绝不会随便涨。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">你现在说得好听。</div></div>
+        <div class="coach"><b>教练点评：</b>对着一个刚被涨价伤过的人承诺不涨价，可信度为零。先问他到底被伤在哪。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：挖“不像当初那么上心”的具体事（P）。</div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-1-2">
+        <div class="bubble-row me"><div class="bubble me">要不要我们两家做个对比方案？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">方案先放着。</div></div>
+        <div class="coach"><b>教练点评：</b>过早给方案。他的不满还没被完整说出来，这时候任何方案都显得廉价。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-1-3">
+        <div class="bubble-row me"><div class="bubble me">你们一年的用量大概多少？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">这个到时候采购会给。</div></div>
+        <div class="coach"><b>教练点评：</b>问量是必要的背景，但此刻他正在倒苦水——先听完，别急着算账。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g3-1" onclick="nextRound('gongye','g3',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-gongye-g3-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">王</div>
+        <div class="bubble boss">有。对接人换得太勤，出了问题要打三个电话才知道找谁。货期有时候一拖就是两周。</div>
+      </div>
+      <div class="ask">两条不满都在台面上了。最后一棒。</div>
+      <div class="options">
+        <div class="option" id="opt-gongye-g3-2-0" onclick="pick('gongye','g3',2,0)">
+          <span class="opt-label">A</span>所以您真正不满意的不是价格，是响应和确定性。如果有一天这批货出了问题，我这边一个电话有人负责到底、货期提前锁定——哪怕单价一分不降，这件事值不值得您给一次小批量验证的机会？
+        </div>
+        <div class="option" id="opt-gongye-g3-2-1" onclick="pick('gongye','g3',2,1)">
+          <span class="opt-label">B</span>我们保证三年不涨价。
+        </div>
+        <div class="option" id="opt-gongye-g3-2-2" onclick="pick('gongye','g3',2,2)">
+          <span class="opt-label">C</span>那我明天给您报个价？
+        </div>
+        <div class="option" id="opt-gongye-g3-2-3" onclick="pick('gongye','g3',2,3)">
+          <span class="opt-label">D</span>您现在最希望供货方改进哪一点？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-2-0">
+        <div class="bubble-row me"><div class="bubble me">所以您真正不满意的不是价格，是响应和确定性。如果有一天这批货出了问题，我这边一个电话有人负责到底、货期提前锁定——哪怕单价一分不降，这件事值不值得您给一次小批量验证的机会？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">这个思路对。你去找采购，让他们安排一次小批量验证，用量不大，先看半年。</div></div>
+        <div class="coach"><b>教练点评：</b>需求效益（N）的收尾技巧：把客户的痛点原词接回来（响应、确定性），主动承认“我不降价”，再要一个极小的下一步（小批量验证）。不降价反而让他相信你听懂了。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-2-1">
+        <div class="bubble-row me"><div class="bubble me">我们保证三年不涨价。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">话说出去容易。</div></div>
+        <div class="coach"><b>教练点评：</b>又一次对着价格承诺。他要的是确定性，不是承诺书。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-2-2">
+        <div class="bubble-row me"><div class="bubble me">那我明天给您报个价？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">价格最后再说。</div></div>
+        <div class="coach"><b>教练点评：</b>客户刚说了“响应慢、货期拖”，你回一句报价单，等于告诉他刚才那段话你没听。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-gongye-g3-2-3">
+        <div class="bubble-row me"><div class="bubble me">您现在最希望供货方改进哪一点？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">王</div><div class="bubble boss">别换来换去就行。</div></div>
+        <div class="coach"><b>教练点评：</b>接近 N 但力度不够——要把他自己那两个词（响应、确定性）总结成一个价值主张，再要下一步。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-gongye-g3-2" onclick="nextRound('gongye','g3',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-gongye-g3"></div>
+  </div>
+  <div class="card center-card">
+    <div class="center-title">本线战绩</div>
+    <div class="center-body" id="center-gongye">还没开打。</div>
+  </div>
+</div>
+<div class="line-root" id="line-qudao" style="display:none;">
+  <div class="card linehead">
+    <div class="lvtag">渠道线 · 区域经销商</div>
+    <div class="sceneline">合肥某生物试剂经销商 · 覆盖皖中高校与医院</div>
+    <div class="brief">你＝福麦斯销售小李。这家经销商手里有终端客户和网络，也有自己认定在推的那几个“心头好”。想让他推你的货，先得搞清楚：谁的手在动。</div>
+  </div>
+  <div class="lv-block" id="lv-qudao-q1">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 1 关 · 见跑终端的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">胡</div>
+        <div class="persona-info">
+          <b>小胡 · 一线销售员</b>
+          <div class="tagline">真正决定推荐哪个牌子的人，也是最没人问过他意见的人</div>
+          <div class="chips"><span class="chip">看返点</span><span class="chip">怕背锅</span><span class="chip">终端催得急</span></div>
+        </div>
+      </div>
+      <div class="brief">公司的销售员。他每天跑高校和医院，客户要什么他就推什么——其实更多时候是推他有把握讲得清的那个牌子。</div>
+      
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">让他承认：丢单不是因为价格，是因为答不上来。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-qudao-q1">
+    <div class="round-block" id="rb-qudao-q1-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">胡</div>
+        <div class="bubble boss">不好意思，我们现在主力推另一个牌子，人家返点高。你今天来推销，怕是要白跑。</div>
+      </div>
+      <div class="ask">他把牌摊了：返点高。你怎么接？</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q1-0-0" onclick="pick('qudao','q1',0,0)">
+          <span class="opt-label">A</span>返点高确实是硬道理。我先不谈返点，问个小的：你最近卖出去的这几单流式抗体，客户用着有没有回头找你麻烦的？
+        </div>
+        <div class="option" id="opt-qudao-q1-0-1" onclick="pick('qudao','q1',0,1)">
+          <span class="opt-label">B</span>我们返点也可以谈，你先听我说说政策。
+        </div>
+        <div class="option" id="opt-qudao-q1-0-2" onclick="pick('qudao','q1',0,2)">
+          <span class="opt-label">C</span>我们是正规代理，品质有保障。
+        </div>
+        <div class="option" id="opt-qudao-q1-0-3" onclick="pick('qudao','q1',0,3)">
+          <span class="opt-label">D</span>你们现在主力推哪几家？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-0-0">
+        <div class="bubble-row me"><div class="bubble me">返点高确实是硬道理。我先不谈返点，问个小的：你最近卖出去的这几单流式抗体，客户用着有没有回头找你麻烦的？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">麻烦的有啊。上次有个客户说抗体染不上色，我也不知道怎么回，最后这一单就丢了。</div></div>
+        <div class="coach"><b>教练点评：</b>背景问题（S）+ 先认同他的立场。一线销售员天天被厂家教育“我们的政策好”，第一次有人问他自己受没受过伤，他会立刻把你放到另一类里。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们返点也可以谈，你先听我说说政策。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">政策都差不多，你发我微信吧。</div></div>
+        <div class="coach"><b>教练点评：</b>他说返点，你就跟返点，等于承认这场对话只能比谁给得多。比到最后你就是一张报价单。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：先不问政策，问他卖出去的单有没有回头找他麻烦（S→P）。</div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-0-2">
+        <div class="bubble-row me"><div class="bubble me">我们是正规代理，品质有保障。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">正规的多的是。</div></div>
+        <div class="coach"><b>教练点评：</b>对终端销售员讲“正规”，他听了一百遍。他关心的是：这一单我能不能保住。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-0-3">
+        <div class="bubble-row me"><div class="bubble me">你们现在主力推哪几家？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">进口两家，国产一家，看客户预算。</div></div>
+        <div class="coach"><b>教练点评：</b>问到了背景，但这一步更应该往他身上扎——让他想起自己丢过的单。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q1-0" onclick="nextRound('qudao','q1',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-qudao-q1-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">胡</div>
+        <div class="bubble boss">麻烦的有啊。上次有个客户说抗体染不上色，我也不知道怎么回，最后这一单就丢了。</div>
+      </div>
+      <div class="ask">他说了“丢单”。这个词的重量，要用问题称出来。</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q1-1-0" onclick="pick('qudao','q1',1,0)">
+          <span class="opt-label">A</span>丢单这事你自己赔进去多少？跑了几趟、最后是不是还得换个牌子给客户试？
+        </div>
+        <div class="option" id="opt-qudao-q1-1-1" onclick="pick('qudao','q1',1,1)">
+          <span class="opt-label">B</span>我们技术支持专业，以后技术问题问我们就行。
+        </div>
+        <div class="option" id="opt-qudao-q1-1-2" onclick="pick('qudao','q1',1,2)">
+          <span class="opt-label">C</span>那家牌子染不上色很正常，他们批次不稳。
+        </div>
+        <div class="option" id="opt-qudao-q1-1-3" onclick="pick('qudao','q1',1,3)">
+          <span class="opt-label">D</span>客户一般问你哪些技术问题？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-1-0">
+        <div class="bubble-row me"><div class="bubble me">丢单这事你自己赔进去多少？跑了几趟、最后是不是还得换个牌子给客户试？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">跑了三趟。最后客户直接从别人那儿下单了，我连报价都没好意思再发。</div></div>
+        <div class="coach"><b>教练点评：</b>难点问题（P）挖的是他自己的痛，不是客户的痛。这是跑渠道最容易搞反的一件事：渠道线第一层的痛永远是“我（一线销售员）被难住了”，不是“客户不满意”。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们技术支持专业，以后技术问题问我们就行。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">行，回头有问题我问你。（敷衍）</div></div>
+        <div class="coach"><b>教练点评：</b>承诺给得太早。他自己还没觉得这是个多大的事，你的支持就不值钱。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：问他为这一单赔进去多少（P）。</div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-1-2">
+        <div class="bubble-row me"><div class="bubble me">那家牌子染不上色很正常，他们批次不稳。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">不好说，可能客户操作也有问题。</div></div>
+        <div class="coach"><b>教练点评：</b>踩同行是最忌讳的动作。他会本能地维护自己卖出去的东西，反而把你推远。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-1-3">
+        <div class="bubble-row me"><div class="bubble me">客户一般问你哪些技术问题？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">染色弱、背景高、一抗二抗怎么配这些。</div></div>
+        <div class="coach"><b>教练点评：</b>问到了素材，但没让他认账。这一步要把“答不上来”换算成他自己损失的那一单。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q1-1" onclick="nextRound('qudao','q1',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-qudao-q1-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">胡</div>
+        <div class="bubble boss">跑了三趟。最后客户直接从别人那儿下单了，我连报价都没好意思再发。</div>
+      </div>
+      <div class="ask">三趟白跑。怎么把这一件事放大成一年？</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q1-2-0" onclick="pick('qudao','q1',2,0)">
+          <span class="opt-label">A</span>跑三趟丢一单，等于你这块时间全白搭了。要是手里有个牌子，客户问技术问题时你能当场说出个一二三——你猜一年下来你能少丢几单？
+        </div>
+        <div class="option" id="opt-qudao-q1-2-1" onclick="pick('qudao','q1',2,1)">
+          <span class="opt-label">B</span>我们定期有产品培训，可以给你们讲课。
+        </div>
+        <div class="option" id="opt-qudao-q1-2-2" onclick="pick('qudao','q1',2,2)">
+          <span class="opt-label">C</span>你可以先拿两单试试我们的货。
+        </div>
+        <div class="option" id="opt-qudao-q1-2-3" onclick="pick('qudao','q1',2,3)">
+          <span class="opt-label">D</span>这种事你一年遇到几次？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-2-0">
+        <div class="bubble-row me"><div class="bubble me">跑三趟丢一单，等于你这块时间全白搭了。要是手里有个牌子，客户问技术问题时你能当场说出个一二三——你猜一年下来你能少丢几单？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">少丢两三单肯定是有的。说实话，我最怕的不是客户砍价，是客户问技术，我答不上来那一瞬间。</div></div>
+        <div class="coach"><b>教练点评：</b>暗示问题（I）要把一次性损失变成年度损失、把“钱”变成“面子”。最后他自己说出那句真话——“最怕答不上来那一瞬间”。这就是你后面所有方案的靶心。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-2-1">
+        <div class="bubble-row me"><div class="bubble me">我们定期有产品培训，可以给你们讲课。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">培训有用吗，听完还是记不住。</div></div>
+        <div class="coach"><b>教练点评：</b>先给解法不给痛。而且这种“培训”对一个天天跑客户的人来说，最大的问题是占用他时间。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-2-2">
+        <div class="bubble-row me"><div class="bubble me">你可以先拿两单试试我们的货。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">试单我自己还得担着。</div></div>
+        <div class="coach"><b>教练点评：</b>一线销售员无权替公司担这个风险——他连自己的库存都不敢多备。别用“你先试”（暗示风险他担）去推他。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q1-2-3">
+        <div class="bubble-row me"><div class="bubble me">这种事你一年遇到几次？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">胡</div><div class="bubble boss">三四次吧。</div></div>
+        <div class="coach"><b>教练点评：</b>量化了次数，但没让它落在“他的损失”上。要换算成钱和时间。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q1-2" onclick="nextRound('qudao','q1',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-qudao-q1"></div>
+  </div>
+  <div class="lv-block locked" id="lv-qudao-q2">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 2 关 · 见管产品线的人</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">赵</div>
+        <div class="persona-info">
+          <b>赵经理 · 产品线负责人</b>
+          <div class="tagline">决定这条线代理哪几个牌子、给什么政策的人</div>
+          <div class="chips"><span class="chip">看利润结构</span><span class="chip">怕乱</span><span class="chip">怕厂家拖</span></div>
+        </div>
+      </div>
+      <div class="brief">销售员的顶头上司。他不跑终端，但他决定这条线能带几个牌子。终端丢单的事他未必知道细节。</div>
+      <div class="memo"><b>上一关留下的那句话：</b>上一关，一线销售员小胡说：&lt;有次客户说抗体染不上色，我答不上来，跑了三趟，最后客户从别人那儿买了&gt;</div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">让他承认：厂家一拖，他这边两头受气，而且手上没有第二条路。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-qudao-q2">
+    <div class="round-block" id="rb-qudao-q2-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">赵</div>
+        <div class="bubble boss">你这个牌子我没听过啊，我们产品架构今年已经定了，不太好加。</div>
+      </div>
+      <div class="ask">两句拒绝。你怎么开？</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q2-0-0" onclick="pick('qudao','q2',0,0)">
+          <span class="opt-label">A</span>架构不用动，我今天不是来要位置的。先说个情况：上周跟你们跑终端的小胡聊了两句，他说有一次客户抗体没染上色、他答不上来，跑了三趟最后客户从别处买了。这种事在你们这条线上是偶尔还是常见？
+        </div>
+        <div class="option" id="opt-qudao-q2-0-1" onclick="pick('qudao','q2',0,1)">
+          <span class="opt-label">B</span>我们产品很有优势，终端发货价比现在这家低。
+        </div>
+        <div class="option" id="opt-qudao-q2-0-2" onclick="pick('qudao','q2',0,2)">
+          <span class="opt-label">C</span>我们的产品线政策比现在这家灵活。
+        </div>
+        <div class="option" id="opt-qudao-q2-0-3" onclick="pick('qudao','q2',0,3)">
+          <span class="opt-label">D</span>你们现在代理几个牌子？结构是怎么排的？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-0-0">
+        <div class="bubble-row me"><div class="bubble me">架构不用动，我今天不是来要位置的。先说个情况：上周跟你们跑终端的小胡聊了两句，他说有一次客户抗体没染上色、他答不上来，跑了三趟最后客户从别处买了。这种事在你们这条线上是偶尔还是常见？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">……他还跟你说这个。偶尔吧，但这种事肯定有。终端的技术问题我们都往上问厂家，厂家一忙就拖。</div></div>
+        <div class="coach"><b>教练点评：</b>引用一线那句原话，是敲开中层门的钥匙：他立刻知道你不是从网上找来的代理名单，而是真的到过他的战场。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们产品很有优势，终端发货价比现在这家低。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">低价不是优势，是麻烦。</div></div>
+        <div class="coach"><b>教练点评：</b>产品负责人最烦低价：低价意味着乱价、串货、终端不赚钱。你第一句就把抓手交出去了。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-0-2">
+        <div class="bubble-row me"><div class="bubble me">我们的产品线政策比现在这家灵活。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">政策是小头。</div></div>
+        <div class="coach"><b>教练点评：</b>政策永远不是第一句话。先谈他这条线正在承受的压力。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-0-3">
+        <div class="bubble-row me"><div class="bubble me">你们现在代理几个牌子？结构是怎么排的？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">主力两三个，其他都是搭配着卖。</div></div>
+        <div class="coach"><b>教练点评：</b>背景问题没错，但你手里明明有一张牌（小胡的原话）没打——先打牌，再问结构。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q2-0" onclick="nextRound('qudao','q2',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-qudao-q2-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">赵</div>
+        <div class="bubble boss">偶尔吧，但这种事肯定有。终端的技术问题我们都往上问厂家，厂家一忙就拖。</div>
+      </div>
+      <div class="ask">“厂家一忙就拖”——他要开始倒苦水了，怎么让他倒得更彻底？</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q2-1-0" onclick="pick('qudao','q2',1,0)">
+          <span class="opt-label">A</span>厂家一拖，你这个管产品线的就得两头受气：终端催你、厂家拖你。这种时候，你手上有没有第二条路可以走？
+        </div>
+        <div class="option" id="opt-qudao-q2-1-1" onclick="pick('qudao','q2',1,1)">
+          <span class="opt-label">B</span>我们响应特别快，技术问题当天回复。
+        </div>
+        <div class="option" id="opt-qudao-q2-1-2" onclick="pick('qudao','q2',1,2)">
+          <span class="opt-label">C</span>你们应该多备一个牌子，分散风险。
+        </div>
+        <div class="option" id="opt-qudao-q2-1-3" onclick="pick('qudao','q2',1,3)">
+          <span class="opt-label">D</span>厂家一般拖多久？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-1-0">
+        <div class="bubble-row me"><div class="bubble me">厂家一拖，你这个管产品线的就得两头受气：终端催你、厂家拖你。这种时候，你手上有没有第二条路可以走？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">没有。基本只能等，等厂家回。终端那边只能让我的人去拖着客户。</div></div>
+        <div class="coach"><b>教练点评：</b>难点问题（P）加上替他说出处境（两头受气），再问一个他的软肋——“有没有第二条路”。答案他自己说出来的时候才有效：没有。这就是你进门的理由。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们响应特别快，技术问题当天回复。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">当天回复谁都会说。</div></div>
+        <div class="coach"><b>教练点评：</b>他还在说“厂家拖”，你就跳出来说“我快”。顺序错位，可信度归零。<span class="score-chip bad">+0 分</span></div>
+        <div class="best-line"><b>换个说法：</b>满分做法：问他这种时候有没有第二条路（P）。</div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-1-2">
+        <div class="bubble-row me"><div class="bubble me">你们应该多备一个牌子，分散风险。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">加牌子哪有那么容易，管理成本高。</div></div>
+        <div class="coach"><b>教练点评：</b>替客户下结论、还不给证据。中层反感被人教做事。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-1-3">
+        <div class="bubble-row me"><div class="bubble me">厂家一般拖多久？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">快的当天，慢的一周都有。</div></div>
+        <div class="coach"><b>教练点评：</b>问到了量化信息，但这一步真正的目标是让他承认“我没退路”。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q2-1" onclick="nextRound('qudao','q2',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-qudao-q2-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">赵</div>
+        <div class="bubble boss">没有。基本只能等，等厂家回。终端那边只能让我的人去拖着客户。</div>
+      </div>
+      <div class="ask">他说了“没退路”。最后一棒。</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q2-2-0" onclick="pick('qudao','q2',2,0)">
+          <span class="opt-label">A</span>所以你要的其实不是多一个牌子，是手上得有一张“厂家拖了也能给客户交代”的牌。要是这件事我们能兜住——终端技术问题当天给答复、货期提前锁定，你觉得先从哪一类客户试最稳？
+        </div>
+        <div class="option" id="opt-qudao-q2-2-1" onclick="pick('qudao','q2',2,1)">
+          <span class="opt-label">B</span>那我们先签个意向协议？
+        </div>
+        <div class="option" id="opt-qudao-q2-2-2" onclick="pick('qudao','q2',2,2)">
+          <span class="opt-label">C</span>我们政策支持力度大，返点好谈。
+        </div>
+        <div class="option" id="opt-qudao-q2-2-3" onclick="pick('qudao','q2',2,3)">
+          <span class="opt-label">D</span>你们今年的考核主要看什么指标？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-2-0">
+        <div class="bubble-row me"><div class="bubble me">所以你要的其实不是多一个牌子，是手上得有一张“厂家拖了也能给客户交代”的牌。要是这件事我们能兜住——终端技术问题当天给答复、货期提前锁定，你觉得先从哪一类客户试最稳？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">那肯定先从高校的小课题组试，量小风险低。这一段是他不容易的地方。</div></div>
+        <div class="coach"><b>教练点评：</b>需求效益（N）：总结他的真实痛点（确定性），再让他自己划定试点范围。中层最需要的是“可控”——让他自己选从哪里开始，他会真的把这件事推进去。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-2-1">
+        <div class="bubble-row me"><div class="bubble me">那我们先签个意向协议？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">协议先不急。</div></div>
+        <div class="coach"><b>教练点评：</b>他刚承认自己没退路，你就掏合同。这时候该给的是“让他心里有底”，不是让他签字。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-2-2">
+        <div class="bubble-row me"><div class="bubble me">我们政策支持力度大，返点好谈。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">又是政策。</div></div>
+        <div class="coach"><b>教练点评：</b>第三棒还在谈返点。他的痛是“被厂家拖”，你一直在答另一张卷子。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q2-2-3">
+        <div class="bubble-row me"><div class="bubble me">你们今年的考核主要看什么指标？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">赵</div><div class="bubble boss">销售增长、利润，还有终端满意度。</div></div>
+        <div class="coach"><b>教练点评：</b>问到了评价标准，有用。但此时更关键的是把“增强确定性”这件事变成他的收益。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q2-2" onclick="nextRound('qudao','q2',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-qudao-q2"></div>
+  </div>
+  <div class="lv-block locked" id="lv-qudao-q3">
+    <div class="lockmsg">🔒 上一关没通关，这一关的人你还见不到 —— 回去把上一关打到通关线</div>
+    <div class="card">
+      <div class="lvtag">第 3 关 · 见老板</div>
+      <h3><span class="dot"></span>今天见的人</h3>
+      <div class="persona-row">
+        <div class="avatar">韩</div>
+        <div class="persona-info">
+          <b>韩总 · 经销商总经理</b>
+          <div class="tagline">决定要不要带你玩、也决定这个市场乱不乱的人</div>
+          <div class="chips"><span class="chip">不信口头保证</span><span class="chip">最在意客户关系</span><span class="chip">见过太多厂家</span></div>
+        </div>
+      </div>
+      <div class="brief">最后一道门。他会问你最不好回答的两个问题：你们厂家是不是也在这边跑直销？隔壁串货你们管不管？</div>
+      <div class="memo"><b>上一关留下的那句话：</b>上一关，产品线赵经理说：&lt;终端技术问题只能往上问厂家，厂家一拖，我们手上没有第二条路&gt;</div>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>这一关要拿到什么</h3>
+      <div class="mission">不能绕、不能空承诺。把“串货”从麻烦翻译成他最怕的东西：客户不再信他。</div>
+      <div class="mission-note">通关线：本关 45 分拿到 <b>30 分</b>以上，并且<b>第 2 轮（挖痛那一轮）必须拿满分</b>——没挖到痛，说再多也不给过。</div>
+    </div>
+    <div class="chat-area" id="chat-qudao-q3">
+    <div class="round-block" id="rb-qudao-q3-0" style="display:block;">
+      <div class="round-head"><span class="num">第 1 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">韩</div>
+        <div class="bubble boss">做你们牌子我有两个顾虑：一，你们厂家自己是不是也在这边跑直销？二，隔壁市那家老往我们这边串货，这个你能管吗？</div>
+      </div>
+      <div class="ask">两颗雷同时扔过来。绕不过去，也不能硬接。第一句你说什么？</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q3-0-0" onclick="pick('qudao','q3',0,0)">
+          <span class="opt-label">A</span>这两个问题我不绕。直销的事我回去问清楚，给你书面答复；串货我先问清楚——现在串过来的是哪几个品种、便宜多少？
+        </div>
+        <div class="option" id="opt-qudao-q3-0-1" onclick="pick('qudao','q3',0,1)">
+          <span class="opt-label">B</span>我们公司肯定不会直销，这个您放心。
+        </div>
+        <div class="option" id="opt-qudao-q3-0-2" onclick="pick('qudao','q3',0,2)">
+          <span class="opt-label">C</span>串货是市场行为，各家都有，我们不太好管。
+        </div>
+        <div class="option" id="opt-qudao-q3-0-3" onclick="pick('qudao','q3',0,3)">
+          <span class="opt-label">D</span>那我们价格给您更优惠，把这块补回来。
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-0-0">
+        <div class="bubble-row me"><div class="bubble me">这两个问题我不绕。直销的事我回去问清楚，给你书面答复；串货我先问清楚——现在串过来的是哪几个品种、便宜多少？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">主要是流式那几个常用指标，便宜差不多两三成。光这个月就有两单。</div></div>
+        <div class="coach"><b>教练点评：</b>渠道线最容易栽的一题：绕 = 死，硬接空承诺 = 更死。正确动作是“先接住，再问清楚”。你要先拿到一串货的证据和幅度，才谈得上给机制。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-0-1">
+        <div class="bubble-row me"><div class="bubble me">我们公司肯定不会直销，这个您放心。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">放心两个字，我听过太多了。</div></div>
+        <div class="coach"><b>教练点评：</b>空承诺。老板不听“放心”，只听“书面”“机制”“违约怎么办”。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-0-2">
+        <div class="bubble-row me"><div class="bubble me">串货是市场行为，各家都有，我们不太好管。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">那还谈什么。（送你出门）</div></div>
+        <div class="coach"><b>教练点评：</b>这是整条渠道线的死法：回避那颗雷。回避＝默认他不重要，老板当场就把你划掉了。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-0-3">
+        <div class="bubble-row me"><div class="bubble me">那我们价格给您更优惠，把这块补回来。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">补得回来吗？一个月两单。</div></div>
+        <div class="coach"><b>教练点评：</b>用价格去补秩序的损失，等于承认你家控制不了市场。而且他刚才说的根本不是钱。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q3-0" onclick="nextRound('qudao','q3',0)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-qudao-q3-1">
+      <div class="round-head"><span class="num">第 2 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">韩</div>
+        <div class="bubble boss">主要是流式那几个常用指标，便宜差不多两三成。光这个月就有两单。</div>
+      </div>
+      <div class="ask">他说了两单、两三成。这些数字背后真正扎他的是什么？</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q3-1-0" onclick="pick('qudao','q3',1,0)">
+          <span class="opt-label">A</span>客户拿着串过来的低价问你为什么贵，你答不上来——丢这一单还好，最难受的是客户心里开始觉得你在赚差价吧？
+        </div>
+        <div class="option" id="opt-qudao-q3-1-1" onclick="pick('qudao','q3',1,1)">
+          <span class="opt-label">B</span>我们可以向工厂申请特价，把这两单抢回来。
+        </div>
+        <div class="option" id="opt-qudao-q3-1-2" onclick="pick('qudao','q3',1,2)">
+          <span class="opt-label">C</span>串货是隔壁那个经销商的问题，跟我们没关系。
+        </div>
+        <div class="option" id="opt-qudao-q3-1-3" onclick="pick('qudao','q3',1,3)">
+          <span class="opt-label">D</span>这种事一个月大概几单？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-1-0">
+        <div class="bubble-row me"><div class="bubble me">客户拿着串过来的低价问你为什么贵，你答不上来——丢这一单还好，最难受的是客户心里开始觉得你在赚差价吧？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">对。钱的事是小事，客户不信你就麻烦了。我这三个终端，都是跟了五六年才跟出来的。</div></div>
+        <div class="coach"><b>教练点评：</b>难点问题（P）要越过金额，打到关系。经销商老板最值钱的资产不是库存，是那几个跟了五六年的终端。串货杀的不是他的毛利，是他在这几个客户面前的信誉。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-1-1">
+        <div class="bubble-row me"><div class="bubble me">我们可以向工厂申请特价，把这两单抢回来。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">抢回来一次，下次还串。</div></div>
+        <div class="coach"><b>教练点评：</b>用特价去治串货，是最典型的头痛医脚。他要看的不是你能多便宜，是你能不能把这个市场管住。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-1-2">
+        <div class="bubble-row me"><div class="bubble me">串货是隔壁那个经销商的问题，跟我们没关系。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">那你为什么在我这儿卖？</div></div>
+        <div class="coach"><b>教练点评：</b>甩锅。他要的不是“谁干的”，是“以后谁管”。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-1-3">
+        <div class="bubble-row me"><div class="bubble me">这种事一个月大概几单？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">两单左右。</div></div>
+        <div class="coach"><b>教练点评：</b>数字他已经给过了。这一步要做的是把数字翻译成“客户关系受损”（P）。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q3-1" onclick="nextRound('qudao','q3',1)">继续对话 →</button>
+    </div>
+    <div class="round-block" id="rb-qudao-q3-2">
+      <div class="round-head"><span class="num">第 3 / 3 轮</span></div>
+      <div class="bubble-row boss">
+        <div class="b-ava">韩</div>
+        <div class="bubble boss">对。钱的事是小事，客户不信你就麻烦了。我这三个终端，都是跟了五六年才跟出来的。</div>
+      </div>
+      <div class="ask">他已经把最值钱的东西摊出来了。最后一棒，落到动作。</div>
+      <div class="options">
+        <div class="option" id="opt-qudao-q3-2-0" onclick="pick('qudao','q3',2,0)">
+          <span class="opt-label">A</span>所以你要的其实不是一个更便宜的价，是一条能让你跟客户说得通的说法、和一个串货有人管的机制。要是我下次带着区域保护口径和那套能直接转给客户的说法来——韩总愿意给我多久，让我把这件事办成？
+        </div>
+        <div class="option" id="opt-qudao-q3-2-1" onclick="pick('qudao','q3',2,1)">
+          <span class="opt-label">B</span>我们给您最优惠的价格。
+        </div>
+        <div class="option" id="opt-qudao-q3-2-2" onclick="pick('qudao','q3',2,2)">
+          <span class="opt-label">C</span>串货的事我回去再反映一下。
+        </div>
+        <div class="option" id="opt-qudao-q3-2-3" onclick="pick('qudao','q3',2,3)">
+          <span class="opt-label">D</span>您希望我们怎么做？
+        </div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-2-0">
+        <div class="bubble-row me"><div class="bubble me">所以你要的其实不是一个更便宜的价，是一条能让你跟客户说得通的说法、和一个串货有人管的机制。要是我下次带着区域保护口径和那套能直接转给客户的说法来——韩总愿意给我多久，让我把这件事办成？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">给你两周。两周之内把这两样拿来，我们就从那两个高校客户开始。</div></div>
+        <div class="coach"><b>教练点评：</b>需求效益（N）＋让客户给期限。最后一句“愿意给我多久”极关键：不是你催他，是他自己给自己定了截止日期。<span class="score-chip good">+15 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-2-1">
+        <div class="bubble-row me"><div class="bubble me">我们给您最优惠的价格。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">（沉默）</div></div>
+        <div class="coach"><b>教练点评：</b>第三次递价格。他说了“钱是小事”。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-2-2">
+        <div class="bubble-row me"><div class="bubble me">串货的事我回去再反映一下。</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">反映？那就等消息吧。（无结论）</div></div>
+        <div class="coach"><b>教练点评：</b>“回去反映”是渠道销售最常用的四个字，也是最没用的四个字——没有动作、没有期限、没有答案。<span class="score-chip bad">+0 分</span></div>
+      </div>
+      <div class="reply-box" id="rp-qudao-q3-2-3">
+        <div class="bubble-row me"><div class="bubble me">您希望我们怎么做？</div></div>
+        <div class="bubble-row boss"><div class="b-ava">韩</div><div class="bubble boss">你先拿出个方案来。</div></div>
+        <div class="coach"><b>教练点评：</b>方向接近 N，但太空：没有先把他那两件事总结成机制，也没有提出具体的下一步。<span class="score-chip mid">+5 分</span></div>
+      </div>
+      <button class="btn" id="btn-qudao-q3-2" onclick="nextRound('qudao','q3',2)">看本关成绩 →</button>
+    </div>
+    </div>
+    <div class="lv-result" id="res-qudao-q3"></div>
+  </div>
+  <div class="card center-card">
+    <div class="center-title">本线战绩</div>
+    <div class="center-body" id="center-qudao">还没开打。</div>
+  </div>
+</div>
 
-  <div class="rolebar">
-    <b>你现在是谁：</b>
-    <button class="rbtn on" data-role="all" onclick="setRole('all')">全看 · 老师</button>
-    <button class="rbtn" data-role="sales" onclick="setRole('sales')">销售</button>
-    <button class="rbtn" data-role="cust" onclick="setRole('cust')">客户</button>
-    <button class="rbtn" data-role="obs" onclick="setRole('obs')">观察员</button>
-    <span class="rolehint">同一页，各看各的：销售看不到底牌和评分标准；客户看不到评分标准。打印时按当前角色出。</span>
-  </div>
-  <div class="print-tag" id="printTag"></div>
-
-  <div class="r-sale">
-    <b>销售 · 你这一轮要拿到的就这三件</b><br>
-    ① 让他<b>自己</b>说出最怕的那件事——他嘴上说"挺好的 / 就那样"，你得往下问；<br>
-    ② 让他承认一次<b>具体代价</b>（补实验 / 工期 / 被谁催 / 丢了什么）；<br>
-    ③ 拿到一个<b>具体的下一步</b>（给你数据、带你见谁、什么时候再聊）。<br>
-    <b>纪律</b>：你说的时间不超过三成；不报价格、不报政策、不讲参数；不许替客户总结（"所以您其实很头疼对吧"这类话咽回去）。
-  </div>
-  <div class="tabs">
-    <button class="tab on" data-p="k" onclick="showChain('k')">科研线</button>
-    <button class="tab" data-p="g" onclick="showChain('g')">工业线</button>
-    <button class="tab" data-p="q" onclick="showChain('q')">渠道线</button>
-  </div>
-
-  <div class="chain" data-p="k" style="display:block;">
-    <div class="chain-done" id="done-k">🎉 科研线三关全通 —— 可以拿真实客户上场了。</div>
-      <div class="lv" id="lv-k1">
-        <div class="lv-head">
-          <span class="lv-no">第 1 关</span>
-          <span class="lv-title">硕士生 / 博士后（真正做实验的人）</span>
-          <span class="lv-lock" id="badge-k1">未通关</span>
-        </div>
-        <div class="lv-meta">时间 10 分钟 · 话题层：实验细节 · 前置：无</div>
-        <div class="kv"><b>场景</b>：某高校课题组，做肿瘤免疫方向，流式多色 panel + 磁珠分选。你第一次进组，对方是天天泡在细胞房里的人。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：最近一批分选后细胞活性掉得厉害，流式结果总是飘。他自己怀疑是操作问题，<b>不敢跟老板说</b>（怕被说“你连这个都做不好”），已经耽误快两周。</div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote r-cust">扮演者第一句：“我们组现在用的挺好的，你要看什么资料吗？”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“protocol 是师兄留下来的，我一直这么做的。”</div>
-        <div class="quote r-cust">“老板定的牌子，我说了也没用。”</div>
-        <div class="quote r-cust">“我也就是个干活的，你跟老板聊吧。”（若销售想跳到老板，必出此句）</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          让他自己说出“最近哪一步最卡”，并说出“飘 / 活性低”这类具体现象（不是销售替他说）；<br>          问到现状事实：样本量、机型、几色 panel、多久做一次、现有 buffer / 分选柱是谁定的；<br>          让他承认代价：这两周耽误了什么（补实验 / 进度 / 被老板催）。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：最容易一上来就讲产品、教他操作，或者顺着他说“那我去找老板”——这一关的痛在他手上，你跳上去就空了。</div>
-        <button class="btn primary r-obs" id="btn-k1" onclick="openPad('k1')">评分并通关</button>
-        <div class="pad r-obs" id="pad-k1">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k1',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k1',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k1',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k1',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k1',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k1',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k1',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k1',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k1',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k1',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k1',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k1',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k1',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k1',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k1',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k1',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：你说的≤三成，四句连成 S→P→I→N；不急着推荐产品、不替他下结论。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k1',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k1',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k1',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k1',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-k1">—</span> / 15</div>
-            <div id="vd-k1"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-      <div class="lv locked" id="lv-k2">
-        <div class="lv-head">
-          <span class="lv-no">第 2 关</span>
-          <span class="lv-title">PI / 课题组长（决定买不买、经费怎么花的人）</span>
-          <span class="lv-lock" id="badge-k2">未解锁</span>
-        </div>
-        <div class="lv-meta">时间 5 分钟 · 话题层：进度与经费 · 前置：<b>必须引用第 1 关那句原话</b> · 🔒 通过上一关后解锁</div>
-        <div class="kv"><b>场景</b>：见 PI，他很忙，只给了 5 分钟。手下有 2-3 个学生在跑流式。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：组里这个课题卡了快一个月，结题 / 文章节点在压。他知道“卡一点”，但以为是学生操作不稳定，没意识到是试剂 / protocol 的问题。<b>最怕的是经费花了没结果、学生不出活。</b></div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote">销售必须这样开场：“X 老师，我上次跟您组里做分选的同学聊过，他说最近一批分选后活性掉得厉害、结果总飘，我想跟您确认一下这事。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“学生做实验出问题很正常，他自己多练练。”</div>
-        <div class="quote r-cust">“我们现在用的牌子也做了好几年了。”</div>
-        <div class="quote r-cust">“我只有五分钟，你说重点。”（若销售开始讲参数，必出此句结束）</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          开场引用了第 1 关那句原话，并且 PI 接了话（“哦？他这么说的？”）；<br>          让 PI 自己说出“最怕的是进度 / 经费 / 节点”，不是你替他总结；<br>          N 类问到：如果这一步能稳定下来，对结题 / 文章 / 下一个课题意味着什么——<b>由他说出价值</b>。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：还在跟 PI 聊 buffer 配方、磁珠粒径。细节对真正做实验的人有用，对 PI 是噪音。这一关要把“实验语言”翻译成“进度与经费语言”。</div>
-        <button class="btn primary r-obs" id="btn-k2" disabled onclick="openPad('k2')">评分并通关</button>
-        <div class="pad r-obs" id="pad-k2">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k2',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k2',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k2',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k2',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k2',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k2',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k2',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k2',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k2',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k2',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k2',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k2',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k2',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k2',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k2',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k2',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：开场引用上一关原话；话题从实验细节升级到进度 / 经费；仍守住 30/70。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k2',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k2',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k2',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k2',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-k2">—</span> / 15</div>
-            <div id="vd-k2"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-      <div class="lv locked" id="lv-k3">
-        <div class="lv-head">
-          <span class="lv-no">第 3 关</span>
-          <span class="lv-title">院长 / 平台主任 / 设备处（管资源、合规与集中采购的人）</span>
-          <span class="lv-lock" id="badge-k3">未解锁</span>
-        </div>
-        <div class="lv-meta">时间 3 分钟 · 话题层：资源、合规、风险 · 前置：<b>必须引用第 2 关 PI 的原话，并翻译成管理层语言</b> · 🔒 通过上一关后解锁</div>
-        <div class="kv"><b>场景</b>：流式平台 / 实验中心主任，或学院分管科研的院长。管平台利用率、经费合规、集中采购与供应商准入。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：平台设备利用率上不去是考核指标；去年有供应商资质不全被审计点过。<b>最怕的是“出事谁担责”和“钱花了没产出”。</b>他不在乎你磁珠粒径多少。</div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote">销售开场：“X 主任，我跟 XX 老师的组聊过，他们这个课题因为分选这一步卡了快一个月；我想跟您说的是，这类问题在平台上是不是普遍存在。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“老师用什么是老师的自由，平台不干涉。”</div>
-        <div class="quote r-cust">“我们采购有目录，你这个不在里面吧？”</div>
-        <div class="quote r-cust">“你说的问题我第一次听说，有数据吗？”</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          把 PI 那一层的痛翻译成平台 / 学院层听得懂的话：利用率、合规、风险、经费产出；<br>          拿到一句可向上汇报的原话（“如果……就能……”，<b>由他自己说</b>）；<br>          问清下一步：进目录 / 走准入要哪些步骤、谁签字——<b>拿到流程，不空手走</b>。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：还在讲产品性能。这一关产品只在最后 30 秒出现，前面全是“平台 / 经费 / 风险”。另外别忘了拿流程——见高层不拿流程，等于白见。</div>
-        <button class="btn primary r-obs" id="btn-k3" disabled onclick="openPad('k3')">评分并通关</button>
-        <div class="pad r-obs" id="pad-k3">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k3',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k3',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k3',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k3',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k3',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k3',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k3',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k3',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k3',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k3',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k3',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k3',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k3',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k3',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k3',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k3',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：3 分钟内说清；引用第 2 关原话并完成翻译；结尾拿到下一步（流程 / 对接人 / 时间）。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('k3',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('k3',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('k3',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('k3',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-k3">—</span> / 15</div>
-            <div id="vd-k3"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-  </div>
-  <div class="chain" data-p="g" style="display:none;">
-    <div class="chain-done" id="done-g">🎉 工业线三关全通 —— 可以拿真实客户上场了。</div>
-      <div class="lv" id="lv-g1">
-        <div class="lv-head">
-          <span class="lv-no">第 1 关</span>
-          <span class="lv-title">研发 / 工艺工程师（真正用的人）</span>
-          <span class="lv-lock" id="badge-g1">未通关</span>
-        </div>
-        <div class="lv-meta">时间 10 分钟 · 话题层：技术细节 · 前置：无</div>
-        <div class="kv"><b>场景</b>：一家 IVD / 生物制药企业，做磁珠法核酸提取或流式质控。对方是每天在实验室调方法的人。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：换过一批试剂后结果波动，复测了两次，项目节点被推。他怀疑是新批次，<b>但没证据，不敢上报怕担责</b>。</div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote r-cust">扮演者第一句：“我们现在有合格供应商，暂时不需要新的。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“方法我们验证过了，不好随便动。”</div>
-        <div class="quote r-cust">“你要真有优势，先发资料我看看。”</div>
-        <div class="quote r-cust">“这事得我们总监定。”（若销售试图绕过流程，必出此句）</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          让他自己说出“波动 / 复测 / 耽误节点”的具体事实：哪一批、哪个指标、复测几次；<br>          问到现状：现有供应商、变更要走哪些步骤、验证几批、看什么指标；<br>          让他承认代价：复测成本、节点被推、他个人担的压力。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：一听到“我们有合格供应商”就退了，或者立刻报参数。这一关要先把“波动”钉成具体事实。</div>
-        <button class="btn primary r-obs" id="btn-g1" onclick="openPad('g1')">评分并通关</button>
-        <div class="pad r-obs" id="pad-g1">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g1',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g1',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g1',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g1',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g1',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g1',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g1',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g1',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g1',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g1',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g1',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g1',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g1',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g1',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g1',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g1',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：你说的≤三成，四句连成 S→P→I→N；不急着报价、不替他下结论。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g1',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g1',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g1',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g1',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-g1">—</span> / 15</div>
-            <div id="vd-g1"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-      <div class="lv locked" id="lv-g2">
-        <div class="lv-head">
-          <span class="lv-no">第 2 关</span>
-          <span class="lv-title">QA / 质量 或 采购 / 供应链（把关的人）</span>
-          <span class="lv-lock" id="badge-g2">未解锁</span>
-        </div>
-        <div class="lv-meta">时间 5 分钟 · 话题层：合规与商务 · 前置：<b>必须引用第 1 关那句原话</b> · 🔒 通过上一关后解锁</div>
-        <div class="kv"><b>场景</b>：见 QA 经理或采购 / 供应链负责人。管供应商准入、变更评审、资质文件。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：上次换供应商导致变更验证重跑，他被老板当众说过，<b>现在最怕担责</b>；同时老板压了降本指标。他卡在“要合规”和“要降本”之间。</div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote">销售开场：“我跟您研发那边聊过，他说最近一批结果波动、复测了两次；我想跟您确认，这类波动在变更验证里是怎么处理的。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“供应商变更要走流程，很麻烦。”</div>
-        <div class="quote r-cust">“你们资质 / 文件齐吗？”</div>
-        <div class="quote r-cust">“这个我们要看 QA 和注册的意见。”</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          开场引用研发那句原话，并让对方接话；<br>          让他说出“最怕担责 / 最怕验证重跑”，<b>不是你说</b>；<br>          N 类问到：如果有一个批次稳定、文件齐全、能直接进变更验证的供应商，对他意味着什么（少担责 / 少重跑）。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：跟 QA 讲“我们质量很好”——自夸无效。这一关必须换成“文件、验证、可追溯”的语言，并且别踩“直接降价”的坑（他把降价当降本，但你一降价他反而怀疑质量）。</div>
-        <button class="btn primary r-obs" id="btn-g2" disabled onclick="openPad('g2')">评分并通关</button>
-        <div class="pad r-obs" id="pad-g2">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g2',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g2',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g2',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g2',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g2',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g2',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g2',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g2',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g2',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g2',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g2',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g2',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g2',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g2',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g2',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g2',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：开场引用上一关原话；话题从技术细节升级到合规 / 商务；仍守住 30/70。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g2',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g2',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g2',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g2',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-g2">—</span> / 15</div>
-            <div id="vd-g2"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-      <div class="lv locked" id="lv-g3">
-        <div class="lv-head">
-          <span class="lv-no">第 3 关</span>
-          <span class="lv-title">研发总监 / 总经理 / 老板（拍板的人）</span>
-          <span class="lv-lock" id="badge-g3">未解锁</span>
-        </div>
-        <div class="lv-meta">时间 3 分钟 · 话题层：项目风险与总成本 · 前置：<b>必须引用第 2 关 QA 的原话，并翻译成管理层语言</b> · 🔒 通过上一关后解锁</div>
-        <div class="kv"><b>场景</b>：见研发总监或老板。他手上有项目节点、注册 / 上市时间表。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：真正卡他的是：项目延期会撞上注册 / 上市节点；供应商出事他要担责；他要的是<b>总成本</b>（复测 + 人力 + 延误），不是单价。</div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote">销售开场：“我跟您研发和 QA 都聊过，QA 那边说上次变更验证重跑过一次；我想跟您确认的是，这类波动对项目节点的影响。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“我们换供应商很慎重，不是价格的事。”</div>
-        <div class="quote r-cust">“你说的这个影响有多大？有数吗？”</div>
-        <div class="quote r-cust">“你先跟下面对接吧，定了再找我。”（若销售没有量化，必出此句打发）</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          把下面两层的痛翻译成节点风险与总成本；<br>          让他自己说出“最怕项目延期 / 出事担责”，并且能说出代价量级；<br>          拿到下一步：谁牵头、什么时间、进供应商名录还要谁批。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：到了老板这层还在讲产品参数与单价。老板只认三件事：节点、风险、总成本。另外别被“你先跟下面对接”打发走——要争一个明确的下一步。</div>
-        <button class="btn primary r-obs" id="btn-g3" disabled onclick="openPad('g3')">评分并通关</button>
-        <div class="pad r-obs" id="pad-g3">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g3',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g3',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g3',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g3',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g3',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g3',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g3',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g3',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g3',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g3',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g3',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g3',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g3',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g3',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g3',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g3',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：3 分钟内说清；引用第 2 关原话并完成翻译；结尾拿到下一步（牵头人 / 时间 / 还要谁批）。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('g3',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('g3',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('g3',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('g3',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-g3">—</span> / 15</div>
-            <div id="vd-g3"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-  </div>
-  <div class="chain" data-p="q" style="display:none;">
-    <div class="chain-done" id="done-q">🎉 渠道线三关全通 —— 可以拿真实客户上场了。</div>
-      <div class="lv" id="lv-q1">
-        <div class="lv-head">
-          <span class="lv-no">第 1 关</span>
-          <span class="lv-title">一线销售员（真正跑终端、决定推谁的货的人）</span>
-          <span class="lv-lock" id="badge-q1">未通关</span>
-        </div>
-        <div class="lv-meta">时间 10 分钟 · 话题层：好不好卖 · 前置：无</div>
-        <div class="kv"><b>场景</b>：经销商的业务员，每天跑医院 / 实验室终端，手上有好几个牌子。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：他推谁只看三件事：<b>好不好卖、返点多少、出了问题谁背</b>。现在推的另一个牌子返点高一点、终端也认，但售后拖。</div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote r-cust">扮演者第一句：“我现在推的牌子挺好的，客户也认。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“我推熟的就行，新牌子我还得重新讲。”</div>
-        <div class="quote r-cust">“客户指定牌子的，我也没办法。”</div>
-        <div class="quote r-cust">“你这个售后谁负责？出问题算谁的？”（他真正关心的这句）</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          让他自己说出“最难受的是哪一头”：压货、不好卖、售后没人管、还是返点低；<br>          问到现状：他现在推几个牌子、各走多少、终端最常问什么、返点大概什么水平、售后怎么处理；<br>          让他承认代价：压在手上的资金、被客户追、丢单。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：把渠道当成“小老板”来聊政策。这一关他不是老板，他关心的是“我好不好卖、出问题谁背”。用科研那套技术语言跟他聊，一句话都聊不下去。</div>
-        <button class="btn primary r-obs" id="btn-q1" onclick="openPad('q1')">评分并通关</button>
-        <div class="pad r-obs" id="pad-q1">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q1',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q1',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q1',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q1',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q1',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q1',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q1',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q1',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q1',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q1',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q1',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q1',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q1',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q1',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q1',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q1',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：你说的≤三成，四句连成 S→P→I→N；不谈政策、不谈任务、不替他下结论。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q1',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q1',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q1',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q1',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-q1">—</span> / 15</div>
-            <div id="vd-q1"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-      <div class="lv locked" id="lv-q2">
-        <div class="lv-head">
-          <span class="lv-no">第 2 关</span>
-          <span class="lv-title">产品线负责人 / 采购商务（选品、政策、账期的人）</span>
-          <span class="lv-lock" id="badge-q2">未解锁</span>
-        </div>
-        <div class="lv-meta">时间 5 分钟 · 话题层：压库、资金、政策 · 前置：<b>必须引用第 1 关那句原话</b> · 🔒 通过上一关后解锁</div>
-        <div class="kv"><b>场景</b>：见经销商的产品线负责人 / 商务。选品、谈政策、管库存与账期。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：库里压了一批货，资金占着；竞品的返点最近降了；厂家直销在挤压。<b>最怕的是进回来卖不动、砸在手里。</b></div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote">销售开场：“我前两天跟您一线跑终端的兄弟聊过，他说现在最难受的是售后没人管；我想跟您确认，咱们库里现在压得最多的是哪一块。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“政策跟别家也差不多。”</div>
-        <div class="quote r-cust">“我们库存已经不少了。”</div>
-        <div class="quote r-cust">“厂家都这么说，最后还不是我们压货。”</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          开场引用一线销售员那句原话，让对方接话；<br>          让他说出“最怕压库 / 资金占着 / 返点不如别家”，<b>不是你说</b>；<br>          N 类问到：如果这个牌子一年能多转两轮、售后有人兜，对你们这批资金意味着什么——<b>由他说出价值</b>（不是“您要不要多进点货”）。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：N 类问题变成“您要不要多进点货”——那是推销，不是需求效益。另外别只谈返点：返点谈到底，你就成了最贵的那个。</div>
-        <button class="btn primary r-obs" id="btn-q2" disabled onclick="openPad('q2')">评分并通关</button>
-        <div class="pad r-obs" id="pad-q2">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q2',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q2',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q2',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q2',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q2',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q2',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q2',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q2',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q2',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q2',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q2',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q2',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q2',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q2',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q2',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q2',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：开场引用上一关原话；话题从“好不好卖”升级到“压库与资金”；仍守住 30/70。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q2',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q2',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q2',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q2',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-q2">—</span> / 15</div>
-            <div id="vd-q2"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-      <div class="lv locked" id="lv-q3">
-        <div class="lv-head">
-          <span class="lv-no">第 3 关</span>
-          <span class="lv-title">老板 / 总经理（决定做不做这个牌子的人）</span>
-          <span class="lv-lock" id="badge-q3">未解锁</span>
-        </div>
-        <div class="lv-meta">时间 3 分钟 · 话题层：利润、周转、渠道冲突 · 前置：<b>必须引用第 2 关那句原话，并算到钱</b> · 🔒 通过上一关后解锁</div>
-        <div class="kv"><b>场景</b>：见经销商老板 / 总经理。他手上压着资金、看着团队人效、盯着窜货。</div>
-        <div class="kv r-both"><span class="rolewho w-both">客户+观察员</span><b>客户底牌（扮演者知道，不许主动说）</b>：他真正在算的是：整体利润、资金周转、渠道冲突（厂家直销抢单、窜货）、团队人效。<b>他不关心你磁珠粒径多少。</b></div>
-        <div class="kv"><b>销售开场 / 客户第一句</b>：</div>
-        <div class="quote">销售开场：“我跟您产品线和一线的兄弟都聊过，一线说售后没人管、产品线说库里压着一批；我想跟您算的是，这块一年占多少资金、多久能转起来。”</div>
-        <div class="kv r-cust"><span class="rolewho w-cust">客户</span><b>他会怎么挡你（扮演者照着说）</b>：</div>
-        <div class="quote r-cust">“你们厂家最后还不是要压货给我们。”</div>
-        <div class="quote r-cust">“直销那边也在卖，价格比我们低，怎么弄？”（<b>这颗雷必须接住</b>）</div>
-        <div class="quote r-cust">“你先跟我们产品对接吧。”</div>
-        <div class="passlist r-obs"><span class="rolewho w-obs">观察员</span><b>本关通关要求（观察员打勾）</b><br>
-          把下面两层的痛翻译成利润、周转、渠道冲突三件事；<br>          让他自己说出“最怕资金压着 / 被直销挤压 / 窜货”，并且说出量级（占多少资金、压几个月）；<br>          拿到下一步：区域 / 价格体系 / 账期谁定、什么时间再谈——<b>不空手走</b>。
-        </div>
-        <div class="trap r-obs"><span class="rolewho w-obs">观察员</span><b>这关最容易栽在</b>：到了老板这层还在讲产品性能。渠道老板只认钱和周转。另外“直销挤压 / 窜货”这颗雷必须接住——回避它，这一关就通不过，因为那正是他最怕的。</div>
-        <button class="btn primary r-obs" id="btn-q3" disabled onclick="openPad('q3')">评分并通关</button>
-        <div class="pad r-obs" id="pad-q3">
-        <div class="srow" data-dim="0">
-          <span class="slab">① 认人</span>
-          <span class="sdesc">确认他在这件事上的位置（用不用、管不管、定不定），并问出链条上另一个关键人</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q3',0,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q3',0,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q3',0,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q3',0,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="1">
-          <span class="slab">② S 现状</span>
-          <span class="sdesc">问到具体事实：数量 / 频次 / 现有方案或供应商 / 流程走哪几步，不是空泛背景</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q3',1,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q3',1,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q3',1,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q3',1,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="2">
-          <span class="slab">③ P+I 挖痛</span>
-          <span class="sdesc">让他<b>自己</b>说出最怕的那件事（不是销售替他下结论），并承认一次具体代价</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q3',2,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q3',2,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q3',2,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q3',2,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="3">
-          <span class="slab">④ N 需求效益</span>
-          <span class="sdesc">让他<b>自己</b>说出解决后的好处，最好能说出量级（省多久 / 少几批 / 多赚多少 / 少担什么责）</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q3',3,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q3',3,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q3',3,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q3',3,3)">3</button>
-          </div>
-        </div>
-        <div class="srow" data-dim="4">
-          <span class="slab">⑤ 过程控制</span>
-          <span class="sdesc">过程控制：3 分钟内说清；引用第 2 关原话并算到钱；结尾拿到下一步（谁定 / 什么时间）。</span>
-          <div class="sbtns">
-            <button class="sbtn" data-val="0" onclick="setScore('q3',4,0)">0</button>
-            <button class="sbtn" data-val="1" onclick="setScore('q3',4,1)">1</button>
-            <button class="sbtn" data-val="2" onclick="setScore('q3',4,2)">2</button>
-            <button class="sbtn" data-val="3" onclick="setScore('q3',4,3)">3</button>
-          </div>
-        </div>
-          <div class="tot-line">
-            <div>总分 <span class="tot-num" id="tot-q3">—</span> / 15</div>
-            <div id="vd-q3"><span class="v-mid">先给五个维度都打分</span></div>
-            <div style="font-size:12px;color:#8A8A96;">通关线：总分 ≥ 12，且「③ P+I 挖痛」≥ 2（一票否决）</div>
-          </div>
-        </div>
-      </div>
-  </div>
-
-  <div class="card">
-    <h2>怎么用这套通关演练</h2>
-    <div class="kv"><b>分组</b>：3 人一组＝销售 / 客户 / 观察员。准备 1 分钟 → 演练（按关卡时间）→ 观察员反馈 2 分钟 → 轮换。</div>
-    <div class="kv"><b>扮演客户的人</b>：不许主动送答案，销售问到位才给；一句话最多给三次机会，问不出来就重复那句刁难。</div>
-    <div class="kv"><b>观察员</b>：只记录不提醒。打完分当场说出“哪一句让他自己说出痛的”。</div>
-    <div class="kv"><b>课堂上怎么排</b>：三线同时开，各练各的链。科研线 16 人分 4 组，工业 2 人一组，渠道 4 人一组。<b>新人从第一关起，不许直接挑第三关。</b></div>
-    <div class="kv" style="font-size:12px;color:#8A8A96;">说明：以下客户台词为演练设计，用于练手感，不是某位客户的真实原话。课堂上场上的素材，请用学员自己带来的真实客户。</div>
+  <div class="note">
+    <b>怎么玩</b>：每一轮客户先说话，下面四个选项就是你的四种答法，选一个，客户会真的回你一句——回得怎么样，教练会当场点评。<br>
+    <b>角色链规则</b>：第 2 关起，开场那句话里必须带上<b>上一关那个人说过的原话</b>。现实里就是这样——你能见到位高一级的人，靠的是下面那个人给你的那句话。<br>
+    <b>一票否决</b>：每关有 45 分，拿到 30 分才算数；但<b>挖痛那一轮必须满分</b>，否则分数再高也不给过。<br>
+    <b>成绩怎么收</b>：打完点「📋 复制我的成绩」，粘到群里。<br>
+    <b>说明</b>：页面里的客户台词是教学构造，不是某个真实客户说过的话；SPIN 真人演练另有纸质版，课堂上老师分发。
   </div>
 
   <div class="foot">福麦斯销售团队共创 · 2026.09</div>
 </div>
-<script>
-var PASSED = [];
-try { PASSED = JSON.parse(localStorage.getItem('fumaisi_spin_chain_v1')) || []; } catch (e) { PASSED = []; }
-function save() { try { localStorage.setItem('fumaisi_spin_chain_v1', JSON.stringify(PASSED)); } catch (e) {} }
-var SC = {};
-function openPad(id) {
-  var p = document.getElementById('pad-' + id);
-  p.className = 'pad' + (p.className.indexOf('show') >= 0 ? '' : ' show');
-}
-function setScore(id, d, v) {
-  if (!SC[id]) SC[id] = [null, null, null, null, null];
-  SC[id][d] = v;
-  var pad = document.getElementById('pad-' + id);
-  var row = pad.querySelector('.srow[data-dim="' + d + '"]');
-  var bs = row.querySelectorAll('.sbtn');
-  for (var i = 0; i < bs.length; i++) {
-    bs[i].className = 'sbtn' + (parseInt(bs[i].getAttribute('data-val'), 10) === v ? ' on' : '');
-  }
-  calc(id);
-}
-function calc(id) {
-  var s = SC[id] || [];
-  var tot = document.getElementById('tot-' + id);
-  var vd = document.getElementById('vd-' + id);
-  for (var i = 0; i < 5; i++) {
-    if (s[i] === null || typeof s[i] === 'undefined') {
-      tot.textContent = '—';
-      vd.innerHTML = '<span class="v-mid">先给五个维度都打分</span>';
-      return;
-    }
-  }
-  var sum = 0;
-  for (var j = 0; j < 5; j++) sum += s[j];
-  tot.textContent = sum;
-  var core = s[2];
-  if (sum >= 12 && core >= 2) {
-    vd.innerHTML = '<span class="v-pass">通关 ✓</span>';
-    if (PASSED.indexOf(id) < 0) { PASSED.push(id); save(); }
-    setBadge(id, '已通关');
-    unlock(id);
-  } else if (core <= 1) {
-    vd.innerHTML = '<span class="v-fail">未通关 · 痛没挖出来（P+I ≤ 1）</span>';
-  } else {
-    vd.innerHTML = '<span class="v-mid">未通关 · 总分不足（需 ≥ 12）</span>';
-  }
-}
-function setBadge(id, txt) {
-  var b = document.getElementById('badge-' + id);
-  if (b) { b.textContent = txt; b.className = (txt === '已通关' ? 'lv-pass' : (txt === '未解锁' ? 'lv-lock' : 'lv-lock')); }
-}
-function unlock(id) {
-  var p = id.charAt(0);
-  var n = parseInt(id.charAt(1), 10);
-  if (n < 3) {
-    var nx = p + (n + 1);
-    var lv = document.getElementById('lv-' + nx);
-    if (lv) lv.className = 'lv';
-    var btn = document.getElementById('btn-' + nx);
-    if (btn) btn.disabled = false;
-    if (PASSED.indexOf(nx) < 0) setBadge(nx, '未通关');
-  } else {
-    var d = document.getElementById('done-' + p);
-    if (d) d.className = 'chain-done show';
-  }
-}
-function init() {
-  var ids = ['k1','k2','k3','g1','g2','g3','q1','q2','q3'];
-  for (var i = 0; i < ids.length; i++) {
-    var id = ids[i];
-    var p = id.charAt(0);
-    var n = parseInt(id.charAt(1), 10);
-    var passed = PASSED.indexOf(id) >= 0;
-    if (n === 1) {
-      var b1 = document.getElementById('btn-' + id);
-      if (b1) b1.disabled = false;
-      setBadge(id, passed ? '已通关' : '未通关');
-    } else {
-      var prev = PASSED.indexOf(p + (n - 1)) >= 0;
-      if (prev) {
-        var lv = document.getElementById('lv-' + id);
-        if (lv) lv.className = 'lv';
-        var bb = document.getElementById('btn-' + id);
-        if (bb) bb.disabled = false;
-        setBadge(id, passed ? '已通关' : '未通关');
-      } else {
-        setBadge(id, '未解锁');
-      }
-    }
-    if (passed && n === 3) {
-      var dd = document.getElementById('done-' + p);
-      if (dd) dd.className = 'chain-done show';
-    }
-  }
-}
-function showChain(p) {
-  var cs = document.querySelectorAll('.chain');
-  for (var i = 0; i < cs.length; i++) {
-    cs[i].style.display = (cs[i].getAttribute('data-p') === p ? 'block' : 'none');
-  }
-  var ts = document.querySelectorAll('.tab');
-  for (var j = 0; j < ts.length; j++) {
-    ts[j].className = 'tab' + (ts[j].getAttribute('data-p') === p ? ' on' : '');
-  }
-}
-window.onload = init;
-</script>
 
 <script>
-var ROLE_LABEL = { all: '全看（老师投屏）', sales: '销售', cust: '客户', obs: '观察员', write: '本组写卡', peer: '互评组打分' };
-function setRole(r) {
-  document.body.setAttribute('data-role', r);
-  var bs = document.querySelectorAll('.rbtn');
-  for (var i = 0; i < bs.length; i++) { bs[i].className = 'rbtn' + (bs[i].getAttribute('data-role') === r ? ' on' : ''); }
-  var t = document.getElementById('printTag');
-  if (t) t.textContent = (r === 'all')
-    ? '本页为【全看】版：含客户底牌与评分标准，只供老师投屏或自己看，不要整份发给学员'
-    : ('本页为【' + (ROLE_LABEL[r] || r) + '】版');
+
+var STORE = 'fumaisi_spin_sim_v1';
+var prog = {};          // {线:{关:分数}}
+var curLine = null;
+var tmpScore = {};      // {线关:[每轮分]}
+
+function loadProg(){
+  try { prog = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e){ prog = {}; }
+  for (var i=0;i<LINES.length;i++){
+    var k = LINES[i]; if(!prog[k]) prog[k] = {};
+  }
 }
-setRole('all');
+function saveProg(){ try { localStorage.setItem(STORE, JSON.stringify(prog)); } catch(e){} }
+
+function pickLine(key){
+  curLine = key;
+  for (var i=0;i<LINES.length;i++){
+    var el = document.getElementById('line-'+LINES[i]);
+    if (el) el.style.display = (LINES[i]===key) ? 'block' : 'none';
+    var b = document.getElementById('ltab-'+LINES[i]);
+    if (b) b.className = 'lbtn' + (LINES[i]===key ? ' on' : '');
+  }
+  refreshLocks(key);
+  renderCenter(key);
+  window.scrollTo(0,0);
+}
+
+function refreshLocks(key){
+  var idx = LINES.indexOf(key);
+  var lvIds = LVMAP[key];
+  for (var i=0;i<lvIds.length;i++){
+    var blk = document.getElementById('lv-'+key+'-'+lvIds[i]);
+    if (!blk) continue;
+    if (i===0) { blk.classList.remove('locked'); continue; }
+    var prevPass = prog[key][lvIds[i-1]] && prog[key][lvIds[i-1]]>=PASS;
+    if (prevPass) blk.classList.remove('locked'); else blk.classList.add('locked');
+  }
+}
+
+function pick(line, lv, r, i){
+  var box = document.getElementById('rb-'+line+'-'+lv+'-'+r);
+  if(!box) return;
+  if (box.getAttribute('data-done')==='1') return;
+  var opts = box.querySelectorAll('.option');
+  for (var j=0;j<opts.length;j++){ opts[j].className='option'; }
+  opts[i].className = 'option selected';
+  box.setAttribute('data-sel', String(i));
+  for (var j=0;j<opts.length;j++){
+    var rp = document.getElementById('rp-'+line+'-'+lv+'-'+r+'-'+j);
+    if (rp) rp.style.display = (j===i) ? 'block' : 'none';
+    var cls = (j===i) ? 'option fin ' + (SCORES[line][lv][r][j]>=10?'ok':(SCORES[line][lv][r][j]>0?'half':'no')) : 'option';
+    if (j===i) { opts[j].className = cls; }
+  }
+  var btn = document.getElementById('btn-'+line+'-'+lv+'-'+r);
+  if (btn) btn.classList.add('show');
+}
+
+function nextRound(line, lv, r){
+  var box = document.getElementById('rb-'+line+'-'+lv+'-'+r);
+  if(!box) return;
+  var sel = box.getAttribute('data-sel');
+  if (sel===null) return;
+  var sc = SCORES[line][lv][r][parseInt(sel,10)];
+  if(!tmpScore[line]) tmpScore[line] = {};
+  if(!tmpScore[line][lv]) tmpScore[line][lv] = [];
+  tmpScore[line][lv][r] = sc;
+  box.setAttribute('data-done','1');
+  var nxt = document.getElementById('rb-'+line+'-'+lv+'-'+(r+1));
+  if (nxt){
+    box.style.display='none';
+    nxt.style.display='block';
+    nxt.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    showLevelResult(line, lv);
+  }
+}
+
+function showLevelResult(line, lv){
+  var arr = tmpScore[line][lv] || [];
+  var total = 0; for (var i=0;i<arr.length;i++) total += (arr[i]||0);
+  var keyIdx = KEYROUND[line][lv];
+  var keyScore = arr[keyIdx]||0;
+  var pass = (total>=PASS) && (keyScore>=15);
+  prog[line][lv] = total;
+  saveProg();
+  var box = document.getElementById('res-'+line+'-'+lv);
+  if(!box) return;
+  var lvIdx = LVMAP[line].indexOf(lv);
+  var nextId = LVMAP[line][lvIdx+1];
+  var htmlx = '<div class="lvres ' + (pass?'p':'f') + '">';
+  htmlx += '<div class="lvres-top">' + (pass ? '✅ 本关通关' : '❌ 未通关') + '　' + total + ' / 45 分</div>';
+  htmlx += '<div class="lvres-body">';
+  htmlx += '挖痛那一轮：' + (keyScore>=15 ? '满分通过' : ('只拿到 '+keyScore+' 分 —— 痛没挖到位，这一关不算过'));
+  htmlx += '</div>';
+  if (pass && nextId){
+    htmlx += '<div class="lvres-next">下一关已解锁 👉 往下拉</div>';
+  } else if (pass){
+    htmlx += '<div class="lvres-next">这条线打通了 🎉 换一条线试试</div>';
+  } else {
+    htmlx += '<div class="lvres-next">没过。点下面「重打本关」，注意第 ' + (keyIdx+1) + ' 轮——那是这一关唯一决定成败的一轮。</div>';
+  }
+  htmlx += '<button class="btn-re" onclick="replayLevel(\'' + line + '\',\'' + lv + '\')">重打本关</button>';
+  htmlx += '<button class="btn-copy" onclick="copyScore()">📋 复制我的成绩</button>';
+  htmlx += '</div>';
+  box.innerHTML = htmlx;
+  box.style.display='block';
+  refreshLocks(line);
+  renderCenter(line);
+  setTimeout(function(){ box.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+}
+
+function replayLevel(line, lv){
+  for (var i=0;i<ROUNDS[line][lv];i++){
+    var box = document.getElementById('rb-'+line+'-'+lv+'-'+i);
+    if(!box) continue;
+    box.style.display = (i===0) ? 'block' : 'none';
+    box.removeAttribute('data-done'); box.removeAttribute('data-sel');
+    var opts = box.querySelectorAll('.option');
+    for (var j=0;j<opts.length;j++) opts[j].className='option';
+    for (var j=0;j<4;j++){
+      var rp = document.getElementById('rp-'+line+'-'+lv+'-'+i+'-'+j);
+      if (rp) rp.style.display='none';
+    }
+    var btn = document.getElementById('btn-'+line+'-'+lv+'-'+i);
+    if (btn) btn.classList.remove('show');
+  }
+  tmpScore[line][lv] = [];
+  var res = document.getElementById('res-'+line+'-'+lv);
+  if (res){ res.style.display='none'; res.innerHTML=''; }
+  document.getElementById('chat-'+line+'-'+lv).scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderCenter(key){
+  var box = document.getElementById('center-'+key);
+  if(!box) return;
+  var ids = LVMAP[key]; var done=0; var sum=0;
+  var rows='<table class="tb"><tr><th>关卡</th><th>得分</th><th>结果</th></tr>';
+  for (var i=0;i<ids.length;i++){
+    var v = prog[key][ids[i]];
+    if (v===undefined){ rows += '<tr><td>第'+(i+1)+'关</td><td>—</td><td class="dim">未打</td></tr>'; }
+    else { rows += '<tr><td>第'+(i+1)+'关</td><td>'+v+'/45</td><td class="'+(v>=PASS?'ok':'no')+'">'+(v>=PASS?'通关':'未过')+'</td></tr>';
+           done++; sum+=v; }
+  }
+  rows += '</table>';
+  rows += '<div class="ctot">已过 '+done+' / '+ids.length+' 关　累计 '+sum+' / '+(ids.length*45)+' 分</div>';
+  box.innerHTML = rows;
+}
+
+function copyScore(){
+  var name = (document.getElementById('who').value || '未填姓名').trim();
+  var txt = '【福麦斯·SPIN模拟对战】姓名：' + name + '\n';
+  for (var i=0;i<LINES.length;i++){
+    var k = LINES[i]; var ids = LVMAP[k];
+    var parts = [];
+    for (var j=0;j<ids.length;j++){
+      var v = prog[k][ids[j]];
+      parts.push('第'+(j+1)+'关 ' + (v===undefined ? '未打' : v+'/45' + (v>=PASS?'（通关）':'（未过）')));
+    }
+    txt += TAG[k] + '：' + parts.join('｜') + '\n';
+  }
+  txt += '（注：分数来自线上模拟对战，真人演练由观察员当场打分）';
+  copyText(txt);
+}
+
+function copyText(t){
+  var ta = document.createElement('textarea');
+  ta.value = t; ta.style.position='fixed'; ta.style.left='-9999px';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); alert('成绩已复制，粘贴到微信群即可'); }
+  catch(e){ alert('复制失败，请手动截图'); }
+  document.body.removeChild(ta);
+}
+
+/* —— 静态数据（供 JS 计分用，页面内容全部写死在 HTML 里） —— */
+var LINES = ['keyan', 'gongye', 'qudao'];
+var TAG = {'keyan':'科研线','gongye':'工业线','qudao':'渠道线'};
+var LVMAP = {'keyan':['k1','k2','k3'],'gongye':['g1','g2','g3'],'qudao':['q1','q2','q3']};
+var ROUNDS = {'keyan':{'k1':3,'k2':3,'k3':3},'gongye':{'g1':3,'g2':3,'g3':3},'qudao':{'q1':3,'q2':3,'q3':3}};
+var SCORES = {'keyan':{'k1':[[15,5,0,0],[15,0,5,0],[15,0,5,0]],'k2':[[15,0,0,5],[15,0,5,5],[15,0,5,0]],'k3':[[15,0,5,0],[15,0,5,0],[15,0,0,5]]},'gongye':{'g1':[[15,0,0,5],[15,0,0,5],[15,0,0,5]],'g2':[[15,0,0,5],[15,0,5,0],[15,0,5,0]],'g3':[[15,0,0,5],[15,0,5,5],[15,0,0,5]]},'qudao':{'q1':[[15,0,0,5],[15,0,0,5],[15,0,0,5]],'q2':[[15,0,0,5],[15,0,0,5],[15,0,0,5]],'q3':[[15,0,0,0],[15,0,0,5],[15,0,0,5]]}};
+var KEYROUND = {'keyan':{'k1':1,'k2':1,'k3':1},'gongye':{'g1':1,'g2':1,'g3':1},'qudao':{'q1':1,'q2':1,'q3':1}};
+var PASS = 30;
+
+loadProg();
+pickLine(LINES[0]);
+
 </script>
 </body>
 </html>

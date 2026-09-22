@@ -1,380 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-page-node-id="EXFV63BbaoSCVHuGJ0W9Cu">
-<head data-page-node-id="tQedCqedjpyDM3wO4ldE1u">
-<meta charset="UTF-8" data-page-node-id="3L830fuqt1z3CJWp7s7RPa">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="wLirlV0F7PWj2vbitKPVQm">
-<title>福麦斯·SPIN真人演练与打分标准 | 六场景</title>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIN 真人演练 · 已改为课堂纸质版</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%); min-height: 100vh; color: #1a2547; line-height: 1.65; }
-.container { max-width: 880px; margin: 0 auto; padding: 24px 20px 60px; }
-.header { background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%); color: #fff; border-radius: 16px;
-  padding: 26px 24px; margin-bottom: 18px; box-shadow: 0 6px 20px rgba(47,60,126,.25); }
-.brand-tag { display: inline-block; background: rgba(255,255,255,.15); font-size: 12px; padding: 4px 10px;
-  border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
-.header h1 { font-size: 23px; margin-bottom: 6px; font-weight: 700; }
-.header p { font-size: 13px; opacity: .9; }
-.key-box { background: rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
-.key-box strong { color: #ffd97a; }
-.card { background: #fff; border-radius: 14px; padding: 20px 22px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(47,60,126,.08); }
-.card h2 { font-size: 17px; margin-bottom: 12px; color: #2F3C7E; border-left: 4px solid #4F81BC; padding-left: 10px; }
-.card h3 { font-size: 15px; margin: 14px 0 8px; color: #1a2547; }
-.line-tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; color: #fff; display: inline-block; margin-right: 6px; }
-.t-k { background: #2E8B84; } .t-g { background: #2F3C7E; } .t-q { background: #B85042; }
-.scene { border: 1px solid #E2E7F2; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
-.scene h4 { font-size: 15px; margin-bottom: 10px; color: #1a2547; }
-.kv { font-size: 13px; margin-bottom: 8px; }
-.kv b { color: #2F3C7E; }
-.quote { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 6px; padding: 8px 12px;
-  font-size: 13px; margin: 6px 0; color: #333f5c; }
-.passlist { background: #FFF8E6; border-left: 3px solid #EF9F27; border-radius: 6px; padding: 10px 12px; font-size: 13px; color: #633806; }
-table.rubric { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
-table.rubric th, table.rubric td { border: 1px solid #E2E7F2; padding: 8px 9px; text-align: left; vertical-align: top; }
-table.rubric th { background: #E4EAF5; color: #2F3C7E; }
-table.rubric td.dim { background: #F7F9FE; font-weight: 600; color: #2F3C7E; width: 15%; }
-.score-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #E2E7F2; flex-wrap: wrap; }
-.score-row .name { width: 190px; font-size: 13.5px; font-weight: 600; }
-.score-row .desc { font-size: 11.5px; color: #8A8A96; width: 100%; margin-top: -6px; }
-select.score-sel { font-family: inherit; font-size: 13px; padding: 7px 10px; border: 1.5px solid #DCE3F0; border-radius: 8px; background: #fff; color: #1a2547; }
-.btn { border: none; border-radius: 10px; padding: 12px 20px; font-size: 14px; cursor: pointer;
-  background: #E4EAF5; color: #43506e; font-family: inherit; }
-.btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
-.total-box { margin-top: 14px; padding: 16px; border-radius: 12px; background: #F4F7FC; text-align: center; }
-.total-num { font-size: 40px; font-weight: 700; color: #2F3C7E; }
-.verdict { display: inline-block; margin: 8px 0 10px; padding: 6px 16px; border-radius: 99px; font-size: 14px; }
-.v-pass { background: #E7F7F1; color: #0F6E56; }
-.v-mid { background: #FFF3D6; color: #854F0B; }
-.v-fail { background: #FDECEC; color: #A32D2D; }
-#advice { font-size: 13px; color: #633806; background: #FFF8E6; border-left: 3px solid #EF9F27;
-  border-radius: 6px; padding: 10px 12px; text-align: left; margin-top: 10px; white-space: pre-line; }
-textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px solid #DCE3F0; border-radius: 8px; padding: 10px; }
-.foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
-
-/* ===== 角色分层：同一页，各看各的 ===== */
-.rolebar { position: sticky; top: 0; z-index: 20; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-  background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(47,60,126,.10); }
-.rolebar b { font-size: 13px; color: #2F3C7E; }
-.rbtn { border: 1.5px solid #DCE3F0; background: #fff; border-radius: 99px; padding: 7px 14px; font-size: 13px;
-  cursor: pointer; font-family: inherit; color: #43506e; }
-.rbtn.on { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; border-color: #2F3C7E; }
-.rolehint { font-size: 11.5px; color: #8A8A96; margin-left: auto; }
-.r-sale { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 8px; padding: 12px 14px;
-  font-size: 13px; margin-bottom: 14px; color: #333f5c; line-height: 1.8; }
-.r-sale b { color: #2F3C7E; }
-.rolewho { display: inline-block; font-size: 10.5px; color: #fff; border-radius: 99px; padding: 1px 7px;
-  margin-left: 6px; margin-right: 2px; vertical-align: middle; font-weight: 400; }
-.rolewho.w-both { background: #8B5CF6; } .rolewho.w-cust { background: #B85042; }
-.rolewho.w-obs { background: #1D9E75; } .rolewho.w-sale { background: #4F81BC; }
-.print-tag { display: none; }
-body[data-role="sales"] .r-cust, body[data-role="sales"] .r-both, body[data-role="sales"] .r-obs, body[data-role="sales"] .r-peer { display: none; }
-body[data-role="cust"] .r-obs, body[data-role="cust"] .r-sale, body[data-role="cust"] .r-peer { display: none; }
-body[data-role="obs"] .r-cust, body[data-role="obs"] .r-sale, body[data-role="obs"] .r-peer { display: none; }
-body[data-role="write"] .r-peer { display: none; }
-body[data-role="peer"] .r-write { display: none; }
-body[data-role="sales"] .rolewho, body[data-role="cust"] .rolewho, body[data-role="obs"] .rolewho,
-body[data-role="write"] .rolewho, body[data-role="peer"] .rolewho { display: none; }
-@media print { .rolebar { display: none; } .print-tag { display: block; font-size: 12px; color: #8A8A96; margin-bottom: 10px; } }
-
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#F4F2ED; color:#2C2C2A; line-height:1.7; font-size:15px; }
+.wrap { max-width:520px; margin:0 auto; padding:30px 16px 60px; }
+.card { background:#fff; border-radius:14px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.tag { display:inline-block; font-size:12px; font-weight:600; color:#fff; background:#B85042;
+  border-radius:999px; padding:3px 12px; margin-bottom:10px; }
+h1 { font-size:19px; color:#2F3C7E; margin-bottom:10px; }
+p { font-size:14px; color:#4A4A46; margin-bottom:10px; }
+b { color:#2C2C2A; }
+.box { background:#FBEED9; border-left:3px solid #BA7517; border-radius:0 8px 8px 0;
+  padding:10px 12px; font-size:13.5px; color:#4A3A1A; margin:12px 0; }
+a.btn { display:block; text-align:center; margin-top:14px; padding:12px; border-radius:10px;
+  background:#2F3C7E; color:#fff; text-decoration:none; font-weight:600; }
+.foot { text-align:center; font-size:12px; color:#88877F; margin-top:20px; }
 </style>
 </head>
-<body data-page-node-id="MpujcxWqEON8G1tYeIx2hX">
-<div class="container" data-page-node-id="ApHifMqXJVuam8UkGfbCJo">
-
-  <div class="header" data-page-node-id="Ul2P1dMmRBn0jWTSZfjb2d">
-    <span class="brand-tag" data-page-node-id="VHiFcsAEs2EEBKiM1oy48y">福麦斯 · 销售铁军一期 · M1</span>
-    <h1 data-page-node-id="9p9H3fPOsc10M4uLkruAtw">SPIN 真人演练 · 场景卡与打分标准</h1>
-    <p data-page-node-id="v4wogn4AcZSY9isURD8mEf">6 个场景（科研 / 工业 / 渠道 各 2 个）· 三人一组 · 轮换演练</p>
-    <div class="key-box" data-page-node-id="Bu68jgIDEyhlAalQh4diWp">
-      <strong data-page-node-id="kBX8X7horXdxMnJUl0RN78">玩法</strong>：3 人一组＝<strong data-page-node-id="C7bShjXWYAuecHMraSAiwW">销售</strong> / <strong data-page-node-id="f6jW76JOgBGjHzDRVFRgSQ">客户</strong> / <strong data-page-node-id="jS8ua4WyFJLnAJh7btLXM9">观察员</strong>。准备 1 分钟 → 演练 8 分钟 → 观察员反馈 2 分钟 → 轮换。<br data-page-node-id="zVChNy6QCfxohnfJWOG4la">
-      <strong data-page-node-id="Z2Hq7IL2gwCiO7plcOtAHq">观察员只记录不提醒</strong>，演练中不许插话、不许提示。<br data-page-node-id="xza4xXsvrH8c2D8vdlBCcV">
-      <strong data-page-node-id="Gx4zAstGn2BMHKmkcSfJya">扮演客户的人不许主动送答案</strong>：销售问到位才给信息；一句话最多给三次机会，问不出来就保持沉默或重复那句刁难。
+<body>
+<div class="wrap">
+  <div class="card">
+    <span class="tag">已改为课堂纸质版</span>
+    <h1>SPIN 真人演练 · 不再线上发放</h1>
+    <p>这个环节是<b>真人演练</b>：三人一组，一个当销售、一个当客户、一个当观察员。</p>
+    <div class="box">
+      真人演练的卡片里有<b>客户底牌</b>（真实痛点）和<b>观察员的评分标准</b>。
+      放在网上，谁扫码都能看到——扮演销售的人会提前看到客户的想法，演练就变成照着答案演。
     </div>
+    <p>所以这个环节改成<b>纸质角色卡</b>，课堂上按角色分发：每个场景 3 页，<b>销售页 / 客户页 / 观察员页</b>各一份，不要互相传看。</p>
+    <p>要练手的话，先在手机上做<b>模拟对战</b>：客户说一句，你从四个答法里选一个，当场给你点评。</p>
+    <a class="btn" href="fumaisi-workshop.html">回到练习中心 →</a>
   </div>
-
-  <div class="rolebar">
-    <b>你现在是谁：</b>
-    <button class="rbtn on" data-role="all" onclick="setRole('all')">全看 · 老师</button>
-    <button class="rbtn" data-role="sales" onclick="setRole('sales')">销售</button>
-    <button class="rbtn" data-role="cust" onclick="setRole('cust')">客户</button>
-    <button class="rbtn" data-role="obs" onclick="setRole('obs')">观察员</button>
-    <span class="rolehint">同一页，各看各的：销售看不到底牌和评分标准；客户看不到评分标准。打印时按当前角色出。</span>
-  </div>
-  <div class="print-tag" id="printTag"></div>
-
-  <div class="r-sale">
-    <b>销售 · 你这一轮要拿到的就这三件</b><br>
-    ① 让他<b>自己</b>说出最怕的那件事——他嘴上说"挺好的 / 就那样"，你得往下问；<br>
-    ② 让他承认一次<b>具体代价</b>（补实验 / 工期 / 被谁催 / 丢了什么）；<br>
-    ③ 拿到一个<b>具体的下一步</b>（给你数据、带你见谁、什么时候再聊）。<br>
-    <b>纪律</b>：你说的时间不超过三成；不报价格、不报政策、不讲参数；不许替客户总结（"所以您其实很头疼对吧"这类话咽回去）。
-  </div>
-  <div class="card" data-page-node-id="qiVMOnyGRqg04SbBOQpqaJ">
-    <h2 data-page-node-id="Ujnb40tlY0OAFGGRQmBFvv">一、六张场景卡</h2>
-    <div style="font-size:12px;color:#8A8A96;margin-bottom:12px;" data-page-node-id="W8glOWrCw8oeC1B6saH5fW">说明：以下客户台词为<strong data-page-node-id="bB9AXkv2QO2hRuAQLDrJQh">演练设计</strong>，用于练手感，不是某位客户的真实原话。课堂上场上的素材，请用学员自己带来的真实客户。</div>
-
-    <div class="scene" data-page-node-id="joss0AEd5JKAiDXVfFpvaK">
-      <h4 data-page-node-id="WVinsstLmrMFi8OG744aE2"><span class="line-tag t-k" data-page-node-id="tFDNR5aVB8yTdo6mqZQBXJ">科研</span>场景 1 · PI（课题组长）只给了十分钟</h4>
-      <div class="kv" data-page-node-id="1LwdYFCT4GtdaTY6hwxype"><b data-page-node-id="GeZvGCXUsQNIF5AwlQ1Nxo">客户身份</b>：高校课题组 PI，课题组在做细胞分选，手下有 2-3 个研究生在跑流式。</div>
-      <div class="kv r-both" data-page-node-id="HBBIDXoAa0EOwyxfZ9mtCJ"><span class="rolewho w-both">客户+观察员</span><b data-page-node-id="ySC43fXGMqQxRWWoA9N6gP">客户底牌（扮演者知道，不许主动说）</b>：上个月有一批实验因为分选后活性低全部重做，耽误了两周，老板（学院）在催进度。他很急，但觉得"说出去丢人"，不会主动讲。</div>
-      <div class="kv r-cust" data-page-node-id="Y3zCNASk2kVLnheC3v0fdC"><span class="rolewho w-cust">客户</span><b data-page-node-id="nxM6R8KrER3mD7Ut8AkwBW">客户开场第一句</b>：</div>
-      <div class="quote r-cust" data-page-node-id="30kDHVKgaRujRkh15zEaAw">"我只有十分钟，你长话短说。"</div>
-      <div class="kv r-cust" data-page-node-id="b1CkunhOVKlIyAgmnF6Dbr"><span class="rolewho w-cust">客户</span><b data-page-node-id="Cg5D03MkP6JnjUP9bjU3e6">客户会说的三句刁难</b>：</div>
-      <div class="quote r-cust" data-page-node-id="PLxU9aM5yjA7Y6e2APuGu7">"我们现在用的挺好的，没必要换。"</div>
-      <div class="quote r-cust" data-page-node-id="HQIyDTO3jFE6iXUu4gwN8P">"换牌子我还得重新摸索条件，时间成本谁给我算？"</div>
-      <div class="quote r-cust" data-page-node-id="UBHDEEOH4ZIzCFZlLGVFXc">"你别跟我讲参数，我听不懂也不想听。"（若销售开始讲产品性能，必出此句）</div>
-      <div class="passlist r-obs" data-page-node-id="3eM0TrPF6Bw0m0tRhyKaOd"><span class="rolewho w-obs">观察员</span><b data-page-node-id="ZCFRT1txURdtkmt2b3nOXw">通关要求（观察员看三件事）</b><br data-page-node-id="UEEZ2IsmE6kB3gd9Zsn4GX">
-        ① 让客户自己说出"最怕的不是花钱，是耽误进度"；<br data-page-node-id="1Ayp0J8Qu3oAkadO0rMXoc">
-        ② 让他承认一次具体的代价（补实验／工期／被催）；<br data-page-node-id="JZtW92eXiU5ivBKMoK1OJ1">
-        ③ 让他自己说出解决后的好处，而不是销售替他总结。</div>
-    </div>
-
-    <div class="scene" data-page-node-id="aMPxqvltBh3cE3CXWXtXh3">
-      <h4 data-page-node-id="AVys1pLbBXTBooFIE982TA"><span class="line-tag t-k" data-page-node-id="xYO8HY1ca6xGRBmiFJboao">科研</span>场景 2 · 真正做实验的人（博士后 / 研究生）</h4>
-      <div class="kv" data-page-node-id="P6Bqy7PliyuUfU0mHvXIDL"><b data-page-node-id="wEMRwiByQBqNrsGUGF5bbK">客户身份</b>：实验室里实际操作的人，结果好不好他最清楚，但采购不归他定。</div>
-      <div class="kv r-both" data-page-node-id="AGAiSG6t0TZ1DoKPpCT8We"><span class="rolewho w-both">客户+观察员</span><b data-page-node-id="ukHtc5CNGGulNTiGCgOW82">客户底牌</b>：实验反复失败，他怀疑是试剂／分选条件的问题，但不敢跟老板说（怕被认为是手不行）。他很想找到原因。</div>
-      <div class="kv r-cust" data-page-node-id="qGFtz8iEx6CuKvV4q9RhCN"><span class="rolewho w-cust">客户</span><b data-page-node-id="c4xsAgLuWEznFrnHKHZKMj">客户开场第一句</b>：</div>
-      <div class="quote r-cust" data-page-node-id="jKw6NKKTkPntwUAcjTYi45">"你怎么又来了，我这儿正忙着上样呢。"</div>
-      <div class="kv r-cust" data-page-node-id="I0MuKmUs8mw695NK3Demat"><span class="rolewho w-cust">客户</span><b data-page-node-id="APnxTfThA7BnowSDBGRKZg">客户会说的三句刁难</b>：</div>
-      <div class="quote r-cust" data-page-node-id="mTYixG2QSqnvluiFIkoPPU">"我说了也不算，老板定了用什么。"</div>
-      <div class="quote r-cust" data-page-node-id="KX3v7IixkXzBPOyMXM5B0C">"这套 protocol 是师兄留下来的，我不能随便改。"</div>
-      <div class="quote r-cust" data-page-node-id="UxJma0r21GX27zChbtFLS2">"会不会是我操作的问题？"（他真正担心的这句，要销售问到"最近一次失败是什么样"才给）</div>
-      <div class="passlist r-obs" data-page-node-id="kNU4VcDJSCViz0AZMt3FWv"><span class="rolewho w-obs">观察员</span><b data-page-node-id="DjWmpG0gVFzjgZMkGu5Ijl">通关要求</b><br data-page-node-id="gqzFnKfI396S1sT2aYwGYT">
-        ① 用 S 题摸到真实操作细节（样本类型／上样量／哪一步最容易出问题）；<br data-page-node-id="DxRCMqFCqBKCNsk8PhWT5E">
-        ② 把"会不会是我手不行"这个怕，问出来并接住（不能顺着承认是他的问题）；<br data-page-node-id="6hAhXIEGNhjJzhIUjMNMrZ">
-        ③ 拿到下一步：愿意把你的说法，带到组会上提一句。</div>
-    </div>
-
-    <div class="scene" data-page-node-id="PSgFk5qWZQqPfBWSTdWHJM">
-      <h4 data-page-node-id="sGRuffPzU9vxJAxlcEzEhP"><span class="line-tag t-g" data-page-node-id="s8LFriA6VFDOqalzCXNX0t">工业</span>场景 3 · IVD 企业质量部（QA）经理</h4>
-      <div class="kv" data-page-node-id="K5gKmrIng4eWJzyWmeZHEQ"><b data-page-node-id="IGhAf22kXsqujPuGkfn2JX">客户身份</b>：管供应商准入与变更评审的人，签字权在他手上。</div>
-      <div class="kv r-both" data-page-node-id="dYkKT5rRGlIGEReDHxAnyz"><span class="rolewho w-both">客户+观察员</span><b data-page-node-id="KcogUEdd2wtZPGkZ56vJJV">客户底牌</b>：上一次供应商变更导致一批验证要重跑，他被老板当众说过。所以他极度保守，怕担责，宁可不换。</div>
-      <div class="kv r-cust" data-page-node-id="OE5lJbDTGuqqQ3QIUfELVD"><span class="rolewho w-cust">客户</span><b data-page-node-id="gXufmLD5jlmhzTxhEL0e8y">客户开场第一句</b>：</div>
-      <div class="quote r-cust" data-page-node-id="dw9wM99ZqB3FAMjhVOSi2k">"要进我们的合格供应商名录，得先走变更评审，流程很长。"</div>
-      <div class="kv r-cust" data-page-node-id="cKmHNASp9wwZeYhPy4agtn"><span class="rolewho w-cust">客户</span><b data-page-node-id="DEvEIPXOOss7EJA2wJIrah">客户会说的三句刁难</b>：</div>
-      <div class="quote r-cust" data-page-node-id="gX8089Dh5AUJlsx1gBH3Ks">"供应商变更不是买个东西，是要担责任的。"</div>
-      <div class="quote r-cust" data-page-node-id="KtNsGSmdkk69XtkaTsjzCY">"上一回换了一家，验证全重做，我背的锅。"</div>
-      <div class="quote r-cust" data-page-node-id="D2u5DwU6UfiMYH7C44I6y1">"你先把资料发我邮箱吧。"（若销售试图绕流程，必出此句结束对话）</div>
-      <div class="passlist r-obs" data-page-node-id="qhCbBrsKCXBXrCAAzmPQT8"><span class="rolewho w-obs">观察员</span><b data-page-node-id="HaRVWALThKgAguCZOLS7nM">通关要求</b><br data-page-node-id="sgxAuzQGiEwyIRnFQc9X3a">
-        ① 不正面撞流程，而是问"麻烦卡在哪一步"；<br data-page-node-id="AS9zvtQoVAeTFSTFXGMkjE">
-        ② 让他自己说出那次背锅的经过与后果（I 题要落地）；<br data-page-node-id="e5ZQBLA3Z2TprYPpB7crlT">
-        ③ 让他自己说出"要是有一家不用重跑验证就好了"这类话。</div>
-    </div>
-
-    <div class="scene" data-page-node-id="xzli5XAi2e1Fr5iZ7EDSgR">
-      <h4 data-page-node-id="hkYEougJhYf33hOHeh4Gpx"><span class="line-tag t-g" data-page-node-id="ua3W4JCxcafrBErhyxLJJn">工业</span>场景 4 · 研发 / 工艺负责人</h4>
-      <div class="kv" data-page-node-id="IaD2NuoUsc1DaKKf679wOt"><b data-page-node-id="6bnRHFzjhD2mKW2lFhLBtF">客户身份</b>：用产品的人，关心的是批次稳定性和数据能不能复现。</div>
-      <div class="kv r-both" data-page-node-id="AdQFQUuMkby1npMQ2eRohl"><span class="rolewho w-both">客户+观察员</span><b data-page-node-id="F5C2ebFYlsp58rvzHAMn76">客户底牌</b>：之前某试剂批次差异导致一批数据要复测，项目节点被推迟，他在老板面前很难看。</div>
-      <div class="kv r-cust" data-page-node-id="X14hxhFSNhasGy6kbvAOQF"><span class="rolewho w-cust">客户</span><b data-page-node-id="xXBnHNPCZvG1rI0JMGHPte">客户开场第一句</b>：</div>
-      <div class="quote r-cust" data-page-node-id="behfKpsaVbC3TIBmVW1R8t">"价格你先别报，我最关心的是稳定不稳定。"</div>
-      <div class="kv r-cust" data-page-node-id="svDM4mGI7axaGyKQafVaCX"><span class="rolewho w-cust">客户</span><b data-page-node-id="EONbuKXnBiIyZtyfEAe59R">客户会说的三句刁难</b>：</div>
-      <div class="quote r-cust" data-page-node-id="ABQlA4VxNtuPEmKGVHvTHp">"你们说的批次一致，拿什么证明？"</div>
-      <div class="quote r-cust" data-page-node-id="Hh9kUXveFfHixm60D78klw">"我怎么知道下一批还是不是这个样？"</div>
-      <div class="quote r-cust" data-page-node-id="cOzS7zvX6ygsWEku7JHAF9">"真出了批次问题，你们担什么？"</div>
-      <div class="passlist r-obs" data-page-node-id="OZEHVhUJTtSoQUJ4dhYeee"><span class="rolewho w-obs">观察员</span><b data-page-node-id="iYI1VomKySt8geI26WPHXZ">通关要求</b><br data-page-node-id="E6H2PrRJJ6zZCwtIZ2EYbQ">
-        ① S 题问到真实用量、验证节点、现在几个批次在用；<br data-page-node-id="Jc7GLpsd8VZC16gZOAoqul">
-        ② P+I 题让他讲出上次批次问题拖了多久、牵连了谁；<br data-page-node-id="Z0MU4B3g9RkbfC7qHrJ4JU">
-        ③ 好处由他讲（项目节点／复测成本／他在老板面前的面子）。</div>
-    </div>
-
-    <div class="scene" data-page-node-id="HRfNMxszow4eGKUoR56Sn2">
-      <h4 data-page-node-id="8n019PreLhV1mkN2oMFALS"><span class="line-tag t-q" data-page-node-id="4l4cnuWHRCEqkUFEqXIk4a">渠道</span>场景 5 · 经销商老板</h4>
-      <div class="kv" data-page-node-id="sTHd10F0p5boagWBAcVhC1"><b data-page-node-id="2OVYkiQ12iPryAQgMLzqWH">客户身份</b>：同时在代理竞品，手里有几个牌子，看你过来默认为你是来压货的。</div>
-      <div class="kv r-both" data-page-node-id="k0nij3DRLrqB65dDrbt5b1"><span class="rolewho w-both">客户+观察员</span><b data-page-node-id="9nu1FXXypsiUIZhVOsBLUS">客户底牌</b>：竞品返点降了、库里压了一批货，资金有点紧；但他不会主动说，怕显得自己经营不行。</div>
-      <div class="kv r-cust" data-page-node-id="50EprBdSvqHssfYdJ9mp1N"><span class="rolewho w-cust">客户</span><b data-page-node-id="ACbvKPTmRqGqDMR7PRYDoB">客户开场第一句</b>：</div>
-      <div class="quote r-cust" data-page-node-id="ZHBLgDE5Wbz0NIt7JBKJNp">"又是厂家来让我做量的吧，我这儿货还压着呢。"</div>
-      <div class="kv r-cust" data-page-node-id="B95oEv2xkCnoU0PNtm1sbC"><span class="rolewho w-cust">客户</span><b data-page-node-id="LQ5sErwACKcUtEhEzAYCeJ">客户会说的三句刁难</b>：</div>
-      <div class="quote r-cust" data-page-node-id="4tEV9HhPk38dtUGwdzCAdc">"你们政策跟别家也没多大差别。"</div>
-      <div class="quote r-cust" data-page-node-id="5rkbifRuWBhLiohQpiSsJ3">"终端认你们这个牌子吗？"</div>
-      <div class="quote r-cust" data-page-node-id="BzNM7LviulwAkEzySWToKx">"先别谈政策，谈政策我就知道你要压货。"</div>
-      <div class="passlist r-obs" data-page-node-id="aXQhc6ZJKMFvSPIsAOWyEK"><span class="rolewho w-obs">观察员</span><b data-page-node-id="uAFnnV5HGYEaUSOMLa3pbV">通关要求</b><br data-page-node-id="6OA8XTMCTqvNh0rM24Uj1R">
-        ① 用 S 题算他的账（走什么牌子、一年多少量、返点多少、压了多少库存）；<br data-page-node-id="5hawMzO0aMk83TGg8TH5Zl">
-        ② 让他自己说出"最难受的是压资金还是串货"；<br data-page-node-id="QiwLCgkEYcKVvBNpcCqwhF">
-        ③ 让他自己算出来：跟你合作这一年能多出来多少钱，而不是你报一个返点数。</div>
-    </div>
-
-    <div class="scene" data-page-node-id="dkL5AvRUtpNy5B1vDdLyl7">
-      <h4 data-page-node-id="RTfELzZlr8iTg1FKC38rFz"><span class="line-tag t-q" data-page-node-id="E61ZNnQcwbRkOuubWtC9UT">渠道</span>场景 6 · 经销商的一线销售员（最容易漏掉的人）</h4>
-      <div class="kv" data-page-node-id="NER5CbxDAW86L6zyOjYsn2"><b data-page-node-id="4hcMCxskairV0maotyCaLv">客户身份</b>：真正跑终端、决定推谁货的人。老板点头没用，他嘴巴上推谁才有用。</div>
-      <div class="kv r-both" data-page-node-id="8ptvBMuhfbykDRCIEcKQDG"><span class="rolewho w-both">客户+观察员</span><b data-page-node-id="WBm0HyEveiP6mmkUUc6uaD">客户底牌</b>：他推熟悉牌子是因为好卖、返点熟、出问题不用自己背。换牌子最大的顾虑是"卖不动、出了事我要挨骂"。</div>
-      <div class="kv r-cust" data-page-node-id="BeaCkRLmm9tup6ZN7AS1nF"><span class="rolewho w-cust">客户</span><b data-page-node-id="hUR1CzdlIWe4PywwRE1rQv">客户开场第一句</b>：</div>
-      <div class="quote r-cust" data-page-node-id="XhHU3WkDGegd2B7810UZz2">"我推我熟悉的就行，客户点名要的。"</div>
-      <div class="kv r-cust" data-page-node-id="AOrbFXj2M7oIWPcHX0mMsN"><span class="rolewho w-cust">客户</span><b data-page-node-id="T4vtom3nSdGsDsPh41Ilqr">客户会说的三句刁难</b>：</div>
-      <div class="quote r-cust" data-page-node-id="ANMk2drfX8XXJHFmsePhAK">"你这个牌子终端不认，我推了也白搭。"</div>
-      <div class="quote r-cust" data-page-node-id="2kOcBqijMvl6UqDfxOyDuZ">"出了问题谁负责？别到时候让我去给客户赔不是。"</div>
-      <div class="quote r-cust" data-page-node-id="QZfj1DMXkfw1Vlk0DPLrEm">"返点我熟的那个也不低。"</div>
-      <div class="passlist r-obs" data-page-node-id="Ah9MSY7Woo4HKYVewQujIk"><span class="rolewho w-obs">观察员</span><b data-page-node-id="yWErKiDlPcFRYDXqWc541a">通关要求</b><br data-page-node-id="fkG0a2T0O5ThnsUd6NMXtm">
-        ① 先承认他"推熟的省心"，不否定他；<br data-page-node-id="wif5qETEIoC87ScKBqj6P2">
-        ② 问出他推一单最难受的是什么（谈价／售后背锅／终端不认）；<br data-page-node-id="1uNkyPd933aqIpwuxw6LQG">
-        ③ 让他自己说出"要是有人帮我兜底售后，我也愿意试"。</div>
-    </div>
-  </div>
-
-  <div class="card" data-page-node-id="jclCuQgv5LmLNQixfTzFOQ">
-    <h2 data-page-node-id="5Xnis5k0cVqV6dQ7PiIBCi">二、打分标准（每维 0-3 分，满分 15 分）</h2>
-    <table class="rubric" data-page-node-id="K9rICvV6POtPmHujsmJC4D">
-      <tr data-page-node-id="xuuNY6mHpHDtlhli8ccHEl"><th data-page-node-id="JABrjSaUETtWot0xXB5rrT">维度</th><th data-page-node-id="FrqLiDM7plDy3tU3pYT82z">0 分</th><th data-page-node-id="hTUX1pAcCOVbDcMLK2fyPR">1 分</th><th data-page-node-id="2sSUlR4oCrT7IlcycGfWwH">2 分</th><th data-page-node-id="tZoQzvF8Rj4QSiDSBasbV0">3 分</th></tr>
-      <tr data-page-node-id="UPgGidHehlPTIOy5fYAS0L">
-        <td class="dim" data-page-node-id="c39BUMFKvN962Ee5r0gv39">1 认人<br data-page-node-id="l9xAhdyOBe1ICay4cvzuA0">（找对能说痛的人）</td>
-        <td data-page-node-id="3GfgzC3ErtrMWg7zIsoK9h">没问对方在这件事里的位置，全程对着人推销。</td>
-        <td data-page-node-id="nnF9v78r3JdNP6xelaAovs">知道对方岗位，但没确认这件事归他管、他自己用不用。</td>
-        <td data-page-node-id="z8Yi2CAKtyAzFH9bVYaPGs">确认了他在这件事上的位置，并问到了下一个关键人。</td>
-        <td data-page-node-id="lfMqQf57LNTUhGqLgsWGog">开场一句话点明"我为什么专门找您"，并顺势拿到了下一个关键人的信息。</td>
-      </tr>
-      <tr data-page-node-id="5f4fWKSMJfRuRwIroqzaFE">
-        <td class="dim" data-page-node-id="6pWphWv2PXvpCQj5lTO37I">2 S 现状<br data-page-node-id="e5DpVAEeRMlNQH7OzzbPsG">（摸到真实情况）</td>
-        <td data-page-node-id="VUNHkrZHUdQPKN8YaiXbFE">没问现状，开口就推荐产品、报参数。</td>
-        <td data-page-node-id="ZvjcXCfu78uOEItzMBuURs">问了但太泛（"你们现在用什么？"没有往下追）。</td>
-        <td data-page-node-id="oQ6uU9rtHrKVJ6MboA0mwY">问到具体事实：量、机型、panel、频次、账期、压库。</td>
-        <td data-page-node-id="XVAJljPlpCR4LSWDwY5qpA">问得内行，客户主动补充细节，态度从戒备变成聊。</td>
-      </tr>
-      <tr data-page-node-id="yk2aQDuJRsLtyN6FI0TR6V">
-        <td class="dim" data-page-node-id="a4FwXfTbalbm7g6whlIB5Y">3 P+I 挖痛<br data-page-node-id="BuL9HigQ4re9qrIu2UEM2o">（让他承认痛与代价）</td>
-        <td data-page-node-id="ptokqHNkRoDDPcPa5TaZWF">全程没挖痛，自说自话。</td>
-        <td data-page-node-id="CXberaGY687QVoCJdD7Gjq">提了痛，但是销售替客户下的结论（"您是不是很头疼交付？"）。</td>
-        <td data-page-node-id="vhqGtbus5mJsMQzTrzFrAD">客户<strong data-page-node-id="L0PFJk1coMmrrEOXiFOieM">自己说出</strong>怕的那件事。</td>
-        <td data-page-node-id="VZ7RRVmgnmu15mqi0GtCLH">客户不仅说出痛，还承认了后果／代价（耽误进度、复测、被投诉、压资金）。</td>
-      </tr>
-      <tr data-page-node-id="EfDe2UlKKpc27i4SSp9ZM4">
-        <td class="dim" data-page-node-id="YuBfEoYgsbFXNs4POlNXjl">4 N 需求效益<br data-page-node-id="q6eGnF4oM7Gt6TBDHilIEA">（好处由他说）</td>
-        <td data-page-node-id="AGg0w17RLRnH1UOfxOJbCS">没问 N。</td>
-        <td data-page-node-id="WC5s1y6Ko23JFo9B2wcngL">销售自己替客户讲好处。</td>
-        <td data-page-node-id="Bf89FZY0YfisJ4VcsXsJDS">客户说出"如果解决了…就好了"这类话。</td>
-        <td data-page-node-id="nFPBExpz7XS0EHfodUpb1L">客户主动量化好处（省多久、少几批、多赚多少）并愿意走下一步。</td>
-      </tr>
-      <tr data-page-node-id="q0sjp2Ay1fphSGzulYZLpC">
-        <td class="dim" data-page-node-id="w8CtHpFHgUGeqbF6Y947s6">5 过程控制<br data-page-node-id="Dh7XIQ91RAByMLVGsNsFTI">（路径与节奏）</td>
-        <td data-page-node-id="cTB7l2QTzmCF51SUOvrBJR">全程销售在讲，四问乱序，像查户口。</td>
-        <td data-page-node-id="VdZxEYR86lsg8WSKuG4E6y">有问有答，但四句没连成路径。</td>
-        <td data-page-node-id="EH4qnxKCBfNkiDcltFW99z">基本按 S→P→I→N 递进，您说的不超过三成。</td>
-        <td data-page-node-id="qCBIKsjUjPTC4PTfQAR3Nu">四句一条路径，客户嘴里冒出"如果…那就"的价值句，结尾拿到下一步承诺。</td>
-      </tr>
-    </table>
-    <div style="font-size:13px;margin-top:12px;color:#5A6482;" data-page-node-id="cy8CPHyll9tp4SxFuhr1fa">
-      <b data-page-node-id="9oDWFDIY3KrWqyqsZX24yy">通关规则</b>：总分 ≥ 12 分且「第 3 项 P+I 挖痛」≥ 2 分才算通关。<br data-page-node-id="X40d1RHvtTyATWd2MitGXP">
-      <b data-page-node-id="mcLikEhJ51tQCRPSiD4Xq7">一票否决</b>：第 3 项 ≤ 1 分（没挖到痛），无论总分多少都判<strong data-page-node-id="8DHGzBpTAvszUXsbpkrxTh">未通关</strong>——痛没挖出来，后面的话全是自我表演。
-    </div>
-  </div>
-
-  <div class="card" data-page-node-id="uxkM5BqEZQmRIHLBpnReKf">
-    <h2 data-page-node-id="1ZmgW4yO9FhpAquPdPsZAu">三、现场打分器</h2>
-    <div class="score-row" data-page-node-id="LgJPzAyGVw7PuF05EG70HU">
-      <span class="name" data-page-node-id="lVX9jvpriEyJt7vWWggo7X">第 1 项 · 认人</span>
-      <select class="score-sel" id="d1" onchange="calcScore()" data-page-node-id="g6J4j3m8le35E6y46DDe7f"><option value="0" data-page-node-id="HfoqS9YMEZgo3T13qUtAWL">0 分</option><option value="1" data-page-node-id="WNK31ctuNNJViOQ0qAnRLl">1 分</option><option value="2" data-page-node-id="J0IGPi4HrdZsLVms3qNemS">2 分</option><option value="3" data-page-node-id="lmbeKHsaCnjdAWbvCoSLSU">3 分</option></select>
-      <div class="desc" data-page-node-id="FOzuek5hVr88NhJGBZRRP5">找对了能说痛的人，并确认他在这件事里的位置</div>
-    </div>
-    <div class="score-row" data-page-node-id="AZSb2mVAHDzkJohItPQfpA">
-      <span class="name" data-page-node-id="DcLuz9iC7z4H6haWSEYgeI">第 2 项 · S 现状</span>
-      <select class="score-sel" id="d2" onchange="calcScore()" data-page-node-id="HdDT6cxE6YtV3GgBFLTkxG"><option value="0" data-page-node-id="QvlkV9AZwcPilldHA3RVQD">0 分</option><option value="1" data-page-node-id="fdR9lUNJqg7NBoTat4wMf6">1 分</option><option value="2" data-page-node-id="YPysipC8LD3JtADUY8BU7y">2 分</option><option value="3" data-page-node-id="OXjbpRfZeraFMtebcXSAy0">3 分</option></select>
-      <div class="desc" data-page-node-id="yLyGgqLehbtWLUeZG4hm6l">摸到具体事实，不是空泛背景</div>
-    </div>
-    <div class="score-row" data-page-node-id="xFDYTJP9RuuDpmFFvMN6r4">
-      <span class="name" data-page-node-id="GMOWg3dSjuCScQSOacM0kU">第 3 项 · P+I 挖痛</span>
-      <select class="score-sel" id="d3" onchange="calcScore()" data-page-node-id="Bqj98XDjY2gWcSZR71Wand"><option value="0" data-page-node-id="3xLy2S2uqlA4ntFamAeZav">0 分</option><option value="1" data-page-node-id="lE2in2IOtxtAOF4DzUdX8X">1 分</option><option value="2" data-page-node-id="EftIxfLO2tsBL2xTxefVCr">2 分</option><option value="3" data-page-node-id="bJmpB9oJJ4yxGsfNJX9XvY">3 分</option></select>
-      <div class="desc" data-page-node-id="bnot4LCsed1dbUbsDxF2Vu">让客户自己说出痛，并承认后果代价（一票否决项）</div>
-    </div>
-    <div class="score-row" data-page-node-id="EOIXAnl9qBKoCvvVhC5zMg">
-      <span class="name" data-page-node-id="2k3wG8RIDdIP5pLzmeW8Kx">第 4 项 · N 需求效益</span>
-      <select class="score-sel" id="d4" onchange="calcScore()" data-page-node-id="4mGHq0bUMTYKbmlqPmi7MF"><option value="0" data-page-node-id="sB1VjkzKgUg7EPG5Pnq8uS">0 分</option><option value="1" data-page-node-id="uOieVBZ0RvsxLVk6b1JZCR">1 分</option><option value="2" data-page-node-id="TPjp0qx8wapK1x1grPGNVJ">2 分</option><option value="3" data-page-node-id="FZ3QmihUzan9hS7GZ1ixcN">3 分</option></select>
-      <div class="desc" data-page-node-id="t8SoyTOh4TvQYg37fyIcAN">好处由客户说出，最好被他量化</div>
-    </div>
-    <div class="score-row" data-page-node-id="G85Rnfui9F6ChGew9Iv4ba">
-      <span class="name" data-page-node-id="CZSpJXvMG1y5PvVy4SbcoC">第 5 项 · 过程控制</span>
-      <select class="score-sel" id="d5" onchange="calcScore()" data-page-node-id="oiMpqCzSMke4UsgDbMPiFZ"><option value="0" data-page-node-id="BZOtF8lMNCLmF4lozr4I5x">0 分</option><option value="1" data-page-node-id="SMqhZYGkRi3R9Fz92b2Jod">1 分</option><option value="2" data-page-node-id="6FoAk9xXE5HpU7dyVuA3iB">2 分</option><option value="3" data-page-node-id="AKr3pRf0dhfRILaXB0wXv4">3 分</option></select>
-      <div class="desc" data-page-node-id="qvSv5SWW5YfcEpm6DWNlR1">四句连成递进路径，您说的不超过三成，结尾拿到承诺</div>
-    </div>
-
-    <div class="total-box" data-page-node-id="ps1RkjPEwUVq4t2Hjj1Ipt">
-      <div class="total-num" data-page-node-id="lkBaDhe5lVKbXAv3fHKXpX"><span id="totalNum" data-page-node-id="nAzccpLR7eI3Xn6fTL2A5q">0</span> / 15</div>
-      <div class="verdict" id="verdict" data-page-node-id="SjoqDchI6jvGNMPxZ9Y2m8">请选择各项得分</div>
-      <div id="advice" data-page-node-id="pBoFasMyRlzMRNqko5OArp"></div>
-    </div>
-
-    <div style="margin-top:14px;" data-page-node-id="RKwdfsl0G4ifOq5Os9zmCx">
-      <div style="font-size:13px;font-weight:600;margin-bottom:6px;" data-page-node-id="FezC3IoDKrp9kW1mKS3S1y">观察员记录（写具体的话，不写"还不错"）</div>
-      <textarea id="notes" rows="4" placeholder="客户说的最有价值的一句原话：&#10;销售卡住的那一问：&#10;下一轮要改的一句："></textarea>
-    </div>
-    <div style="margin-top:12px;" data-page-node-id="3Nbac0qiQMl8FS3KmcfjGl">
-      <button class="btn primary" onclick="copyAll()" data-page-node-id="htYkJFnP3jD4K6KjwC7JA0">📋 复制本轮评分</button>
-      <button class="btn" onclick="resetScore()" data-page-node-id="yk1jyyw9SEBF4DAFiL60Fm">重置</button>
-    </div>
-  </div>
-
-  <div class="foot" data-page-node-id="RGP5uSVW5ZBozd2F7oP5o9">福麦斯销售团队共创 · 2026.09｜演练台词为教学设计，课堂请替换为学员自己的真实客户</div>
+  <div class="foot">福麦斯销售团队共创 · 2026.09</div>
 </div>
-
-<script>
-function vals() {
-  return [ parseInt(document.getElementById('d1').value,10), parseInt(document.getElementById('d2').value,10),
-           parseInt(document.getElementById('d3').value,10), parseInt(document.getElementById('d4').value,10),
-           parseInt(document.getElementById('d5').value,10) ];
-}
-
-function calcScore() {
-  var v = vals();
-  var total = v[0]+v[1]+v[2]+v[3]+v[4];
-  document.getElementById('totalNum').textContent = total;
-  var box = document.getElementById('verdict');
-  var pain = v[2];
-  if (pain <= 1) {
-    box.className = 'verdict v-fail';
-    box.textContent = '未通关 · 痛没挖出来（P+I ≤ 1 分）';
-  } else if (total >= 12) {
-    box.className = 'verdict v-pass';
-    box.textContent = '通关 · 可轮换下一角色';
-  } else if (total >= 9) {
-    box.className = 'verdict v-mid';
-    box.textContent = '待练 · 差一口气，改一句重来';
-  } else {
-    box.className = 'verdict v-fail';
-    box.textContent = '重练 · 回到四句顺序重新走一遍';
-  }
-  var names = ['认人','S 现状','P+I 挖痛','N 需求效益','过程控制'];
-  var tips = [ '回去把这家客户的关键人补清楚：谁在用、谁签字、谁最后定，先对准人再开口。',
-    'S 题要落到具体事实：数量、设备、频次、账期、库存，别问"你们现在怎么样"。',
-    '把客户的模糊抱怨钉成具体难点，再问他这事最坏会怎么样——让他自己说，你别替他说。',
-    '好处必须让客户自己讲出口，销售替他讲完，等于没讲。',
-    '四问要连成一条路径，听他说七成，你只说三成。' ];
-  var adv = '';
-  for (var i = 0; i < 5; i++) { if (v[i] <= 1) { adv += '· ' + names[i] + '：' + tips[i] + '\n'; } }
-  if (!adv) { adv = '五维都在 2 分以上。下一轮换一个更硬的场景（如场景 3 的 QA）继续压。'; }
-  document.getElementById('advice').textContent = adv;
-}
-
-function resetScore() {
-  for (var i = 1; i <= 5; i++) { document.getElementById('d' + i).value = '0'; }
-  document.getElementById('totalNum').textContent = '0';
-  document.getElementById('verdict').className = 'verdict';
-  document.getElementById('verdict').textContent = '请选择各项得分';
-  document.getElementById('advice').textContent = '';
-}
-
-function copyAll() {
-  var v = vals();
-  var names = ['认人','S 现状','P+I 挖痛','N 需求效益','过程控制'];
-  var txt = '【福麦斯·SPIN真人演练】\n演练人：______（角色：销售）\n场景：______\n';
-  for (var i = 0; i < 5; i++) { txt += names[i] + '：' + v[i] + ' 分\n'; }
-  txt += '总分：' + (v[0]+v[1]+v[2]+v[3]+v[4]) + '/15\n判定：' + document.getElementById('verdict').textContent + '\n';
-  txt += '观察员记录：\n' + document.getElementById('notes').value;
-  var ta = document.createElement('textarea');
-  ta.value = txt; document.body.appendChild(ta); ta.select();
-  try { document.execCommand('copy'); alert('评分已复制'); } catch (e) { alert('复制失败，请手动复制'); }
-  document.body.removeChild(ta);
-}
-</script>
-
-<script>
-var ROLE_LABEL = { all: '全看（老师投屏）', sales: '销售', cust: '客户', obs: '观察员', write: '本组写卡', peer: '互评组打分' };
-function setRole(r) {
-  document.body.setAttribute('data-role', r);
-  var bs = document.querySelectorAll('.rbtn');
-  for (var i = 0; i < bs.length; i++) { bs[i].className = 'rbtn' + (bs[i].getAttribute('data-role') === r ? ' on' : ''); }
-  var t = document.getElementById('printTag');
-  if (t) t.textContent = (r === 'all')
-    ? '本页为【全看】版：含客户底牌与评分标准，只供老师投屏或自己看，不要整份发给学员'
-    : ('本页为【' + (ROLE_LABEL[r] || r) + '】版');
-}
-setRole('all');
-</script>
 </body>
 </html>
