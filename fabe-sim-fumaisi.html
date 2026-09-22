@@ -50,6 +50,32 @@ textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px sol
   background: #E4EAF5; color: #43506e; font-family: inherit; margin-right: 8px; }
 .btn.primary { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; }
 .foot { text-align: center; font-size: 12px; color: #8A8A96; margin-top: 20px; }
+
+/* ===== 角色分层：同一页，各看各的 ===== */
+.rolebar { position: sticky; top: 0; z-index: 20; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(47,60,126,.10); }
+.rolebar b { font-size: 13px; color: #2F3C7E; }
+.rbtn { border: 1.5px solid #DCE3F0; background: #fff; border-radius: 99px; padding: 7px 14px; font-size: 13px;
+  cursor: pointer; font-family: inherit; color: #43506e; }
+.rbtn.on { background: linear-gradient(135deg,#2F3C7E,#4F81BC); color: #fff; border-color: #2F3C7E; }
+.rolehint { font-size: 11.5px; color: #8A8A96; margin-left: auto; }
+.r-sale { background: #F4F7FC; border-left: 3px solid #4F81BC; border-radius: 8px; padding: 12px 14px;
+  font-size: 13px; margin-bottom: 14px; color: #333f5c; line-height: 1.8; }
+.r-sale b { color: #2F3C7E; }
+.rolewho { display: inline-block; font-size: 10.5px; color: #fff; border-radius: 99px; padding: 1px 7px;
+  margin-left: 6px; margin-right: 2px; vertical-align: middle; font-weight: 400; }
+.rolewho.w-both { background: #8B5CF6; } .rolewho.w-cust { background: #B85042; }
+.rolewho.w-obs { background: #1D9E75; } .rolewho.w-sale { background: #4F81BC; }
+.print-tag { display: none; }
+body[data-role="sales"] .r-cust, body[data-role="sales"] .r-both, body[data-role="sales"] .r-obs, body[data-role="sales"] .r-peer { display: none; }
+body[data-role="cust"] .r-obs, body[data-role="cust"] .r-sale, body[data-role="cust"] .r-peer { display: none; }
+body[data-role="obs"] .r-cust, body[data-role="obs"] .r-sale, body[data-role="obs"] .r-peer { display: none; }
+body[data-role="write"] .r-peer { display: none; }
+body[data-role="peer"] .r-write { display: none; }
+body[data-role="sales"] .rolewho, body[data-role="cust"] .rolewho, body[data-role="obs"] .rolewho,
+body[data-role="write"] .rolewho, body[data-role="peer"] .rolewho { display: none; }
+@media print { .rolebar { display: none; } .print-tag { display: block; font-size: 12px; color: #8A8A96; margin-bottom: 10px; } }
+
 </style>
 </head>
 <body>
@@ -66,11 +92,19 @@ textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px sol
     </div>
   </div>
 
+  <div class="rolebar">
+    <b>你现在是谁：</b>
+    <button class="rbtn on" data-role="all" onclick="setRole('all')">全看 · 老师</button>
+    <button class="rbtn" data-role="write" onclick="setRole('write')">本组写卡</button>
+    <button class="rbtn" data-role="peer" onclick="setRole('peer')">互评组打分</button>
+    <span class="rolehint">写卡的那一组看不到打分表；互评的那一组只看打分表、不看任务卡里的提示。打印时按当前角色出。</span>
+  </div>
+  <div class="print-tag" id="printTag"></div>
   <div class="card">
     <h2>一、三张演练任务卡</h2>
     <p style="font-size:12.5px;color:#8A8A96;margin-bottom:12px;">主推品当场从技术给的 F/A 清单里选；选品标准＝走量的、有差异化可讲的、拿得出证据的。<b>每张卡只做一个品，做透。</b></p>
 
-    <div class="task k">
+    <div class="task k r-write">
       <span class="tagline">科研线</span>
       <h3>高校课题组 / 医院检验科</h3>
       <div class="field"><b>主推品：</b><span class="line"></span></div>
@@ -78,10 +112,10 @@ textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px sol
       <div class="field"><b>A 怎么推：</b>从 F 往前一步写"它能做到……"（例：预包被即用型 → "它能省掉自己包被抗体这一步"）</div>
       <div class="field"><b>E 能拿什么：</b>文献引用｜其他课题组的用例｜第三方检测报告｜可公开的组名或平台名</div>
       <div class="warn"><b>最容易犯的错：</b>B 写成"实验结果更准确""品质更稳定"这类通用好处；E 拿不出，只能讲"很多老师都在用"。</div>
-      <div class="check"><b>互评重点：</b>盖住痛点单独读 B——还立得住吗？立得住就是没挂上痛。</div>
+      <div class="check r-peer"><b>互评重点：</b>盖住痛点单独读 B——还立得住吗？立得住就是没挂上痛。</div>
     </div>
 
-    <div class="task g">
+    <div class="task g r-write">
       <span class="tagline">工业线</span>
       <h3>IVD / 药企 · 研发或质量</h3>
       <div class="field"><b>主推品：</b><span class="line"></span></div>
@@ -89,10 +123,10 @@ textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px sol
       <div class="field"><b>A 怎么推：</b>（例：批间差异小 → "它能保证连续几批的检测结果落在同一区间"）</div>
       <div class="field"><b>E 能拿什么：</b>COA｜批次稳定性数据｜验证报告｜可公开的同行业客户名单</div>
       <div class="warn"><b>最容易犯的错：</b>A 写成"我们比进口品牌便宜"（那是同行对比，归 E，而且要有数据）；E 用"我们服务好"顶。</div>
-      <div class="check"><b>互评重点：</b>这份 E 能不能进他的变更文件、供应商名录？进不去，就还没说服 QA。</div>
+      <div class="check r-peer"><b>互评重点：</b>这份 E 能不能进他的变更文件、供应商名录？进不去，就还没说服 QA。</div>
     </div>
 
-    <div class="task q">
+    <div class="task q r-write">
       <span class="tagline">渠道线</span>
       <h3>经销商 / 代理商</h3>
       <div class="field"><b>主推品 / 政策：</b><span class="line"></span><span style="font-size:12px;color:#8A8A96;">（渠道的 F 可以是返点、账期、动销支持、区域保护）</span></div>
@@ -100,11 +134,11 @@ textarea { width: 100%; font-family: inherit; font-size: 12.5px; border: 1px sol
       <div class="field"><b>A 怎么推：</b>（例：动销支持 → "它能帮你在终端做一场推广"）</div>
       <div class="field"><b>E 能拿什么：</b>动销数据｜复购情况｜其他经销商的实际账（可脱敏）｜可公开的区域名单</div>
       <div class="warn"><b>最容易犯的错：</b>整张卡写满产品性能参数——那还是在用科研的语言跟经销商说话；B 写成"品质更好"，而不是"你能多赚多少、少压多少资金"。</div>
-      <div class="check"><b>互评重点：</b>这张卡的 B，说的是不是钱和周转？不是，就还没翻译到位。</div>
+      <div class="check r-peer"><b>互评重点：</b>这张卡的 B，说的是不是钱和周转？不是，就还没翻译到位。</div>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card r-peer">
     <h2>二、打分标准（每维 0-3 分，满分 15 分）</h2>
     <table class="rubric">
       <tr><th>维度</th><th>0 分</th><th>1 分</th><th>2 分</th><th>3 分</th></tr>
@@ -234,6 +268,20 @@ function copyFabe() {
   try { document.execCommand('copy'); alert('评分已复制'); } catch (e) { alert('请手动复制'); }
   document.body.removeChild(ta);
 }
+</script>
+
+<script>
+var ROLE_LABEL = { all: '全看（老师投屏）', sales: '销售', cust: '客户', obs: '观察员', write: '本组写卡', peer: '互评组打分' };
+function setRole(r) {
+  document.body.setAttribute('data-role', r);
+  var bs = document.querySelectorAll('.rbtn');
+  for (var i = 0; i < bs.length; i++) { bs[i].className = 'rbtn' + (bs[i].getAttribute('data-role') === r ? ' on' : ''); }
+  var t = document.getElementById('printTag');
+  if (t) t.textContent = (r === 'all')
+    ? '本页为【全看】版：含客户底牌与评分标准，只供老师投屏或自己看，不要整份发给学员'
+    : ('本页为【' + (ROLE_LABEL[r] || r) + '】版');
+}
+setRole('all');
 </script>
 </body>
 </html>
