@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>米思米 AI角色演练 · 在线对话版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:#EEF1F8; color:#2B2B33; font-size:14px; line-height:1.6; }
+  button, textarea, input { font-family:inherit; font-size:inherit; }
+  button { cursor:pointer; border:none; }
+
+  /* ===== 顶栏 ===== */
+  .topbar { background:linear-gradient(120deg,#2F3C7E,#3D4C9E); color:#fff; padding:10px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; position:sticky; top:0; z-index:30; box-shadow:0 2px 10px rgba(47,60,126,.25); }
+  .topbar h1 { font-size:16px; font-weight:700; letter-spacing:.3px; }
+  .topbar .sub { font-size:11px; opacity:.8; margin-top:1px; }
+  .spacer { flex:1; }
+  .badge { font-size:11px; font-weight:700; padding:4px 11px; border-radius:20px; white-space:nowrap; }
+  .badge.ai { background:#0F6E56; }
+  .badge.off { background:#B85042; }
+  .tbtn { background:rgba(255,255,255,.16); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:7px; padding:5px 12px; font-size:12px; font-weight:600; }
+  .tbtn:hover { background:rgba(255,255,255,.28); }
+  .tbtn.on { background:#F9E795; color:#2F3C7E; border-color:#F9E795; }
+
+  /* ===== 角色条 ===== */
+  .roles { background:#fff; border-bottom:1px solid #E3E6EF; padding:9px 14px; display:flex; gap:8px; overflow-x:auto; }
+  .roles::-webkit-scrollbar { height:5px; }
+  .roles::-webkit-scrollbar-thumb { background:#C7CDDE; border-radius:5px; }
+  .rc { min-width:132px; border:1px solid #E3E6EF; border-radius:9px; padding:7px 10px; background:#F8F9FC; flex-shrink:0; text-align:left; transition:.15s; }
+  .rc:hover { border-color:#2F3C7E; background:#fff; }
+  .rc.sel { border-color:#2F3C7E; background:#EEF1F8; box-shadow:0 0 0 2px rgba(47,60,126,.14); }
+  .rc .n { font-size:13px; font-weight:700; color:#2F3C7E; }
+  .rc .m { font-size:10.5px; color:#7A7F92; margin-top:2px; }
+  .rc .tags { margin-top:4px; display:flex; gap:4px; flex-wrap:wrap; }
+  .tg { font-size:9.5px; border-radius:9px; padding:1px 7px; font-weight:700; }
+  .tg-spin { background:#E6F1FB; color:#185FA5; }
+  .tg-fabe { background:#EAF3DE; color:#3B6D11; }
+  .tg-lscpa { background:#FAECE7; color:#993C1D; }
+  .lv { font-size:9.5px; border-radius:9px; padding:1px 7px; font-weight:700; }
+  .lv1 { background:#E1F5EE; color:#0F6E56; } .lv2 { background:#FAC775; color:#633806; } .lv3 { background:#F7C1C1; color:#791F1F; }
+
+  /* ===== 主区 ===== */
+  .wrap { max-width:1180px; margin:0 auto; padding:12px 14px 8px; display:grid; grid-template-columns:1fr 296px; gap:12px; align-items:start; }
+  .panel { background:#fff; border:1px solid #E3E6EF; border-radius:11px; overflow:hidden; }
+  .ph { background:#F4F6FB; border-bottom:1px solid #E3E6EF; padding:6px 13px; font-size:12px; font-weight:700; color:#2F3C7E; display:flex; align-items:center; gap:8px; }
+  .ph .sp { flex:1; }
+  .ph .mini { font-size:10.5px; font-weight:600; color:#7A7F92; }
+
+  /* 对话区 */
+  #chat { height:min(52vh,470px); overflow-y:auto; padding:13px; background:#FBFCFE; }
+  #chat::-webkit-scrollbar { width:6px; }
+  #chat::-webkit-scrollbar-thumb { background:#C7CDDE; border-radius:6px; }
+  .msg { display:flex; margin-bottom:11px; }
+  .msg.me { justify-content:flex-end; }
+  .bub { max-width:78%; padding:8px 12px; border-radius:11px; font-size:13.5px; line-height:1.65; white-space:pre-wrap; word-break:break-word; }
+  .msg.cu .bub { background:#F1F3F8; color:#2B2B33; border-top-left-radius:3px; }
+  .msg.me .bub { background:#2F3C7E; color:#fff; border-top-right-radius:3px; }
+  .who { font-size:10px; color:#8A8FA3; margin-bottom:3px; }
+  .msg.me .who { text-align:right; }
+  .coach { font-size:10.5px; color:#993C1D; background:#FFF8F3; border:1px dashed #E8B79A; border-radius:6px; padding:2px 7px; margin-top:4px; display:inline-block; }
+  .coach.ok { color:#0F6E56; background:#F0FAF6; border-color:#A8DCC8; }
+  .sysnote { text-align:center; font-size:11px; color:#8A8FA3; margin:6px 0; }
+
+  .typing { display:flex; gap:4px; padding:9px 12px; background:#F1F3F8; border-radius:11px; width:fit-content; }
+  .typing i { width:5px; height:5px; border-radius:50%; background:#9AA0B5; animation:bl 1.1s infinite; }
+  .typing i:nth-child(2){ animation-delay:.18s; } .typing i:nth-child(3){ animation-delay:.36s; }
+  @keyframes bl { 0%,60%,100%{opacity:.28;transform:translateY(0);} 30%{opacity:1;transform:translateY(-3px);} }
+
+  /* 输入区 */
+  .inputbar { border-top:1px solid #E3E6EF; padding:9px 12px; background:#fff; }
+  .rulebar { font-size:11px; color:#993C1D; background:#FFF8F3; border:1px solid #F0D9C8; border-radius:7px; padding:5px 10px; margin-bottom:7px; }
+  .rulebar b { color:#B85042; }
+  .inrow { display:flex; gap:8px; align-items:flex-end; }
+  #userInput { flex:1; border:1px solid #D8DDEC; border-radius:9px; padding:8px 11px; resize:none; height:60px; line-height:1.5; outline:none; }
+  #userInput:focus { border-color:#2F3C7E; }
+  .send { background:#2F3C7E; color:#fff; border-radius:9px; padding:0 18px; height:60px; font-weight:700; font-size:14px; }
+  .send:hover { background:#3D4C9E; }
+  .send:disabled { background:#B9BFD2; }
+  .btnline { display:flex; gap:8px; margin-top:7px; flex-wrap:wrap; }
+  .ghost { background:#fff; color:#2F3C7E; border:1px solid #C7CDDE; border-radius:7px; padding:5px 12px; font-size:12px; font-weight:600; }
+  .ghost:hover { background:#EEF1F8; }
+  .gold { background:#B85042; color:#fff; border-radius:7px; padding:5px 12px; font-size:12px; font-weight:700; }
+  .gold:hover { background:#A0453A; }
+
+  /* 右栏 */
+  .side { display:flex; flex-direction:column; gap:10px; }
+  .kv { padding:9px 13px; font-size:12px; line-height:1.6; }
+  .kv .row { margin-bottom:7px; }
+  .kv .row:last-child { margin-bottom:0; }
+  .kv b { color:#B85042; display:block; font-size:11px; margin-bottom:1px; }
+  .hidden-box { position:relative; }
+  .hidden-box .mask { filter:blur(5px); user-select:none; }
+  .reveal { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.55); }
+  .reveal button { background:#2F3C7E; color:#fff; border-radius:20px; padding:5px 14px; font-size:11.5px; font-weight:700; }
+  .goalbox { padding:9px 13px; font-size:12px; line-height:1.6; }
+  .goalbox .g { background:#EAF3DE; border-radius:7px; padding:6px 10px; color:#33500C; }
+  .goalbox .w { background:#FAECE7; border-radius:7px; padding:6px 10px; color:#993C1D; margin-top:6px; }
+
+  /* 弹层 */
+  .modal { position:fixed; inset:0; background:rgba(23,28,48,.55); display:none; align-items:center; justify-content:center; z-index:60; padding:16px; }
+  .modal.show { display:flex; }
+  .mbox { background:#fff; border-radius:13px; width:min(760px,100%); max-height:88vh; display:flex; flex-direction:column; overflow:hidden; }
+  .mhead { background:linear-gradient(120deg,#2F3C7E,#3D4C9E); color:#fff; padding:10px 16px; display:flex; align-items:center; }
+  .mhead h3 { font-size:15px; font-weight:700; }
+  .mhead .sp { flex:1; }
+  .mhead button { background:rgba(255,255,255,.18); color:#fff; border-radius:6px; padding:4px 11px; font-size:12px; font-weight:600; }
+  .mbody { padding:14px 16px; overflow-y:auto; font-size:13px; line-height:1.7; }
+  .mfoot { padding:9px 16px; border-top:1px solid #E3E6EF; display:flex; gap:8px; justify-content:flex-end; background:#F8F9FC; }
+
+  .setuprow { display:flex; gap:8px; align-items:center; margin-bottom:9px; flex-wrap:wrap; }
+  .setuprow input { flex:1; min-width:220px; border:1px solid #D8DDEC; border-radius:8px; padding:7px 11px; outline:none; }
+  .setuprow input:focus { border-color:#2F3C7E; }
+  .tip { font-size:11.5px; color:#6E6E7A; background:#F4F6FB; border-radius:7px; padding:7px 11px; line-height:1.65; }
+  .tip b { color:#2F3C7E; }
+
+  pre.out { background:#F7F8FB; border:1px solid #E3E6EF; border-radius:8px; padding:11px 13px; font-size:12.5px; line-height:1.75; white-space:pre-wrap; word-break:break-word; font-family:inherit; }
+
+  .hist-item { border:1px solid #E3E6EF; border-radius:9px; padding:9px 12px; margin-bottom:8px; background:#FBFCFE; }
+  .hist-item .h1 { display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:#2F3C7E; }
+  .hist-item .h2 { font-size:11px; color:#8A8FA3; margin-top:2px; }
+  .tagmini { font-size:10px; border-radius:9px; padding:1px 8px; font-weight:700; background:#E1F5EE; color:#0F6E56; }
+  .tagmini.no { background:#F1F3F8; color:#7A7F92; }
+  .tagmini.mode-ai { background:#E6F1FB; color:#185FA5; }
+  .tagmini.mode-off { background:#FAECE7; color:#993C1D; }
+
+  @media (max-width:900px) {
+    .wrap { grid-template-columns:1fr; }
+    .side { order:-1; }
+    #chat { height:min(46vh,380px); }
+    .topbar h1 { font-size:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>米思米 AI角色演练 · 在线对话版</h1>
+    <div class="sub">6个客户角色 · 真AI对话 / 离线剧本双模 · 练完一键出话术卡</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="modeBadge" class="badge off">离线剧本模式</span>
+  <button class="tbtn" id="btnSetup">密钥设置</button>
+  <button class="tbtn" id="btnHist">演练记录</button>
+  <button class="tbtn on" id="btnCoach">教练提示：开</button>
+</div>
+
+<div class="roles" id="roles"></div>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="ph">
+      <span id="chatTitle">演练台</span>
+      <span class="sp"></span>
+      <span class="mini" id="chatMeta">先选一个角色</span>
+    </div>
+    <div id="chat"></div>
+    <div class="inputbar">
+      <div class="rulebar"><b>米思米铁律：</b>客户是带着型号来的。没先正面回应他的报价／交期／库存／替代型号之前，他不配合任何开放式提问；被追问抽象问题三次，直接结束。</div>
+      <div class="inrow">
+        <textarea id="userInput" placeholder="输入你要对客户说的话，回车发送（Shift+回车换行）"></textarea>
+        <button class="send" id="sendBtn">发送</button>
+      </div>
+      <div class="btnline">
+        <button class="ghost" id="btnRestart">重开一场</button>
+        <button class="gold" id="btnReview">结束并生成话术卡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="panel">
+      <div class="ph">当前角色卡</div>
+      <div class="kv" id="cardInfo"></div>
+    </div>
+    <div class="panel">
+      <div class="ph">通关标准</div>
+      <div class="goalbox" id="goalBox"></div>
+    </div>
+    <div class="panel">
+      <div class="ph">这场练什么</div>
+      <div class="kv" id="focusBox"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 复盘弹层 -->
+<div class="modal" id="reviewModal">
+  <div class="mbox">
+    <div class="mhead"><h3>本场复盘 · 话术卡</h3><span class="sp"></span><button onclick="closeModal('reviewModal')">关闭</button></div>
+    <div class="mbody"><pre class="out" id="reviewOut">生成中…</pre></div>
+    <div class="mfoot">
+      <button class="ghost" id="btnSaveCard">存入演练记录</button>
+      <button class="gold" id="btnCopyCard">复制话术卡</button>
+    </div>
+  </div>
+</div>
+
+<!-- 设置弹层 -->
+<div class="modal" id="setupModal">
+  <div class="mbox">
+    <div class="mhead"><h3>密钥设置</h3><span class="sp"></span><button onclick="closeModal('setupModal')">关闭</button></div>
+    <div class="mbody">
+      <div class="setuprow">
+        <input type="password" id="keyInput" placeholder="粘贴 DeepSeek API 密钥（sk-开头），留空则用离线剧本模式">
+        <button class="gold" id="btnSaveKey">保存</button>
+        <button class="ghost" id="btnClearKey">清除</button>
+      </div>
+      <div class="tip">
+        <b>两种模式的区别</b><br>
+        <b>真AI模式（填了密钥）</b>：客户由大模型实时扮演，你说什么他都接得住，会真变脸、真打断，通关判定靠你自己感觉。约几分钱一场。<br>
+        <b>离线剧本模式（不填）</b>：客户按卡内「踩／对」触发器回应，零费用、断网可用、手机上也能跑。每轮会标明你踩中或打开了哪条规则。<br>
+        密钥只存在你自己的浏览器里，不会上传。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 历史弹层 -->
+<div class="modal" id="histModal">
+  <div class="mbox">
+    <div class="mhead"><h3>演练记录（保存在本机浏览器）</h3><span class="sp"></span><button onclick="closeModal('histModal')">关闭</button></div>
+    <div class="mbody" id="histList"></div>
+    <div class="mfoot">
+      <button class="ghost" id="btnExportHist">导出全部记录</button>
+      <button class="ghost" id="btnClearHist">清空记录</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==================== 角色卡数据 ==================== */
+/* 规则说明：
+   type: bad=踩坑（客户变脸） / good=打开（客户给信息）
+   min : 需要达到的阶段才生效   set: 命中后把阶段推进到几
+   cnt : 'abstract' 累计3次结束 / 'end2' 累计2次结束
+   pass: 命中即通关
+*/
+const CARDS = [
+{
+  id:'li', no:1, name:'李工', title:'非标自动化厂机械设计',
+  tags:[{t:'SPIN',c:'spin'}], chan:'电话', lv:3,
+  identity:'35岁，非标设备厂机械设计，画图选型一手包。用米思米官网选型十几年，手上有自己惯用的型号库。',
+  style:'极简务实，一句话不超过15个字。开场寒暄和"您最近忙吗"直接触发反感。',
+  hidden:'上月一批直线导轨到货后滑块卡滞，装配返工两天被老板骂。已经在偷偷看别家品牌，但不敢换——出了事他担。',
+  trigger:'说套话或问抽象开放题（"您选型上有什么困难"）→"没困难，报价给我"；先给出可验证的具体信息（"LX26这批上海仓有库存明天出，同规格还有经济品，价格低约28%"）→"经济品？寿命一样吗"（打开话匣）。',
+  opening:'喂，型号我发你系统了，LX26-300这批，报个价，几天到？',
+  goal:'加上企业微信，并让客户说出"经济品／替代型号你也可以给我建议一下"。',
+  fail:'直接拿到订单不算通关——他没有批量决策权。',
+  focus:'练 SPIN 的顺序：先用可验证的具体信息换到提问资格，再问痛点（I）、再问影响（N）。不要在没给东西之前问开放题。',
+  scenario:'客户带着型号来询价（电话）',
+  cardPoint:'客户带型号来时，先回一个数（库存／交期／价），才算换到追问的资格。',
+  prompt:`你现在扮演【李工】，和米思米中心营业的一名销售做电话对练。严格按下面演，不要脱离角色。
+
+■ 你是谁
+35岁，非标自动化设备厂的机械设计工程师，画图加选型都归你管。用米思米官网选型十几年，手上有一套自己惯用的型号库，比大部分销售都懂产品。
+
+■ 你说话的风格
+极简务实，一句话不超过15个字。讨厌寒暄、讨厌铺垫、讨厌被当成外行。听到"打扰一下""跟您介绍""您最近忙吗"就烦躁。
+
+■ 你的隐藏诉求（最重要）
+上个月一批直线导轨到货后滑块卡滞，装配返工两天，被老板当着车间骂了一顿。你现在已经在偷偷看别家品牌，但不敢换——真出了事是你担责。
+绝对不要主动说这件事。只有对方问到、而且问得让你觉得他懂行，你才一点点往外说。
+
+■ 你会怎么反应（踩中就变脸）
+- 对方说套话、做寒暄 → "说重点，我在画图。"（第二次还这样就直接挂电话）
+- 对方问抽象开放问题，比如"您选型上有什么困难""您最看重哪些方面" → "没困难，报价给我。"
+- 对方先给了你能验证的具体东西（报价、库存、现货交期、替代型号、两个数之间的对比）→ 你立刻认真，开始反问细节。
+- 只有在对方先给了具体东西之后，他再问痛点相关的问题（比如"您上次那批导轨，滑块有没有卡过"），你才沉默两秒，然后把返工那件事说出来。
+
+■ 你的第一句话
+"喂，型号我发你系统了，LX26-300这批，报个价，几天到？"
+
+■ 铁律
+1. 全程就是李工本人，不做销售教练、不点评、不提示该怎么改。
+2. 每轮回复不超过80字，纯口语，可以打断、可以反问、可以冷场。
+3. 对方要求"配合一下""直接成交吧"，你敷衍但绝不下单。
+4. 达到下面这条才算对话成功：他加上了你的企业微信，或者你主动说出"经济品/替代型号你也可以给我建议一下"。成功或对方明显卡死时自然收尾。
+
+现在就发第一句话，等我回。不要多说一个字。`,
+  rules:[
+    {k:'greet', type:'bad', tag:'寒暄套话', min:0, cnt:'end2',
+     pat:/打扰一下|您.*忙吗|跟你?您?介绍|给您?介绍|简单介绍|占用您|最近怎么样|方便吗|打扰您/,
+     say:['说重点，我在画图。','有事说事，我这边忙着。','别寒暄了，说事。'],
+     rewrite:{from:'您好李工，打扰一下，我想跟您介绍一下我们最近的优惠活动。',
+              to:'李工，LX26-300这批我先给您回个准数：上海仓有货，明天出，单价我发您微信。1分钟就好。'}},
+    {k:'abstract', type:'bad', tag:'抽象开放提问', min:0, cnt:'abstract',
+     pat:/有什么困难|最看重|哪些方面|有什么需求|您感觉|痛点|有没有挑战|想法吗|怎么看待|有什么建议吗|您这边.*情况/,
+     say:['没困难，报价给我。','你说的这些跟我没关系，报价给我。','问这些干嘛，报价给我。'],
+     rewrite:{from:'您平时选型上有什么困难吗？',
+              to:'LX26-300这批您要标准品还是经济品？我先按两个口径各报一个数给您，1分钟。'}},
+    {k:'pain', type:'good', tag:'追问痛点（已给过具体信息）', min:1, set:2,
+     pat:/卡滞|滑块|返工|卡过|装.*不上|导轨.*怎么样|导轨.*有没有|上次那批|装配|车间.*有没有/,
+     say:['……上个月那批导轨，滑块到货就卡滞，装配返工两天，我被老板当着车间骂了一顿。这事我没跟别人说过。','你倒是懂行。上个月那批导轨滑块卡滞，返工两天，我被骂惨了。']},
+    {k:'suggest', type:'good', tag:'给出替代/经济品方案并要下一步', min:2, set:3, pass:true,
+     pat:/经济品|替代型号|替代方案|两个.*方案|发您?.*参考|加.*微信|企微|微信.*加|我加您/,
+     say:['行，你加我微信吧，把经济品的对比发我。以后经济品、替代型号你也可以给我建议一下。']},
+    {k:'concrete', type:'good', tag:'先给可验证的具体信息', min:0, set:1,
+     pat:/库存|现货|明天|今天|后天|到货|交期|几天到|报价|单价|元|块|经济品|替代|同规格|便宜|低\d+|有货|发您?|比.*低/,
+     say:['经济品？寿命一样吗。','这批你确定有现货？别到时候又等两周。','差多少，你说个数。']}
+  ],
+  fb:{0:['报价给我，LX26-300。','型号发你了，报价。','你先报个价。'],
+      1:['嗯，你说。','然后呢？','还有呢，说重点。'],
+      2:['你把东西发我微信，我看看。','你说具体点。']},
+  endSay:'行了，问不出个数来，我挂了。报价发我邮箱就行。'
+},
+{
+  id:'zhang', no:2, name:'张经理', title:'统一采购（供应链）',
+  tags:[{t:'LSCPA',c:'lscpa'},{t:'FABE',c:'fabe'}], chan:'邮件 → 电话', lv:2,
+  identity:'42岁，管标准件与MRO统一采购，手上供应商十几家，今年压着8%的降本指标。',
+  style:'只认数字和表格，"把报价单发来"挂嘴边；极度警惕搞关系的销售。',
+  hidden:'去年被一家低价供应商延迟交货坑过，停线半天，被老板当众批过。嘴上要降本，心里最怕断货。',
+  trigger:'谈战略合作/资源整合→"把资质和报价发我邮箱"；被问价格异议就立刻降价→他会继续压，永不成交；澄清他的"贵"到底是单价贵还是综合成本高→他开始认真；提到现货率、异常响应时效、延期怎么处理→愿意多聊15分钟。',
+  opening:'你们是新供应商吧？先把资质材料和报价单发过来，我们比一下。',
+  goal:'同意做一次按综合口径的对比报价（含交期、异常处理、退换），或约成15分钟电话。',
+  fail:'只砍出一个低价不算过。',
+  focus:'练 LSCPA 的 C（澄清）：客户说"贵"时，先不动价，把"贵"拆成单价／总成本／风险成本，再谈。',
+  scenario:'新供应商准入，客户压价（邮件转电话）',
+  cardPoint:'价格异议先澄清口径，不澄清就让价，等于教客户继续压。',
+  prompt:`你现在扮演【张经理】，和米思米中心营业的一名销售做采购洽谈对练。严格按下面演，不要脱离角色。
+
+■ 你是谁
+42岁，负责公司标准件和MRO的统一采购，手上供应商十几家。今年公司给你压了8%的降本指标，压力很大。
+
+■ 你说话的风格
+只认数字和表格，口头禅是"把报价单发来""这个要报给领导看"。对搞关系、套近乎的销售极度警惕，一句话就能听出来。
+
+■ 你的隐藏诉求（最重要）
+去年被一家报价很低的供应商延迟交货坑过，停线半天，被老板当着所有人批了一顿。你嘴上天天喊降本，心里最怕的是断货和交不了差。
+绝对不要主动说。只有对方不问价格、先问交付风险的时候，你才会把这件事带出来。
+
+■ 你会怎么反应（踩中就变脸）
+- 对方谈战略规划、资源整合、长期合作 → "这些先不谈，把资质材料和报价单发我邮箱。"
+- 对方一上来就承诺能给更低价 → "那你们之前为什么报那么高。"（警惕拉满）
+- 你说"你们价格太贵了"，对方如果立刻让价 → 你继续往下压，而且永远不松口成交。
+- 你说"太贵了"，对方如果先反问、把"贵"这件事说清楚（是单价贵，还是算上及时率、异常处理之后的总成本高）→ 你才认真听进去。
+- 对方主动提到现货率、异常怎么响应、延期了怎么赔 → 你愿意再多聊15分钟。
+
+■ 你的第一句话
+"你们是新供应商吧？先把资质材料和报价单发过来，我们比一下。"
+
+■ 铁律
+1. 全程就是张经理本人，不做销售教练、不点评、不提示。
+2. 每轮回复不超过80字，公事公办的口气，可以反问、可以直接结束。
+3. 对方要求"配合一下""你就说成交吧"，你敷衍但绝不下订单。
+4. 达到下面这条才算成功：你同意做一次算得上综合口径的对比报价（要包含交期、异常怎么处理、退换），或者同意约一次15分钟电话。只是砍出一个低价，不算成功。
+
+现在就发第一句话，等我回。不要多说一个字。`,
+  rules:[
+    {k:'strategy', type:'bad', tag:'谈战略/关系', min:0, cnt:'end2',
+     pat:/战略|长期合作|资源整合|共赢|伙伴|生态|一起成长|强强联合|深度合作/,
+     say:['这些先不谈，把资质材料和报价单发我邮箱。','你说的这些我没法报给领导，发报价单。'],
+     rewrite:{from:'我们希望和贵司建立长期战略合作，实现共赢。',
+              to:'张经理，我先把三样能报给领导的东西发您邮箱：资质、标准件报价单、现货率数据。您看完再决定要不要往下谈。'}},
+    {k:'discount', type:'bad', tag:'被压价立刻让价', min:0,
+     pat:/我.*申请.*折扣|给您?.*优惠|再便宜|最低.*给您?|让价|降一点|给您?降|去申请.*价格|争取.*价/,
+     say:['那你们之前为什么报那么高。','你这么快就能降，那我还能再往下压。','降了之后还有空间吧？继续。'],
+     rewrite:{from:'这个价格我可以帮您向领导申请一下优惠。',
+              to:'这个数我先不动。张经理，您说的贵是单价贵，还是算上及时率和异常处理之后的成本高？我按您说的口径重算一版给您。'}},
+    {k:'clarify', type:'good', tag:'先澄清"贵"的口径', min:0, set:1,
+     pat:/单价|综合|总成本|及时率|准时|交付率|算上|口径|贵.*是.*还是|哪个环节|算下来|含不含|怎么算/,
+     say:['嗯，你这句话说到点子上了。我们要的不是最低价，是交得出来。','对，我说的贵不是那几块钱，是算上后面的事。']},
+    {k:'risk', type:'good', tag:'主动谈交付风险与异常处理', min:1, set:2,
+     pat:/现货率|库存|异常|延期|停线|断货|响应|赔|退换|多久.*到|交不出来|怎么兜底|备选/,
+     say:['去年有家报得低，交不出来，停线半天，我被老板当众批了一顿。这事我一直记着。','你这么说我还愿意往下听。']},
+    {k:'pass', type:'good', tag:'提出综合口径对比报价', min:2, set:3, pass:true,
+     pat:/综合.*报价|对比.*报价|按.*口径|15分钟|约.*电话|做个.*对比|一版.*方案|重新报/,
+     say:['行，那你做一版综合口径的报价，交期、异常怎么处理、退换都写清楚。我们约15分钟电话过一遍。']}
+  ],
+  fb:{0:['把报价单发我邮箱。','资质先发我。','这些先不谈，发报价单。'],
+      1:['还有别的吗？','你说的这些我要能报给领导才行。','继续说。'],
+      2:['那你把方案发我，我看完再定。','书面给我一份。']},
+  endSay:'行了，资料发我邮箱吧，有需要我再联系你。'
+},
+{
+  id:'chen', no:3, name:'陈总', title:'30人小设备厂老板',
+  tags:[{t:'FABE',c:'fabe'}], chan:'电话 / 企微', lv:2,
+  identity:'52岁，三十来人的小设备厂老板，自己画图自己采购，所有事他一句话说了算。',
+  style:'算账极快，开口就是"多少钱、现货吗、能便宜多少"；一句不顺耳立刻换供应商。',
+  hidden:'车间几个工人等着这根轴装上去，缺一根全线停工。他不在乎省二十块，在乎今天能不能出货。',
+  trigger:'讲公司规模、品牌故事、客户案例→"行了行了，说现货"；说"我帮您向领导申请折扣"→"那你申请完再打给我"（人情筹码完全无效）；给马上能用的具体信息（"这三个型号今天下单明天到，价格发你微信"）→立刻精神。他问"怎么付款/送到哪个门"是成交信号，此时你还在讲产品即失败。',
+  opening:'导向轴多少钱一根？有现货吗？',
+  goal:'让他向你要一份现货型号清单，或当场下一个小单。',
+  fail:'讲了一通优势却没给到具体价格，算失败。',
+  focus:'练 FABE 的顺序：小老板只认"多久到、多少钱"。先把 B（利益）压到一句话里，别铺陈 F（特征）。',
+  scenario:'小老板急单询价（电话/微信）',
+  cardPoint:'对小老板，优势要翻译成"今天能不能装上"，不是品牌故事。',
+  prompt:`你现在扮演【陈总】，和米思米中心营业的一名销售做电话或微信对练。严格按下面演，不要脱离角色。
+
+■ 你是谁
+52岁，三十来人的小设备厂老板，画图、采购、催货全是你一个人。所有事你一句话就能定。
+
+■ 你说话的风格
+算账极快，开口就是"多少钱""有现货吗""能便宜多少"。一句听着虚的话，你马上就没兴趣了。
+
+■ 你的隐藏诉求（最重要）
+车间几个工人正等着这根轴装上去，缺一根，整条线就停了。你根本不在乎省那二十块钱，你在乎的是今天下午能不能出货。
+绝对不要主动说。只有对方说到能立刻到你手里的东西，你才会把着急这件事带出来。
+
+■ 你会怎么反应（踩中就变脸）
+- 对方讲公司规模、品牌故事、服务过哪些大客户 → "行了行了，说现货。"第二次还这样就结束。
+- 对方说"我帮您向领导申请一下折扣" → "那你申请完了再打给我。"人情筹码对你完全没用，只有确定的价格有用。
+- 对方给了马上能用的具体东西（哪个型号有现货、什么时候能到、一共多少钱）→ 你立刻认真，开始追问付款和送货。
+- 报价之后对方只说"您考虑考虑"这种没下文的话 → 你冷掉，不再回。
+- 当你问"怎么付款""送到哪个门""能开发票吗"，这就是你的成交信号。这时候对方要是还在讲产品优势，你就说"行了，我再看看"，然后结束。
+
+■ 你的第一句话
+"导向轴多少钱一根？有现货吗？"
+
+■ 铁律
+1. 全程就是陈总本人，不做销售教练、不点评、不提示。
+2. 每轮回复不超过80字，短促、急躁，可以直接打断。
+3. 对方要求"配合一下""你就说下单吧"，你敷衍但绝不承诺。
+4. 达到下面这条才算成功：你主动向他要一份现货型号清单，或者当场下一个小单。对方讲了一通产品优势却始终没给具体价格，明确算失败。
+
+现在就发第一句话，等我回。不要多说一个字。`,
+  rules:[
+    {k:'brand', type:'bad', tag:'讲公司/品牌/案例', min:0, cnt:'end2',
+     pat:/我们公司|成立于|行业.*领先|服务过|大客户|品牌|案例|规模|世界500强|头部客户|口碑/,
+     say:['行了行了，说现货。','这些跟我没关系，多少钱？','别说这些，有货吗？'],
+     rewrite:{from:'我们米思米是行业领先的零部件供应商，服务过很多知名大客户。',
+              to:'陈总，您要的那两个规格今天下单明天到，单价我发您微信。30秒说完，您看要不要锁。'}},
+    {k:'approval', type:'bad', tag:'人情筹码/申请折扣', min:0,
+     pat:/申请.*折扣|向领导申请|我跟领导|帮忙.*申请|我去争取|我帮你?您?申请|特别.*申请/,
+     say:['那你申请完了再打给我。','别申请了，你直接说多少钱。','申请来申请去，我等不了。'],
+     rewrite:{from:'这个价格我帮您向领导申请一下。',
+              to:'这个价就是能出的价。陈总，您那根轴今天下午能不能装上？能装我现在就把库存锁住。'}},
+    {k:'stock', type:'good', tag:'给出马上能用的具体信息', min:0, set:1,
+     pat:/现货|库存|明天到|今天.*到|单价|元|多少钱.*有|发您?微信|当天|发货|规格.*有货|数量.*够/,
+     say:['那你说，哪几个型号今天能发？','多少钱，你直接报。','有货的话你说，别绕。']},
+    {k:'urgency', type:'good', tag:'戳中停工/出货', min:1, set:2,
+     pat:/停工|停线|等着装|今天下午|出货|急|产线|工人等|赶|交不了|卡在这里/,
+     say:['对，车间几个人就等这根轴，缺一根整条线就停了。你今天能到我就下单。','你倒是说对了，我今天就得出货。']},
+    {k:'pass', type:'good', tag:'给清单或锁库存下单', min:2, set:3, pass:true,
+     pat:/清单|现货.*列表|发您?.*清单|先.*一单|锁.*库存|下单|挑两个|要.*两个/,
+     say:['行，你把有现货的型号清单发我，我挑两个先下一单试试。']}
+  ],
+  fb:{0:['多少钱，有现货吗？','别绕，说现货。','你直接报价就行。'],
+      1:['那你说，多久能到？','你报个价。','还有呢？'],
+      2:['行，那你发我看看。','送到哪个门？怎么付款？']},
+  endSay:'行了行了，我再看看别家吧。'
+},
+{
+  id:'wang', no:4, name:'王工', title:'整机厂VE降本工程师',
+  tags:[{t:'FABE证据',c:'fabe'},{t:'SPIN暗示',c:'spin'}], chan:'邮件 / 企微', lv:3,
+  identity:'38岁，大厂标准化与VE工程师，手上握着一张进口件替代清单，今年降本指标还没完成。',
+  style:'数据控，开口就要材质书、公差带、寿命曲线、第三方检测报告。最烦"我们质量也很好"这类话。',
+  hidden:'确实想换掉日本高价件，但怕出问题担责。他需要的不是低价，是一条能让他向上面交代的验证路径（小批量验证＋书面依据）。',
+  trigger:'说"我们质量也不错/很多客户在用"→"有第三方检测吗"（当场冷下来）；泛泛谈价格→礼貌结束；给对比表＋风险控制路径（"先按贵司图纸做三件样件，尺寸报告一起给，验证通过再走批量"）→松动，开始问细节；对方主动说"如果替代出问题，最坏会怎样、我这边怎么处理"→他会说出真正担心的点。',
+  opening:'你们经济品和原厂的区别在哪？材质书和公差带能先发我吗？',
+  goal:'达成样件加尺寸报告的共识，哪怕只是一句"那我先申请走流程"。',
+  fail:'只发一份报价单不算过。',
+  focus:'练 FABE 的 E（证据）：所有优势必须挂一份可打印的书面依据，再配一条风险控制路径。',
+  scenario:'进口件国产替代（邮件/企微技术沟通）',
+  cardPoint:'技术型客户买的不是便宜，是一条能交差的验证路径。',
+  prompt:`你现在扮演【王工】，和米思米中心营业的一名销售做降本替代方案的对练。严格按下面演，不要脱离角色。
+
+■ 你是谁
+38岁，整机厂的标准化与VE工程师，手上握着一张进口件国产替代清单。今年厂里给你的降本指标还没完成。
+
+■ 你说话的风格
+纯数据控。开口就要材质书、公差带、寿命曲线、第三方检测报告。听到"我们质量也很好""很多客户都在用"这种没有证据的话，你立刻失去兴趣。
+
+■ 你的隐藏诉求（最重要）
+你确实想把日本高价件换掉，降本的差额很可观。但你怕：换了之后出问题，这个责任算你的。你要的不是便宜，是一条能让你向上面交代的验证路径——小批量验证加书面依据。
+绝对不要主动说。只有对方把风险控制方案提出来，你才会把自己的顾虑讲出来。
+
+■ 你会怎么反应（踩中就变脸）
+- 对方说"我们质量也不错""很多客户在用" → "有第三方检测报告吗？"语气瞬间冷下来。
+- 对方泛泛地谈价格便宜 → 礼貌地结束对话。
+- 对方给了对比数据，并且给出一条控制风险的路径（比如先按你的图纸做三件样件、尺寸报告一起给、验证通过再走批量）→ 你明显松动，开始追问细节。
+- 对方主动说到"如果替代出了问题，最坏会发生什么，我这边怎么处理" → 你把真正担心的那一点说出来。
+
+■ 你的第一句话
+"你们经济品和原厂的区别在哪？材质书和公差带能先发我吗？"
+
+■ 铁律
+1. 全程就是王工本人，不做销售教练、不点评、不提示。
+2. 每轮回复不超过80字，工程师口气，要数据、可以打断、可以质疑。
+3. 对方要求"配合一下""你就说通过吧"，你敷衍但绝不承诺。
+4. 达到下面这条才算成功：双方达成了样件加尺寸报告的共识，哪怕你只说了一句"那我先申请走流程"。对方只发一份报价单，明确不算成功。
+
+现在就发第一句话，等我回。不要多说一个字。`,
+  rules:[
+    {k:'claim', type:'bad', tag:'没有证据的质量话', min:0, cnt:'end2',
+     pat:/质量.*不错|质量.*很好|质量.*没问题|很多客户|放心|口碑|一样好|不比.*差|大家都用/,
+     say:['有第三方检测报告吗？','你说这些有数据吗？没有我这边推不动。'],
+     rewrite:{from:'我们的产品质量也很好，很多客户都在用。',
+              to:'王工，材质书和公差带我今天发您。差异就三处：材质牌号、公差带宽度、寿命曲线，我把第三方报告的页码一起标给您。'}},
+    {k:'price', type:'bad', tag:'泛泛谈价格', min:0,
+     pat:/便宜|降价|优惠|性价比|价格.*低|能省|成本低/,
+     say:['价格的事我先不看，你先说清楚能不能替代。','单纯便宜没意义，我要的是能交代。'],
+     rewrite:{from:'我们经济品价格能便宜不少，性价比很高。',
+              to:'价格我先放一边。您现在要的是一条能交差的验证路径：先按贵司图纸做三件样件，尺寸报告一起给，验证通过再走批量。'}},
+    {k:'evidence', type:'good', tag:'给书面证据/对比数据', min:0, set:1,
+     pat:/材质书|公差带|SGS|第三方|检测报告|寿命曲线|对比表|数据|报告|图纸|材质牌号|页码|参数表/,
+     say:['你把对比表发我，我要能打印出来给领导看的那种。','这个还像点样子，继续。']},
+    {k:'riskpath', type:'good', tag:'给出风险控制路径', min:1, set:2,
+     pat:/样件|小批量|验证|试.*件|尺寸报告|风险|最坏|怎么处理|先.*三件|分批|兜底/,
+     say:['嗯……其实我是想换的，但换了出问题算我的。你要是能把验证这一步写清楚，我就能往上申请。','你把最坏的情况也说清楚了，这个我可以谈。']},
+    {k:'pass', type:'good', tag:'推动走流程', min:2, set:3, pass:true,
+     pat:/申请.*流程|走流程|先.*做.*样件|我先.*申请|试试.*三件|提.*流程|报上去/,
+     say:['行，那我先申请走流程。你按图纸先做三件，尺寸报告一起给，验证过了再谈批量。']}
+  ],
+  fb:{0:['材质书能发我吗？','先给我数据。','这个没有依据我没法推。'],
+      1:['还有没有更细的？','这个我要看报告。','把书面东西发我。'],
+      2:['那你把流程说清楚，我好报上去。']},
+  endSay:'这样吧，你先把资料整理好发我，我看完再联系你。'
+},
+{
+  id:'liu', no:5, name:'刘工', title:'三年老客户（沉默防御型）',
+  tags:[{t:'SPIN深挖',c:'spin'},{t:'LSCPA',c:'lscpa'}], chan:'企微 / 电话', lv:2,
+  identity:'合作三年，一直挂在某个销售名下采购，最近三个月下单频率明显下降。',
+  style:'熟但不热情，回消息慢，常用"嗯""好的""暂时不用"。不吵架、不投诉、慢慢消失。',
+  hidden:'去年那批不锈钢件表面有色差，返修两次也没根治，心里有气但懒得提；已经在别家悄悄试了两单。',
+  trigger:'上来推新品、降本、活动→"不用了谢谢"；过度承诺（"以后绝对不会再这样"）→明显不信；主动认领旧账（"上次那批304的色差最后怎么处理的，我一直没跟进，心里不踏实"）→打开话匣说出实情；承认事实＋给一个不涉及降价的具体动作→松动。',
+  opening:'最近暂时不用，谢谢你啊。',
+  goal:'说出真实不满，并同意挑一两个型号重做对比或试单。',
+  fail:'靠降价留人算失败——他会回一句"那我再看看"。',
+  focus:'练"主动认领旧账"：沉默型客户不会投诉，只会消失。你不提那笔账，他永远不会说。',
+  scenario:'老客户下单频率下降（企微回访）',
+  cardPoint:'沉默型流失的钥匙是自己先认旧账，不是优惠。',
+  prompt:`你现在扮演【刘工】，和米思米中心营业的一名销售做老客户回访对练。严格按下面演，不要脱离角色。
+
+■ 你是谁
+和米思米合作三年了，一直挂在这个销售名下买东西。最近三个月，你下单的频率明显降下来了。
+
+■ 你说话的风格
+熟，但不热情。回消息很慢，经常是"嗯""好的""暂时不用"。你不吵架、不投诉、不解释，你只是慢慢消失。
+
+■ 你的隐藏诉求（最重要）
+去年那批不锈钢件表面有色差，返修了两次也没根治。你心里是有气的，但说出来太麻烦，就懒得提了。这两个月你已经在另一家试着下了两单。
+绝对不要主动说。只有对方自己把那句旧账提出来，你才会讲真话。
+
+■ 你会怎么反应（踩中就变脸）
+- 对方上来推新品、推降本方案、推活动 → "不用了谢谢。"
+- 对方过度承诺，说"以后绝对不会再出现""我保证质量没问题" → 你明显不信，敷衍两句结束。
+- 对方主动认领旧账，比如"上次那批304有色差，最后是怎么处理的，我一直没跟进，心里不踏实" → 你打开话匣，把真实经过说出来。
+- 对方承认事实，并且给了一个不需要降价的具体动作 → 你松动，愿意继续聊。
+- 对方试图用降价把你留回来 → 你回一句"那我再看看"，然后冷掉。
+
+■ 你的第一句话
+"最近暂时不用，谢谢你啊。"
+
+■ 铁律
+1. 全程就是刘工本人，不做销售教练、不点评、不提示。
+2. 每轮回复不超过80字，冷淡、简短，可以半天不回、可以只回两个字。
+3. 对方要求"配合一下""你就说还会买吧"，你敷衍但绝不承诺。
+4. 达到下面这条才算成功：你把真实的不满说出来了，并且同意挑一两个型号重新做对比或试单。对方靠降价把你留住，明确算失败。
+
+现在就发第一句话，等我回。不要多说一个字。`,
+  rules:[
+    {k:'push', type:'bad', tag:'上来就推东西', min:0, cnt:'end2',
+     pat:/新品|活动|促销|优惠|降本|最近.*方案|要不要.*看看|推.*一下|给您?介绍|最新的|刚出/,
+     say:['不用了谢谢。','先不看了，谢谢你啊。','嗯，暂时不用。'],
+     rewrite:{from:'刘工，最近我们有一批新品和降本方案，要不要给您介绍一下？',
+              to:'刘工，我不是来推东西的。上次那批304的色差最后怎么处理的，我一直没跟进，心里不踏实，想跟您确认一下。'}},
+    {k:'promise', type:'bad', tag:'过度承诺', min:0,
+     pat:/保证|绝对不会|以后.*没问题|一定.*不会再|放心.*质量|肯定.*不会/,
+     say:['嗯。','行吧，我心里有数。','你这么说，我更不敢信了。'],
+     rewrite:{from:'您放心，以后绝对不会再出现这种问题了。',
+              to:'我不敢说以后不会。我这边能做的是：您挑一两个型号，这批做完我先寄三件样件给您确认，颜色对得上再走。'}},
+    {k:'cheap', type:'bad', tag:'靠降价留人', min:0,
+     pat:/给您?.*便宜|降价|再.*优惠|老客户.*价|便宜点|给.*折扣/,
+     say:['那我再看看。','不是钱的事。','嗯，再说吧。'],
+     rewrite:{from:'刘工，您回来我给您申请一个老客户专属价。',
+              to:'价格我就不动了。我就想把那笔旧账补上：您挑一两个型号，我这批先寄样件给您确认色差，您看过再说。'}},
+    {k:'olddebt', type:'good', tag:'主动认领旧账', min:0, set:1,
+     pat:/上次|色差|304|那批|返修|没跟进|心里不踏实|一直.*没.*问|对不起|我们.*问题/,
+     say:['……你倒是还记得。去年那批304表面有色差，返修了两次也没根治，我也懒得提了。这两个月我在别家试了两单。']},
+    {k:'action', type:'good', tag:'承认事实+给具体动作', min:1, set:2,
+     pat:/样件|先.*寄|对比|试一单|两个型号|寄.*确认|重做|检测|重新.*做|一两个型号/,
+     say:['那你要真这么弄，我可以挑两个型号试试。','嗯，那你先弄两个型号给我看看。']},
+    {k:'pass', type:'good', tag:'敲定重做对比', min:2, set:3, pass:true,
+     pat:/挑.*两个|重做.*对比|试.*单|先.*两个型号|拿去.*比|拿.*跟.*比/,
+     say:['行，那你把这两个型号按你说的做一版，我拿去跟现在这家比一比。比得过我就转回来。']}
+  ],
+  fb:{0:['暂时不用，谢谢你啊。','嗯，先不用。','嗯。'],
+      1:['……','嗯。','还有事吗？'],
+      2:['那你发我看看吧。','嗯，我看看。']},
+  endSay:'嗯，那先这样吧，我这边忙了。'
+},
+{
+  id:'lin', no:6, name:'小林', title:'新接手的采购对接人',
+  tags:[{t:'SPIN基础',c:'spin'}], chan:'电话 / 企微', lv:1,
+  identity:'25岁，原来负责采购的同事离职，临时把对接米思米这件事接过来，型号体系还不熟。',
+  style:'客气、怕出错，口头禅"我记一下""我问一下工程师"。技术内容一深就冷场。',
+  hidden:'想学会，怕被供应商忽悠、更怕被自己家的工程师嫌弃。真正选型和定量定的另有其人。',
+  trigger:'甩一串型号参数→"呃，我记录一下问一下工程师"（冷场）；直接打听谁是负责人、你们量多少→警惕不答；给看得懂的东西（一页纸的常用件对照、常见选型误区）→开心，愿意帮忙；用给台阶的方式请他引荐（"这份对照表我发您，方便的话帮我转给负责选型的工程师，或者告诉我怎么称呼他"）→会给到名字。',
+  opening:'您好，请问是米思米吗？我们之前负责采购的同事离职了，现在这边是我接。',
+  goal:'加上企业微信，并拿到真正选型人的称呼或分机。',
+  fail:'在这位新手身上推一堆型号清单算方向错误。',
+  focus:'练"给台阶式引荐"：先给对方能看懂、能转交的东西，再请他指路，不直接打探决策链。',
+  scenario:'对接人换人（电话/企微首次接触）',
+  cardPoint:'新手不是决策者，是通道。给他能转交的东西，他才肯给你名字。',
+  prompt:`你现在扮演【小林】，和米思米中心营业的一名销售做电话或微信对练。严格按下面演，不要脱离角色。
+
+■ 你是谁
+25岁，公司原来负责米思米采购的同事离职了，你被临时安排把这件事接过来。型号体系你还很不熟。
+
+■ 你说话的风格
+客气、怕出错，口头禅是"我记一下""我问一下工程师"。对方一说深的技术内容，你就接不住，开始冷场。
+
+■ 你的隐藏诉求（最重要）
+你是想学的，但你怕：怕被供应商忽悠，更怕拿着错误的型号回去被自己家的工程师说。真正决定选型和定量的是别人，不是你。
+绝对不要主动说。只有对方给的东西让你觉得"这个我能看懂"，你才会主动帮忙。
+
+■ 你会怎么反应（踩中就变脸）
+- 对方甩给你一串型号和参数 → "呃……我记录一下，问一下工程师。"然后冷场。
+- 对方直接打听谁是负责人、你们一个月采购多少 → 你警觉，不回答。
+- 对方给了你看得懂的东西，比如一页纸的常用件对照、新手最容易踩的选型误区 → 你明显开心，话开始变多，愿意帮忙。
+- 对方用一个给台阶的方式请你引荐，比如"这份对照表我先发您，方便的话帮我转给负责选型的工程师，或者告诉我怎么称呼他" → 你把称呼或分机给他。
+
+■ 你的第一句话
+"您好，请问是米思米吗？我们之前负责采购的同事离职了，现在这边是我接。"
+
+■ 铁律
+1. 全程就是小林本人，不做销售教练、不点评、不提示。
+2. 每轮回复不超过80字，客气但生疏，可以犹豫、可以答不上来。
+3. 对方要求"配合一下""你就说给我转工程师吧"，你敷衍但不给名字。
+4. 达到下面这条才算成功：你加上了对方的企业微信，并且给了真正选型人的称呼或分机。对方在你身上推一堆型号清单，明确算方向错误。
+
+现在就发第一句话，等我回。不要多说一个字。`,
+  rules:[
+    {k:'spec', type:'bad', tag:'甩型号参数', min:0,
+     pat:/公差|材质|载荷|额定|H7|h7|直线度|硬度|选型.*参数|技术参数|参数表|精度等级|形位/,
+     say:['呃……我记录一下，问一下工程师。','这个我看不太懂，我先记下来。'],
+     rewrite:{from:'您这边常用的型号是SFU2010和LX26-300，精度等级要注意H7。',
+              to:'我整理了一份一页纸的常用件对照表，看型号不用记参数。您先留着，等接手熟了再往下看。'}},
+    {k:'probe', type:'bad', tag:'直接打探决策链', min:0,
+     pat:/谁负责|负责人|决策|一个月.*多少|采购量|多少量|领导是谁|谁拍板|谁定/,
+     say:['这个……我不太清楚，你问这个干嘛？','我不太方便说。','嗯……这个我不确定。'],
+     rewrite:{from:'请问你们这边最终是谁负责选型？一个月大概采购多少？',
+              to:'这份常用件对照表我先发您，方便的话帮我转给负责选型的工程师，或者告诉我怎么称呼他就行。'}},
+    {k:'simple', type:'good', tag:'给看得懂的东西', min:0, set:1,
+     pat:/对照表|一页纸|常见.*误区|简单|新手|整理.*发您?|不用记|方便.*看|容易.*错|怎么选/,
+     say:['哦这个好，这个我看得懂。你发我吧。','这个有用，我留着看。']},
+    {k:'pass', type:'good', tag:'给台阶式引荐', min:1, set:3, pass:true,
+     pat:/转给|帮我.*转|怎么称呼|工程师.*称呼|加.*微信|企微|给我.*名字|方便.*帮/,
+     say:['行，我加你微信。选型这块主要是王工在定，你叫他王工就行，分机我一会发你。']}
+  ],
+  fb:{0:['嗯……我记一下。','我问一下工程师。','好的，我记录一下。'],
+      1:['好的，你发我吧。','嗯嗯，我记一下。','还有吗？'],
+      2:['行，那我帮你转一下。']},
+  endSay:'好的，那我先这样，回头我问问工程师再说吧。'
+}
+];
+
+const REVIEW_PROMPT = `【复盘：把刚才这段对话变成一张米思米话术卡】
+请立刻停止扮演客户，切换成销售教练，基于我们刚才这段对话，按下面四块输出。
+
+1｜踩中的坑（不超过3条）
+格式：我说 → 客户的反应 → 客户当时的原话（必须带引号，一个字不要改）
+只挑客户明显防御、冷淡、抗拒或打断你的那几句。
+
+2｜问开的点（不超过3条）
+格式：我说 → 客户的反应 → 客户当时的原话（必须带引号）
+只挑客户明显打开话匣、主动给出新信息的那几句。
+
+3｜一句最佳改写
+从"踩中的坑"里挑最伤的一条，做最小改动：
+保留原文里的数字、产品型号、客户场景一个都不删，只换姿态（介绍/沟通/推广 → 确认/核对/帮您）、补上要占用的时间、补一个低门槛的行动请求。
+输出格式：原文 → 改后。
+
+4｜话术卡（可直接粘进米思米话术卡模板）
+适用场景：
+话术：
+要点：一句话说清楚为什么这么写
+
+要求：
+- 不美化、不推测、不替我补内容。客户说过的话必须带引号。
+- 我没有提到的信息一律写"待确认"。
+- 全文不超过300字。`;
+/* ==================== 引擎 ==================== */
+const LS_KEY = 'misumi_roleplay_key';
+const LS_LOG = 'misumi_roleplay_log';
+const API_URL = 'https://api.deepseek.com/chat/completions';
+const PROXIES = ['https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
+
+let cur = null;            // 当前卡
+let st = null;             // 当前局状态
+let coachOn = true;
+let lastCard = '';         // 最近生成的话术卡文本
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getKey(){ try { return localStorage.getItem(LS_KEY) || ''; } catch(e){ return ''; } }
+function mode(){ return getKey() ? 'ai' : 'off'; }
+
+function newState(card){
+  return { card:card, stage:0, msgs:[], hits:[], hitsByKey:{}, abs:0, passed:false, ended:false, turns:0, startedAt:new Date() };
+}
+
+/* ---------- 角色条 ---------- */
+function renderRoles(){
+  const box = document.getElementById('roles');
+  box.innerHTML = CARDS.map(c => `
+    <button class="rc${cur && cur.id===c.id ? ' sel':''}" onclick="pick('${c.id}')">
+      <div class="n">${c.no}. ${esc(c.name)}</div>
+      <div class="m">${esc(c.title)}</div>
+      <div class="tags">
+        ${c.tags.map(t=>`<span class="tg tg-${t.c}">${t.t}</span>`).join('')}
+        <span class="lv lv${c.lv}">${'★'.repeat(c.lv)}${'☆'.repeat(3-c.lv)}</span>
+        <span class="lv" style="background:#F1EFE8;color:#5F5E5A;">${esc(c.chan)}</span>
+      </div>
+    </button>`).join('');
+}
+
+function pick(id){
+  cur = CARDS.find(c => c.id === id);
+  renderRoles();
+  renderSide();
+  startRound();
+}
+
+/* ---------- 右栏 ---------- */
+function renderSide(){
+  const c = cur;
+  document.getElementById('cardInfo').innerHTML = `
+    <div class="row"><b>身份背景</b>${esc(c.identity)}</div>
+    <div class="row"><b>性格风格</b>${esc(c.style)}</div>
+    <div class="row hidden-box"><b>隐藏诉求（练前建议别看）</b>
+      <div class="mask" id="hidMask">${esc(c.hidden)}</div>
+      <div class="reveal" id="hidBtn"><button onclick="revealHidden()">教练用 · 点开揭示</button></div>
+    </div>
+    <div class="row"><b>异议触发器（踩／对）</b>${esc(c.trigger)}</div>
+    <div class="row"><b>客户第一句</b>「${esc(c.opening)}」</div>`;
+  document.getElementById('goalBox').innerHTML = `
+    <div class="g"><b>通关：</b>${esc(c.goal)}</div>
+    <div class="w"><b>不算通关：</b>${esc(c.fail)}</div>`;
+  document.getElementById('focusBox').innerHTML = `<div class="row">${esc(c.focus)}</div>`;
+}
+function revealHidden(){
+  const m = document.getElementById('hidMask'), b = document.getElementById('hidBtn');
+  if(m){ m.classList.remove('mask'); }
+  if(b){ b.remove(); }
+}
+
+/* ---------- 对话渲染 ---------- */
+function bubble(who, text, coach){
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg ' + (who === 'me' ? 'me' : 'cu');
+  d.innerHTML = `<div><div class="who">${who==='me' ? '我（销售）' : esc(cur ? cur.name : '客户')}</div>
+    <div class="bub">${esc(text)}</div>
+    ${coach ? `<div class="coach${coach.ok?' ok':''}">${esc(coach.txt)}</div>` : ''}</div>`;
+  chat.appendChild(d);
+  chat.scrollTop = chat.scrollHeight;
+}
+function sysnote(t){
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'sysnote'; d.textContent = t;
+  chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+}
+function typing(){
+  const chat = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg cu'; d.id = 'tp';
+  d.innerHTML = `<div><div class="typing"><i></i><i></i><i></i></div></div>`;
+  chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+}
+function untype(){ const t = document.getElementById('tp'); if(t) t.remove(); }
+
+/* ---------- 开局 ---------- */
+function startRound(){
+  st = newState(cur);
+  lastCard = '';
+  const chat = document.getElementById('chat');
+  chat.innerHTML = '';
+  document.getElementById('userInput').disabled = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('chatTitle').textContent = '演练台 · ' + cur.name;
+  const m = mode();
+  document.getElementById('chatMeta').textContent =
+    (m === 'ai' ? '真AI对话' : '离线剧本') + ' · 共 ' + cur.rules.length + '条触发器';
+  bubble('cu', cur.opening, null);
+  st.msgs = [];
+}
+
+/* ---------- 发送 ---------- */
+async function send(){
+  if(!cur || !st || st.ended) return;
+  const ta = document.getElementById('userInput');
+  const text = ta.value.trim();
+  if(!text) return;
+  ta.value = '';
+  st.turns++;
+  bubble('me', text, null);
+  st.msgs.push({ role:'user', content:text });
+
+  if(mode() === 'ai'){
+    typing();
+    document.getElementById('sendBtn').disabled = true;
+    try{
+      const reply = await callAI([
+        { role:'system', content: cur.prompt },
+        { role:'assistant', content: cur.opening },
+        ...st.msgs
+      ]);
+      untype();
+      bubble('cu', reply, null);
+      st.msgs.push({ role:'assistant', content:reply });
+    }catch(err){
+      untype();
+      sysnote('调用失败：' + err.message + '　（可在「密钥设置」里留空，改用离线剧本模式）');
+    }
+    document.getElementById('sendBtn').disabled = false;
+  } else {
+    const r = matchRule(text);
+    setTimeout(() => { applyRule(r, text); }, 420);
+  }
+}
+
+/* ---------- 剧本模式：匹配 ---------- */
+function matchRule(text){
+  const scan = (type, advanceOnly) => {
+    for(const r of cur.rules){
+      if(r.type !== type) continue;
+      if(st.stage < (r.min || 0)) continue;
+      // advanceOnly：只认能把阶段往前推的规则，避免被前置规则反复拦截
+      if(advanceOnly && !((r.set && r.set > st.stage) || r.pass)) continue;
+      if(r.pat.test(text)) return r;
+    }
+    return null;
+  };
+  // 踩坑优先；打开类先看能不能推进，推不动再退回原地规则
+  return scan('bad', false) || scan('good', true) || scan('good', false);
+}
+
+function applyRule(r, text){
+  if(!r){
+    const pool = cur.fb[st.stage] || cur.fb[0];
+    const say = pool[Math.floor(Math.random()*pool.length)];
+    bubble('cu', say, coachOn ? { txt:'本轮没触发任何规则——客户在等你给具体的东西。' } : null);
+    return;
+  }
+  const n = (st.hitsByKey[r.k] || 0);
+  st.hitsByKey[r.k] = n + 1;
+  const say = r.say[Math.min(n, r.say.length - 1)];
+
+  if(r.type === 'bad'){
+    st.hits.push({ type:'bad', k:r.k, tag:r.tag, me:text, cu:say, rw:r.rewrite });
+    bubble('cu', say, coachOn ? { txt:'踩中：【' + r.tag + '】' } : null);
+    if(r.cnt === 'abstract'){
+      st.abs++;
+      if(st.abs >= 3){ endRound(cur.endSay, '被追问抽象问题三次，客户挂断了。'); return; }
+      if(st.abs === 2) sysnote('提示：抽象问题已追问两次，第三次客户会直接结束。');
+    } else if(r.cnt === 'end2'){
+      if(st.hitsByKey[r.k] >= 2){ endRound(cur.endSay, '同类问题重复两次，客户结束了对话。'); return; }
+    }
+    return;
+  }
+
+  // good
+  st.hits.push({ type:'good', k:r.k, tag:r.tag, me:text, cu:say });
+  bubble('cu', say, coachOn ? { txt:'打开：【' + r.tag + '】', ok:true } : null);
+  if(r.set && st.stage < r.set) st.stage = r.set;
+  if(r.pass){
+    st.passed = true;
+    sysnote('✅ 达成通关标准：' + cur.goal + '　建议点下方「结束并生成话术卡」沉淀成话术卡。');
+  }
+}
+
+function endRound(say, why){
+  st.ended = true;
+  bubble('cu', say, null);
+  sysnote(why + '　本场结束，点下方按钮生成话术卡。');
+  document.getElementById('userInput').disabled = true;
+  document.getElementById('sendBtn').disabled = true;
+}
+
+/* ---------- DeepSeek 调用 ---------- */
+async function callAI(messages){
+  const key = getKey();
+  if(!key) throw new Error('未填写密钥');
+  const body = JSON.stringify({ model:'deepseek-chat', messages:messages, temperature:0.85, max_tokens:400 });
+  let lastErr = null;
+  const urls = [API_URL, ...PROXIES.map(p => p + encodeURIComponent(API_URL))];
+  for(const url of urls){
+    try{
+      const resp = await fetch(url, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + key },
+        body:body
+      });
+      if(!resp.ok){
+        const t = await resp.text().catch(()=> '');
+        if(resp.status === 401 || resp.status === 403) throw new Error('密钥无效或已过期（' + resp.status + '）');
+        if(resp.status === 429) throw new Error('调用频率超限，请稍等几秒');
+        lastErr = new Error('接口返回 ' + resp.status + '：' + t.slice(0,120));
+        continue;
+      }
+      const data = await resp.json();
+      const c = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if(!c) throw new Error('返回内容为空');
+      return c.trim();
+    }catch(e){
+      if(e.message && (e.message.indexOf('密钥') === 0 || e.message.indexOf('调用频率') === 0)) throw e;
+      lastErr = e;
+    }
+  }
+  throw new Error(lastErr ? lastErr.message : '网络请求失败');
+}
+
+/* ---------- 复盘 ---------- */
+async function review(){
+  if(!cur || !st) return;
+  openModal('reviewModal');
+  const out = document.getElementById('reviewOut');
+  out.textContent = '生成中…（真AI模式下大约需要十几秒）';
+  st.ended = true;
+  document.getElementById('userInput').disabled = true;
+
+  if(mode() === 'ai'){
+    try{
+      const r = await callAI([
+        { role:'system', content: cur.prompt },
+        { role:'assistant', content: cur.opening },
+        ...st.msgs,
+        { role:'user', content: REVIEW_PROMPT }
+      ]);
+      lastCard = '【' + cur.name + ' · 真AI模式 · ' + fmt(new Date()) + '】\n\n' + r;
+      out.textContent = lastCard;
+      saveLog();
+    }catch(err){
+      out.textContent = '复盘调用失败：' + err.message;
+    }
+    return;
+  }
+  lastCard = buildOfflineCard();
+  out.textContent = lastCard;
+  saveLog();
+}
+
+function buildOfflineCard(){
+  const bads = st.hits.filter(h => h.type === 'bad');
+  const goods = st.hits.filter(h => h.type === 'good');
+  const L = [];
+  L.push('【' + cur.name + ' · 离线剧本模式 · ' + fmt(st.startedAt) + '】');
+  L.push('结果：' + (st.passed ? '✅ 通关' : (st.ended ? '客户结束对话' : '中途收尾')) + '　回合：' + st.turns);
+  L.push('');
+  L.push('一、踩中的坑（' + bads.length + '条）');
+  if(!bads.length) L.push('（无）本场没有触发客户防御。');
+  bads.forEach((h,i) => {
+    L.push((i+1) + '. 我说："' + h.me + '"');
+    L.push('   客户：' + cur.name + '「' + h.cu + '」');
+    L.push('   命中：' + h.tag);
+  });
+  L.push('');
+  L.push('二、问开的点（' + goods.length + '条）');
+  if(!goods.length) L.push('（无）客户始终没给出新信息——通常是还没给到他能验证的具体东西（报价／库存／交期／替代型号）。');
+  goods.forEach((h,i) => {
+    L.push((i+1) + '. 我说："' + h.me + '"');
+    L.push('   客户：' + cur.name + '「' + h.cu + '」');
+  });
+  L.push('');
+  L.push('三、一句最佳改写（不丢数字、型号、客户场景，只换姿态）');
+  const worst = bads.find(h => h.rw) || null;
+  if(worst){
+    L.push('原文："' + worst.rw.from + '"');
+    L.push('改后："' + worst.rw.to + '"');
+  } else {
+    const demo = cur.rules.find(r => r.type === 'bad' && r.rewrite);
+    if(demo){
+      L.push('（本场没踩坑，给一条本卡的通用示范）');
+      L.push('原文："' + demo.rewrite.from + '"');
+      L.push('改后："' + demo.rewrite.to + '"');
+    }
+  }
+  L.push('');
+  L.push('四、话术卡（可直接粘进米思米话术卡模板）');
+  L.push('适用场景：' + cur.scenario);
+  const best = goods.length ? goods[goods.length-1].me : (worst ? worst.rw.to : '待确认');
+  L.push('话术：' + best);
+  L.push('要点：' + cur.cardPoint);
+  return L.join('\n');
+}
+
+function fmt(d){
+  const p = n => (n < 10 ? '0' : '') + n;
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+
+/* ---------- 演练记录 ---------- */
+function loadLog(){ try { return JSON.parse(localStorage.getItem(LS_LOG) || '[]'); } catch(e){ return []; } }
+function saveLog(){
+  try{
+    const log = loadLog();
+    log.unshift({
+      id: String(Date.now()),
+      cardId: cur.id, cardName: cur.name,
+      mode: mode() === 'ai' ? '真AI' : '离线剧本',
+      at: fmt(new Date()),
+      turns: st.turns,
+      passed: st.passed,
+      card: lastCard,
+      transcript: st.msgs
+    });
+    localStorage.setItem(LS_LOG, JSON.stringify(log.slice(0,60)));
+    st.saved = true;
+  }catch(e){}
+}
+function renderHist(){
+  const log = loadLog();
+  const box = document.getElementById('histList');
+  if(!log.length){ box.innerHTML = '<div class="tip">还没有记录。练完一场点「结束并生成话术卡」，就会自动存在这台设备的浏览器里。</div>'; return; }
+  box.innerHTML = log.map(h => `
+    <div class="hist-item">
+      <div class="h1">${esc(h.cardName)}
+        <span class="tagmini ${h.passed ? '' : 'no'}">${h.passed ? '通关' : '未通关'}</span>
+        <span class="tagmini mode-${h.mode==='真AI' ? 'ai':'off'}">${esc(h.mode)}</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="ghost" onclick="viewLog('${h.id}')">查看</button>
+        <button class="ghost" onclick="delLog('${h.id}')">删除</button>
+      </div>
+      <div class="h2">${esc(h.at)} · ${h.turns} 个回合</div>
+    </div>`).join('');
+}
+function viewLog(id){
+  const h = loadLog().find(x => x.id === id);
+  if(!h) return;
+  openModal('reviewModal');
+  let txt = h.card || '（本场未生成话术卡）';
+  txt += '\n\n—— 完整对话 ——\n' + (h.transcript || []).map(m => (m.role === 'user' ? '我：' : h.cardName + '：') + m.content).join('\n');
+  document.getElementById('reviewOut').textContent = txt;
+}
+function delLog(id){
+  try{
+    const log = loadLog().filter(x => x.id !== id);
+    localStorage.setItem(LS_LOG, JSON.stringify(log));
+    renderHist();
+  }catch(e){}
+}
+
+/* ---------- 弹层 ---------- */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+function copyText(txt){
+  const done = () => {};
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(txt).catch(() => fallbackCopy(txt));
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  const ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(e){ alert('复制失败，请手动选中下方文字复制'); }
+  document.body.removeChild(ta);
+}
+
+/* ---------- 初始化 ---------- */
+function refreshMode(){
+  const b = document.getElementById('modeBadge');
+  const m = mode();
+  b.className = 'badge ' + (m === 'ai' ? 'ai' : 'off');
+  b.textContent = m === 'ai' ? '真AI对话模式' : '离线剧本模式';
+}
+
+document.getElementById('btnSetup').onclick = () => {
+  document.getElementById('keyInput').value = getKey();
+  openModal('setupModal');
+};
+document.getElementById('btnSaveKey').onclick = () => {
+  const v = document.getElementById('keyInput').value.trim();
+  try{ localStorage.setItem(LS_KEY, v); }catch(e){}
+  refreshMode(); closeModal('setupModal');
+  if(cur) startRound();
+};
+document.getElementById('btnClearKey').onclick = () => {
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  document.getElementById('keyInput').value = '';
+  refreshMode(); closeModal('setupModal');
+  if(cur) startRound();
+};
+document.getElementById('btnHist').onclick = () => { renderHist(); openModal('histModal'); };
+document.getElementById('btnCoach').onclick = () => {
+  coachOn = !coachOn;
+  const b = document.getElementById('btnCoach');
+  b.textContent = '教练提示：' + (coachOn ? '开' : '关');
+  b.className = 'tbtn' + (coachOn ? ' on' : '');
+};
+document.getElementById('sendBtn').onclick = send;
+document.getElementById('userInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+});
+document.getElementById('btnRestart').onclick = () => { if(cur) startRound(); };
+document.getElementById('btnReview').onclick = review;
+document.getElementById('btnCopyCard').onclick = () => { copyText(lastCard || document.getElementById('reviewOut').textContent); };
+document.getElementById('btnSaveCard').onclick = () => {
+  if(st && st.saved){ alert('本场已经在记录里了。'); return; }
+  saveLog(); if(st) st.saved = true; renderHist(); alert('已存入演练记录');
+};
+document.getElementById('btnExportHist').onclick = () => {
+  const log = loadLog();
+  const txt = log.map(h => '===== ' + h.cardName + ' · ' + h.mode + ' · ' + h.at + ' =====\n' + (h.card || '') + '\n').join('\n\n');
+  const blob = new Blob([txt], { type:'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '米思米AI演练记录_' + fmt(new Date()).replace(/[-: ]/g,'') + '.txt';
+  a.click();
+};
+document.getElementById('btnClearHist').onclick = () => {
+  if(confirm('确认清空本机保存的全部演练记录？此操作不可恢复。')){
+    try{ localStorage.removeItem(LS_LOG); }catch(e){}
+    renderHist();
+  }
+};
+
+refreshMode();
+cur = CARDS[0];
+renderRoles();
+renderSide();
+startRound();
+</script>
+</body>
+</html>
