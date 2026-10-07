@@ -86,7 +86,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
 <body>
 <header>
   <div class="wrap">
-    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1</span></h1>
+    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1.1</span></h1>
     <div class="sub">选岗位 → 选场景 → 出一套能直接照着用的 SPIN / FABE 话术</div>
   </div>
 </header>
@@ -143,6 +143,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
             <label class="f">他现在用谁家的 / 提到过什么型号（选填）</label>
             <input type="text" id="rival" placeholder="例：现在用晶丰 BP2863SK；提到过 JW19812E">
           </div>
+          <div class="note" id="priceNote" style="display:none;margin:11px 0 0"></div>
         </div>
       </div>
 
@@ -187,7 +188,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
   </div>
 
   <div class="foot">
-    厦门名瑟电子科技 · 销售拜访配套工具 · V1<br>
+    厦门名瑟电子科技 · 销售拜访配套工具 · V1.1（新增：价格异议分支）<br>
     AI 生成的内容请自行核对后再使用；型号、价格、交期以实际查询为准。
   </div>
 </div>
@@ -272,7 +273,7 @@ var INDS = [
 var SCENES = [
   {id:'quote', name:'带料号来询价', tip:'客户带料号或图纸来问价——先回应「四个数」（有没有库存 / 单价 / 交期具体到哪一天 / 有没有同规格替代），才换得到追问时间。被追问抽象问题三次，他直接结束对话。'},
   {id:'price', name:'客户嫌贵', tip:'「你们比晶丰贵」——LSCPA 的 C 先问口径：是跟单价比，还是跟综合成本比？别急着解释，更别马上让价。'},
-  {id:'replace', name:'想换掉现在用的料', tip:'替代路径要讲清楚：pin to pin 兼容还是改板？省不省外围器件？验证周期多久？给他一条能落地的路，别只说「我们能替」。'},
+  {id:'replace', name:'想换掉现在用的料', tip:'替代路径要讲清楚：pin to pin 兼容还是改板？省不省外围器件？验证周期多久？给他一条能落地的路，别只说「我们能替」。★注意：他是主动要换的，动机通常不是省钱（省钱就不必换）——先搞清是认证、品质、支持还是交期逼着他换。'},
   {id:'sample', name:'送样后没下文', tip:'样品送出去就没回声了——三态跟进（在测／测完了等结果／卡住了），问到具体卡在哪，别问「测得怎么样」。'},
   {id:'delivery', name:'交期 / 断供 / 急单', tip:'他急的是产线，不是你。先给具体到日的答复，再谈方案；承诺不了的日子宁可说「我下午四点前回你」。'},
   {id:'silent', name:'老客户突然不下单', tip:'先认领旧账或先给一条对他有用的信息，再谈业务；开场别一上来就推新品。'},
@@ -294,6 +295,23 @@ var ABILITIES = [
   '长期供货承诺＋生命周期与 EOL 提前通知',
   'AEC-Q 认证产品线（仅汽车电子场景可用，须配车规量产案例）'
 ];
+
+/* ===== 价格异议分支：客户说"你们更贵"时，SPIN 的主轴必须换掉 ===== */
+var PRICE_RE = /贵|便宜|砍价|压价|降价|降本|价差|价格差|比.{0,12}贵/;
+var PRICE_ANGLES = [
+  '换料验证成本：改板重测、认证重跑、错过出货窗口（出口照明最认这条）',
+  '品质与批次一致性：一批飘一次，返工和客诉的钱远大于那点价差',
+  '技术支持与响应速度：原厂技术通道＋同城 FAE，少一次改板、早一周量产',
+  '断供与 EOL 风险：pin to pin 替代预案、生命周期与提前通知',
+  '交付与库存弹性：安全库存、急单插单、优先排产',
+  '出问题谁兜底：来料批次追溯＋质量协议承诺'
+];
+function isPriceCase(){
+  if (state.scene === 'price') return true;
+  var w = '';
+  try { w = (document.getElementById('words').value||''); } catch(e){ w = ''; }
+  return PRICE_RE.test(w);
+}
 
 /* 型号口径：以下型号在真实拜访记录里出现过，仅作举例；不确定一律占位 */
 var MODELS = '杰华特 JW 系列（如 JW19812E、JW19818CT）；市面常见竞品：晶丰明源 BP 系列（BP2861AJ、BP2863SK、BP5219）、必易微 KP 系列（KP1075BWP）。以上仅作举例，实际以查询为准，不确定就写〔按查得的型号〕。';
@@ -352,8 +370,21 @@ function pickInd(id){
   else { note.style.display='none'; }
 }
 
+function refreshPriceNote(){
+  var n = document.getElementById('priceNote');
+  if (!n) return;
+  if (isPriceCase()){
+    n.style.display = 'block';
+    n.innerHTML = '<b>已识别：价格异议</b>（客户说我们更贵 / 场景＝客户嫌贵）<br>' +
+      '本轮话术改走「先接价 → 换比较口径 → 挖同轴痛点」；<b>SPIN 不再拿「帮您降成本」当主轴</b>——我们自己更贵，挖成本等于把劣势挖深。';
+  } else {
+    n.style.display = 'none';
+  }
+}
+
 function pickScene(id){
   state.scene = id;
+  refreshPriceNote();
   var all = chipsEl.querySelectorAll('.chip');
   for (var i=0;i<all.length;i++){ all[i].classList.toggle('on', all[i].getAttribute('data-id')===id); }
   var sc = null;
@@ -369,6 +400,11 @@ function pickScene(id){
     else { note.style.display='none'; }
   }
 }
+
+(function(){
+  var w = document.getElementById('words');
+  if (w) w.addEventListener('input', refreshPriceNote);
+})();
 
 function renderMap(){
   var card = document.getElementById('mapCard');
@@ -420,6 +456,22 @@ function buildPrompt(){
   L.push('· 客户说过的话：' + (words ? '「' + words + '」' : '（未提供，按该岗位最典型的场景推演）'));
   L.push('· 现在用谁家的/提到的型号：' + (rival || '（未提供）'));
   L.push('');
+
+  var prFlag = isPriceCase();
+  if (prFlag){
+    L.push('【★★ 本次已识别：客户提出了价格异议（他说我们更贵 / 场景＝客户嫌贵）】');
+    L.push('下面这七条优先级高于所有常规规则，违反即作废：');
+    L.push('1. 严禁把「帮客户降成本 / 压 BOM / 找更便宜的料」作为 SPIN 挖痛的主轴，也严禁在 P、I 两步放大「成本上涨、利润变薄、价格优势没了」。理由：我们本来就更贵，顺着「我要省钱」挖下去，客户的逻辑结论是选更便宜的竞品或逼我们降价——等于把劣势挖深。');
+    L.push('2. 先接价：一句话承认，不辩解、不比价、不许马上让价（例：「是，单颗确实贵一点」），把价格从「障碍」转成「待解释的差异」。');
+    L.push('3. 换口径：把比较标准从「单颗价」换成「总成本 / 风险成本」——认证重跑、改板重测、返工客诉、断供停线、没人支持，这些都算钱。');
+    L.push('4. 只挖「同轴痛点」：必须是名瑟能解决、且与下面痛点地图 A/B 类能对上的痛。从下面池子里选 2~3 条，不要全用：');
+    PRICE_ANGLES.forEach(function(t,i){ L.push('   · ' + t); });
+    L.push('5. 若场景是「想换掉现在用的料」：客户主动要换，说明动机不是省钱（省钱就不必换，直接用原来那家），大概率是认证 / 品质 / 支持 / 交期——先用 S 问验证这一点，再决定挖哪条。');
+    L.push('6. FABE 的 A 必须显式消化价差：说清「贵〔替换成你查到的数〕%换来什么、省下什么」，不许回避价格只讲好处，也不许空口说「反而更便宜」。');
+    L.push('7. N（确认价值）必须把比较口径说出来，例：「所以您真正要比的不是单颗价，而是一批货从头到尾的总成本，对吧？」');
+    L.push('');
+  }
+
   L.push('【这个岗位校准后的痛点地图——你只能从这里取材】');
   p.A.forEach(function(t,i){ L.push('A'+(i+1)+'（我的战场）'+t); });
   p.B.forEach(function(t,i){ L.push('B'+(i+1)+'（转译后可解）'+t); });
@@ -436,28 +488,37 @@ function buildPrompt(){
   L.push('');
   L.push('【六条铁律，违反任何一条本次输出作废】');
   L.push('1. 不许编型号、不许编客户案例、不许编具体价格、降幅、交期天数——需要数字的地方一律写〔替换成你查到的数〕。');
-  L.push('2. 每条话术必须能对应上痛点地图里的某一条（A 或 B），不要凭空造痛点。');
+  L.push('2. 每条话术必须能对应上痛点地图里的某一条（A 或 B），不要凭空造痛点。' + (prFlag ? '★本次已激活价格异议分支：「降本 / 更便宜的料 / 压 BOM」这一类痛点降级为不可用作主轴，只能在换过口径之后当佐证用。' : ''));
   L.push('3. 用口语，像真人说话，不用书面语，不用「我们致力于」「全方位赋能」这类词。');
   L.push('4. 不要替客户下结论，多用问句把话说一半，让客户自己说出来。');
-  L.push('5. 全程不知道对方姓名，绝对不许编「王总」「李工」这类姓——一律用「您」或「贵司」；确需具名的地方写成「〔对方称呼〕您好」，由销售发出前替换成真姓。');
+  L.push('5. 全程不知道对方姓名，绝对不许编「王总」「李工」这类姓——一律用「您」或「贵司」；确需具名的地方写成「〔对方称呼〕您好」，由销售发出前替换成真姓。销售本人也不许编名字（不许出现「我是小王」这类），写成「我是厦门名瑟的〔你的名字〕」。');
   L.push('6. 若行业是汽车电子，所有证据必须升级为 AEC-Q 认证与车规量产案例，不许用消费级话术；没有案例就写〔需要原厂提供的车规案例〕。');
   L.push('');
-  L.push('【输出格式——严格按这四段，不要多写也不要少写】');
+  L.push('【输出格式——严格按下面这些段，不要多写也不要少写】');
   L.push('');
-  L.push('一、SPIN 四步提问（每步一句，可以直接照着问）');
+  if (prFlag){
+    L.push('〇、先接价的一句话（不辩解、不比价、不让价，先接住他说贵这件事）');
+    L.push('……');
+    L.push('');
+  }
+  L.push('一、SPIN 四步提问（每步一句，可以直接照着问）' + (prFlag ? '（★P 与 I 两步不许落在"成本上涨/利润变薄/价格优势"上，必须落在换过口径后的同轴痛点）' : ''));
   L.push('S（现状）：……');
   L.push('P（难点）：……');
   L.push('I（放大影响）：……（若对方是采购、工程师、品质这类「打工者」，I 问要从组织影响递进到个人影响：被追责、绩效、夹在中间传话）');
-  L.push('N（确认价值）：……');
-  L.push('（说明这一轮该从哪一步进：客户已经明说痛点就从 I 进，没说就从 S 开始抛假设）');
+  L.push('N（确认价值）：……' + (prFlag ? '（★必须把比较口径换成总成本/风险成本）' : ''));
+  L.push('（说明这一轮该从哪一步开口：客户已经明说痛点就从 I 进，没说就从 S 开始抛假设）');
+  L.push('★四步一句都不能少：就算本轮建议从 I 开口，也要把 S、P、N 三句一并写出来备用（注明「本轮建议从 I 开口」即可），不许只写一步。');
   L.push('');
   L.push('二、FABE 一段话（60-90 秒能讲完，F 特征 / A 优势 / B 利益 / E 证据）');
   L.push('要求：A（优势）必须挂比较对象——比他现在用的、比竞品、比进口料，不能只说「我们有什么作用」。');
+  if (prFlag){
+    L.push('★价格异议专条：A 这一段必须正面消化价差——「贵〔替换成你查到的数〕%，换来的是……」，不许绕开价格只讲好处；数字一律写〔替换成你查到的数〕。');
+  }
   L.push('');
   L.push('三、他大概率会提的一个异议 + LSCPA 五步应对');
   L.push('L 倾听 / S 确认 / C 澄清（问出「具体差多少」）/ P 呈现 / A 请求下一步');
   L.push('');
-  L.push('四、第一条微信/企微开场消息（120 字以内，可以直接发出去，对方不用思考就能回）');
+  L.push('四、第一条微信/企微开场消息（120 字以内，可以直接发出去，对方不用思考就能回；不许出现对方姓氏，也不许出现销售自己的名字）');
   L.push('');
   L.push('全部写完后，最后加一行：「发出前请自己改三处——换成你的口气、填进真实数字、换成客户真说过的话。」');
   return L.join('\n');
@@ -525,13 +586,24 @@ function copyText(txt){
    云端大模型通道（免密钥：模型密钥在服务端，页面里没有 Key）
    ========================================================= */
 var cloud = null;
-var CLOUD_ENDPOINT = 'https://mingshe-gen.app.workbuddy.host';
-var CLOUD_KEY = '';
+/* 按当前域名自动选用对应的云端通道（Origin 必须精确匹配，换域名就要换 Key） */
+var CLOUD_CONF = {
+  'mingshe-gen.app.workbuddy.host': {
+    endpoint: 'https://mingshe-gen.app.workbuddy.host',
+    key: 'wbpk_bLhwNDvE22sdIg3tpwqFd1_lSnibFLmTVPwpsveUB0FU3HNwV7r3OJS'
+  },
+  'misumi-roleplay.app.workbuddy.host': {
+    endpoint: 'https://misumi-roleplay.app.workbuddy.host',
+    key: 'wbpk_lZuqtTjzObzETTB90Vg7eP_uWoU9PdVRby2JDJC0fK67ef7DHrqJTPE'
+  }
+};
+var _conf = null;
+try { _conf = CLOUD_CONF[location.hostname] || null; } catch(e){ _conf = null; }
 try {
-  if (CLOUD_KEY){
+  if (_conf && _conf.key){
     cloud = WorkBuddyCloud.createWorkBuddyCloud({
-      endpoint: CLOUD_ENDPOINT,
-      publishableKey: CLOUD_KEY
+      endpoint: _conf.endpoint,
+      publishableKey: _conf.key
     });
   }
 } catch(e){ cloud = null; }
@@ -559,7 +631,7 @@ function pickModel(){
   });
 }
 
-var SYSTEM_MSG = '你是厦门名瑟电子的销售话术教练。严格按用户消息规定的格式输出；只使用用户消息给出的痛点地图与支撑点清单，不编造型号、客户案例、价格数字和对方姓名。';
+var SYSTEM_MSG = '你是厦门名瑟电子的销售话术教练。严格按用户消息规定的格式输出，一段都不能少；只使用用户消息给出的痛点地图与支撑点清单，不编造型号、客户案例、价格数字，也不编造对方姓氏和销售自己的名字。';
 
 async function runModel(m, prompt, onDelta, signal){
   for await (const chunk of cloud.llm.chat.completions.create({
@@ -588,6 +660,10 @@ if (!cloud || typeof WorkBuddyCloud === 'undefined'){
   var rn = document.getElementById('runNote');
   rn.style.display = 'block';
   rn.innerHTML = '<b>这一版怎么玩：</b>点一下，提示词自动复制好，粘到 DeepSeek / 豆包 / 元宝 / 企微里的 AI，它就按我们的痛点地图出话术。<b>手机上一样能用。</b>';
+} else {
+  var rn2 = document.getElementById('runNote');
+  rn2.style.display = 'block';
+  rn2.innerHTML = '点「生成话术」，十几秒出一套：SPIN 四问 ＋ FABE ＋ 异议应对 ＋ 企微开场。<b>发出前改三处：</b>换成你的口气、填真实数字、换成客户真说过的话。';
 }
 
 btnRun.onclick = function(){
