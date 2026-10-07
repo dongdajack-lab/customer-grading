@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>名瑟电子 · 拜访话术生成器</title>
+<style>
+:root{
+  --navy:#1B2A4A; --steel:#2E6B9E; --orange:#E67E22;
+  --ink:#1F2430; --sub:#5F6673; --line:#E3E6EC; --bg:#F5F7FA;
+  --ok:#1D9E75; --okbg:#E8F5F0; --bad:#C0392B; --badbg:#FCEBEB;
+  --tip:#185FA5; --tipbg:#E6F1FB; --gold:#D98A1D; --warnbg:#FFF7EC;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px 48px}
+header{background:linear-gradient(135deg,#1B2A4A 0%,#2E6B9E 100%);color:#fff;padding:18px 0 16px;margin-bottom:16px}
+header .wrap{padding-bottom:0}
+h1{margin:0;font-size:20px;font-weight:600;letter-spacing:.4px}
+.sub{font-size:12.5px;opacity:.8;margin-top:5px}
+.ver{display:inline-block;background:rgba(255,255,255,.18);border-radius:4px;padding:1px 8px;font-size:11.5px;margin-left:8px;vertical-align:2px}
+.body-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.body-grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.ch{background:#F8F9FB;border-bottom:1px solid var(--line);padding:11px 15px;font-size:13.5px;font-weight:600;color:var(--navy);
+  display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ch .hint{font-size:11.5px;font-weight:400;color:var(--sub);white-space:nowrap}
+.cb{padding:14px 15px}
+label.f{display:block;font-size:12.5px;color:var(--sub);margin:0 0 6px;font-weight:500}
+input[type=text],textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:13.5px;
+  font-family:inherit;color:var(--ink);background:#fff;outline:none;transition:border-color .15s}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--steel);box-shadow:0 0 0 3px rgba(46,107,158,.1)}
+textarea{resize:vertical;min-height:64px;line-height:1.6}
+.mb{margin-bottom:13px}
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:560px){.posts{grid-template-columns:repeat(2,1fr)}}
+.post{border:1.5px solid var(--line);border-radius:10px;padding:10px 11px;cursor:pointer;background:#fff;transition:all .15s;text-align:left}
+.post:hover{border-color:#B9C6D8;background:#FBFCFE}
+.post.on{border-color:var(--steel);background:linear-gradient(180deg,#F2F7FC,#fff);box-shadow:0 2px 10px rgba(46,107,158,.13)}
+.post .pn{font-size:13.5px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:5px}
+.post .pc{font-size:11px;color:var(--sub);margin-top:3px;line-height:1.45}
+.post .dot{width:7px;height:7px;border-radius:50%;background:var(--line);flex:none}
+.post.on .dot{background:var(--orange)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);border-radius:20px;padding:7px 14px;font-size:13px;cursor:pointer;background:#fff;transition:all .15s;color:var(--ink)}
+.chip:hover{border-color:#B9C6D8}
+.chip.on{border-color:var(--orange);background:#FFF4E8;color:#B85C0B;font-weight:600}
+.chip.sm{font-size:12px;padding:6px 12px}
+.btn{border:none;border-radius:9px;padding:11px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.primary:hover{background:#16223C}
+.btn.accent{background:var(--orange);color:#fff}
+.btn.accent:hover{background:#CF6E14}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--steel);color:var(--steel)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap}
+.out-empty{color:var(--sub);font-size:13px;padding:28px 16px;text-align:center;line-height:1.9}
+pre.prompt{background:#1E2430;color:#E8ECF2;border-radius:9px;padding:14px;font-size:12px;line-height:1.75;
+  overflow:auto;max-height:460px;white-space:pre-wrap;word-break:break-word;margin:0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;padding:14px;font-size:13px;line-height:1.85;
+  overflow:auto;max-height:520px;white-space:pre-wrap;word-break:break-word;margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+.note{font-size:12px;color:var(--sub);line-height:1.7;background:#F8F9FB;border-radius:8px;padding:10px 12px;margin-top:11px}
+.note b{color:var(--navy)}
+.rule{background:var(--warnbg);border:1px solid #F5DFBE;border-radius:9px;padding:11px 13px;font-size:12.5px;color:#8A5A12;line-height:1.75;margin-bottom:14px}
+.rule b{color:#B85C0B}
+.foot{font-size:11.5px;color:var(--sub);text-align:center;margin-top:22px;line-height:1.9}
+.copied{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:var(--navy);color:#fff;
+  padding:10px 20px;border-radius:22px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:99}
+.copied.show{opacity:1}
+.maplist{font-size:12.5px;line-height:1.8}
+.maplist .row{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start}
+.maplist .tag{flex:none;width:19px;height:19px;border-radius:5px;font-size:11px;font-weight:700;display:flex;
+  align-items:center;justify-content:center;margin-top:2px}
+.tagA{background:#E8F5F0;color:#1D9E75}
+.tagB{background:#E6F1FB;color:#185FA5}
+.tagC{background:#F2F3F5;color:#8A9099}
+.srcnote{font-size:11.5px;color:#8A9099;margin-top:9px;line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1</span></h1>
+    <div class="sub">选岗位 → 选场景 → 出一套能直接照着用的 SPIN / FABE 话术</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="rule">
+    <b>先看这条：</b>痛点地图取自咱们自己 2 月共创的原话。<b>AI 生成的是草稿，不是终稿——发出前请自己改三处</b>：改成你的口气、填进你查到的真实数字（价格、交期、用量）、换成客户真说过的话。
+  </div>
+
+  <div class="body-grid">
+
+    <!-- ============ 左：输入 ============ -->
+    <div>
+      <div class="card">
+        <div class="ch"><span>① 拜访谁？什么岗位？</span><span class="hint">必选</span></div>
+        <div class="cb">
+          <div class="posts" id="posts"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span>② 客户做什么行业？</span><span class="hint">选填，选了更准</span></div>
+        <div class="cb">
+          <div class="chips" id="inds"></div>
+          <div class="note" id="indNote" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span>③ 这次是什么场景？</span><span class="hint">必选</span></div>
+        <div class="cb">
+          <div class="chips" id="chips"></div>
+          <div class="note" id="sceneNote" style="display:none"></div>
+          <div class="mb" id="otherWrap" style="display:none;margin:11px 0 0">
+            <label class="f">这个场景是什么？一句话写清楚（例：客户让我先报个价对比现在用的）</label>
+            <input type="text" id="otherScene" placeholder="一句话描述当时的情况">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span>④ 客户情况</span><span class="hint">公司必填，原话越具体越准</span></div>
+        <div class="cb">
+          <div class="mb">
+            <label class="f">客户公司名 / 做什么产品（例：中山XX照明 / 做智能感应灯，出口欧洲）</label>
+            <input type="text" id="company" placeholder="公司名或行业即可">
+          </div>
+          <div class="mb">
+            <label class="f">客户说过的话（原话，选填但强烈建议——贴了质量翻倍）</label>
+            <textarea id="words" placeholder="例：你们家比晶丰贵啊，交期还要等五周"></textarea>
+          </div>
+          <div class="mb" style="margin-bottom:0">
+            <label class="f">他现在用谁家的 / 提到过什么型号（选填）</label>
+            <input type="text" id="rival" placeholder="例：现在用晶丰 BP2863SK；提到过 JW19812E">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span>⑤ 生成话术</span><span class="hint">点一下就行</span></div>
+        <div class="cb">
+          <div class="btnrow">
+            <button class="btn accent" id="btnRun" style="flex:1;padding:13px">生成话术</button>
+          </div>
+          <div class="btnrow" style="margin-top:9px">
+            <button class="btn ghost" id="btnCopyPrompt" style="font-size:12px;padding:7px 12px">备用：只复制提示词</button>
+          </div>
+          <div class="note" id="runNote" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 右：输出 ============ -->
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch"><span id="outTitle">输出</span><span class="hint" id="outHint"></span></div>
+        <div class="cb" style="padding:0">
+          <div class="out-empty" id="outEmpty">
+            左边选好岗位和场景，点「生成话术」<br>
+            AI 会按共创定下来的痛点地图，直接写出四段能照着用的话术
+          </div>
+          <pre class="prompt" id="outPrompt" style="display:none"></pre>
+          <pre class="result" id="outResult" style="display:none"></pre>
+        </div>
+      </div>
+
+      <div class="card" id="mapCard" style="display:none">
+        <div class="ch"><span id="mapTitle">这个岗位的痛点地图</span><span class="hint">生成时会给 AI，你也能自己看</span></div>
+        <div class="cb">
+          <div class="maplist" id="mapList"></div>
+          <div class="note" id="mapLine"></div>
+          <div class="srcnote">痛点名称与分类出自 2 月共创原件；SPIN 问句按原版风格衍生，供提问方向参考，不是逐字稿。</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    厦门名瑟电子科技 · 销售拜访配套工具 · V1<br>
+    AI 生成的内容请自行核对后再使用；型号、价格、交期以实际查询为准。
+  </div>
+</div>
+
+<div class="copied" id="toast">已复制</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script>
+/* =========================================================
+   知识底座 —— 名瑟电子 2 月共创痛点库（5 角色 + 行业叠加）
+   A=我的战场（名瑟直接能解）  B=转译后可解（要一个弯）  C=真痛点·非我战场
+   ========================================================= */
+var ROLES = {
+  boss:{
+    name:'老板 / 总经理', focus:'只关心三件事：利润、份额、方向',
+    A:[
+      '利润承压、增长乏力：整机 BOM 里电源类芯片占比上升，卖价却涨不动 → 原厂技术降本支持，同样功能更便宜的料',
+      '现金流与账期压力：备货占资金、旺季转不开 → 按你的节奏做安全库存＋弹性交付',
+      '升级方向与转型焦虑：照明转智能感应、消费电子转新品类，怕押错方向 → 同方向已有量产客户案例，带他看同行怎么走'
+    ],
+    B:[
+      '市场份额被对手挤压 → 用差异化方案（更省电、更小体积）帮他把份额守回来',
+      '团队稳定与内部协同：换料选型反复、加班返工 → 稳定选型支持＋FAE 快速响应，帮团队少踩坑'
+    ],
+    C:['融资与股权安排','股东/家族内部关系','他自己下游客户欠他的钱','招人难留人难'],
+    line:'跟老板不聊型号，聊利润和方向；他给你十分钟，前八分钟必须是他的生意，不是你的芯片。'
+  },
+  buyer:{
+    name:'采购主管 / 经理', focus:'交期、成本、断供、别让我夹在中间',
+    A:[
+      '交付不稳：急单插不进、交期拖延 → 稳定交期、提前锁价、优先排产',
+      '成本价格压力：每年有降本指标 → 按用量阶梯做价格方案＋原厂技术降本',
+      '供应商风险与断供担忧：独家依赖、突然 EOL → 提前做替代料预案，pin to pin 兼容方案备好、样品随时能测',
+      '内部协同满意度：研发抱怨、供应商响应慢，全靠他传话 → FAE 直接对接研发，技术问题不过他的手'
+    ],
+    B:['降本谈不动时，把话题从单价换成综合成本（含停线、返工、换料验证的成本）'],
+    C:['公司内部采购流程政治','他的个人职业发展'],
+    line:'采购的痛点每一条都接得住——硬碰硬。但记住：他怕的不是贵，是断料和背锅，I 问要打到个人影响（被追责、绩效）。'
+  },
+  cto:{
+    name:'技术总监 / 研发负责人', focus:'项目节点、良率、有人兜底',
+    A:[
+      '研发周期与项目节点：选型反复、样品慢、调试调不通 → FAE 带着 DEMO 板上门，参考设计一次给全',
+      '兼容性与良率：温度漂移、启动异常、跟别家料打架 → 同类客户量产线良率数据＋原厂 FAE 驻场调通',
+      '技术支持不给力：自己啃 Datasheet、上论坛找答案 → 同城 FAE 随叫随到＋原厂技术通道'
+    ],
+    B:[],
+    C:['公司技术路线之争','研发人力编制'],
+    line:'技术岗讲参数要落到「对你意味着什么」：少一次改板、早一周量产。他信数据不信形容词。'
+  },
+  rnd:{
+    name:'研发工程师（一线）', focus:'好不好调、资料齐不齐、样品快不快',
+    A:[
+      '方案好不好调、资料齐不齐、样品快不快 → Datasheet、参考设计、驱动代码一次给齐，样品当天留，FAE 同城上门',
+      '踩过坑怕再来一遍（品质三怕：怕质量不稳、怕售后没人兜底、怕看着一样实际差很多）→ 全流程把控＋售后前置'
+    ],
+    B:[],
+    C:['公司给的薪资与晋升'],
+    line:'工程师是所有岗位里最好打交道的——你把资料给齐、把样品放下，他就愿意跟你聊。别跟他谈生意，跟他谈板子。'
+  },
+  qc:{
+    name:'品质 / 生产负责人', focus:'别给我惹麻烦、出事有据可依',
+    A:[
+      '批次一致性：同颗料不同批次参数飘，产线每批都要重新调 → 同批同参数、批次一致性数据可查',
+      '出问题谁兜底：来料事故供应商不认账、赔付拖 → 来料批次追溯＋质量协议承诺，出问题有据可依'
+    ],
+    B:['个人工作量大：没报告的料要自己加测 → 检测数据随货＝帮他减工作量'],
+    C:['设备与产线投资','品质部门 KPI 设计'],
+    line:'品质岗不讲价格，讲判定依据——给他一份双方都能拿来说话的纸，他就站你这边。'
+  }
+};
+
+/* 行业叠加 */
+var INDS = [
+  {id:'light', name:'照明（智能感应 / 出口）', tip:'出口型照明特别认两件事：认证别折腾（ErP、能效反复改板重测，错过一班船就是几周）、新品要踩住上市窗口。'},
+  {id:'ce', name:'消费电子', tip:'价格战＋上市窗口双压。问他：晚一个月上市和贵五毛钱成本，哪个更伤？'},
+  {id:'auto', name:'汽车电子（新行业）', tip:'★证据必须升级：一律用 AEC-Q 认证与车规量产案例说话，不许用消费级话术。车规料出问题召回是百万级起步。'},
+  {id:'na', name:'还没搞清楚 / 其他', tip:''}
+];
+
+/* 场景 */
+var SCENES = [
+  {id:'quote', name:'带料号来询价', tip:'客户带料号或图纸来问价——先回应「四个数」（有没有库存 / 单价 / 交期具体到哪一天 / 有没有同规格替代），才换得到追问时间。被追问抽象问题三次，他直接结束对话。'},
+  {id:'price', name:'客户嫌贵', tip:'「你们比晶丰贵」——LSCPA 的 C 先问口径：是跟单价比，还是跟综合成本比？别急着解释，更别马上让价。'},
+  {id:'replace', name:'想换掉现在用的料', tip:'替代路径要讲清楚：pin to pin 兼容还是改板？省不省外围器件？验证周期多久？给他一条能落地的路，别只说「我们能替」。'},
+  {id:'sample', name:'送样后没下文', tip:'样品送出去就没回声了——三态跟进（在测／测完了等结果／卡住了），问到具体卡在哪，别问「测得怎么样」。'},
+  {id:'delivery', name:'交期 / 断供 / 急单', tip:'他急的是产线，不是你。先给具体到日的答复，再谈方案；承诺不了的日子宁可说「我下午四点前回你」。'},
+  {id:'silent', name:'老客户突然不下单', tip:'先认领旧账或先给一条对他有用的信息，再谈业务；开场别一上来就推新品。'},
+  {id:'first', name:'首次接触', tip:'陌生电话／展会／企微加好友——PPP 开场（目的／过程／收益）先把防御降到最低，再用假设式 SPIN 抛痛点：地图上多的是假设，这个不中换下一个。'},
+  {id:'other', name:'其他', tip:''}
+];
+
+/* 名瑟可对外用的支撑点（源自 2 月共创话术；涉及数字一律留占位） */
+var ABILITIES = [
+  '杰华特（Halo Micro）原厂产品线：DC/DC、AC/DC、线性电源、电池管理、LED 驱动芯片',
+  '原厂技术通道＋同城 FAE 支持（厦门总部，杭州、中山有办事处）',
+  '参考设计、DEMO 板、Datasheet、驱动代码一次给齐',
+  '样品支持：随时可测，FAE 可上门陪测',
+  'pin to pin 兼容替代方案＋替代料预案（应对断供、EOL）',
+  '按用量阶梯的价格方案＋原厂技术降本（同样功能更便宜的料）',
+  '安全库存＋弹性交付＋提前锁价＋优先排产',
+  '同批同参数，批次一致性数据可查',
+  '来料批次追溯＋质量协议承诺',
+  '长期供货承诺＋生命周期与 EOL 提前通知',
+  'AEC-Q 认证产品线（仅汽车电子场景可用，须配车规量产案例）'
+];
+
+/* 型号口径：以下型号在真实拜访记录里出现过，仅作举例；不确定一律占位 */
+var MODELS = '杰华特 JW 系列（如 JW19812E、JW19818CT）；市面常见竞品：晶丰明源 BP 系列（BP2861AJ、BP2863SK、BP5219）、必易微 KP 系列（KP1075BWP）。以上仅作举例，实际以查询为准，不确定就写〔按查得的型号〕。';
+
+/* =========================================================
+   状态与渲染
+   ========================================================= */
+var state = {role:null, ind:null, scene:null};
+
+var postsEl = document.getElementById('posts');
+var indsEl = document.getElementById('inds');
+var chipsEl = document.getElementById('chips');
+
+for (var k in ROLES){
+  var p = ROLES[k];
+  var d = document.createElement('button');
+  d.className = 'post'; d.type = 'button'; d.setAttribute('data-k', k);
+  d.innerHTML = '<div class="pn"><span class="dot"></span>'+p.name+'</div>';
+  (function(key){
+    d.onclick = function(){ pickRole(key); };
+  })(k);
+  postsEl.appendChild(d);
+}
+
+INDS.forEach(function(s){
+  var c = document.createElement('button');
+  c.className = 'chip sm'; c.type = 'button'; c.textContent = s.name;
+  c.setAttribute('data-id', s.id);
+  c.onclick = function(){ pickInd(s.id); };
+  indsEl.appendChild(c);
+});
+
+SCENES.forEach(function(s){
+  var c = document.createElement('button');
+  c.className = 'chip'; c.type = 'button'; c.textContent = s.name;
+  c.setAttribute('data-id', s.id);
+  c.onclick = function(){ pickScene(s.id); };
+  chipsEl.appendChild(c);
+});
+
+function pickRole(key){
+  state.role = key;
+  var all = postsEl.querySelectorAll('.post');
+  for (var i=0;i<all.length;i++){ all[i].classList.toggle('on', all[i].getAttribute('data-k')===key); }
+  renderMap();
+}
+
+function pickInd(id){
+  state.ind = (state.ind === id) ? null : id;
+  var all = indsEl.querySelectorAll('.chip');
+  for (var i=0;i<all.length;i++){ all[i].classList.toggle('on', all[i].getAttribute('data-id')===state.ind); }
+  var note = document.getElementById('indNote');
+  var cur = null;
+  for (var j=0;j<INDS.length;j++){ if (INDS[j].id===state.ind) cur = INDS[j]; }
+  if (cur && cur.tip){ note.style.display='block'; note.innerHTML = '<b>这个行业要加的方向：</b>'+cur.tip; }
+  else { note.style.display='none'; }
+}
+
+function pickScene(id){
+  state.scene = id;
+  var all = chipsEl.querySelectorAll('.chip');
+  for (var i=0;i<all.length;i++){ all[i].classList.toggle('on', all[i].getAttribute('data-id')===id); }
+  var sc = null;
+  for (var j=0;j<SCENES.length;j++){ if (SCENES[j].id===id) sc = SCENES[j]; }
+  var note = document.getElementById('sceneNote');
+  var otherWrap = document.getElementById('otherWrap');
+  if (id==='other'){
+    note.style.display='none';
+    otherWrap.style.display='block';
+  } else {
+    otherWrap.style.display='none';
+    if (sc && sc.tip){ note.style.display='block'; note.innerHTML = '<b>这个场景的要点：</b>'+sc.tip; }
+    else { note.style.display='none'; }
+  }
+}
+
+function renderMap(){
+  var card = document.getElementById('mapCard');
+  if (!state.role){ card.style.display='none'; return; }
+  var p = ROLES[state.role];
+  card.style.display='block';
+  document.getElementById('mapTitle').textContent = p.name + ' · 共创校准的痛点地图';
+  var h = '';
+  p.A.forEach(function(t){ h += '<div class="row"><span class="tag tagA">A</span><span>'+t+'</span></div>'; });
+  p.B.forEach(function(t){ h += '<div class="row"><span class="tag tagB">B</span><span>'+t+'</span></div>'; });
+  p.C.forEach(function(t){ h += '<div class="row"><span class="tag tagC">C</span><span>'+t+'</span></div>'; });
+  if (p.C.length){
+    h += '<div style="margin-top:9px;font-size:11.5px;color:#8A9099">C 类＝真痛点但不是我们的战场——他提起时坦然说一句「这个我们帮不上，您找专业的人」，然后换话题。</div>';
+  }
+  document.getElementById('mapList').innerHTML = h;
+  document.getElementById('mapLine').innerHTML = '<b>一句话：</b>'+p.line;
+}
+
+/* =========================================================
+   提示词拼装
+   ========================================================= */
+function buildPrompt(){
+  if (!state.role || !state.scene){ return null; }
+  var p = ROLES[state.role];
+  var sc = null;
+  for (var j=0;j<SCENES.length;j++){ if (SCENES[j].id===state.scene) sc = SCENES[j]; }
+  var company = (document.getElementById('company').value||'').trim();
+  var words = (document.getElementById('words').value||'').trim();
+  var rival = (document.getElementById('rival').value||'').trim();
+
+  var L = [];
+  L.push('你是厦门名瑟电子的销售教练。名瑟是杰华特微电子（Halo Micro）的核心代理商＋方案商，产品线：DC/DC、AC/DC、线性电源、电池管理、LED 驱动芯片；主攻智能感应照明、通用照明、消费电子，正在切入汽车电子。');
+  L.push('请你为下面这次拜访，写一套可以直接照着用的话术。');
+  L.push('');
+  L.push('【客户信息】');
+  L.push('· 客户公司/做什么产品：' + (company || '（未填写，按行业通例推演）'));
+  L.push('· 对接人岗位：' + p.name + '（他关心的是：' + p.focus + '）');
+  var indTxt = '（未选择）';
+  if (state.ind){
+    for (var i2=0;i2<INDS.length;i2++){ if (INDS[i2].id===state.ind) indTxt = INDS[i2].name; }
+  }
+  L.push('· 行业：' + indTxt);
+  var sceneDesc = sc.name;
+  if (state.scene==='other'){
+    var ot = (document.getElementById('otherScene').value||'').trim();
+    sceneDesc = ot ? ('其他——' + ot) : '其他（未描述，按该岗位常见场景推演）';
+  }
+  L.push('· 当前场景：' + sceneDesc);
+  L.push('· 客户说过的话：' + (words ? '「' + words + '」' : '（未提供，按该岗位最典型的场景推演）'));
+  L.push('· 现在用谁家的/提到的型号：' + (rival || '（未提供）'));
+  L.push('');
+  L.push('【这个岗位校准后的痛点地图——你只能从这里取材】');
+  p.A.forEach(function(t,i){ L.push('A'+(i+1)+'（我的战场）'+t); });
+  p.B.forEach(function(t,i){ L.push('B'+(i+1)+'（转译后可解）'+t); });
+  if (p.C.length) L.push('C 类（真痛点但不是名瑟的战场，本次不用，也不要硬接）：' + p.C.join('、'));
+  L.push('岗位要点：' + p.line);
+  if (state.ind && state.ind !== 'na'){
+    for (var i3=0;i3<INDS.length;i3++){ if (INDS[i3].id===state.ind) L.push('行业叠加要点：' + INDS[i3].tip); }
+  }
+  L.push('');
+  L.push('【名瑟可对外用的支撑点——话术里只能出现这些】');
+  ABILITIES.forEach(function(t,i){ L.push((i+1)+'. '+t); });
+  L.push('');
+  L.push('【型号口径】' + MODELS);
+  L.push('');
+  L.push('【六条铁律，违反任何一条本次输出作废】');
+  L.push('1. 不许编型号、不许编客户案例、不许编具体价格、降幅、交期天数——需要数字的地方一律写〔替换成你查到的数〕。');
+  L.push('2. 每条话术必须能对应上痛点地图里的某一条（A 或 B），不要凭空造痛点。');
+  L.push('3. 用口语，像真人说话，不用书面语，不用「我们致力于」「全方位赋能」这类词。');
+  L.push('4. 不要替客户下结论，多用问句把话说一半，让客户自己说出来。');
+  L.push('5. 全程不知道对方姓名，绝对不许编「王总」「李工」这类姓——一律用「您」或「贵司」；确需具名的地方写成「〔对方称呼〕您好」，由销售发出前替换成真姓。');
+  L.push('6. 若行业是汽车电子，所有证据必须升级为 AEC-Q 认证与车规量产案例，不许用消费级话术；没有案例就写〔需要原厂提供的车规案例〕。');
+  L.push('');
+  L.push('【输出格式——严格按这四段，不要多写也不要少写】');
+  L.push('');
+  L.push('一、SPIN 四步提问（每步一句，可以直接照着问）');
+  L.push('S（现状）：……');
+  L.push('P（难点）：……');
+  L.push('I（放大影响）：……（若对方是采购、工程师、品质这类「打工者」，I 问要从组织影响递进到个人影响：被追责、绩效、夹在中间传话）');
+  L.push('N（确认价值）：……');
+  L.push('（说明这一轮该从哪一步进：客户已经明说痛点就从 I 进，没说就从 S 开始抛假设）');
+  L.push('');
+  L.push('二、FABE 一段话（60-90 秒能讲完，F 特征 / A 优势 / B 利益 / E 证据）');
+  L.push('要求：A（优势）必须挂比较对象——比他现在用的、比竞品、比进口料，不能只说「我们有什么作用」。');
+  L.push('');
+  L.push('三、他大概率会提的一个异议 + LSCPA 五步应对');
+  L.push('L 倾听 / S 确认 / C 澄清（问出「具体差多少」）/ P 呈现 / A 请求下一步');
+  L.push('');
+  L.push('四、第一条微信/企微开场消息（120 字以内，可以直接发出去，对方不用思考就能回）');
+  L.push('');
+  L.push('全部写完后，最后加一行：「发出前请自己改三处——换成你的口气、填进真实数字、换成客户真说过的话。」');
+  return L.join('\n');
+}
+
+/* =========================================================
+   界面动作
+   ========================================================= */
+var outEmpty = document.getElementById('outEmpty');
+var outPrompt = document.getElementById('outPrompt');
+var outResult = document.getElementById('outResult');
+var outTitle = document.getElementById('outTitle');
+var outHint = document.getElementById('outHint');
+
+function requireReady(){
+  if (!state.role || !state.scene){
+    showToast('先选岗位和场景');
+    return false;
+  }
+  if (state.scene==='other' && !(document.getElementById('otherScene').value||'').trim()){
+    showToast('用一句话把"其他"这个场景写一下');
+    document.getElementById('otherScene').focus();
+    return false;
+  }
+  if (!(document.getElementById('company').value||'').trim()){
+    showToast('填一下客户公司或做什么产品');
+    document.getElementById('company').focus();
+    return false;
+  }
+  return true;
+}
+
+document.getElementById('btnCopyPrompt').onclick = function(){
+  if (!requireReady()) return;
+  var txt = buildPrompt();
+  outEmpty.style.display='none';
+  outResult.style.display='none';
+  outPrompt.style.display='block';
+  outPrompt.textContent = txt;
+  outTitle.textContent = '提示词（复制后粘到任意 AI）';
+  outHint.textContent = '共 ' + txt.length + ' 字';
+  copyText(txt);
+};
+
+function copyText(txt){
+  function fallback(){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position='fixed'; ta.style.top='-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
+    document.body.removeChild(ta);
+    showToast(ok ? '已复制，去粘给 AI 吧' : '复制失败，请手动长按选择');
+  }
+  if (navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(txt).then(function(){ showToast('已复制，去粘给 AI 吧'); }, fallback);
+  } else {
+    fallback();
+  }
+}
+
+/* =========================================================
+   云端大模型通道（免密钥：模型密钥在服务端，页面里没有 Key）
+   ========================================================= */
+var cloud = null;
+var CLOUD_ENDPOINT = 'https://mingshe-gen.app.workbuddy.host';
+var CLOUD_KEY = '';
+try {
+  if (CLOUD_KEY){
+    cloud = WorkBuddyCloud.createWorkBuddyCloud({
+      endpoint: CLOUD_ENDPOINT,
+      publishableKey: CLOUD_KEY
+    });
+  }
+} catch(e){ cloud = null; }
+
+var MODEL_CACHE = null;
+var PREFERRED = ['hunyuan-chat','default'];
+function pickModel(){
+  if (MODEL_CACHE) return Promise.resolve(MODEL_CACHE);
+  return cloud.llm.models.list().then(function(models){
+    var m = null;
+    for (var i=0;i<PREFERRED.length;i++){
+      for (var j=0;j<models.length;j++){
+        if (models[j].id===PREFERRED[i] && models[j].disabled!==true){ m = models[j]; break; }
+      }
+      if (m) break;
+    }
+    if (!m){
+      for (var k=0;k<models.length;k++){
+        if (models[k].disabled!==true && models[k].supportsReasoning!==true){ m = models[k]; break; }
+      }
+    }
+    if (!m) throw new Error('当前没有可用模型');
+    MODEL_CACHE = m;
+    return m;
+  });
+}
+
+var SYSTEM_MSG = '你是厦门名瑟电子的销售话术教练。严格按用户消息规定的格式输出；只使用用户消息给出的痛点地图与支撑点清单，不编造型号、客户案例、价格数字和对方姓名。';
+
+async function runModel(m, prompt, onDelta, signal){
+  for await (const chunk of cloud.llm.chat.completions.create({
+    model: m.id,
+    messages: [
+      { role:'system', content: SYSTEM_MSG },
+      { role:'user', content: prompt }
+    ],
+    stream: true,
+    temperature: 0.7,
+    signal: signal
+  })){
+    const d = chunk.choices && chunk.choices[0] && chunk.choices[0].delta;
+    if (d && d.content) onDelta(d.content);
+  }
+}
+
+var controller = null;
+var btnRun = document.getElementById('btnRun');
+var btnCopy = document.getElementById('btnCopyPrompt');
+
+/* 没有云端通道时（例如放在普通静态托管上），主按钮直接变成"生成提示词并复制" */
+if (!cloud || typeof WorkBuddyCloud === 'undefined'){
+  btnRun.textContent = '生成提示词（自动复制）';
+  btnCopy.style.display = 'none';
+  var rn = document.getElementById('runNote');
+  rn.style.display = 'block';
+  rn.innerHTML = '<b>这一版怎么玩：</b>点一下，提示词自动复制好，粘到 DeepSeek / 豆包 / 元宝 / 企微里的 AI，它就按我们的痛点地图出话术。<b>手机上一样能用。</b>';
+}
+
+btnRun.onclick = function(){
+  var self = this;
+  if (controller){ controller.abort(); return; }
+  if (!requireReady()) return;
+  if (!cloud || typeof WorkBuddyCloud === 'undefined'){
+    var txt0 = buildPrompt();
+    outEmpty.style.display='none';
+    outResult.style.display='none';
+    outPrompt.style.display='block';
+    outPrompt.textContent = txt0;
+    outTitle.textContent = '提示词已生成（已复制，粘到任意 AI）';
+    outHint.textContent = '共 ' + txt0.length + ' 字 · 粘到 DeepSeek / 豆包 / 元宝 / 企微里的 AI 即可';
+    copyText(txt0);
+    return;
+  }
+  var prompt = buildPrompt();
+  controller = new AbortController();
+  self.textContent = '■ 停止';
+  outEmpty.style.display='none';
+  outPrompt.style.display='none';
+  outResult.style.display='block';
+  outResult.textContent = '正在按岗位痛点地图生成话术…';
+  outTitle.textContent = '生成结果';
+  outHint.textContent = '';
+  var acc = '';
+  var t0 = Date.now();
+  pickModel().then(function(m){
+    return runModel(m, prompt, function(t){
+      acc += t;
+      outResult.textContent = acc;
+      outResult.scrollTop = outResult.scrollHeight;
+    }, controller.signal);
+  }).then(function(){
+    if (!acc.trim()) throw new Error('模型没有返回内容，请再试一次');
+    outResult.textContent = acc + '\n\n────\n提示：发出前请自己改三处——换成你的口气、填进真实数字、换成客户真说过的话。';
+    outHint.textContent = '生成完成，用时约 ' + Math.round((Date.now()-t0)/1000) + ' 秒，可长按选择复制';
+  }).catch(function(e){
+    if (e && (e.name === 'AbortError')){
+      outResult.textContent = (acc.trim() ? acc : '（未生成内容）') + '\n\n（已停止）';
+    } else {
+      var code = e && e.error && e.error.code ? '（' + e.error.code + '）' : '';
+      var msg = '生成失败：' + (e && e.message ? e.message : '未知错误') + code;
+      outResult.textContent = msg + '\n\n点「备用：只复制提示词」，粘到 DeepSeek / 豆包 / 元宝，同样能得到这套话术。';
+    }
+  }).then(function(){
+    controller = null;
+    self.textContent = '生成话术';
+  });
+};
+
+function showFail(msg){
+  outEmpty.style.display='none';
+  outPrompt.style.display='none';
+  outResult.style.display='block';
+  outResult.textContent = msg;
+  outTitle.textContent = '生成结果';
+}
+
+var toastEl = document.getElementById('toast');
+var toastTimer = null;
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2000);
+}
+</script>
+</body>
+</html>
