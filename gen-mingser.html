@@ -86,7 +86,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
 <body>
 <header>
   <div class="wrap">
-    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1.1</span></h1>
+    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1.2</span></h1>
     <div class="sub">选岗位 → 选场景 → 出一套能直接照着用的 SPIN / FABE 话术</div>
   </div>
 </header>
@@ -188,7 +188,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
   </div>
 
   <div class="foot">
-    厦门名瑟电子科技 · 销售拜访配套工具 · V1.1（新增：价格异议分支）<br>
+    厦门名瑟电子科技 · 销售拜访配套工具 · V1.2（价格异议分支＋询价先答四个数）<br>
     AI 生成的内容请自行核对后再使用；型号、价格、交期以实际查询为准。
   </div>
 </div>
@@ -457,6 +457,22 @@ function buildPrompt(){
   L.push('· 现在用谁家的/提到的型号：' + (rival || '（未提供）'));
   L.push('');
 
+  /* —— 场景战术要点：以前只在页面上显示给销售看，AI 看不见，现在必须进提示词 —— */
+  if (sc && sc.tip){
+    L.push('【本次场景的战术要点——必须体现在话术里】' + sc.tip);
+    L.push('');
+  }
+
+  /* —— 带料号询价：先回应「四个数」再提问 —— */
+  var qFlag = (state.scene === 'quote');
+  if (qFlag){
+    L.push('【★★ 客户是带料号/图纸来询价（先回应四个数）】');
+    L.push('1. 输出的最前面必须先给「四个数」：①有没有库存 ②单价 ③交期具体到哪一天 ④有没有同规格可替代的方案。');
+    L.push('2. 这四个数没答完之前不许抛 SPIN 的抽象问题——客户带着型号来，被追问抽象问题三次就直接结束对话。');
+    L.push('3. 数字一律写〔替换成你查到的数〕／〔替换成你查到的交期日〕，答不上来就写"我〔今天几点〕前回您"。');
+    L.push('');
+  }
+
   var prFlag = isPriceCase();
   if (prFlag){
     L.push('【★★ 本次已识别：客户提出了价格异议（他说我们更贵 / 场景＝客户嫌贵）】');
@@ -496,8 +512,13 @@ function buildPrompt(){
   L.push('');
   L.push('【输出格式——严格按下面这些段，不要多写也不要少写】');
   L.push('');
+  if (qFlag){
+    L.push('〇、先答四个数（库存／单价／交期具体到哪天／有没有同规格可替代；数字一律〔替换成你查到的数〕）');
+    L.push('……');
+    L.push('');
+  }
   if (prFlag){
-    L.push('〇、先接价的一句话（不辩解、不比价、不让价，先接住他说贵这件事）');
+    L.push((qFlag ? '〇二' : '〇') + '、先接价的一句话（不辩解、不比价、不让价，先接住他说贵这件事）');
     L.push('……');
     L.push('');
   }
