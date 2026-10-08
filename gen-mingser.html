@@ -81,13 +81,29 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
 .tagB{background:#E6F1FB;color:#185FA5}
 .tagC{background:#F2F3F5;color:#8A9099}
 .srcnote{font-size:11.5px;color:#8A9099;margin-top:9px;line-height:1.6}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:560px){.modes{grid-template-columns:1fr}}
+.mode{border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;background:#fff;text-align:left;font-family:inherit;transition:all .15s}
+.mode:hover{border-color:#B9C6D8}
+.mode.on{border-color:var(--steel);background:linear-gradient(180deg,#F2F7FC,#fff);box-shadow:0 2px 10px rgba(46,107,158,.13)}
+.mode b{display:block;font-size:14px;color:var(--navy);font-weight:600}
+.mode span{display:block;font-size:11.5px;color:var(--sub);margin-top:3px;line-height:1.5}
+.mods{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+@media(max-width:560px){.mods{grid-template-columns:1fr}}
+.modb{border:1.5px solid var(--line);border-radius:10px;padding:10px 11px;cursor:pointer;background:#fff;text-align:left;font-family:inherit;transition:all .15s}
+.modb:hover{border-color:#B9C6D8}
+.modb.on{border-color:var(--orange);background:#FFF4E8}
+.modb b{display:block;font-size:13.5px;color:var(--navy);font-weight:600}
+.modb span{display:block;font-size:11px;color:var(--sub);margin-top:2px;line-height:1.45}
+.sessline{font-size:11.5px;color:var(--sub);margin-top:11px;line-height:1.75;border-top:1px dashed var(--line);padding-top:9px}
+.sessline .ok{color:var(--ok);font-weight:600}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1.2</span></h1>
-    <div class="sub">选岗位 → 选场景 → 出一套能直接照着用的 SPIN / FABE 话术</div>
+    <h1>名瑟电子 · 拜访话术生成器<span class="ver">V1.3</span></h1>
+    <div class="sub">一键出全套，也可以只练一块：开场白 / SPIN / FABE / LSCPA</div>
   </div>
 </header>
 
@@ -95,6 +111,17 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
 
   <div class="rule">
     <b>先看这条：</b>痛点地图取自咱们自己 2 月共创的原话。<b>AI 生成的是草稿，不是终稿——发出前请自己改三处</b>：改成你的口气、填进你查到的真实数字（价格、交期、用量）、换成客户真说过的话。
+  </div>
+
+  <div class="modes" id="modes">
+    <button class="mode on" type="button" data-m="all">
+      <b>一键全套</b>
+      <span>一次出：开场白 ＋ SPIN ＋ FABE ＋ 异议应对</span>
+    </button>
+    <button class="mode" type="button" data-m="one">
+      <b>单模块精修</b>
+      <span>只练一块——输入更准、出得更快、还能接得上前面写的</span>
+    </button>
   </div>
 
   <div class="body-grid">
@@ -117,7 +144,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
       </div>
 
       <div class="card">
-        <div class="ch"><span>③ 这次是什么场景？</span><span class="hint">必选</span></div>
+        <div class="ch"><span>③ 这次是什么场景？</span><span class="hint" id="sceneHint">必选</span></div>
         <div class="cb">
           <div class="chips" id="chips"></div>
           <div class="note" id="sceneNote" style="display:none"></div>
@@ -147,8 +174,17 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
         </div>
       </div>
 
+      <div class="card" id="modCard" style="display:none">
+        <div class="ch"><span>⑤ 练哪一块？</span><span class="hint">必选</span></div>
+        <div class="cb">
+          <div class="mods" id="mods"></div>
+          <div id="modFields" style="margin-top:12px"></div>
+          <div class="sessline" id="sessLine"></div>
+        </div>
+      </div>
+
       <div class="card">
-        <div class="ch"><span>⑤ 生成话术</span><span class="hint">点一下就行</span></div>
+        <div class="ch"><span>⑥ 生成话术</span><span class="hint">点一下就行</span></div>
         <div class="cb">
           <div class="btnrow">
             <button class="btn accent" id="btnRun" style="flex:1;padding:13px">生成话术</button>
@@ -188,7 +224,7 @@ pre.result{background:#FBFCFE;border:1px solid var(--line);border-radius:9px;pad
   </div>
 
   <div class="foot">
-    厦门名瑟电子科技 · 销售拜访配套工具 · V1.2（价格异议分支＋询价先答四个数）<br>
+    厦门名瑟电子科技 · 销售拜访配套工具 · V1.3（全套 / 单模块双模式 · 单模块给 2-3 个备选）<br>
     AI 生成的内容请自行核对后再使用；型号、价格、交期以实际查询为准。
   </div>
 </div>
@@ -308,9 +344,10 @@ var PRICE_ANGLES = [
 ];
 function isPriceCase(){
   if (state.scene === 'price') return true;
-  var w = '';
-  try { w = (document.getElementById('words').value||''); } catch(e){ w = ''; }
-  return PRICE_RE.test(w);
+  function tv(id){
+    try { var e = document.getElementById(id); return e ? (e.value||'') : ''; } catch(err){ return ''; }
+  }
+  return PRICE_RE.test(tv('words')) || PRICE_RE.test(tv('lscpaObj')) || PRICE_RE.test(tv('spinPain'));
 }
 
 /* 型号口径：以下型号在真实拜访记录里出现过，仅作举例；不确定一律占位 */
@@ -319,7 +356,19 @@ var MODELS = '杰华特 JW 系列（如 JW19812E、JW19818CT）；市面常见�
 /* =========================================================
    状态与渲染
    ========================================================= */
-var state = {role:null, ind:null, scene:null};
+/* ===== 模式：一键全套 / 单模块精修 ===== */
+var MODULES = [
+  {id:'ppp',   name:'开场白 PPP',  desc:'破冰 · 让他愿意听下去'},
+  {id:'spin',  name:'SPIN 挖需',   desc:'把痛点问出来'},
+  {id:'fabe',  name:'FABE 匹配',   desc:'把方案对上需求'},
+  {id:'lscpa', name:'LSCPA 异议',  desc:'把反对接住'}
+];
+var MODNAME = {ppp:'开场白 PPP', spin:'SPIN 挖需', fabe:'FABE 匹配', lscpa:'LSCPA 异议'};
+/* 会话上下文：已生成的模块原文，生成下一块时自动带进去 */
+var sess = {ppp:'', spin:'', fabe:'', lscpa:''};
+var NO_CLOUD = false;
+
+var state = {role:null, ind:null, scene:null, mode:'all', mod:null};
 
 var postsEl = document.getElementById('posts');
 var indsEl = document.getElementById('inds');
@@ -424,48 +473,159 @@ function renderMap(){
 }
 
 /* =========================================================
+   模式 / 模块 界面
+   ========================================================= */
+function buildMods(){
+  var box = document.getElementById('mods');
+  if (!box) return;
+  box.innerHTML = '';
+  MODULES.forEach(function(m){
+    var b = document.createElement('button');
+    b.className = 'modb'; b.type = 'button'; b.setAttribute('data-m', m.id);
+    b.innerHTML = '<b>'+m.name+'</b><span>'+m.desc+'</span>';
+    b.onclick = function(){ pickModule(m.id); };
+    box.appendChild(b);
+  });
+}
+
+function pickMode(m){
+  state.mode = m;
+  var all = document.querySelectorAll('#modes .mode');
+  for (var i=0;i<all.length;i++){ all[i].classList.toggle('on', all[i].getAttribute('data-m')===m); }
+  var mc = document.getElementById('modCard');
+  if (mc) mc.style.display = (m==='one') ? 'block' : 'none';
+  var sh = document.getElementById('sceneHint');
+  if (sh) sh.textContent = (m==='one') ? '选填，选了更准' : '必选';
+  if (m==='one' && !state.mod) pickModule('spin');
+  updateRunBtn();
+  renderSessLine();
+}
+
+function pickModule(id){
+  state.mod = id;
+  var all = document.querySelectorAll('#mods .modb');
+  for (var i=0;i<all.length;i++){ all[i].classList.toggle('on', all[i].getAttribute('data-m')===id); }
+  renderModuleFields(id);
+  updateRunBtn();
+}
+
+function renderModuleFields(id){
+  var box = document.getElementById('modFields');
+  if (!box) return;
+  var h = '';
+  if (id==='ppp'){
+    h += '<div class="mb"><label class="f">走哪个渠道？</label><select id="pppCh">'
+      + '<option value="电话">电话</option><option value="邮件">邮件</option>'
+      + '<option value="企微/微信">企微 / 微信</option><option value="登门拜访">登门拜访</option>'
+      + '<option value="全都要">全都要（每个渠道各来一条）</option></select></div>'
+      + '<div class="mb"><label class="f">我手上有什么信息？（他看过什么 / 在哪见过 / 谁介绍的）</label>'
+      + '<input type="text" id="pppInfo" placeholder="例：上周展会留的名片，说在做智能感应灯"></div>'
+      + '<div class="mb" style="margin-bottom:0"><label class="f">这次目的（一句话，选填）</label>'
+      + '<input type="text" id="pppGoal" placeholder="例：确认一下他现在电源方案用的是哪颗料"></div>';
+  } else if (id==='spin'){
+    h += '<div class="mb" style="margin-bottom:0"><label class="f">客户痛点 / 关注点（可留空——留空我先给你三条假设挑）</label>'
+      + '<textarea id="spinPain" placeholder="例：出口欧洲的认证要重跑，怕错过船期"></textarea></div>'
+      + '<div class="note" style="margin-top:10px"><b>留空也能生成：</b>AI 会先按这个岗位＋场景给你三条痛点假设让你挑，再留一条空白自己填，然后按第一条写出 S／P／I／N 四句。挑中别的，把那条贴回上面重新生成即可。</div>';
+  } else if (id==='fabe'){
+    h += '<div class="mb"><label class="f">已经挖到的需求（一句话，必填）</label>'
+      + '<textarea id="fabeNeed" placeholder="例：担心换料要重新过认证，错过 3 月那班船"></textarea></div>'
+      + '<div class="mb"><label class="f">我打算推荐什么（选填）</label>'
+      + '<input type="text" id="fabeOffer" placeholder="例：JW 系列 ＋ DEMO 板，pin to pin 替代"></div>'
+      + '<div class="mb" style="margin-bottom:0"><label class="f">跟谁比 / 他现在用什么（选填）</label>'
+      + '<input type="text" id="fabeVs" placeholder="例：现在用晶丰 BP2863SK"></div>';
+  } else if (id==='lscpa'){
+    h += '<div class="mb" style="margin-bottom:0"><label class="f">客户的异议原话（必填，越原汁原味越好）</label>'
+      + '<textarea id="lscpaObj" placeholder="例：你们比晶丰贵 10%，交期还要五周"></textarea></div>'
+      + '<div class="mb" style="margin-top:12px"><label class="f">他现在用谁家的（选填）</label>'
+      + '<input type="text" id="lscpaVs" placeholder="例：现在用晶丰 BP2863SK"></div>';
+  }
+  box.innerHTML = h;
+  ['spinPain','lscpaObj'].forEach(function(fid){
+    var el = document.getElementById(fid);
+    if (el) el.addEventListener('input', refreshPriceNote);
+  });
+  refreshPriceNote();
+}
+
+function updateRunBtn(){
+  var b = document.getElementById('btnRun');
+  if (!b) return;
+  if (NO_CLOUD){ b.textContent = '生成提示词（自动复制）'; return; }
+  b.textContent = (state.mode==='one' && state.mod) ? ('生成「'+MODNAME[state.mod]+'」') : '生成话术';
+}
+
+function renderSessLine(){
+  var el = document.getElementById('sessLine');
+  if (!el) return;
+  var h = '本次已写好：';
+  MODULES.forEach(function(m,i){
+    h += (i ? ' · ' : '') + (sess[m.id] ? '<span class="ok">'+m.name+' ✓</span>' : m.name+' ○');
+  });
+  h += '<br>生成下一块时，写好的会自动带进提示词——不用重填，四块最终串成一次完整拜访。';
+  el.innerHTML = h;
+}
+
+(function(){
+  var ms = document.querySelectorAll('#modes .mode');
+  for (var i=0;i<ms.length;i++){
+    ms[i].onclick = function(){ pickMode(this.getAttribute('data-m')); };
+  }
+  buildMods();
+})();
+
+/* =========================================================
    提示词拼装
    ========================================================= */
 function buildPrompt(){
-  if (!state.role || !state.scene){ return null; }
-  var p = ROLES[state.role];
+  if (!state.role) return null;
+  if (state.mode === 'one'){ return state.mod ? buildModulePrompt() : null; }
+  if (!state.scene) return null;
+  return buildAllPrompt();
+}
+
+function val(id){
+  var el = document.getElementById(id);
+  return el ? (el.value||'').trim() : '';
+}
+
+function ctx(){
   var sc = null;
   for (var j=0;j<SCENES.length;j++){ if (SCENES[j].id===state.scene) sc = SCENES[j]; }
-  var company = (document.getElementById('company').value||'').trim();
-  var words = (document.getElementById('words').value||'').trim();
-  var rival = (document.getElementById('rival').value||'').trim();
+  return { p: ROLES[state.role], sc: sc, prFlag: isPriceCase(), qFlag: (state.scene==='quote') };
+}
 
-  var L = [];
+/* 公共底座：客户信息 + 场景要点 + 分支规则 + 痛点地图 + 支撑点 + 铁律 */
+function pushCommon(L, c, withQuote, task){
+  var p = c.p, sc = c.sc;
   L.push('你是厦门名瑟电子的销售教练。名瑟是杰华特微电子（Halo Micro）的核心代理商＋方案商，产品线：DC/DC、AC/DC、线性电源、电池管理、LED 驱动芯片；主攻智能感应照明、通用照明、消费电子，正在切入汽车电子。');
-  L.push('请你为下面这次拜访，写一套可以直接照着用的话术。');
+  if (task) L.push(task);
   L.push('');
   L.push('【客户信息】');
-  L.push('· 客户公司/做什么产品：' + (company || '（未填写，按行业通例推演）'));
+  L.push('· 客户公司/做什么产品：' + (val('company') || '（未填写，按行业通例推演）'));
   L.push('· 对接人岗位：' + p.name + '（他关心的是：' + p.focus + '）');
   var indTxt = '（未选择）';
   if (state.ind){
     for (var i2=0;i2<INDS.length;i2++){ if (INDS[i2].id===state.ind) indTxt = INDS[i2].name; }
   }
   L.push('· 行业：' + indTxt);
-  var sceneDesc = sc.name;
+  var sceneDesc = sc ? sc.name : '（未选择）';
   if (state.scene==='other'){
-    var ot = (document.getElementById('otherScene').value||'').trim();
+    var ot = val('otherScene');
     sceneDesc = ot ? ('其他——' + ot) : '其他（未描述，按该岗位常见场景推演）';
   }
   L.push('· 当前场景：' + sceneDesc);
-  L.push('· 客户说过的话：' + (words ? '「' + words + '」' : '（未提供，按该岗位最典型的场景推演）'));
-  L.push('· 现在用谁家的/提到的型号：' + (rival || '（未提供）'));
+  L.push('· 客户说过的话：' + (val('words') ? '「' + val('words') + '」' : '（未提供，按该岗位最典型的场景推演）'));
+  L.push('· 现在用谁家的/提到的型号：' + (val('rival') || '（未提供）'));
   L.push('');
 
-  /* —— 场景战术要点：以前只在页面上显示给销售看，AI 看不见，现在必须进提示词 —— */
+  /* —— 场景战术要点：必须进提示词，只显示在页面上 AI 是看不见的 —— */
   if (sc && sc.tip){
     L.push('【本次场景的战术要点——必须体现在话术里】' + sc.tip);
     L.push('');
   }
 
   /* —— 带料号询价：先回应「四个数」再提问 —— */
-  var qFlag = (state.scene === 'quote');
-  if (qFlag){
+  if (withQuote && c.qFlag){
     L.push('【★★ 客户是带料号/图纸来询价（先回应四个数）】');
     L.push('1. 输出的最前面必须先给「四个数」：①有没有库存 ②单价 ③交期具体到哪一天 ④有没有同规格可替代的方案。');
     L.push('2. 这四个数没答完之前不许抛 SPIN 的抽象问题——客户带着型号来，被追问抽象问题三次就直接结束对话。');
@@ -473,15 +633,14 @@ function buildPrompt(){
     L.push('');
   }
 
-  var prFlag = isPriceCase();
-  if (prFlag){
+  if (c.prFlag){
     L.push('【★★ 本次已识别：客户提出了价格异议（他说我们更贵 / 场景＝客户嫌贵）】');
     L.push('下面这七条优先级高于所有常规规则，违反即作废：');
     L.push('1. 严禁把「帮客户降成本 / 压 BOM / 找更便宜的料」作为 SPIN 挖痛的主轴，也严禁在 P、I 两步放大「成本上涨、利润变薄、价格优势没了」。理由：我们本来就更贵，顺着「我要省钱」挖下去，客户的逻辑结论是选更便宜的竞品或逼我们降价——等于把劣势挖深。');
     L.push('2. 先接价：一句话承认，不辩解、不比价、不许马上让价（例：「是，单颗确实贵一点」），把价格从「障碍」转成「待解释的差异」。');
     L.push('3. 换口径：把比较标准从「单颗价」换成「总成本 / 风险成本」——认证重跑、改板重测、返工客诉、断供停线、没人支持，这些都算钱。');
     L.push('4. 只挖「同轴痛点」：必须是名瑟能解决、且与下面痛点地图 A/B 类能对上的痛。从下面池子里选 2~3 条，不要全用：');
-    PRICE_ANGLES.forEach(function(t,i){ L.push('   · ' + t); });
+    PRICE_ANGLES.forEach(function(t){ L.push('   · ' + t); });
     L.push('5. 若场景是「想换掉现在用的料」：客户主动要换，说明动机不是省钱（省钱就不必换，直接用原来那家），大概率是认证 / 品质 / 支持 / 交期——先用 S 问验证这一点，再决定挖哪条。');
     L.push('6. FABE 的 A 必须显式消化价差：说清「贵〔替换成你查到的数〕%换来什么、省下什么」，不许回避价格只讲好处，也不许空口说「反而更便宜」。');
     L.push('7. N（确认价值）必须把比较口径说出来，例：「所以您真正要比的不是单颗价，而是一批货从头到尾的总成本，对吧？」');
@@ -504,35 +663,42 @@ function buildPrompt(){
   L.push('');
   L.push('【六条铁律，违反任何一条本次输出作废】');
   L.push('1. 不许编型号、不许编客户案例、不许编具体价格、降幅、交期天数——需要数字的地方一律写〔替换成你查到的数〕。');
-  L.push('2. 每条话术必须能对应上痛点地图里的某一条（A 或 B），不要凭空造痛点。' + (prFlag ? '★本次已激活价格异议分支：「降本 / 更便宜的料 / 压 BOM」这一类痛点降级为不可用作主轴，只能在换过口径之后当佐证用。' : ''));
+  L.push('2. 每条话术必须能对应上痛点地图里的某一条（A 或 B），不要凭空造痛点。' + (c.prFlag ? '★本次已激活价格异议分支：「降本 / 更便宜的料 / 压 BOM」这一类痛点降级为不可用作主轴，只能在换过口径之后当佐证用。' : ''));
   L.push('3. 用口语，像真人说话，不用书面语，不用「我们致力于」「全方位赋能」这类词。');
   L.push('4. 不要替客户下结论，多用问句把话说一半，让客户自己说出来。');
   L.push('5. 全程不知道对方姓名，绝对不许编「王总」「李工」这类姓——一律用「您」或「贵司」；确需具名的地方写成「〔对方称呼〕您好」，由销售发出前替换成真姓。销售本人也不许编名字（不许出现「我是小王」这类），写成「我是厦门名瑟的〔你的名字〕」。');
   L.push('6. 若行业是汽车电子，所有证据必须升级为 AEC-Q 认证与车规量产案例，不许用消费级话术；没有案例就写〔需要原厂提供的车规案例〕。');
   L.push('');
+}
+
+/* ===== 分支一：一键全套 ===== */
+function buildAllPrompt(){
+  var c = ctx();
+  var L = [];
+  pushCommon(L, c, true, '请你为下面这次拜访，写一套可以直接照着用的话术。');
   L.push('【输出格式——严格按下面这些段，不要多写也不要少写】');
   L.push('');
-  if (qFlag){
+  if (c.qFlag){
     L.push('〇、先答四个数（库存／单价／交期具体到哪天／有没有同规格可替代；数字一律〔替换成你查到的数〕）');
     L.push('……');
     L.push('');
   }
-  if (prFlag){
-    L.push((qFlag ? '〇二' : '〇') + '、先接价的一句话（不辩解、不比价、不让价，先接住他说贵这件事）');
+  if (c.prFlag){
+    L.push((c.qFlag ? '〇二' : '〇') + '、先接价的一句话（不辩解、不比价、不让价，先接住他说贵这件事）');
     L.push('……');
     L.push('');
   }
-  L.push('一、SPIN 四步提问（每步一句，可以直接照着问）' + (prFlag ? '（★P 与 I 两步不许落在"成本上涨/利润变薄/价格优势"上，必须落在换过口径后的同轴痛点）' : ''));
+  L.push('一、SPIN 四步提问（每步一句，可以直接照着问）' + (c.prFlag ? '（★P 与 I 两步不许落在"成本上涨/利润变薄/价格优势"上，必须落在换过口径后的同轴痛点）' : ''));
   L.push('S（现状）：……');
   L.push('P（难点）：……');
   L.push('I（放大影响）：……（若对方是采购、工程师、品质这类「打工者」，I 问要从组织影响递进到个人影响：被追责、绩效、夹在中间传话）');
-  L.push('N（确认价值）：……' + (prFlag ? '（★必须把比较口径换成总成本/风险成本）' : ''));
+  L.push('N（确认价值）：……' + (c.prFlag ? '（★必须把比较口径换成总成本/风险成本）' : ''));
   L.push('（说明这一轮该从哪一步开口：客户已经明说痛点就从 I 进，没说就从 S 开始抛假设）');
   L.push('★四步一句都不能少：就算本轮建议从 I 开口，也要把 S、P、N 三句一并写出来备用（注明「本轮建议从 I 开口」即可），不许只写一步。');
   L.push('');
   L.push('二、FABE 一段话（60-90 秒能讲完，F 特征 / A 优势 / B 利益 / E 证据）');
   L.push('要求：A（优势）必须挂比较对象——比他现在用的、比竞品、比进口料，不能只说「我们有什么作用」。');
-  if (prFlag){
+  if (c.prFlag){
     L.push('★价格异议专条：A 这一段必须正面消化价差——「贵〔替换成你查到的数〕%，换来的是……」，不许绕开价格只讲好处；数字一律写〔替换成你查到的数〕。');
   }
   L.push('');
@@ -540,6 +706,158 @@ function buildPrompt(){
   L.push('L 倾听 / S 确认 / C 澄清（问出「具体差多少」）/ P 呈现 / A 请求下一步');
   L.push('');
   L.push('四、第一条微信/企微开场消息（120 字以内，可以直接发出去，对方不用思考就能回；不许出现对方姓氏，也不许出现销售自己的名字）');
+  L.push('');
+  L.push('全部写完后，最后加一行：「发出前请自己改三处——换成你的口气、填进真实数字、换成客户真说过的话。」');
+  return L.join('\n');
+}
+
+/* ===== 分支二：单模块精修 ===== */
+function buildModulePrompt(){
+  var c = ctx();
+  var m = state.mod;
+  var L = [];
+  pushCommon(L, c, (m==='ppp' || m==='spin'), '这次【只写「' + MODNAME[m] + '」这一段】，别的模块一律不要输出。');
+
+  var done = [];
+  MODULES.forEach(function(x){ if (sess[x.id] && x.id !== m) done.push(x); });
+  if (done.length){
+    L.push('');
+    L.push('【本次拜访已经写好的部分——必须接得上，不许另起一套】');
+    done.forEach(function(x){ L.push('——' + x.name + '（已生成原文）——'); L.push(sess[x.id]); });
+    L.push('写这一段时必须沿用上面已经定下来的痛点、方案与叫法；客户情况、型号、数字前后要一致。');
+    L.push('');
+  }
+
+  L.push('【本模块输入】');
+  if (m==='ppp'){
+    L.push('· 渠道：' + (val('pppCh') || '电话'));
+    L.push('· 我手上有的信息：' + (val('pppInfo') || '（没填——自己按该岗位常见情况补一条合理的，并注明〔替你补的〕）'));
+    L.push('· 这次目的：' + (val('pppGoal') || '（没填，按该岗位最合理的目的推演）'));
+  } else if (m==='spin'){
+    var sp = val('spinPain');
+    L.push('· 客户痛点/关注点：' + (sp ? ('「' + sp + '」') : '（学员没填——按下面的专条先给三条假设让他挑）'));
+  } else if (m==='fabe'){
+    L.push('· 已经挖到的需求：' + (val('fabeNeed') || '（未填）'));
+    L.push('· 我打算推荐什么：' + (val('fabeOffer') || '（未填，按痛点地图 A 类自己选一个最匹配的支撑点）'));
+    L.push('· 跟谁比 / 他现在用什么：' + (val('fabeVs') || '（未填）'));
+  } else if (m==='lscpa'){
+    L.push('· 客户的异议原话：' + (val('lscpaObj') || '（未填）'));
+    L.push('· 他现在用谁家的：' + (val('lscpaVs') || '（未填）'));
+  }
+  L.push('');
+
+  if (m==='ppp'){
+    L.push('【开场白 PPP 专条】');
+    L.push('1. PPP 三要素：Purpose（我为什么来找您）/ Process（占您多久、怎么进行）/ Payoff（对您有什么用）。不要求分三句，一句话里装两个以上就算合格。');
+    L.push('2. 姿态动词用"确认 / 核对 / 对一下"，不用"介绍 / 推荐 / 打扰一下"。');
+    L.push('3. 不许出现"我看到您在浏览……"这类监控感用词；要替代就换成"给一条跟他有关的信息"。');
+    L.push('4. CTA 门槛要低：客户最少回 2~4 个字就能推进下一步。');
+    L.push('5. 一条消息只说一件事，不许一次提三个请求。');
+    L.push('6. 若是邮件，主题行＝数字＋品类＋动词＋收益。');
+    L.push('');
+  } else if (m==='spin'){
+    L.push('【SPIN 挖需专条】');
+    if (!val('spinPain')){
+      L.push('1. 学员没填痛点。严禁替他硬编一个痛点当结论——先按输出格式里的「先挑一条」给三条假设，全部从下面痛点地图的 A 类里挑，每条一句话说清"为什么会这么猜"（结合岗位＋场景）。');
+      L.push('2. 三条之后必须留一条空白，原样输出这一行、不许替他填任何内容：D 〔你自己填：______〕');
+      L.push('3. 排序有讲究：把最可能中的排 A。若场景是「想换掉现在用的料」，客户是主动要换的，动机通常不是省钱（省钱就不必换）——至少两条假设不许落在省钱/降本上，优先认证、品质一致性、技术支持、交期与断供。');
+      L.push('4. 然后按假设 A 写出 S/P/I/N 四句，并注明「这是按假设 A 写的；挑中 B 或 C 就把痛点换掉、句式照抄」。');
+    } else {
+      L.push('1. 学员填了痛点，直接围绕这一条痛点写 S/P/I/N 四句，不许换成别的痛点。');
+    }
+    L.push('5. 四句一句都不能少；每句都要能直接照着问出口，不许写成"深入了解客户需求"这种说明性文字。');
+    L.push('6. 对方是打工者岗位（采购 / 研发 / 品质），I 问要从组织影响递进到个人影响（被追责、绩效、夹在中间传话）。');
+    if (c.prFlag) L.push('7. ★价格异议已激活：P、I 两步不许落在"成本上涨 / 利润变薄 / 价格优势没了"上，必须落在换过口径后的同轴痛点（认证重跑、改板重测、批次一致性返工客诉、FAE 响应、断供 EOL、交付弹性、谁兜底）。');
+    L.push('');
+  } else if (m==='fabe'){
+    L.push('【FABE 匹配专条】');
+    L.push('1. F 量得出、A 比得出、B 省得出、E 拿得出。');
+    L.push('2. A（优势）必须挂比较对象——比他现在用的、比竞品、比进口料，不许只说"我们有什么作用"。');
+    L.push('3. B（利益）要落到客户自己的结果：少一次改板、早一周量产、少一次客诉。');
+    L.push('4. E（证据）必须是真拿得出来的东西：检测报告、量产案例、批次数据、FAE 上门；没有就写〔需要提供的证据〕，不许编。');
+    if (c.prFlag) L.push('5. ★价格异议已激活：A 这一段必须正面消化价差——"贵〔替换成你查到的数〕%，换来的是……"，不许绕开价格只讲好处。');
+    L.push('');
+  } else if (m==='lscpa'){
+    L.push('【LSCPA 异议处理专条】');
+    L.push('1. L 倾听 / S 确认 / C 澄清（问出"具体差多少、具体卡在哪"）/ P 呈现 / A 请求下一步——五步一句都不能少。');
+    L.push('2. C 这一步必须问出可量化的差距（差百分之几、差几天、差在哪一颗料），没问出来不许硬答。');
+    L.push('3. 不许一上来就让价、不许说"我去申请折扣"、不许跟客户争。');
+    L.push('4. A 请求的下一步必须是低门槛动作（发份资料 / 加个企微 / 寄颗样品 / 约个 15 分钟的电话），不许直接要订单。');
+    if (c.prFlag) L.push('5. ★价格异议已激活：先接价（不辩解、不比价、不让价），再把口径从"单颗价"换成"总成本 / 风险成本"；严禁以降本为主轴。');
+    L.push('');
+  }
+
+  L.push('【输出格式——严格照写，不要多写也不要少写】');
+  L.push('');
+  if (c.qFlag && (m==='ppp' || m==='spin')){
+    L.push('〇、先答四个数（库存／单价／交期具体到哪天／有没有同规格可替代；数字一律〔替换成你查到的数〕）');
+    L.push('……');
+    L.push('');
+  }
+  if (c.prFlag && m==='lscpa'){
+    L.push('〇、先接价的一句话（不辩解、不比价、不让价）');
+    L.push('……');
+    L.push('');
+  }
+  if (m==='ppp'){
+    L.push('一、开场白（给 2-3 个备选，标 A／B／C）');
+    L.push('每个备选按这个格式写：');
+    L.push('A（偏____）：开场第一句 → 目的 → 时间承诺 → CTA');
+    L.push('B（偏____）：……');
+    L.push('C（偏____）：……');
+    L.push('');
+    L.push('二、每个备选各配一行说明：适合什么语气、什么客户');
+    L.push('');
+    L.push('三、自检三问（各答一句）：①客户知道要占他多久吗 ②有没有监控感用词 ③客户最少回几个字');
+    L.push('');
+    L.push('四、这一步之后：接 SPIN 的第一句问什么');
+  } else if (m==='spin'){
+    var hasPain = !!val('spinPain');
+    if (!hasPain){
+      L.push('一、先挑一条（三条假设 ＋ 一条自填）');
+      L.push('A ……（为什么会这么猜：……）');
+      L.push('B ……（为什么会这么猜：……）');
+      L.push('C ……（为什么会这么猜：……）');
+      L.push('D 〔你自己填：______〕');
+      L.push('');
+      L.push('二、按假设 A 写的 SPIN 四句（挑中 B／C 就把痛点换掉、句式照抄）');
+    } else {
+      L.push('一、SPIN 四句（围绕学员填的这条痛点）');
+    }
+    L.push('S（现状）：……');
+    L.push('P（难点）：……');
+    L.push('I（放大影响）：……');
+    L.push('N（确认价值）：……');
+    L.push('');
+    L.push((hasPain ? '二、' : '三、') + '备选 2-3 个问法（换切入角度：从现状问／从后果问／从对比问）');
+    L.push('');
+    L.push((hasPain ? '三、' : '四、') + '他答完之后，下一句接着问什么');
+  } else if (m==='fabe'){
+    L.push('一、F / A / B / E 四句（A 必挂比较对象）');
+    L.push('F（特征）：……');
+    L.push('A（优势，比____）：……');
+    L.push('B（利益，对客户意味着____）：……');
+    L.push('E（证据）：……');
+    L.push('');
+    L.push('二、备选 2-3 版（角度分别为：省成本 / 防风险 / 抢时间；每版一段话，60-90 秒讲得完）');
+    L.push('');
+    L.push('三、这次要带的证据清单（没有就写〔需要提供的证据〕）');
+    L.push('');
+    L.push('四、讲完之后收口的一句（推向下一步）');
+  } else if (m==='lscpa'){
+    L.push('一、LSCPA 五步（每步一句，可以直接照着说）');
+    L.push('L 倾听：……');
+    L.push('S 确认：……');
+    L.push('C 澄清：……');
+    L.push('P 呈现：……');
+    L.push('A 请求下一步：……');
+    L.push('');
+    L.push('二、备选 2-3 个处理姿态（换口径型 / 拆分型 / 台阶型，各标适合什么情况）');
+    L.push('');
+    L.push('三、这一步需要的证据（没有就写〔需要提供的证据〕）');
+    L.push('');
+    L.push('四、谈不下来时的一句退路（留门，不硬顶）');
+  }
   L.push('');
   L.push('全部写完后，最后加一行：「发出前请自己改三处——换成你的口气、填进真实数字、换成客户真说过的话。」');
   return L.join('\n');
@@ -555,18 +873,36 @@ var outTitle = document.getElementById('outTitle');
 var outHint = document.getElementById('outHint');
 
 function requireReady(){
-  if (!state.role || !state.scene){
-    showToast('先选岗位和场景');
-    return false;
-  }
-  if (state.scene==='other' && !(document.getElementById('otherScene').value||'').trim()){
-    showToast('用一句话把"其他"这个场景写一下');
-    document.getElementById('otherScene').focus();
+  if (!state.role){
+    showToast('先选岗位');
     return false;
   }
   if (!(document.getElementById('company').value||'').trim()){
     showToast('填一下客户公司或做什么产品');
     document.getElementById('company').focus();
+    return false;
+  }
+  if (state.mode === 'one'){
+    if (!state.mod){ showToast('选一个要练的模块'); return false; }
+    if (state.mod === 'fabe' && !val('fabeNeed')){
+      showToast('先写一句已经挖到的需求');
+      var e1 = document.getElementById('fabeNeed'); if (e1) e1.focus();
+      return false;
+    }
+    if (state.mod === 'lscpa' && !val('lscpaObj')){
+      showToast('把客户的异议原话贴进来');
+      var e2 = document.getElementById('lscpaObj'); if (e2) e2.focus();
+      return false;
+    }
+    return true;
+  }
+  if (!state.scene){
+    showToast('先选场景');
+    return false;
+  }
+  if (state.scene==='other' && !val('otherScene')){
+    showToast('用一句话把"其他"这个场景写一下');
+    document.getElementById('otherScene').focus();
     return false;
   }
   return true;
@@ -676,6 +1012,7 @@ var btnCopy = document.getElementById('btnCopyPrompt');
 
 /* 没有云端通道时（例如放在普通静态托管上），主按钮直接变成"生成提示词并复制" */
 if (!cloud || typeof WorkBuddyCloud === 'undefined'){
+  NO_CLOUD = true;
   btnRun.textContent = '生成提示词（自动复制）';
   btnCopy.style.display = 'none';
   var rn = document.getElementById('runNote');
@@ -684,8 +1021,10 @@ if (!cloud || typeof WorkBuddyCloud === 'undefined'){
 } else {
   var rn2 = document.getElementById('runNote');
   rn2.style.display = 'block';
-  rn2.innerHTML = '点「生成话术」，十几秒出一套：SPIN 四问 ＋ FABE ＋ 异议应对 ＋ 企微开场。<b>发出前改三处：</b>换成你的口气、填真实数字、换成客户真说过的话。';
+  rn2.innerHTML = '<b>一键全套：</b>十几秒出一套（SPIN ＋ FABE ＋ 异议应对 ＋ 企微开场）。<br><b>单模块精修：</b>只练一块，输入更准、出得更快，还能接上前面已经写好的部分。<br><b>发出前改三处：</b>换成你的口气、填真实数字、换成客户真说过的话。';
 }
+
+(function(){ renderSessLine(); updateRunBtn(); })();
 
 btnRun.onclick = function(){
   var self = this;
@@ -705,11 +1044,12 @@ btnRun.onclick = function(){
   var prompt = buildPrompt();
   controller = new AbortController();
   self.textContent = '■ 停止';
+  var isOne = (state.mode === 'one' && state.mod);
   outEmpty.style.display='none';
   outPrompt.style.display='none';
   outResult.style.display='block';
-  outResult.textContent = '正在按岗位痛点地图生成话术…';
-  outTitle.textContent = '生成结果';
+  outResult.textContent = '正在按痛点地图生成「' + (isOne ? MODNAME[state.mod] : '全套话术') + '」…';
+  outTitle.textContent = isOne ? ('生成结果 · ' + MODNAME[state.mod]) : '生成结果 · 全套';
   outHint.textContent = '';
   var acc = '';
   var t0 = Date.now();
@@ -723,6 +1063,10 @@ btnRun.onclick = function(){
     if (!acc.trim()) throw new Error('模型没有返回内容，请再试一次');
     outResult.textContent = acc + '\n\n────\n提示：发出前请自己改三处——换成你的口气、填进真实数字、换成客户真说过的话。';
     outHint.textContent = '生成完成，用时约 ' + Math.round((Date.now()-t0)/1000) + ' 秒，可长按选择复制';
+    if (isOne){
+      sess[state.mod] = acc;
+      renderSessLine();
+    }
   }).catch(function(e){
     if (e && (e.name === 'AbortError')){
       outResult.textContent = (acc.trim() ? acc : '（未生成内容）') + '\n\n（已停止）';
@@ -733,7 +1077,7 @@ btnRun.onclick = function(){
     }
   }).then(function(){
     controller = null;
-    self.textContent = '生成话术';
+    updateRunBtn();
   });
 };
 
