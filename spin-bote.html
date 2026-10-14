@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="format-detection" content="telephone=no">
+<title>郑州波特·SPIN销售话术练习（8道情景判断题）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f0f3fa 0%, #e1e7f3 100%);
+  min-height: 100vh;
+  color: #1a2547;
+  line-height: 1.6;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+
+/* === 头部 === */
+.header {
+  background: linear-gradient(135deg, #2F3C7E 0%, #1a2547 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 20px rgba(47, 60, 126, 0.25);
+}
+.brand-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.header h1 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
+.header p { font-size: 13px; opacity: 0.9; }
+.scenario-info {
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* === 进度条 === */
+.progress-wrap {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+.progress-text .current-num {
+  color: #2F3C7E;
+  font-weight: 700;
+  font-size: 16px;
+}
+.progress-bar {
+  height: 6px;
+  background: #e8ecf5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2F3C7E 0%, #4a5fa8 100%);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* === 题目卡 === */
+.q-block { display: none; }
+.q-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.question-badge {
+  display: inline-block;
+  background: #2F3C7E;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.scenario {
+  background: #f5f7fc;
+  border-left: 4px solid #2F3C7E;
+  padding: 14px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+}
+.scenario .label {
+  color: #2F3C7E;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.q-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2547;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border-radius: 8px;
+  border: 1px dashed #d0d8ec;
+}
+.q-title .stage-hint {
+  display: inline-block;
+  font-size: 12px;
+  background: #fff4e6;
+  color: #c47b1f;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+/* === 选项 === */
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border: 2px solid #e8ecf5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+}
+.option:hover {
+  border-color: #2F3C7E;
+  background: #f5f7fc;
+  transform: translateX(2px);
+}
+.option.selected {
+  border-color: #2F3C7E;
+  background: #eef2fb;
+}
+.option.correct {
+  border-color: #336633;
+  background: #eaf5ea;
+}
+.option.wrong {
+  border-color: #c14545;
+  background: #fbeaea;
+}
+.option.disabled { cursor: not-allowed; }
+.option .radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+  position: relative;
+}
+.option.selected .radio {
+  border-color: #2F3C7E;
+  background: #2F3C7E;
+}
+.option.selected .radio::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+.option.correct .radio {
+  border-color: #336633;
+  background: #336633;
+}
+.option.correct .radio::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.option.wrong .radio {
+  border-color: #c14545;
+  background: #c14545;
+}
+.option.wrong .radio::after {
+  content: '✗';
+  position: absolute;
+  top: -2px;
+  left: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+.option .text { flex: 1; }
+.opt-label {
+  font-weight: 700;
+  color: #2F3C7E;
+  margin-right: 4px;
+}
+.option.correct .opt-label { color: #336633; }
+.option.wrong .opt-label { color: #c14545; }
+.option.correct .option.wrong 
+/* === 答案和解析 === */
+.correct-answer, .explanation {
+  display: none;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.correct-answer {
+  background: #eaf5ea;
+  border-left: 4px solid #336633;
+  color: #2a4d2a;
+}
+.correct-answer .label {
+  font-weight: 700;
+  margin-right: 6px;
+}
+.explanation {
+  background: #fafbff;
+  border-left: 4px solid #2F3C7E;
+  color: #333;
+}
+.explanation h4 {
+  font-size: 14px;
+  color: #2F3C7E;
+  margin-bottom: 8px;
+}
+.explanation p { margin-bottom: 8px; font-size: 13.5px; line-height: 1.7; }
+.explanation .formula {
+  background: #2F3C7E;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+.correct-answer.show, .explanation.show { display: block; }
+
+/* === 按钮 === */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: #2F3C7E;
+  color: white;
+}
+.btn-primary:hover:not(:disabled) { background: #1e2a5c; }
+.btn-primary:disabled { background: #b0b8c8; cursor: not-allowed; }
+.btn-secondary {
+  background: white;
+  color: #2F3C7E;
+  border: 2px solid #2F3C7E;
+}
+.btn-secondary:hover:not(:disabled) { background: #f5f7fc; }
+.btn-secondary:disabled { color: #b0b8c8; border-color: #d0d8ec; cursor: not-allowed; }
+
+/* === 结果页 === */
+.result-card {
+  display: none;
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.result-card.show { display: block; }
+.result-title { font-size: 22px; color: #1a2547; margin-bottom: 8px; font-weight: 700; }
+.score-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2F3C7E 0%, #4a5fa8 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  box-shadow: 0 4px 16px rgba(47, 60, 126, 0.3);
+}
+.score-circle .num { font-size: 42px; font-weight: 700; }
+.score-circle .total { font-size: 14px; opacity: 0.9; }
+.score-percent { font-size: 18px; color: #2F3C7E; margin-bottom: 6px; font-weight: 600; }
+.score-remark { font-size: 14px; color: #666; margin-bottom: 24px; }
+.result-detail {
+  text-align: left;
+  background: #fafbff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.result-detail h3 { font-size: 15px; color: #2F3C7E; margin-bottom: 12px; }
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13.5px;
+  color: #333;
+  border-bottom: 1px solid #e8ecf5;
+}
+.result-item:last-child { border-bottom: none; }
+.result-item .status { font-weight: 700; }
+
+/* === 页脚 === */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #999;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .container { padding: 16px 12px; }
+  .header { padding: 20px 16px; }
+  .header h1 { font-size: 20px; }
+  .q-card { padding: 20px 16px; }
+  .option { padding: 12px 14px; font-size: 13.5px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="brand-tag">博商 · 大董销售体系</span>
+    <h1>郑州波特·SPIN销售话术练习</h1>
+    <p>粮油加工与粮食仓储自动化场景 · 8道情景判断题</p>
+    <div class="scenario-info">
+      <strong>场景设定：</strong>你是郑州波特控制技术有限公司的销售工程师。公司 2009 年成立，国家级高新技术企业、2025 年国家级科技型中小企业，专做粮油行业的自动化控制系统——面粉厂 PLC 系统、粉率系统、一卡通无人值守收粮系统、生产管理系统、在线装车系统。客户是面粉与米业集团、粮食储备库、饲料厂、食品厂；2025 年中标项目金额 3497.68 万元，客户分布全国。下面 8 个场景，请你选出<strong>最佳</strong>的做法。
+    </div>
+  </div>
+
+  <div id="quizPage">
+    <div class="progress-wrap">
+      <div class="progress-text">
+        <span>答题进度</span>
+        <span><span class="current-num" id="currentNum">1</span> / <span id="totalNum">8</span></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- 第 1 题 -->
+    <div class="q-block" id="q0" style="display:block;">
+      <div class="q-card">
+        <span class="question-badge">第 1 题</span>
+        <div class="scenario"><span class="label">【场景】</span>你第一次进厂，见到面粉集团分管生产的赵总。他 15 分钟后要开会，坐到你对面的第一句话是：「你们公司我知道，做面粉厂控制的。我们这条线 PLC 是设计院带过来的，用着还行。」</div>
+        <div class="q-title">此刻最应该问的是哪类问题？<span class="stage-hint">开局阶段</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 你们的出粉率才 75%，比行业标杆低 2 个点，一年亏多少您算过吗？</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 赵总，咱们这条线日处理小麦大概多少吨？出粉率现在控制在什么水平？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 我们是国家级高新技术企业，服务过多个面粉项目，我先花几分钟给您介绍下公司。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 您现在的 PLC 系统是哪家做的？当时投了多少钱？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca0"><span class="label">✅ 正确答案：B</span>S（Situation 背景问题）—— 先了解客户现状：日处理量、当前出粉率。这两个数客户张口就能答，又不涉及机密。</div>
+        <div class="explanation" id="ex0"><h4>解析：SPIN 的开场为什么必须是 S？</h4>
+          <p><strong>原因 1：</strong>A 项看着「专业」，其实是当众给赵总判分。他干了二十年面粉，第一句就被告知「你差两个点」，后面的话他一句都听不进去。</p>
+          <p><strong>原因 2：</strong>D 项也算背景问题，但踩了两个雷——打听竞争对手、打听价格。第一次见面就问这些，客户会把你归类为「来摸底的」，而不是「来解决问题的」。</p>
+          <p><strong>原因 3：</strong>C 项是自嗨式开场。而且在面粉行业，报别家的项目名字，客户第一反应是「你是不是也拿我去当案例」。</p>
+          <div class="formula">SPIN 顺序口诀：先问「是什么」（S），再问「哪里难」（P），再问「会怎样」（I），最后问「想要啥」（N）。开场只做一件事——把事实问清楚。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 2 题 -->
+    <div class="q-block" id="q1">
+      <div class="q-card">
+        <span class="question-badge">第 2 题</span>
+        <div class="scenario"><span class="label">【场景】</span>赵总回答：「日处理小麦 3000 吨，出粉率 75% 上下。这数儿我还得看报表，车间报上来的，一天一报。」</div>
+        <div class="q-title">接下来最合适的一问是？<span class="stage-hint">了解阶段</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 75% 太低了赵总，行业标杆都 77% 了。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 我们的粉率系统能实时采集，比人工准得多，我给您讲讲原理？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 手抄、第二天才汇总——那有没有出现过这种情况：某个班粉率掉下来了，等您看到报表，那批麦子已经磨完了？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 那你们现在的吨粉能耗指标是多少？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca1"><span class="label">✅ 正确答案：C</span>P（Problem 难点问题）—— 客户已经给了你现状（3000 吨、75%、一天一报），现在该把话题从「事实」引向「不满」。</div>
+        <div class="explanation" id="ex1"><h4>解析：什么时候从 S 切到 P？</h4>
+          <p><strong>关键信号：</strong>客户主动说出了「手抄、下班交、第二天早上汇总」——这是 S 阶段信息已经充分的信号，也是他亲手递给你的入口。</p>
+          <p><strong>C 为什么对：</strong>不下结论、不评价，只请他回忆一个具体场景。客户一旦讲出「有过，上个月那批 300 吨……」，痛点就从「你猜的」变成「他自己说的」。</p>
+          <p><strong>A 为什么错：</strong>指出客户比标杆低 2 个点 = 当众打脸，数字没错，时机全错。</p>
+          <p><strong>B 为什么错：</strong>痛点还没浮出水面就讲原理，是自说自话；D 项则是继续问 S，节奏一步没往前。</p>
+          <div class="formula">难点问题的公式 = 不评价 + 给场景 + 请他回忆。例：「有没有出现过……等您看到报表，那批麦子已经磨完了？」</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 3 题 -->
+    <div class="q-block" id="q2">
+      <div class="q-card">
+        <span class="question-badge">第 3 题</span>
+        <div class="scenario"><span class="label">【场景】</span>赵总承认：「有过。上个月一批麦子水分偏高，车间没调参数，等我看报表的时候，那 300 吨麦子已经磨完了，粉率掉了 1.2 个点。」</div>
+        <div class="q-title">此刻最该说（问）的是？<span class="stage-hint">放大阶段</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 所以您看，上一套在线监测系统还是很有必要的。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 我们系统能提前 2 小时预警，这种事绝对不会再发生。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 这种偏差在面粉厂其实很普遍，您不用太自责。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 300 吨、1.2 个点就是 3.6 吨面粉，按现在的行情这一批少赚一万多——像这样的月份，一年有几次？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca2"><span class="label">✅ 正确答案：D</span>I（Implication 暗示问题）—— 用客户自己的数字算成钱，再问频次，把一次意外放大成常态。</div>
+        <div class="explanation" id="ex2"><h4>解析：痛点放大不是「说得多严重」，是「算得多清楚」</h4>
+          <p><strong>D 为什么对：</strong>300 吨 × 1.2% = 3.6 吨面粉，按行情一万多块；再问「一年几次」——客户自己得出「一年几十万」。这个结论是他算出来的，不会反驳自己。</p>
+          <p><strong>A 为什么错：</strong>客户刚露出伤口，你立刻说「所以你要买」。他把这当成趁火打劫，前面挖的痛点全废。</p>
+          <p><strong>B 为什么错：</strong>在生产口，「绝对不会」这四个字最不值钱，赵总听到的潜台词是「你不懂现场」。</p>
+          <p><strong>C 为什么错：</strong>安慰等于替客户宣布「这事无所谓」。他一放松，你的机会就没了。</p>
+          <div class="formula">暗示问题公式 = 客户的原话数字 × 单位价格 × 一年频次 = 他必须面对的损失。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 4 题 -->
+    <div class="q-block" id="q3">
+      <div class="q-card">
+        <span class="question-badge">第 4 题</span>
+        <div class="scenario"><span class="label">【场景】</span>赵总顺着你的话算了算：「一年总有个七八回，加起来几十万跑不掉。」他停了停，又说：「唉，老板今年给我们生产口下了 300 万的降本指标，我这头发都要掉光了。」</div>
+        <div class="q-title">此刻最该接的一句是？<span class="stage-hint">升级阶段</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 粉率每稳 0.1 个点，一天就是 3 吨面粉，一个月二十五万上下——老板要的那 300 万，可能就藏在 1 个点里。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 所以赵总，您更需要上我们的系统，帮老板把这 300 万省出来。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 我们有个客户上了系统之后，一年光粉率这块就多赚了 500 万。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 降本 300 万压力确实大，生产这块最难做，您辛苦了。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca3"><span class="label">✅ 正确答案：A</span>I→N 的桥梁 —— 把客户的痛点，换算成他老板考核他的那个数字。</div>
+        <div class="explanation" id="ex3"><h4>解析：为什么是「换算成他老板的 KPI」？</h4>
+          <p><strong>A 为什么对：</strong>3000 吨 × 0.1% = 3 吨/天，一天一万出头，一个月二十五万——一年就是 300 万量级。你不是在卖系统，你是在帮他把老板的指标接住。</p>
+          <p><strong>B 为什么错：</strong>「所以您更需要」是典型的销售腔——你替他做了决定。这句话一说，前面挖的痛点全部作废。</p>
+          <p><strong>C 为什么错：</strong>讲别人的账，客户心里自动打折。真正有说服力的账，是用他自己刚才报的数字算出来的。</p>
+          <p><strong>D 为什么错：</strong>共情到此为止。你从「帮他想办法的人」，变成了「听他倒苦水的人」。</p>
+          <div class="formula">价值问题的公式 = 客户的业务指标 × 微小改善 × 他的考核周期 = 他老板要的那个数。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 5 题 -->
+    <div class="q-block" id="q4">
+      <div class="q-card">
+        <span class="question-badge">第 5 题</span>
+        <div class="scenario"><span class="label">【场景】</span>赵总拿笔算了一遍，抬头问你：「你等等，这个算法你再给我说一遍……算了。小朱，这套东西多少钱？什么时候能上？」</div>
+        <div class="q-title">客户主动问价、问周期，此刻最该做的是？<span class="stage-hint">推进阶段</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 大概六十万，您要是这个月定，我给您申请个九折。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 赵总您稍等，我回去做一份完整的方案，做好发您邮箱。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="true" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 钱我明天给您一个实在的数。但报价之前，我想先借您最近三个月的粉率报表，按您的麦子、您的设备跑一次数据对标，算出到底能捞回多少——这周五方便吗？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 我们可以先免费给您装一套试用，用得好再说钱。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca4"><span class="label">✅ 正确答案：C</span>N（Need-payoff 效益问题）+ 收口 —— 不拒绝报价，但把报价变成「用他的数字算出来的账」。</div>
+        <div class="explanation" id="ex4"><h4>解析：客户主动谈钱时，为什么恰恰不该报价？</h4>
+          <p><strong>C 为什么对：</strong>你只推后一步，拿到他的三个月报表。有了它，你就从供应商变成他的「数据合伙人」，报价也不再是一个可以被砍的数字——而且客户必须付出一次投入，承诺才真实。</p>
+          <p><strong>A 为什么错：</strong>报价 + 折扣 = 告诉他你的价格有水分。以后每一次见面，都要再让一次。</p>
+          <p><strong>B 为什么错：</strong>没有时间、没有动作、没有客户承诺的方案，大概率在邮箱里睡觉。</p>
+          <p><strong>D 为什么错：</strong>在生产口，「免费」约等于「不担责、不负责」——你把自己最值钱的东西换成了最不值钱的姿态。</p>
+          <div class="formula">收口公式 = 具体动作 + 具体时间 + 客户必须贡献的一样东西（他的数据/他的目标）。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 6 题 -->
+    <div class="q-block" id="q5">
+      <div class="q-card">
+        <span class="question-badge">第 6 题</span>
+        <div class="scenario"><span class="label">【场景】</span>这次客户换成了省级储备粮直属库的仓储科钱主任，项目要走公开招标。他在技术交流会现场对你说：「你们材料我都看了。你先报个价吧，我心里有个数。这种事啊，好不好我说了不算，审计说了算。」</div>
+        <div class="q-title">最佳应对是哪一句？<span class="stage-hint">特殊场景 · 招投标</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 钱主任，我们价格有优势，肯定比别家低。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="true" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 报价我一定给。不过在报之前，我想先请教一件事：这次升级，上级考核验收主要看哪几个指标？</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 我们做过中储粮系统的项目，经验很足，您放心。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 钱主任，那这次改造的预算大概是什么规模？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca5"><span class="label">✅ 正确答案：B</span>体制内客户的第一入口 —— 不是价格，是「怎么验收、怎么过审计」。</div>
+        <div class="explanation" id="ex5"><h4>解析：跟体制内客户，第一句话决定你被归到哪一类</h4>
+          <p><strong>B 为什么对：</strong>他刚说了「审计说了算」，你顺着问「验收看什么指标」——这是他的语言，也是整个项目的方向盘。</p>
+          <p><strong>A 为什么错：</strong>在体制内，「便宜」往往等于「风险高、以后说不清」。你第一句就把自己送进了价格笼子。</p>
+          <p><strong>C 为什么错：</strong>想用项目背书，反而触发纪律警觉。而且还没搞清他要什么，自证没有意义。</p>
+          <p><strong>D 为什么错：</strong>问预算不算错，但属于敏感项，现场不可能有答案。问早了只会显得不懂规矩。</p>
+          <div class="formula">对体制内客户：先问标准（验收），再问现状（流程），最后才谈产品与价格。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 7 题 -->
+    <div class="q-block" id="q6">
+      <div class="q-card">
+        <span class="question-badge">第 7 题</span>
+        <div class="scenario"><span class="label">【场景】</span>一位三年前做过电气安装的老客户来电，设备科长说：「你们那个系统，我们想加点东西。」上次合作验收评价不错，后续也没再联系过。</div>
+        <div class="q-title">最该做的是？<span class="stage-hint">特殊场景 · 老客户复购</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="false" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 太好了，您要加什么功能？我直接给您报个价。</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 三年前的线该整体换新了，我给您做一套全面改造方案。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 我先把三年前的合同调出来看看，再跟您对。</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="true" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 加什么功能先放一放。我更想知道：这三年系统用下来，哪几个环节您觉得还是靠人在扛？当初没做的功能，现在为什么想做了？</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca6"><span class="label">✅ 正确答案：D</span>复购不是「接单」，是把「想加点东西」还原成真实的痛点。</div>
+        <div class="explanation" id="ex6"><h4>解析：老客户是最好挖的痛点矿，前提是你别急着接单</h4>
+          <p><strong>D 为什么对：</strong>「想加点东西」只是客户对问题的模糊表达。问「哪个环节还在靠人扛」，你才能知道这三年他到底忍了什么——这类增量需求，往往比新客户的主项目更容易成。</p>
+          <p><strong>A 为什么错：</strong>接单思维。你说报就报，报完他还要比价，你又回到了价格战里。</p>
+          <p><strong>B 为什么错：</strong>把技改直接升格为整体改造，客户第一反应是「你又想让我大出血」，当场缩回去。</p>
+          <p><strong>C 为什么错：</strong>翻合同属于事务性动作，不产生任何信息。客户打这个电话，是有话想说的。</p>
+          <div class="formula">老客户复购公式 = 先问「这几年哪里还靠人扛」，再谈加什么；老客户最大的价值是转介绍，而转介绍只在「你帮他把事办成」之后发生。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">确认答案</button>
+      </div>
+    </div>
+
+    <!-- 第 8 题 -->
+    <div class="q-block" id="q7">
+      <div class="q-card">
+        <span class="question-badge">第 8 题</span>
+        <div class="scenario"><span class="label">【场景】</span>六轮谈下来，客户松了口：「那你先做个方案吧。」</div>
+        <div class="q-title">收口时最该做的是什么？<span class="stage-hint">收口阶段</span></div>
+        <div class="options">
+          <div class="option" data-idx="0" data-correct="true" onclick="selectOpt(0)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[A]</span> 方案我做没问题。不过方案里最关键的一个数——目标出粉率——得您来定；下周三我带着方案来，跟您和技术科一起过一遍，行吗？</div>
+          </div>
+          <div class="option" data-idx="1" data-correct="false" onclick="selectOpt(1)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[B]</span> 好的，我尽快做好发您邮箱。</div>
+          </div>
+          <div class="option" data-idx="2" data-correct="false" onclick="selectOpt(2)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[C]</span> 那您对价格的心理预期大概是多少？</div>
+          </div>
+          <div class="option" data-idx="3" data-correct="false" onclick="selectOpt(3)">
+            <div class="radio"></div>
+            <div class="text"><span class="opt-label">[D]</span> 方案做完我先发您，您觉得可以咱们再约。</div>
+          </div>
+        </div>
+        <div class="correct-answer" id="ca7"><span class="label">✅ 正确答案：A</span>收口 = 具体动作 + 具体人 + 具体时间 + 客户必须贡献一个东西。</div>
+        <div class="explanation" id="ex7"><h4>解析：收口收的不是合同，是「下一步动作」</h4>
+          <p><strong>A 为什么对：</strong>你请客户定「目标出粉率」——他一旦给了这个数，方案就变成了他的方案；而约定了带方案上门的时间，见面就是必然发生的。</p>
+          <p><strong>B 为什么错：</strong>没有时间、没有对象、没有承诺的「尽快」，等于把节奏交出去。客户的邮箱里，躺着几十份这样的方案。</p>
+          <p><strong>C 为什么错：</strong>方案阶段谈价格，会让客户提前进入砍价模式，你的方案价值在他眼里只是一个报价单。</p>
+          <p><strong>D 为什么错：</strong>「您觉得可以咱们再约」——你把下一次见面变成了客户的义务，而不是你的责任。</p>
+          <div class="formula">收口公式 = 具体动作 + 具体时间 + 客户必须贡献的一样东西（他的数字、他的目标、他的决策人）。欠了客户「一个数」的方案，自然要见面交。</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnPrev" disabled>← 上一题</button>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="confirmAnswer()">查看结果</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结果页 -->
+  <div class="result-card" id="resultPage">
+    <div class="result-title">练习完成！</div>
+    <div class="score-circle">
+      <div class="num" id="scoreNum">0</div>
+      <div class="total">/ 8 题</div>
+    </div>
+    <div class="score-percent">正确率 <span id="percentNum">0</span>%</div>
+    <div class="score-remark" id="scoreRemark"></div>
+    <div class="result-detail" id="resultDetail"></div>
+    <button class="btn btn-primary" onclick="restart()">再练一遍 🔁</button>
+  </div>
+
+  <div class="footer">
+    博商 · 大董销售体系 · 郑州波特SPIN话术练习 · 仅供内部培训使用
+  </div>
+</div>
+
+<script>
+var current = 0;
+var selected = null;
+var answered = false;
+var results = [];
+var totalQuestions = 8;
+
+function init() {
+  updateProgress();
+  showQuestion(0);
+}
+
+function updateProgress() {
+  document.getElementById("currentNum").textContent = (current + 1);
+  document.getElementById("progressFill").style.width =
+    (current / totalQuestions * 100) + "%";
+}
+
+function currentBlock() {
+  return document.getElementById('q' + current);
+}
+
+function currentBtns() {
+  var q = currentBlock();
+  return {
+    next: q.querySelector('#btnNext'),
+    prev: q.querySelector('#btnPrev')
+  };
+}
+
+function showQuestion(idx) {
+  for (var i = 0; i < totalQuestions; i++) {
+    var el = document.getElementById('q' + i);
+    if (el) el.style.display = 'none';
+  }
+  var curr = document.getElementById('q' + idx);
+  if (curr) curr.style.display = 'block';
+  current = idx;
+  selected = null;
+  answered = false;
+  var btns = currentBtns();
+  var btnNext = btns.next;
+  var btnPrev = btns.prev;
+  btnNext.textContent = (idx === totalQuestions - 1) ? "查看结果" : "确认答案";
+  btnNext.disabled = true;
+  btnNext.onclick = confirmAnswer;
+  btnPrev.disabled = (idx === 0);
+  btnPrev.onclick = function() {
+    if (current > 0) {
+      current--;
+      updateProgress();
+      showQuestion(current);
+    }
+  };
+}
+
+function selectOpt(idx) {
+  if (answered) return;
+  selected = idx;
+  var container = document.querySelectorAll('#q' + current + ' .option');
+  for (var i = 0; i < container.length; i++) {
+    if (i === idx) {
+      container[i].classList.add('selected');
+    } else {
+      container[i].classList.remove('selected');
+    }
+  }
+  currentBtns().next.disabled = false;
+}
+
+function confirmAnswer() {
+  if (selected === null) return;
+  var qBlock = document.getElementById('q' + current);
+  var options = qBlock.querySelectorAll('.option');
+  var isCorrect = false;
+  for (var i = 0; i < options.length; i++) {
+    var optCorrect = options[i].getAttribute('data-correct') === 'true';
+    if (optCorrect) options[i].classList.add('correct');
+    if (i === selected && !optCorrect) options[i].classList.add('wrong');
+    if (i === selected && optCorrect) isCorrect = true;
+    options[i].onclick = null;
+  }
+  answered = true;
+  results[current] = isCorrect;
+  var ca = document.getElementById('ca' + current);
+  var ex = document.getElementById('ex' + current);
+  if (ca) ca.classList.add('show');
+  if (ex) ex.classList.add('show');
+  var btnNext = currentBtns().next;
+  btnNext.disabled = false;
+  if (current < totalQuestions - 1) {
+    btnNext.textContent = "下一题 →";
+    btnNext.onclick = goNext;
+  } else {
+    btnNext.textContent = "查看结果";
+    btnNext.onclick = showResult;
+  }
+}
+
+function goNext() {
+  current++;
+  updateProgress();
+  showQuestion(current);
+}
+
+function showResult() {
+  document.getElementById("quizPage").style.display = "none";
+  document.getElementById("resultPage").classList.add("show");
+  var score = 0;
+  for (var i = 0; i < results.length; i++) {
+    if (results[i]) score++;
+  }
+  document.getElementById("scoreNum").textContent = score;
+  document.getElementById("percentNum").textContent =
+    Math.round(score / results.length * 100);
+
+  var pct = Math.round(score / results.length * 100);
+  var remark = "";
+  if (pct === 100) remark = "🏆 完美！您已是SPIN高手，可以去指导波特的销售团队了";
+  else if (pct >= 75) remark = "👍 SPIN基础扎实，多练几遍就能形成肌肉记忆";
+  else if (pct >= 50) remark = "💪 已掌握核心思路，重点复习 I 和 N 阶段的提问技巧";
+  else remark = "📚 建议从 S→P→I→N 的顺序再过一遍，先建立对话节奏";
+  document.getElementById("scoreRemark").textContent = remark;
+
+  var detail = "<h3>答题详情</h3>";
+  for (var i = 0; i < results.length; i++) {
+    detail += '<div class="result-item"><span class="status">' +
+      (results[i] ? '✅ 正确' : '❌ 错误') + '</span><span>第 ' + (i + 1) + ' 题</span></div>';
+  }
+  document.getElementById("resultDetail").innerHTML = detail;
+}
+
+function restart() {
+  current = 0;
+  selected = null;
+  answered = false;
+  results = [];
+  for (var i = 0; i < totalQuestions; i++) {
+    var opts = document.querySelectorAll('#q' + i + ' .option');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].classList.remove('selected', 'correct', 'wrong');
+      opts[j].onclick = function() {
+        var myIdx = parseInt(this.getAttribute('data-idx'));
+        selectOpt(myIdx);
+      };
+    }
+    var ca = document.getElementById('ca' + i);
+    var ex = document.getElementById('ex' + i);
+    if (ca) ca.classList.remove('show');
+    if (ex) ex.classList.remove('show');
+  }
+  document.getElementById("quizPage").style.display = "block";
+  document.getElementById("resultPage").classList.remove("show");
+  init();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
