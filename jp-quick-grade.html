@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>你的时间花对客户了吗 · 日本场</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;background:#F4F6F9;color:#2C2C2A;line-height:1.6;padding:18px 16px 40px}
+.wrap{max-width:560px;margin:0 auto}
+.head{text-align:center;margin-bottom:18px}
+.badge{display:inline-block;font-size:11px;color:#B85042;border:1px solid #E6C9C4;background:#FDF6F4;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+h1{font-size:20px;color:#123C6B;font-weight:600}
+.sub{font-size:13px;color:#8A8A8A;margin-top:6px;line-height:1.7}
+.card{background:#fff;border-radius:14px;padding:16px 16px 6px;box-shadow:0 1px 3px rgba(18,60,107,.06);margin-bottom:13px}
+.nm{width:100%;border:1px solid #E4E8EE;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#2C2C2A;margin-bottom:4px;outline:none}
+.nm:focus{border-color:#123C6B}
+.hint{font-size:11.5px;color:#A8A8A8;margin:0 0 2px 2px}
+.q{margin-bottom:17px}
+.q .t{font-size:14px;color:#2C2C2A;margin-bottom:9px;font-weight:500}
+.q .t b{color:#B85042;font-weight:500;font-size:11.5px;margin-right:6px}
+.row{display:flex;gap:6px}
+.ch{flex:1;border:1px solid #E4E8EE;background:#fff;border-radius:9px;padding:9px 2px;font-size:11.5px;color:#666;cursor:pointer;font-family:inherit;transition:.12s;line-height:1.3}
+.ch:hover{border-color:#123C6B}
+.ch.on{background:#123C6B;border-color:#123C6B;color:#fff}
+.btn{display:block;width:100%;background:#123C6B;color:#fff;border:0;padding:13px;border-radius:11px;font-size:15px;font-family:inherit;cursor:pointer;margin-top:4px}
+.btn:disabled{background:#C9D2DF;cursor:not-allowed}
+.btn.ghost{background:#fff;color:#123C6B;border:1px solid #C9D6E6;margin-top:9px}
+.lv{text-align:center;padding:6px 0 10px}
+.lv .grade{font-size:46px;font-weight:600;letter-spacing:2px;line-height:1}
+.lv .tag{font-size:12.5px;color:#8A8A8A;margin-top:6px}
+.pie{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:14px 0 8px;background:#EEF0F4}
+.pie i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:#8A8A8A;margin-bottom:6px}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend em{width:8px;height:8px;border-radius:2px;display:inline-block}
+.adv{font-size:13.5px;background:#F7F8FA;border-radius:10px;padding:13px;margin:14px 0 6px;line-height:1.75}
+.adv b{color:#B85042}
+.adv .h{font-size:12px;color:#8A8A8A;margin-bottom:4px}
+.tip{font-size:11.5px;color:#A0A0A0;text-align:center;margin-top:16px;line-height:1.7}
+.small{font-size:11.5px;color:#8A8A8A;margin-top:8px;line-height:1.65}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="badge">日本场 · 全员动手 ②</div>
+    <h1>你的时间，花对客户了吗</h1>
+    <div class="sub">选一个你现在最费心的客户，六个问题，三十秒<br>不记名、不保存、只有你自己看得见</div>
+  </div>
+  <div id="app"></div>
+  <div class="tip">这里分的是「你该给他多少时间」，不是「这个客户好不好」<br>分级标准可以按你行业调，敢分这件事不能调</div>
+</div>
+<script>
+var DIMS = [
+  {id:'amt', tag:'金额', q:'这一年，他大概值多少钱？', opts:['远高于平均','中等偏上','偏低','很小']},
+  {id:'dec', tag:'决策', q:'这单谁拍板？', opts:['他本人拍板','需报上级','多人商量','还说不清']},
+  {id:'rep', tag:'复购', q:'他会不会再来？', opts:['稳定复购','可能再来','一次性','很难说']},
+  {id:'ref', tag:'转介', q:'他会不会给你介绍人？', opts:['已经介绍过','愿意介绍','不确定','不会']},
+  {id:'mgn', tag:'利润', q:'这单你赚不赚钱？', opts:['高于平均','正常','偏低','基本不赚']},
+  {id:'fit', tag:'配合', q:'跟他沟通顺不顺？', opts:['很顺','一般','费劲','很累']}
+];
+var GRADE = {
+  S:{c:'#1D9E75', nm:'S 级 · 该多给时间', adv:'这类客户不是「服务好一点」，是「多给资源」。他值你一半的时间。<b>你现在给他的时间，够吗？</b>'},
+  A:{c:'#378ADD', nm:'A 级 · 守住别掉级', adv:'守住，别掉级。掉级通常不是客户变了，是你松了。<b>每个季度主动找他一次，不要等他找你。</b>'},
+  B:{c:'#EF9F27', nm:'B 级 · 控投入', adv:'用标准流程跟，不要用你的时间跟。<b>他值得流程，不值得你亲自跑。</b>'},
+  C:{c:'#D85A30', nm:'C 级 · 主动放弃', adv:'该放就放。你在他身上花的时间，是从 S 级客户那里偷来的。<b>放弃不是失礼，是把时间还回去。</b>'}
+};
+var ans = {};
+var app = document.getElementById('app');
+
+function render(){
+  var h = '<div class="card">';
+  h += '<input class="nm" id="cname" placeholder="客户或项目名称（可以不填）" maxlength="20">';
+  h += '<div class="hint" style="margin-bottom:14px">随手写一个代号就行，不写也能算</div>';
+  DIMS.forEach(function(d,di){
+    h += '<div class="q"><div class="t"><b>'+d.tag+'</b>'+d.q+'</div><div class="row">';
+    d.opts.forEach(function(o,oi){
+      h += '<button class="ch" id="'+d.id+oi+'" onclick="sel(\''+d.id+'\','+oi+')">'+o+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div>';
+  h += '<button class="btn" id="go" disabled onclick="result()">看结果</button>';
+  app.innerHTML = h;
+}
+
+function sel(id, i){
+  DIMS.forEach(function(d){
+    if(d.id===id){
+      d.opts.forEach(function(_,oi){ document.getElementById(d.id+oi).className='ch'; });
+    }
+  });
+  document.getElementById(id+i).className = 'ch on';
+  ans[id] = 4 - i;
+  document.getElementById('go').disabled = Object.keys(ans).length < DIMS.length;
+}
+
+function result(){
+  var total = 0;
+  DIMS.forEach(function(d){ total += ans[d.id]; });
+  var g = total>=21?'S' : total>=16?'A' : total>=11?'B' : 'C';
+  var cname = (document.getElementById('cname').value||'').trim();
+  var G = GRADE[g];
+  var pct = {'S':45,'A':30,'B':20,'C':5}[g];
+
+  var h = '<div class="card"><div class="lv">';
+  h += '<div class="grade" style="color:'+G.c+'">'+g+'</div>';
+  h += '<div class="tag">'+total+' / 24　'+(cname?('客户：'+cname):'')+'</div>';
+  h += '<div class="tag" style="margin-top:4px;color:'+G.c+'">'+G.nm+'</div>';
+  h += '</div>';
+
+  h += '<div style="font-size:12.5px;color:#666;margin-top:10px">这个客户，该占你多少时间</div>';
+  h += '<div class="pie"><i style="width:'+pct+'%;background:'+G.c+'"></i><i style="width:'+(100-pct)+'%;background:#DDE3EC"></i></div>';
+  h += '<div class="legend"><span><em style="background:'+G.c+'"></em>他 '+pct+'%</span><span><em style="background:#DDE3EC"></em>其他客户 '+(100-pct)+'%</span></div>';
+
+  h += '<div class="adv"><div class="h">给你的建议</div>'+G.adv+'</div>';
+
+  var lowest = DIMS.slice().sort(function(a,b){return ans[a.id]-ans[b.id];})[0];
+  h += '<div class="small">最弱的一项：<b style="color:#B85042">'+lowest.tag+'</b>　'+lowest.q+'<br>这一项决定了这个客户的上限——不是他不想给你更多，是他给不了。</div>';
+  h += '</div>';
+
+  h += '<button class="btn ghost" onclick="ans={};render()">换一个客户再算一遍</button>';
+  h += '<div class="small" style="text-align:center;margin-top:14px">回家之后，把你手上最大的五个客户各算一遍<br>如果五个里有两个 C，你就知道时间该从哪儿挪了</div>';
+  app.innerHTML = h;
+  window.scrollTo(0,0);
+}
+
+render();
+</script>
+</body>
+</html>

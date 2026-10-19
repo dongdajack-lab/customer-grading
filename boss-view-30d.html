@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天地人 · 老板视图 | 30 天后的一天</title>
+<style>
+  :root{
+    --navy:#2F3C7E; --navy2:#1e2a63; --navy-light:#eef1fb;
+    --orange:#ea5b0c; --orange-light:#fff1e6;
+    --green:#2e8b57; --green-light:#eef9f3;
+    --ink:#2b2b2b; --sub:#666; --line:#e6e6e6; --card:#fff; --bg:#f7f8fc;
+    --red:#c0392b; --red-light:#fdf1ef; --amber:#b45309;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;}
+  .wrap{max-width:880px;margin:0 auto;padding:20px 15px 60px;}
+
+  /* ── 头 ── */
+  .hero{background:linear-gradient(135deg,#3b4a9e,#2F3C7E 55%,#1b2350);color:#fff;border-radius:18px;padding:30px 28px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.06);}
+  .hero .kicker{font-size:12.5px;letter-spacing:3px;opacity:.75;position:relative;z-index:1;}
+  .hero h1{font-size:29px;font-weight:800;margin:6px 0 10px;position:relative;z-index:1;letter-spacing:.5px;}
+  .hero p{font-size:14.5px;opacity:.92;max-width:620px;position:relative;z-index:1;}
+  .hero .tags{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1;}
+  .hero .tag{font-size:12px;background:rgba(255,255,255,.15);padding:4px 11px;border-radius:20px;}
+
+  /* ── 通用 ── */
+  .card{background:var(--card);border-radius:15px;padding:22px 24px;margin-bottom:15px;border:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .sec-title{font-size:20px;font-weight:800;margin:26px 0 4px;display:flex;align-items:center;gap:9px;}
+  .sec-title .n{background:var(--navy);color:#fff;width:27px;height:27px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .sec-sub{font-size:13px;color:var(--sub);margin-bottom:14px;padding-left:36px;}
+
+  /* ── 对比开场 ── */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+  .compare .side{padding:20px 20px 18px;}
+  .compare .today{background:#f4f4f6;}
+  .compare .after{background:linear-gradient(135deg,#eef1fb,#e3e8fa);}
+  .compare .side h4{font-size:12.5px;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;}
+  .compare .today h4{color:#888;}
+  .compare .after h4{color:var(--navy);}
+  .compare .side .big{font-size:17px;font-weight:800;line-height:1.5;margin-bottom:10px;}
+  .compare .side ul{list-style:none;font-size:13.5px;}
+  .compare .side li{padding:4px 0 4px 20px;position:relative;line-height:1.6;}
+  .compare .side li::before{content:"";position:absolute;left:4px;top:13px;width:6px;height:6px;border-radius:50%;}
+  .compare .today li::before{background:#bbb;}
+  .compare .after li::before{background:var(--navy);}
+  .compare .after li b{color:var(--navy);}
+
+  /* ── 时间轴 ── */
+  .tl{position:relative;padding-left:26px;}
+  .tl::before{content:"";position:absolute;left:7px;top:14px;bottom:14px;width:2px;background:linear-gradient(180deg,var(--navy),var(--orange),var(--green));opacity:.35;}
+  .scene{position:relative;margin-bottom:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .scene::before{content:"";position:absolute;left:-25px;top:24px;width:10px;height:10px;border-radius:50%;background:#fff;border:3px solid var(--navy);}
+  .scene.earth::before{border-color:var(--orange);}
+  .scene.people::before{border-color:var(--green);}
+  .scene .time{font-size:12.5px;font-weight:800;color:var(--navy);letter-spacing:1px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .scene.earth .time{color:var(--orange);}
+  .scene.people .time{color:var(--green);}
+  .scene .time .dim{font-size:11px;background:#f0f2f8;color:#555;padding:1px 9px;border-radius:10px;font-weight:600;letter-spacing:0;}
+  .scene h3{font-size:17.5px;font-weight:800;margin:6px 0 12px;line-height:1.45;}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .vs .box{border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.65;}
+  .vs .before{background:#f6f6f8;border:1px dashed #d5d5d8;color:#777;}
+  .vs .after{background:var(--navy-light);border:1px solid #c9d2f2;color:#26306b;}
+  .scene.earth .vs .after{background:var(--orange-light);border-color:#fbd0a8;color:#6b3208;}
+  .scene.people .vs .after{background:var(--green-light);border-color:#a9dfc4;color:#1c5133;}
+  .vs .box .lbl{font-size:11px;letter-spacing:1px;font-weight:700;opacity:.7;margin-bottom:5px;}
+  .vs .box .val{font-size:14px;font-weight:600;}
+  .vs .box .val em{font-style:normal;display:block;font-size:12.5px;font-weight:400;margin-top:4px;opacity:.85;}
+
+  .sting{margin-top:12px;background:#fff8f2;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:10px 14px;font-size:14.5px;font-weight:700;color:#7c3a06;line-height:1.6;}
+  .scene.people .sting{background:#f2fbf6;border-left-color:var(--green);color:#1c5133;}
+  .scene .what{margin-top:10px;font-size:12.5px;color:var(--sub);padding-top:9px;border-top:1px dashed var(--line);}
+  .scene .what b{color:var(--ink);}
+
+  /* ── 迷你表 ── */
+  table.mini{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px;}
+  table.mini th,table.mini td{padding:6px 8px;border-bottom:1px solid rgba(0,0,0,.07);text-align:left;}
+  table.mini th{font-size:11px;opacity:.75;font-weight:600;letter-spacing:.5px;}
+  table.mini tr:last-child td{border-bottom:none;}
+  table.mini td.r{color:var(--red);font-weight:700;}
+  table.mini td.g{color:var(--green);font-weight:700;}
+
+  /* ── 三层总结 ── */
+  .layer{border-radius:14px;padding:18px 20px;margin-bottom:12px;border:1.5px solid;}
+  .layer.sky{background:linear-gradient(135deg,#f4f6fe,#e8ecfb);border-color:#c3ccf2;}
+  .layer.earth{background:linear-gradient(135deg,#fff6ef,#ffeedd);border-color:#f8cba4;}
+  .layer.people{background:linear-gradient(135deg,#f2fbf6,#e3f5ec);border-color:#a9dfc4;}
+  .layer .lt{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;}
+  .layer .lg{font-size:26px;font-weight:800;line-height:1;}
+  .layer.sky .lg{color:var(--navy);}
+  .layer.earth .lg{color:var(--orange);}
+  .layer.people .lg{color:var(--green);}
+  .layer .lw{font-size:13px;color:var(--sub);}
+  .layer table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .layer table td{padding:7px 8px;border-bottom:1px dashed rgba(0,0,0,.09);vertical-align:top;line-height:1.6;}
+  .layer table tr:last-child td{border-bottom:none;}
+  .layer table td:first-child{width:74px;color:var(--sub);font-size:12.5px;font-weight:600;white-space:nowrap;}
+
+  /* ── 数字 ── */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px 12px;text-align:center;}
+  .metric .v{font-size:27px;font-weight:800;color:var(--navy);line-height:1.15;}
+  .metric .arrow{font-size:12px;color:#999;font-weight:400;}
+  .metric .k{font-size:12.5px;color:var(--sub);margin-top:4px;}
+  .metric .d{font-size:11.5px;color:#a0a0a0;margin-top:2px;}
+
+  /* ── 冷水 ── */
+  .cold{background:#fdf9f4;border:2px solid #e4d3bd;border-radius:15px;padding:22px 24px;}
+  .cold h3{font-size:19px;font-weight:800;color:#8a5a1a;margin-bottom:12px;}
+  .cold ol{margin-left:20px;font-size:14.5px;line-height:1.85;}
+  .cold ol li{margin-bottom:9px;}
+  .cold .quote{margin-top:14px;background:#fff;border-left:4px solid #d9a441;padding:12px 16px;font-size:15px;font-weight:700;color:#7a4d10;border-radius:0 8px 8px 0;line-height:1.7;}
+
+  /* ── 收口 ── */
+  .cta{background:linear-gradient(135deg,#3b4a9e,#2F3C7E);color:#fff;border-radius:16px;padding:24px 26px;text-align:center;}
+  .cta h3{font-size:20px;font-weight:800;margin-bottom:8px;}
+  .cta p{font-size:14px;opacity:.92;margin-bottom:16px;}
+  .cta .btn{display:inline-block;background:#fff;color:var(--navy);text-decoration:none;font-weight:800;font-size:15px;padding:12px 30px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,.18);}
+  .cta .qrbox{margin-top:16px;display:inline-block;background:rgba(255,255,255,.12);border:1.5px dashed rgba(255,255,255,.45);border-radius:10px;padding:14px 18px;font-size:12.5px;opacity:.9;}
+
+  .note-box{background:#fffbf0;border:1px solid #f2e0b8;border-radius:10px;padding:11px 14px;font-size:12.5px;color:#8a6a20;margin-top:12px;line-height:1.7;}
+  .footer{text-align:center;font-size:12px;color:#aaa;margin-top:26px;line-height:1.9;}
+
+  @media(max-width:680px){
+    .compare,.vs{grid-template-columns:1fr;}
+    .metrics{grid-template-columns:1fr 1fr;}
+    .hero h1{font-size:23px;}
+    .sec-sub{padding-left:0;}
+  }
+  @media print{
+    body{background:#fff;}
+    .hero,.layer,.scene,.vs .box,.cold,.cta{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .card,.scene{box-shadow:none;break-inside:avoid;}
+    .scene{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kicker">天地人 · 老板视图</div>
+    <h1>30 天后的一天</h1>
+    <p>这一天老板做的事没变，变的是——他不用再问任何人，打开就有。<br>本页零输入、纯看图。图示公司：华东某精密制造 · 12 名销售 · 386 家成交客户（示意数据，已脱敏）。</p>
+    <div class="tags">
+      <span class="tag">不用开会就知道</span>
+      <span class="tag">不用追进度</span>
+      <span class="tag">不用再加一张新报表</span>
+    </div>
+  </div>
+
+  <div class="sec-title"><span class="n">1</span>同一件事，两种活法</div>
+  <div class="sec-sub">周一的早上八点二十。差别不在老板多努力，在他要不要开口问。</div>
+  <div class="card" style="padding:0;border:none;background:none;box-shadow:none;">
+    <div class="compare">
+      <div class="side today">
+        <h4>今 天</h4>
+        <div class="big">老板想搞清楚上周发生了什么，要开口问三个人。</div>
+        <ul>
+          <li>打开微信，问销售总监「上周怎么样」</li>
+          <li>总监去问三个组长，下午才回过来</li>
+          <li>回过来的是「都在跑，有几个在谈」</li>
+          <li>老板知道这话不能用，但也没法反驳</li>
+          <li>约了下午三点开会——又是两小时</li>
+        </ul>
+      </div>
+      <div class="side after">
+        <h4>30 天后</h4>
+        <div class="big">手机推过来一条：<b>本周只看三件事。</b></div>
+        <ul>
+          <li><b>王经理那份报价，卡了 23 天</b>（正常是 9 天）</li>
+          <li><b>2 家去年下过单的，今年 8 个月没动静</b></li>
+          <li><b>小李连续 3 周没有新增商机</b></li>
+          <li>三条都是数出来的，不是人报上来的</li>
+          <li>看完 90 秒，他知道今天该找谁说话</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span class="n">2</span>这一天，七个时刻</div>
+  <div class="sec-sub">AI 在这一天做的事只有一件：<b>把已经发生的事，变成老板看得懂的一句话。</b>它没有替老板下任何一个判断。</div>
+
+  <div class="tl">
+
+    <!-- 08:20 -->
+    <div class="scene">
+      <div class="time">08:20<span class="dim">推送，不推送就没人看</span></div>
+      <h3>本周只看三件事</h3>
+      <div class="vs">
+        <div class="box before"><div class="lbl">原 来</div><div class="val">等周会才知道<em>而且不一定有人提</em></div></div>
+        <div class="box after"><div class="lbl">现在</div><div class="val">三条，按金额排<em>每条都能点进去看原始记录</em></div></div>
+      </div>
+      <div class="sting">老板最贵的不是钱，是「要开口问」这件事。</div>
+      <div class="what"><b>AI 干了什么：</b>扫描全公司上周的拜访、报价、订单异动，只挑出「偏离正常」的三条。九十九条正常的事，一条都不打扰他。</div>
+    </div>
+
+    <!-- 09:00 天 -->
+    <div class="scene">
+      <div class="time">09:00<span class="dim">天 · 客户分级与资源裁决</span></div>
+      <h3>打开手机，就是一张客户地图</h3>
+      <div class="vs">
+        <div class="box before"><div class="lbl">原 来</div><div class="val">销售心里那本账<em>谁重要，取决于谁喊得响</em></div></div>
+        <div class="box after"><div class="lbl">现在</div><div class="val">一张表，四类客户<em>份额在掉的、沉睡的、该收的、别再砸钱的</em></div></div>
+      </div>
+      <table class="mini">
+        <thead><tr><th>客户</th><th>去年份额</th><th>今年份额</th><th>系统提示</th></tr></thead>
+        <tbody>
+          <tr><td>A（示意）</td><td>31%</td><td class="r">19%</td><td class="r">份额掉了 12 个点，本月必访</td></tr>
+          <tr><td>B（示意）</td><td>12%</td><td>11%</td><td>正常，按季度维护</td></tr>
+          <tr><td>C（示意）</td><td>0</td><td>0</td><td class="r">8 个月无往来，去年成交 87 万</td></tr>
+          <tr><td>D（示意）</td><td>54%</td><td class="g">57%</td><td class="g">已到顶，别再砸费用</td></tr>
+        </tbody>
+      </table>
+      <div class="sting">你今年花了四小时招待的那家，份额只有 8%——这事不是销售不汇报，是没人算得出来。</div>
+      <div class="what"><b>AI 干了什么：</b>把下单记录、拜访频次、份额变化三样东西合到一张表上。<b>它不替老板判断，它让老板第一次有东西可以判断。</b></div>
+    </div>
+
+    <!-- 10:30 地 -->
+    <div class="scene earth">
+      <div class="time">10:30<span class="dim">地 · 销售过程管控</span></div>
+      <h3>例会 20 分钟结束——因为不用听了</h3>
+      <div class="vs">
+        <div class="box before"><div class="lbl">原 来</div><div class="val">两小时，轮流汇报<em>管的是人，不是阶段</em></div></div>
+        <div class="box after"><div class="lbl">现在</div><div class="val">只看「卡住」的那几行<em>其余照常推进的，一页带过</em></div></div>
+      </div>
+      <table class="mini">
+        <thead><tr><th>商机</th><th>阶段</th><th>停留</th><th>正常</th></tr></thead>
+        <tbody>
+          <tr><td>E 项目</td><td>方案商谈</td><td class="r">41 天</td><td>18 天</td></tr>
+          <tr><td>F 项目</td><td>报价确认</td><td class="r">23 天</td><td>9 天</td></tr>
+          <tr><td>G 项目</td><td>需求确认</td><td>7 天</td><td>10 天</td></tr>
+        </tbody>
+      </table>
+      <div class="sting">过程管控为什么落不了地？因为看过程太贵。AI 把贵降到零，降到零你才管得动。</div>
+      <div class="what"><b>AI 干了什么：</b>算出每个阶段的「正常停留天数」，超了就变红。<b>老板不再管人，管的是那几行红色。</b></div>
+    </div>
+
+    <!-- 14:00 人 -->
+    <div class="scene people">
+      <div class="time">14:00<span class="dim">人 · 团队与激励</span></div>
+      <h3>不用再猜谁行、谁不行</h3>
+      <div class="vs">
+        <div class="box before"><div class="lbl">原 来</div><div class="val">凭印象、凭亲近<em>、「我觉得小张挺努力的」</em></div></div>
+        <div class="box after"><div class="lbl">现在</div><div class="val">看趋势，不看单月<em>谁在涨、谁在退，一眼</em></div></div>
+      </div>
+      <table class="mini">
+        <thead><tr><th>销售</th><th>近 8 周新增商机</th><th>趋势</th><th>系统提示</th></tr></thead>
+        <tbody>
+          <tr><td>小李</td><td>11 → 6 → 2 → 0</td><td class="r">↓</td><td>连续 3 周零新增，先谈原因不谈结果</td></tr>
+          <tr><td>小张</td><td>4 → 6 → 9 → 12</td><td class="g">↑</td><td class="g">转化率在涨，可以把难客户交给他</td></tr>
+        </tbody>
+      </table>
+      <div class="sting">连续三周零新增的人，不是突然不行了——是你在 30 天前就该知道。</div>
+      <div class="what"><b>AI 干了什么：</b>把每个人的动作量变成一条趋势线。<b>谈人之前先看线，这是唯一不用吵架的依据。</b></div>
+    </div>
+
+    <!-- 16:30 销售的那一侧 -->
+    <div class="scene earth">
+      <div class="time">16:30<span class="dim">地 · 销售这一侧的画面</span></div>
+      <h3>销售回来了，说了 30 秒，拿到下一步</h3>
+      <div class="vs">
+        <div class="box before"><div class="lbl">原 来</div><div class="val">晚上回去补日志<em>补的时候已经忘了，也不想写</em></div></div>
+        <div class="box after"><div class="lbl">现在</div><div class="val">车上说 30 秒<em>回来就有下一步，越写越省事</em></div></div>
+      </div>
+      <div class="sting">人为什么会造假？因为填表是「给别人看的」。反过来给他下一步建议、帮他拿单——说假话骗的是他自己。</div>
+      <div class="what"><b>AI 干了什么：</b>把口述变成日志 → 比对这家客户的历史 → 给出<b>下次什么时候去、带什么方案去、对手那块准备什么弹药</b>。这三句话，是销售愿意继续用的原因。</div>
+    </div>
+
+    <!-- 18:00 收工 -->
+    <div class="scene people">
+      <div class="time">18:00<span class="dim">人 · 激励</span></div>
+      <h3>提成不用吵了，因为他自己也算得出来</h3>
+      <div class="vs">
+        <div class="box before"><div class="lbl">原 来</div><div class="val">月底对账吵一次<em>销售觉得被扣了，财务觉得没错</em></div></div>
+        <div class="box after"><div class="lbl">现在</div><div class="val">规则写在系统里<em>他手机上有，我手机上也有</em></div></div>
+      </div>
+      <div class="sting">销售的积极性不是被激励出来的，是「算得清」出来的。</div>
+      <div class="what"><b>AI 干了什么：</b>按既定规则实时计算，谁都能看。<b>它没有改你的制度，它让你的制度第一次被执行到底。</b></div>
+    </div>
+
+  </div>
+
+  <div class="sec-title"><span class="n">3</span>老板到底拿到了什么</div>
+  <div class="sec-sub">天、地、人——每一层老板拿到的是同一件东西：<b>不用问。</b></div>
+
+  <div class="layer sky">
+    <div class="lt"><span class="lg">天</span><span class="lw">客户分级与资源裁决 · 解决"往哪打"</span></div>
+    <table>
+      <tr><td>原来</td><td>客户重要性写在销售的脑子里，谁的嗓门大谁拿资源</td></tr>
+      <tr><td>30 天后</td><td>份额变化、沉睡时长、对手动向，一张表排出来；<b>先救 A 还是保 B，是有依据的取舍，不是拍脑袋</b></td></tr>
+    </table>
+  </div>
+
+  <div class="layer earth">
+    <div class="lt"><span class="lg">地</span><span class="lw">销售过程管控 · 解决"打得稳不稳"</span></div>
+    <table>
+      <tr><td>原来</td><td>要管过程就必须开会，开会就不是管理，是听汇报</td></tr>
+      <tr><td>30 天后</td><td>只盯「偏离正常」的那几行；<b>过程管控的成本降到零，你才第一次真正拥有掌控感</b></td></tr>
+    </table>
+  </div>
+
+  <div class="layer people">
+    <div class="lt"><span class="lg">人</span><span class="lw">铁军打造与激励 · 解决"谁愿意打"</span></div>
+    <table>
+      <tr><td>原来</td><td>谁行谁不行靠印象，激励靠年底一笔账</td></tr>
+      <tr><td>30 天后</td><td>趋势线比印象准；<b>销售愿意写日志，是因为日志反过来帮他自己——顺序不能反</b></td></tr>
+    </table>
+  </div>
+
+  <div class="sec-title"><span class="n">4</span>这些数字，是这一天的账单</div>
+  <div class="sec-sub">不是「效率提升」，是这四项，具体到小时。</div>
+  <div class="metrics">
+    <div class="metric"><div class="v">2h <span class="arrow">→ 20min</span></div><div class="k">周例会</div><div class="d">从听汇报改成看红行</div></div>
+    <div class="metric"><div class="v">3 次 <span class="arrow">→ 0 次</span></div><div class="k">追问进度</div><div class="d">每周省下约 4 小时</div></div>
+    <div class="metric"><div class="v">8 min <span class="arrow">→ 30 s</span></div><div class="k">写一条拜访</div><div class="d">销售阻力下来了</div></div>
+    <div class="metric"><div class="v">0 <span class="arrow">张</span></div><div class="k">新增报表</div><div class="d">老板只看原来的那几样</div></div>
+  </div>
+
+  <div class="note-box">
+    这一页最容易被误读的地方：<b>它不是软件演示，是管理方式的样子。</b><br>
+    上面每一个画面，都有两件东西做前提——<b>一套被写下来的流程，一份有人在维护的数据。</b>这两样不齐，任何软件都只能给你一个更漂亮的空壳。
+  </div>
+
+  <div class="sec-title"><span class="n">5</span>泼盆冷水：这一天不是买来的</div>
+  <div class="sec-sub">这一段千万别省。省了，前面全是广告；留着，前面才是交付。</div>
+  <div class="cold">
+    <h3>为什么大多数公司做不到这一天</h3>
+    <ol>
+      <li><b>先买软件，后发现没流程。</b>AI 是放大镜，不是魔术——你给它一团乱麻，它放大一团乱麻。</li>
+      <li><b>日志只服务管理，不服务销售。</b>员工填表是给别人看的，就一定会编。顺序必须反过来：<b>先让日志对销售有用（给他下一步），他才愿意说真话。</b></li>
+      <li><b>做一张新报表。</b>老板不看新报表，他只看他原来就盯的那几样。输出要写进他已经在看的地方。</li>
+      <li><b>入口不顺手。</b>让员工多做一个动作——打开一个专用网页、登录一个新系统——这件事三个月内必死。它必须长在<em>员工已经在用的地方</em>：企微、钉钉、飞书，哪个顺手用哪个。</li>
+      <li><b>指望它替老板做判断。</b>它替代的是「填表」和「追问进度」，替代不了两件事——<b>判断这个客户值不值得投，以及当面把话说进去。</b>前者是老板的活，后者是销售的活。</li>
+    </ol>
+    <div class="quote">所以如果问我第一步做什么，我的答案不是去买 AI。<br>是先花两天，把你公司的流程和数据理一遍。<br>理完那两天，你自然知道该上什么、不该上什么。</div>
+  </div>
+
+  <div class="sec-title"><span class="n">6</span>那两天怎么开始</div>
+  <div class="sec-sub">五个问题，30 秒。答完你就知道自己是「可以上」，还是「先别上」。</div>
+  <div class="cta">
+    <h3>你的公司，能不能走到这一天？</h3>
+    <p>五道题，当场出结果、出缺口清单。假的也行——<b>知道自己还没准备好，比买错东西便宜得多。</b></p>
+    <a class="btn" href="ai-readiness-5q.html">开始 5 题自检 →</a>
+    <div class="qrbox">课堂投屏：直接打开本链接 ｜ 手机作答：扫老师给的二维码<br>（此处可放本页二维码）</div>
+  </div>
+
+  <div class="footer">
+    大董老师 · 「天地人」销售管理体系<br>
+    本页为课堂讲解视图，全部数据为示意数据，不涉及任何真实客户。
+  </div>
+
+</div>
+</body>
+</html>

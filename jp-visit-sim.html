@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>拜访模拟 · 日本场</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;background:#F4F6F9;color:#2C2C2A;line-height:1.6;padding:18px 16px 40px}
+.wrap{max-width:560px;margin:0 auto}
+.head{text-align:center;margin-bottom:20px}
+.badge{display:inline-block;font-size:11px;color:#B85042;border:1px solid #E6C9C4;background:#FDF6F4;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+h1{font-size:20px;color:#123C6B;font-weight:600;letter-spacing:.3px}
+.sub{font-size:13px;color:#8A8A8A;margin-top:6px}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(18,60,107,.06);margin-bottom:14px}
+.scene{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #E8EBF0;border-radius:11px;margin-bottom:9px;cursor:pointer;transition:.15s;background:#fff}
+.scene:hover{border-color:#378ADD;background:#F7FAFD}
+.scene .ico{width:34px;height:34px;border-radius:9px;background:#EEF3F9;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.scene .nm{font-size:14.5px;color:#123C6B;font-weight:500}
+.scene .ds{font-size:11.5px;color:#999}
+.bar{height:4px;background:#E8EBF0;border-radius:4px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:#123C6B;width:0;transition:width .35s}
+.turn{font-size:11px;color:#999;margin-bottom:8px}
+.say{background:#F7F8FA;border-left:3px solid #123C6B;border-radius:0 9px 9px 0;padding:12px 14px;font-size:14.5px;color:#2C2C2A;margin-bottom:16px}
+.say b{display:block;font-size:11px;color:#8A8A8A;font-weight:400;margin-bottom:4px}
+.opt{display:block;width:100%;text-align:left;border:1px solid #E4E8EE;background:#fff;border-radius:10px;padding:12px 14px;font-size:14px;color:#2C2C2A;margin-bottom:9px;cursor:pointer;transition:.15s;font-family:inherit;line-height:1.5}
+.opt:hover{border-color:#123C6B}
+.opt.ok{border-color:#1D9E75;background:#F0F9F5}
+.opt.no{border-color:#D85A30;background:#FDF5F2}
+.fb{font-size:12.5px;padding:10px 12px;border-radius:9px;margin-top:4px;margin-bottom:14px;display:none}
+.fb.show{display:block}
+.fb.ok{background:#F0F9F5;color:#0F6E56}
+.fb.no{background:#FDF5F2;color:#993C1D}
+.btn{display:block;width:100%;background:#123C6B;color:#fff;border:0;padding:13px;border-radius:11px;font-size:15px;font-family:inherit;cursor:pointer;margin-top:6px}
+.btn.ghost{background:#fff;color:#123C6B;border:1px solid #C9D6E6}
+.res-lv{text-align:center;padding:8px 0 14px}
+.res-lv .big{font-size:34px;font-weight:600;color:#123C6B}
+.res-lv .lb{font-size:12px;color:#999;margin-top:2px}
+.dim{margin-bottom:11px}
+.dim .t{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;color:#444}
+.dim .t span:last-child{color:#8A8A8A;font-size:12px}
+.dim .g{height:7px;background:#EEF0F4;border-radius:5px;overflow:hidden}
+.dim .g i{display:block;height:100%;border-radius:5px}
+.adv{font-size:13.5px;color:#2C2C2A;background:#F7F8FA;border-radius:10px;padding:13px;margin-top:6px}
+.adv b{color:#B85042}
+.tip{font-size:11.5px;color:#A0A0A0;text-align:center;margin-top:16px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="badge">日本场 · 全员动手 ①</div>
+    <h1>拜访模拟 · 五步节奏</h1>
+    <div class="sub">选一个客户类型，客户会开口说话。每轮只选一句<br>不记名、不上交、只有你自己看得见</div>
+  </div>
+  <div id="app"></div>
+  <div class="tip">做完关掉页面即可，不保存任何内容<br>客户均为虚拟人物，与真实企业无关</div>
+</div>
+<script>
+var SCENES = [
+  {id:'estate', ico:'房', nm:'不动产中介', ds:'正在看投资房的客户', say:[
+    '我先了解一下，现在这个行情不太敢动。',
+    '说实话，我看房看了大半年了，一直没定下来。',
+    '主要是担心买了之后租不出去，贷款压力又在那儿。',
+    '你说得对，空置半年，损失确实不小。',
+    '那你觉得我这种情况，应该先看哪一类？']},
+  {id:'retail', ico:'店', nm:'药妆 · 酒行零售', ds:'门店或批发的采购', say:[
+    '我们店现在供应商挺多的，暂时不缺。',
+    '不过最近有一款卖得不好，压了不少货。',
+    '压货倒是其次，主要是占着货架和现金。',
+    '这么算下来，一年压货的成本确实不少。',
+    '你说的这个，能不能先给我看个小样？']},
+  {id:'trade', ico:'贸', nm:'贸易商社', ds:'采购负责人', say:[
+    '价格我们还在比，你们不是最便宜的。',
+    '我们主要担心交期，上次那家拖了两个月。',
+    '拖期的话，我们下游客户是要罚款的。',
+    '罚款加上信誉损失，这个账我认。',
+    '那你们能做到什么程度的交期保证？']},
+  {id:'it', ico:'IT', nm:'IT 咨询', ds:'中小企业主', say:[
+    '我们公司小，暂时用不上太复杂的东西。',
+    '不过现在客户信息都在几个人手上，人一走就麻烦。',
+    '对，去年就有一个销售走了，客户全带走了。',
+    '这个损失，确实比我想的大。',
+    '那从哪儿开始比较现实？']},
+  {id:'beauty', ico:'美', nm:'美容 · 会员店', ds:'店主', say:[
+    '我们店老客户挺稳定的，不太需要拉新。',
+    '但最近老客户回头的间隔明显变长了。',
+    '间隔变长，可能是一批人搬走了，也可能换了习惯。',
+    '如果要挽回这批人，成本确实比拉新低。',
+    '那这个怎么开始做？']}
+];
+
+var ROUNDS = [
+  {need:'S', opts:[
+    {t:'S', q:'您现在主要看哪一类？大概什么时候需要？', ok:1, fb:'先摸清现状，不急着介绍。这是第一句话该干的事。'},
+    {t:'P', q:'您是不是觉得现在这个行情不敢动？', fb:'客户还没说，你先替他下结论，他会本能地收缩。'},
+    {t:'I', q:'如果一直不动，成本可能会更高。', fb:'刚认识就放大代价，客户会觉得你在施压。'},
+    {t:'N', q:'那我们从哪个方案开始比较合适？', fb:'太早了，你还不知道他要什么，给方案就是被比价。'}]},
+  {need:'P', opts:[
+    {t:'S', q:'那您现在手上有几个候选？', fb:'现状已经清楚了，再问现状就是原地打转。'},
+    {t:'P', q:'这半年一直没定下来，最卡的是哪一点？', ok:1, fb:'挖到具体的卡点，后面才有得谈。'},
+    {t:'I', q:'再拖下去会不会更被动？', fb:'痛点还没说清就放大，客户会觉得被套路。'},
+    {t:'N', q:'我给您一个方案您先看看？', fb:'跳步了。这一步给方案，一定被拿去比价。'}]},
+  {need:'I', opts:[
+    {t:'S', q:'那您之前遇到过类似的情况吗？', fb:'偏回顾，没有把代价摆到桌面上。'},
+    {t:'P', q:'除了这个，还有别的担心吗？', fb:'这个点已经够了，再挖就是纠缠，该算账了。'},
+    {t:'I', q:'如果这个一直不解决，一年大概会损失多少？', ok:1, fb:'把代价变成数字，客户自己会算，比你讲十句管用。'},
+    {t:'N', q:'所以您需要的就是这一类对吧？', fb:'替客户下结论，不如让他自己说出来。'}]},
+  {need:'N', opts:[
+    {t:'S', q:'那您团队现在几个人？', fb:'跑偏了。这时候问现状，客户会觉得你没在听。'},
+    {t:'P', q:'还有别的顾虑吗？', fb:'已经够了。再挖下去，他会觉得你不想解决问题。'},
+    {t:'I', q:'再不做，损失会更大。', fb:'重复施压，边际效果递减，还会引起反感。'},
+    {t:'N', q:'如果这一块能解决，对您今年意味着什么？', ok:1, fb:'让客户自己讲出价值——这句话是你今天最值钱的一句。'}]},
+  {need:'N', opts:[
+    {t:'S', q:'那您再考虑考虑？', fb:'这句话等于放客户走。'},
+    {t:'P', q:'您还有什么不放心的？', fb:'可以问，但不产生任何动作。'},
+    {t:'I', q:'错过这个时点，成本会更高。', fb:'最后一步还在施压，很容易反效果。'},
+    {t:'N', q:'我们先从最小的一步开始，您看这周还是下周方便？', ok:1, fb:'具体的小步 + 二选一时间，这才叫推进。'}]}
+];
+
+var ORDER = {S:0,P:1,I:2,N:3};
+var NAME = {S:'现状型',P:'难点型',I:'暗示型',N:'需求效益型'};
+var st = {scene:null, i:0, ans:[], locked:false};
+var app = document.getElementById('app');
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+function renderPick(){
+  var h = '<div class="card"><div style="font-size:13px;color:#666;margin-bottom:13px">先选一个你今天真实在跟的客户类型</div>';
+  SCENES.forEach(function(s){
+    h += '<div class="scene" onclick="pickScene(\''+s.id+'\')"><div class="ico">'+s.ico+'</div><div><div class="nm">'+s.nm+'</div><div class="ds">'+s.ds+'</div></div></div>';
+  });
+  h += '</div>';
+  app.innerHTML = h;
+}
+
+function pickScene(id){
+  st.scene = SCENES.filter(function(s){return s.id===id;})[0];
+  st.i = 0; st.ans = [];
+  renderRound();
+}
+
+function renderRound(){
+  var sc = st.scene, r = ROUNDS[st.i];
+  var pct = Math.round(st.i/ROUNDS.length*100);
+  var h = '<div class="card">';
+  h += '<div class="bar"><i style="width:'+pct+'%"></i></div>';
+  h += '<div class="turn">第 '+(st.i+1)+' / '+ROUNDS.length+' 轮　'+sc.nm+'</div>';
+  h += '<div class="say"><b>客户说</b>'+esc(sc.say[st.i])+'</div>';
+  h += '<div style="font-size:13px;color:#666;margin-bottom:10px">你下一句问什么？</div>';
+  r.opts.forEach(function(o,i){
+    h += '<button class="opt" id="o'+i+'" onclick="choose('+i+')">'+esc(o.q)+'</button>';
+  });
+  h += '<div class="fb" id="fb"></div>';
+  h += '<button class="btn" id="nx" style="display:none" onclick="next()">'+(st.i===ROUNDS.length-1?'看结果':'下一轮')+'</button>';
+  h += '</div>';
+  app.innerHTML = h;
+  st.locked = false;
+}
+
+function choose(i){
+  if(st.locked) return;
+  st.locked = true;
+  var r = ROUNDS[st.i], o = r.opts[i];
+  st.ans.push({need:r.need, pick:o.t, ok:!!o.ok});
+  var el = document.getElementById('o'+i);
+  el.className = 'opt ' + (o.ok?'ok':'no');
+  if(!o.ok){
+    r.opts.forEach(function(x,j){ if(x.ok) document.getElementById('o'+j).className='opt ok'; });
+  }
+  var fb = document.getElementById('fb');
+  fb.className = 'fb show ' + (o.ok?'ok':'no');
+  fb.textContent = (o.ok?'对。':'错。') + o.fb + (o.ok?'':'　这一步该用「'+NAME[r.need]+'」。');
+  document.getElementById('nx').style.display = 'block';
+}
+
+function next(){
+  st.i++;
+  if(st.i >= ROUNDS.length){ renderResult(); } else { renderRound(); }
+}
+
+function renderResult(){
+  var okN = st.ans.filter(function(a){return a.ok;}).length;
+  var jump = {}, back = {};
+  st.ans.forEach(function(a){
+    if(a.ok) return;
+    if(ORDER[a.pick] > ORDER[a.need]){ jump[NAME[a.need]] = (jump[NAME[a.need]]||0)+1; }
+    else { back[NAME[a.pick]] = (back[NAME[a.pick]]||0)+1; }
+  });
+  var topJump = Object.keys(jump).sort(function(a,b){return jump[b]-jump[a];})[0];
+  var topBack = Object.keys(back).sort(function(a,b){return back[b]-back[a];})[0];
+
+  var h = '<div class="card"><div class="res-lv">';
+  h += '<div class="big">'+okN+' / '+ROUNDS.length+'</div>';
+  h += '<div class="lb">五步里踩对的步数</div></div>';
+
+  ['S','P','I','N'].forEach(function(k){
+    var total = st.ans.filter(function(a){return a.need===k;}).length;
+    var good = st.ans.filter(function(a){return a.need===k && a.ok;}).length;
+    var pct = total? Math.round(good/total*100):0;
+    var col = pct>=90?'#1D9E75':(pct>=50?'#EF9F27':'#D85A30');
+    h += '<div class="dim"><div class="t"><span>'+NAME[k]+'</span><span>'+good+' / '+total+'</span></div><div class="g"><i style="width:'+pct+'%;background:'+col+'"></i></div></div>';
+  });
+
+  h += '<div class="adv" style="margin-top:16px">';
+  if(okN === ROUNDS.length){
+    h += '<b>五步节奏全对。</b>你缺的不是方法，是把这套动作固定下来——固定成你自己的话，固定成团队能抄的模板。';
+  } else if(topJump){
+    h += '<b>你最常跳的是「'+topJump+'」。</b>也就是说，客户刚说个开头，你就往前走了两步。跳步不会让你更快，只会让你更早被比价。';
+    if(topBack){ h += '<br><br>另外你有 '+back[topBack]+' 次把「'+topBack+'」用早了。'; }
+  } else if(topBack){
+    h += '<b>你偏保守。</b>该算账的时候你还在摸底，客户会觉得你在绕。该往前推一步的时候，要敢推。';
+  }
+  h += '</div>';
+  h += '<div style="font-size:12px;color:#8A8A8A;margin-top:14px;line-height:1.7">五步：现状 → 难点 → 暗示 → 需求效益 → 推进。<br>每一步都有它该出现的位置，位置错了，话再好听也没用。</div>';
+  h += '</div>';
+  h += '<button class="btn ghost" onclick="restart()">换一个客户类型再练一遍</button>';
+  app.innerHTML = h;
+}
+
+function restart(){ st={scene:null,i:0,ans:[],locked:false}; renderPick(); }
+
+renderPick();
+</script>
+</body>
+</html>
