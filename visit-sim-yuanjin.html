@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拜访模拟训练 · 源金专属版 | 大董销售训练营</title>
+<style>
+  :root{
+    --navy:#1A3C6D; --navy2:#2E75B6; --gold:#E8A817;
+    --ink:#1F2937; --soft:#6B7280; --line:#E5E7EB; --bg:#F5F7FA; --white:#fff;
+    --green:#2E7D32; --red:#C0392B; --amber:#B45309;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 14px 60px;}
+  .hdr{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:22px 18px 24px;}
+  .hdr .badge{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+       font-size:12px;padding:4px 12px;border-radius:20px;letter-spacing:.5px;}
+  .hdr h1{font-size:23px;font-weight:800;margin:10px 0 6px;}
+  .hdr p{font-size:13px;color:rgba(255,255,255,.82);}
+  .card{background:var(--white);border-radius:14px;box-shadow:0 2px 14px rgba(20,40,80,.07);
+        padding:20px 18px;margin-top:14px;}
+  .who{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .ava{width:46px;height:46px;border-radius:50%;background:var(--navy);color:#fff;font-size:19px;
+       font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;}
+  .who .nm{font-size:17px;font-weight:800;}
+  .who .ti{font-size:12.5px;color:var(--soft);}
+  .chip{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:12px;
+        background:#EEF4FB;color:var(--navy2);font-weight:700;margin-left:6px;}
+  .stage{font-size:12.5px;color:var(--soft);border-left:3px solid var(--gold);padding-left:10px;margin-bottom:14px;}
+  .round{font-size:12px;color:var(--soft);font-weight:700;letter-spacing:1px;margin-bottom:6px;}
+  .say{background:#F8FAFC;border:1px solid var(--line);border-left:4px solid var(--navy2);
+       border-radius:10px;padding:14px 16px;font-size:16px;font-weight:600;margin-bottom:14px;}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);
+       border-radius:11px;padding:12px 14px;margin-bottom:9px;font-size:14.5px;font-family:inherit;
+       color:var(--ink);cursor:pointer;transition:all .15s;line-height:1.6;}
+  .opt:hover:not(:disabled){border-color:var(--navy2);background:#F6FAFF;}
+  .opt:disabled{cursor:default;opacity:.62;}
+  .opt.pick{border-color:var(--navy2);background:#EEF4FB;opacity:1;}
+  .opt .k{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;
+          border-radius:6px;background:var(--navy);color:#fff;font-size:12px;font-weight:800;margin-right:8px;flex:none;}
+  .fb{margin-top:12px;border-radius:11px;padding:14px 16px;background:#FFFBF0;border:1px solid #F3E3B8;}
+  .fb .row{margin-bottom:9px;}
+  .fb .lb{font-size:11.5px;font-weight:800;letter-spacing:1px;color:var(--amber);margin-bottom:3px;}
+  .fb .tx{font-size:14px;}
+  .sc{display:inline-block;font-size:13px;font-weight:800;padding:3px 11px;border-radius:14px;}
+  .sc.good{background:#E6F4EA;color:var(--green);}
+  .sc.mid{background:#FFF4E0;color:var(--amber);}
+  .sc.bad{background:#FDECEA;color:var(--red);}
+  .fb .best{background:#fff;border:1px dashed #D9C48A;border-radius:9px;padding:10px 12px;margin-top:8px;font-size:14px;}
+  .btn{display:block;width:100%;border:none;border-radius:11px;padding:14px;font-size:15.5px;
+       font-weight:800;font-family:inherit;cursor:pointer;background:var(--navy);color:#fff;margin-top:12px;}
+  .btn:hover{background:var(--navy2);}
+  .btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--navy2);background:#F6FAFF;}
+  .btn.gold{background:var(--gold);color:#4A3200;}
+  .btn.gold:hover{background:#D99A0F;}
+  .total{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;}
+  .total .n{font-size:40px;font-weight:900;color:var(--navy);}
+  .total .u{font-size:14px;color:var(--soft);}
+  .pct{font-size:13px;color:var(--soft);margin-bottom:16px;}
+  .bars .b{margin-bottom:9px;}
+  .bars .lb2{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;}
+  .track{height:9px;background:#EEF1F5;border-radius:5px;overflow:hidden;}
+  .fill{height:100%;border-radius:5px;background:var(--navy2);}
+  .comm{background:#F8FAFC;border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+        font-size:14.5px;margin:14px 0;}
+  .comm b{color:var(--navy);}
+  h3.sec{font-size:15px;font-weight:800;color:var(--navy);margin:18px 0 8px;border-left:4px solid var(--gold);padding-left:9px;}
+  .secret{background:#FFF8E7;border:1px solid #F0DDA8;border-radius:11px;padding:14px 16px;font-size:14.5px;}
+  .secret div{margin-bottom:8px;}
+  .secret div:last-child{margin-bottom:0;}
+  .six{font-size:14px;}
+  .six div{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--line);}
+  .six div:last-child{border:none;margin:0;padding:0;}
+  .six .t{font-weight:800;color:var(--navy2);margin-right:6px;}
+  .foot{text-align:center;font-size:12px;color:#9AA3AF;padding:18px 10px 0;line-height:1.8;}
+  .note{font-size:12.5px;color:var(--soft);background:#EEF4FB;border-radius:9px;padding:10px 12px;margin-top:10px;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="wrap" style="padding-bottom:0">
+    <div class="badge">江西源金科技集团 · 专属版（内部训练用）</div>
+    <h1>拜访模拟训练 · 源金版</h1>
+    <p>三位真实客户类型随机匹配 · 六轮对话 · 教练即时点评 · 战绩卡诊断<br>大董销售训练营 ｜ 练的是「问对问题」，不是背话术</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="card" id="startCard">
+    <div class="who">
+      <div class="ava">源</div>
+      <div>
+        <div class="nm">这一关，你会遇到谁？</div>
+        <div class="ti">系统从三类真实客户中随机匹配一位，防止背答案</div>
+      </div>
+    </div>
+    <div class="stage">场景设定：源金牌智能密集架（YJ-ZNMJJ 等）、文物柜架、仓储货架、智能枪弹柜，以及档案馆 / 数字档案馆总集成（一体化中心平台、智能环境控制系统、恒湿净化一体机、气体灭火）。项目从十几万到五百万级不等。</div>
+    <div class="note">每一轮，客户会说一句真实场景里的原话。你从四个应答里选一个 —— 选完立刻看到他的真实反应、教练点评和满分做法。六轮结束出战绩卡。</div>
+    <button class="btn gold" onclick="startGame()">进入训练 →</button>
+  </div>
+
+  <div class="card hidden" id="playCard">
+    <div class="who">
+      <div class="ava" id="ava">张</div>
+      <div>
+        <div class="nm"><span id="cname">张馆长</span><span class="chip" id="ctag">档案系统 · 怕验收</span></div>
+        <div class="ti" id="ctitle">县档案馆 馆长</div>
+      </div>
+    </div>
+    <div class="stage" id="cstage"></div>
+    <div class="round" id="rno">第 1 轮 / 共 6 轮</div>
+    <div class="say" id="say"></div>
+    <div id="opts"></div>
+    <div id="fb"></div>
+    <button class="btn hidden" id="nextBtn" onclick="nextRound()">继续对话 →</button>
+  </div>
+
+  <div class="card hidden" id="cardBox"></div>
+
+  <div class="foot">
+    江西源金科技集团 · 专属版 —— 客户类型为真实结构，人名与场景为训练用虚构。<br>
+    大董销售训练营 · 董仁杰 ｜ 同一套 SPIN，不同客户挖不同的账。
+  </div>
+</div>
+
+<script>
+var CLIENTS = [
+
+/* ---------- 客户一：张馆长（档案馆） ---------- */
+{
+ id:'zhang', name:'张馆长', title:'县档案馆 馆长', tag:'档案系统 · 怕验收', ava:'张',
+ stage:'新馆库房改造的技术交流。他在这行干了二十多年，再有几年就退，最怕的不是花钱，是任期内出事。',
+ fear:'任内档案受潮、发霉、损毁 —— 档案损毁是要进档案史志、要追责的；加上新馆验收过不了，卡在他这一任。',
+ treasure:'库房真实的立方米数、年新增档案量，还有这次技术评分表里的分项 —— 拿到前两个，配置就是按他库房定的。',
+ rounds:[
+  {dim:'S', q:'「你们先报个价吧，我们预算有限。」', opts:[
+    {t:'先问：这次是新馆建设还是老库改造？库房面积多大、现有档案大约多少立方米？除密集架外，环境控制、消防气体灭火是不是也在这一包里？', s:15,
+     r:'（这才抬头）一千二百平左右，老档案大概六百多方，还说要上恒湿净化……你们还真问到点子上了。',
+     c:'先摸底再谈钱。他是馆长，心里装的是整个库房：面积、存量、还要不要带环境控制。你把这三样问全，后面每一句都能落到他的库房上。',
+     best:'背景摸底四件套：新馆/改造 · 面积 · 现有立方米 · 这一包含不含环境控制和消防。'},
+    {t:'直接报一个优惠单价争取先入围', s:0,
+     r:'（合上本子）行，价格我记下了。',
+     c:'一报价就出局。你连含不含恒湿净化都不知道就报，报低了做不下来，报高了连谈的资格都没有。',
+     best:'背景摸底四件套：新馆/改造 · 面积 · 现有立方米 · 这一包含不含环境控制和消防。'},
+    {t:'讲公司是樟树金属家具产业园的规模企业、做过很多大项目', s:5,
+     r:'（翻资料）嗯，资质都差不多。',
+     c:'不算错，但慢。馆长不缺供应商，缺的是有人把他这一馆的事问清楚。',
+     best:'背景摸底四件套：新馆/改造 · 面积 · 现有立方米 · 这一包含不含环境控制和消防。'},
+    {t:'打听这一带有几家同行已经报了价', s:0,
+     r:'（脸色一变）这个不方便说。',
+     c:'打听同行报价，你就从「来帮忙的」变成了「来摸底的」。档案系统圈子小，一句话就传开了。',
+     best:'背景摸底四件套：新馆/改造 · 面积 · 现有立方米 · 这一包含不含环境控制和消防。'}
+  ]},
+  {dim:'P', q:'「老库房用了十几年了，也能用。」', opts:[
+    {t:'问：这十几年里，有没有出现过返潮发霉、虫害鼠患、汛期渗水，或者档案盒变形取不出来的情况？', s:15,
+     r:'（停顿）……前年汛期地下库房渗过一次水，最底下一排盒子全泡了，现在还压在心里。',
+     c:'不评价 + 给场景 + 请他回忆。你没说该换，是他自己想起了那次泡水 —— 这才是他真正过不去的坎。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆（返潮 / 发霉 / 渗水 / 虫鼠 / 盒子变形）。'},
+    {t:'说十几年了，达到使用年限该换了', s:0,
+     r:'还能用就先用着。',
+     c:'你在替他做判断，他会本能维护自己的现状 —— 毕竟那库房是他一手看过来的。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'},
+    {t:'介绍新库房有多智能，恒湿净化、气体灭火全都能配', s:5,
+     r:'（不置可否）',
+     c:'讲产品太早。他还没承认自己痛，你讲再多配置他听不进去。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'},
+    {t:'说这样下去档案损毁要担责任', s:0,
+     r:'（不悦）我们管理是规范的。',
+     c:'吓唬式销售。而且你没证据，他只会觉得你在戳他的痛处、质疑他的管理。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'}
+  ]},
+  {dim:'I', q:'「偶尔返潮一次也不算大事，勤通风就行。」', opts:[
+    {t:'换算：纸质档案的损毁是不可逆的 —— 一批泡水的卷宗修复一页要多少钱、能不能修复回来都是问号。更要紧的是，档案损毁是要进档案史志的，这一任要是出了这种事，追责追到谁头上很清楚。', s:15,
+     r:'（沉默很久）……前年那批到现在还没完全修复完。',
+     c:'把「偶尔一次」换算成「不可逆 + 进史志 + 追责到人」。馆长这类客户买单的从来不是设备，是「我这一任平平安安交出去」。',
+     best:'暗示问题 = 客户原话的次数 × 不可逆后果 × 责任归属（这一任谁签字）。'},
+    {t:'说装了恒湿净化一体机就能彻底解决', s:5,
+     r:'（点头）',
+     c:'有价值，但没换算成他的责任。「能解决」是产品话术，「这一任不会出事」才是他要的。',
+     best:'暗示问题 = 次数 × 不可逆后果 × 责任归属。'},
+    {t:'认同他，说加强通风和人工管理确实也行', s:0,
+     r:'（点头）就是。',
+     c:'你亲手把伤口缝上了。客户说「不算大事」的时候，恰恰是你必须换算的时刻。',
+     best:'暗示问题 = 次数 × 不可逆后果 × 责任归属。'},
+    {t:'说别的馆早就换代了', s:0,
+     r:'别人是别人。',
+     c:'从众式说服。档案系统的馆长最忌讳被拿来和别人比，这会让他觉得你在小看他。',
+     best:'暗示问题 = 次数 × 不可逆后果 × 责任归属。'}
+  ]},
+  {dim:'N', q:'「你们这个方案，跟别家到底有什么区别？」', opts:[
+    {t:'落到他的验收责任：这一包我们做总集成 —— 智能密集架 + 智能环境控制系统 + 恒湿净化一体机 + 气体灭火联动，交付时出第三方承重与环境检测报告，再给一份逐项验收清单。您签字那一步，有据可依。', s:15,
+     r:'（拿笔）……第三方报告和验收清单，你们真能一起出？这两个最要紧。',
+     c:'你把「我们的配置」换成了「他签字时的底气」。总集成 + 第三方报告 + 验收清单，这三样合起来就是他的免责证据链。',
+     best:'价值引导 = 总集成能力 + 第三方检测 + 逐项验收清单，落到「您签字那一步有据可依」。'},
+    {t:'发一堆资质、专利、检测报告给他', s:5,
+     r:'（随手放一边）',
+     c:'有物证，但没连成链。单张证书只能证明你合格，连成证据链才能帮他免责。',
+     best:'价值引导 = 总集成 + 第三方检测 + 验收清单。'},
+    {t:'说我们是源头厂，质量更好、价格更实在', s:0,
+     r:'（没接话）',
+     c:'三个形容词，零个证据。这句话每一家来投标的都会说。',
+     best:'价值引导 = 总集成 + 第三方检测 + 验收清单。'},
+    {t:'说别家是贴牌，我们是真源头', s:0,
+     r:'（不悦）同行的事我不评价。',
+     c:'贬低同行。档案系统圈子极小，你今天说别家，明天就传到对方耳朵里。',
+     best:'价值引导 = 总集成 + 第三方检测 + 验收清单。'}
+  ]},
+  {dim:'P', q:'「技术参数是专家定的，我们改不了。」', opts:[
+    {t:'问：参数草稿现在到哪一版？有没有征求意见的窗口？我们能不能以「技术服务建议书」的方式，提三条合规性建议（承重、防火分区、环境控制）？', s:15,
+     r:'（想了想）……草稿倒是有，意见征集到下周三，你们要以书面形式提。',
+     c:'把「改参数」换成「帮他把需求写准」。他不是不能动，是怕动完出问题没人担；你用书面技术建议，正好替他把责任分散掉。',
+     best:'锁定真实顾虑：他怕的不是改，是改完出事 —— 用「书面建议」替他分散责任。'},
+    {t:'质疑这个承重参数定得不合理', s:0,
+     r:'（脸一沉）这是专家论证过的。',
+     c:'当众打脸。你越说不合理，他越不敢动 —— 动了就等于承认之前一年多白干了。',
+     best:'锁定真实顾虑：怕的不是改，是改完出事。'},
+    {t:'说那就按现有参数投，我们配合', s:0,
+     r:'（点头）行。',
+     c:'你把胜负交给运气。参数是谁参与写的，谁就赢了一半。',
+     best:'锁定真实顾虑：怕的不是改，是改完出事。'},
+    {t:'说要去找上级主管部门反映', s:0,
+     r:'（明显不快）没必要。',
+     c:'越级。档案系统最讲层级，你一越级，他就被架在火上烤。',
+     best:'锁定真实顾虑：怕的不是改，是改完出事。'}
+  ]},
+  {dim:'C', q:'「行，资料留下，有消息我通知你。」', opts:[
+    {t:'收口：这周我按您说的一千二百平、六百多方存量，出一版配置清单（含环境控制与气体灭火）+ 同类馆验收清单 + 第三方承重与环境检测样本，周五前发您。您能不能把这次技术评分表里那几个分项拍给我看一下？我照着那几条改。', s:15,
+     r:'（点头）……评分表那几项我拍给你。周五我等你。',
+     c:'收口公式 = 具体动作 + 具体时间 + 他必须贡献的一样东西。评分表一到手，这单就从「等通知」变成了「一起改」。',
+     best:'收口 = 周五前给配置清单+验收清单+检测样本，换您把技术评分表拍我。'},
+    {t:'说好的，那我等您通知', s:0,
+     r:'（起身送客）',
+     c:'等于没有下一步。「等通知」是销售里最贵的三个字 —— 你没拿到任何东西，也没约定任何时间。',
+     best:'收口 = 具体动作 + 具体时间 + 他必须贡献的一样东西。'},
+    {t:'问那这个大概什么时候能定下来', s:5,
+     r:'不好说，要走流程。',
+     c:'问时间没用。要问「我给您什么，您给我什么」。',
+     best:'收口 = 具体动作 + 具体时间 + 他必须贡献的一样东西。'},
+    {t:'说我们随时可以签合同，排产也快', s:0,
+     r:'（笑）不急。',
+     c:'跳步骤。参数还没定你就催签，显得你只想成交，不想帮他这个馆解决问题。',
+     best:'收口 = 具体动作 + 具体时间 + 他必须贡献的一样东西。'}
+  ]}],
+ six:{S:'这次是新馆建设还是老库改造？库房多大面积？现有档案大约多少立方米？这一包含不含环境控制和气体灭火？',
+      P:'这十几年里，有没有出现过返潮发霉、虫鼠、汛期渗水，或者档案盒变形取不出来？',
+      I:'纸质档案损毁是不可逆的 —— 一批修复要多久、能不能修回来？这种事进了档案史志，这一任追责追到谁？',
+      N:'我们不分开做：密集架 + 环境控制 + 恒湿净化 + 气体灭火联动，交付时出第三方承重与环境检测报告，再配逐项验收清单，让您签字那一步有据可依。',
+      C:'这周出一版配置清单 + 验收清单 + 检测样本，周五发您；您把技术评分表的分项拍给我，我照着那几条改。'},
+ fix:'S弱 → 再战张馆长：把「新馆还是改造 / 面积 / 存量立方米 / 包不包环境控制」四样问全再谈钱。'
+ },
+
+/* ---------- 客户二：李主任（法院） ---------- */
+{
+ id:'li', name:'李主任', title:'法院办公室 / 司法行政装备处 主任', tag:'司法系统 · 怕误审判', ava:'李',
+ stage:'普惠金融类案件批量增加，档案库房要扩容。业务部门天天催归档，他被夹在中间。',
+ fear:'开庭前找不到卷，归档延误影响审限 —— 这种事一旦发生，是要被通报的，板子打在办公室和他头上。',
+ treasure:'一年新增多少卷、库房还剩多少立方米、最卡的是哪一类案卷 —— 拿到这三个，方案就是按他的卷量定的。',
+ rounds:[
+  {dim:'S', q:'「业务部门天天催，你们多久能装完？」', opts:[
+    {t:'先问：现在一年大概新增多少卷？库房还剩多少立方米？最急的是哪一类案卷 —— 是普惠金融这类批量案件，还是刑事、民事卷？', s:15,
+     r:'（叹气）一年新增快两万卷了，普惠金融那批最麻烦，库房就剩几十方了。',
+     c:'他问工期，你先问卷量和存量。工期是他表面的急，真正的急是「普惠金融那批往哪放」。你把话问到这里，后面每一句都踩在他的痛上。',
+     best:'背景摸底三件套：年新增卷数 / 库房剩余立方米 / 最急的是哪一类案卷。'},
+    {t:'承诺一个月内完工，让他放心', s:0,
+     r:'（记下来）那你们可得按时。',
+     c:'还没摸清量就承诺工期，等于给自己上枷锁。而且他真正要的不是快，是「别影响开庭」。',
+     best:'背景摸底三件套：年新增卷数 / 库房剩余 / 最急的案卷类型。'},
+    {t:'讲公司规模和做过多少个法院项目', s:5,
+     r:'（翻资料）',
+     c:'不算错，但他现在满脑子是那两万卷。先聊他的卷，别聊你自己。',
+     best:'背景摸底三件套：年新增卷数 / 库房剩余 / 最急的案卷类型。'},
+    {t:'打听今年院里这笔预算批了多少', s:0,
+     r:'（警惕）这个我不能讲。',
+     c:'直接问预算数字，在法院这种单位很犯忌讳。要问「打算先解决哪一段」，别问「有多少钱」。',
+     best:'背景摸底三件套：年新增卷数 / 库房剩余 / 最急的案卷类型。'}
+  ]},
+  {dim:'P', q:'「老办法也能对付，多安排两个人整理归档呗。」', opts:[
+    {t:'问：现在找一份卷平均要多久？有没有出现过开庭前找不到卷、或者归档积压到季度末集中补的情况？', s:15,
+     r:'（敲桌子）……上个月有个庭，卷没找到，法官在庭上等了快二十分钟。',
+     c:'不评价 + 给场景 + 请他回忆。你没说人手不够，是他自己想起了那二十分钟 —— 那是他最难受的一次。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆（找不到卷 / 积压 / 开庭等待）。'},
+    {t:'说加人只是治标，根本要靠系统', s:0,
+     r:'（皱眉）人都不够，还谈什么系统。',
+     c:'你在否定他刚提出的办法，他会本能地维护。先承认加人有用，再追问加人之后还卡在哪。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'},
+    {t:'介绍智能密集架的定位功能有多快', s:5,
+     r:'（不置可否）',
+     c:'讲产品太早。他还没想起那二十分钟，你讲多快他没感觉。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'},
+    {t:'说这样下去会影响审判质效考核', s:0,
+     r:'（不悦）我们院里考核排名不差。',
+     c:'空泛的威胁，还戳到他的自尊。要让他自己算出来，不能你替他说。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'}
+  ]},
+  {dim:'I', q:'「偶尔找不到卷，也不至于那么严重吧。」', opts:[
+    {t:'换算：按您说的一年新增近两万卷，普惠金融又是批量案件 —— 一次开庭前找不到卷，法官和当事人等二十分钟；一个庭室一天好几个庭。更要紧的是，归档一旦积压影响审限，这是要被通报的事，通报下来板子打在办公室。', s:15,
+     r:'（沉默）……通报那两个字，最要命。',
+     c:'把「偶尔」换算成「频次 × 单次代价 × 通报责任」。司法系统最在乎的不是效率，是「别出事别被通报」—— 你算到这一层，他就没法再轻描淡写了。',
+     best:'暗示问题 = 客户原话次数（偶尔）× 单次代价（二十分钟 / 一天几庭）× 后果（通报、审限、追责）。'},
+    {t:'说装上定位功能以后一秒就能找到', s:5,
+     r:'（点头）',
+     c:'有价值，但没换算。「一秒」是产品语言，「通报」才是他要承担的后果。',
+     best:'暗示问题 = 次数 × 单次代价 × 后果。'},
+    {t:'认同他，说偶尔确实难免', s:0,
+     r:'（点头）就是。',
+     c:'你又要亲手缝上伤口了。他说「不至于」的时候，正是你该算账的时候。',
+     best:'暗示问题 = 次数 × 单次代价 × 后果。'},
+    {t:'说别的法院早就换了', s:0,
+     r:'各家情况不一样。',
+     c:'从众没用。法院讲的是本院的实际卷量和自己的考核指标。',
+     best:'暗示问题 = 次数 × 单次代价 × 后果。'}
+  ]},
+  {dim:'N', q:'「那你们到底能解决什么？」', opts:[
+    {t:'出方案：按案卷类型分区布置（普惠金融 / 刑事 / 民事分开定位），再配分期施工 —— 周末和夜间进场，工作日正常开放，不停审不停归档。交付时给一本移交验收清单。', s:15,
+     r:'（坐直）周末进场？这个能写进合同吗 —— 我们审判一天都不能停。',
+     c:'把「我们产品好」换成「不影响你开庭」。对法院来说，最好的方案不是最先进的，是施工期间一天庭都不停。',
+     best:'价值引导 = 按案卷类型分区 + 分期施工不停审，落到「审判一天不断」。'},
+    {t:'说我们有智能定位和快速检索，找卷很快', s:5,
+     r:'（没接话）',
+     c:'功能罗列。他现在最怕的不是找得慢，是施工期间停摆。你要先解他最急的那个。',
+     best:'价值引导 = 分区 + 分期施工不停审。'},
+    {t:'说我们质量可靠、服务到位、价格合理', s:0,
+     r:'（摇头）这些话都差不多。',
+     c:'三个形容词，零个证据。每个供应商都这么说。',
+     best:'价值引导 = 分区 + 分期施工不停审。'},
+    {t:'强调我们是樟树本地源头厂，交期有保障', s:0,
+     r:'（不置可否）',
+     c:'源头厂是你的事，不是他的收益。交期要落到「什么时候进场、分几期、停不停审」。',
+     best:'价值引导 = 分区 + 分期施工不停审。'}
+  ]},
+  {dim:'P', q:'「预算要走流程，今年不一定批得下来。」', opts:[
+    {t:'问：如果批下来，您最想先解决的是哪一段？是先扩普惠金融那批的容量，还是先把剩下几十方的库位盘顺，还是先把消防和环境解决了？', s:15,
+     r:'（想了想）说实话，最急的是先把普惠金融那批的容量腾出来。',
+     c:'预算没批 ≠ 没需求。你不问「什么时候批」，问「批了先解决哪一段」—— 真正的优先级这就出来了：普惠金融扩容。',
+     best:'锁定真实优先级：别问预算何时批，问「批下来先解决哪一段」。'},
+    {t:'说那等预算批了再说，我先做方案', s:0,
+     r:'（点头）',
+     c:'你把主动权交出去了。预算没批的时候，恰恰是帮他写需求的窗口期 —— 等批下来，参数早就被别人写好了。',
+     best:'锁定真实优先级：批下来先解决哪一段？'},
+    {t:'说我们可以先垫资施工', s:0,
+     r:'（摇头）那不行。',
+     c:'法院不可能接受。这句话一说，显得你不懂体制内的规矩。',
+     best:'锁定真实优先级：批下来先解决哪一段？'},
+    {t:'说今年不做明年价格更高', s:0,
+     r:'（不悦）',
+     c:'威胁式销售。他不为所动，只会觉得你在逼他。',
+     best:'锁定真实优先级：批下来先解决哪一段？'}
+  ]},
+  {dim:'C', q:'「你把方案放这儿吧，我们研究研究。」', opts:[
+    {t:'收口：我按您说的年新增近两万卷、剩余几十方，这周三出一版布置图 + 分期施工计划（不停审），普惠金融单独分区。您能不能安排人带我去库房量一次准确尺寸，顺便看一眼现在最堵的是哪一类案卷？量完我再改。', s:15,
+     r:'（点头）周三可以，我让档案室的同志带你去量。',
+     c:'收口 = 具体动作 + 具体时间 + 他必须贡献的一样东西（现场尺寸）。拿到准确尺寸，这单你赢了一半。',
+     best:'收口 = 周三出布置图+分期施工计划，换您让我去现场量一次准确尺寸。'},
+    {t:'说好的，我回去把方案发您邮箱', s:0,
+     r:'（起身）',
+     c:'发完就走，等于把方案交给运气。你连库房多大都没量过，布置图怎么可能对得上？',
+     best:'收口 = 周三出布置图 + 让我去现场量准确尺寸。'},
+    {t:'问预算大概什么时候能批', s:5,
+     r:'不好说。',
+     c:'问时间没用。要问「我要做什么，您给我什么」。',
+     best:'收口 = 周三出布置图 + 让我去现场量准确尺寸。'},
+    {t:'说我们随时能来勘测，您安排就行', s:0,
+     r:'（没接话）',
+     c:'没有具体时间的「随时」，等于没有约定。',
+     best:'收口 = 周三出布置图 + 让我去现场量准确尺寸。'}
+  ]}],
+ six:{S:'现在一年大概新增多少卷？库房还剩多少立方米？最急的是哪一类案卷？',
+      P:'现在找一份卷平均要多久？有没有开庭前找不到卷、或者归档积压到季末集中补的情况？',
+      I:'按一年新增近两万卷，一次找不到卷法官等二十分钟，一个庭室一天好几个庭 —— 归档一积压影响审限，通报下来板子打在办公室。',
+      N:'按案卷类型分区布置，再配分期施工（周末夜间进场），工作日正常开放 —— 不停审、不停归档，交付时给移交验收清单。',
+      C:'周三出一版布置图 + 分期施工计划，普惠金融单独分区；您安排人带我去库房量一次准确尺寸。'},
+ fix:'P弱 → 再战李主任：练「不评价 + 给场景 + 请他回忆」，别替他下结论，也别否定他的老办法。'
+ },
+
+/* ---------- 客户三：王经理（银行） ---------- */
+{
+ id:'wang', name:'王经理', title:'分行 / 农商行 行政部（后勤保障中心）经理', tag:'银行系统 · 怕合规检查', ava:'王',
+ stage:'网点撤并，几个网点的信贷档案和会计凭证要集中到分行库房。他最怕的是集中过程中出岔子，被监管或内审抽到。',
+ fear:'信贷档案、会计凭证一旦缺失或编号对不上，那是合规问题 —— 检查抽到要整改、要通报，责任在他这个口。',
+ treasure:'这次涉及哪几个网点、现有多少箱、多少立方米 —— 拿到这三个，搬迁方案就是按他的台账定的。',
+ rounds:[
+  {dim:'S', q:'「你们比别家贵一点。」', opts:[
+    {t:'问：这次集中涉及哪几个网点？撤并后统一放到哪个库房？现有信贷档案和会计凭证大概多少箱、多少立方米？报价里含不含搬迁、上架和编号整理？', s:15,
+     r:'（翻台账）四个网点，大概两千多箱……搬迁和上架？这个要另算的吧。',
+     c:'别急着辩价，先拆工作范围。「贵一点」往往只是因为别人不含搬迁和编号整理 —— 一问就见分晓。',
+     best:'背景摸底四件套：涉及网点数 / 统一库房位置 / 现有箱数与立方米 / 报价格式（含不含搬迁上架）。'},
+    {t:'直接申请降价，请示领导给个优惠', s:0,
+     r:'（笑）那你们还有空间。',
+     c:'一降就证实报价有水分，而且他下次还会压。银行采购最会的就是比价。',
+     best:'背景摸底四件套：网点数 / 库房位置 / 箱数 / 报价含不含搬迁上架。'},
+    {t:'说我们质量更好，贵得有道理', s:5,
+     r:'（没接话）',
+     c:'空话。他不关心质量排名，他关心两千箱档案搬过去之后账能不能对得上。',
+     best:'背景摸底四件套：网点数 / 库房位置 / 箱数 / 报价含不含搬迁上架。'},
+    {t:'说别家是小厂，价格低是因为偷工减料', s:0,
+     r:'（不悦）人家也做了不少行。',
+     c:'贬低同行。金融系统的采购最反感这种话，反而会觉得你不厚道。',
+     best:'背景摸底四件套：网点数 / 库房位置 / 箱数 / 报价含不含搬迁上架。'}
+  ]},
+  {dim:'P', q:'「网点那些档案放了好几年也没出过事。」', opts:[
+    {t:'问：之前有过网点撤并或者搬迁吗？那时候有没有出现箱号破损、编号对不上，或者某一类凭证（信贷合同、会计传票）事后找不齐的情况？', s:15,
+     r:'（皱眉）……上次搬过一个网点，有几箱信贷合同编号对不上，后来补了快一个月台账。',
+     c:'不评价 + 给场景 + 请他回忆。你没说会出事，是他自己想起了上次补台账那一个月。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆（箱号破损 / 编号对不上 / 某类凭证找不齐）。'},
+    {t:'说这次集中量大，风险肯定比以前高', s:0,
+     r:'（不置可否）',
+     c:'空泛地讲风险。他没想起那一个月的补台账，你讲风险他没体感。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'},
+    {t:'介绍我们的密集架能防火防潮防盗', s:5,
+     r:'（点头）',
+     c:'讲产品太早。他现在最怕的不是架子的性能，是搬迁过程中账对不上。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'},
+    {t:'承诺我们搬绝对不会出问题', s:0,
+     r:'（笑）话说太满了吧。',
+     c:'乱承诺。金融从业者最反感「绝对不会」—— 这句话一说，你的专业度当场归零。',
+     best:'难点问题公式 = 不评价 + 给场景 + 请他回忆。'}
+  ]},
+  {dim:'I', q:'「丢几张凭证也不算大事吧，补一下就是了。」', opts:[
+    {t:'换算：信贷档案和会计凭证有法定保管年限，缺一份就是合规瑕疵 —— 一次监管抽查或内审抽到档案缺失，整改要多久、要不要通报、要不要问责，这个性质跟价格贵一点完全不是一回事。上次您说补台账补了一个月，那还只是编号对不上。', s:15,
+     r:'（沉默）……你说得对，编号错位和凭证缺失，性质完全不同。',
+     c:'把「丢几张」换算成「合规瑕疵 × 整改成本 × 问责性质」。银行人买单的从来不是价格，是「别被抽到」。',
+     best:'暗示问题 = 缺失份数 × 合规性质 × 整改与问责成本（不是钱，是性质）。'},
+    {t:'说我们的密集架有定位和权限管理，丢了能查到', s:5,
+     r:'（点头）',
+     c:'有价值，但没换算成他的合规责任。查得到不等于没有问题，检查看的是账实相符。',
+     best:'暗示问题 = 缺失 × 合规性质 × 问责成本。'},
+    {t:'认同他，说偶尔丢几张确实难免', s:0,
+     r:'（点头）就是。',
+     c:'你又一次把伤口缝上了。在合规话题上附和客户，是最危险的附和。',
+     best:'暗示问题 = 缺失 × 合规性质 × 问责成本。'},
+    {t:'说别家行社也丢过凭证', s:0,
+     r:'（没接话）',
+     c:'比惨没用。合规问题不会因为别人也犯过就免责。',
+     best:'暗示问题 = 缺失 × 合规性质 × 问责成本。'}
+  ]},
+  {dim:'N', q:'「那你给我什么方案？」', opts:[
+    {t:'出「搬迁零差错」方案：逐箱编号条码化 + 按网点分区 + 交接双签交接单 + 上架即定位；库房同步配恒湿净化与气体灭火保护信贷凭证。交付给一本《搬迁上架台账》，账实一次核对清。', s:15,
+     r:'（坐直）逐箱编号还配双签交接单 —— 这个台账能不能直接拿来迎检？',
+     c:'把「卖架子」换成了「交付一本能迎检的台账」。对他来说，设备只是载体，那本台账才是他的护身符。',
+     best:'价值引导 = 逐箱编号 + 双签交接 + 上架即定位 + 迎检台账，落到「账实一次核对清」。'},
+    {t:'报一个更优惠的整体打包价', s:5,
+     r:'（点头）价格嘛，当然是考虑项。',
+     c:'只讲钱。银行采购永远会继续压价，你要给的是他压不下去的理由 —— 那本台账。',
+     best:'价值引导 = 逐箱编号 + 双签交接 + 迎检台账。'},
+    {t:'说我们可以先送货后付款', s:0,
+     r:'（摇头）财务流程不允许。',
+     c:'不懂银行财务规矩。这句话一说，显得你没做过金融客户。',
+     best:'价值引导 = 逐箱编号 + 双签交接 + 迎检台账。'},
+    {t:'说政策跟别家差不多，不会让您吃亏', s:0,
+     r:'（没反应）',
+     c:'「差不多」等于没有。你要给的是别人给不了的东西。',
+     best:'价值引导 = 逐箱编号 + 双签交接 + 迎检台账。'}
+  ]},
+  {dim:'P', q:'「这次预算是上面批的，具体批多少还不确定。」', opts:[
+    {t:'问：如果批下来，您最想先把哪一段做扎实 —— 是先做网点集中（逐箱编号 + 搬迁交接），还是先把库房的环境（恒湿净化、气体灭火）解决掉？', s:15,
+     r:'（想了想）我更想把搬迁交接这段做扎实，凭证不能出错。',
+     c:'预算不确定 ≠ 需求不清。你不问批多少，问「先做哪一段」—— 他的优先级立刻出来：搬迁零差错。',
+     best:'锁定真实优先级：别问批多少，问「先做哪一段」。'},
+    {t:'说那等预算定了我再报方案', s:0,
+     r:'（点头）',
+     c:'你把主动权交出去了。预算没定的时候，正是帮他写需求范围的窗口期。',
+     best:'锁定真实优先级：先做哪一段？'},
+    {t:'建议他先做一部分，剩下的明年再说', s:5,
+     r:'（没接话）',
+     c:'方向对，但没问出他的优先级。你应该让他自己说出「先做搬迁」。',
+     best:'锁定真实优先级：先做哪一段？'},
+    {t:'说我们可以按最低预算先出一个简配方案', s:0,
+     r:'（摇头）简配的东西我不敢用。',
+     c:'主动降价提案。在银行这种单位，「便宜」等于「不靠谱」。',
+     best:'锁定真实优先级：先做哪一段？'}
+  ]},
+  {dim:'C', q:'「我开会讨论一下。」', opts:[
+    {t:'收口：这周我把同类行社的《搬迁交接台账》模板 + 逐箱编号规则 + 上架定位图做出来。您把这次涉及的四个网点清单和现有箱数给我，周五前出一版给您，咱们对着台账对一遍。', s:15,
+     r:'（点头）行，网点清单和箱数我让下面整理给你。',
+     c:'收口 = 具体动作 + 具体时间 + 他必须贡献的一样东西（网点清单和箱数）。拿到台账，这单就锁死了。',
+     best:'收口 = 周五前出台账模板+编号规则+定位图，换您把四个网点清单和现有箱数给我。'},
+    {t:'说好的，那您商量完给我信儿', s:0,
+     r:'（起身）',
+     c:'把结果交给会场。银行里一个会没议完，可能就拖到下个季度了。',
+     best:'收口 = 周五前出三样东西 + 您把网点清单和箱数给我。'},
+    {t:'问会上大概什么时候能定', s:5,
+     r:'不好说，看安排。',
+     c:'问时间没用。要问他给您什么、您给他什么。',
+     best:'收口 = 周五前出三样东西 + 您把网点清单和箱数给我。'},
+    {t:'说我们随时可以签', s:0,
+     r:'（没接话）',
+     c:'没有下一步动作的收口，等于没收。',
+     best:'收口 = 周五前出三样东西 + 您把网点清单和箱数给我。'}
+  ]}],
+ six:{S:'这次集中涉及哪几个网点？撤并后统一放哪个库房？信贷档案和会计凭证大概多少箱、多少立方米？报价含不含搬迁和上架？',
+      P:'之前撤并或搬迁过吗？有没有出现箱号破损、编号对不上，或者某类凭证事后找不齐？',
+      I:'信贷档案和会计凭证有法定保管年限，缺一份就是合规瑕疵 —— 上次编号错位补了一个月台账，那还只是编号；凭证缺失被抽到，性质完全不同。',
+      N:'逐箱编号条码化 + 按网点分区 + 双签交接单 + 上架即定位，交付一本《搬迁上架台账》，账实一次核对清，直接能迎检。',
+      C:'这周出《搬迁交接台账》模板 + 逐箱编号规则 + 上架定位图；您把四个网点清单和现有箱数给我，周五对一遍。'},
+ fix:'I弱 → 再战王经理：练把「丢几张」换算成「合规瑕疵 × 问责性质」，别跟他卷价格。'
+ }
+];
+
+var DIMS = [
+ {k:'S', n:'背景摸底', max:15},
+ {k:'P', n:'难点挖掘', max:30},
+ {k:'I', n:'痛点放大', max:15},
+ {k:'N', n:'价值引导', max:15},
+ {k:'C', n:'推进收口', max:15}
+];
+
+var cur=null, ri=0, score={S:0,P:0,I:0,N:0,C:0}, picked=false;
+
+function startGame(force){
+  var pool;
+  if(force){ pool=[force]; }
+  else{
+    pool = CLIENTS.filter(function(c){ return !c.done; });
+    if(!pool.length){ CLIENTS.forEach(function(c){ c.done=false; }); pool=CLIENTS; }
+  }
+  cur = pool[Math.floor(Math.random()*pool.length)];
+  cur.done = true;
+  ri=0; score={S:0,P:0,I:0,N:0,C:0};
+  document.getElementById('startCard').classList.add('hidden');
+  document.getElementById('cardBox').classList.add('hidden');
+  document.getElementById('playCard').classList.remove('hidden');
+  document.getElementById('ava').textContent=cur.ava;
+  document.getElementById('cname').textContent=cur.name;
+  document.getElementById('ctitle').textContent=cur.title;
+  document.getElementById('ctag').textContent=cur.tag;
+  document.getElementById('cstage').textContent=cur.stage;
+  renderRound();
+}
+
+function renderRound(){
+  picked=false;
+  var r=cur.rounds[ri];
+  document.getElementById('rno').textContent='第 '+(ri+1)+' 轮 / 共 6 轮';
+  document.getElementById('say').textContent=r.q;
+  document.getElementById('fb').innerHTML='';
+  document.getElementById('nextBtn').classList.add('hidden');
+  var box=document.getElementById('opts'); box.innerHTML='';
+  r.opts.forEach(function(o,i){
+    var b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML='<span class="k">'+'ABCD'[i]+'</span>'+o.t;
+    b.onclick=function(){ pick(i,b); };
+    box.appendChild(b);
+  });
+}
+
+function pick(i,btn){
+  if(picked) return; picked=true;
+  var r=cur.rounds[ri], o=r.opts[i];
+  score[r.dim]+=o.s;
+  var all=document.querySelectorAll('#opts .opt');
+  for(var j=0;j<all.length;j++){ all[j].disabled=true; }
+  btn.classList.add('pick');
+  var cls=o.s>=15?'good':(o.s>0?'mid':'bad');
+  var tag=o.s>=15?'+15 满分':(o.s>0?'+'+o.s+' 部分对':'+0 错误');
+  document.getElementById('fb').innerHTML=
+    '<div class="fb">'+
+      '<div class="row"><div class="lb">他的真实反应</div><div class="tx">'+o.r+'</div></div>'+
+      '<div class="row"><div class="lb">教练点评</div><div class="tx">'+o.c+'</div></div>'+
+      '<div class="row"><div class="lb">本题得分</div><span class="sc '+cls+'">'+tag+'</span></div>'+
+      '<div class="best"><b>满分做法 ｜</b>'+o.best+'</div>'+
+    '</div>';
+  var nb=document.getElementById('nextBtn');
+  nb.classList.remove('hidden');
+  nb.textContent=(ri>=5)?'查看战绩卡 →':'继续对话 →';
+}
+
+function nextRound(){
+  if(ri>=5){ showCard(); return; }
+  ri++; renderRound();
+}
+
+function total(){ return score.S+score.P+score.I+score.N+score.C; }
+
+function showCard(){
+  document.getElementById('playCard').classList.add('hidden');
+  var t=total(), pctv=Math.round(t/90*100);
+  var comm;
+  if(pctv>=80) comm='<b>三位客户你都问到了点上。</b>这说明你不是背话术，是真的会问 —— 同一个岗位换个人，你也能挖出同样的账。';
+  else if(pctv>=55) comm='<b>节奏基本对，个别轮次操之过急。</b>你卡在「时机感」：要么痛还没挖透就抛方案，要么客户已经给你信号了你还在讲产品。重点复盘上面拿 0 分那几轮。';
+  else comm='<b>别灰心，每个销冠都死过这几个坑。</b>你现在的习惯是「先讲我们有什么」—— 这恰恰是客户防御最强的时候。回去把 SPIN 的顺序重刷一遍，先问，再讲。';
+
+  var weak=DIMS[0], wr=999;
+  DIMS.forEach(function(d){
+    var rate=score[d.k]/d.max;
+    if(rate<wr){ wr=rate; weak=d; }
+  });
+  var fixMap={
+    'S':CLIENTS[0].fix,'P':CLIENTS[1].fix,'I':CLIENTS[2].fix,
+    'N':CLIENTS[0].fix,
+    'C':'收口弱 → 随便挑一位重打，专练最后一句：具体动作 + 具体时间 + 他必须贡献的一样东西。'
+  };
+
+  var bars='';
+  DIMS.forEach(function(d){
+    var p=Math.round(score[d.k]/d.max*100);
+    bars+='<div class="b"><div class="lb2"><span>'+d.n+'</span><span>'+score[d.k]+' / '+d.max+'（'+p+'%）</span></div>'+
+          '<div class="track"><div class="fill" style="width:'+p+'%"></div></div></div>';
+  });
+
+  var sixMap={S:'S · 背景摸底',P:'P · 难点挖掘',I:'I · 痛点放大',N:'N · 价值引导',C:'收口 · 下一步'};
+  var six='';
+  DIMS.forEach(function(d){
+    six+='<div><span class="t">'+sixMap[d.k]+'</span>'+cur.six[d.k]+'</div>';
+  });
+
+  document.getElementById('cardBox').innerHTML=
+   '<div class="who"><div class="ava" style="background:var(--gold);color:#4A3200">卡</div>'+
+     '<div><div class="nm">战绩卡 ｜ '+cur.name+'</div><div class="ti">'+cur.title+'</div></div></div>'+
+   '<div class="total"><span class="n">'+t+'</span><span class="u">/ 90 分</span></div>'+
+   '<div class="pct">百分制 '+pctv+' 分 ｜ 最弱的一维：<b>'+weak.n+'</b></div>'+
+   '<div class="bars">'+bars+'</div>'+
+   '<div class="comm">'+comm+'</div>'+
+   '<h3 class="sec">通关揭秘 · 他真正怕什么</h3>'+
+   '<div class="secret"><div><b>真正怕的：</b>'+cur.fear+'</div>'+
+     '<div><b>最值钱的：</b>'+cur.treasure+'</div></div>'+
+   '<h3 class="sec">满分话术六连（可直接带走背）</h3>'+
+   '<div class="six">'+six+'</div>'+
+   '<h3 class="sec">教练建议 · 下一局</h3>'+
+   '<div class="comm">'+fixMap[weak.k]+'</div>'+
+   '<button class="btn" onclick="startGame()">再战一位客户 →</button>'+
+   '<button class="btn ghost" onclick="againSame()">同一位客户再练一遍</button>'+
+   '<button class="btn gold" onclick="copyCard()">📋 复制我的战绩</button>';
+  var box=document.getElementById('cardBox');
+  box.classList.remove('hidden');
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function againSame(){
+  var f=CLIENTS.filter(function(c){return c.id===cur.id;})[0];
+  startGame(f);
+}
+
+function copyCard(){
+  var t=total(), pctv=Math.round(t/90*100);
+  var s='【源金版 · 拜访模拟训练 · 战绩卡】\n'+
+    '客户：'+cur.name+'（'+cur.title+'）\n'+
+    '得分：'+t+' / 90（百分制 '+pctv+' 分）\n'+
+    '背景摸底 '+score.S+'/15 ｜ 难点挖掘 '+score.P+'/30 ｜ 痛点放大 '+score.I+'/15 ｜ 价值引导 '+score.N+'/15 ｜ 推进收口 '+score.C+'/15\n'+
+    '—— 发到团队群，@销售负责人 约下一关。';
+  var ta=document.createElement('textarea');
+  ta.value=s; document.body.appendChild(ta); ta.select();
+  try{document.execCommand('copy'); alert('战绩已复制，发到团队群 @销售负责人 约下一关。');}
+  catch(e){ prompt('复制这段战绩：', s); }
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
