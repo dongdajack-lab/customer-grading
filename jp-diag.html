@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天地人健康度诊断 · 日本场（23题）</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#F5F6F8;color:#1d1d1f;line-height:1.7;font-size:15px}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 60px}
+.head{background:linear-gradient(135deg,#123C6B,#1d4f85);color:#fff;padding:20px 18px 18px;margin:0 -14px 14px}
+.badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 13px;font-size:11.5px;letter-spacing:1.5px}
+.head h1{font-size:21px;margin:9px 0 5px;font-weight:600}
+.head p{font-size:12.5px;color:#CBD9EA;line-height:1.7}
+.privacy{background:#FFF8F6;border:0.5px solid #F0D5CE;border-radius:10px;padding:11px 13px;font-size:12.5px;color:#7a3a30;margin:12px 0}
+.type-box{background:#fff;border-radius:12px;padding:14px 15px;margin-bottom:12px;border:0.5px solid #E4E7EC}
+.type-box .t{font-size:14px;font-weight:600;margin-bottom:8px}
+.type-opts{display:flex;gap:8px;flex-wrap:wrap}
+.type-btn{font-family:inherit;font-size:14px;padding:8px 14px;border:1px solid #C9D6E6;border-radius:9px;background:#fff;color:#123C6B;cursor:pointer}
+.type-btn.sel{background:#123C6B;color:#fff;border-color:#123C6B}
+.nav{display:flex;gap:6px;margin-bottom:12px}
+.nav button{flex:1;font-family:inherit;font-size:14px;padding:9px 4px;border:0;border-radius:9px;background:#fff;color:#666;cursor:pointer;border:.5px solid #E4E7EC}
+.nav button.on{background:#123C6B;color:#fff;border-color:#123C6B}
+.card{background:#fff;border-radius:12px;padding:16px 15px;margin-bottom:12px;border:.5px solid #E4E7EC}
+.sec-title{font-size:17px;font-weight:600;margin-bottom:3px}
+.sec-sub{font-size:12.5px;color:#8a8a90;margin-bottom:11px}
+.bar-wrap{height:5px;background:#EEF0F4;border-radius:3px;overflow:hidden;margin-bottom:5px}
+.bar{height:100%;width:0;background:#123C6B;border-radius:3px;transition:width .3s}
+.prog-text{font-size:11.5px;color:#999;margin-bottom:12px}
+.q-wrap{padding:13px 0;border-top:.5px solid #F0F1F3}
+.q-wrap:first-child{border-top:0}
+.q-text{font-size:14.5px;line-height:1.65;margin-bottom:9px}
+.q-num{display:inline-block;min-width:20px;text-align:center;border-radius:5px;padding:1px 5px;font-size:12px;font-weight:600;margin-right:5px}
+.score-row{display:flex;gap:6px;flex-wrap:wrap}
+.score-btn{font-family:inherit;font-size:13px;padding:7px 10px;border:1px solid #DDD;border-radius:8px;background:#fff;color:#555;cursor:pointer;flex:1;min-width:96px}
+.score-btn.sel-1{background:#FDF0EC;border-color:#B85042;color:#993C1D}
+.score-btn.sel-2{background:#FDF4EC;border-color:#BA7517;color:#854F0B}
+.score-btn.sel-3{background:#E9F1FB;border-color:#378ADD;color:#185FA5}
+.score-btn.sel-4{background:#EDF6EA;border-color:#639922;color:#3B6D11}
+.followup-box{background:#FAFBFC;border:.5px solid #E4E7EC;border-radius:9px;padding:11px 12px;margin-top:9px}
+.followup-label{font-size:11.5px;color:#999;letter-spacing:.5px}
+.followup-q{font-size:13.5px;font-weight:600;margin:3px 0 8px}
+.followup-opt{font-family:inherit;font-size:13px;text-align:left;padding:8px 11px;border:1px solid #DDD;border-radius:8px;background:#fff;color:#444;cursor:pointer;margin-bottom:5px;display:block;width:100%}
+.followup-opt.sel{background:#FFF4E8;border-color:#BA7517;color:#854F0B}
+.btn{font-family:inherit;width:100%;padding:13px;border:0;border-radius:11px;background:#123C6B;color:#fff;font-size:15px;cursor:pointer;margin-top:12px}
+.btn.ghost{background:#fff;color:#123C6B;border:1px solid #C9D6E6}
+.dim-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.dim-name{width:78px;font-size:13.5px;font-weight:600;flex-shrink:0}
+.dim-bar{flex:1;height:22px;background:#EEF0F4;border-radius:5px;overflow:hidden;position:relative}
+.dim-bar i{display:block;height:100%;border-radius:5px}
+.dim-score{width:76px;text-align:right;font-size:13px;color:#555;flex-shrink:0}
+.total{text-align:center;padding:6px 0 14px}
+.total .big{font-size:40px;font-weight:600;color:#123C6B}
+.total .lb{font-size:12px;color:#999}
+.act{background:#FFF8F6;border:.5px solid #F0D5CE;border-radius:10px;padding:12px 14px;font-size:14.5px;color:#7a3a30;line-height:1.75}
+.act b{color:#B85042}
+.li-item{background:#FAFBFC;border-radius:9px;padding:10px 12px;margin-bottom:7px;font-size:13.5px;line-height:1.7}
+.li-item .q{font-weight:600}
+.li-item .d{color:#777;font-size:13px;margin-top:2px}
+.foot{text-align:center;font-size:12px;color:#aaa;margin-top:14px;line-height:1.8}
+@media print{.nav,.btn,.score-row,.followup-box{display:none!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="badge">日本场 · 天地人健康度诊断</div>
+    <h1>天地人 · 事业健康度诊断（23 题）</h1>
+    <p>天 8 题 · 地 8 题 · 人 7 题　│　约 12 分钟<br>不给标准答案，只看你自己这块生意的形状</p>
+  </div>
+
+  <div class="privacy">
+    这一页<b>不用填姓名、不用填公司名，也不上传任何数据</b>。<br>
+    全程在您自己手机上算，关掉页面就没了。教室里也不会有人知道谁得了多少分。
+  </div>
+
+  <div class="type-box">
+    <div class="t">第一问，不计分：你的生意更接近哪一种？</div>
+    <div class="type-opts">
+      <button class="type-btn" id="type-a" onclick="setType('b2b')">做单的公司（有单可跟）</button>
+      <button class="type-btn" id="type-b" onclick="setType('toc')">开店的生意（客人上门）</button>
+      <button class="type-btn" id="type-c" onclick="setType('both')">两种都有</button>
+    </div>
+  </div>
+
+  <div class="nav" id="nav">
+    <button id="nav-sky" class="on" onclick="go('sky')">天 · 往哪打 8题</button>
+    <button id="nav-land" onclick="go('land')">地 · 怎么打 8题</button>
+    <button id="nav-people" onclick="go('people')">人 · 派谁打 7题</button>
+  </div>
+
+  <div id="sec-sky" class="card">
+    <div class="sec-title" style="color:#993C1D">天 · 往哪打</div>
+    <div class="sec-sub">资源押在哪儿、不做什么 —— 这一层错了，后面都是白做</div>
+    <div class="bar-wrap"><i class="bar" id="sky-bar" style="background:#993C1D"></i></div>
+    <div class="prog-text" id="sky-prog">已完成 0 / 8 题</div>
+    <div id="sky-qs"></div>
+  </div>
+
+  <div id="sec-land" class="card" style="display:none">
+    <div class="sec-title" style="color:#185FA5">地 · 怎么打</div>
+    <div class="sec-sub">过程能不能说清、能不能复制 —— 决定了离了谁行不行</div>
+    <div class="bar-wrap"><i class="bar" id="land-bar" style="background:#185FA5"></i></div>
+    <div class="prog-text" id="land-prog">已完成 0 / 8 题</div>
+    <div id="land-qs"></div>
+  </div>
+
+  <div id="sec-people" class="card" style="display:none">
+    <div class="sec-title" style="color:#3B6D11">人 · 派谁打</div>
+    <div class="sec-sub">分工、复制、激励 —— 决定了你能不能不在场</div>
+    <div class="bar-wrap"><i class="bar" id="people-bar" style="background:#3B6D11"></i></div>
+    <div class="prog-text" id="people-prog">已完成 0 / 7 题</div>
+    <div id="people-qs"></div>
+  </div>
+
+  <div id="sec-result" style="display:none"></div>
+
+  <div class="foot" id="next-hint">
+    做完三块后，点下面这颗按钮看结果<br>大董老师 · 天地人销售管理体系
+  </div>
+  <button class="btn" id="to-result" onclick="toResult()" style="display:none">看我的诊断结果</button>
+
+</div>
+
+<script>
+var TYPE = '';
+var TYPENAME = {b2b:'做单的公司', toc:'开店的生意', both:'两种都有'};
+
+var QS = {
+sky:[
+ {id:'s1',text:'你能否说清：撑起你一半以上收入的，是哪一类客户（或哪一类货）？',
+  fu:{q:'说不清，最接近哪种情况？',opts:['从来没有算过这种数','凭感觉大概知道，说不出准确数','算过一次，之后就没再看','数据散在不同地方，凑不齐']}},
+ {id:'s2',text:'你是否按「值不值得花时间」，把客户（开店的是品类和客群）分过级？',
+  fu:{q:'分级没落地，最大的障碍是什么？',opts:['不知道该怎么分','数据不完整，算不出来','有标准但没人执行','分完之后不知道怎么用']}},
+ {id:'s3',text:'有没有明确「不做什么」——哪一种客户、哪一类生意，你是不接（不主推）的？',
+  fu:{q:'做不到取舍，最主要的原因是？',opts:['怕丢生意，不敢不要','没有判断标准，只能都做','有人提过，但没被执行','怕得罪客户（客人），不好开口']}},
+ {id:'s4',text:'今年要做到什么结果，你有没有一个说得出来的数，而不是「比去年好就行」？',
+  fu:{q:'定不出这个数，主要缺什么？',opts:['没有去年的分类数据，算不出基数','不知道这块市场能做多大','只看总流水，从来没拆过','目标只在老板脑子里，没跟团队说过']}},
+ {id:'s5',text:'今年重点是拉新还是守老客户（守老品类），你和团队是不是同一个说法？',
+  fu:{q:'重心没对齐，最接近哪一种？',opts:['老板知道，但没跟团队讲过','讲过一次，没有配套动作','每个人自己决定往哪使劲','嘴上说拉新，考核还是看总业绩']}},
+ {id:'s6',text:'你的生意有没有明确的聚焦（区域、品类、客户类型），还是什么有钱赚做什么？',
+  fu:{q:'资源分散，最明显的表现是？',opts:['什么客户都接，来者不拒','什么品类都上，货架越来越挤','老板一人身兼数职，注意力散','有方向，但执行层没跟上']}},
+ {id:'s7',text:'你会不会定期（至少每季度）回头看一次「这个方向还对不对」，而不只是看赚了多少？',
+  fu:{q:'没做这件事，原因是？',opts:['没有固定的复盘节奏','只看流水，从不讨论方向','知道要做，一忙就忘了','不知道该看什么指标']}},
+ {id:'s8',text:'你的对手在做什么、靠什么把你的客户抢走，你能说清吗？',
+  fu:{q:'竞争分析没做，最接近哪一种？',opts:['从来没有系统看过同行','知道对手是谁，不知道他们怎么打','看过，但没形成对策','有对策，现场还是各打各的']}}
+],
+land:[
+ {id:'l1',text:'最好卖的那笔生意，从客人上门（从认识客户）到成交，每一步你能说清吗？',
+  fu:{q:'过程说不清，原因是？',opts:['每个客户都不一样，觉得没法标准','试过梳理，没坚持下去','老人会做就行了，没必要写','不知道该怎么划分步骤']}},
+ {id:'l2',text:'这套动作有没有写下来，写到一个新人照着做就能做到七八成？',
+  fu:{q:'没写下来，最直接的影响是？',opts:['新人要大半年才能上手','好坏全靠人，换一个人就垮','方法总结不出来，讲不清','新人因为不知道做什么而留不住']}},
+ {id:'l3',text:'值钱的客户（主推的品类）和不值钱的，你花的时间是不是真的不一样？',
+  fu:{q:'差别没做出来，结果是？',opts:['最好的客户也没有被特殊对待','不赚钱的客户（品类）占掉大量精力','时间怎么分配，全靠人自觉','有差别，但没形成规矩']}},
+ {id:'l4',text:'关键动作有没有配套的清单、话术、模板，还是全靠个人经验？',
+  fu:{q:'最缺工具的环节是哪个？',opts:['开口之前没有准备清单','了解需求靠感觉，问不成系统','推荐（报价）全凭个人水平','临门一脚没有抓手，容易被压价']}},
+ {id:'l5',text:'每次关键接触，有没有留下一条记录：谁、说了什么、下一步干什么？',
+  fu:{q:'记录没人记，最主要的原因是？',opts:['嫌麻烦，转头就忘','记了也没人看，干脆不记','忙起来根本顾不上','没有统一地方记，散在各处']}},
+ {id:'l6',text:'你手上有没有一张能随时看的数：在跟什么、停在哪一步、下一步干什么？',
+  fu:{q:'没有这张表，结果是？',opts:['不知道卡在哪一步','预测不了下个月','不知道该辅导谁','出了问题只能事后追责']}},
+ {id:'l7',text:'生意和团队有没有固定的复盘节奏（周或月），而不是想起才问一句？',
+  fu:{q:'定不下来的原因是？',opts:['老板忙，顾不上定时开','开了会也没结论，不如不开','没人张罗这件事','不知道复盘该问什么问题']}},
+ {id:'l8',text:'上面的记录、统计、复盘，现在靠人手写，还是有东西在替你记？',
+  fu:{q:'想用工具但没用起来，最接近？',opts:['不知道从哪儿开始','试过一次，嫌麻烦就没继续','东西太多，不知道选哪个','团队没人会用、没人愿意试']}}
+],
+people:[
+ {id:'p1',text:'团队每个人（哪怕就两三个人）负责什么，能不能一句话说清？',
+  fu:{q:'说不清，最接近哪一种？',opts:['一人身兼数职，根本说不清','有分工但经常交叉打架','从来没有书面职责','人太少，谁能干谁上']}},
+ {id:'p2',text:'谁能卖、谁不能卖（谁卖得动、谁卖不动），你能说出差别在哪一步吗？',
+  fu:{q:'说不出差别，因为？',opts:['没有可对照的标准','做得好的人也说不出自己做了什么','没有记录，没法比较','从来没有人分析过这件事']}},
+ {id:'p3',text:'最厉害的那个人（或老板你自己）的打法，有没有沉淀成别人能抄的东西？',
+  fu:{q:'没沉淀下来，结果是？',opts:['他一走，这套东西就断了','方法只在老板脑子里','新人只能自己摸索','会的人不愿意教']}},
+ {id:'p4',text:'新人上手，有没有明确的时间和办法，还是跟着看、看悟性？',
+  fu:{q:'没有一个体系，最接近？',opts:['跟着看，多久学会看悟性','有人带，但带的人各不相同','没有说到哪一步算学会','招不到合适的人，谈不上培养']}},
+ {id:'p5',text:'提成和绩效的设计，是不是在奖励你真正想让他做的那件事？',
+  fu:{q:'激励跑偏，最明显的表现？',opts:['只看结果，过程没人管','想让他推新品（贵品），人还是挑好卖的','干好干坏差别不大','激励方案自己也说不清楚']}},
+ {id:'p6',text:'你离开一个月，这摊生意能不能自己转起来？',
+  fu:{q:'离不开你，最主要的原因是？',opts:['关键客户（渠道、供应商）只认你','价格和折扣只有你能定','团队不敢做决定','没人知道下一步该干什么']}},
+ {id:'p7',text:'团队里有没有一个人在琢磨：怎么用 AI 和新工具把手上的活变省事？',
+  fu:{q:'没人琢磨，最接近？',opts:['老板自己也不知道怎么用','用过通用 AI，不知道怎么落到生意上','团队太忙，没时间试','怕出错，不敢用']}}
+]};
+
+var answers = {};
+var fus = {};
+var TYPE_LABEL = '';
+
+function setType(t){
+  TYPE = t;
+  ['b2b','toc','both'].forEach(function(k){
+    var el = document.getElementById('type-'+(k==='b2b'?'a':k==='toc'?'b':'c'));
+    if(el) el.className = 'type-btn' + (k===t?' sel':'');
+  });
+}
+
+var COLORS = {sky:'#993C1D', land:'#185FA5', people:'#3B6D11'};
+var SECNAME = {sky:'天 · 往哪打', land:'地 · 怎么打', people:'人 · 派谁打'};
+
+function build(sec){
+  var box = document.getElementById(sec+'-qs');
+  box.innerHTML = '';
+  QS[sec].forEach(function(q,i){
+    var d = document.createElement('div');
+    d.className = 'q-wrap';
+    var h = '<div class="q-text"><span class="q-num" style="background:'+COLORS[sec]+'22;color:'+COLORS[sec]+'">'+(i+1)+'</span>'+q.text+'</div>';
+    h += '<div class="score-row">';
+    ['1 · 完全没有','2 · 想过没落地','3 · 部分做到','4 · 基本成形'].forEach(function(l,idx){
+      h += '<button class="score-btn" id="sb-'+q.id+'-'+(idx+1)+'" onclick="setScore(\''+q.id+'\',\''+sec+'\','+(idx+1)+')">'+l+'</button>';
+    });
+    h += '</div><div class="followup-box" id="fu-'+q.id+'" style="display:none"></div>';
+    d.innerHTML = h;
+    box.appendChild(d);
+  });
+}
+
+function findQ(id){
+  for(var s in QS){ for(var i=0;i<QS[s].length;i++){ if(QS[s][i].id===id) return QS[s][i]; } }
+  return null;
+}
+
+function setScore(id, sec, v){
+  answers[id] = v;
+  for(var i=1;i<=4;i++){
+    var b = document.getElementById('sb-'+id+'-'+i);
+    if(b) b.className = 'score-btn' + (i===v ? ' sel-'+i : '');
+  }
+  var box = document.getElementById('fu-'+id);
+  var q = findQ(id);
+  if(v <= 2 && q && q.fu){
+    box.style.display = 'block';
+    var sel = fus[id] !== undefined ? fus[id] : -1;
+    var h = '<div class="followup-label">深度追问 · 帮你定位真正的卡点</div><div class="followup-q">'+q.fu.q+'</div>';
+    q.fu.opts.forEach(function(o,idx){
+      h += '<button class="followup-opt'+(idx===sel?' sel':'')+'" onclick="setFu(\''+id+'\','+idx+')">'+o+'</button>';
+    });
+    box.innerHTML = h;
+  } else {
+    box.style.display = 'none';
+    delete fus[id];
+  }
+  prog(sec);
+}
+
+function setFu(id, idx){
+  fus[id] = idx;
+  var box = document.getElementById('fu-'+id);
+  var bs = box.querySelectorAll('.followup-opt');
+  for(var i=0;i<bs.length;i++){ bs[i].className = 'followup-opt' + (i===idx?' sel':''); }
+}
+
+function prog(sec){
+  var done = QS[sec].filter(function(q){ return answers[q.id]!==undefined; }).length;
+  document.getElementById(sec+'-bar').style.width = Math.round(done/QS[sec].length*100)+'%';
+  document.getElementById(sec+'-prog').textContent = '已完成 '+done+' / '+QS[sec].length+' 题';
+  allDone();
+}
+
+function allDone(){
+  var total = 0, got = 0;
+  for(var s in QS){ QS[s].forEach(function(q){ total++; if(answers[q.id]!==undefined) got++; }); }
+  document.getElementById('to-result').style.display = (got === total) ? 'block' : 'none';
+  document.getElementById('next-hint').style.display = (got === total) ? 'none' : 'block';
+}
+
+function go(sec){
+  ['sky','land','people'].forEach(function(s){
+    document.getElementById('sec-'+s).style.display = (s===sec)?'block':'none';
+    document.getElementById('nav-'+s).className = (s===sec)?'on':'';
+  });
+  window.scrollTo(0,0);
+}
+
+function score(sec){
+  var sum = 0, n = 0;
+  QS[sec].forEach(function(q){ if(answers[q.id]!==undefined){ sum += answers[q.id]; n++; } });
+  return n ? Math.round(sum/n/4*100) : 0;
+}
+
+function lvl(v){
+  if(v>=85) return {c:'#3B6D11', t:'扎实'};
+  if(v>=70) return {c:'#639922', t:'基本成形'};
+  if(v>=55) return {c:'#BA7517', t:'有框架没落实'};
+  if(v>=40) return {c:'#B85042', t:'明显短板'};
+  return {c:'#993C1D', t:'基本空白'};
+}
+
+var ACTIONS = {
+  sky:{b2b:'这周就把客户按去年的贡献排一次，抄出前 20%；剩下这批，这个季度不再投入新的时间。',
+       toc:'这周把货架（或菜单）按毛利排一次，找出占位置最赚钱的三块，和最不赚钱的三块。',
+       both:'先挑生意里最大的那一摊动手，别两边同时改——同时改等于都不改。'},
+  land:{b2b:'挑一个正在跟的单，把从认识到成交的步骤写下来，五到七步就够，别追求完美。',
+        toc:'挑一类最常卖的货，把客人从进店到成交的动作写下来，五到七步就够。',
+        both:'挑一个最常发生的场景，把它写成五到七步，让第二个人照着做一遍试试。'},
+  people:{b2b:'这周开始，周会只问一句：这个单下一步是什么、谁负责、什么时候。不许汇报，只答这一句。',
+          toc:'这周开始，每天收工问一句：今天进店没买的人，为什么没买。连续问五天。',
+          both:'这周开始，每次碰面只问一句：下一步是什么、谁负责、什么时候。'}
+};
+
+function toResult(){
+  var sky = score('sky'), land = score('land'), peo = score('people');
+  var total = Math.round((sky+land+peo)/3);
+  var dims = [{k:'sky',v:sky},{k:'land',v:land},{k:'people',v:peo}];
+  dims.sort(function(a,b){ return a.v-b.v; });
+  var weak = dims[0].k;
+
+  var h = '';
+  h += '<div class="card"><div class="total"><div class="big">'+total+'</div><div class="lb">综合健康度（满分 100）</div></div>';
+  ['sky','land','people'].forEach(function(s){
+    var v = {sky:sky,land:land,people:peo}[s];
+    var L = lvl(v);
+    h += '<div class="dim-row"><div class="dim-name" style="color:'+COLORS[s]+'">'+SECNAME[s]+'</div>'
+      + '<div class="dim-bar"><i style="width:'+v+'%;background:'+COLORS[s]+'"></i></div>'
+      + '<div class="dim-score">'+v+' 分 · '+L.t+'</div></div>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><div class="sec-title">今天先做这一件事</div>'
+     + '<div class="sec-sub">你的生意类型：'+(TYPENAME[TYPE]||'未选择')+'　│　最弱的一层：'+SECNAME[weak]+'</div>'
+     + '<div class="act">'+ACTIONS[weak][TYPE||'both']+'</div></div>';
+
+  var low = [];
+  ['sky','land','people'].forEach(function(s){
+    QS[s].forEach(function(q){
+      if(answers[q.id]!==undefined && answers[q.id]<=2){
+        var pick = (fus[q.id]!==undefined && q.fu) ? q.fu.opts[fus[q.id]] : '';
+        low.push('<div class="li-item"><div class="q">'+SECNAME[s]+'：'+q.text+'</div>'+(pick?'<div class="d">你自己选的卡点 → '+pick+'</div>':'')+'</div>');
+      }
+    });
+  });
+  if(low.length){
+    h += '<div class="card"><div class="sec-title">你给自己点出来的卡点（'+low.length+' 处）</div>'
+       + '<div class="sec-sub">这些是你打了 1 分或 2 分的题目</div>'+low.join('')+'</div>';
+  }
+
+  h += '<div class="card"><div class="sec-title">下一步</div>'
+     + '<div style="font-size:13.5px;color:#666;line-height:1.8">这张结果只在您自己手机上，关掉就没了，建议截一张图留着。<br>'
+     + '等一会儿老师会问：天、地、人，你最弱的是哪一块 —— 举手就行，不用说分数。</div></div>';
+
+  h += '<button class="btn no-print" onclick="go(\'sky\')">回去改答案</button>'
+     + '<div class="foot">大董老师 · 天地人销售管理体系<br>2026.10.25 日本场</div>';
+
+  var r = document.getElementById('sec-result');
+  r.innerHTML = h;
+  ['sky','land','people'].forEach(function(s){ document.getElementById('sec-'+s).style.display='none'; });
+  document.getElementById('nav').style.display='none';
+  document.getElementById('to-result').style.display='none';
+  document.getElementById('next-hint').style.display='none';
+  r.style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+['sky','land','people'].forEach(build);
+</script>
+</body>
+</html>
