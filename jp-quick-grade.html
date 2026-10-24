@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>你的时间花对客户了吗 · 日本场</title>
+<title>你的力气花对地方了吗 · 日本场</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;background:#F4F6F9;color:#2C2C2A;line-height:1.6;padding:18px 16px 40px}
@@ -26,8 +26,14 @@ h1{font-size:20px;color:#123C6B;font-weight:600}
 .btn{display:block;width:100%;background:#123C6B;color:#fff;border:0;padding:13px;border-radius:11px;font-size:15px;font-family:inherit;cursor:pointer;margin-top:4px}
 .btn:disabled{background:#C9D2DF;cursor:not-allowed}
 .btn.ghost{background:#fff;color:#123C6B;border:1px solid #C9D6E6;margin-top:9px}
+.mode{display:block;width:100%;text-align:left;background:#fff;border:1px solid #E4E8EE;border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer;font-family:inherit;transition:.12s}
+.mode:hover{border-color:#123C6B}
+.mode b{display:block;font-size:15px;color:#123C6B;font-weight:600;margin-bottom:3px}
+.mode span{display:block;font-size:12.5px;color:#555;line-height:1.5}
+.small{font-size:11.5px;color:#8A8A8A;margin-top:8px;line-height:1.65}
+.back{font-size:12px;color:#8A8A8A;margin:0 0 12px 2px;cursor:pointer;text-decoration:underline;display:inline-block}
 .lv{text-align:center;padding:6px 0 10px}
-.lv .grade{font-size:46px;font-weight:600;letter-spacing:2px;line-height:1}
+.lv .grade{font-size:44px;font-weight:600;letter-spacing:1px;line-height:1}
 .lv .tag{font-size:12.5px;color:#8A8A8A;margin-top:6px}
 .pie{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:14px 0 8px;background:#EEF0F4}
 .pie i{display:block;height:100%}
@@ -38,42 +44,126 @@ h1{font-size:20px;color:#123C6B;font-weight:600}
 .adv b{color:#B85042}
 .adv .h{font-size:12px;color:#8A8A8A;margin-bottom:4px}
 .tip{font-size:11.5px;color:#A0A0A0;text-align:center;margin-top:16px;line-height:1.7}
-.small{font-size:11.5px;color:#8A8A8A;margin-top:8px;line-height:1.65}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="head">
-    <div class="badge">日本场 · 全员动手 ②</div>
-    <h1>你的时间，花对客户了吗</h1>
-    <div class="sub">选一个你现在最费心的客户，六个问题，三十秒<br>不记名、不保存、只有你自己看得见</div>
+    <div class="badge">日本场 · 天字篇</div>
+    <h1>你的力气，花对地方了吗</h1>
+    <div class="sub">先选你要分的是什么，六个问题，三十秒<br>不记名、不保存、只有你自己看得见</div>
   </div>
   <div id="app"></div>
-  <div class="tip">这里分的是「你该给他多少时间」，不是「这个客户好不好」<br>分级标准可以按你行业调，敢分这件事不能调</div>
+  <div class="tip">这里分的是「你该给他多少力气」，不是「他好不好」<br>标准可以按你的行业调，敢分这件事不能调</div>
 </div>
 <script>
-var DIMS = [
-  {id:'amt', tag:'金额', q:'这一年，他大概值多少钱？', opts:['远高于平均','中等偏上','偏低','很小']},
-  {id:'dec', tag:'决策', q:'这单谁拍板？', opts:['他本人拍板','需报上级','多人商量','还说不清']},
-  {id:'rep', tag:'复购', q:'他会不会再来？', opts:['稳定复购','可能再来','一次性','很难说']},
-  {id:'ref', tag:'转介', q:'他会不会给你介绍人？', opts:['已经介绍过','愿意介绍','不确定','不会']},
-  {id:'mgn', tag:'利润', q:'这单你赚不赚钱？', opts:['高于平均','正常','偏低','基本不赚']},
-  {id:'fit', tag:'配合', q:'跟他沟通顺不顺？', opts:['很顺','一般','费劲','很累']}
-];
-var GRADE = {
-  S:{c:'#1D9E75', nm:'S 级 · 该多给时间', adv:'这类客户不是「服务好一点」，是「多给资源」。他值你一半的时间。<b>你现在给他的时间，够吗？</b>'},
-  A:{c:'#378ADD', nm:'A 级 · 守住别掉级', adv:'守住，别掉级。掉级通常不是客户变了，是你松了。<b>每个季度主动找他一次，不要等他找你。</b>'},
-  B:{c:'#EF9F27', nm:'B 级 · 控投入', adv:'用标准流程跟，不要用你的时间跟。<b>他值得流程，不值得你亲自跑。</b>'},
-  C:{c:'#D85A30', nm:'C 级 · 主动放弃', adv:'该放就放。你在他身上花的时间，是从 S 级客户那里偷来的。<b>放弃不是失礼，是把时间还回去。</b>'}
+var MODES = {
+
+  item: {
+    label: '我开店 · 分品类',
+    ph: '品类名（可以不填，例：护肤品、清酒、卡项）',
+    tail: '货架和进货的钱，该给哪个品',
+    what: '这个品，该占你多少货架和精力',
+    unit: '其他品类',
+    again: '换一个品再算一遍',
+    home: '回家之后，把你货架上最大的五个品类各算一遍',
+    home2: '如果五个里有两个 C，你就知道位置该从哪儿腾了',
+    dims: [
+      {id:'amt', tag:'贡献', q:'这个品，一年给你带来多少营业额？', opts:['占很大一块','中等','偏少','基本没动']},
+      {id:'mgn', tag:'利润', q:'这个品，你赚不赚钱？', opts:['毛利很高','正常','偏低','基本不赚']},
+      {id:'rep', tag:'回头', q:'买这个品的人，会不会再来买？', opts:['经常回头','偶尔','一次性','很少回头']},
+      {id:'ref', tag:'带客', q:'这个品能不能把别的客人带进门、带动别的品？', opts:['能带一大片','能带一点','带不动','只有它自己卖']},
+      {id:'fit', tag:'省心', q:'这个品你卖起来费不费劲？', opts:['不用讲就走','讲两句','要讲很久','讲半天还不一定买']},
+      {id:'trd', tag:'顺势', q:'这个品，现在还有人主动来找吗？', opts:['经常有人问','偶尔有人问','很少','基本没人问了']}
+    ],
+    G: {
+      S:{c:'#1D9E75', nm:'S 品 · 该给它最好的位置', adv:'这种品不是「摆着就行」，是「摆在客人第一眼看到的地方」，进货也该敢多进。<b>你现在给它最好的位置了吗？</b>'},
+      A:{c:'#378ADD', nm:'A 品 · 守住别掉下去', adv:'守住。掉下去通常不是品不行了，是你不推了。<b>每个季度主动主推一次，不要等客人自己来问。</b>'},
+      B:{c:'#EF9F27', nm:'B 品 · 正常摆着就行', adv:'让它自己卖，不要用你的口舌去推。<b>它值得一个货架位，不值得你亲自讲。</b>'},
+      C:{c:'#D85A30', nm:'C 品 · 该下架了', adv:'该停就停。它在货架上占的每一格，都是从 S 品那里抢来的。<b>下架不是亏，是把位置和进货的钱还回去。</b>'}
+    }
+  },
+
+  crowd: {
+    label: '我开店 · 分客群',
+    ph: '客群名（可以不填，例：游客、在日华人、本地回头客）',
+    tail: '引流的心思和话术，该给哪类客人',
+    what: '这类客人，该占你多少力气',
+    unit: '其他客群',
+    again: '换一类客人再算一遍',
+    home: '回家之后，把你店里的三类客人各算一遍',
+    home2: '如果算出来最赚钱的那类，你从来没专门为他准备过东西，你就知道心思该往哪儿挪了',
+    dims: [
+      {id:'amt', tag:'贡献', q:'这类客人，一年给你带来多少营业额？', opts:['占很大一块','中等','偏少','很少']},
+      {id:'mgn', tag:'利润', q:'这类客人，你赚不赚钱？', opts:['毛利很高','正常','偏低','基本不赚']},
+      {id:'rep', tag:'回头', q:'这类客人会不会再来？', opts:['稳定回头','有时会','一次性','基本不来第二次']},
+      {id:'ref', tag:'带客', q:'这类客人会不会带人来、帮你传？', opts:['已经带来过','愿意','不确定','不会']},
+      {id:'fit', tag:'沟通', q:'跟这类客人打交道顺不顺？', opts:['很顺','一般','费劲','很累']},
+      {id:'get', tag:'可得', q:'这类客人，你想拉就能拉来吗？', opts:['很容易再拉来','要花点力气','很难','只能等他上门']}
+    ],
+    G: {
+      S:{c:'#1D9E75', nm:'S 类 · 该为他们专门做点什么', adv:'不是「服务好一点」，是「专门为他们准备点东西」：专门的话术、专门的品、专门的位置。<b>你现在为他们准备过什么？</b>'},
+      A:{c:'#378ADD', nm:'A 类 · 守住别流失', adv:'守住。流失通常不是他们不来了，是你没再唤过。<b>定个日子主动唤一次，不要等他们自己想起你。</b>'},
+      B:{c:'#EF9F27', nm:'B 类 · 正常接就行', adv:'用标准动作接，不要花心思去琢磨。<b>他们值得一套话术，不值得你专门想。</b>'},
+      C:{c:'#D85A30', nm:'C 类 · 别再为他花钱了', adv:'该停就停。你为他花的引流钱和心思，是从 S 类客人那里挪来的。<b>不服务不是得罪人，是把力气还回去。</b>'}
+    }
+  },
+
+  client: {
+    label: '我做单 · 分客户',
+    ph: '客户或项目名称（可以不填）',
+    tail: '你的时间，该给哪个客户',
+    what: '这个客户，该占你多少时间',
+    unit: '其他客户',
+    again: '换一个客户再算一遍',
+    home: '回家之后，把你手上最大的五个客户各算一遍',
+    home2: '如果五个里有两个 C，你就知道时间该从哪儿挪了',
+    dims: [
+      {id:'amt', tag:'金额', q:'这一年，他大概值多少钱？', opts:['远高于平均','中等偏上','偏低','很小']},
+      {id:'dec', tag:'决策', q:'这单谁拍板？', opts:['他本人拍板','需报上级','多人商量','还说不清']},
+      {id:'rep', tag:'复购', q:'他会不会再来？', opts:['稳定复购','可能再来','一次性','很难说']},
+      {id:'ref', tag:'转介', q:'他会不会给你介绍人？', opts:['已经介绍过','愿意介绍','不确定','不会']},
+      {id:'mgn', tag:'利润', q:'这单你赚不赚钱？', opts:['高于平均','正常','偏低','基本不赚']},
+      {id:'fit', tag:'配合', q:'跟他沟通顺不顺？', opts:['很顺','一般','费劲','很累']}
+    ],
+    G: {
+      S:{c:'#1D9E75', nm:'S 级 · 该多给时间', adv:'这类客户不是「服务好一点」，是「多给资源」。他值你一半的时间。<b>你现在给他的时间，够吗？</b>'},
+      A:{c:'#378ADD', nm:'A 级 · 守住别掉级', adv:'守住，别掉级。掉级通常不是客户变了，是你松了。<b>每个季度主动找他一次，不要等他找你。</b>'},
+      B:{c:'#EF9F27', nm:'B 级 · 控投入', adv:'用标准流程跟，不要用你的时间跟。<b>他值得流程，不值得你亲自跑。</b>'},
+      C:{c:'#D85A30', nm:'C 级 · 主动放弃', adv:'该放就放。你在他身上花的时间，是从 S 级客户那里偷来的。<b>放弃不是失礼，是把时间还回去。</b>'}
+    }
+  }
 };
-var ans = {};
+
+var order = ['item','crowd','client'];
+var MODE = null, DIMS = null, G = null, ans = {};
 var app = document.getElementById('app');
 
+function entry(){
+  MODE = null; ans = {};
+  var h = '<div style="font-size:13px;color:#8A8A8A;margin:2px 2px 12px">先选一个：你今天想分的是什么？</div>';
+  for (var i = 0; i < order.length; i++){
+    var k = order[i], m = MODES[k];
+    h += '<button class="mode" onclick="pick(\''+k+'\')"><b>'+m.label+'</b><span>'+m.tail+'</span></button>';
+  }
+  h += '<div class="small" style="margin-top:14px">开店的先分「品」，再分「客群」——这两块咬在一起：客群一换，品就得跟着换。<br>做单做批发的，直接分「客户」。</div>';
+  app.innerHTML = h;
+}
+
+function pick(k){
+  MODE = k; DIMS = MODES[k].dims; G = MODES[k].G; ans = {};
+  render();
+  window.scrollTo(0,0);
+}
+
 function render(){
-  var h = '<div class="card">';
-  h += '<input class="nm" id="cname" placeholder="客户或项目名称（可以不填）" maxlength="20">';
+  var m = MODES[MODE];
+  var h = '<div><span class="back" onclick="entry()">← 换一种分法</span></div>';
+  h += '<div style="font-size:12.5px;color:#B85042;margin:0 0 10px 2px">'+m.label+'　'+m.tail+'</div>';
+  h += '<div class="card">';
+  h += '<input class="nm" id="cname" placeholder="'+m.ph+'" maxlength="20">';
   h += '<div class="hint" style="margin-bottom:14px">随手写一个代号就行，不写也能算</div>';
-  DIMS.forEach(function(d,di){
+  DIMS.forEach(function(d){
     h += '<div class="q"><div class="t"><b>'+d.tag+'</b>'+d.q+'</div><div class="row">';
     d.opts.forEach(function(o,oi){
       h += '<button class="ch" id="'+d.id+oi+'" onclick="sel(\''+d.id+'\','+oi+')">'+o+'</button>';
@@ -87,9 +177,7 @@ function render(){
 
 function sel(id, i){
   DIMS.forEach(function(d){
-    if(d.id===id){
-      d.opts.forEach(function(_,oi){ document.getElementById(d.id+oi).className='ch'; });
-    }
+    if(d.id===id){ d.opts.forEach(function(_,oi){ document.getElementById(d.id+oi).className='ch'; }); }
   });
   document.getElementById(id+i).className = 'ch on';
   ans[id] = 4 - i;
@@ -97,36 +185,37 @@ function sel(id, i){
 }
 
 function result(){
-  var total = 0;
+  var m = MODES[MODE], total = 0;
   DIMS.forEach(function(d){ total += ans[d.id]; });
   var g = total>=21?'S' : total>=16?'A' : total>=11?'B' : 'C';
   var cname = (document.getElementById('cname').value||'').trim();
-  var G = GRADE[g];
+  var GG = G[g];
   var pct = {'S':45,'A':30,'B':20,'C':5}[g];
 
   var h = '<div class="card"><div class="lv">';
-  h += '<div class="grade" style="color:'+G.c+'">'+g+'</div>';
-  h += '<div class="tag">'+total+' / 24　'+(cname?('客户：'+cname):'')+'</div>';
-  h += '<div class="tag" style="margin-top:4px;color:'+G.c+'">'+G.nm+'</div>';
+  h += '<div class="grade" style="color:'+GG.c+'">'+g+'</div>';
+  h += '<div class="tag">'+total+' / 24　'+(cname?cname:'')+'</div>';
+  h += '<div class="tag" style="margin-top:4px;color:'+GG.c+'">'+GG.nm+'</div>';
   h += '</div>';
 
-  h += '<div style="font-size:12.5px;color:#666;margin-top:10px">这个客户，该占你多少时间</div>';
-  h += '<div class="pie"><i style="width:'+pct+'%;background:'+G.c+'"></i><i style="width:'+(100-pct)+'%;background:#DDE3EC"></i></div>';
-  h += '<div class="legend"><span><em style="background:'+G.c+'"></em>他 '+pct+'%</span><span><em style="background:#DDE3EC"></em>其他客户 '+(100-pct)+'%</span></div>';
+  h += '<div style="font-size:12.5px;color:#666;margin-top:10px">'+m.what+'</div>';
+  h += '<div class="pie"><i style="width:'+pct+'%;background:'+GG.c+'"></i><i style="width:'+(100-pct)+'%;background:#DDE3EC"></i></div>';
+  h += '<div class="legend"><span><em style="background:'+GG.c+'"></em>他 '+pct+'%</span><span><em style="background:#DDE3EC"></em>'+m.unit+' '+(100-pct)+'%</span></div>';
 
-  h += '<div class="adv"><div class="h">给你的建议</div>'+G.adv+'</div>';
+  h += '<div class="adv"><div class="h">给你的建议</div>'+GG.adv+'</div>';
 
   var lowest = DIMS.slice().sort(function(a,b){return ans[a.id]-ans[b.id];})[0];
-  h += '<div class="small">最弱的一项：<b style="color:#B85042">'+lowest.tag+'</b>　'+lowest.q+'<br>这一项决定了这个客户的上限——不是他不想给你更多，是他给不了。</div>';
+  h += '<div class="adv"><div class="h">最弱的一项：'+lowest.tag+'</div>'+lowest.q+'<br><b>这一项决定了他的上限——不是他不想给你更多，是他给不了。</b></div>';
   h += '</div>';
 
-  h += '<button class="btn ghost" onclick="ans={};render()">换一个客户再算一遍</button>';
-  h += '<div class="small" style="text-align:center;margin-top:14px">回家之后，把你手上最大的五个客户各算一遍<br>如果五个里有两个 C，你就知道时间该从哪儿挪了</div>';
+  h += '<button class="btn" onclick="render()">'+m.again+'</button>';
+  h += '<button class="btn ghost" onclick="entry()">换一种分法</button>';
+  h += '<div class="tip">'+m.home+'<br>'+m.home2+'</div>';
   app.innerHTML = h;
   window.scrollTo(0,0);
 }
 
-render();
+entry();
 </script>
 </body>
 </html>
